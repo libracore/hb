@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include heimbohrtechnik *.css
+recursive-include heimbohrtechnik *.csv
+recursive-include heimbohrtechnik *.html
+recursive-include heimbohrtechnik *.ico
+recursive-include heimbohrtechnik *.js
+recursive-include heimbohrtechnik *.json
+recursive-include heimbohrtechnik *.md
+recursive-include heimbohrtechnik *.png
+recursive-include heimbohrtechnik *.py
+recursive-include heimbohrtechnik *.svg
+recursive-include heimbohrtechnik *.txt
+recursive-exclude heimbohrtechnik *.pyc
