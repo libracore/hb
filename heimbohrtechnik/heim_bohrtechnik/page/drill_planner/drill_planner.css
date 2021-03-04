@@ -1,0 +1,89 @@
+.date-row {
+    width: 100%;
+}
+
+.date-row > .bohrteam-platzhalter {
+    float: left;
+    background: #f8f8f8;
+    width: 246px;
+    height: 120px;
+}
+
+.date-row > .tag {
+    float: left;
+    padding: 20px;
+    background: #eee;
+    width: 161px;
+    height: 120px;
+    
+    border-left: 1px solid black;
+}
+
+.date-row > .tag:last-child {
+    border-right: 1px solid black;
+    width: 162px;
+}
+
+.date-row > .tag > .sub-tag {
+    float: left;
+    padding: 20px;
+    background: #eee;
+    width: 60px;
+    height: 60px;
+}
+
+.b-middle {
+    border-right: 0.5px dotted black;
+}
+
+.clear {
+    clear: both;
+}
+
+.bohrteam-row {
+    border-top: 1px solid black;
+    width: 100%;
+}
+
+.bohrteam-row > .bohrteam {
+    float: left;
+    padding: 20px;
+    background: #eee;
+    width: 246px;
+    height: 120px;
+}
+
+.bohrteam-row > .tag {
+    float: left;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: #eee;
+    width: 161px;
+    height: 120px;
+    
+    border-left: 1px solid black;
+}
+
+.bohrteam-row > .tag:last-child {
+    border-right: 1px solid black;
+    width: 162px;
+}
+
+.bohrteam-row > .tag > .sub-tag {
+    float: left;
+    padding: 20px;
+    background: #eee;
+    width: 80px;
+    height: 100px;
+}
+
+.booked {
+    background-color: green !important;
+}
+
+.project-details {
+    overflow: visible;
+    padding: 0px !important;
+    white-space: nowrap;
+    color: white;
+}
