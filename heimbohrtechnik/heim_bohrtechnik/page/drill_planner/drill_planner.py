@@ -3,7 +3,7 @@
 
 from __future__ import unicode_literals
 import frappe
-from frappe.utils.data import getdate
+from frappe.utils.data import getdate, date_diff
 from datetime import date, timedelta
 
 @frappe.whitelist()
@@ -63,26 +63,53 @@ def get_booked_days_of_drilling_team(team):
         delta = timedelta(days=1)
         
         start_date = getdate(project.expected_start_date)
-        project_details[start_date.strftime("%d.%m.%Y")] = {
-            'object': project.object,
-            'object_name': project.object_name,
-            'object_location': project.object_location,
-            'ews_details': project.ews_details
-        }
+        end_date = getdate(project.expected_end_date)
+        
         if project.start_half_day == 'VM':
             booked_vm_start_days.append(start_date.strftime("%d.%m.%Y"))
+            project_details[start_date.strftime("%d.%m.%Y")] = {
+                'object': project.object,
+                'object_name': project.object_name,
+                'object_location': project.object_location,
+                'ews_details': project.ews_details
+            }
         else:
             booked_nm_start_days.append(start_date.strftime("%d.%m.%Y"))
+            project_details[start_date.strftime("%d.%m.%Y")] = {
+                'object': project.object,
+                'object_name': project.object_name,
+                'object_location': project.object_location,
+                'ews_details': project.ews_details
+            }
         start_date += delta
         
-        end_date = getdate(project.expected_end_date)
+        
         if project.end_half_day == 'VM':
             booked_vm_end_days.append(end_date.strftime("%d.%m.%Y"))
+            project_details[end_date.strftime("%d.%m.%Y")] = {
+                'object': project.object,
+                'object_name': project.object_name,
+                'object_location': project.object_location,
+                'ews_details': project.ews_details
+            }
         else:
             booked_nm_end_days.append(end_date.strftime("%d.%m.%Y"))
+            project_details[end_date.strftime("%d.%m.%Y")] = {
+                'object': project.object,
+                'object_name': project.object_name,
+                'object_location': project.object_location,
+                'ews_details': project.ews_details
+            }
         
         while start_date < end_date:
             booked_days.append(start_date.strftime("%d.%m.%Y"))
+            dauer = date_diff(end_date, start_date)
+            project_details[start_date.strftime("%d.%m.%Y")] = {
+                'object': project.object,
+                'object_name': project.object_name,
+                'object_location': project.object_location,
+                'ews_details': project.ews_details
+            }
             start_date += delta
     
     return booked_days, booked_vm_start_days, booked_nm_start_days, booked_vm_end_days, booked_nm_end_days, project_details

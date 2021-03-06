@@ -28,44 +28,32 @@
                 {% if (in_list(drilling_team.booked_vm_start_days, day)) { %}
                     <!-- start tag am vormittag -->
                     <div class="tag">
-                        <div class="sub-tag b-middle booked project-details">
-                            <i class="fa fa-info-circle"></i><br>
-                            {{ drilling_team.project_details[day].object }}<br>
-                            {{ drilling_team.project_details[day].object_name }}<br>
-                            {{ drilling_team.project_details[day].object_location }}<br>
-                            {{ drilling_team.project_details[day].ews_details }}
-                        </div>
-                        <div class="sub-tag booked"></div>
+                        <div class="sub-tag b-middle booked project-details" id="{{ drilling_team.project_details[day].object }}"></div>
+                        <div class="sub-tag booked" id="{{ drilling_team.project_details[day].object }}"></div>
                     </div>
                 {% } else if (in_list(drilling_team.booked_nm_start_days, day)) { %}
                     <!-- start tag am nachmittag -->
                     <div class="tag">
                         <div class="sub-tag b-middle"></div>
-                        <div class="sub-tag booked project-details">
-                            <i class="fa fa-info-circle"></i><br>
-                            {{ drilling_team.project_details[day].object }}<br>
-                            {{ drilling_team.project_details[day].object_name }}<br>
-                            {{ drilling_team.project_details[day].object_location }}<br>
-                            {{ drilling_team.project_details[day].ews_details }}
-                        </div>
+                        <div class="sub-tag booked project-details" id="{{ drilling_team.project_details[day].object }}"></div>
                     </div>
                 {% } else if (in_list(drilling_team.booked_days, day)) { %}
                      <!-- ganze tage -->
                     <div class="tag">
-                        <div class="sub-tag b-middle booked"></div>
-                        <div class="sub-tag booked"></div>
+                        <div class="sub-tag b-middle booked" id="{{ drilling_team.project_details[day].object }}"></div>
+                        <div class="sub-tag booked" id="{{ drilling_team.project_details[day].object }}"></div>
                     </div>
                 {% } else if (in_list(drilling_team.booked_vm_end_days, day)) { %}
                     <!-- end tag am vormittag -->
                     <div class="tag">
-                        <div class="sub-tag b-middle booked"></div>
+                        <div class="sub-tag b-middle booked" id="{{ drilling_team.project_details[day].object }}"></div>
                         <div class="sub-tag"></div>
                     </div>
                 {% } else if (in_list(drilling_team.booked_nm_end_days, day)) { %}
                     <!-- end tag am nachmittag -->
                     <div class="tag">
-                        <div class="sub-tag b-middle booked"></div>
-                        <div class="sub-tag booked"></div>
+                        <div class="sub-tag b-middle booked" id="{{ drilling_team.project_details[day].object }}"></div>
+                        <div class="sub-tag booked" id="{{ drilling_team.project_details[day].object }}"></div>
                     </div>
                 {% } else { %}
                     <!-- ungebucht -->
