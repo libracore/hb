@@ -58,8 +58,8 @@
                 {% } else { %}
                     <!-- ungebucht -->
                     <div class="tag">
-                        <div class="sub-tag b-middle"></div>
-                        <div class="sub-tag"></div>
+                        <div id="{{ drilling_team.team }}-{{ day }}-VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag b-middle dropziel"></div>
+                        <div id="{{ drilling_team.team }}-{{ day }}-VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag dropziel"></div>
                     </div>
                 {% } %}
             {% endfor %}

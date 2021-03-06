@@ -14,6 +14,11 @@ frappe.pages['drill-planner'].on_page_load = function(wrapper) {
 	frappe.drill_planner.run(page);
     setTimeout(function(){ frappe.drill_planner.reload_data(page); }, 1);
     
+    // drag start
+    document.addEventListener('dragstart', function(event) {
+        event.dataTransfer.setData('Text', event.target.id);
+        document.getElementById(event.target.id).style.backgroundColor = 'green';
+    });
 }
 
 frappe.drill_planner = {
@@ -93,8 +98,10 @@ frappe.drill_planner = {
             var search_element = document.getElementById(Object.entries(data.drilling_teams[i].project_details)[0][1].object);
             if (search_element) {
                 var search_elementTextRectangle = search_element.getBoundingClientRect();
+                var project = Object.entries(data.drilling_teams[i].project_details)[0][1].object;
                 
                 var overlay = document.createElement("div");
+                overlay.id = 'dragObjecT-' + project;
                 var innerHTML = '<span class="indicator green"></span>';
                 innerHTML = innerHTML + '<span class="indicator red"></span>';
                 innerHTML = innerHTML + '<span class="indicator yellow"></span>';
@@ -102,7 +109,7 @@ frappe.drill_planner = {
                 innerHTML = innerHTML + '<span class="indicator grey"></span>';
                 innerHTML = innerHTML + '<span class="indicator red"></span>';
                 innerHTML = innerHTML + '<span class="indicator green"></span>';
-                innerHTML = innerHTML + '<i class="fa fa-info-circle"></i><br>';
+                innerHTML = innerHTML + '<i class="fa fa-info-circle pointer" onclick="frappe.drill_planner.show_detail_popup(' + "'" + project + "'" + ');"></i><br>';
                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[0][1].object + "<br>";
                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[0][1].object_name + "<br>";
                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[0][1].object_location + "<br>";
@@ -122,10 +129,49 @@ frappe.drill_planner = {
                 overlay.style.top = String(pos_top - 111) + 'px';
                 overlay.style.minWidth = '160px';
                 
+                overlay.setAttribute('draggable', true);
+                
                 var drill_planner_div = document.getElementById("drill_planner_main_element");
                 
                 drill_planner_div.appendChild(overlay);
             }
         }
+    },
+    show_detail_popup: function(_project) {
+        frappe.call({
+            "method": "frappe.client.get",
+            "args": {
+                "doctype": "Project",
+                "name": _project
+            },
+            "callback": function(response) {
+                var project = response.message;
+
+                if (project) {
+                    var html = project.name + "<br>";
+                    html = html + "Auftraggeber...<br>";
+                    html = html + project.object_name + "<br>";
+                    html = html + project.object_location + "<br>";
+                    html = html + project.ews_details + "<br>";
+                    html = html + "Schlammentsorger...<br>";
+                    html = html + "Typ Borhgerät...<br>";
+                    html = html + "Bauleiter...<br>";
+                    html = html + "Status - Details...<br>";
+                    frappe.msgprint(html, __("Details"));
+                } else {
+                    frappe.msgprint("Project not found");
+                }
+            }
+        });
+    },
+    allow_drop: function(ev) {
+        ev.preventDefault();
+    },
+    drop: function(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        var to_drop = document.getElementById(data);
+        to_drop.style.position = "unset";
+        ev.target.appendChild(to_drop);
     }
 }

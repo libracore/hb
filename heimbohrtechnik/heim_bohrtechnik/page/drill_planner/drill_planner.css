@@ -87,3 +87,11 @@
     white-space: nowrap;
     color: white;
 }
+
+.pointer {
+    cursor: pointer;
+}
+
+[draggable=true] {
+  cursor: move;
+}
