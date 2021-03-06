@@ -95,7 +95,14 @@ frappe.drill_planner = {
                 var search_elementTextRectangle = search_element.getBoundingClientRect();
                 
                 var overlay = document.createElement("div");
-                var innerHTML = '<i class="fa fa-info-circle"></i><br>';
+                var innerHTML = '<span class="indicator green"></span>';
+                innerHTML = innerHTML + '<span class="indicator red"></span>';
+                innerHTML = innerHTML + '<span class="indicator yellow"></span>';
+                innerHTML = innerHTML + '<span class="indicator green"></span>';
+                innerHTML = innerHTML + '<span class="indicator grey"></span>';
+                innerHTML = innerHTML + '<span class="indicator red"></span>';
+                innerHTML = innerHTML + '<span class="indicator green"></span>';
+                innerHTML = innerHTML + '<i class="fa fa-info-circle"></i><br>';
                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[0][1].object + "<br>";
                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[0][1].object_name + "<br>";
                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[0][1].object_location + "<br>";
