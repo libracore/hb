@@ -12,10 +12,19 @@
             </div> 
         </div>
         {% for day in days %}
-        <div class="tag"><center><b>{{ day }}</center></b>
-            <div class="sub-tag b-middle">VM</div>
-            <div class="sub-tag">NM</div>
-        </div>
+            {% if (in_list(weekend, day)) { %}
+                <!-- wochenende -->
+                <div class="tag weekend"><center><b>{{ day }}</center></b>
+                    <div class="sub-tag b-middle weekend">VM</div>
+                    <div class="sub-tag weekend">NM</div>
+                </div>
+            {% } else { %}
+                <!-- wochentag -->
+                <div class="tag"><center><b>{{ day }}</center></b>
+                    <div class="sub-tag b-middle">VM</div>
+                    <div class="sub-tag">NM</div>
+                </div>
+            {% } %}
         {% endfor %}
     </div>
     {% for drilling_team in drilling_teams %}
@@ -34,7 +43,13 @@
                 {% } else if (in_list(drilling_team.booked_nm_start_days, day)) { %}
                     <!-- start tag am nachmittag -->
                     <div class="tag">
-                        <div class="sub-tag b-middle"></div>
+                        {% if (in_list(weekend, day)) { %}
+                            <!-- wochenende -->
+                            <div class="sub-tag b-middle weekend"></div>
+                        {% } else { %}
+                            <!-- wochentag -->
+                            <div class="sub-tag b-middle"></div>
+                        {% } %}
                         <div class="sub-tag booked project-details" id="{{ drilling_team.project_details[day].object }}"></div>
                     </div>
                 {% } else if (in_list(drilling_team.booked_days, day)) { %}
@@ -47,7 +62,13 @@
                     <!-- end tag am vormittag -->
                     <div class="tag">
                         <div class="sub-tag b-middle booked" id="{{ drilling_team.project_details[day].object }}"></div>
-                        <div class="sub-tag"></div>
+                        {% if (in_list(weekend, day)) { %}
+                            <!-- wochenende -->
+                            <div class="sub-tag weekend"></div>
+                        {% } else { %}
+                            <!-- wochentag -->
+                            <div class="sub-tag"></div>
+                        {% } %}
                     </div>
                 {% } else if (in_list(drilling_team.booked_nm_end_days, day)) { %}
                     <!-- end tag am nachmittag -->
@@ -56,11 +77,19 @@
                         <div class="sub-tag booked" id="{{ drilling_team.project_details[day].object }}"></div>
                     </div>
                 {% } else { %}
-                    <!-- ungebucht -->
-                    <div class="tag">
-                        <div id="{{ drilling_team.team }}-{{ day }}-VM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag b-middle dropziel"></div>
-                        <div id="{{ drilling_team.team }}-{{ day }}-NM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="NM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag dropziel"></div>
-                    </div>
+                    {% if (in_list(weekend, day)) { %}
+                        <!-- ungebucht wochenende -->
+                        <div class="tag">
+                            <div id="{{ drilling_team.team }}-{{ day }}-VM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag b-middle dropziel weekend"></div>
+                            <div id="{{ drilling_team.team }}-{{ day }}-NM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="NM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag dropziel weekend"></div>
+                        </div>
+                    {% } else { %}
+                        <!-- ungebucht wochentag -->
+                        <div class="tag">
+                            <div id="{{ drilling_team.team }}-{{ day }}-VM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag b-middle dropziel"></div>
+                            <div id="{{ drilling_team.team }}-{{ day }}-NM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="NM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag dropziel"></div>
+                        </div>
+                    {% } %}
                 {% } %}
             {% endfor %}
         </div>

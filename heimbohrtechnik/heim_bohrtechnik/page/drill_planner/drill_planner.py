@@ -10,24 +10,28 @@ from datetime import date, timedelta
 def get_content(from_date, to_date):
     data = {}
     data["drilling_teams"] = get_drilling_teams()
-    data["days"], data["total_width"] = get_days(from_date, to_date)
+    data["days"], data["total_width"], data["weekend"] = get_days(from_date, to_date)
     return data
     
 def get_days(from_date, to_date):
     start_date = getdate(from_date)
     end_date = getdate(to_date)
     date_list = []
+    weekend_list = []
     total_width = 0
     
     delta = timedelta(days=1)
     while start_date <= end_date:
         date_list.append(start_date.strftime("%d.%m.%Y"))
+        week_day_no = start_date.weekday()
+        if week_day_no >= 5:
+            weekend_list.append(start_date.strftime("%d.%m.%Y"))
         start_date += delta
         total_width += 1
         
     total_width = (total_width * 161) + 247
     
-    return date_list, total_width
+    return date_list, total_width, weekend_list
     
 def get_drilling_teams():
     drilling_teams = []

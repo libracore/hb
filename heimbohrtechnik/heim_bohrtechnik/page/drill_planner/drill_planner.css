@@ -95,3 +95,7 @@
 [draggable=true] {
   cursor: move;
 }
+
+.weekend {
+    background-color: #FD8B8B !important;
+}
