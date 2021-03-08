@@ -94,46 +94,53 @@ frappe.drill_planner = {
         return data
     },
     add_overlay: function(data) {
+        var added_list = [];
         for (var i = 0; i<data.drilling_teams.length; i++) {
-            var search_element = document.getElementById(Object.entries(data.drilling_teams[i].project_details)[0][1].object);
-            if (search_element) {
-                var search_elementTextRectangle = search_element.getBoundingClientRect();
-                var project = Object.entries(data.drilling_teams[i].project_details)[0][1].object;
-                
-                var overlay = document.createElement("div");
-                overlay.id = 'dragObjecT-' + project;
-                var innerHTML = '<span class="indicator green"></span>';
-                innerHTML = innerHTML + '<span class="indicator red"></span>';
-                innerHTML = innerHTML + '<span class="indicator yellow"></span>';
-                innerHTML = innerHTML + '<span class="indicator green"></span>';
-                innerHTML = innerHTML + '<span class="indicator grey"></span>';
-                innerHTML = innerHTML + '<span class="indicator red"></span>';
-                innerHTML = innerHTML + '<span class="indicator green"></span>';
-                innerHTML = innerHTML + '<i class="fa fa-info-circle pointer" onclick="frappe.drill_planner.show_detail_popup(' + "'" + project + "'" + ');"></i><br>';
-                innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[0][1].object + "<br>";
-                innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[0][1].object_name + "<br>";
-                innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[0][1].object_location + "<br>";
-                innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[0][1].ews_details;
-                overlay.innerHTML = innerHTML;
-                
-                overlay.style.backgroundColor  = 'transparent';
-                overlay.style.color  = 'white';
-                overlay.style.height = String(search_elementTextRectangle.height) + 'px';
-                overlay.style.position = 'absolute';
-                
-                var left_korrektur_faktor = parseInt($(".container.page-body").css("marginLeft"));
-                var pos_left = search_elementTextRectangle.left;
-                var pos_top = search_elementTextRectangle.top;
-                
-                overlay.style.left = String(pos_left - left_korrektur_faktor) + 'px';
-                overlay.style.top = String(pos_top - 111) + 'px';
-                overlay.style.minWidth = '160px';
-                
-                overlay.setAttribute('draggable', true);
-                
-                var drill_planner_div = document.getElementById("drill_planner_main_element");
-                
-                drill_planner_div.appendChild(overlay);
+            for (var y = 0; y<Object.entries(data.drilling_teams[i].project_details).length; y++) {
+                if (!added_list.includes(Object.entries(data.drilling_teams[i].project_details)[y][1].object)) {
+                    added_list.push(Object.entries(data.drilling_teams[i].project_details)[y][1].object);
+                    
+                    var search_element = document.getElementById(Object.entries(data.drilling_teams[i].project_details)[y][1].object);
+                    if (search_element) {
+                        var search_elementTextRectangle = search_element.getBoundingClientRect();
+                        var project = Object.entries(data.drilling_teams[i].project_details)[y][1].object;
+                        
+                        var overlay = document.createElement("div");
+                        overlay.id = 'dragObjecT-' + project;
+                        var innerHTML = '<span class="indicator green"></span>';
+                        innerHTML = innerHTML + '<span class="indicator red"></span>';
+                        innerHTML = innerHTML + '<span class="indicator yellow"></span>';
+                        innerHTML = innerHTML + '<span class="indicator green"></span>';
+                        innerHTML = innerHTML + '<span class="indicator grey"></span>';
+                        innerHTML = innerHTML + '<span class="indicator red"></span>';
+                        innerHTML = innerHTML + '<span class="indicator green"></span>';
+                        innerHTML = innerHTML + '<i class="fa fa-info-circle pointer" onclick="frappe.drill_planner.show_detail_popup(' + "'" + project + "'" + ');"></i><br>';
+                        innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object + "<br>";
+                        innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_name + "<br>";
+                        innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_location + "<br>";
+                        innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].ews_details;
+                        overlay.innerHTML = innerHTML;
+                        
+                        overlay.style.backgroundColor  = 'transparent';
+                        overlay.style.color  = 'white';
+                        overlay.style.height = String(search_elementTextRectangle.height) + 'px';
+                        overlay.style.position = 'absolute';
+                        
+                        var left_korrektur_faktor = parseInt($(".container.page-body").css("marginLeft"));
+                        var pos_left = search_elementTextRectangle.left;
+                        var pos_top = search_elementTextRectangle.top;
+                        
+                        overlay.style.left = String(pos_left - left_korrektur_faktor) + 'px';
+                        overlay.style.top = String(pos_top - 111) + 'px';
+                        overlay.style.minWidth = '160px';
+                        
+                        overlay.setAttribute('draggable', true);
+                        
+                        var drill_planner_div = document.getElementById("drill_planner_main_element");
+                        
+                        drill_planner_div.appendChild(overlay);
+                    }
+                }
             }
         }
     },
