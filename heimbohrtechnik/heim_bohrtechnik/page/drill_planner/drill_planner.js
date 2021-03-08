@@ -180,5 +180,20 @@ frappe.drill_planner = {
         var to_drop = document.getElementById(data);
         to_drop.style.position = "unset";
         ev.target.appendChild(to_drop);
+        
+        // reschedule_project
+        frappe.call({
+		   method: "heimbohrtechnik.heim_bohrtechnik.page.drill_planner.drill_planner.reschedule_project",
+		   args: {
+				"project": data.replace("dragObjecT-", ""),
+				"team": ev.target.dataset.team,
+                "day": ev.target.dataset.day,
+                "start_half_day": ev.target.dataset.start
+		   },
+           async: false,
+		   callback: function(response) {
+				frappe.drill_planner.reload_data(frappe.drill_planner.page);
+		   }
+		});
     }
 }

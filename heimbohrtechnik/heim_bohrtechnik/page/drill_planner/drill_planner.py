@@ -103,7 +103,6 @@ def get_booked_days_of_drilling_team(team):
         
         while start_date < end_date:
             booked_days.append(start_date.strftime("%d.%m.%Y"))
-            dauer = date_diff(end_date, start_date)
             project_details[start_date.strftime("%d.%m.%Y")] = {
                 'object': project.object,
                 'object_name': project.object_name,
@@ -113,3 +112,27 @@ def get_booked_days_of_drilling_team(team):
             start_date += delta
     
     return booked_days, booked_vm_start_days, booked_nm_start_days, booked_vm_end_days, booked_nm_end_days, project_details
+    
+@frappe.whitelist()
+def reschedule_project(project, team, day, start_half_day):
+    project = frappe.get_doc("Project", project)
+    
+    start_date = project.expected_start_date
+    end_date = project.expected_end_date
+    project_duration = date_diff(end_date, start_date)
+    delta = timedelta(days=project_duration)
+    
+    new_project_start_day = day.split(".")[0]
+    new_project_start_month = day.split(".")[1]
+    new_project_start_year = day.split(".")[2]
+    new_project_start = getdate(new_project_start_year + "-" + new_project_start_month + "-" + new_project_start_day)
+    
+    new_project_end_date = new_project_start
+    new_project_end_date += delta
+    
+    project.expected_start_date = new_project_start
+    project.expected_end_date = new_project_end_date
+    project.start_half_day = start_half_day
+    project.drilling_team = team
+    
+    project.save()

@@ -58,8 +58,8 @@
                 {% } else { %}
                     <!-- ungebucht -->
                     <div class="tag">
-                        <div id="{{ drilling_team.team }}-{{ day }}-VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag b-middle dropziel"></div>
-                        <div id="{{ drilling_team.team }}-{{ day }}-VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag dropziel"></div>
+                        <div id="{{ drilling_team.team }}-{{ day }}-VM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag b-middle dropziel"></div>
+                        <div id="{{ drilling_team.team }}-{{ day }}-NM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="NM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag dropziel"></div>
                     </div>
                 {% } %}
             {% endfor %}
