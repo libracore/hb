@@ -117,7 +117,16 @@ frappe.drill_planner = {
                             async: false,
                             callback: function(response) {
                                 var ampel_indicators = response.message;
-                                
+                                /*
+                                 Ampeln:
+                                 a1 = Baustelle besichtigt: rot/grün (Checkbox)
+                                 a2 = Bewilligungen: von Untertabelle jede als Dokument (rot nichts, gelb einige, grün alle)
+                                 a3 = Kundenauftrag: Rot fehlt, gelb auf Entwurf, grün gültig
+                                 a4 = Materialstatus: rot fehlt/gelb bestellt (Lieferantenauftrag)/grün an Lager (Wareneingang)
+                                 a5 = Kran benötigt? (grau nein, rot nicht geplant, grün organisiert)
+                                 a6 = Bohrschlammentsorgung (rot: keiner, grün ein Schlammentsorger (Lieferant) im Objekt)
+                                 a7 = Bohranzeige versendet (Checkbox auf Projekt)
+                                */
                                 var innerHTML = '<span class="indicator ' + ampel_indicators.a1 + '"></span>';
                                 innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a2 + '"></span>';
                                 innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a3 + '"></span>';
@@ -206,29 +215,6 @@ frappe.drill_planner = {
            async: false,
 		   callback: function(response) {
 				frappe.drill_planner.reload_data(frappe.drill_planner.page);
-		   }
-		});
-    },
-    get_ampel_indicators: function(project) {
-        /*
-         Ampeln:
-         a1 = Baustelle besichtigt: rot/grün (Checkbox)
-         a2 = Bewilligungen: von Untertabelle jede als Dokument (rot nichts, gelb einige, grün alle)
-         a3 = Kundenauftrag: Rot fehlt, gelb auf Entwurf, grün gültig
-         a4 = Materialstatus: rot fehlt/gelb bestellt (Lieferantenauftrag)/grün an Lager (Wareneingang)
-         a5 = Kran benötigt? (grau nein, rot nicht geplant, grün organisiert)
-         a6 = Bohrschlammentsorgung (rot: keiner, grün ein Schlammentsorger (Lieferant) im Objekt)
-         a7 = Bohranzeige versendet (Checkbox auf Projekt)
-        */
-        frappe.call({
-		   method: "heimbohrtechnik.heim_bohrtechnik.page.drill_planner.drill_planner.get_traffic_lights",
-		   args: {
-				"project": project
-		   },
-           async: false,
-		   callback: function(response) {
-				console.log(response.message);
-                return response.message;
 		   }
 		});
     }

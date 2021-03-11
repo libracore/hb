@@ -155,23 +155,61 @@ def get_traffic_lights(project):
     return data
 
 def get_traffic_lights_indicator(project, typ):
-    if typ == 'a1':
-        # project = frappe.get_doc("Project", project)
-        # if project.baustelle_besichtigt == 1:
-            # return 'green'
-        # else:
-            # return 'red'
-        return 'green'
+    # Ampeln:
+    # a1 = Baustelle besichtigt: rot/grün (Checkbox)
+    # a2 = Bewilligungen: von Untertabelle jede als Dokument (rot nichts, gelb einige, grün alle)
+    # a3 = Kundenauftrag: Rot fehlt, gelb auf Entwurf, grün gültig
+    # a4 = Materialstatus: rot fehlt/gelb bestellt (Lieferantenauftrag)/grün an Lager (Wareneingang)
+    # a5 = Kran benötigt? (grau nein, rot nicht geplant, grün organisiert)
+    # a6 = Bohrschlammentsorgung (rot: keiner, grün ein Schlammentsorger (Lieferant) im Objekt)
+    # a7 = Bohranzeige versendet (Checkbox auf Projekt)
+                                 
+    project = frappe.get_doc("Project", project)
+    drilling_object = frappe.get_doc("Object", project.object)
     
+    if typ == 'a1':
+        if drilling_object.construction_site_inspected == 1:
+            return 'green'
+        else:
+            return 'red'
+    
+    # tbd!
     if typ == 'a2':
-        return 'yellow'
+        return 'red'
+    
     if typ == 'a3':
-        return 'green'
+        if not project.sales_order:
+            return 'red'
+        else:
+            sales_order = frappe.get_doc("Sales Order", project.sales_order)
+            if sales_order.docstatus == 1:
+                return 'green'
+            elif  sales_order.docstatus == 0:
+                return 'yellow'
+            else:
+                return 'red'
+    
+    # tbd!
     if typ == 'a4':
         return 'red'
+    
     if typ == 'a5':
-        return 'grey'
+        if project.crane_required == 0:
+            return 'grey'
+        else:
+            if project.crane_organized == 1:
+                return 'green'
+            else:
+                return 'red'
+    
     if typ == 'a6':
-        return 'green'
+        if drilling_object.mud_disposer:
+            return 'green'
+        else:
+            return 'red'
+    
     if typ == 'a7':
-        return 'red'
+        if project.drill_notice_sent == 1:
+            return 'green'
+        else:
+            return 'red'

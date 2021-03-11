@@ -11,6 +11,7 @@
   "object_street",
   "object_location",
   "section_drilling_details",
+  "construction_site_inspected",
   "ews_details",
   "mud_disposer",
   "drilling_equipment",
@@ -75,9 +76,15 @@
    "fieldtype": "Link",
    "label": "Manager",
    "options": "User"
+  },
+  {
+   "default": "0",
+   "fieldname": "construction_site_inspected",
+   "fieldtype": "Check",
+   "label": "Construction site inspected"
   }
  ],
- "modified": "2021-03-01 17:46:06.311429",
+ "modified": "2021-03-11 14:23:20.322970",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
