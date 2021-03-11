@@ -177,16 +177,53 @@ frappe.drill_planner = {
                 var project = response.message;
 
                 if (project) {
-                    var html = project.name + "<br>";
-                    html = html + "Auftraggeber...<br>";
-                    html = html + project.object_name + "<br>";
-                    html = html + project.object_location + "<br>";
-                    html = html + project.ews_details + "<br>";
-                    html = html + "Schlammentsorger...<br>";
-                    html = html + "Typ Borhgerät...<br>";
-                    html = html + "Bauleiter...<br>";
-                    html = html + "Status - Details...<br>";
-                    frappe.msgprint(html, __("Details"));
+                    frappe.call({
+                        "method": "frappe.client.get",
+                        "args": {
+                            "doctype": "Object",
+                            "name": project.object
+                        },
+                        "callback": function(r) {
+                            var object = r.message;
+
+                            if (object) {
+                                var customer = __('No Customer found');
+                                if (project.customer) {
+                                    customer = '<a href="/desk#Form/Customer/' + project.customer + '" target="_blank">' + project.customer + '</a>';
+                                }
+                                
+                                var object_link = '<a href="/desk#Form/Object/' + object.name + '" target="_blank">' + project.object_name + '</a>';
+                                
+                                var mud_disposer = __('No Mud Disposer found');
+                                if (object.mud_disposer) {
+                                    mud_disposer = '<a href="/desk#Form/Mud Disposer/' + object.mud_disposer + '" target="_blank">' + object.mud_disposer + '</a>';
+                                }
+                                
+                                var drilling_equipment = __('No Drilling Equipment found');
+                                if (object.drilling_equipment) {
+                                    drilling_equipment = '<a href="/desk#Form/Drilling Equipment/' + object.drilling_equipment + '" target="_blank">' + object.drilling_equipment + '</a>';
+                                }
+                                
+                                var manager = __('No Manager found');
+                                if (object.manager) {
+                                    manager = '<a href="/desk#Form/User/' + object.manager + '" target="_blank">' + object.manager + '</a>';
+                                }
+                                
+                                var html = '<a href="/desk#Form/Project/' + project.name + '" target="_blank">' + project.name + "</a><br>";
+                                html = html + customer + "<br>";
+                                html = html + object_link + "<br>";
+                                html = html + project.object_location + "<br>";
+                                html = html + project.ews_details + "<br>";
+                                html = html + mud_disposer + "<br>";
+                                html = html + drilling_equipment + "<br>";
+                                html = html + manager + "<br>";
+                                html = html + "Status - Details...<br>";
+                                frappe.msgprint(html, __("Details"));
+                            } else {
+                                frappe.msgprint("Object not found");
+                            }
+                        }
+                    });
                 } else {
                     frappe.msgprint("Project not found");
                 }
