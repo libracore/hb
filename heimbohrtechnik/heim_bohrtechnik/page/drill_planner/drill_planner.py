@@ -140,3 +140,38 @@ def reschedule_project(project, team, day, start_half_day):
     project.drilling_team = team
     
     project.save()
+
+@frappe.whitelist()
+def get_traffic_lights(project):
+    data = {}
+    data['a1'] = get_traffic_lights_indicator(project, 'a1')
+    data['a2'] = get_traffic_lights_indicator(project, 'a2')
+    data['a3'] = get_traffic_lights_indicator(project, 'a3')
+    data['a4'] = get_traffic_lights_indicator(project, 'a4')
+    data['a5'] = get_traffic_lights_indicator(project, 'a5')
+    data['a6'] = get_traffic_lights_indicator(project, 'a6')
+    data['a7'] = get_traffic_lights_indicator(project, 'a7')
+    
+    return data
+
+def get_traffic_lights_indicator(project, typ):
+    if typ == 'a1':
+        # project = frappe.get_doc("Project", project)
+        # if project.baustelle_besichtigt == 1:
+            # return 'green'
+        # else:
+            # return 'red'
+        return 'green'
+    
+    if typ == 'a2':
+        return 'yellow'
+    if typ == 'a3':
+        return 'green'
+    if typ == 'a4':
+        return 'red'
+    if typ == 'a5':
+        return 'grey'
+    if typ == 'a6':
+        return 'green'
+    if typ == 'a7':
+        return 'red'

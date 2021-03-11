@@ -108,38 +108,50 @@ frappe.drill_planner = {
                         
                         var overlay = document.createElement("div");
                         overlay.id = 'dragObjecT-' + project;
-                        var innerHTML = '<span class="indicator green"></span>';
-                        innerHTML = innerHTML + '<span class="indicator red"></span>';
-                        innerHTML = innerHTML + '<span class="indicator yellow"></span>';
-                        innerHTML = innerHTML + '<span class="indicator green"></span>';
-                        innerHTML = innerHTML + '<span class="indicator grey"></span>';
-                        innerHTML = innerHTML + '<span class="indicator red"></span>';
-                        innerHTML = innerHTML + '<span class="indicator green"></span>';
-                        innerHTML = innerHTML + '<i class="fa fa-info-circle pointer" onclick="frappe.drill_planner.show_detail_popup(' + "'" + project + "'" + ');"></i><br>';
-                        innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object + "<br>";
-                        innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_name + "<br>";
-                        innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_location + "<br>";
-                        innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].ews_details;
-                        overlay.innerHTML = innerHTML;
                         
-                        overlay.style.backgroundColor  = 'transparent';
-                        overlay.style.color  = 'white';
-                        overlay.style.height = String(search_elementTextRectangle.height) + 'px';
-                        overlay.style.position = 'absolute';
-                        
-                        var left_korrektur_faktor = parseInt($(".container.page-body").css("marginLeft"));
-                        var pos_left = search_elementTextRectangle.left;
-                        var pos_top = search_elementTextRectangle.top;
-                        
-                        overlay.style.left = String(pos_left - left_korrektur_faktor) + 'px';
-                        overlay.style.top = String(pos_top - 111) + 'px';
-                        overlay.style.minWidth = '160px';
-                        
-                        overlay.setAttribute('draggable', true);
-                        
-                        var drill_planner_div = document.getElementById("drill_planner_main_element");
-                        
-                        drill_planner_div.appendChild(overlay);
+                        frappe.call({
+                            method: "heimbohrtechnik.heim_bohrtechnik.page.drill_planner.drill_planner.get_traffic_lights",
+                            args: {
+                                "project": project
+                            },
+                            async: false,
+                            callback: function(response) {
+                                var ampel_indicators = response.message;
+                                
+                                var innerHTML = '<span class="indicator ' + ampel_indicators.a1 + '"></span>';
+                                innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a2 + '"></span>';
+                                innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a3 + '"></span>';
+                                innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a4 + '"></span>';
+                                innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a5 + '"></span>';
+                                innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a6 + '"></span>';
+                                innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a7 + '"></span>';
+                                innerHTML = innerHTML + '<i class="fa fa-info-circle pointer" onclick="frappe.drill_planner.show_detail_popup(' + "'" + project + "'" + ');"></i><br>';
+                                innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object + "<br>";
+                                innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_name + "<br>";
+                                innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_location + "<br>";
+                                innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].ews_details;
+                                overlay.innerHTML = innerHTML;
+
+                                overlay.style.backgroundColor  = 'transparent';
+                                overlay.style.color  = 'white';
+                                overlay.style.height = String(search_elementTextRectangle.height) + 'px';
+                                overlay.style.position = 'absolute';
+
+                                var left_korrektur_faktor = parseInt($(".container.page-body").css("marginLeft"));
+                                var pos_left = search_elementTextRectangle.left;
+                                var pos_top = search_elementTextRectangle.top;
+
+                                overlay.style.left = String(pos_left - left_korrektur_faktor) + 'px';
+                                overlay.style.top = String(pos_top - 111) + 'px';
+                                overlay.style.minWidth = '160px';
+
+                                overlay.setAttribute('draggable', true);
+
+                                var drill_planner_div = document.getElementById("drill_planner_main_element");
+
+                                drill_planner_div.appendChild(overlay);
+                            }
+                        });
                     }
                 }
             }
@@ -194,6 +206,29 @@ frappe.drill_planner = {
            async: false,
 		   callback: function(response) {
 				frappe.drill_planner.reload_data(frappe.drill_planner.page);
+		   }
+		});
+    },
+    get_ampel_indicators: function(project) {
+        /*
+         Ampeln:
+         a1 = Baustelle besichtigt: rot/grün (Checkbox)
+         a2 = Bewilligungen: von Untertabelle jede als Dokument (rot nichts, gelb einige, grün alle)
+         a3 = Kundenauftrag: Rot fehlt, gelb auf Entwurf, grün gültig
+         a4 = Materialstatus: rot fehlt/gelb bestellt (Lieferantenauftrag)/grün an Lager (Wareneingang)
+         a5 = Kran benötigt? (grau nein, rot nicht geplant, grün organisiert)
+         a6 = Bohrschlammentsorgung (rot: keiner, grün ein Schlammentsorger (Lieferant) im Objekt)
+         a7 = Bohranzeige versendet (Checkbox auf Projekt)
+        */
+        frappe.call({
+		   method: "heimbohrtechnik.heim_bohrtechnik.page.drill_planner.drill_planner.get_traffic_lights",
+		   args: {
+				"project": project
+		   },
+           async: false,
+		   callback: function(response) {
+				console.log(response.message);
+                return response.message;
 		   }
 		});
     }
