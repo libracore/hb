@@ -17,7 +17,10 @@
   "ews_details",
   "mud_disposer",
   "drilling_equipment",
-  "manager"
+  "manager",
+  "section_stakeholders",
+  "customer",
+  "object_owner"
  ],
  "fields": [
   {
@@ -59,7 +62,7 @@
    "fieldname": "mud_disposer",
    "fieldtype": "Link",
    "label": "Mud disposer",
-   "options": "Mud Disposer"
+   "options": "Supplier"
   },
   {
    "fieldname": "drilling_equipment",
@@ -91,9 +94,26 @@
    "label": "Naming Series",
    "options": "O-.#####",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_stakeholders",
+   "fieldtype": "Section Break",
+   "label": "Stakeholders"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "object_owner",
+   "fieldtype": "Link",
+   "label": "Owner",
+   "options": "Customer"
   }
  ],
- "modified": "2021-03-17 11:40:16.130391",
+ "modified": "2021-03-17 11:50:25.786419",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
