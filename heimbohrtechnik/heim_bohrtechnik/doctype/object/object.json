@@ -1,14 +1,16 @@
 {
- "autoname": "field:title",
+ "allow_rename": 1,
+ "autoname": "naming_series:",
  "creation": "2021-02-28 20:44:35.530316",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "title",
+  "naming_series",
   "object_name",
   "section_address",
   "object_street",
+  "button_search_plz",
   "object_location",
   "section_drilling_details",
   "construction_site_inspected",
@@ -19,16 +21,9 @@
  ],
  "fields": [
   {
-   "fieldname": "title",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Title",
-   "reqd": 1,
-   "unique": 1
-  },
-  {
    "fieldname": "object_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Object name",
    "reqd": 1
   },
@@ -46,6 +41,7 @@
    "description": "PLZ + Ort",
    "fieldname": "object_location",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Location",
    "reqd": 1
   },
@@ -82,9 +78,22 @@
    "fieldname": "construction_site_inspected",
    "fieldtype": "Check",
    "label": "Construction site inspected"
+  },
+  {
+   "fieldname": "button_search_plz",
+   "fieldtype": "Button",
+   "label": "Search PLZ"
+  },
+  {
+   "default": "O-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "O-.#####",
+   "read_only": 1
   }
  ],
- "modified": "2021-03-11 14:23:20.322970",
+ "modified": "2021-03-17 11:40:16.130391",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
@@ -116,6 +125,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "title_field": "title",
+ "title_field": "object_name",
  "track_changes": 1
 }

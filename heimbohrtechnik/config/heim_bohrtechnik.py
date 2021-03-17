@@ -92,5 +92,23 @@ def get_data():
                     "is_query_report": True,
                 }
             ]
+        },
+        {
+            "label": _("Settings"),
+            "icon": "fa fa-money",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "Drilling Team",
+                   "label": _("Drilling Team"),
+                   "description": _("Drilling Team")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Drilling Equipment",
+                   "label": _("Drilling Equipment"),
+                   "description": _("Drilling Equipment")
+                }
+            ]
         }
     ]
