@@ -12,7 +12,6 @@ frappe.pages['drill-planner'].on_page_load = function(wrapper) {
     
     frappe.drill_planner.make(page);
 	frappe.drill_planner.run(page);
-    setTimeout(function(){ frappe.drill_planner.reload_data(page); }, 1);
     
     // drag start
     document.addEventListener('dragstart', function(event) {
@@ -45,6 +44,7 @@ frappe.drill_planner = {
         // set trigger for date changes
         this.page.main.find("#from").on('change', function() {frappe.drill_planner.reload_data(page);});
         this.page.main.find("#to").on('change', function() {frappe.drill_planner.reload_data(page);});
+        setTimeout(function(){ frappe.drill_planner.reload_data(page); }, 1);
     },
     reload_data: function(page) {
         var me = frappe.drill_planner;
@@ -96,11 +96,11 @@ frappe.drill_planner = {
     },
     add_overlay: function(data) {
         var added_list = [];
+        var main_layout_element = document.getElementsByClassName("row layout-main")[0].getBoundingClientRect();
         for (var i = 0; i<data.drilling_teams.length; i++) {
             for (var y = 0; y<Object.entries(data.drilling_teams[i].project_details).length; y++) {
                 if (!added_list.includes(Object.entries(data.drilling_teams[i].project_details)[y][1].object)) {
                     added_list.push(Object.entries(data.drilling_teams[i].project_details)[y][1].object);
-                    
                     var search_element = document.getElementById(Object.entries(data.drilling_teams[i].project_details)[y][1].object);
                     if (search_element) {
                         var search_elementTextRectangle = search_element.getBoundingClientRect();
@@ -145,8 +145,8 @@ frappe.drill_planner = {
                                 overlay.style.color  = 'white';
                                 overlay.style.height = String(search_elementTextRectangle.height) + 'px';
                                 overlay.style.position = 'absolute';
-
-                                var left_korrektur_faktor = parseInt($(".container.page-body").css("marginLeft")) + 15;
+                                
+                                var left_korrektur_faktor = main_layout_element.left + 15;
                                 var pos_left = search_elementTextRectangle.left;
                                 var pos_top = search_elementTextRectangle.top;
 
