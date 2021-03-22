@@ -24,13 +24,15 @@ frappe.drill_planner = {
     make: function(page) {
         var me = frappe.drill_planner;
         me.page = page;
-        me.body = $('<div id="drill_planner_main_element" style="overflow: auto; position: relative; max-height: calc(100vH - 15vH);"></div>').appendTo(me.page.main);
+        me.header = $('<div id="drill_planner_header_element" style="overflow: auto; position: sticky; top: 0;"></div>').appendTo(me.page.main);
+        me.body = $('<div id="drill_planner_main_element" style="overflow: auto; position: relative; max-height: calc(100vH - 25vH);"></div>').appendTo(me.page.main);
 
         // set today as default "from" date
         var now = new Date();
         var from_date = frappe.datetime.add_days(now, 0);
         var to_date = frappe.datetime.add_days(now, 30);
         var data = frappe.drill_planner.get_content(page, from_date, to_date);
+        $(frappe.render_template('drill_planner_header', data)).appendTo(me.header);
         $(frappe.render_template('drill_planner', data)).appendTo(me.body);
     },
     run: function(page) {
@@ -53,11 +55,14 @@ frappe.drill_planner = {
         var to_date = document.getElementById("to").value;
         
         // remove old data
+        $('#drill_planner_header_element').remove();
         $('#drill_planner_main_element').remove();
         
         // create new content
-        me.body = $('<div id="drill_planner_main_element" style="overflow: auto; position: relative; max-height: calc(100vH - 15vH);"></div>').appendTo(me.page.main);
+        me.header = $('<div id="drill_planner_header_element" style="overflow: auto; position: sticky; top: 0;"></div>').appendTo(me.page.main);
+        me.body = $('<div id="drill_planner_main_element" style="overflow: auto; position: relative; max-height: calc(100vH - 25vH);"></div>').appendTo(me.page.main);
         var data = frappe.drill_planner.get_content(page, from_date, to_date);
+        $(frappe.render_template('drill_planner_header', data)).appendTo(me.header);
         $(frappe.render_template('drill_planner', data)).appendTo(me.body);
         
         // reset from and to date
@@ -151,7 +156,7 @@ frappe.drill_planner = {
                                 var pos_top = search_elementTextRectangle.top;
 
                                 overlay.style.left = String(pos_left - left_korrektur_faktor) + 'px';
-                                overlay.style.top = String(pos_top - 111) + 'px';
+                                overlay.style.top = String(pos_top - 245) + 'px';
                                 overlay.style.minWidth = '160px';
 
                                 overlay.setAttribute('draggable', true);
@@ -165,6 +170,16 @@ frappe.drill_planner = {
                 }
             }
         }
+        $("#drill_planner_main_element").on('scroll', function(e) { 
+            var ele = $(e.currentTarget);
+            var left = ele.scrollLeft();
+            $("#drill_planner_header_element").scrollLeft(left);
+        });
+        $("#drill_planner_header_element").on('scroll', function(e) { 
+            var ele = $(e.currentTarget);
+            var left = ele.scrollLeft();
+            $("#drill_planner_main_element").scrollLeft(left);
+        });
     },
     show_detail_popup: function(_project) {
         frappe.call({
