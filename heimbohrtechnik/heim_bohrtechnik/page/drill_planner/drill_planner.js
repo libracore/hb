@@ -24,8 +24,8 @@ frappe.drill_planner = {
     make: function(page) {
         var me = frappe.drill_planner;
         me.page = page;
-        me.header = $('<div id="drill_planner_header_element" style="overflow: auto; position: sticky; top: 0;"></div>').appendTo(me.page.main);
-        me.body = $('<div id="drill_planner_main_element" style="overflow: auto; position: relative; max-height: calc(100vH - 25vH);"></div>').appendTo(me.page.main);
+        me.header = $('<div id="drill_planner_header_element" style="overflow-x: scroll; overflow-y: scroll;"></div>').appendTo(me.page.main);
+        me.body = $('<div id="drill_planner_main_element" style="overflow-x: scroll; overflow-y: scroll; position: relative; max-height: calc(100vH - 25vH);"></div>').appendTo(me.page.main);
 
         // set today as default "from" date
         var now = new Date();
@@ -59,8 +59,8 @@ frappe.drill_planner = {
         $('#drill_planner_main_element').remove();
         
         // create new content
-        me.header = $('<div id="drill_planner_header_element" style="overflow: auto; position: sticky; top: 0;"></div>').appendTo(me.page.main);
-        me.body = $('<div id="drill_planner_main_element" style="overflow: auto; position: relative; max-height: calc(100vH - 25vH);"></div>').appendTo(me.page.main);
+        me.header = $('<div id="drill_planner_header_element" style="overflow-x: scroll; overflow-y: scroll;"></div>').appendTo(me.page.main);
+        me.body = $('<div id="drill_planner_main_element" style="overflow-x: scroll; overflow-y: scroll; position: relative; max-height: calc(100vH - 25vH);"></div>').appendTo(me.page.main);
         var data = frappe.drill_planner.get_content(page, from_date, to_date);
         $(frappe.render_template('drill_planner_header', data)).appendTo(me.header);
         $(frappe.render_template('drill_planner', data)).appendTo(me.body);

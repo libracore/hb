@@ -1,32 +1,5 @@
 <!-- total_width = anzahlt tage * 161px + 1px + 246px (berechnung in python) -->
 <div style="overflow: hidden; width: {{ total_width }}px;">
-    <!--{#<div class="date-row">
-        <div class="bohrteam-platzhalter">
-            <div class="form-group">
-                <label for="from">{{ __("From") }}</label>
-                <input type="date" class="form-control" id="from">
-            </div>
-            <div class="form-group">
-                <label for="to">{{ __("To") }}</label>
-                <input type="date" class="form-control" id="to">
-            </div> 
-        </div>
-        {% for day in days %}
-            {% if (in_list(weekend, day)) { %}
-                <!-- wochenende 
-                <div class="tag weekend"><center><b>{{ day }}</center></b>
-                    <div class="sub-tag b-middle weekend">VM</div>
-                    <div class="sub-tag weekend">NM</div>
-                </div>
-            {% } else { %}
-                <!-- wochentag 
-                <div class="tag"><center><b>{{ day }}</center></b>
-                    <div class="sub-tag b-middle">VM</div>
-                    <div class="sub-tag">NM</div>
-                </div>
-            {% } %}
-        {% endfor %}
-    </div>}#-->
     {% for drilling_team in drilling_teams %}
         <div class="clear"></div>
         <div class="bohrteam-row">
