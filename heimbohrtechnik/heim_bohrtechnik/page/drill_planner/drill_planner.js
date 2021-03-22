@@ -146,7 +146,7 @@ frappe.drill_planner = {
                                 overlay.style.height = String(search_elementTextRectangle.height) + 'px';
                                 overlay.style.position = 'absolute';
 
-                                var left_korrektur_faktor = parseInt($(".container.page-body").css("marginLeft"));
+                                var left_korrektur_faktor = parseInt($(".container.page-body").css("marginLeft")) + 15;
                                 var pos_left = search_elementTextRectangle.left;
                                 var pos_top = search_elementTextRectangle.top;
 

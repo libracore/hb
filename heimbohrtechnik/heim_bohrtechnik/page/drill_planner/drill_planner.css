@@ -29,7 +29,7 @@
     padding: 20px;
     background: #eee;
     width: 60px;
-    height: 60px;
+    height: 80px;
 }
 
 .b-middle {
@@ -55,8 +55,6 @@
 
 .bohrteam-row > .tag {
     float: left;
-    padding-top: 10px;
-    padding-bottom: 10px;
     background: #eee;
     width: 161px;
     height: 120px;
@@ -74,7 +72,7 @@
     padding: 20px;
     background: #eee;
     width: 80px;
-    height: 100px;
+    height: 120px;
 }
 
 .booked {
