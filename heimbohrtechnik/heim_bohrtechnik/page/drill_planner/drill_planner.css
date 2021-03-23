@@ -161,4 +161,24 @@
   cursor: move;
 }
 
+.ampel-indicator {
+    width: 15px;
+    height: 15px;
+    float: left;
+    margin: 5px 2px 2px 2px;
+    border: 1px solid black;
+    cursor: default;
+}
 
+.showTooltip {
+    background-color: black;
+    color: white;
+    padding:5px;
+    margin-top: 1.3em;
+    position: absolute;
+    max-width: 200px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    display: block !important;
+}

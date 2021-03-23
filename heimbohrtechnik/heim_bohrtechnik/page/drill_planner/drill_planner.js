@@ -104,6 +104,7 @@ frappe.drill_planner = {
     add_overlay: function(data) {
         var added_list = [];
         var main_layout_element = document.getElementsByClassName("row layout-main")[0].getBoundingClientRect();
+        var left_korrektur_faktor = main_layout_element.left + 15;
         for (var i = 0; i<data.drilling_teams.length; i++) {
             for (var y = 0; y<Object.entries(data.drilling_teams[i].project_details).length; y++) {
                 if (!added_list.includes(Object.entries(data.drilling_teams[i].project_details)[y][1].object)) {
@@ -134,14 +135,15 @@ frappe.drill_planner = {
                                  a6 = Bohrschlammentsorgung (rot: keiner, grün ein Schlammentsorger (Lieferant) im Objekt)
                                  a7 = Bohranzeige versendet (Checkbox auf Projekt)
                                 */
-                                var innerHTML = '<span class="indicator ' + ampel_indicators.a1 + '"></span>';
-                                innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a2 + '"></span>';
-                                innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a3 + '"></span>';
-                                innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a4 + '"></span>';
-                                innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a5 + '"></span>';
-                                innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a6 + '"></span>';
-                                innerHTML = innerHTML + '<span class="indicator ' + ampel_indicators.a7 + '"></span>';
-                                innerHTML = innerHTML + '<i class="fa fa-info-circle pointer" onclick="frappe.drill_planner.show_detail_popup(' + "'" + project + "'" + ');"></i><br>';
+                                var innerHTML =  '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a1 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 1</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a2 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 2</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a3 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 3</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a4 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 4</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a5 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 5</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a6 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 6</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a7 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 7</span>';
+                                
+                                innerHTML = innerHTML + '<i class="fa fa-info-circle pointer" style="margin-left: 5px; font-size: 20px; margin-top: 2px;" onclick="frappe.drill_planner.show_detail_popup(' + "'" + project + "'" + ');"></i><br>';
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object + "<br>";
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_name + "<br>";
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_location + "<br>";
@@ -153,7 +155,6 @@ frappe.drill_planner = {
                                 overlay.style.height = String(search_elementTextRectangle.height) + 'px';
                                 overlay.style.position = 'absolute';
                                 
-                                var left_korrektur_faktor = main_layout_element.left + 15;
                                 var pos_left = search_elementTextRectangle.left;
                                 var pos_top = search_elementTextRectangle.top;
 
@@ -171,6 +172,11 @@ frappe.drill_planner = {
                     }
                 }
             }
+            $('.hasTooltip').hover(function() {
+                $(this).next('span').addClass('showTooltip');
+            }, function() {
+                $(this).next('span').removeClass('showTooltip');
+            });
         }
         $("#drill_planner_main_element").on('scroll', function(e) { 
             var ele = $(e.currentTarget);
@@ -245,18 +251,17 @@ frappe.drill_planner = {
                                 html = html + '<td>' + manager + '</td></tr>';
                                 html = html + '<tr><td><b>' + __('Status') + '</b></td>';
                                 html = html + '<td>Status - Details...</td></tr>';
-                                //frappe.msgprint(html, __("Details"));
                                 
                                 var d = new frappe.ui.Dialog({
                                     'fields': [
                                         {'fieldname': 'ht', 'fieldtype': 'HTML'},
                                         {'fieldname': 'section_1', 'fieldtype': 'Section Break'},
                                         {'fieldname': 'start', 'label': __('Start'), 'fieldtype': 'Date', 'default': project.expected_start_date, 'reqd': 1},
-                                        {'fieldname': 'start_hd', 'label': __('Start Half-Day'), 'fieldtype': 'Select', 'options': 'VM\nNM', 'default': 'VM'},
+                                        {'fieldname': 'start_hd', 'label': __('Start Half-Day'), 'fieldtype': 'Select', 'options': 'VM\nNM', 'default': project.start_half_day},
                                         {'fieldname': 'drilling_team', 'label': __("Drilling Team"), 'fieldtype': 'Link', 'options': 'Drilling Team', 'default': project.drilling_team, 'reqd': 1},
                                         {'fieldname': 'cb_1', 'fieldtype': 'Column Break'},
                                         {'fieldname': 'end', 'label': __('End'), 'fieldtype': 'Date', 'default': project.expected_end_date, 'reqd': 1},
-                                        {'fieldname': 'end_hd', 'label': __('End Half-Day'), 'fieldtype': 'Select', 'options': 'VM\nNM', 'default': 'NM'}
+                                        {'fieldname': 'end_hd', 'label': __('End Half-Day'), 'fieldtype': 'Select', 'options': 'VM\nNM', 'default': project.end_half_day}
                                     ],
                                     primary_action: function(){
                                         d.hide();
