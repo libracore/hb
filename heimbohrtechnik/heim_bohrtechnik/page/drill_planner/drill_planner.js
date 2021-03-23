@@ -226,16 +226,64 @@ frappe.drill_planner = {
                                     manager = '<a href="/desk#Form/User/' + object.manager + '" target="_blank">' + object.manager + '</a>';
                                 }
                                 
-                                var html = '<a href="/desk#Form/Project/' + project.name + '" target="_blank">' + project.name + "</a><br>";
-                                html = html + customer + "<br>";
-                                html = html + object_link + "<br>";
-                                html = html + project.object_location + "<br>";
-                                html = html + project.ews_details + "<br>";
-                                html = html + mud_disposer + "<br>";
-                                html = html + drilling_equipment + "<br>";
-                                html = html + manager + "<br>";
-                                html = html + "Status - Details...<br>";
-                                frappe.msgprint(html, __("Details"));
+                                var html = '<table style="width: 100%;">';
+                                html = html + '<tr><td><b>' + __('Project') + '</b></td>';
+                                html = html + '<td>' + '<a href="/desk#Form/Project/' + project.name + '" target="_blank">' + project.name + '</a></td></tr>';
+                                html = html + '<tr><td><b>' + __('Customer') + '</b></td>';
+                                html = html + '<td>' + customer + ' (' + project.customer_name + ')' + '</td></tr>';
+                                html = html + '<tr><td><b>' + __('Object') + '</b></td>';
+                                html = html + '<td>' + object_link + '</td></tr>';
+                                html = html + '<tr><td><b>' + __('Location') + '</b></td>';
+                                html = html + '<td>' + project.object_location + '</td></tr>';
+                                html = html + '<tr><td><b>' + __('EWS Details') + '</b></td>';
+                                html = html + '<td>' + project.ews_details + '</td></tr>';
+                                html = html + '<tr><td><b>' + __('Mud Disposer') + '</b></td>';
+                                html = html + '<td>' + mud_disposer + '</td></tr>';
+                                html = html + '<tr><td><b>' + __('Drilling Equipment') + '</b></td>';
+                                html = html + '<td>' + drilling_equipment + '</td></tr>';
+                                html = html + '<tr><td><b>' + __('Manager') + '</b></td>';
+                                html = html + '<td>' + manager + '</td></tr>';
+                                html = html + '<tr><td><b>' + __('Status') + '</b></td>';
+                                html = html + '<td>Status - Details...</td></tr>';
+                                //frappe.msgprint(html, __("Details"));
+                                
+                                var d = new frappe.ui.Dialog({
+                                    'fields': [
+                                        {'fieldname': 'ht', 'fieldtype': 'HTML'},
+                                        {'fieldname': 'section_1', 'fieldtype': 'Section Break'},
+                                        {'fieldname': 'start', 'label': __('Start'), 'fieldtype': 'Date', 'default': project.expected_start_date, 'reqd': 1},
+                                        {'fieldname': 'start_hd', 'label': __('Start Half-Day'), 'fieldtype': 'Select', 'options': 'VM\nNM', 'default': 'VM'},
+                                        {'fieldname': 'drilling_team', 'label': __("Drilling Team"), 'fieldtype': 'Link', 'options': 'Drilling Team', 'default': project.drilling_team, 'reqd': 1},
+                                        {'fieldname': 'cb_1', 'fieldtype': 'Column Break'},
+                                        {'fieldname': 'end', 'label': __('End'), 'fieldtype': 'Date', 'default': project.expected_end_date, 'reqd': 1},
+                                        {'fieldname': 'end_hd', 'label': __('End Half-Day'), 'fieldtype': 'Select', 'options': 'VM\nNM', 'default': 'NM'}
+                                    ],
+                                    primary_action: function(){
+                                        d.hide();
+                                        var reshedule_data = d.get_values();
+                                        // reschedule_project
+                                        frappe.call({
+                                           method: "heimbohrtechnik.heim_bohrtechnik.page.drill_planner.drill_planner.reschedule_project",
+                                           args: {
+                                                "popup": 1,
+                                                "project": project.name,
+                                                'new_project_start': reshedule_data.start,
+                                                "start_half_day": reshedule_data.start_hd,
+                                                'new_project_end_date': reshedule_data.end,
+                                                'end_half_day': reshedule_data.end_hd,
+                                                'team': reshedule_data.drilling_team
+                                           },
+                                           async: false,
+                                           callback: function(response) {
+                                                frappe.drill_planner.reload_data(frappe.drill_planner.page);
+                                           }
+                                        });
+                                    },
+                                    primary_action_label: __('Reshedule'),
+                                    title: __("Details")
+                                });
+                                d.fields_dict.ht.$wrapper.html(html);
+                                d.show();
                             } else {
                                 frappe.msgprint("Object not found");
                             }

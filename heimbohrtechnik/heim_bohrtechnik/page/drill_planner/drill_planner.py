@@ -127,28 +127,38 @@ def get_booked_days_of_drilling_team(team):
     return booked_days, booked_vm_start_days, booked_nm_start_days, booked_vm_end_days, booked_nm_end_days, project_details
     
 @frappe.whitelist()
-def reschedule_project(project, team, day, start_half_day):
+def reschedule_project(project=None, team=None, day=None, start_half_day=None, popup=False, new_project_start=None, new_project_end_date=None, end_half_day=None):
     project = frappe.get_doc("Project", project)
     
-    start_date = project.expected_start_date
-    end_date = project.expected_end_date
-    project_duration = date_diff(end_date, start_date)
-    delta = timedelta(days=project_duration)
-    
-    new_project_start_day = day.split(".")[0]
-    new_project_start_month = day.split(".")[1]
-    new_project_start_year = day.split(".")[2]
-    new_project_start = getdate(new_project_start_year + "-" + new_project_start_month + "-" + new_project_start_day)
-    
-    new_project_end_date = new_project_start
-    new_project_end_date += delta
-    
-    project.expected_start_date = new_project_start
-    project.expected_end_date = new_project_end_date
-    project.start_half_day = start_half_day
-    project.drilling_team = team
-    
-    project.save()
+    if not popup:
+        start_date = project.expected_start_date
+        end_date = project.expected_end_date
+        project_duration = date_diff(end_date, start_date)
+        delta = timedelta(days=project_duration)
+        
+        new_project_start_day = day.split(".")[0]
+        new_project_start_month = day.split(".")[1]
+        new_project_start_year = day.split(".")[2]
+        new_project_start = getdate(new_project_start_year + "-" + new_project_start_month + "-" + new_project_start_day)
+        
+        new_project_end_date = new_project_start
+        new_project_end_date += delta
+        
+        project.expected_start_date = new_project_start
+        project.expected_end_date = new_project_end_date
+        project.start_half_day = start_half_day
+        project.drilling_team = team
+        
+        project.save()
+    else:
+        project.expected_start_date = new_project_start
+        project.expected_end_date = new_project_end_date
+        project.start_half_day = start_half_day
+        project.end_half_day = end_half_day
+        project.drilling_team = team
+        
+        project.save()
+        
 
 @frappe.whitelist()
 def get_traffic_lights(project):
