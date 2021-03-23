@@ -9,9 +9,9 @@
     height: 120px;
 }
 
+/* Wochentag */
 .date-row > .tag {
     float: left;
-    padding: 20px;
     background: #eee;
     width: 161px;
     height: 120px;
@@ -28,7 +28,38 @@
     float: left;
     padding: 20px;
     background: #eee;
-    width: 60px;
+    width: 80px;
+    height: 80px;
+}
+
+/* Weekend */
+.date-row > .tag.weekend {
+    float: left;
+    background: #eee;
+    width: 80px;
+    height: 120px;
+    
+    border-left: 1px solid black;
+}
+
+.date-row > .tag.weekend:last-child {
+    border-right: 1px solid black;
+    width: 81px;
+}
+
+.date-row > .tag > .sub-tag.weekend {
+    float: left;
+    padding: 20px 0px 0px 0px;
+    background: #eee;
+    width: 40.5px;
+    height: 80px;
+}
+
+.date-row > .tag > .sub-tag.b-middle.weekend {
+    float: left;
+    padding: 20px 0px 0px 0px;
+    background: #eee;
+    width: 38.5px;
     height: 80px;
 }
 
@@ -53,6 +84,7 @@
     height: 120px;
 }
 
+/* Wochentag */
 .bohrteam-row > .tag {
     float: left;
     background: #eee;
@@ -75,6 +107,41 @@
     height: 120px;
 }
 
+/* Weekend */
+.bohrteam-row > .tag.weekend {
+    float: left;
+    background: #eee;
+    width: 80px;
+    height: 120px;
+    
+    border-left: 1px solid black;
+}
+
+.bohrteam-row > .tag.weekend:last-child {
+    border-right: 1px solid black;
+    width: 81px;
+}
+
+.bohrteam-row > .tag > .sub-tag.weekend {
+    float: left;
+    padding: 0;
+    background: #eee;
+    width: 40.5px;
+    height: 120px;
+}
+
+.bohrteam-row > .tag > .sub-tag.b-middle.weekend {
+    float: left;
+    padding: 0;
+    background: #eee;
+    width: 38.5px;
+    height: 120px;
+}
+
+.weekend {
+    background-color: #FD8B8B !important;
+}
+
 .booked {
     background-color: green !important;
 }
@@ -94,6 +161,4 @@
   cursor: move;
 }
 
-.weekend {
-    background-color: #FD8B8B !important;
-}
+

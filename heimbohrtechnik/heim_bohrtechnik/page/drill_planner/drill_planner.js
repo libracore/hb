@@ -92,7 +92,9 @@ frappe.drill_planner = {
                     drilling_teams: content.drilling_teams,
                     days: content.days,
                     total_width: content.total_width,
-                    weekend: content.weekend
+                    weekend: content.weekend,
+                    kw_list: content.kw_list,
+                    day_list: content.day_list
                 };
 		   }
 		});

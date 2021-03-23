@@ -14,15 +14,15 @@
         {% for day in days %}
             {% if (in_list(weekend, day)) { %}
                 <!-- wochenende -->
-                <div class="tag weekend"><center><b>{{ day }}</center></b>
-                    <div class="sub-tag b-middle weekend">VM</div>
-                    <div class="sub-tag weekend">NM</div>
+                <div class="tag weekend"><center><b>KW {{ kw_list[day] }}<br>{{ day }}<br>({{ __(day_list[day]) }})</center></b>
+                    <div class="sub-tag b-middle weekend"><center>VM</center></div>
+                    <div class="sub-tag weekend"><center>NM</center></div>
                 </div>
             {% } else { %}
                 <!-- wochentag -->
-                <div class="tag"><center><b>{{ day }}</center></b>
-                    <div class="sub-tag b-middle">VM</div>
-                    <div class="sub-tag">NM</div>
+                <div class="tag"><center><b>KW {{ kw_list[day] }}<br>{{ day }}<br>({{ __(day_list[day]) }})</center></b>
+                    <div class="sub-tag b-middle"><center>VM</center></div>
+                    <div class="sub-tag"><center>NM</center></div>
                 </div>
             {% } %}
         {% endfor %}
