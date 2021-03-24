@@ -135,13 +135,13 @@ frappe.drill_planner = {
                                  a6 = Bohrschlammentsorgung (rot: keiner, grün ein Schlammentsorger (Lieferant) im Objekt)
                                  a7 = Bohranzeige versendet (Checkbox auf Projekt)
                                 */
-                                var innerHTML =  '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a1 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 1</span>';
-                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a2 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 2</span>';
-                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a3 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 3</span>';
-                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a4 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 4</span>';
-                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a5 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 5</span>';
-                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a6 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 6</span>';
-                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a7 + ';"></div><span style="display: none;">Hier folgt der Tooltip für die Ampel 7</span>';
+                                var innerHTML =  '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a1.color + ';"></div><span style="display: none;">' + ampel_indicators.a1.tooltip + '</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a2.color + ';"></div><span style="display: none;">' + ampel_indicators.a2.tooltip + '</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a3.color + ';"></div><span style="display: none;">' + ampel_indicators.a3.tooltip + '</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a4.color + ';"></div><span style="display: none;">' + ampel_indicators.a4.tooltip + '</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a5.color + ';"></div><span style="display: none;">' + ampel_indicators.a5.tooltip + '</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a6.color + ';"></div><span style="display: none;">' + ampel_indicators.a6.tooltip + '</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a7.color + ';"></div><span style="display: none;">' + ampel_indicators.a7.tooltip + '</span>';
                                 
                                 innerHTML = innerHTML + '<i class="fa fa-info-circle pointer" style="margin-left: 5px; font-size: 20px; margin-top: 2px;" onclick="frappe.drill_planner.show_detail_popup(' + "'" + project + "'" + ');"></i><br>';
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object + "<br>";

@@ -3,7 +3,8 @@
 
 from __future__ import unicode_literals
 import frappe
-from frappe.utils.data import getdate, date_diff
+from frappe import _
+from frappe.utils.data import getdate, date_diff, add_days
 from datetime import date, timedelta
 
 @frappe.whitelist()
@@ -145,7 +146,23 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
         
         project.expected_start_date = new_project_start
         project.expected_end_date = new_project_end_date
-        project.start_half_day = start_half_day
+        
+        if project.start_half_day != start_half_day:
+            old_start_hd = project.start_half_day
+            project.start_half_day = start_half_day
+            if old_start_hd == 'NM':
+                if project.end_half_day == 'NM':
+                    project.end_half_day = 'VM'
+                else:
+                    project.end_half_day = 'NM'
+                    project.expected_end_date = add_days(project.expected_end_date, -1)
+            else:
+                if project.end_half_day == 'VM':
+                    project.end_half_day = 'NM'
+                else:
+                    project.end_half_day = 'VM'
+                    project.expected_end_date = add_days(project.expected_end_date, 1)
+        
         project.drilling_team = team
         
         project.save()
@@ -187,47 +204,92 @@ def get_traffic_lights_indicator(project, typ):
     
     if typ == 'a1':
         if drilling_object.construction_site_inspected == 1:
-            return 'green'
+            return {
+                'color': 'green',
+                'tooltip': _('The construction site was visited')
+            }
         else:
-            return 'red'
+            return {
+                'color': 'red',
+                'tooltip': _("The construction site was <b>not</b> visited")
+            }
     
     # tbd!
     if typ == 'a2':
-        return 'red'
+        return {
+            'color': 'red',
+            'tooltip': _("This tooltip is an example and still needs to be programmed")
+        }
     
     if typ == 'a3':
         if not project.sales_order:
-            return 'red'
+            return {
+                'color': 'red',
+                'tooltip': _("No sales order available")
+            }
         else:
             sales_order = frappe.get_doc("Sales Order", project.sales_order)
             if sales_order.docstatus == 1:
-                return 'green'
+                return {
+                    'color': 'green',
+                    'tooltip': _("The sales order is submitted")
+                }
             elif  sales_order.docstatus == 0:
-                return 'yellow'
+                return {
+                    'color': 'yellow',
+                    'tooltip': _("The sales order is <b>not</b> submitted")
+                }
             else:
-                return 'red'
+                return {
+                    'color': 'red',
+                    'tooltip': _("The sales order is cancelled")
+                }
     
     # tbd!
     if typ == 'a4':
-        return 'red'
+        return {
+            'color': 'red',
+            'tooltip': _("This tooltip is an example and still needs to be programmed")
+        }
     
     if typ == 'a5':
         if project.crane_required == 0:
-            return 'grey'
+            return {
+                'color': 'grey',
+                'tooltip': _("No crane is needed")
+            }
         else:
             if project.crane_organized == 1:
-                return 'green'
+                return {
+                    'color': 'green',
+                    'tooltip': _("The crane was organized")
+                }
             else:
-                return 'red'
+                return {
+                    'color': 'red',
+                    'tooltip': _("The crane has not yet been organized")
+                }
     
     if typ == 'a6':
         if drilling_object.mud_disposer:
-            return 'green'
+            return {
+                'color': 'green',
+                'tooltip': _("Mud Disposer entered")
+            }
         else:
-            return 'red'
+            return {
+                'color': 'red',
+                'tooltip': _("Mud Disposer missing")
+            }
     
     if typ == 'a7':
         if project.drill_notice_sent == 1:
-            return 'green'
+            return {
+                'color': 'green',
+                'tooltip': _("Drill notice sent")
+            }
         else:
-            return 'red'
+           return {
+                'color': 'red',
+                'tooltip': _("Drill notice <b>not</b> sent")
+            }
