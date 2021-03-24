@@ -12,28 +12,28 @@
                     {% if (in_list(weekend, day)) { %}
                         <!-- wochenende -->
                         <div class="tag weekend">
-                            <div class="sub-tag b-middle weekend booked project-details" id="{{ drilling_team.project_details[day].object }}"></div>
-                            <div class="sub-tag weekend booked" id="{{ drilling_team.project_details[day].object }}"></div>
+                            <div class="sub-tag b-middle weekend booked project-details" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="VM"></div>
+                            <div class="sub-tag weekend booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="NM" ></div>
                         </div>
                     {% } else { %}
                         <!-- wochentag -->
                         <div class="tag">
-                            <div class="sub-tag b-middle booked project-details" id="{{ drilling_team.project_details[day].object }}"></div>
-                            <div class="sub-tag booked" id="{{ drilling_team.project_details[day].object }}"></div>
+                            <div class="sub-tag b-middle booked project-details" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="VM"></div>
+                            <div class="sub-tag booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="NM" ></div>
                         </div>
                     {% } %}
                 {% } else if (in_list(drilling_team.booked_nm_start_days, day)) { %}
                     {% if (in_list(weekend, day)) { %}
                         <!-- wochenende -->
                         <div class="tag weekend">
-                            <div class="sub-tag b-middle weekend"></div>
-                            <div class="sub-tag weekend booked project-details" id="{{ drilling_team.project_details[day].object }}"></div>
+                            <div class="sub-tag b-middle weekend" data-day="{{ day }}" data-start="VM" ></div>
+                            <div class="sub-tag weekend booked project-details" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="NM"></div>
                         </div>
                     {% } else { %}
                         <!-- wochentag -->
                         <div class="tag">
-                            <div class="sub-tag b-middle"></div>
-                            <div class="sub-tag booked project-details" id="{{ drilling_team.project_details[day].object }}"></div>
+                            <div class="sub-tag b-middle" data-day="{{ day }}" data-start="VM" ></div>
+                            <div class="sub-tag booked project-details" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="NM"></div>
                         </div>
                     {% } %}
                 {% } else if (in_list(drilling_team.booked_days, day)) { %}
@@ -41,14 +41,14 @@
                      {% if (in_list(weekend, day)) { %}
                         <!-- wochenende -->
                         <div class="tag weekend">
-                            <div class="sub-tag b-middle weekend booked" id="{{ drilling_team.project_details[day].object }}"></div>
-                            <div class="sub-tag weekend booked" id="{{ drilling_team.project_details[day].object }}"></div>
+                            <div class="sub-tag b-middle weekend booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="VM"></div>
+                            <div class="sub-tag weekend booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="NM" ></div>
                         </div>
                     {% } else { %}
                         <!-- wochentag -->
                         <div class="tag">
-                            <div class="sub-tag b-middle booked" id="{{ drilling_team.project_details[day].object }}"></div>
-                            <div class="sub-tag booked" id="{{ drilling_team.project_details[day].object }}"></div>
+                            <div class="sub-tag b-middle booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="VM"></div>
+                            <div class="sub-tag booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="NM" ></div>
                         </div>
                     {% } %}
                 {% } else if (in_list(drilling_team.booked_vm_end_days, day)) { %}
@@ -56,14 +56,14 @@
                     {% if (in_list(weekend, day)) { %}
                         <!-- wochenende -->
                         <div class="tag weekend">
-                            <div class="sub-tag b-middle weekend booked" id="{{ drilling_team.project_details[day].object }}"></div>
-                            <div class="sub-tag weekend"></div>
+                            <div class="sub-tag b-middle weekend booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="VM"></div>
+                            <div class="sub-tag weekend" data-day="{{ day }}" data-start="NM" ></div>
                         </div>
                     {% } else { %}
                         <!-- wochentag -->
                         <div class="tag">
-                            <div class="sub-tag b-middle booked" id="{{ drilling_team.project_details[day].object }}"></div>
-                            <div class="sub-tag"></div>
+                            <div class="sub-tag b-middle booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="VM"></div>
+                            <div class="sub-tag" data-day="{{ day }}" data-start="NM" ></div>
                         </div>
                     {% } %}
                 {% } else if (in_list(drilling_team.booked_nm_end_days, day)) { %}
@@ -71,14 +71,14 @@
                     {% if (in_list(weekend, day)) { %}
                         <!-- wochenende -->
                         <div class="tag weekend">
-                            <div class="sub-tag b-middle weekend booked" id="{{ drilling_team.project_details[day].object }}"></div>
-                            <div class="sub-tag weekend booked" id="{{ drilling_team.project_details[day].object }}"></div>
+                            <div class="sub-tag b-middle weekend booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="VM"></div>
+                            <div class="sub-tag weekend booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="NM" ></div>
                         </div>
                     {% } else { %}
                         <!-- wochentag -->
                         <div class="tag">
-                            <div class="sub-tag b-middle booked" id="{{ drilling_team.project_details[day].object }}"></div>
-                            <div class="sub-tag booked" id="{{ drilling_team.project_details[day].object }}"></div>
+                            <div class="sub-tag b-middle booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="VM"></div>
+                            <div class="sub-tag booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="NM"></div>
                         </div>
                     {% } %}
                 {% } else { %}

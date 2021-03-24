@@ -187,6 +187,39 @@ def get_traffic_lights(project):
     data['a6'] = get_traffic_lights_indicator(project, 'a6')
     data['a7'] = get_traffic_lights_indicator(project, 'a7')
     
+    project = frappe.get_doc("Project", project)
+    start_date = getdate(project.expected_start_date)
+    end_date = getdate(project.expected_end_date)
+    total_weekend = 0
+    total_weekday = 0
+    
+    delta = timedelta(days=1)
+    while start_date <= end_date:
+        week_day_no = start_date.weekday()
+        if week_day_no >= 5:
+            total_weekend += 1
+        else:
+            total_weekday += 1
+        start_date += delta
+        
+    total_weekend = total_weekend * 2
+    total_weekday = total_weekday * 2
+    
+    if project.start_half_day == 'NM':
+        if getdate(project.expected_start_date).weekday() >= 5:
+            total_weekend -= 1
+        else:
+            total_weekday -= 1
+        
+    if project.end_half_day == 'VM':
+        if getdate(project.expected_end_date).weekday() >= 5:
+            total_weekend -= 1
+        else:
+            total_weekday -= 1
+    
+    total_overlay_width = (total_weekday * 80) + (total_weekend * 40)
+    data['total_overlay_width'] = total_overlay_width
+    
     return data
 
 def get_traffic_lights_indicator(project, typ):

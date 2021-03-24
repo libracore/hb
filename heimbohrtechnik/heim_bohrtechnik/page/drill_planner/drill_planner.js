@@ -16,7 +16,9 @@ frappe.pages['drill-planner'].on_page_load = function(wrapper) {
     // drag start
     document.addEventListener('dragstart', function(event) {
         event.dataTransfer.setData('Text', event.target.id);
-        document.getElementById(event.target.id).style.backgroundColor = 'green';
+        var drag_element = document.getElementById(event.target.id);
+        drag_element.style.backgroundColor = 'green';
+        drag_element.innerHTML = __("Drag&Drop me to the new start date");
     });
 }
 
@@ -143,7 +145,7 @@ frappe.drill_planner = {
                                 innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a6.color + ';"></div><span style="display: none;">' + ampel_indicators.a6.tooltip + '</span>';
                                 innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a7.color + ';"></div><span style="display: none;">' + ampel_indicators.a7.tooltip + '</span>';
                                 
-                                innerHTML = innerHTML + '<i class="fa fa-info-circle pointer" style="margin-left: 5px; font-size: 20px; margin-top: 2px;" onclick="frappe.drill_planner.show_detail_popup(' + "'" + project + "'" + ');"></i><br>';
+                                innerHTML = innerHTML + '<i class="fa fa-info-circle pointer hasTooltip" style="margin-left: 5px; font-size: 20px; margin-top: 2px;" onclick="frappe.drill_planner.show_detail_popup(' + "'" + project + "'" + ');"></i><span style="display: none;">' + __("Click me for more informations") + '</span><br>';
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object + "<br>";
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_name + "<br>";
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_location + "<br>";
@@ -160,8 +162,8 @@ frappe.drill_planner = {
 
                                 overlay.style.left = String(pos_left - left_korrektur_faktor) + 'px';
                                 overlay.style.top = String(pos_top - 245) + 'px';
-                                overlay.style.minWidth = '160px';
-
+                                
+                                overlay.style.minWidth = String(ampel_indicators.total_overlay_width) + "px";
                                 overlay.setAttribute('draggable', true);
 
                                 var drill_planner_div = document.getElementById("drill_planner_main_element");
