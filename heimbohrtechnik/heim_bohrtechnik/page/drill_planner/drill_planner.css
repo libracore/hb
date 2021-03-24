@@ -182,3 +182,7 @@
     border-radius: 5px;
     display: block !important;
 }
+
+.ondragover {
+    background-color: yellow !important;
+}

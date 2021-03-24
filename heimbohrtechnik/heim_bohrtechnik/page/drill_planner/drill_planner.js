@@ -304,6 +304,13 @@ frappe.drill_planner = {
     },
     allow_drop: function(ev) {
         ev.preventDefault();
+        var to_get_droped = document.getElementById(ev.target.id);
+        to_get_droped.classList.add("ondragover");
+    },
+    drag_leave: function(ev) {
+        ev.preventDefault();
+        var leaved = document.getElementById(ev.target.id);
+        leaved.classList.remove("ondragover");
     },
     drop: function(ev) {
         ev.preventDefault();

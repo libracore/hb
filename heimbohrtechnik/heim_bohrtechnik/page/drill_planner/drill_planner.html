@@ -26,13 +26,13 @@
                     {% if (in_list(weekend, day)) { %}
                         <!-- wochenende -->
                         <div class="tag weekend">
-                            <div class="sub-tag b-middle weekend" data-day="{{ day }}" data-start="VM" ></div>
+                            <div id="{{ drilling_team.team }}-{{ day }}-VM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" ondragleave="frappe.drill_planner.drag_leave(event)" class="sub-tag b-middle weekend dropziel"></div>
                             <div class="sub-tag weekend booked project-details" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="NM"></div>
                         </div>
                     {% } else { %}
                         <!-- wochentag -->
                         <div class="tag">
-                            <div class="sub-tag b-middle" data-day="{{ day }}" data-start="VM" ></div>
+                            <div id="{{ drilling_team.team }}-{{ day }}-VM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" ondragleave="frappe.drill_planner.drag_leave(event)" class="sub-tag b-middle dropziel"></div>
                             <div class="sub-tag booked project-details" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="NM"></div>
                         </div>
                     {% } %}
@@ -57,13 +57,13 @@
                         <!-- wochenende -->
                         <div class="tag weekend">
                             <div class="sub-tag b-middle weekend booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="VM"></div>
-                            <div class="sub-tag weekend" data-day="{{ day }}" data-start="NM" ></div>
+                            <div id="{{ drilling_team.team }}-{{ day }}-NM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="NM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" ondragleave="frappe.drill_planner.drag_leave(event)" class="sub-tag weekend dropziel"></div>
                         </div>
                     {% } else { %}
                         <!-- wochentag -->
                         <div class="tag">
                             <div class="sub-tag b-middle booked" id="{{ drilling_team.project_details[day].object }}" data-day="{{ day }}" data-start="VM"></div>
-                            <div class="sub-tag" data-day="{{ day }}" data-start="NM" ></div>
+                            <div id="{{ drilling_team.team }}-{{ day }}-NM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="NM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" ondragleave="frappe.drill_planner.drag_leave(event)" class="sub-tag dropziel"></div>
                         </div>
                     {% } %}
                 {% } else if (in_list(drilling_team.booked_nm_end_days, day)) { %}
@@ -85,14 +85,14 @@
                     {% if (in_list(weekend, day)) { %}
                         <!-- ungebucht wochenende -->
                         <div class="tag weekend">
-                            <div id="{{ drilling_team.team }}-{{ day }}-VM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag b-middle weekend dropziel"></div>
-                            <div id="{{ drilling_team.team }}-{{ day }}-NM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="NM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag weekend dropziel"></div>
+                            <div id="{{ drilling_team.team }}-{{ day }}-VM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" ondragleave="frappe.drill_planner.drag_leave(event)" class="sub-tag b-middle weekend dropziel"></div>
+                            <div id="{{ drilling_team.team }}-{{ day }}-NM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="NM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" ondragleave="frappe.drill_planner.drag_leave(event)" class="sub-tag weekend dropziel"></div>
                         </div>
                     {% } else { %}
                         <!-- ungebucht wochentag -->
                         <div class="tag">
-                            <div id="{{ drilling_team.team }}-{{ day }}-VM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag b-middle dropziel"></div>
-                            <div id="{{ drilling_team.team }}-{{ day }}-NM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="NM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" class="sub-tag dropziel"></div>
+                            <div id="{{ drilling_team.team }}-{{ day }}-VM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="VM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" ondragleave="frappe.drill_planner.drag_leave(event)" class="sub-tag b-middle dropziel"></div>
+                            <div id="{{ drilling_team.team }}-{{ day }}-NM" data-team="{{ drilling_team.team }}" data-day="{{ day }}" data-start="NM" ondrop="frappe.drill_planner.drop(event)" ondragover="frappe.drill_planner.allow_drop(event)" ondragleave="frappe.drill_planner.drag_leave(event)" class="sub-tag dropziel"></div>
                         </div>
                     {% } %}
                 {% } %}
