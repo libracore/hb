@@ -177,7 +177,7 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
         
 
 @frappe.whitelist()
-def get_traffic_lights(project):
+def get_overlay_data(project, selected_start, selected_end):
     data = {}
     data['a1'] = get_traffic_lights_indicator(project, 'a1')
     data['a2'] = get_traffic_lights_indicator(project, 'a2')
@@ -190,33 +190,43 @@ def get_traffic_lights(project):
     project = frappe.get_doc("Project", project)
     start_date = getdate(project.expected_start_date)
     end_date = getdate(project.expected_end_date)
+    start_overwritten = False
+    end_overwritten = False
+    
+    if getdate(selected_start) > start_date:
+        start_date = getdate(selected_start)
+        start_overwritten = True
+    
+    if getdate(selected_end) < end_date:
+        end_date = getdate(selected_end)
+        end_overwritten = True
+    
     total_weekend = 0
     total_weekday = 0
+    
+    if not start_overwritten:
+        if project.start_half_day == 'NM':
+            if getdate(project.expected_start_date).weekday() >= 5:
+                total_weekend -= 1
+            else:
+                total_weekday -= 1
+    
+    if not end_overwritten:
+        if project.end_half_day == 'VM':
+            if getdate(project.expected_end_date).weekday() >= 5:
+                total_weekend -= 1
+            else:
+                total_weekday -= 1
     
     delta = timedelta(days=1)
     while start_date <= end_date:
         week_day_no = start_date.weekday()
         if week_day_no >= 5:
-            total_weekend += 1
+            total_weekend += 2
         else:
-            total_weekday += 1
+            total_weekday += 2
         start_date += delta
         
-    total_weekend = total_weekend * 2
-    total_weekday = total_weekday * 2
-    
-    if project.start_half_day == 'NM':
-        if getdate(project.expected_start_date).weekday() >= 5:
-            total_weekend -= 1
-        else:
-            total_weekday -= 1
-        
-    if project.end_half_day == 'VM':
-        if getdate(project.expected_end_date).weekday() >= 5:
-            total_weekend -= 1
-        else:
-            total_weekday -= 1
-    
     total_overlay_width = (total_weekday * 80) + (total_weekend * 40)
     data['total_overlay_width'] = total_overlay_width
     

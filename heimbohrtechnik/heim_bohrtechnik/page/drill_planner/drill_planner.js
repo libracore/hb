@@ -119,10 +119,15 @@ frappe.drill_planner = {
                         var overlay = document.createElement("div");
                         overlay.id = 'dragObjecT-' + project;
                         
+                        var selected_start = document.getElementById("from").value;
+                        var selected_end = document.getElementById("to").value;
+                        
                         frappe.call({
-                            method: "heimbohrtechnik.heim_bohrtechnik.page.drill_planner.drill_planner.get_traffic_lights",
+                            method: "heimbohrtechnik.heim_bohrtechnik.page.drill_planner.drill_planner.get_overlay_data",
                             args: {
-                                "project": project
+                                "project": project,
+                                "selected_start": selected_start,
+                                "selected_end": selected_end
                             },
                             async: false,
                             callback: function(response) {
