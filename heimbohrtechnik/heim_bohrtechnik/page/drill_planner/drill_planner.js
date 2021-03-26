@@ -18,7 +18,6 @@ frappe.pages['drill-planner'].on_page_load = function(wrapper) {
         event.dataTransfer.setData('Text', event.target.id);
         var drag_element = document.getElementById(event.target.id);
         drag_element.style.backgroundColor = 'green';
-        drag_element.innerHTML = __("Drag&Drop me to the new start date");
     });
 }
 
