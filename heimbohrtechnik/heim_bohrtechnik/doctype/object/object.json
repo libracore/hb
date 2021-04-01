@@ -28,9 +28,19 @@
   "customer_address",
   "customer_address_display",
   "customer_contact",
-  "customer_conact_name",
+  "customer_contact_name",
   "customer_contact_email",
-  "customer_contact_phone"
+  "customer_contact_phone",
+  "section_owner",
+  "owner",
+  "owner_name",
+  "column_owner",
+  "owner_address",
+  "owner_address_display",
+  "owner_contact",
+  "owner_contact_name",
+  "owner_contact_email",
+  "owner_contact_phone"
  ],
  "fields": [
   {
@@ -162,13 +172,6 @@
    "options": "Contact"
   },
   {
-   "fetch_from": "contact.full_name",
-   "fieldname": "customer_conact_name",
-   "fieldtype": "Data",
-   "label": "Customer contact name",
-   "read_only": 1
-  },
-  {
    "fetch_from": "contact.email_id",
    "fieldname": "customer_contact_email",
    "fieldtype": "Data",
@@ -181,9 +184,76 @@
    "fieldtype": "Data",
    "label": "Customer contact phone",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_owner",
+   "fieldtype": "Section Break",
+   "label": "Owner"
+  },
+  {
+   "fetch_from": "contact.full_name",
+   "fieldname": "customer_contact_name",
+   "fieldtype": "Data",
+   "label": "Customer contact name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "owner",
+   "fieldtype": "Link",
+   "label": "Owner",
+   "options": "Customer"
+  },
+  {
+   "fetch_from": "owner.customer_name",
+   "fieldname": "owner_name",
+   "fieldtype": "Data",
+   "label": "Owner name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_owner",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "owner_address",
+   "fieldtype": "Link",
+   "label": "Owner address",
+   "options": "Address"
+  },
+  {
+   "fieldname": "owner_address_display",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "owner_contact",
+   "fieldtype": "Link",
+   "label": "Owner contact",
+   "options": "Contact"
+  },
+  {
+   "fetch_from": "owner_contact.full_name",
+   "fieldname": "owner_contact_name",
+   "fieldtype": "Data",
+   "label": "Owner contact name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "owner_contact.email_id",
+   "fieldname": "owner_contact_email",
+   "fieldtype": "Data",
+   "label": "Owner contact email",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "owner_contact.phone",
+   "fieldname": "owner_contact_phone",
+   "fieldtype": "Data",
+   "label": "Owner contact phone",
+   "read_only": 1
   }
  ],
- "modified": "2021-04-01 08:45:42.633761",
+ "modified": "2021-04-01 20:37:58.815265",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
