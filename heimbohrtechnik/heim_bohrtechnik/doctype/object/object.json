@@ -8,6 +8,9 @@
  "field_order": [
   "naming_series",
   "object_name",
+  "column_main",
+  "object_mode",
+  "object_type",
   "section_address",
   "object_street",
   "button_search_plz",
@@ -18,9 +21,16 @@
   "mud_disposer",
   "drilling_equipment",
   "manager",
-  "section_stakeholders",
+  "section_customer",
   "customer",
-  "object_owner"
+  "customer_name",
+  "column_customer",
+  "customer_address",
+  "customer_address_display",
+  "customer_contact",
+  "customer_conact_name",
+  "customer_contact_email",
+  "customer_contact_phone"
  ],
  "fields": [
   {
@@ -96,24 +106,84 @@
    "read_only": 1
   },
   {
-   "fieldname": "section_stakeholders",
-   "fieldtype": "Section Break",
-   "label": "Stakeholders"
-  },
-  {
    "fieldname": "customer",
    "fieldtype": "Link",
    "label": "Customer",
    "options": "Customer"
   },
   {
-   "fieldname": "object_owner",
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "object_type",
+   "fieldtype": "Select",
+   "label": "Object Type",
+   "options": "\nEFH\nDEFH\nGewerbe\nMFH\nSonstIge\nW\u00dcBB"
+  },
+  {
+   "default": "Neubau",
+   "fieldname": "object_mode",
+   "fieldtype": "Select",
+   "label": "Object Mode",
+   "options": "Neubau\nSanierung"
+  },
+  {
+   "fieldname": "section_customer",
+   "fieldtype": "Section Break",
+   "label": "Customer"
+  },
+  {
+   "fetch_from": "customer.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_customer",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer_address",
    "fieldtype": "Link",
-   "label": "Owner",
-   "options": "Customer"
+   "label": "Customer address",
+   "options": "Address"
+  },
+  {
+   "fieldname": "customer_address_display",
+   "fieldtype": "Small Text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer_contact",
+   "fieldtype": "Link",
+   "label": "Customer contact",
+   "options": "Contact"
+  },
+  {
+   "fetch_from": "contact.full_name",
+   "fieldname": "customer_conact_name",
+   "fieldtype": "Data",
+   "label": "Customer contact name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "contact.email_id",
+   "fieldname": "customer_contact_email",
+   "fieldtype": "Data",
+   "label": "Customer contact email",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "contact.phone",
+   "fieldname": "customer_contact_phone",
+   "fieldtype": "Data",
+   "label": "Customer contact phone",
+   "read_only": 1
   }
  ],
- "modified": "2021-03-17 11:50:25.786419",
+ "modified": "2021-04-01 08:45:42.633761",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
