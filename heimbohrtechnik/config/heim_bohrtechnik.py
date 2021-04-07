@@ -108,6 +108,18 @@ def get_data():
                    "name": "Drilling Equipment",
                    "label": _("Drilling Equipment"),
                    "description": _("Drilling Equipment")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Permit Type",
+                   "label": _("Permit Type"),
+                   "description": _("Permit Type")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Checklist Activity",
+                   "label": _("Checklist Activity"),
+                   "description": _("Checklist Activity")
                 }
             ]
         }
