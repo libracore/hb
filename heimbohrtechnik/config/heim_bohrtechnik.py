@@ -120,6 +120,12 @@ def get_data():
                    "name": "Checklist Activity",
                    "label": _("Checklist Activity"),
                    "description": _("Checklist Activity")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Drilling Type",
+                   "label": _("Drilling Type"),
+                   "description": _("Drilling Type")
                 }
             ]
         }

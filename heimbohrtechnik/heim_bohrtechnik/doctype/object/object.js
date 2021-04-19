@@ -32,7 +32,33 @@ frappe.ui.form.on('Object', {
     },
     button_search_plz: function(frm) {
         search_plz(frm);
-    }
+    },
+    plz: function(frm) {
+        update_location(frm);
+    },
+    city: function(frm) {
+        update_location(frm);
+    },
+    kanton: function(frm) {
+        update_location(frm);
+    }/*,
+    ch_coordinates: function(frm) {
+        convert_ch_to_gps(frm);
+    },
+    gps_coordinates: function(frm) {
+        convert_gps_to_ch(frm);
+    },
+    button_open_map: function(frm) {
+        if (frm.doc.ch_coordinates) {
+            var parts = frm.doc.ch_coordinates.split("/");
+            var e= parts[0].replaceAll(" ", "").replaceAll("'", "");
+            var n = parts[1].replaceAll(" ", "").replaceAll("'", "");
+            window.open(
+                "https://map.geo.admin.ch/?lang=de&topic=ech&bgLayer=ch.swisstopo.swissimage&layers=ch.swisstopo.zeitreihen,ch.bfs.gebaeude_wohnungs_register,ch.bav.haltestellen-oev,ch.swisstopo.swisstlm3d-wanderwege&layers_opacity=1,1,1,0.8&layers_visibility=false,false,false,false&layers_timestamp=18641231,,,&E=" + e + "&N=" + n + "&zoom=12",
+                '_blank'
+            );
+        }
+    } */
 });
 
 function search_plz(frm) {
@@ -54,7 +80,9 @@ function search_plz(frm) {
                     if (response.message.length == 1) {
                         // got exactly one city
                         var city = response.message[0].city;
-                        cur_frm.set_value('object_location', values.plz + " " + city);
+                        cur_frm.set_value('plz', values.plz);
+                        cur_frm.set_value('city', city);
+                        cur_frm.set_value('kanton', response.message[0].canton_code);
                     } else {
                         // multiple cities found, show selection
                         var cities = "";
@@ -73,7 +101,13 @@ function search_plz(frm) {
                             ],
                             function(v2){
                                 var city = v2.city;
-                                cur_frm.set_value('object_location', values.plz + " " + city);
+                                cur_frm.set_value('plz', values.plz);
+                                cur_frm.set_value('city', city);
+                                for (var i = 0; i < response.message.length; i++) {
+                                    if (city === response.message[i].city) {
+                                        cur_frm.set_value('kanton', response.message[i].canton_code);
+                                    }
+                                }
                             },
                             __('City'),
                             __('Set')
@@ -81,8 +115,8 @@ function search_plz(frm) {
                     }
                 } else {
                     // got no match
-                    cur_frm.set_value(target_field, "");
-                    console.log("No match");
+                    frappe.show_alert("No match");
+                    cur_frm.set_value('plz', values.plz);
                 }
             }
         });
@@ -90,4 +124,42 @@ function search_plz(frm) {
     __('Search PLZ'),
     __('Search')
     )
+}
+
+function update_location(frm) {
+    cur_frm.set_value("object_location", (frm.doc.plz || "") + " " + (frm.doc.city || "") + " " + (frm.doc.kanton || ""));
+}
+
+function convert_ch_to_gps(frm) {
+    if (locals.topo_prevent_loop) {
+        locals.topo_prevent_loop = false;
+    } else {
+        frappe.call({
+            method: 'convert_ch_to_gps',
+            doc: frm.doc,
+            callback: function(response) {
+                if (response.message) {
+                    locals.topo_prevent_loop = true;
+                    cur_frm.set_value("gps_coordinates", response.message);
+                }
+            }
+        });
+    }
+}
+
+function convert_gps_to_ch(frm) {
+    if (locals.topo_prevent_loop) {
+        locals.topo_prevent_loop = false;
+    } else {
+        frappe.call({
+            method: 'convert_gps_to_ch',
+            doc: frm.doc,
+            callback: function(response) {
+                if (response.message) {
+                    locals.topo_prevent_loop = true;
+                    cur_frm.set_value("ch_coordinates", response.message);
+                }
+            }
+        });
+    }
 }

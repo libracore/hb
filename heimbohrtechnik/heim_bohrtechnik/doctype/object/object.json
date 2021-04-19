@@ -11,10 +11,18 @@
   "column_main",
   "object_mode",
   "object_type",
+  "drilling_type",
   "section_address",
   "object_street",
   "button_search_plz",
+  "plz",
+  "city",
+  "kanton",
   "object_location",
+  "country",
+  "column_location",
+  "parcel",
+  "button_open_map",
   "section_drilling_details",
   "construction_site_inspected",
   "ews_details",
@@ -168,6 +176,8 @@
   {
    "fieldname": "object_street",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Street"
   },
   {
@@ -228,7 +238,7 @@
   {
    "fieldname": "customer",
    "fieldtype": "Link",
-   "label": "Customer",
+   "label": "Auftraggeber",
    "options": "Customer"
   },
   {
@@ -252,13 +262,13 @@
    "collapsible": 1,
    "fieldname": "section_customer",
    "fieldtype": "Section Break",
-   "label": "Customer"
+   "label": "Auftraggeber"
   },
   {
    "fetch_from": "customer.customer_name",
    "fieldname": "customer_name",
    "fieldtype": "Data",
-   "label": "Customer name",
+   "label": "Name Auftraggeber",
    "read_only": 1
   },
   {
@@ -268,7 +278,7 @@
   {
    "fieldname": "customer_address",
    "fieldtype": "Link",
-   "label": "Customer address",
+   "label": "Adresse Auftraggeber",
    "options": "Address"
   },
   {
@@ -279,21 +289,21 @@
   {
    "fieldname": "customer_contact",
    "fieldtype": "Link",
-   "label": "Customer contact",
+   "label": "Kontakt Auftraggeber",
    "options": "Contact"
   },
   {
    "fetch_from": "customer_contact.email_id",
    "fieldname": "customer_contact_email",
    "fieldtype": "Data",
-   "label": "Customer contact email",
+   "label": "Email Auftraggeber",
    "read_only": 1
   },
   {
    "fetch_from": "customer_contact.phone",
    "fieldname": "customer_contact_phone",
    "fieldtype": "Data",
-   "label": "Customer contact phone",
+   "label": "Telefon Auftraggeber",
    "read_only": 1
   },
   {
@@ -306,7 +316,7 @@
    "fetch_from": "customer_contact.full_name",
    "fieldname": "customer_contact_name",
    "fieldtype": "Data",
-   "label": "Customer contact name",
+   "label": "Person Auftraggeber",
    "read_only": 1
   },
   {
@@ -1034,9 +1044,53 @@
    "fieldtype": "Link",
    "label": "Owner",
    "options": "Customer"
+  },
+  {
+   "fieldname": "drilling_type",
+   "fieldtype": "Link",
+   "label": "Drilling Type",
+   "options": "Drilling Type"
+  },
+  {
+   "fieldname": "plz",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "PLZ"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "City"
+  },
+  {
+   "fieldname": "kanton",
+   "fieldtype": "Data",
+   "label": "Kanton"
+  },
+  {
+   "default": "Schweiz",
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "column_location",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "parcel",
+   "fieldtype": "Data",
+   "label": "Parcel"
+  },
+  {
+   "fieldname": "button_open_map",
+   "fieldtype": "Button",
+   "label": "Open Map"
   }
  ],
- "modified": "2021-04-07 12:21:10.189168",
+ "modified": "2021-04-19 23:32:32.499803",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
