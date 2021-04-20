@@ -1129,21 +1129,6 @@
    "fieldname": "ews_count",
    "fieldtype": "Int",
    "label": "Count"
-  },
-  {
-   "fieldname": "ews_pressure_level",
-   "fieldtype": "Link",
-   "label": "Pressure Level",
-   "options": "Pressure Level"
-  },
-  {
-   "fieldname": "column_ews_details",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "ews_remarks",
-   "fieldtype": "Small Text",
-   "label": "Remarks"
   }
  ],
  "modified": "2021-04-20 12:09:15.146913",

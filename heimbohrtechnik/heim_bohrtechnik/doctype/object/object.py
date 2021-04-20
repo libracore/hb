@@ -22,6 +22,17 @@ class Object(Document):
             "project_name": self.name,
             "object": self.name
         })
+        # add checklist and permits
+        for c in self.checklist:
+            project.append("checklist", {
+              'activity': c.activity,
+              'supplier': c.supplier,
+              'supplier_name': c.supplier_name  
+            })
+        for p in self.permits:
+            project.append("permits", {
+              'permit': p.permit
+            })
         project.insert()
         return
         
