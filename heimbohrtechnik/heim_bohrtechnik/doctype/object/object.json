@@ -1131,12 +1131,22 @@
    "label": "Count"
   },
   {
-   "fieldname": "ews_depth",
-   "fieldtype": "Int",
-   "label": "Depth"
+   "fieldname": "ews_pressure_level",
+   "fieldtype": "Link",
+   "label": "Pressure Level",
+   "options": "Pressure Level"
+  },
+  {
+   "fieldname": "column_ews_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ews_remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
   }
  ],
- "modified": "2021-04-20 12:03:15.146913",
+ "modified": "2021-04-20 12:09:15.146913",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
