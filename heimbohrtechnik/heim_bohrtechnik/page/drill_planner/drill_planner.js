@@ -95,7 +95,8 @@ frappe.drill_planner = {
                     total_width: content.total_width,
                     weekend: content.weekend,
                     kw_list: content.kw_list,
-                    day_list: content.day_list
+                    day_list: content.day_list,
+                    today: content.today
                 };
 		   }
 		});
@@ -105,7 +106,7 @@ frappe.drill_planner = {
     add_overlay: function(data) {
         var added_list = [];
         var main_layout_element = document.getElementsByClassName("row layout-main")[0].getBoundingClientRect();
-        var left_korrektur_faktor = main_layout_element.left + 15;
+        var left_korrektur_faktor = main_layout_element.left + 16;
         for (var i = 0; i<data.drilling_teams.length; i++) {
             for (var y = 0; y<Object.entries(data.drilling_teams[i].project_details).length; y++) {
                 if (!added_list.includes(Object.entries(data.drilling_teams[i].project_details)[y][1].object)) {
@@ -144,10 +145,10 @@ frappe.drill_planner = {
                                 var innerHTML =  '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a1.color + ';"></div><span style="display: none;">' + ampel_indicators.a1.tooltip + '</span>';
                                 innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a2.color + ';"></div><span style="display: none;">' + ampel_indicators.a2.tooltip + '</span>';
                                 innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a3.color + ';"></div><span style="display: none;">' + ampel_indicators.a3.tooltip + '</span>';
+                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a7.color + ';"></div><span style="display: none;">' + ampel_indicators.a7.tooltip + '</span>';
                                 innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a4.color + ';"></div><span style="display: none;">' + ampel_indicators.a4.tooltip + '</span>';
                                 innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a5.color + ';"></div><span style="display: none;">' + ampel_indicators.a5.tooltip + '</span>';
                                 innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a6.color + ';"></div><span style="display: none;">' + ampel_indicators.a6.tooltip + '</span>';
-                                innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a7.color + ';"></div><span style="display: none;">' + ampel_indicators.a7.tooltip + '</span>';
                                 
                                 innerHTML = innerHTML + '<i class="fa fa-info-circle pointer hasTooltip" style="margin-left: 5px; font-size: 20px; margin-top: 2px;" onclick="frappe.drill_planner.show_detail_popup(' + "'" + project + "'" + ');"></i><span style="display: none;">' + __("Click me for more informations") + '</span><br>';
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object + "<br>";
@@ -155,19 +156,38 @@ frappe.drill_planner = {
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_location + "<br>";
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].ews_details;
                                 overlay.innerHTML = innerHTML;
-
-                                overlay.style.backgroundColor  = 'transparent';
-                                overlay.style.color  = 'white';
-                                overlay.style.height = String(search_elementTextRectangle.height) + 'px';
+                                
+                                if (
+                                    ampel_indicators.a1.color == 'green' &&
+                                    ampel_indicators.a2.color == 'green' &&
+                                    ampel_indicators.a3.color == 'green' &&
+                                    ampel_indicators.a7.color == 'green' &&
+                                    ampel_indicators.a4.color == 'green' &&
+                                    (ampel_indicators.a5.color == 'green'||ampel_indicators.a5.color == 'grey') &&
+                                    ampel_indicators.a6.color == 'green'
+                                ) {
+                                    overlay.style.backgroundColor  = '#eefdec';
+                                } else if (
+                                    ampel_indicators.a1.color == 'green' &&
+                                    ampel_indicators.a2.color == 'green' &&
+                                    ampel_indicators.a3.color == 'green' &&
+                                    ampel_indicators.a7.color == 'green'
+                                ) {
+                                    overlay.style.backgroundColor  = '#ffffbf';
+                                } else {
+                                    overlay.style.backgroundColor  = '#ffeae9';
+                                }
+                                overlay.style.color  = 'black';
+                                overlay.style.height = String((search_elementTextRectangle.height + 2)) + 'px';
                                 overlay.style.position = 'absolute';
                                 
                                 var pos_left = search_elementTextRectangle.left;
                                 var pos_top = search_elementTextRectangle.top;
 
                                 overlay.style.left = String(pos_left - left_korrektur_faktor) + 'px';
-                                overlay.style.top = String(pos_top - 245) + 'px';
+                                overlay.style.top = String(pos_top - 244) + 'px';
                                 
-                                overlay.style.minWidth = String(ampel_indicators.total_overlay_width) + "px";
+                                overlay.style.minWidth = String((ampel_indicators.total_overlay_width + 3)) + "px";
                                 overlay.setAttribute('draggable', true);
 
                                 var drill_planner_div = document.getElementById("drill_planner_main_element");
@@ -217,14 +237,31 @@ frappe.drill_planner = {
 
                             if (object) {
                                 var customer = __('No Customer found');
+                                var customer_name = '';
                                 if (project.customer) {
                                     customer = '<a href="/desk#Form/Customer/' + project.customer + '" target="_blank">' + project.customer + '</a>';
+                                    customer_name = "(" + project.customer_name + ")";
                                 }
                                 
                                 var object_link = '<a href="/desk#Form/Object/' + object.name + '" target="_blank">' + project.object_name + '</a>';
                                 
                                 var mud_disposer = __('No Mud Disposer found');
+                                var mud_disposer_name = '';
                                 if (object.mud_disposer) {
+                                    frappe.call({
+                                        "method": "frappe.client.get",
+                                        "args": {
+                                            "doctype": "Supplier",
+                                            "name": object.mud_disposer
+                                        },
+                                        "async": false,
+                                        "callback": function(_supplier) {
+                                            if (_supplier.message) {
+                                                var supplier = _supplier.message;
+                                                mud_disposer_name = "(" + supplier.supplier_name + ")";
+                                            }
+                                        }
+                                    });
                                     mud_disposer = '<a href="/desk#Form/Mud Disposer/' + object.mud_disposer + '" target="_blank">' + object.mud_disposer + '</a>';
                                 }
                                 
@@ -242,7 +279,7 @@ frappe.drill_planner = {
                                 html = html + '<tr><td><b>' + __('Project') + '</b></td>';
                                 html = html + '<td>' + '<a href="/desk#Form/Project/' + project.name + '" target="_blank">' + project.name + '</a></td></tr>';
                                 html = html + '<tr><td><b>' + __('Customer') + '</b></td>';
-                                html = html + '<td>' + customer + ' (' + project.customer_name + ')' + '</td></tr>';
+                                html = html + '<td>' + customer + ' ' + customer_name + '</td></tr>';
                                 html = html + '<tr><td><b>' + __('Object') + '</b></td>';
                                 html = html + '<td>' + object_link + '</td></tr>';
                                 html = html + '<tr><td><b>' + __('Location') + '</b></td>';
@@ -250,7 +287,7 @@ frappe.drill_planner = {
                                 html = html + '<tr><td><b>' + __('EWS Details') + '</b></td>';
                                 html = html + '<td>' + project.ews_details + '</td></tr>';
                                 html = html + '<tr><td><b>' + __('Mud Disposer') + '</b></td>';
-                                html = html + '<td>' + mud_disposer + '</td></tr>';
+                                html = html + '<td>' + mud_disposer + ' ' + mud_disposer_name +'</td></tr>';
                                 html = html + '<tr><td><b>' + __('Drilling Equipment') + '</b></td>';
                                 html = html + '<td>' + drilling_equipment + '</td></tr>';
                                 html = html + '<tr><td><b>' + __('Manager') + '</b></td>';

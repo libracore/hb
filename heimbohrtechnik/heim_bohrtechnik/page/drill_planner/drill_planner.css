@@ -31,6 +31,7 @@
     width: 80px;
     height: 80px;
 }
+/*---*/
 
 /* Weekend */
 .date-row > .tag.weekend {
@@ -62,6 +63,7 @@
     width: 38.5px;
     height: 80px;
 }
+/*---*/
 
 .b-middle {
     border-right: 0.5px dotted black;
@@ -106,6 +108,7 @@
     width: 80px;
     height: 120px;
 }
+/*---*/
 
 /* Weekend */
 .bohrteam-row > .tag.weekend {
@@ -139,7 +142,11 @@
 }
 
 .weekend {
-    background-color: #FD8B8B !important;
+    background-color: #ffeae9 !important;
+}
+
+.today {
+    background-color: #eefdec !important;
 }
 
 .booked {
