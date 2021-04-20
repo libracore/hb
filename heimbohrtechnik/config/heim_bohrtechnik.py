@@ -126,6 +126,12 @@ def get_data():
                    "name": "Drilling Type",
                    "label": _("Drilling Type"),
                    "description": _("Drilling Type")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Pressure Level",
+                   "label": _("Pressure Level"),
+                   "description": _("Pressure Level")
                 }
             ]
         }

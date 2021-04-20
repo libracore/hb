@@ -27,10 +27,15 @@
   "button_open_map",
   "section_drilling_details",
   "construction_site_inspected",
-  "ews_details",
   "mud_disposer",
   "drilling_equipment",
   "manager",
+  "section_checklist_and_permits",
+  "checklist",
+  "permits",
+  "section_ews_details",
+  "ews_count",
+  "ews_depth",
   "section_customer",
   "customer",
   "customer_name",
@@ -194,11 +199,6 @@
    "fieldname": "section_drilling_details",
    "fieldtype": "Section Break",
    "label": "Drilling details"
-  },
-  {
-   "fieldname": "ews_details",
-   "fieldtype": "Data",
-   "label": "EWS Details"
   },
   {
    "fieldname": "mud_disposer",
@@ -1102,9 +1102,41 @@
    "fieldname": "gps_coordinates",
    "fieldtype": "Data",
    "label": "GPS Coordinates"
+  },
+  {
+   "fieldname": "section_checklist_and_permits",
+   "fieldtype": "Section Break",
+   "label": "Checklist and Permits"
+  },
+  {
+   "fieldname": "checklist",
+   "fieldtype": "Table",
+   "label": "Checklist",
+   "options": "Project Checklist"
+  },
+  {
+   "fieldname": "permits",
+   "fieldtype": "Table",
+   "label": "Permits",
+   "options": "Project Permit"
+  },
+  {
+   "fieldname": "section_ews_details",
+   "fieldtype": "Section Break",
+   "label": "EWS Details"
+  },
+  {
+   "fieldname": "ews_count",
+   "fieldtype": "Int",
+   "label": "Count"
+  },
+  {
+   "fieldname": "ews_depth",
+   "fieldtype": "Int",
+   "label": "Depth"
   }
  ],
- "modified": "2021-04-20 09:36:00.289777",
+ "modified": "2021-04-20 12:03:15.146913",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",

@@ -86,6 +86,7 @@ Doctype: Object,GPS Coordinates,GPS-Koordinaten
 Doctype: Object,Open Map,Karte öffnen
 Doctype: Object,Drilling Details,Bohrdetails
 Doctype: Object,Construction site inspected,Baustelle besichtigt
+Doctype: Object,Depth,Tiefe
 Doctype: Project,Mud Disposer,Schlammentsorger
 Doctype: Project,Mud disposer,Schlammentsorger
 Doctype: Project,Drilling Equipment,Bohrequipment
@@ -98,3 +99,4 @@ Doctype: Permit Type,Permit Type,Bewillingungsart
 Doctype: Permit Type,Permit,Bewillingung
 Doctype: Checklist Activity,Checklist Activity,Aktivität
 Doctype: Drilling Type,Drilling Type,Bohrart
+Doctype: Pressure Level,Pressure Level,Druckstufe
