@@ -22,9 +22,9 @@
   "country",
   "column_location",
   "parcel",
-  "button_open_map",
   "ch_coordinates",
   "gps_coordinates",
+  "button_open_map",
   "section_drilling_details",
   "construction_site_inspected",
   "ews_details",
@@ -1092,17 +1092,19 @@
    "label": "Open Map"
   },
   {
+   "description": "2'760'280 / 1'249'594",
    "fieldname": "ch_coordinates",
    "fieldtype": "Data",
    "label": "CH Coordinates"
   },
   {
+   "description": "47.37767, 9.56121",
    "fieldname": "gps_coordinates",
    "fieldtype": "Data",
    "label": "GPS Coordinates"
   }
  ],
- "modified": "2021-04-20 08:28:27.516659",
+ "modified": "2021-04-20 09:36:00.289777",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",

@@ -81,9 +81,11 @@ Doctype: Object,Geometer contact email,Email Geometer
 Doctype: Object,Geometer contact phone,Telefon Geometer
 Doctype: Object,Parcel,Parzelle
 Doctype: Object,Search PLZ,Postleitzahl suchen
-Doctype: Object,CH coordinates,Schweizer Koordindaten
-Doctype: Object,GPS coordinates,GPS-Koordinaten
+Doctype: Object,CH Coordinates,Schweizer Koordindaten
+Doctype: Object,GPS Coordinates,GPS-Koordinaten
 Doctype: Object,Open Map,Karte öffnen
+Doctype: Object,Drilling Details,Bohrdetails
+Doctype: Object,Construction site inspected,Baustelle besichtigt
 Doctype: Project,Mud Disposer,Schlammentsorger
 Doctype: Project,Mud disposer,Schlammentsorger
 Doctype: Project,Drilling Equipment,Bohrequipment
@@ -95,4 +97,4 @@ Doctype: Project,Drilling Team,Bohrteam
 Doctype: Permit Type,Permit Type,Bewillingungsart
 Doctype: Permit Type,Permit,Bewillingung
 Doctype: Checklist Activity,Checklist Activity,Aktivität
-Doctype: Drilling Type, Drilling Type,Bohrart
+Doctype: Drilling Type,Drilling Type,Bohrart

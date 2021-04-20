@@ -41,7 +41,7 @@ frappe.ui.form.on('Object', {
     },
     kanton: function(frm) {
         update_location(frm);
-    }/*,
+    },
     ch_coordinates: function(frm) {
         convert_ch_to_gps(frm);
     },
@@ -58,7 +58,7 @@ frappe.ui.form.on('Object', {
                 '_blank'
             );
         }
-    } */
+    }
 });
 
 function search_plz(frm) {
