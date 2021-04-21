@@ -36,136 +36,140 @@
   "section_ews_details",
   "ews_count",
   "ews_depth",
-  "section_customer",
-  "customer",
-  "customer_name",
-  "column_customer",
-  "customer_address",
-  "customer_address_display",
-  "customer_contact",
-  "customer_contact_name",
-  "customer_contact_email",
-  "customer_contact_phone",
+  "ews_diameter",
+  "pressure_level",
+  "column_ews",
+  "ews_remarks",
+  "section_cst",
+  "cst",
+  "cst_name",
+  "column_cst",
+  "cst_address",
+  "cst_a_display",
+  "cst_contact",
+  "cst_c_name",
+  "cst_email",
+  "cst_phone",
   "section_owner",
   "object_owner",
   "owner_name",
   "column_owner",
   "owner_address",
-  "owner_address_display",
+  "owner_a_display",
   "owner_contact",
-  "owner_contact_name",
-  "owner_contact_email",
-  "owner_contact_phone",
-  "section_architect",
-  "architect",
-  "architect_name",
-  "column_architect",
-  "architect_address",
-  "architect_address_display",
-  "architect_contact",
-  "architect_contact_name",
-  "architect_contact_phone",
-  "architect_contact_email",
-  "section_construction_manager",
-  "construction_manager",
-  "construction_manager_name",
-  "column_construction_manager",
-  "construction_manager_address",
-  "construction_manager_address_display",
-  "construction_manager_contact",
-  "construction_manager_contact_name",
-  "construction_manager_contact_email",
-  "construction_manager_contact_phone",
-  "section_plumber",
-  "plumber",
-  "plumber_name",
-  "column_plumber",
-  "plumber_address",
-  "plumber_address_display",
-  "plumber_contact",
-  "plumber_contact_name",
-  "plumber_contact_email",
-  "plumber_contact_phone",
-  "section_planer",
-  "planer",
-  "planer_name",
-  "column_planer",
-  "planer_address",
-  "planer_address_display",
-  "planer_contact",
-  "planer_contact_name",
-  "planer_contact_email",
-  "planer_contact_phone",
-  "section_trough",
-  "trough",
-  "trough_name",
-  "column_trough",
-  "trough_address",
-  "trough_address_display",
-  "trough_contact",
-  "trough_contact_name",
-  "trough_contact_email",
-  "trough_contact_phone",
+  "owner_c_name",
+  "owner_email",
+  "owner_phone",
+  "section_arc",
+  "arc",
+  "arc_name",
+  "column_arc",
+  "arc_address",
+  "arc_a_display",
+  "arc_contact",
+  "arc_c_name",
+  "arc_phone",
+  "arc_email",
+  "section_cmgr",
+  "cmgr",
+  "cmgr_name",
+  "column_cmgr",
+  "cmgr_address",
+  "cmgr_a_display",
+  "cmgr_contact",
+  "cmgr_c_name",
+  "cmgr_email",
+  "cmgr_phone",
+  "section_plb",
+  "plb",
+  "plb_name",
+  "column_plb",
+  "plb_address",
+  "plb_a_display",
+  "plb_contact",
+  "plb_c_name",
+  "plb_email",
+  "plb_phone",
+  "section_pln",
+  "pln",
+  "pln_name",
+  "column_pln",
+  "pln_address",
+  "pln_a_display",
+  "pln_contact",
+  "pln_c_name",
+  "pln_email",
+  "pln_phone",
+  "section_trg",
+  "trg",
+  "trg_name",
+  "column_trg",
+  "trg_address",
+  "trg_a_display",
+  "trg_contact",
+  "trg_c_name",
+  "trg_email",
+  "trg_phone",
   "section_mud",
   "mud",
   "mud_name",
   "column_mud",
   "mud_address",
-  "mud_address_display",
+  "mud_a_display",
   "mud_contact",
-  "mud_contact_name",
-  "mud_contact_email",
-  "mud_contact_phone",
-  "section_crane",
-  "crane",
-  "crane_name",
-  "column_crane",
-  "crane_address",
-  "crane_address_display",
-  "crane_contact",
-  "crane_contact_name",
-  "crane_contact_email",
-  "crane_contact_phone",
-  "section_authority",
-  "authority",
-  "authority_name",
-  "column_authority",
-  "authority_address",
-  "authority_address_display",
-  "authority_contact",
-  "authority_contact_name",
-  "authority_contact_email",
-  "authority_contact_phone",
-  "section_community",
-  "community",
-  "community_name",
-  "column_community",
-  "community_address",
-  "community_address_display",
-  "community_contact",
-  "community_contact_name",
-  "community_contact_email",
-  "community_contact_phone",
-  "section_geologist",
-  "geologist",
-  "geologist_name",
-  "column_geologist",
-  "geologist_address",
-  "geologist_address_display",
-  "geologist_contact",
-  "geologist_contact_name",
-  "geologist_contact_email",
-  "geologist_contact_phone",
-  "section_geometer",
-  "geometer",
-  "geometer_name",
-  "column_geometer",
-  "geometer_address",
-  "geometer_address_display",
-  "geometer_contact",
-  "geometer_contact_name",
-  "geometer_contact_email",
-  "geometer_contact_phone"
+  "mud_c_name",
+  "mud_email",
+  "mud_phone",
+  "section_crn",
+  "crn",
+  "crn_name",
+  "column_crn",
+  "crn_address",
+  "crn_a_display",
+  "crn_contact",
+  "crn_c_name",
+  "crn_email",
+  "crn_phone",
+  "section_auth",
+  "auth",
+  "auth_name",
+  "column_auth",
+  "auth_address",
+  "auth_a_display",
+  "auth_contact",
+  "auth_c_name",
+  "auth_email",
+  "auth_phone",
+  "section_cmn",
+  "cmn",
+  "cmn_name",
+  "column_cmn",
+  "cmn_address",
+  "cmn_a_display",
+  "cmn_contact",
+  "cmn_c_name",
+  "cmn_email",
+  "cmn_phone",
+  "section_glgst",
+  "glgst",
+  "glgst_name",
+  "column_glgst",
+  "glgst_address",
+  "glgst_a_display",
+  "glgst_contact",
+  "glgst_c_name",
+  "glgst_email",
+  "glgst_phone",
+  "section_gmtr",
+  "gmtr",
+  "gmtr_name",
+  "column_gmtr",
+  "gmtr_address",
+  "gmtr_a_display",
+  "gmtr_contact",
+  "gmtr_c_name",
+  "gmtr_email",
+  "gmtr_phone"
  ],
  "fields": [
   {
@@ -238,7 +242,7 @@
    "read_only": 1
   },
   {
-   "fieldname": "customer",
+   "fieldname": "cst",
    "fieldtype": "Link",
    "label": "Auftraggeber",
    "options": "Customer"
@@ -262,48 +266,48 @@
   },
   {
    "collapsible": 1,
-   "fieldname": "section_customer",
+   "fieldname": "section_cst",
    "fieldtype": "Section Break",
    "label": "Auftraggeber"
   },
   {
-   "fetch_from": "customer.customer_name",
-   "fieldname": "customer_name",
+   "fetch_from": "cst.cst_name",
+   "fieldname": "cst_name",
    "fieldtype": "Data",
    "label": "Name Auftraggeber",
    "read_only": 1
   },
   {
-   "fieldname": "column_customer",
+   "fieldname": "column_cst",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "customer_address",
+   "fieldname": "cst_address",
    "fieldtype": "Link",
    "label": "Adresse Auftraggeber",
    "options": "Address"
   },
   {
-   "fieldname": "customer_address_display",
+   "fieldname": "cst_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
   {
-   "fieldname": "customer_contact",
+   "fieldname": "cst_contact",
    "fieldtype": "Link",
    "label": "Kontakt Auftraggeber",
    "options": "Contact"
   },
   {
-   "fetch_from": "customer_contact.email_id",
-   "fieldname": "customer_contact_email",
+   "fetch_from": "cst_contact.email_id",
+   "fieldname": "cst_email",
    "fieldtype": "Data",
    "label": "Email Auftraggeber",
    "read_only": 1
   },
   {
-   "fetch_from": "customer_contact.phone",
-   "fieldname": "customer_contact_phone",
+   "fetch_from": "cst_contact.phone",
+   "fieldname": "cst_phone",
    "fieldtype": "Data",
    "label": "Telefon Auftraggeber",
    "read_only": 1
@@ -315,14 +319,14 @@
    "label": "Owner"
   },
   {
-   "fetch_from": "customer_contact.full_name",
-   "fieldname": "customer_contact_name",
+   "fetch_from": "cst_contact.full_name",
+   "fieldname": "cst_c_name",
    "fieldtype": "Data",
    "label": "Person Auftraggeber",
    "read_only": 1
   },
   {
-   "fetch_from": "object_owner.customer_name",
+   "fetch_from": "object_owner.cst_name",
    "fieldname": "owner_name",
    "fieldtype": "Data",
    "label": "Owner name",
@@ -339,7 +343,7 @@
    "options": "Address"
   },
   {
-   "fieldname": "owner_address_display",
+   "fieldname": "owner_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
@@ -351,326 +355,326 @@
   },
   {
    "fetch_from": "owner_contact.full_name",
-   "fieldname": "owner_contact_name",
+   "fieldname": "owner_c_name",
    "fieldtype": "Data",
    "label": "Owner contact name",
    "read_only": 1
   },
   {
    "fetch_from": "owner_contact.email_id",
-   "fieldname": "owner_contact_email",
+   "fieldname": "owner_email",
    "fieldtype": "Data",
    "label": "Owner contact email",
    "read_only": 1
   },
   {
    "fetch_from": "owner_contact.phone",
-   "fieldname": "owner_contact_phone",
+   "fieldname": "owner_phone",
    "fieldtype": "Data",
    "label": "Owner contact phone",
    "read_only": 1
   },
   {
    "collapsible": 1,
-   "fieldname": "section_architect",
+   "fieldname": "section_arc",
    "fieldtype": "Section Break",
    "label": "Architect"
   },
   {
-   "fieldname": "architect",
+   "fieldname": "arc",
    "fieldtype": "Link",
    "label": "Architect",
    "options": "Customer"
   },
   {
-   "fetch_from": "architect.customer_name",
-   "fieldname": "architect_name",
+   "fetch_from": "arc.cst_name",
+   "fieldname": "arc_name",
    "fieldtype": "Data",
    "label": "Architect name",
    "read_only": 1
   },
   {
-   "fieldname": "column_architect",
+   "fieldname": "column_arc",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "architect_address",
+   "fieldname": "arc_address",
    "fieldtype": "Link",
    "label": "Architect address",
    "options": "Address"
   },
   {
-   "fieldname": "architect_address_display",
+   "fieldname": "arc_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
   {
-   "fieldname": "architect_contact",
+   "fieldname": "arc_contact",
    "fieldtype": "Link",
    "label": "Architect contact",
    "options": "Contact"
   },
   {
-   "fetch_from": "architect_contact.full_name",
-   "fieldname": "architect_contact_name",
+   "fetch_from": "arc_contact.full_name",
+   "fieldname": "arc_c_name",
    "fieldtype": "Data",
    "label": "Architect contact name",
    "read_only": 1
   },
   {
-   "fetch_from": "architect_contact.email_id",
-   "fieldname": "architect_contact_email",
+   "fetch_from": "arc_contact.email_id",
+   "fieldname": "arc_email",
    "fieldtype": "Data",
    "label": "Architect contact email",
    "read_only": 1
   },
   {
-   "fetch_from": "architect_contact.phone",
-   "fieldname": "architect_contact_phone",
+   "fetch_from": "arc_contact.phone",
+   "fieldname": "arc_phone",
    "fieldtype": "Data",
    "label": "Architect contact phone",
    "read_only": 1
   },
   {
    "collapsible": 1,
-   "fieldname": "section_construction_manager",
+   "fieldname": "section_cmgr",
    "fieldtype": "Section Break",
    "label": "Construction Manager"
   },
   {
-   "fieldname": "construction_manager",
+   "fieldname": "cmgr",
    "fieldtype": "Link",
    "label": "Construction Manager",
    "options": "Customer"
   },
   {
-   "fetch_from": "construction_manager.customer_name",
-   "fieldname": "construction_manager_name",
+   "fetch_from": "cmgr.cst_name",
+   "fieldname": "cmgr_name",
    "fieldtype": "Data",
    "label": "Construction Manager name",
    "read_only": 1
   },
   {
-   "fieldname": "column_construction_manager",
+   "fieldname": "column_cmgr",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "construction_manager_address",
+   "fieldname": "cmgr_address",
    "fieldtype": "Link",
    "label": "Construction Manager address",
    "options": "Address"
   },
   {
-   "fieldname": "construction_manager_address_display",
+   "fieldname": "cmgr_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
   {
-   "fieldname": "construction_manager_contact",
+   "fieldname": "cmgr_contact",
    "fieldtype": "Link",
    "label": "Construction Manager contact",
    "options": "Contact"
   },
   {
-   "fetch_from": "construction_manager_contact.full_name",
-   "fieldname": "construction_manager_contact_name",
+   "fetch_from": "cmgr_contact.full_name",
+   "fieldname": "cmgr_c_name",
    "fieldtype": "Data",
    "label": "Construction Manager contact name",
    "read_only": 1
   },
   {
-   "fetch_from": "construction_manager_contact.email_id",
-   "fieldname": "construction_manager_contact_email",
+   "fetch_from": "cmgr_contact.email_id",
+   "fieldname": "cmgr_email",
    "fieldtype": "Data",
    "label": "Construction Manager contact email",
    "read_only": 1
   },
   {
-   "fetch_from": "construction_manager_contact.phone",
-   "fieldname": "construction_manager_contact_phone",
+   "fetch_from": "cmgr_contact.phone",
+   "fieldname": "cmgr_phone",
    "fieldtype": "Data",
    "label": "Construction Manager contact phone",
    "read_only": 1
   },
   {
    "collapsible": 1,
-   "fieldname": "section_plumber",
+   "fieldname": "section_plb",
    "fieldtype": "Section Break",
    "label": "Plumber"
   },
   {
-   "fieldname": "plumber",
+   "fieldname": "plb",
    "fieldtype": "Link",
    "label": "Plumber",
    "options": "Customer"
   },
   {
-   "fetch_from": "plumber.customer_name",
-   "fieldname": "plumber_name",
+   "fetch_from": "plb.cst_name",
+   "fieldname": "plb_name",
    "fieldtype": "Data",
    "label": "Plumber name",
    "read_only": 1
   },
   {
-   "fieldname": "column_plumber",
+   "fieldname": "column_plb",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "plumber_address",
+   "fieldname": "plb_address",
    "fieldtype": "Link",
    "label": "Plumber address",
    "options": "Address"
   },
   {
-   "fieldname": "plumber_address_display",
+   "fieldname": "plb_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
   {
-   "fieldname": "plumber_contact",
+   "fieldname": "plb_contact",
    "fieldtype": "Link",
    "label": "Plumber contact",
    "options": "Contact"
   },
   {
-   "fetch_from": "plumber_contact.full_name",
-   "fieldname": "plumber_contact_name",
+   "fetch_from": "plb_contact.full_name",
+   "fieldname": "plb_c_name",
    "fieldtype": "Data",
    "label": "Plumber contact name",
    "read_only": 1
   },
   {
-   "fetch_from": "plumber_contact.email_id",
-   "fieldname": "plumber_contact_email",
+   "fetch_from": "plb_contact.email_id",
+   "fieldname": "plb_email",
    "fieldtype": "Data",
    "label": "Plumber contact email",
    "read_only": 1
   },
   {
-   "fetch_from": "plumber_contact.phone",
-   "fieldname": "plumber_contact_phone",
+   "fetch_from": "plb_contact.phone",
+   "fieldname": "plb_phone",
    "fieldtype": "Data",
    "label": "Plumber contact phone",
    "read_only": 1
   },
   {
    "collapsible": 1,
-   "fieldname": "section_planer",
+   "fieldname": "section_pln",
    "fieldtype": "Section Break",
    "label": "TGA Planer"
   },
   {
-   "fieldname": "planer",
+   "fieldname": "pln",
    "fieldtype": "Link",
    "label": "TGA Planer",
    "options": "Customer"
   },
   {
-   "fetch_from": "planer.customer_name",
-   "fieldname": "planer_name",
+   "fetch_from": "pln.cst_name",
+   "fieldname": "pln_name",
    "fieldtype": "Data",
    "label": "TGA Planer name",
    "read_only": 1
   },
   {
-   "fieldname": "column_planer",
+   "fieldname": "column_pln",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "planer_address",
+   "fieldname": "pln_address",
    "fieldtype": "Link",
    "label": "TGA Planer address",
    "options": "Address"
   },
   {
-   "fieldname": "planer_address_display",
+   "fieldname": "pln_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
   {
-   "fieldname": "planer_contact",
+   "fieldname": "pln_contact",
    "fieldtype": "Link",
    "label": "TGA Planer contact",
    "options": "Contact"
   },
   {
-   "fetch_from": "planer_contact.full_name",
-   "fieldname": "planer_contact_name",
+   "fetch_from": "pln_contact.full_name",
+   "fieldname": "pln_c_name",
    "fieldtype": "Data",
    "label": "TGA Planer contact name",
    "read_only": 1
   },
   {
-   "fetch_from": "planer_contact.email_id",
-   "fieldname": "planer_contact_email",
+   "fetch_from": "pln_contact.email_id",
+   "fieldname": "pln_email",
    "fieldtype": "Data",
    "label": "TGA Planer contact email",
    "read_only": 1
   },
   {
-   "fetch_from": "planer_contact.phone",
-   "fieldname": "planer_contact_phone",
+   "fetch_from": "pln_contact.phone",
+   "fieldname": "pln_phone",
    "fieldtype": "Data",
    "label": "TGA Planer contact phone",
    "read_only": 1
   },
   {
    "collapsible": 1,
-   "fieldname": "section_trough",
+   "fieldname": "section_trg",
    "fieldtype": "Section Break",
    "label": "Trough"
   },
   {
-   "fieldname": "trough",
+   "fieldname": "trg",
    "fieldtype": "Link",
    "label": "Trough",
    "options": "Supplier"
   },
   {
-   "fetch_from": "trough.supplier_name",
-   "fieldname": "trough_name",
+   "fetch_from": "trg.supplier_name",
+   "fieldname": "trg_name",
    "fieldtype": "Data",
    "label": "Trough name",
    "read_only": 1
   },
   {
-   "fieldname": "column_trough",
+   "fieldname": "column_trg",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "trough_address",
+   "fieldname": "trg_address",
    "fieldtype": "Link",
    "label": "Trough address",
    "options": "Address"
   },
   {
-   "fieldname": "trough_address_display",
+   "fieldname": "trg_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
   {
-   "fieldname": "trough_contact",
+   "fieldname": "trg_contact",
    "fieldtype": "Link",
    "label": "Trough contact",
    "options": "Contact"
   },
   {
-   "fetch_from": "trough_contact.full_name",
-   "fieldname": "trough_contact_name",
+   "fetch_from": "trg_contact.full_name",
+   "fieldname": "trg_c_name",
    "fieldtype": "Data",
    "label": "Trough contact name",
    "read_only": 1
   },
   {
-   "fetch_from": "trough_contact.email_id",
-   "fieldname": "trough_contact_email",
+   "fetch_from": "trg_contact.email_id",
+   "fieldname": "trg_email",
    "fieldtype": "Data",
    "label": "Trough contact email",
    "read_only": 1
   },
   {
-   "fetch_from": "trough_contact.phone",
-   "fieldname": "trough_contact_phone",
+   "fetch_from": "trg_contact.phone",
+   "fieldname": "trg_phone",
    "fieldtype": "Data",
    "label": "Trough contact phone",
    "read_only": 1
@@ -705,7 +709,7 @@
    "options": "Address"
   },
   {
-   "fieldname": "mud_address_display",
+   "fieldname": "mud_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
@@ -717,326 +721,326 @@
   },
   {
    "fetch_from": "mud_contact.full_name",
-   "fieldname": "mud_contact_name",
+   "fieldname": "mud_c_name",
    "fieldtype": "Data",
    "label": "Mud contact name",
    "read_only": 1
   },
   {
    "fetch_from": "mud_contact.email_id",
-   "fieldname": "mud_contact_email",
+   "fieldname": "mud_email",
    "fieldtype": "Data",
    "label": "Mud contact email",
    "read_only": 1
   },
   {
    "fetch_from": "mud_contact.phone",
-   "fieldname": "mud_contact_phone",
+   "fieldname": "mud_phone",
    "fieldtype": "Data",
    "label": "Mud contact phone",
    "read_only": 1
   },
   {
    "collapsible": 1,
-   "fieldname": "section_crane",
+   "fieldname": "section_crn",
    "fieldtype": "Section Break",
    "label": "Crane"
   },
   {
-   "fieldname": "crane",
+   "fieldname": "crn",
    "fieldtype": "Link",
    "label": "Crane",
    "options": "Supplier"
   },
   {
-   "fetch_from": "crane.supplier_name",
-   "fieldname": "crane_name",
+   "fetch_from": "crn.supplier_name",
+   "fieldname": "crn_name",
    "fieldtype": "Data",
    "label": "Crane name",
    "read_only": 1
   },
   {
-   "fieldname": "column_crane",
+   "fieldname": "column_crn",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "crane_address",
+   "fieldname": "crn_address",
    "fieldtype": "Link",
    "label": "Crane address",
    "options": "Address"
   },
   {
-   "fieldname": "crane_address_display",
+   "fieldname": "crn_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
   {
-   "fieldname": "crane_contact",
+   "fieldname": "crn_contact",
    "fieldtype": "Link",
    "label": "Crane contact",
    "options": "Contact"
   },
   {
-   "fetch_from": "crane_contact.full_name",
-   "fieldname": "crane_contact_name",
+   "fetch_from": "crn_contact.full_name",
+   "fieldname": "crn_c_name",
    "fieldtype": "Data",
    "label": "Crane contact name",
    "read_only": 1
   },
   {
-   "fetch_from": "crane_contact.email_id",
-   "fieldname": "crane_contact_email",
+   "fetch_from": "crn_contact.email_id",
+   "fieldname": "crn_email",
    "fieldtype": "Data",
    "label": "Crane contact email",
    "read_only": 1
   },
   {
-   "fetch_from": "crane_contact.phone",
-   "fieldname": "crane_contact_phone",
+   "fetch_from": "crn_contact.phone",
+   "fieldname": "crn_phone",
    "fieldtype": "Data",
    "label": "Crane contact phone",
    "read_only": 1
   },
   {
    "collapsible": 1,
-   "fieldname": "section_authority",
+   "fieldname": "section_auth",
    "fieldtype": "Section Break",
    "label": "Authority"
   },
   {
-   "fieldname": "authority",
+   "fieldname": "auth",
    "fieldtype": "Link",
    "label": "Authority",
    "options": "Supplier"
   },
   {
-   "fetch_from": "authority.supplier_name",
-   "fieldname": "authority_name",
+   "fetch_from": "auth.supplier_name",
+   "fieldname": "auth_name",
    "fieldtype": "Data",
    "label": "Authority name",
    "read_only": 1
   },
   {
-   "fieldname": "column_authority",
+   "fieldname": "column_auth",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "authority_address",
+   "fieldname": "auth_address",
    "fieldtype": "Link",
    "label": "Authority address",
    "options": "Address"
   },
   {
-   "fieldname": "authority_address_display",
+   "fieldname": "auth_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
   {
-   "fieldname": "authority_contact",
+   "fieldname": "auth_contact",
    "fieldtype": "Link",
    "label": "Authority contact",
    "options": "Contact"
   },
   {
-   "fetch_from": "authority_contact.full_name",
-   "fieldname": "authority_contact_name",
+   "fetch_from": "auth_contact.full_name",
+   "fieldname": "auth_c_name",
    "fieldtype": "Data",
    "label": "Authority contact name",
    "read_only": 1
   },
   {
-   "fetch_from": "authority_contact.email_id",
-   "fieldname": "authority_contact_email",
+   "fetch_from": "auth_contact.email_id",
+   "fieldname": "auth_email",
    "fieldtype": "Data",
    "label": "Authority contact email",
    "read_only": 1
   },
   {
-   "fetch_from": "authority_contact.phone",
-   "fieldname": "authority_contact_phone",
+   "fetch_from": "auth_contact.phone",
+   "fieldname": "auth_phone",
    "fieldtype": "Data",
    "label": "Authority contact phone",
    "read_only": 1
   },
   {
    "collapsible": 1,
-   "fieldname": "section_community",
+   "fieldname": "section_cmn",
    "fieldtype": "Section Break",
    "label": "Community"
   },
   {
-   "fieldname": "community",
+   "fieldname": "cmn",
    "fieldtype": "Link",
    "label": "Community",
    "options": "Supplier"
   },
   {
-   "fetch_from": "community.supplier_name",
-   "fieldname": "community_name",
+   "fetch_from": "cmn.supplier_name",
+   "fieldname": "cmn_name",
    "fieldtype": "Data",
    "label": "Community name",
    "read_only": 1
   },
   {
-   "fieldname": "column_community",
+   "fieldname": "column_cmn",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "community_address",
+   "fieldname": "cmn_address",
    "fieldtype": "Link",
    "label": "Community address",
    "options": "Address"
   },
   {
-   "fieldname": "community_address_display",
+   "fieldname": "cmn_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
   {
-   "fieldname": "community_contact",
+   "fieldname": "cmn_contact",
    "fieldtype": "Link",
    "label": "Community contact",
    "options": "Contact"
   },
   {
-   "fetch_from": "community_contact.full_name",
-   "fieldname": "community_contact_name",
+   "fetch_from": "cmn_contact.full_name",
+   "fieldname": "cmn_c_name",
    "fieldtype": "Data",
    "label": "Community contact name",
    "read_only": 1
   },
   {
-   "fetch_from": "community_contact.email_id",
-   "fieldname": "community_contact_email",
+   "fetch_from": "cmn_contact.email_id",
+   "fieldname": "cmn_email",
    "fieldtype": "Data",
    "label": "Community contact email",
    "read_only": 1
   },
   {
-   "fetch_from": "community_contact.phone",
-   "fieldname": "community_contact_phone",
+   "fetch_from": "cmn_contact.phone",
+   "fieldname": "cmn_phone",
    "fieldtype": "Data",
    "label": "Community contact phone",
    "read_only": 1
   },
   {
    "collapsible": 1,
-   "fieldname": "section_geologist",
+   "fieldname": "section_glgst",
    "fieldtype": "Section Break",
    "label": "Geologist"
   },
   {
-   "fieldname": "geologist",
+   "fieldname": "glgst",
    "fieldtype": "Link",
    "label": "Geologist",
    "options": "Supplier"
   },
   {
-   "fetch_from": "geologist.supplier_name",
-   "fieldname": "geologist_name",
+   "fetch_from": "glgst.supplier_name",
+   "fieldname": "glgst_name",
    "fieldtype": "Data",
    "label": "Geologist name",
    "read_only": 1
   },
   {
-   "fieldname": "column_geologist",
+   "fieldname": "column_glgst",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "geologist_address",
+   "fieldname": "glgst_address",
    "fieldtype": "Link",
    "label": "Geologist address",
    "options": "Address"
   },
   {
-   "fieldname": "geologist_address_display",
+   "fieldname": "glgst_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
   {
-   "fieldname": "geologist_contact",
+   "fieldname": "glgst_contact",
    "fieldtype": "Link",
    "label": "Geologist contact",
    "options": "Contact"
   },
   {
-   "fetch_from": "geologist_contact.full_name",
-   "fieldname": "geologist_contact_name",
+   "fetch_from": "glgst_contact.full_name",
+   "fieldname": "glgst_c_name",
    "fieldtype": "Data",
    "label": "Geologist contact name",
    "read_only": 1
   },
   {
-   "fetch_from": "geologist_contact.email_id",
-   "fieldname": "geologist_contact_email",
+   "fetch_from": "glgst_contact.email_id",
+   "fieldname": "glgst_email",
    "fieldtype": "Data",
    "label": "Geologist contact email",
    "read_only": 1
   },
   {
-   "fetch_from": "geologist_contact.phone",
-   "fieldname": "geologist_contact_phone",
+   "fetch_from": "glgst_contact.phone",
+   "fieldname": "glgst_phone",
    "fieldtype": "Data",
    "label": "Geologist contact phone",
    "read_only": 1
   },
   {
    "collapsible": 1,
-   "fieldname": "section_geometer",
+   "fieldname": "section_gmtr",
    "fieldtype": "Section Break",
    "label": "Geometer"
   },
   {
-   "fieldname": "geometer",
+   "fieldname": "gmtr",
    "fieldtype": "Link",
    "label": "Geometer",
    "options": "Supplier"
   },
   {
-   "fetch_from": "geometer.supplier_name",
-   "fieldname": "geometer_name",
+   "fetch_from": "gmtr.supplier_name",
+   "fieldname": "gmtr_name",
    "fieldtype": "Data",
    "label": "Geometer name",
    "read_only": 1
   },
   {
-   "fieldname": "column_geometer",
+   "fieldname": "column_gmtr",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "geometer_address",
+   "fieldname": "gmtr_address",
    "fieldtype": "Link",
    "label": "Geometer address",
    "options": "Address"
   },
   {
-   "fieldname": "geometer_address_display",
+   "fieldname": "gmtr_a_display",
    "fieldtype": "Small Text",
    "read_only": 1
   },
   {
-   "fieldname": "geometer_contact",
+   "fieldname": "gmtr_contact",
    "fieldtype": "Link",
    "label": "Geometer contact",
    "options": "Contact"
   },
   {
-   "fetch_from": "geometer_contact.full_name",
-   "fieldname": "geometer_contact_name",
+   "fetch_from": "gmtr_contact.full_name",
+   "fieldname": "gmtr_c_name",
    "fieldtype": "Data",
    "label": "Geometer contact name",
    "read_only": 1
   },
   {
-   "fetch_from": "geometer_contact.email_id",
-   "fieldname": "geometer_contact_email",
+   "fetch_from": "gmtr_contact.email_id",
+   "fieldname": "gmtr_email",
    "fieldtype": "Data",
    "label": "Geometer contact email",
    "read_only": 1
   },
   {
-   "fetch_from": "geometer_contact.phone",
-   "fieldname": "geometer_contact_phone",
+   "fetch_from": "gmtr_contact.phone",
+   "fieldname": "gmtr_phone",
    "fieldtype": "Data",
    "label": "Geometer contact phone",
    "read_only": 1
@@ -1129,9 +1133,36 @@
    "fieldname": "ews_count",
    "fieldtype": "Int",
    "label": "Count"
+  },
+  {
+   "description": "m",
+   "fieldname": "ews_depth",
+   "fieldtype": "Int",
+   "label": "Depth"
+  },
+  {
+   "description": "mm",
+   "fieldname": "ews_diameter",
+   "fieldtype": "Int",
+   "label": "Diameter"
+  },
+  {
+   "fieldname": "pressure_level",
+   "fieldtype": "Link",
+   "label": "Pressure Level",
+   "options": "Pressure Level"
+  },
+  {
+   "fieldname": "column_ews",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ews_remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
   }
  ],
- "modified": "2021-04-20 12:09:15.146913",
+ "modified": "2021-04-21 21:28:49.627270",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
