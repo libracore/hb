@@ -3,9 +3,6 @@
     {% for drilling_team in drilling_teams %}
         <div class="clear"></div>
         <div class="bohrteam-row">
-            <div class="bohrteam">
-                <b>{{ drilling_team.title }}</b>
-            </div>
             {% for day in days %}
                 {% if (in_list(drilling_team.booked_vm_start_days, day)) { %}
                     <!-- start tag am vormittag -->

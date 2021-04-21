@@ -38,7 +38,7 @@ def get_days(from_date, to_date):
             total_weekday += 1
         start_date += delta
         
-    total_width = (total_weekday * 161) + (total_weekend * 80) + 247
+    total_width = (total_weekday * 161) + (total_weekend * 80) + 6
     
     today = date.today()
     today = today.strftime("%d.%m.%Y")
