@@ -11,7 +11,7 @@ from datetime import date, timedelta
 def get_content(from_date, to_date):
     data = {}
     data["drilling_teams"] = get_drilling_teams()
-    data["days"], data["total_width"], data["weekend"], data["kw_list"], data["day_list"] = get_days(from_date, to_date)
+    data["days"], data["total_width"], data["weekend"], data["kw_list"], data["day_list"], data["today"] = get_days(from_date, to_date)
     return data
     
 def get_days(from_date, to_date):
@@ -38,18 +38,22 @@ def get_days(from_date, to_date):
             total_weekday += 1
         start_date += delta
         
-    total_width = (total_weekday * 161) + (total_weekend * 80) + 247
+    total_width = (total_weekday * 161) + (total_weekend * 80) + 6
     
-    return date_list, total_width, weekend_list, kw_list, day_list
+    today = date.today()
+    today = today.strftime("%d.%m.%Y")
+    
+    return date_list, total_width, weekend_list, kw_list, day_list, today
     
 def get_drilling_teams():
     drilling_teams = []
-    _drilling_teams = frappe.db.sql("""SELECT `name` FROM `tabDrilling Team`""", as_list=True)
+    _drilling_teams = frappe.db.sql("""SELECT `name`, `title` FROM `tabDrilling Team`""", as_dict=True)
     
     for team in _drilling_teams:
         data = {}
-        data["team"] = team[0]
-        data["booked_days"], data["booked_vm_start_days"], data["booked_nm_start_days"], data["booked_vm_end_days"], data["booked_nm_end_days"], data["project_details"] = get_booked_days_of_drilling_team(team[0])
+        data["team"] = team.name
+        data["title"] = team.title
+        data["booked_days"], data["booked_vm_start_days"], data["booked_nm_start_days"], data["booked_vm_end_days"], data["booked_nm_end_days"], data["project_details"] = get_booked_days_of_drilling_team(team.name)
         drilling_teams.append(data)
     
     return drilling_teams
@@ -260,14 +264,15 @@ def get_traffic_lights_indicator(project, typ):
     # tbd!
     if typ == 'a2':
         return {
-            'color': 'red',
+            'color': 'green',
             'tooltip': _("This tooltip is an example and still needs to be programmed")
         }
     
+    #tbd!
     if typ == 'a3':
         if not project.sales_order:
             return {
-                'color': 'red',
+                'color': 'green',
                 'tooltip': _("No sales order available")
             }
         else:
@@ -291,7 +296,7 @@ def get_traffic_lights_indicator(project, typ):
     # tbd!
     if typ == 'a4':
         return {
-            'color': 'red',
+            'color': 'green',
             'tooltip': _("This tooltip is an example and still needs to be programmed")
         }
     

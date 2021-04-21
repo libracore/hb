@@ -1,29 +1,35 @@
-<!-- total_width = anzahlt tage * 161px + 1px + 246px (berechnung in python) -->
+<!-- total_width = anzahlt tage * 161px + 1px + 6px (berechnung in python) -->
 <div style="overflow: hidden; width: {{ total_width }}px;">
     <div class="date-row">
-        <div class="bohrteam-platzhalter">
-            <div class="form-group">
-                <label for="from">{{ __("From") }}</label>
-                <input type="date" class="form-control" id="from">
-            </div>
-            <div class="form-group">
-                <label for="to">{{ __("To") }}</label>
-                <input type="date" class="form-control" id="to">
-            </div> 
-        </div>
         {% for day in days %}
             {% if (in_list(weekend, day)) { %}
-                <!-- wochenende -->
-                <div class="tag weekend"><center><b>KW {{ kw_list[day] }}<br>{{ day }}<br>({{ __(day_list[day]) }})</center></b>
-                    <div class="sub-tag b-middle weekend"><center>VM</center></div>
-                    <div class="sub-tag weekend"><center>NM</center></div>
-                </div>
+                {% if day == today %}
+                    <!-- wochenende/heute -->
+                    <div class="tag weekend today"><center><b>KW {{ kw_list[day] }}<br>{{ day }}<br>({{ __(day_list[day]) }})</center></b>
+                        <div class="sub-tag b-middle weekend today"><center>VM</center></div>
+                        <div class="sub-tag weekend today"><center>NM</center></div>
+                    </div>
+                {% } else { %}
+                    <!-- wochenende -->
+                    <div class="tag weekend"><center><b>KW {{ kw_list[day] }}<br>{{ day }}<br>({{ __(day_list[day]) }})</center></b>
+                        <div class="sub-tag b-middle weekend"><center>VM</center></div>
+                        <div class="sub-tag weekend"><center>NM</center></div>
+                    </div>
+                {% } %}
             {% } else { %}
-                <!-- wochentag -->
-                <div class="tag"><center><b>KW {{ kw_list[day] }}<br>{{ day }}<br>({{ __(day_list[day]) }})</center></b>
-                    <div class="sub-tag b-middle"><center>VM</center></div>
-                    <div class="sub-tag"><center>NM</center></div>
-                </div>
+                {% if day == today %}
+                    <!-- wochentag/heute -->
+                    <div class="tag today"><center><b>KW {{ kw_list[day] }}<br>{{ day }}<br>({{ __(day_list[day]) }})</center></b>
+                        <div class="sub-tag b-middle today"><center>VM</center></div>
+                        <div class="sub-tag today"><center>NM</center></div>
+                    </div>
+                {% } else { %}
+                    <!-- wochentag -->
+                    <div class="tag"><center><b>KW {{ kw_list[day] }}<br>{{ day }}<br>({{ __(day_list[day]) }})</center></b>
+                        <div class="sub-tag b-middle"><center>VM</center></div>
+                        <div class="sub-tag"><center>NM</center></div>
+                    </div>
+                {% } %}
             {% } %}
         {% endfor %}
     </div>

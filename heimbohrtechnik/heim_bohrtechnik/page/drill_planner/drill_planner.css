@@ -1,12 +1,7 @@
+/*---------------------------*/
+/* drill_planner_header.html */
 .date-row {
     width: 100%;
-}
-
-.date-row > .bohrteam-platzhalter {
-    float: left;
-    background: #f8f8f8;
-    width: 246px;
-    height: 120px;
 }
 
 /* Wochentag */
@@ -31,6 +26,7 @@
     width: 80px;
     height: 80px;
 }
+/*---*/
 
 /* Weekend */
 .date-row > .tag.weekend {
@@ -62,11 +58,36 @@
     width: 38.5px;
     height: 80px;
 }
+/*---*/
 
-.b-middle {
-    border-right: 0.5px dotted black;
+/* drill_planner_header.html */
+/*---------------------------*/
+
+/*---------------------------*/
+/* drill_planner_header_left.html */
+.date-row > .bohrteam-platzhalter {
+    float: left;
+    background: #f8f8f8;
+    width: 246px;
+    height: 120px;
 }
+/* drill_planner_header.html */
+/*---------------------------*/
 
+/*---------------------------*/
+/* drill_planner_left.html */
+.bohrteam-row > .bohrteam {
+    /*float: left;*/
+    padding: 20px;
+    background: #eee;
+    width: 246px;
+    height: 120px;
+}
+/* drill_planner_left.html */
+/*---------------------------*/
+
+/*---------------------------*/
+/* drill_planner.html */
 .clear {
     clear: both;
 }
@@ -74,14 +95,6 @@
 .bohrteam-row {
     border-top: 1px solid black;
     width: 100%;
-}
-
-.bohrteam-row > .bohrteam {
-    float: left;
-    padding: 20px;
-    background: #eee;
-    width: 246px;
-    height: 120px;
 }
 
 /* Wochentag */
@@ -106,6 +119,7 @@
     width: 80px;
     height: 120px;
 }
+/*---*/
 
 /* Weekend */
 .bohrteam-row > .tag.weekend {
@@ -137,13 +151,26 @@
     width: 38.5px;
     height: 120px;
 }
+/*---*/
+/* drill_planner.html */
+/*---------------------------*/
+
+/*---------------------------*/
+/* allgemein */
+.b-middle {
+    border-right: 0.5px dotted black;
+}
 
 .weekend {
-    background-color: #FD8B8B !important;
+    background-color: #ffeae9 !important;
+}
+
+.today {
+    background-color: #eefdec !important;
 }
 
 .booked {
-    background-color: green !important;
+    background-color: white !important;
 }
 
 .project-details {
@@ -186,3 +213,13 @@
 .ondragover {
     background-color: yellow !important;
 }
+
+#drill_planner_main_element, #drill_planner_header_element {
+    padding-left: 0px;
+}
+
+#drill_planner_main_element_left {
+    padding-right: 0px;
+}
+/* allgemein */
+/*---------------------------*/
