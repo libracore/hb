@@ -61,6 +61,45 @@ frappe.ui.form.on('Object', {
     }
 });
 
+frappe.ui.form.on('Object Address', {
+    refresh: function(frm, dt, dn) {
+        var v = locals[dt][dn];
+        frm.fields_dict.addresses.grid.get_field('party').get_query =   
+            function(frm, dt, dn) {   
+                var filters = {};
+                if (vars.dt === "Supplier") {
+                    filters = {
+                        'query': 'heimbohrtechnik.heim_bohrtechnik.filters.supplier_by_capability',
+                        'filters': {
+                            'capability': vars.address_type
+                        }
+                    }
+                }
+                return filters
+        };
+        frm.fields_dict.addresses.grid.get_field('address').get_query =   
+            function(frm, dt, dn) {   
+                return {
+                    query: "frappe.contacts.doctype.address.address.address_query",
+                    filters: {
+                        "link_doctype": v.dt,
+                        "link_name": v.party
+                    }
+                }
+            }; 
+        frm.fields_dict.addresses.grid.get_field('contact').get_query =   
+            function(frm, dt, dn) {   
+                return {
+                    query: "frappe.contacts.doctype.contact.contact.contact_query",
+                    filters: {
+                        "link_doctype": v.dt,
+                        "link_name": v.party
+                    }
+                }
+        };
+    }
+});
+
 function search_plz(frm) {
     frappe.prompt([
         {'fieldname': 'plz', 'fieldtype': 'Data', 'label': 'PLZ', 'reqd': 1}  

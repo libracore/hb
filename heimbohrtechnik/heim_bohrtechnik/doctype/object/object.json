@@ -40,6 +40,8 @@
   "pressure_level",
   "column_ews",
   "ews_remarks",
+  "section_addresses",
+  "addresses",
   "section_cst",
   "cst",
   "cst_name",
@@ -1160,9 +1162,20 @@
    "fieldname": "ews_remarks",
    "fieldtype": "Small Text",
    "label": "Remarks"
+  },
+  {
+   "fieldname": "addresses",
+   "fieldtype": "Table",
+   "label": "Addresses",
+   "options": "Object Address"
+  },
+  {
+   "fieldname": "section_addresses",
+   "fieldtype": "Section Break",
+   "label": "Addresses"
   }
  ],
- "modified": "2021-04-21 21:28:49.627270",
+ "modified": "2021-04-22 10:28:16.941409",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
