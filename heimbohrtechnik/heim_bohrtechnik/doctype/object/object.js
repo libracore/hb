@@ -58,6 +58,18 @@ frappe.ui.form.on('Object', {
                 '_blank'
             );
         }
+    },
+    ews_count: function(frm) {
+        update_ews_details(frm);
+    },
+    ews_depth: function(frm) {
+        update_ews_details(frm);
+    },
+    ews_diameter: function(frm) {
+        update_ews_details(frm);
+    },
+    pressure_level: function(frm) {
+        update_ews_details(frm);
     }
 });
 
@@ -201,4 +213,11 @@ function convert_gps_to_ch(frm) {
             }
         });
     }
+}
+
+function update_ews_details(frm) {
+    cur_frm.set_value("ews_details", (frm.doc.ews_count || "?") + "x "
+        + (frm.doc.ews_depth || "?") + "m, "
+        + (frm.doc.ews_diameter || "?") + "mm, "
+        + (frm.doc.pressure_level || "?"));
 }

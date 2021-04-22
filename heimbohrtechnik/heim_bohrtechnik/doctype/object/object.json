@@ -34,6 +34,7 @@
   "checklist",
   "permits",
   "section_ews_details",
+  "ews_details",
   "ews_count",
   "ews_depth",
   "ews_diameter",
@@ -1173,9 +1174,15 @@
    "fieldname": "section_addresses",
    "fieldtype": "Section Break",
    "label": "Addresses"
+  },
+  {
+   "fieldname": "ews_details",
+   "fieldtype": "Data",
+   "label": "EWS Details",
+   "read_only": 1
   }
  ],
- "modified": "2021-04-22 10:28:16.941409",
+ "modified": "2021-04-22 11:19:47.532388",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
