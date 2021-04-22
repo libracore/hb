@@ -17,7 +17,6 @@ frappe.pages['drill-planner'].on_page_load = function(wrapper) {
     document.addEventListener('dragstart', function(event) {
         event.dataTransfer.setData('Text', event.target.id);
         var drag_element = document.getElementById(event.target.id);
-        drag_element.style.backgroundColor = 'green';
     });
 }
 
@@ -124,7 +123,7 @@ frappe.drill_planner = {
     add_overlay: function(data) {
         var added_list = [];
         var main_layout_element = document.getElementsByClassName("row layout-main")[0].getBoundingClientRect();
-        var left_korrektur_faktor = (main_layout_element.left + 16) + 249;
+        var left_korrektur_faktor = (main_layout_element.left + 16) + $("#drill_planner_main_element_left").width();
         for (var i = 0; i<data.drilling_teams.length; i++) {
             for (var y = 0; y<Object.entries(data.drilling_teams[i].project_details).length; y++) {
                 if (!added_list.includes(Object.entries(data.drilling_teams[i].project_details)[y][1].object)) {
@@ -205,7 +204,7 @@ frappe.drill_planner = {
                                 overlay.style.left = String(pos_left - left_korrektur_faktor) + 'px';
                                 overlay.style.top = String(pos_top - 244) + 'px';
                                 
-                                overlay.style.minWidth = String((ampel_indicators.total_overlay_width + 3)) + "px";
+                                overlay.style.minWidth = String(ampel_indicators.total_overlay_width) + "px";
                                 overlay.setAttribute('draggable', true);
 
                                 var drill_planner_div = document.getElementById("drill_planner_main_element");
