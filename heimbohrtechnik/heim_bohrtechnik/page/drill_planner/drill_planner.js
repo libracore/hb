@@ -17,6 +17,7 @@ frappe.pages['drill-planner'].on_page_load = function(wrapper) {
     document.addEventListener('dragstart', function(event) {
         event.dataTransfer.setData('Text', event.target.id);
         var drag_element = document.getElementById(event.target.id);
+        drag_element.classList.add("hidden");
     });
 }
 
@@ -371,12 +372,12 @@ frappe.drill_planner = {
     },
     allow_drop: function(ev) {
         ev.preventDefault();
-        var to_get_droped = document.getElementById(ev.target.id);
+        var to_get_droped = $("[data-dropid='" + ev.target.dataset.dropid + "']")[0];
         to_get_droped.classList.add("ondragover");
     },
     drag_leave: function(ev) {
         ev.preventDefault();
-        var leaved = document.getElementById(ev.target.id);
+        var leaved = $("[data-dropid='" + ev.target.dataset.dropid + "']")[0];
         leaved.classList.remove("ondragover");
     },
     drop: function(ev) {
