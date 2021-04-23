@@ -138,6 +138,12 @@ def get_data():
                    "name": "Pressure Level",
                    "label": _("Pressure Level"),
                    "description": _("Pressure Level")
+                },
+                {
+                   "type": "doctype",
+                   "name": "BKP Group",
+                   "label": _("BKP Group"),
+                   "description": _("BKP Group")
                 }
             ]
         }
