@@ -114,8 +114,64 @@ frappe.ui.form.on('Object', {
 });
 
 frappe.ui.form.on('Object Address', {
-    refresh: function(frm, dt, dn) {
-        
+    address: function(frm, dt, dn) {
+        var v = locals[dt][dn];
+        if (v.address) {
+            frappe.call({
+                "method": "frappe.client.get",
+                "args": {
+                    "doctype": "Address",
+                    "name": v.address
+                },
+                "callback": function(response) {
+                    var address = response.message;
+                    var html = v.party_name;
+                    html += "<br>" + address.address_line1;
+                    if (address.address_line2) {
+                        html += "<br>" + address.address_line2;
+                    }
+                    html += "<br>" + address.pincode + " " + address.city;
+                    html += "<br>" + address.country;
+                    frappe.model.set_value(dt, dn, 'address_display', html);
+                }
+            });
+        } else {
+            frappe.model.set_value(dt, dn, 'address_display', null);
+        }
+    },
+    party: function(frm, dt, dn) {
+        var v = locals[dt][dn];
+        if (v.party) {
+            // clean address and contact
+            frappe.model.set_value(dt, dn, 'address', null);
+            frappe.model.set_value(dt, dn, 'contact', null);
+            // fetch party name
+            if (v.dt === "Customer") {
+                frappe.call({
+                    "method": "frappe.client.get",
+                    "args": {
+                        "doctype": "Customer",
+                        "name": v.party
+                    },
+                    "callback": function(response) {
+                        var customer = response.message;
+                        frappe.model.set_value(dt, dn, 'party_name', customer.customer_name);
+                    }
+                });
+            } else if (v.dt === "Supplier") {
+                frappe.call({
+                    "method": "frappe.client.get",
+                    "args": {
+                        "doctype": "Supplier",
+                        "name": v.party
+                    },
+                    "callback": function(response) {
+                        var supplier = response.message;
+                        frappe.model.set_value(dt, dn, 'party_name', supplier.supplier_name);
+                    }
+                });
+            }
+        }
     }
 });
 
