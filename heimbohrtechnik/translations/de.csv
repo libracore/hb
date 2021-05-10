@@ -1,5 +1,12 @@
 Page: Drill Planner,Drill Planner,Bohrplaner
 Page: Drill Planner,To,Bis
+Page: Drill Planner,Mon,Mo
+Page: Drill Planner,Tue,Di
+Page: Drill Planner,Wed,Mi
+Page: Drill Planner,Thu,Do
+Page: Drill Planner,Fri,Fr
+Page: Drill Planner,Sat,Sa
+Page: Drill Planner,Sun,So
 Doctype: Object,Object,Objekt
 Doctype: Object,Object name,Objektname
 Doctype: Object,Object location,Objektort
