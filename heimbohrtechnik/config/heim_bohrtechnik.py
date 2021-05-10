@@ -144,6 +144,12 @@ def get_data():
                    "name": "BKP Group",
                    "label": _("BKP Group"),
                    "description": _("BKP Group")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Heim Settings",
+                   "label": _("Heim Settings"),
+                   "description": _("Heim Settings")
                 }
             ]
         }

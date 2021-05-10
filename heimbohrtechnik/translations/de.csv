@@ -94,6 +94,7 @@ Doctype: Object,Open Map,Karte öffnen
 Doctype: Object,Drilling Details,Bohrdetails
 Doctype: Object,Construction site inspected,Baustelle besichtigt
 Doctype: Object,Depth,Tiefe
+Doctype: Object,EWS Specification,EWS-Spezifikation
 Doctype: Project,Mud Disposer,Schlammentsorger
 Doctype: Project,Mud disposer,Schlammentsorger
 Doctype: Project,Drilling Equipment,Bohrequipment
@@ -107,3 +108,7 @@ Doctype: Permit Type,Permit,Bewillingung
 Doctype: Checklist Activity,Checklist Activity,Aktivität
 Doctype: Drilling Type,Drilling Type,Bohrart
 Doctype: Pressure Level,Pressure Level,Druckstufe
+Doctype: Heim Settings,Core Data,Kerndaten
+Doctype: Heim Settings,Heim Settings,Heim-Einstellungen
+Doctype: Heim Settings,Address Template,Adressvorlage
+Doctype: Heim Settings,Is Standard,Ist Standard

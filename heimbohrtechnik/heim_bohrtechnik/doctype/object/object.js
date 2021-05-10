@@ -68,6 +68,22 @@ frappe.ui.form.on('Object', {
                     }
                 }
             });
+        } else {
+            if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
+                // fresh document, no addresses - load template
+                frappe.call({
+                    "method": "heimbohrtechnik.heim_bohrtechnik.doctype.heim_settings.heim_settings.get_address_template",
+                    "callback": function(response) {
+                        var address_types = response.message;
+                        for (var i = 0; i < address_types.length; i++) {
+                            var child = cur_frm.add_child('addresses');
+                            frappe.model.set_value(child.doctype, child.name, 'address_type', address_types[i].type);
+                            frappe.model.set_value(child.doctype, child.name, 'dt', address_types[i].dt);
+                        }
+                        cur_frm.refresh_field('addresses');
+                    }
+                });
+            }
         }
     },
     button_search_plz: function(frm) {
@@ -98,19 +114,25 @@ frappe.ui.form.on('Object', {
                 '_blank'
             );
         }
-    },
-    ews_count: function(frm) {
-        update_ews_details(frm);
-    },
-    ews_depth: function(frm) {
-        update_ews_details(frm);
-    },
-    ews_diameter: function(frm) {
-        update_ews_details(frm);
-    },
-    pressure_level: function(frm) {
-        update_ews_details(frm);
     }
+});
+
+frappe.ui.form.on('Object EWS', {
+    ews_count: function(frm, cdt, cdn) {
+        update_ews_details(frm, cdt, cdn);
+    },
+    ews_depth: function(frm, cdt, cdn) {
+        update_ews_details(frm, cdt, cdn);
+    },
+    ews_diameter: function(frm, cdt, cdn) {
+        update_ews_details(frm, cdt, cdn);
+    },
+    ews_diameter_unit: function(frm, cdt, cdn) {
+        update_ews_details(frm, cdt, cdn);
+    },
+    pressure_level: function(frm, cdt, cdn) {
+        update_ews_details(frm, cdt, cdn);
+    }    
 });
 
 frappe.ui.form.on('Object Address', {
@@ -278,9 +300,22 @@ function convert_gps_to_ch(frm) {
     }
 }
 
-function update_ews_details(frm) {
-    cur_frm.set_value("ews_details", (frm.doc.ews_count || "?") + "x "
-        + (frm.doc.ews_depth || "?") + "m, "
-        + (frm.doc.ews_diameter || "?") + "mm, "
-        + (frm.doc.pressure_level || "?"));
+function update_ews_details(frm, cdt, cdn) {
+    var v = locals[cdt][cdn];
+    if (frm.doc.ews_specification) {
+        if (frm.doc.ews_specification.length === 1) {
+            var details = (v.ews_count || "?") + "x "
+                + (v.ews_depth || "?") + "m, "
+                + (v.ews_diameter || "?") + (v.ews_diameter_unit || "");
+            if (v.pressure_level) {
+                details += ", " + (v.pressure_level || "");
+            }
+            if (frm.doc.drilling_type === "Brunnen") {
+                details = "Brunnen " + details;
+            }
+            cur_frm.set_value("ews_details", details);
+        } else {
+            cur_frm.set_value("ews_details", "divers");
+        }
+    }
 }

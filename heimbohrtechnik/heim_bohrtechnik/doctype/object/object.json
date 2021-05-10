@@ -35,11 +35,7 @@
   "permits",
   "section_ews_details",
   "ews_details",
-  "ews_count",
-  "ews_depth",
-  "ews_diameter",
-  "pressure_level",
-  "column_ews",
+  "ews_specification",
   "ews_remarks",
   "section_addresses",
   "addresses"
@@ -210,33 +206,6 @@
    "label": "EWS Details"
   },
   {
-   "fieldname": "ews_count",
-   "fieldtype": "Int",
-   "label": "Count"
-  },
-  {
-   "description": "m",
-   "fieldname": "ews_depth",
-   "fieldtype": "Int",
-   "label": "Depth"
-  },
-  {
-   "description": "mm",
-   "fieldname": "ews_diameter",
-   "fieldtype": "Int",
-   "label": "Diameter"
-  },
-  {
-   "fieldname": "pressure_level",
-   "fieldtype": "Link",
-   "label": "Pressure Level",
-   "options": "Pressure Level"
-  },
-  {
-   "fieldname": "column_ews",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "ews_remarks",
    "fieldtype": "Small Text",
    "label": "Remarks"
@@ -257,9 +226,15 @@
    "fieldtype": "Data",
    "label": "EWS Details",
    "read_only": 1
+  },
+  {
+   "fieldname": "ews_specification",
+   "fieldtype": "Table",
+   "label": "EWS Specification",
+   "options": "Object EWS"
   }
  ],
- "modified": "2021-05-10 17:48:18.437847",
+ "modified": "2021-05-10 20:36:43.095484",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
