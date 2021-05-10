@@ -1,6 +1,46 @@
 // Copyright (c) 2021, libracore AG and contributors
 // For license information, please see license.txt
 
+// child table filter sets
+cur_frm.fields_dict.addresses.grid.get_field('address').get_query =   
+    function(frm, dt, dn) {   
+        var v = locals[dt][dn];
+        return {
+            query: "frappe.contacts.doctype.address.address.address_query",
+            filters: {
+                "link_doctype": v.dt,
+                "link_name": v.party
+            }
+        }
+    }; 
+
+cur_frm.fields_dict.addresses.grid.get_field('party').get_query =   
+    function(frm, dt, dn) {   
+        var filters = {};
+        var v = locals[dt][dn];
+        if (v.dt === "Supplier") {
+            filters = {
+                'query': 'heimbohrtechnik.heim_bohrtechnik.filters.supplier_by_capability',
+                'filters': {
+                    'capability': v.address_type
+                }
+            }
+        }
+        return filters
+    };
+
+cur_frm.fields_dict.addresses.grid.get_field('contact').get_query =   
+    function(frm, dt, dn) {
+        var v = locals[dt][dn];
+        return {
+            query: "frappe.contacts.doctype.contact.contact.contact_query",
+            filters: {
+                "link_doctype": v.dt,
+                "link_name": v.party
+            }
+        }
+    };
+    
 frappe.ui.form.on('Object', {
     refresh: function(frm) {
         if (!frm.doc.__islocal) {
@@ -75,40 +115,7 @@ frappe.ui.form.on('Object', {
 
 frappe.ui.form.on('Object Address', {
     refresh: function(frm, dt, dn) {
-        var v = locals[dt][dn];
-        frm.fields_dict.addresses.grid.get_field('party').get_query =   
-            function(frm, dt, dn) {   
-                var filters = {};
-                if (vars.dt === "Supplier") {
-                    filters = {
-                        'query': 'heimbohrtechnik.heim_bohrtechnik.filters.supplier_by_capability',
-                        'filters': {
-                            'capability': vars.address_type
-                        }
-                    }
-                }
-                return filters
-        };
-        frm.fields_dict.addresses.grid.get_field('address').get_query =   
-            function(frm, dt, dn) {   
-                return {
-                    query: "frappe.contacts.doctype.address.address.address_query",
-                    filters: {
-                        "link_doctype": v.dt,
-                        "link_name": v.party
-                    }
-                }
-            }; 
-        frm.fields_dict.addresses.grid.get_field('contact').get_query =   
-            function(frm, dt, dn) {   
-                return {
-                    query: "frappe.contacts.doctype.contact.contact.contact_query",
-                    filters: {
-                        "link_doctype": v.dt,
-                        "link_name": v.party
-                    }
-                }
-        };
+        
     }
 });
 
