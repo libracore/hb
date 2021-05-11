@@ -8,8 +8,12 @@ def get_data():
       'fieldname': 'object',
       'transactions': [
          {
-            'label': _('Selling'),
+            'label': _("Selling"),
             'items': ['Quotation']
+         },
+         {
+            'label': _("Documentation"),
+            'items': ['Construction Site Description']
          }
       ]
    }

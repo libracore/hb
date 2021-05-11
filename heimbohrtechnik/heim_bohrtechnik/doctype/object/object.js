@@ -84,6 +84,48 @@ frappe.ui.form.on('Object', {
                     }
                 });
             }
+            if ((!frm.doc.permits) || (frm.doc.permits.length === 0)) {
+                // no permits, load standards
+                frappe.call({
+                    "method": "heimbohrtechnik.heim_bohrtechnik.doctype.permit_type.permit_type.get_standard_permits",
+                    "callback": function(response) {
+                        var standard_permts = response.message;
+                        for (var i = 0; i < standard_permts.length; i++) {
+                            var child = cur_frm.add_child('permits');
+                            frappe.model.set_value(child.doctype, child.name, 'permit', standard_permts[i]);
+                        }
+                        cur_frm.refresh_field('permits');
+                    }
+                });
+            }
+        }
+    },
+    validate: function(frm) {
+        // check if all mandatory permits are present
+        if ((frm.doc.permits) && (frm.doc.permits.length > 0)) {
+            frappe.call({
+                "method": "heimbohrtechnik.heim_bohrtechnik.doctype.permit_type.permit_type.get_standard_permits",
+                "async": 0,
+                "callback": function(response) {
+                    var mandatory_permits = response.message;
+                    var found = false;
+                    for (var i = 0; i < mandatory_permits.length; i++) {
+                        for (var j = 0; j < frm.doc.permits.length; j++) {
+                            if (frm.doc.permits[j].permit === mandatory_permits[i]) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            frappe.msgprint( ( __("Permit {0} is mandatory but missing") ).replace("{0}", mandatory_permits[i]), __("Validation") );
+                            frappe.validated=false;
+                        } 
+                    }
+                }
+            });
+        } else {
+            frappe.msgprint( __("Are there really no required permits?"), __("Validation") );
+            // frappe.validated=false;
         }
     },
     button_search_plz: function(frm) {

@@ -95,6 +95,8 @@ Doctype: Object,Drilling Details,Bohrdetails
 Doctype: Object,Construction site inspected,Baustelle besichtigt
 Doctype: Object,Depth,Tiefe
 Doctype: Object,EWS Specification,EWS-Spezifikation
+Doctype: Object,Are there really no required permits?,Braucht es wirklich keine Bewilligungen?
+Doctype: Object,Permit {0} is mandatory but missing,Bewilligung {0} ist zwingend erforderlich aber fehlt
 Doctype: Project,Mud Disposer,Schlammentsorger
 Doctype: Project,Mud disposer,Schlammentsorger
 Doctype: Project,Drilling Equipment,Bohrequipment
@@ -105,6 +107,7 @@ Doctype: Project,Checklist,Checkliste
 Doctype: Project,Drilling Team,Bohrteam
 Doctype: Permit Type,Permit Type,Bewillingungsart
 Doctype: Permit Type,Permit,Bewillingung
+Doctype: Permit Type,Is Mandatory,Ist zwingend erforderlich
 Doctype: Checklist Activity,Checklist Activity,Aktivität
 Doctype: Drilling Type,Drilling Type,Bohrart
 Doctype: Pressure Level,Pressure Level,Druckstufe
@@ -112,3 +115,4 @@ Doctype: Heim Settings,Core Data,Kerndaten
 Doctype: Heim Settings,Heim Settings,Heim-Einstellungen
 Doctype: Heim Settings,Address Template,Adressvorlage
 Doctype: Heim Settings,Is Standard,Ist Standard
+DocType: Construction Site Description,Construction Site Description,Baustellenbeschreibung
