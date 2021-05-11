@@ -9,7 +9,7 @@ cur_frm.fields_dict.addresses.grid.get_field('address').get_query =
             query: "frappe.contacts.doctype.address.address.address_query",
             filters: {
                 "link_doctype": v.dt,
-                "link_name": v.party
+                "link_name": v.party || null
             }
         }
     }; 
@@ -36,7 +36,7 @@ cur_frm.fields_dict.addresses.grid.get_field('contact').get_query =
             query: "frappe.contacts.doctype.contact.contact.contact_query",
             filters: {
                 "link_doctype": v.dt,
-                "link_name": v.party
+                "link_name": v.party || null
             }
         }
     };
