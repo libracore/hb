@@ -31,7 +31,8 @@ class Object(Document):
             })
         for p in self.permits:
             project.append("permits", {
-              'permit': p.permit
+              'permit': p.permit,
+              'file': p.file
             })
         project.insert()
         return

@@ -147,6 +147,12 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Raw Material",
+                   "label": _("Raw Material"),
+                   "description": _("Raw Material")
+                },
+                {
+                   "type": "doctype",
                    "name": "Heim Settings",
                    "label": _("Heim Settings"),
                    "description": _("Heim Settings")
