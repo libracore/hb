@@ -119,3 +119,4 @@ DocType: Construction Site Description,Construction Site Description,Baustellenb
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
 DocType: Raw Material,Raw Material,Werkstoff
+DocType: Quotation,Discount Positions,Abschlagspositonen
