@@ -17,7 +17,9 @@ app_license = "AGPL"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/heimbohrtechnik/css/heimbohrtechnik.css"
 # app_include_js = "/assets/heimbohrtechnik/js/heimbohrtechnik.js"
-
+app_include_js = [
+    "/assets/heimbohrtechnik/js/heim_common.js"
+    ]
 # include js, css files in header of web template
 # web_include_css = "/assets/heimbohrtechnik/css/heimbohrtechnik.css"
 # web_include_js = "/assets/heimbohrtechnik/js/heimbohrtechnik.js"
@@ -29,7 +31,12 @@ app_license = "AGPL"
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 doctype_js = {
     "Contact": "public/js/contact.js",
-    "Quotation": "public/js/quotation.js"
+    "Quotation": "public/js/quotation.js",
+    "Sales Order": "public/js/sales_order.js",
+    "Delivery Note": "public/js/delviery_note.js",
+    "Sales Invoice": "public/js/sales_invoice.js",
+    "Purchase Order": "public/js/purchase_order.js",
+    "Project": "public/js/project.js"
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}

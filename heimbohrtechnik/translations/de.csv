@@ -120,3 +120,5 @@ DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
 DocType: Raw Material,Raw Material,Werkstoff
 DocType: Quotation,Discount Positions,Abschlagspositonen
+DocType: Purchase Order,We are hereby placing the following order:,Hiermit bestellen wir folgende Positionen:
+DocType: Supplier,Required Activity,Erforderliche Tätigkeit

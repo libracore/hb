@@ -12,3 +12,15 @@ def supplier_by_capability(doctype, txt, searchfield, start, page_len, filters):
            LEFT JOIN `tabSupplier Activity` ON `tabSupplier Activity`.`parent` = `tabSupplier`.`name`
            WHERE `tabSupplier Activity`.`activity` = "{c}";
         """.format(c=filters['capability']))
+
+@frappe.whitelist()
+def get_required_activities(supplier, activity):
+    sql_query = """SELECT `required_activity`
+                   FROM `tabSupplier Activity`
+                   WHERE `parent` = "{supplier}"
+                     AND `activity` = "{activity}"; """.format(supplier=supplier, activity=activity)
+    data = frappe.db.sql(sql_query, as_dict=True)
+    activities = []
+    for a in data:
+        activities.append(a['required_activity'])
+    return activities
