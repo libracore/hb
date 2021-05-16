@@ -24,19 +24,33 @@ def get_days(from_date, to_date):
     total_width = 0
     total_weekday = 0
     total_weekend = 0
-    
+    company = frappe.defaults.get_user_default("Company")
+    holidaylist = frappe.get_doc("Company", company).default_holiday_list
+    if holidaylist:
+        holidaylist = frappe.get_doc("Holiday List", holidaylist)
+        holidays = []
+        for holiday in holidaylist.holidays:
+            holidays.append(holiday.holiday_date.strftime("%d.%m.%Y"))
     delta = timedelta(days=1)
     while start_date <= end_date:
         date_list.append(start_date.strftime("%d.%m.%Y"))
         kw_list[start_date.strftime("%d.%m.%Y")] = start_date.strftime("%V")
         day_list[start_date.strftime("%d.%m.%Y")] = start_date.strftime("%a")
         week_day_no = start_date.weekday()
-        if week_day_no >= 5:
-            weekend_list.append(start_date.strftime("%d.%m.%Y"))
-            total_weekend += 1
+        if holidaylist:
+            if start_date.strftime("%d.%m.%Y") in holidays:
+                weekend_list.append(start_date.strftime("%d.%m.%Y"))
+                total_weekend += 1
+            else:
+                total_weekday += 1
+            start_date += delta
         else:
-            total_weekday += 1
-        start_date += delta
+            if week_day_no >= 5:
+                weekend_list.append(start_date.strftime("%d.%m.%Y"))
+                total_weekend += 1
+            else:
+                total_weekday += 1
+            start_date += delta
         
     total_width = (total_weekday * 161) + (total_weekend * 80) + 6
     
@@ -47,12 +61,17 @@ def get_days(from_date, to_date):
     
 def get_drilling_teams():
     drilling_teams = []
-    _drilling_teams = frappe.db.sql("""SELECT `name`, `title` FROM `tabDrilling Team`""", as_dict=True)
+    _drilling_teams = frappe.db.sql("""SELECT `name`, `title`, `drm`, `drt`, `truck_and_weight`, `has_trough`, `has_crane` FROM `tabDrilling Team`""", as_dict=True)
     
     for team in _drilling_teams:
         data = {}
         data["team"] = team.name
         data["title"] = team.title
+        data["drm"] = team.drm
+        data["drt"] = team.drt
+        data["truck_and_weight"] = team.truck_and_weight
+        data["has_trough"] = team.has_trough
+        data["has_crane"] = team.has_crane
         data["booked_days"], data["booked_vm_start_days"], data["booked_nm_start_days"], data["booked_vm_end_days"], data["booked_nm_end_days"], data["project_details"] = get_booked_days_of_drilling_team(team.name)
         drilling_teams.append(data)
     
@@ -192,6 +211,11 @@ def get_overlay_data(project, selected_start, selected_end):
     data['a7'] = get_traffic_lights_indicator(project, 'a7')
     
     project = frappe.get_doc("Project", project)
+    data['object'] = frappe.get_doc("Object", project.object)
+    if data['object'].manager:
+        data['manager'] = frappe.get_doc("User", data['object'].manager).username
+    else:
+        data['manager'] = ''
     start_date = getdate(project.expected_start_date)
     end_date = getdate(project.expected_end_date)
     start_overwritten = False
