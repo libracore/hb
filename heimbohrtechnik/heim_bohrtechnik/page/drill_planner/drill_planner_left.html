@@ -1,7 +1,10 @@
 {% for drilling_team in drilling_teams %}
     <div class="bohrteam-row">
         <div class="bohrteam">
-            <b>{{ drilling_team.title }}</b>
+            <b>{{ drilling_team.title }}</b><br>
+            {% if drilling_team.drm %}{{ drilling_team.drm }}, {% endif %}{% if drilling_team.drt %}{{ drilling_team.drt }}{% endif %}<br>
+            {% if drilling_team.truck_and_weight %}{{ drilling_team.truck_and_weight }}<br>{% endif %}
+            {% if drilling_team.has_trough == 1 %}<i class="fa fa-archive"></i>{% endif %} {% if drilling_team.has_crane == 1 %}<i class="fa fa-angle-double-up"></i>{% endif %}
         </div>
     </div>
 {% endfor %}

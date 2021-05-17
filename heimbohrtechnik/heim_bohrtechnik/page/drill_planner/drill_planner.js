@@ -9,16 +9,19 @@ frappe.pages['drill-planner'].on_page_load = function(wrapper) {
     if (document.getElementsByTagName("body")[0].className != 'full-width') {
         frappe.ui.toolbar.toggle_full_width();
     }
-    
-    frappe.drill_planner.make(page);
-	frappe.drill_planner.run(page);
-    
-    // drag start
-    document.addEventListener('dragstart', function(event) {
-        event.dataTransfer.setData('Text', event.target.id);
-        var drag_element = document.getElementById(event.target.id);
-        drag_element.classList.add("hidden");
-    });
+    if (frappe.is_mobile()) {
+        frappe.drill_planner.make_mobile(page);
+    } else {
+        frappe.drill_planner.make(page);
+        frappe.drill_planner.run(page);
+        
+        // drag start
+        document.addEventListener('dragstart', function(event) {
+            event.dataTransfer.setData('Text', event.target.id);
+            var drag_element = document.getElementById(event.target.id);
+            drag_element.classList.add("hidden");
+        });
+    }
 }
 
 frappe.drill_planner = {
@@ -45,6 +48,12 @@ frappe.drill_planner = {
         $(frappe.render_template('drill_planner_header', data)).appendTo(me.header_right);
         $(frappe.render_template('drill_planner_left', data)).appendTo(me.body_left);
         $(frappe.render_template('drill_planner', data)).appendTo(me.body_right);
+    },
+    make_mobile: function(page) {
+        var me = frappe.drill_planner;
+        me.page = page;
+        
+        $(frappe.render_template('mobile_view', {})).appendTo(me.page.main);
     },
     run: function(page) {
 		// set today as default "from" date
@@ -169,7 +178,7 @@ frappe.drill_planner = {
                                 innerHTML = innerHTML + '<div class="ampel-indicator hasTooltip" style="background-color: ' + ampel_indicators.a6.color + ';"></div><span style="display: none;">' + ampel_indicators.a6.tooltip + '</span>';
                                 
                                 innerHTML = innerHTML + '<i class="fa fa-info-circle pointer hasTooltip" style="margin-left: 5px; font-size: 20px; margin-top: 2px;" onclick="frappe.drill_planner.show_detail_popup(' + "'" + project + "'" + ');"></i><span style="display: none;">' + __("Click me for more informations") + '</span><br>';
-                                innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object + "<br>";
+                                innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object + " (" + ampel_indicators.manager + ")" + "<br>";
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_name + "<br>";
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].object_location + "<br>";
                                 innerHTML = innerHTML + Object.entries(data.drilling_teams[i].project_details)[y][1].ews_details;

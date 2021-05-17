@@ -5,7 +5,12 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "title"
+  "title",
+  "drm",
+  "drt",
+  "truck_and_weight",
+  "has_trough",
+  "has_crane"
  ],
  "fields": [
   {
@@ -15,9 +20,36 @@
    "label": "Title",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "drm",
+   "fieldtype": "Data",
+   "label": "Drilling rig manufacturer"
+  },
+  {
+   "fieldname": "drt",
+   "fieldtype": "Data",
+   "label": "Drilling rig type"
+  },
+  {
+   "fieldname": "truck_and_weight",
+   "fieldtype": "Data",
+   "label": "Truck and Weight"
+  },
+  {
+   "default": "0",
+   "fieldname": "has_trough",
+   "fieldtype": "Check",
+   "label": "Trough"
+  },
+  {
+   "default": "0",
+   "fieldname": "has_crane",
+   "fieldtype": "Check",
+   "label": "Crane"
   }
  ],
- "modified": "2021-03-01 17:11:43.786887",
+ "modified": "2021-05-16 20:43:37.658463",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Team",
