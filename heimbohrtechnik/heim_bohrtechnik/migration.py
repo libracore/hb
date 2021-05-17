@@ -52,41 +52,42 @@ def update_suppliers(filename, service_type):
             doc.append("capabilities", {'activity': service_type, 'remarks': get_field(cells[REMARK])})
             doc.save()
                 
-            # check and update address
-            sql_query = """SELECT `tabAddress`.`name`
-                    FROM `tabDynamic Link` 
-                    LEFT JOIN `tabAddress` ON `tabDynamic Link`.`parent` = `tabAddress`.`name`
-                    WHERE `link_doctype` = 'Supplier'
-                      AND `link_name` = "{supplier}"
-                      AND `address_line1` = "{street}"
-                    ORDER BY `tabAddress`.`is_primary_address` DESC;""".format(supplier=doc.name, street=get_field(cells[STREET]))
-            addresses = frappe.db.sql(sql_query, as_dict=True)
-            if addresses and len(addresses)  > 0:
-                # update address
-                address = frappe.get_doc("Address", addresses[0]['name'])
-                address.address_line2 = get_field(cells[ADDRESS_2])
-                address.pincode = get_field(cells[PINCODE])
-                address.plz = get_field(cells[PINCODE])
-                address.city = get_field(cells[CITY])
-                address.state = get_field(cells[CANTON])
-                address.is_primary_address = 1
-                address.save()
-            else:
-                address = frappe.get_doc({
-                    'doctype': 'Address',
-                    'address_type': "Billing",
-                    'address_line1': get_field(cells[STREET]),
-                    'address_line2': get_field(cells[ADDRESS_2]),
-                    'pincode': get_field(cells[PINCODE]),
-                    'plz': get_field(cells[PINCODE]),
-                    'city': get_field(cells[CITY]),
-                    'state': get_field(cells[CANTON])
-                })
-                address.append('links', {
-                    'link_doctype': "Supplier",
-                    'link_name': doc.name
-                })
-                address.insert()
+            if get_field(cells[STREET]):
+                # check and update address
+                sql_query = """SELECT `tabAddress`.`name`
+                        FROM `tabDynamic Link` 
+                        LEFT JOIN `tabAddress` ON `tabDynamic Link`.`parent` = `tabAddress`.`name`
+                        WHERE `link_doctype` = 'Supplier'
+                          AND `link_name` = "{supplier}"
+                          AND `address_line1` = "{street}"
+                        ORDER BY `tabAddress`.`is_primary_address` DESC;""".format(supplier=doc.name, street=get_field(cells[STREET]))
+                addresses = frappe.db.sql(sql_query, as_dict=True)
+                if addresses and len(addresses)  > 0:
+                    # update address
+                    address = frappe.get_doc("Address", addresses[0]['name'])
+                    address.address_line2 = get_field(cells[ADDRESS_2])
+                    address.pincode = get_field(cells[PINCODE])
+                    address.plz = get_field(cells[PINCODE])
+                    address.city = get_field(cells[CITY])
+                    address.state = get_field(cells[CANTON])
+                    address.is_primary_address = 1
+                    address.save()
+                else:
+                    address = frappe.get_doc({
+                        'doctype': 'Address',
+                        'address_type': "Billing",
+                        'address_line1': get_field(cells[STREET]),
+                        'address_line2': get_field(cells[ADDRESS_2]),
+                        'pincode': get_field(cells[PINCODE]),
+                        'plz': get_field(cells[PINCODE]),
+                        'city': get_field(cells[CITY]),
+                        'state': get_field(cells[CANTON])
+                    })
+                    address.append('links', {
+                        'link_doctype': "Supplier",
+                        'link_name': doc.name
+                    })
+                    address.insert()
                 
             # check and update contact
             first_name = None
@@ -100,51 +101,51 @@ def update_suppliers(filename, service_type):
                     gender = "Männlich"
                 else:
                     gender = "Weiblich"
+            if first_name and last_name:
+                sql_query = """SELECT `tabContact`.`name`
+                        FROM `tabDynamic Link` 
+                        LEFT JOIN `tabContact` ON `tabDynamic Link`.`parent` = `tabContact`.`name`
+                        WHERE `link_doctype` = 'Supplier'
+                          AND `link_name` = "{supplier}"
+                          AND `last_name` = "{last_name}"
+                        ;""".format(supplier=doc.name, last_name=last_name)
+                contacts = frappe.db.sql(sql_query, as_dict=True)
+                if contacts and len(contacts)  > 0:
+                    # update contact
+                    contact = frappe.get_doc("Contact", contacts[0]['name'])
+                else:
+                    contact = frappe.get_doc({
+                        'doctype': 'Contact',
+                        'first_name': first_name,
+                        'last_name': last_name,
+                        'gender': gender
+                    })
+                    contact.append('links', {
+                        'link_doctype': "Supplier",
+                        'link_name': doc.name
+                    })
+                    contact.insert()
                     
-            sql_query = """SELECT `tabContact`.`name`
-                    FROM `tabDynamic Link` 
-                    LEFT JOIN `tabContact` ON `tabDynamic Link`.`parent` = `tabContact`.`name`
-                    WHERE `link_doctype` = 'Supplier'
-                      AND `link_name` = "{supplier}"
-                      AND `last_name` = "{last_name}"
-                    ;""".format(supplier=doc.name, last_name=last_name)
-            contacts = frappe.db.sql(sql_query, as_dict=True)
-            if contacts and len(contacts)  > 0:
-                # update contact
-                contact = frappe.get_doc("Contact", contacts[0]['name'])
-            else:
-                contact = frappe.get_doc({
-                    'doctype': 'Contact',
-                    'first_name': first_name,
-                    'last_name': last_name,
-                    'gender': gender
-                })
-                contact.append('links', {
-                    'link_doctype': "Supplier",
-                    'link_name': doc.name
-                })
-                contact.insert()
-                
-            contact.first_name = first_name
-            if get_field(cells[MAIL]):
-                contact.email_ids = []
-                contact.append('email_ids', {
-                    'email_id': get_field(cells[MAIL]),
-                    'is_primary': 1
-                })
-            if get_field(cells[PHONE]) or get_field(cells[MOBILE]):
-                contact.phone_nos = []
-                if get_field(cells[PHONE]):
-                    contact.append('phone_nos', {
-                        'phone': get_field(cells[PHONE]),
-                        'is_primary_phone': 1
+                contact.first_name = first_name
+                if get_field(cells[MAIL]):
+                    contact.email_ids = []
+                    contact.append('email_ids', {
+                        'email_id': get_field(cells[MAIL]),
+                        'is_primary': 1
                     })
-                if get_field(cells[MOBILE]):
-                    contact.append('phone_nos', {
-                        'phone': get_field(cells[MOBILE]),
-                        'is_primary_mobile_no': 1
-                    })
-            contact.save()
+                if get_field(cells[PHONE]) or get_field(cells[MOBILE]):
+                    contact.phone_nos = []
+                    if get_field(cells[PHONE]):
+                        contact.append('phone_nos', {
+                            'phone': get_field(cells[PHONE]),
+                            'is_primary_phone': 1
+                        })
+                    if get_field(cells[MOBILE]):
+                        contact.append('phone_nos', {
+                            'phone': get_field(cells[MOBILE]),
+                            'is_primary_mobile_no': 1
+                        })
+                contact.save()
             
             print("Updated {supplier}".format(supplier=doc.name))
     return
