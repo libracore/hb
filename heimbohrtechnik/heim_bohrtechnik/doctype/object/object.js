@@ -150,10 +150,32 @@ frappe.ui.form.on('Object', {
             var parts = frm.doc.ch_coordinates.split("/");
             var e= parts[0].replaceAll(" ", "").replaceAll("'", "");
             var n = parts[1].replaceAll(" ", "").replaceAll("'", "");
-            window.open(
-                "https://map.geo.admin.ch/?lang=de&topic=ech&bgLayer=ch.swisstopo.swissimage&layers=ch.swisstopo.zeitreihen,ch.bfs.gebaeude_wohnungs_register,ch.bav.haltestellen-oev,ch.swisstopo.swisstlm3d-wanderwege&layers_opacity=1,1,1,0.8&layers_visibility=false,false,false,false&layers_timestamp=18641231,,,&E=" + e + "&N=" + n + "&zoom=12",
-                '_blank'
-            );
+            frappe.call({
+                "method": "erpnextswiss.erpnextswiss.swisstopo.get_swisstopo_url_from_ch",
+                "args": {
+                    "x": e,
+                    "y": n,
+                    "language": "de",
+                    "zoom": 12
+                },
+                "callback": function(response) {
+                    var url = response.message;
+                    window.open(url, '_blank');
+                }
+            });
+        } else if (frm.doc.plz) {
+            frappe.call({
+                "method": "erpnextswiss.erpnextswiss.swisstopo.get_swisstopo_url_from_pincode",
+                "args": {
+                    "pincode": frm.doc.plz,
+                    "language": "de",
+                    "zoom": 7
+                },
+                "callback": function(response) {
+                    var url = response.message;
+                    window.open(url, '_blank');
+                }
+            });
         }
     }
 });

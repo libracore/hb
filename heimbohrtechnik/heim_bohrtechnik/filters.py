@@ -10,8 +10,8 @@ def supplier_by_capability(doctype, txt, searchfield, start, page_len, filters):
         """SELECT `tabSupplier`.`name`, `tabSupplier`.`supplier_name`
            FROM `tabSupplier`
            LEFT JOIN `tabSupplier Activity` ON `tabSupplier Activity`.`parent` = `tabSupplier`.`name`
-           WHERE `tabSupplier Activity`.`activity` = "{c}";
-        """.format(c=filters['capability']))
+           WHERE `tabSupplier Activity`.`activity` = "{c}" AND `tabSupplier`.`supplier_name` LIKE "%{s}%";
+        """.format(c=filters['capability'], s=txt))
 
 @frappe.whitelist()
 def get_required_activities(supplier, activity):
