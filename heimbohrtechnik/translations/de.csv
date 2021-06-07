@@ -93,8 +93,9 @@ Doctype: Object,GPS Coordinates,GPS-Koordinaten
 Doctype: Object,Open Map,Karte öffnen
 Doctype: Object,Drilling Details,Bohrdetails
 Doctype: Object,Construction site inspected,Baustelle besichtigt
-Doctype: Object,Depth,Tiefe
-Doctype: Object,EWS Specification,EWS-Spezifikation
+DocType: Object,Depth,Tiefe
+DocType: Object,Object Specification,Objekt-Spezifikation
+DocType: Object,Object Details,Objekt-Details
 Doctype: Object,Are there really no required permits?,Braucht es wirklich keine Bewilligungen?
 Doctype: Object,Permit {0} is mandatory but missing,Bewilligung {0} ist zwingend erforderlich aber fehlt
 Doctype: Project,Mud Disposer,Schlammentsorger

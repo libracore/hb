@@ -5,6 +5,8 @@
  "engine": "InnoDB",
  "field_order": [
   "object",
+  "column_main",
+  "object_name",
   "section_images",
   "images"
  ],
@@ -27,9 +29,20 @@
    "fieldtype": "Table",
    "label": "Images",
    "options": "Construction Site Description Image"
+  },
+  {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "object.object_name",
+   "fieldname": "object_name",
+   "fieldtype": "Data",
+   "label": "Object Name",
+   "read_only": 1
   }
  ],
- "modified": "2021-05-11 20:29:15.995737",
+ "modified": "2021-06-07 10:19:19.272778",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",

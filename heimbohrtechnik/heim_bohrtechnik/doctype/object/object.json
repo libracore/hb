@@ -27,7 +27,6 @@
   "button_open_map",
   "section_drilling_details",
   "construction_site_inspected",
-  "mud_disposer",
   "drilling_equipment",
   "manager",
   "section_checklist_and_permits",
@@ -72,12 +71,6 @@
    "fieldname": "section_drilling_details",
    "fieldtype": "Section Break",
    "label": "Drilling details"
-  },
-  {
-   "fieldname": "mud_disposer",
-   "fieldtype": "Link",
-   "label": "Mud disposer",
-   "options": "Supplier"
   },
   {
    "fieldname": "drilling_equipment",
@@ -203,7 +196,7 @@
   {
    "fieldname": "section_ews_details",
    "fieldtype": "Section Break",
-   "label": "EWS Details"
+   "label": "Object Details"
   },
   {
    "fieldname": "ews_remarks",
@@ -224,17 +217,17 @@
   {
    "fieldname": "ews_details",
    "fieldtype": "Data",
-   "label": "EWS Details",
+   "label": "Object Details",
    "read_only": 1
   },
   {
    "fieldname": "ews_specification",
    "fieldtype": "Table",
-   "label": "EWS Specification",
+   "label": "Object Specification",
    "options": "Object EWS"
   }
  ],
- "modified": "2021-05-10 20:36:43.095484",
+ "modified": "2021-06-07 10:15:42.568438",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",

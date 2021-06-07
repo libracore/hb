@@ -24,6 +24,12 @@ def get_data():
                    "name": "Object",
                    "label": _("Object"),
                    "description": _("Object")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Item",
+                   "label": _("Item"),
+                   "description": _("Item")
                 }
             ]
         },
