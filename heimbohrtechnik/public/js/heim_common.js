@@ -3,20 +3,22 @@
 // Common functions
 
 function get_object_address(frm) {
-    frappe.call({
-        'method': "frappe.client.get",
-        'args': {
-            'doctype': "Object",
-            'name': frm.doc.object
-        },
-        'callback': function(response) {
-            var object = response.message;
+    if (frm.doc.object) {
+        frappe.call({
+            'method': "frappe.client.get",
+            'args': {
+                'doctype': "Object",
+                'name': frm.doc.object
+            },
+            'callback': function(response) {
+                var object = response.message;
 
-            if (object) {
-                cur_frm.set_value('object_address_display', object.object_street + "<br>" + object.object_location);
-            } 
-        }
-    });
+                if (object) {
+                    cur_frm.set_value('object_address_display', object.object_street + "<br>" + object.object_location);
+                } 
+            }
+        });
+    }
 }
 
 function update_additional_discount(frm) {

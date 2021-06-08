@@ -138,3 +138,7 @@ doctype_js = {
 # 	"Task": "heimbohrtechnik.task.get_dashboard_data"
 # }
 
+# hook for migrate cleanup tasks
+after_migrate = [
+    'heimbohrtechnik.heim_bohrtechnik.updater.cleanup_languages'
+]
