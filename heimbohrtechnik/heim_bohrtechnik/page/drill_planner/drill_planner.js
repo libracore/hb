@@ -21,6 +21,8 @@ frappe.pages['drill-planner'].on_page_load = function(wrapper) {
             var drag_element = document.getElementById(event.target.id);
             drag_element.classList.add("hidden");
         });
+        
+        
     }
 }
 
@@ -250,6 +252,8 @@ frappe.drill_planner = {
             var left = ele.scrollLeft();
             $("#drill_planner_main_element").scrollLeft(left);
         });
+        
+        $('[data-toggle="popover"]').popover();
     },
     show_detail_popup: function(_project) {
         frappe.call({
