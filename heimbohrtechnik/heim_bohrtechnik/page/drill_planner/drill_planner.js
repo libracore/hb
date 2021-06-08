@@ -21,8 +21,6 @@ frappe.pages['drill-planner'].on_page_load = function(wrapper) {
             var drag_element = document.getElementById(event.target.id);
             drag_element.classList.add("hidden");
         });
-        
-        
     }
 }
 
@@ -196,6 +194,7 @@ frappe.drill_planner = {
                                     ampel_indicators.a6.color == 'green'
                                 ) {
                                     overlay.style.backgroundColor  = '#eefdec';
+                                    overlay.style.border = '2px solid #81d41a';
                                 } else if (
                                     ampel_indicators.a1.color == 'green' &&
                                     ampel_indicators.a2.color == 'green' &&
@@ -203,21 +202,26 @@ frappe.drill_planner = {
                                     ampel_indicators.a7.color == 'green'
                                 ) {
                                     overlay.style.backgroundColor  = '#ffffbf';
+                                    overlay.style.border = '2px solid #ffff6d';
                                 } else {
                                     overlay.style.backgroundColor  = '#ffeae9';
+                                    overlay.style.border = '2px solid #ffa6a6';
                                 }
                                 overlay.style.color  = 'black';
-                                overlay.style.height = String((search_elementTextRectangle.height + 2)) + 'px';
+                                overlay.style.height = String((search_elementTextRectangle.height)) + 'px';
                                 overlay.style.position = 'absolute';
                                 
                                 var pos_left = search_elementTextRectangle.left;
                                 var pos_top = search_elementTextRectangle.top;
 
-                                overlay.style.left = String(pos_left - left_korrektur_faktor) + 'px';
-                                overlay.style.top = String(pos_top - 244) + 'px';
+                                overlay.style.left = String(pos_left - left_korrektur_faktor + 1) + 'px';
+                                overlay.style.top = String(pos_top - 243) + 'px';
                                 
                                 overlay.style.minWidth = String(ampel_indicators.total_overlay_width) + "px";
                                 overlay.setAttribute('draggable', true);
+                                
+                                overlay.style.borderRadius = '10px';
+                                overlay.style.paddingLeft = '1px';
 
                                 var drill_planner_div = document.getElementById("drill_planner_main_element");
 
