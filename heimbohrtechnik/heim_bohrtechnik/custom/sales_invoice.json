@@ -593,7 +593,7 @@
    "fieldname": "object",
    "fieldtype": "Link",
    "hidden": 0,
-   "idx": 5,
+   "idx": 6,
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -645,7 +645,7 @@
    "fieldname": "object_name",
    "fieldtype": "Data",
    "hidden": 0,
-   "idx": 6,
+   "idx": 7,
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -697,7 +697,7 @@
    "fieldname": "object_address_display",
    "fieldtype": "Small Text",
    "hidden": 0,
-   "idx": 42,
+   "idx": 43,
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -744,7 +744,7 @@
    "doctype_or_field": "DocField",
    "field_name": "naming_series",
    "idx": 0,
-   "modified": "2021-05-14 09:41:19.483473",
+   "modified": "2021-06-09 08:58:49.650405",
    "modified_by": "Administrator",
    "name": "Sales Invoice-naming_series-default",
    "owner": "Administrator",
@@ -753,7 +753,7 @@
    "parenttype": null,
    "property": "default",
    "property_type": "Text",
-   "value": "AR-.YY.#####"
+   "value": "RE-.YY.#####"
   },
   {
    "_assign": null,
@@ -767,7 +767,7 @@
    "doctype_or_field": "DocField",
    "field_name": "naming_series",
    "idx": 0,
-   "modified": "2021-05-14 09:41:19.437159",
+   "modified": "2021-06-09 08:58:49.564340",
    "modified_by": "Administrator",
    "name": "Sales Invoice-naming_series-options",
    "owner": "Administrator",
@@ -776,7 +776,7 @@
    "parenttype": null,
    "property": "options",
    "property_type": "Text",
-   "value": "AR-.YY.#####"
+   "value": "RE-.YY.#####\nGS-.YY.#####"
   },
   {
    "_assign": null,
