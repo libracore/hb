@@ -1,4 +1,5 @@
 {
+ "allow_rename": 1,
  "autoname": "field:title",
  "creation": "2021-03-01 17:11:23.013322",
  "doctype": "DocType",
@@ -8,10 +9,15 @@
   "title",
   "drm",
   "drt",
+  "column_main",
   "truck_and_weight",
   "phone",
+  "section_info",
   "has_trough",
-  "has_crane"
+  "trough_details",
+  "column_info",
+  "has_crane",
+  "crane_details"
  ],
  "fields": [
   {
@@ -53,9 +59,34 @@
    "fieldname": "phone",
    "fieldtype": "Data",
    "label": "Phone"
+  },
+  {
+   "fieldname": "section_info",
+   "fieldtype": "Section Break",
+   "label": "Information"
+  },
+  {
+   "depends_on": "eval:doc.has_trough == 1",
+   "fieldname": "trough_details",
+   "fieldtype": "Data",
+   "label": "Trough Details"
+  },
+  {
+   "fieldname": "column_info",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.has_crane == 1",
+   "fieldname": "crane_details",
+   "fieldtype": "Data",
+   "label": "Crane Details"
+  },
+  {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
   }
  ],
- "modified": "2021-06-08 11:48:46.823201",
+ "modified": "2021-06-09 09:07:35.241571",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Team",
