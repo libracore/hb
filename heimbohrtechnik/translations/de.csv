@@ -96,8 +96,13 @@ Doctype: Object,Construction site inspected,Baustelle besichtigt
 DocType: Object,Depth,Tiefe
 DocType: Object,Object Specification,Objekt-Spezifikation
 DocType: Object,Object Details,Objekt-Details
-Doctype: Object,Are there really no required permits?,Braucht es wirklich keine Bewilligungen?
-Doctype: Object,Permit {0} is mandatory but missing,Bewilligung {0} ist zwingend erforderlich aber fehlt
+DocType: Object,Are there really no required permits?,Braucht es wirklich keine Bewilligungen?
+DocType: Object,Permit {0} is mandatory but missing,Bewilligung {0} ist zwingend erforderlich aber fehlt
+DocType: Object,Heat capacity,Heizleistung (kW)
+DocType: Object,Cooling capacity,Kälteleistung
+DocType: Object,Withdrawal capacity,Entzugsleistung (W/m)
+DocType: Object,Drilling meter,Bohrmeter
+DocType: Object,Project EWS,Projektierung Wärmepumpe
 Doctype: Project,Mud Disposer,Schlammentsorger
 Doctype: Project,Mud disposer,Schlammentsorger
 Doctype: Project,Drilling Equipment,Bohrequipment
@@ -129,3 +134,4 @@ DocType: Drilling Team,Drilling rig type,Typenbezeichnung der Bohrausrüstung
 DocType: Drilling Team,Truck and Weight,LKW und Gewicht
 DocType: Drilling Team,Trough Details,Muldendetails
 DocType: Drilling Team,Crane Details,Krandetails
+DocType: Probe Type,Probe Type,Sondenart
