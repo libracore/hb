@@ -7,7 +7,7 @@ def get_data():
 		{
 			"module_name": "Heim Bohrtechnik",
 			"color": "#0075b8",
-			"icon": "octicon octicon-pulse",
+			"icon": "icon hb-blue",
 			"type": "module",
 			"label": _("Heim Bohrtechnik")
 		}
