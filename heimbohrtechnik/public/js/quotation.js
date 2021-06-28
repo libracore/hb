@@ -4,6 +4,7 @@
 frappe.ui.form.on('Quotation', {
     object: function(frm) {
         get_object_address(frm);
+        get_object_description(frm);
     }
 });
 

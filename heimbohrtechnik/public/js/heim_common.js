@@ -21,6 +21,24 @@ function get_object_address(frm) {
     }
 }
 
+function get_object_description(frm) {
+    if (frm.doc.object) {
+        frappe.call({
+            'method': "heimbohrtechnik.heim_bohrtechnik.utils.get_object_description",
+            'args': {
+                'object_name': frm.doc.object
+            },
+            'callback': function(response) {
+                var html = response.message;
+
+                if (html) {
+                    cur_frm.set_value('object_description', html);
+                } 
+            }
+        });
+    }
+}
+
 function update_additional_discount(frm) {
     if (frm.doc.discount_positions) {
         var additional_discount = 0;

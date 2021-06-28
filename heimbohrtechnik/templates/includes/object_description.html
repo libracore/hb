@@ -1,0 +1,10 @@
+<p><b>Projektierung:</b></p>
+<table>
+    <tr>
+        <td>geplante Anzahl und Grösse der Sonden</td>
+        <td>{% for ews in object.ews_specification %}
+            {{ ews.ews_count }} Stück, Tiefe {{ ews.ews_depth }} m, Durchmesser {{ ews.ews_diameter }} {{ ews.ews_diameter_unit }}<br>
+        {% endfor %}
+        </td>
+    </tr>
+</table>

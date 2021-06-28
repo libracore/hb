@@ -127,6 +127,7 @@ DocType: Item,Wall Strength,Wandstärke
 DocType: Raw Material,Raw Material,Werkstoff
 DocType: Quotation,Discount Positions,Abschlagspositonen
 DocType: Quotation,Add Discount,Rabatt hinzufügen
+DocType: Quotation,Object description,Objekttext
 DocType: Purchase Order,We are hereby placing the following order:,Hiermit bestellen wir folgende Positionen:
 DocType: Supplier,Required Activity,Erforderliche Tätigkeit
 DocType: Drilling Team,Drilling rig manufacturer,Hersteller Bohrausrüsting

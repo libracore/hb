@@ -27,3 +27,12 @@ def get_standard_activities():
     for a in activities:
         standard_activities.append(a['name'])
     return standard_activities
+
+@frappe.whitelist()
+def get_object_description(object_name):
+    obj = frappe.get_doc("Object", object_name)
+    data = {
+        'object': obj.as_dict()
+    }
+    html = frappe.render_template("heimbohrtechnik/templates/includes/object_description.html", data)
+    return html
