@@ -396,7 +396,6 @@ function update_ews_details(frm, cdt, cdn) {
 }
 
 function recalculate_drilling_meter(frm) {
-    console.log("here");
     if ((frm.doc.cooling_capacity) && (frm.doc.withdrawal_capacity)) {
         cur_frm.set_value("drilling_meter", ((frm.doc.cooling_capacity * 1000) / frm.doc.withdrawal_capacity));
     } else {
