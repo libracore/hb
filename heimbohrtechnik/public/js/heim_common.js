@@ -2,6 +2,17 @@
 // For license information, please see license.txt
 // Common functions
 
+// mark navbar in specific colour
+window.onload = async function () {
+	await sleep(1000);
+	var navbars = document.getElementsByClassName("navbar");
+	if (navbars.length > 0) {
+		if (window.location.hostname.includes("erp-test")) {
+			navbars[0].style.backgroundColor = "#d68080";
+		}
+	}
+}
+
 function get_object_address(frm) {
     if (frm.doc.object) {
         frappe.call({
