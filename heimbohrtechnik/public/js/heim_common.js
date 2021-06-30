@@ -13,6 +13,11 @@ window.onload = async function () {
 	}
 }
 
+
+function sleep(milliseconds) {
+   return new Promise(resolve => setTimeout(resolve, milliseconds));
+}
+
 function get_object_address(frm) {
     if (frm.doc.object) {
         frappe.call({
