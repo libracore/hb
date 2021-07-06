@@ -124,6 +124,10 @@ Doctype: Heim Settings,Is Standard,Ist Standard
 DocType: Construction Site Description,Construction Site Description,Baustellenbeschreibung
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
+DocType: Item Price,Base Rate,Grundpreis
+DocType: Item Price,Discount,Rabatt
+DocType: Item Price,Cost Markup,Teuerungszuschlag
+DocType: Item Price,Skonto Discount,Skonto-Rabatt
 DocType: Raw Material,Raw Material,Werkstoff
 DocType: Quotation,Discount Positions,Abschlagspositonen
 DocType: Quotation,Add Discount,Rabatt hinzufügen
