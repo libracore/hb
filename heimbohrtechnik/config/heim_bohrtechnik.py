@@ -159,6 +159,12 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Signature",
+                   "label": _("Signature"),
+                   "description": _("Signature")
+                },
+                {
+                   "type": "doctype",
                    "name": "Heim Settings",
                    "label": _("Heim Settings"),
                    "description": _("Heim Settings")

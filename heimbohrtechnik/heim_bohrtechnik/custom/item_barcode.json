@@ -15,7 +15,7 @@
    "doctype_or_field": "DocField",
    "field_name": "barcode",
    "idx": 0,
-   "modified": "2021-02-26 21:21:17.075798",
+   "modified": "2021-07-06 17:35:17.075798",
    "modified_by": "Administrator",
    "name": "Item Barcode-barcode-hidden",
    "owner": "Administrator",
@@ -24,7 +24,7 @@
    "parenttype": null,
    "property": "hidden",
    "property_type": "Check",
-   "value": "1"
+   "value": "0"
   }
  ],
  "sync_on_migrate": 1
