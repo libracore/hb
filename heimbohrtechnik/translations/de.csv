@@ -142,3 +142,5 @@ DocType: Drilling Team,Crane Details,Krandetails
 DocType: Probe Type,Probe Type,Sondenart
 DocType: Signature,Signature,Unterschrift
 DocType: Signature,Signature type,Unterschriftenregelung
+DocType: Quotation,Created by,Erstellt durch
+DocType: Quotation,Our contact,Unser Ansprechpartner
