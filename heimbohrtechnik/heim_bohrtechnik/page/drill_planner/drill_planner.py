@@ -302,7 +302,7 @@ def get_traffic_lights_indicator(project, typ):
                 # some missing
                 return {
                     'color': 'yellow',
-                    'tooltip': _("Following permits are missing:<br>{missing_permits}".format(missing_permits='<br>'.join(missing_permits)))
+                    'tooltip': _("Following permits are missing:") + "<br>{missing_permits}".format(missing_permits='<br>'.join(missing_permits))
                 }
         else:
             # all good
@@ -342,7 +342,7 @@ def get_traffic_lights_indicator(project, typ):
             if po.docstatus != 1:
                 return {
                     'color': 'red',
-                    'tooltip': _("Purchase Order {po} <b>not</b> submitted".format(po=po.name))
+                    'tooltip': _("Purchase Order") + " {po} ".format(po=po.name) + _("<b>not</b> submitted")
                 }
             else:
                 if po.per_received == 100:
@@ -353,7 +353,7 @@ def get_traffic_lights_indicator(project, typ):
                 else:
                     return {
                         'color': 'yellow',
-                        'tooltip': _("Purchase Order {percent}% delivered".format(percent=po.per_received))
+                        'tooltip': _("Purchase Order") + " {percent}% " + "delivered".format(percent=po.per_received)
                     }
         else:
             return {
