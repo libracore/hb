@@ -61,7 +61,7 @@ def get_days(from_date, to_date):
     
 def get_drilling_teams():
     drilling_teams = []
-    _drilling_teams = frappe.db.sql("""SELECT `name`, `title`, `drm`, `drt`, `truck_and_weight`, `has_trough`, `has_crane`, `phone` FROM `tabDrilling Team`""", as_dict=True)
+    _drilling_teams = frappe.db.sql("""SELECT `name`, `title`, `drm`, `drt`, `truck_and_weight`, `has_trough`, `trough_details`, `has_crane`, `crane_details`, `phone` FROM `tabDrilling Team`""", as_dict=True)
     
     for team in _drilling_teams:
         data = {}
@@ -71,7 +71,9 @@ def get_drilling_teams():
         data["drt"] = team.drt
         data["truck_and_weight"] = team.truck_and_weight
         data["has_trough"] = team.has_trough
+        data["trough_details"] = team.trough_details or _('Has Trough')
         data["has_crane"] = team.has_crane
+        data['crane_details'] = team.crane_details or _('Has Crane')
         data["phone"] = team.phone
         data["booked_days"], data["booked_vm_start_days"], data["booked_nm_start_days"], data["booked_vm_end_days"], data["booked_nm_end_days"], data["project_details"] = get_booked_days_of_drilling_team(team.name)
         drilling_teams.append(data)
