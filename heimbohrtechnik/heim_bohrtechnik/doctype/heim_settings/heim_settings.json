@@ -5,7 +5,10 @@
  "engine": "InnoDB",
  "field_order": [
   "section_object",
-  "address_template"
+  "address_template",
+  "section_bohrplaner",
+  "crane_activity",
+  "mud_disposer_activity"
  ],
  "fields": [
   {
@@ -18,10 +21,31 @@
    "fieldtype": "Table",
    "label": "Address Template",
    "options": "Object Address Template"
+  },
+  {
+   "fieldname": "section_bohrplaner",
+   "fieldtype": "Section Break",
+   "label": "Bohrplaner"
+  },
+  {
+   "fieldname": "crane_activity",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Crane Activity",
+   "options": "Checklist Activity",
+   "reqd": 1
+  },
+  {
+   "fieldname": "mud_disposer_activity",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Mud Disposer Activity",
+   "options": "Checklist Activity",
+   "reqd": 1
   }
  ],
  "issingle": 1,
- "modified": "2021-05-10 21:08:44.025014",
+ "modified": "2021-07-19 13:20:28.293624",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",

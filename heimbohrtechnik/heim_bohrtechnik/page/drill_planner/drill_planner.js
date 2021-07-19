@@ -66,7 +66,7 @@ frappe.drill_planner = {
         // set trigger for date changes
         this.page.main.find("#from").on('change', function() {frappe.drill_planner.reload_data(page);});
         this.page.main.find("#to").on('change', function() {frappe.drill_planner.reload_data(page);});
-        setTimeout(function(){ frappe.drill_planner.reload_data(page); }, 1);
+        setTimeout(function(){ frappe.drill_planner.reload_data(page); }, 1000);
     },
     reload_data: function(page) {
         var me = frappe.drill_planner;

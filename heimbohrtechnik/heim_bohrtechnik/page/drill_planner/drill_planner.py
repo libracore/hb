@@ -364,7 +364,8 @@ def get_traffic_lights_indicator(project, typ):
             }
     
     if typ == 'a5':
-        crane = frappe.db.sql("""SELECT `name`, `supplier` FROM `tabProject Checklist` WHERE `parent` = '{project}' AND `activity` = 'Kran'""".format(project=project.name), as_dict=True)
+        crane_activity = frappe.get_single("Heim Settings").crane_activity or 'Kran'
+        crane = frappe.db.sql("""SELECT `name`, `supplier` FROM `tabProject Checklist` WHERE `parent` = '{project}' AND `activity` = '{crane_activity}'""".format(project=project.name, crane_activity=crane_activity), as_dict=True)
         if not len(crane) > 0:
             return {
                 'color': 'grey',
@@ -383,7 +384,8 @@ def get_traffic_lights_indicator(project, typ):
                 }
     
     if typ == 'a6':
-        mud_disposer = frappe.db.sql("""SELECT `name`, `supplier` FROM `tabProject Checklist` WHERE `parent` = '{project}' AND `activity` = 'Schlammentsorgung'""".format(project=project.name), as_dict=True)
+        mud_disposer_activity = frappe.get_single("Heim Settings").mud_disposer_activity or 'Schlammentsorgung'
+        mud_disposer = frappe.db.sql("""SELECT `name`, `supplier` FROM `tabProject Checklist` WHERE `parent` = '{project}' AND `activity` = '{mud_disposer_activity}'""".format(project=project.name, mud_disposer_activity=mud_disposer_activity), as_dict=True)
         if not len(mud_disposer) > 0:
             return {
                 'color': 'red',
