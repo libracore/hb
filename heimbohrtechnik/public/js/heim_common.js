@@ -4,13 +4,13 @@
 
 // mark navbar in specific colour
 window.onload = async function () {
-	await sleep(1000);
-	var navbars = document.getElementsByClassName("navbar");
-	if (navbars.length > 0) {
-		if (window.location.hostname.includes("erp-test")) {
-			navbars[0].style.backgroundColor = "#d68080";
-		}
-	}
+    await sleep(1000);
+    var navbars = document.getElementsByClassName("navbar");
+    if (navbars.length > 0) {
+        if (window.location.hostname.includes("erp-test")) {
+            navbars[0].style.backgroundColor = "#d68080";
+        }
+    }
 }
 
 
