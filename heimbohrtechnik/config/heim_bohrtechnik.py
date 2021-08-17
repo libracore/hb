@@ -224,5 +224,17 @@ def get_data():
                    "description": _("Heim Settings")
                 }
             ]
+        },
+        {
+            "label": _("MudEx"),
+            "icon": "fa fa-money",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "Truck Scale",
+                   "label": _("Truck Scale"),
+                   "description": _("Truck Scale")
+                }
+            ]
         }
     ]
