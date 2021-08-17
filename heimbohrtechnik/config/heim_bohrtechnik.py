@@ -106,6 +106,60 @@ def get_data():
             ]
         },
         {
+            "label": _("Human Resources"),
+            "icon": "fa fa-money",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "Employee",
+                   "label": _("Employee"),
+                   "description": _("Employee")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Expense Claim",
+                   "label": _("Expense Claim"),
+                   "description": _("Expense Claim")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Payroll Entry",
+                   "label": _("Payroll Entry"),
+                   "description": _("Payroll Entry")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Salary Slip",
+                   "label": _("Salary Slip"),
+                   "description": _("Salary Slip")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Salary Certificate",
+                   "label": _("Salary Certificate"),
+                   "description": _("Salary Certificate")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Salary Structure Assignment",
+                   "label": _("alary Structure Assignment"),
+                   "description": _("alary Structure Assignment")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Salary Structure",
+                   "label": _("Salary Structure"),
+                   "description": _("Salary Structure")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Salary Component",
+                   "label": _("Salary Component"),
+                   "description": _("Salary Component")
+                }
+            ]
+        },
+        {
             "label": _("Settings"),
             "icon": "fa fa-money",
             "items": [
