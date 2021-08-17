@@ -18,10 +18,12 @@ function get_weight(frm) {
             'truck_scale': frm.doc.name
         },
         'callback': function(r) {
-            if(r.message) {
+            if (typeof r.message !== 'undefined') {
                 var html = __('Weight') + " " + r.message + " kg";
                 cur_frm.set_df_property('weight_html', 'options', html);
-            } 
+            } else {
+                console.log("Invalid response");
+            }
         }
     });
 }
