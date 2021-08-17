@@ -21,6 +21,7 @@ def get_weight(truck_scale):
         response = connection.read_some()                                   # read response
         parts = response.decode('ascii').split("kg")                        # parse response (something like 1234 kg B)
         weight = float(parts[0])
+        connection.close()                                                  # close connection
     except Exception as err:
         weight = -1
         frappe.log_error( "{0}".format(err), "Get weight failed")
