@@ -7,6 +7,25 @@ Page: Drill Planner,Thu,Do
 Page: Drill Planner,Fri,Fr
 Page: Drill Planner,Sat,Sa
 Page: Drill Planner,Sun,So
+Page: Drill Planner,The construction site was visited,Die Baustelle wurde besucht
+Page: Drill Planner,"The construction site was <b>not</b> visited","Die Baustelle wurde <b>nicht</b> besucht"
+Page: Drill Planner,All permits are missing,Alle Bweilligungen fehlen
+Page: Drill Planner,"Following permits are missing:","Folgende Bewilligungen fehlen:"
+Page: Drill Planner,All permits available,Alle Bewilligungen vorhanden
+Page: Drill Planner,No sales order available,Kein Kundenauftrag vorhanden
+Page: Drill Planner,The sales order is submitted,Der Kundenauftrag ist gebucht
+Page: Drill Planner,"The sales order is <b>not</b> submitted","Der Kundenauftrag ist <b>nicht</b> gebucht"
+Page: Drill Planner,The sales order is cancelled,Der Kundenauftrag ist abgebrochen
+Page: Drill Planner,"<b>not</b> submitted","<b>nicht</b> gebucht"
+Page: Drill Planner,Purchase Order delivered,Lieferantenauftrag geliefert
+Page: Drill Planner,No Purchase Order available,Kein Lieferantenauftrag vorhanden
+Page: Drill Planner,No crane is needed,"Kein Kran benötigt"
+Page: Drill Planner,The crane was organized,Der Kran wurde organisiert
+Page: Drill Planner,The crane has not yet been organized,Der Kran wurde noch nicht organisiert
+Page: Drill Planner,The Mud Disposer has not yet been organized,Der Schlammentsorger wurde nocht nicht organisiert
+Page: Drill Planner,The Mud Disposer was organized,Der Schlammentsorger wurde organisiert
+Page: Drill Planner,Drill notice sent,Die Bohranzeige wurde versendet
+Page: Drill Planner,"Drill notice <b>not</b> sent","Die Bohranzeige wurde <b>noch nicht</b> versendet"
 Doctype: Object,Object,Objekt
 Doctype: Object,Object name,Objektname
 Doctype: Object,Object location,Objektort
@@ -99,7 +118,7 @@ DocType: Object,Object Details,Objekt-Details
 DocType: Object,Are there really no required permits?,Braucht es wirklich keine Bewilligungen?
 DocType: Object,Permit {0} is mandatory but missing,Bewilligung {0} ist zwingend erforderlich aber fehlt
 DocType: Object,Heat capacity,Heizleistung (kW)
-DocType: Object,Cooling capacity,Kälteleistung
+DocType: Object,Cooling capacity,Kälteleistung (kW)
 DocType: Object,Withdrawal capacity,Entzugsleistung (W/m)
 DocType: Object,Drilling meter,Bohrmeter
 DocType: Object,Project EWS,Projektierung Wärmepumpe
@@ -121,9 +140,15 @@ Doctype: Heim Settings,Core Data,Kerndaten
 Doctype: Heim Settings,Heim Settings,Heim-Einstellungen
 Doctype: Heim Settings,Address Template,Adressvorlage
 Doctype: Heim Settings,Is Standard,Ist Standard
+Doctype: Heim Settings,Mud Disposer Activity,"Schlammentsorger Aktivität"
+Doctype: Heim Settings,Crane Activity,"Kran Aktivität"
 DocType: Construction Site Description,Construction Site Description,Baustellenbeschreibung
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
+DocType: Item Price,Base Rate,Grundpreis
+DocType: Item Price,Discount,Rabatt
+DocType: Item Price,Cost Markup,Teuerungszuschlag
+DocType: Item Price,Skonto Discount,Skonto-Rabatt
 DocType: Raw Material,Raw Material,Werkstoff
 DocType: Quotation,Discount Positions,Abschlagspositonen
 DocType: Quotation,Add Discount,Rabatt hinzufügen
@@ -136,3 +161,9 @@ DocType: Drilling Team,Truck and Weight,LKW und Gewicht
 DocType: Drilling Team,Trough Details,Muldendetails
 DocType: Drilling Team,Crane Details,Krandetails
 DocType: Probe Type,Probe Type,Sondenart
+DocType: Signature,Signature,Unterschrift
+DocType: Signature,Signature type,Unterschriftenregelung
+DocType: Quotation,Created by,Erstellt durch
+DocType: Quotation,Our contact,Unser Ansprechpartner
+DocType: Quotation,of,von
+DocType: Truck Scale,Truck Scale,Lastwagenwaage

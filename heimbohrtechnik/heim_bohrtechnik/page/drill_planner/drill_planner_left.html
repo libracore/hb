@@ -4,7 +4,7 @@
             <b>{{ drilling_team.title }}</b><br>
             {% if drilling_team.drm %}{{ drilling_team.drm }}, {% endif %}{% if drilling_team.drt %}{{ drilling_team.drt }}{% endif %}<br>
             {% if drilling_team.truck_and_weight %}{{ drilling_team.truck_and_weight }}<br>{% endif %}
-            {% if drilling_team.has_trough == 1 %}<a href="#" data-toggle="popover" data-trigger="hover" data-content="Has Trough"><img src="/assets/heimbohrtechnik/images/trough.png" width="10"></a>{% endif %} {% if drilling_team.has_crane == 1 %}<a href="#" data-toggle="popover" data-trigger="hover" data-content="Has Crane"><img src="/assets/heimbohrtechnik/images/crane_hook.png" width="10"></a>{% endif %} {% if drilling_team.phone %}<a href="tel:{{ drilling_team.phone }}" data-toggle="popover" data-trigger="hover" data-content="{{ drilling_team.phone }}"><img src="/assets/heimbohrtechnik/images/phone.png" width="10"></a>{% endif %}
+            {% if drilling_team.has_trough == 1 %}<a href="#" data-toggle="popover" data-trigger="hover" data-content="{{ drilling_team.trough_details }}"><img src="/assets/heimbohrtechnik/images/trough.png" width="24"></a>{% endif %} {% if drilling_team.has_crane == 1 %}<a href="#" data-toggle="popover" data-trigger="hover" data-content="{{ drilling_team.crane_details }}"><img src="/assets/heimbohrtechnik/images/crane_hook.png" width="24"></a>{% endif %} {% if drilling_team.phone %}<a href="tel:{{ drilling_team.phone }}" data-toggle="popover" data-trigger="hover" data-content="{{ drilling_team.phone }}"><img src="/assets/heimbohrtechnik/images/phone.png" width="24"></a>{% endif %}
         </div>
     </div>
 {% endfor %}

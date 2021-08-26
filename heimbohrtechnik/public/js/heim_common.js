@@ -2,17 +2,29 @@
 // For license information, please see license.txt
 // Common functions
 
-// mark navbar in specific colour
+console.log("common");
+
+// 1 sec after start (has to be delayed after document ready)
 window.onload = async function () {
-	await sleep(1000);
-	var navbars = document.getElementsByClassName("navbar");
-	if (navbars.length > 0) {
-		if (window.location.hostname.includes("erp-test")) {
-			navbars[0].style.backgroundColor = "#d68080";
-		}
-	}
+    await sleep(1000);
+    // mark navbar
+    var navbars = document.getElementsByClassName("navbar");
+    if (navbars.length > 0) {
+        if (window.location.hostname.includes("erp-test")) {
+            navbars[0].style.backgroundColor = "#d68080";
+            console.log("colored");
+        }
+    }
 }
 
+// document loaded
+document.addEventListener("DOMContentLoaded", function(event) {
+    var sheet = window.document.styleSheets[0];
+    if (!frappe.user.has_role("System Manager")) {
+        // disable deleting document attachments
+        sheet.insertRule('.attachment-row>.close { display: none !important; }');
+    }
+});
 
 function sleep(milliseconds) {
    return new Promise(resolve => setTimeout(resolve, milliseconds));

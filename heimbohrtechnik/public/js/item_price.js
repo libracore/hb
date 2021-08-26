@@ -9,12 +9,20 @@ frappe.ui.form.on('Item Price', {
     },
     cost_markup(frm) {
         update_price_list_rate(frm);
+    },
+    discount(frm) {
+        update_price_list_rate(frm);
+    },
+    skonto_discount(frm) {
+        update_price_list_rate(frm);
     }
 });
 
 function update_price_list_rate(frm) {
     if (frm.doc.base_rate) {
-        var rate = frm.doc.base_rate * (((frm.doc.cost_markup || 0) + 100) / 100);
+        var rate = ((frm.doc.base_rate * (((frm.doc.discount || 0) + 100) / 100))
+                    * (((frm.doc.cost_markup || 0) + 100) / 100))
+                    * (((frm.doc.skonto_discount || 0) + 100) / 100);
         cur_frm.set_value("price_list_rate", rate);
     }
 }

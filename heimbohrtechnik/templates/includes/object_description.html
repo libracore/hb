@@ -1,5 +1,33 @@
 <p><b>Projektierung:</b></p>
-<table>
+<table style="width: 100%; ">
+    {% if object.heat_capacity %}
+    <tr>
+        <td>angegebene Heizleistung der W&auml;rmepumpe</td>
+        <td>{{ object.heat_capacity }} kW
+        </td>
+    </tr>
+    {% endif %}
+    {% if object.cooling_capacity %}
+    <tr>
+        <td>angegebene K&auml;lteleistung der W&auml;rmepumpe</td>
+        <td>{{ object.cooling_capacity }} kW
+        </td>
+    </tr>
+    {% endif %}
+    {% if object.withdrawal_capacity %}
+    <tr>
+        <td>theoretische spezifische Entzugsleistung</td>
+        <td>{{ object.withdrawal_capacity }} W/m
+        </td>
+    </tr>
+    {% endif %}
+    {% if object.drilling_meter %}
+    <tr>
+        <td>berechnete Bohrmeter</td>
+        <td>{{ object.drilling_meter }} m
+        </td>
+    </tr>
+    {% endif %}
     <tr>
         <td>geplante Anzahl und Grösse der Sonden</td>
         <td>{% for ews in object.ews_specification %}
@@ -8,3 +36,7 @@
         </td>
     </tr>
 </table>
+<p>Die geplante Bohrteufe muss unter Umst&auml;nden den &ouml;rtlichen geologischen Gegebenheiten, bzw. den beh&ouml;rdlichen
+Auflagen, entsprechend angepasst werden. Massgabe ist immer Ihr Heizw&auml;rmebedarf. &Auml;ndern sich die
+bauseitigen Daten muss die Projektierung gem&auml;ss den ge&auml;nderten Angaben &uuml;berarbeitet werden. Fester
+Bestandteil unserer Angebote sind unsere allgemeinen Vertragsbedingungen (siehe Anlage).</p>

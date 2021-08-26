@@ -32,16 +32,16 @@
   "section_checklist_and_permits",
   "checklist",
   "permits",
-  "section_ews_details",
-  "ews_details",
-  "ews_specification",
-  "ews_remarks",
   "section_project_ews",
   "heat_capacity",
   "cooling_capacity",
   "column_project_ews",
   "withdrawal_capacity",
   "drilling_meter",
+  "section_ews_details",
+  "ews_details",
+  "ews_specification",
+  "ews_remarks",
   "section_addresses",
   "addresses"
  ],
@@ -238,11 +238,13 @@
    "label": "Project EWS"
   },
   {
+   "description": "kW",
    "fieldname": "heat_capacity",
    "fieldtype": "Float",
    "label": "Heat capacity"
   },
   {
+   "description": "kW",
    "fieldname": "cooling_capacity",
    "fieldtype": "Float",
    "label": "Cooling capacity"
@@ -252,18 +254,20 @@
    "fieldtype": "Column Break"
   },
   {
+   "description": "W/m",
    "fieldname": "withdrawal_capacity",
    "fieldtype": "Float",
    "label": "Withdrawal capacity"
   },
   {
+   "description": "m",
    "fieldname": "drilling_meter",
    "fieldtype": "Int",
    "label": "Drilling meter",
    "read_only": 1
   }
  ],
- "modified": "2021-06-28 21:23:24.047821",
+ "modified": "2021-07-06 17:57:39.046873",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",

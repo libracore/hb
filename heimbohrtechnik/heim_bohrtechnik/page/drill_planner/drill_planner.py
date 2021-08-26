@@ -61,7 +61,7 @@ def get_days(from_date, to_date):
     
 def get_drilling_teams():
     drilling_teams = []
-    _drilling_teams = frappe.db.sql("""SELECT `name`, `title`, `drm`, `drt`, `truck_and_weight`, `has_trough`, `has_crane`, `phone` FROM `tabDrilling Team`""", as_dict=True)
+    _drilling_teams = frappe.db.sql("""SELECT `name`, `title`, `drm`, `drt`, `truck_and_weight`, `has_trough`, `trough_details`, `has_crane`, `crane_details`, `phone` FROM `tabDrilling Team`""", as_dict=True)
     
     for team in _drilling_teams:
         data = {}
@@ -71,7 +71,9 @@ def get_drilling_teams():
         data["drt"] = team.drt
         data["truck_and_weight"] = team.truck_and_weight
         data["has_trough"] = team.has_trough
+        data["trough_details"] = team.trough_details or _('Has Trough')
         data["has_crane"] = team.has_crane
+        data['crane_details'] = team.crane_details or _('Has Crane')
         data["phone"] = team.phone
         data["booked_days"], data["booked_vm_start_days"], data["booked_nm_start_days"], data["booked_vm_end_days"], data["booked_nm_end_days"], data["project_details"] = get_booked_days_of_drilling_team(team.name)
         drilling_teams.append(data)
@@ -263,13 +265,13 @@ def get_overlay_data(project, selected_start, selected_end):
 
 def get_traffic_lights_indicator(project, typ):
     # Ampeln:
-    # a1 = Baustelle besichtigt: rot/grün (Checkbox)
-    # a2 = Bewilligungen: von Untertabelle jede als Dokument (rot nichts, gelb einige, grün alle)
-    # a3 = Kundenauftrag: Rot fehlt, gelb auf Entwurf, grün gültig
-    # a4 = Materialstatus: rot fehlt/gelb bestellt (Lieferantenauftrag)/grün an Lager (Wareneingang)
-    # a5 = Kran benötigt? (grau nein, rot nicht geplant, grün organisiert)
-    # a6 = Bohrschlammentsorgung (rot: keiner, grün ein Schlammentsorger (Lieferant) im Objekt)
-    # a7 = Bohranzeige versendet (Checkbox auf Projekt)
+    # a1 = Baustelle besichtigt (construction_site_inspected auf Objekt)
+    # a2 = Bewilligungen (permits in Project)
+    # a3 = Kundenauftrag (Sales Order in Project)
+    # a4 = Materialstatus (Purchase Order and Delivery note linkt o Project)
+    # a5 = Kran benötigt (Checklist in Project)
+    # a6 = Bohrschlammentsorgung (Checklist in Project)
+    # a7 = Bohranzeige versendet (Checkbox in Project)
                                  
     project = frappe.get_doc("Project", project)
     drilling_object = frappe.get_doc("Object", project.object)
@@ -286,18 +288,35 @@ def get_traffic_lights_indicator(project, typ):
                 'tooltip': _("The construction site was <b>not</b> visited")
             }
     
-    # tbd!
     if typ == 'a2':
-        return {
-            'color': 'green',
-            'tooltip': _("This tooltip is an example and still needs to be programmed")
-        }
+        missing_permits = []
+        for permit in project.permits:
+            if not permit.file:
+                missing_permits.append(permit.permit)
+        if len(missing_permits) > 0:
+            if len(missing_permits) == len(project.permits):
+                # all missing
+                return {
+                    'color': 'red',
+                    'tooltip': _("All permits are missing")
+                }
+            else:
+                # some missing
+                return {
+                    'color': 'yellow',
+                    'tooltip': _("Following permits are missing:") + "<br>{missing_permits}".format(missing_permits='<br>'.join(missing_permits))
+                }
+        else:
+            # all good
+            return {
+                'color': 'green',
+                'tooltip': _("All permits available")
+            }
     
-    #tbd!
     if typ == 'a3':
         if not project.sales_order:
             return {
-                'color': 'green',
+                'color': 'red',
                 'tooltip': _("No sales order available")
             }
         else:
@@ -318,21 +337,42 @@ def get_traffic_lights_indicator(project, typ):
                     'tooltip': _("The sales order is cancelled")
                 }
     
-    # tbd!
     if typ == 'a4':
-        return {
-            'color': 'green',
-            'tooltip': _("This tooltip is an example and still needs to be programmed")
-        }
+        pos = frappe.db.sql("""SELECT DISTINCT `parent` FROM `tabPurchase Order Item` WHERE `project` = '{project}' AND `docstatus` != 2 LIMIT 1""".format(project=project.name), as_dict=True)
+        if len(pos) > 0:
+            po = frappe.get_doc("Purchase Order", pos[0].parent)
+            if po.docstatus != 1:
+                return {
+                    'color': 'red',
+                    'tooltip': _("Purchase Order") + " {po} ".format(po=po.name) + _("<b>not</b> submitted")
+                }
+            else:
+                if po.per_received == 100:
+                    return {
+                        'color': 'green',
+                        'tooltip': _("Purchase Order delivered")
+                    }
+                else:
+                    return {
+                        'color': 'yellow',
+                        'tooltip': _("Purchase Order") + " {percent}% " + "delivered".format(percent=po.per_received)
+                    }
+        else:
+            return {
+                'color': 'red',
+                'tooltip': _("No Purchase Order available")
+            }
     
     if typ == 'a5':
-        if project.crane_required == 0:
+        crane_activity = frappe.get_single("Heim Settings").crane_activity or 'Kran'
+        crane = frappe.db.sql("""SELECT `name`, `supplier` FROM `tabProject Checklist` WHERE `parent` = '{project}' AND `activity` = '{crane_activity}'""".format(project=project.name, crane_activity=crane_activity), as_dict=True)
+        if not len(crane) > 0:
             return {
                 'color': 'grey',
                 'tooltip': _("No crane is needed")
             }
         else:
-            if project.crane_organized == 1:
+            if crane[0].supplier:
                 return {
                     'color': 'green',
                     'tooltip': _("The crane was organized")
@@ -344,16 +384,24 @@ def get_traffic_lights_indicator(project, typ):
                 }
     
     if typ == 'a6':
-        if drilling_object.mud_disposer:
-            return {
-                'color': 'green',
-                'tooltip': _("Mud Disposer entered")
-            }
-        else:
+        mud_disposer_activity = frappe.get_single("Heim Settings").mud_disposer_activity or 'Schlammentsorgung'
+        mud_disposer = frappe.db.sql("""SELECT `name`, `supplier` FROM `tabProject Checklist` WHERE `parent` = '{project}' AND `activity` = '{mud_disposer_activity}'""".format(project=project.name, mud_disposer_activity=mud_disposer_activity), as_dict=True)
+        if not len(mud_disposer) > 0:
             return {
                 'color': 'red',
-                'tooltip': _("Mud Disposer missing")
+                'tooltip': _("The Mud Disposer has not yet been organized")
             }
+        else:
+            if mud_disposer[0].supplier:
+                return {
+                    'color': 'green',
+                    'tooltip': _("The Mud Disposer was organized")
+                }
+            else:
+                return {
+                    'color': 'red',
+                    'tooltip': _("The Mud Disposer has not yet been organized")
+                }
     
     if typ == 'a7':
         if project.drill_notice_sent == 1:
