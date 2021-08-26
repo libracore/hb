@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 import frappe
+from dataparser import get_projects
 
 ROW_SEPARATOR = "\n"
 CELL_SEPARATOR = ";"
@@ -153,3 +154,28 @@ def update_suppliers(filename, service_type):
 # removes the quotation marks from a cell
 def get_field(content):
     return content.replace("\"", "")
+
+# read projects
+def load_projects(fielname):
+    teams_with_projects = get_projects(filename)
+    for team in teams_with_projects:
+        for project in team['projects']:
+            # check if project exists
+            if frappe.db.exists("Project", project['name']):
+                # existing project, update
+                
+            else:
+                # this project is not yet in the database, create
+                new_project = frappe.get_doc({
+                    'doctype': 'Project',
+                    'project_title': project['name'],
+                    'drilling_team': team['drilling_team'],
+                    'expected_start_date': project['start_date'],
+                    'expected_end_date': project['end_date']
+                    'start_half_day': "VM" if project['start_date_vm'] else "NM",
+                    'end_half_day': "VM" if project['end_date_vm'] else "NM",
+                    'status': project['status']
+                })
+                new_project.insert()
+                print("Created project{0}".format(project['name']))
+                frappe.db.commit()
