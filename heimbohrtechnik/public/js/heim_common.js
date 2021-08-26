@@ -2,8 +2,6 @@
 // For license information, please see license.txt
 // Common functions
 
-console.log("common");
-
 // 1 sec after start (has to be delayed after document ready)
 window.onload = async function () {
     await sleep(1000);

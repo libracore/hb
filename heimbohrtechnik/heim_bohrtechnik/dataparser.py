@@ -9,7 +9,7 @@ def get_projects(filename):
     # format definition
     teams = [  # each team section
         {
-            'drilling_team': 'Team 1',
+            'drilling_team': '01',
             'project_row': 8,                # row with the project number
             'customer_name': 9,              # customer name
             'object_name': 10,               # object name
@@ -20,7 +20,7 @@ def get_projects(filename):
             'object_project_manager': 17     # object project manager (short)
         },
         {
-            'drilling_team': 'Team 2',
+            'drilling_team': '02',
             'project_row': 20,                # row with the project number
             'customer_name': 21,              # customer name
             'object_name': 22,               # object name
@@ -31,7 +31,7 @@ def get_projects(filename):
             'object_project_manager': 29     # object project manager (short)
         },
         {
-            'drilling_team': 'Team 3',
+            'drilling_team': '03',
             'project_row': 32,                # row with the project number
             'customer_name': 33,              # customer name
             'object_name': 34,               # object name
@@ -42,7 +42,7 @@ def get_projects(filename):
             'object_project_manager': 41     # object project manager (short)
         },
         {
-            'drilling_team': 'Team 4',
+            'drilling_team': '04',
             'project_row': 44,                # row with the project number
             'customer_name': 45,              # customer name
             'object_name': 46,               # object name
@@ -53,7 +53,7 @@ def get_projects(filename):
             'object_project_manager': 53     # object project manager (short)
         },
         {
-            'drilling_team': 'Team 5',
+            'drilling_team': '05',
             'project_row': 56,                # row with the project number
             'customer_name': 57,              # customer name
             'object_name': 58,               # object name
@@ -64,7 +64,7 @@ def get_projects(filename):
             'object_project_manager': 65     # object project manager (short)
         },
         {
-            'drilling_team': 'Team 6',
+            'drilling_team': '06',
             'project_row': 68,                # row with the project number
             'customer_name': 69,              # customer name
             'object_name': 70,               # object name
@@ -75,7 +75,7 @@ def get_projects(filename):
             'object_project_manager': 77     # object project manager (short)
         },
         {
-            'drilling_team': 'Team 7',
+            'drilling_team': '07',
             'project_row': 80,                # row with the project number
             'customer_name': 81,              # customer name
             'object_name': 82,               # object name
@@ -86,7 +86,7 @@ def get_projects(filename):
             'object_project_manager': 89     # object project manager (short)
         },
         {
-            'drilling_team': 'Team 8',
+            'drilling_team': '08',
             'project_row': 92,                # row with the project number
             'customer_name': 93,              # customer name
             'object_name': 94,               # object name
@@ -97,7 +97,7 @@ def get_projects(filename):
             'object_project_manager': 101     # object project manager (short)
         },
         {
-            'drilling_team': 'Team 9',
+            'drilling_team': '09',
             'project_row': 104,                # row with the project number
             'customer_name': 105,              # customer name
             'object_name': 106,               # object name
@@ -108,7 +108,7 @@ def get_projects(filename):
             'object_project_manager': 113     # object project manager (short)
         },
         {
-            'drilling_team': 'Team 10',
+            'drilling_team': '10',
             'project_row': 116,                # row with the project number
             'customer_name': 117,              # customer name
             'object_name': 118,               # object name
@@ -127,6 +127,10 @@ def get_projects(filename):
 
     # get active sheet
     sheet_obj = wb_obj.active
+
+    # resolve done color
+    done_color = sheet_obj['D16'].fill.start_color.index
+    print("Done color: {0}".format(done_color))
 
     # get last used column
     last_column = sheet_obj.max_column
@@ -153,14 +157,25 @@ def get_projects(filename):
         else:
             start_date_vm = True
         projects = [{
-            'name': project,
+            'name': remove_links(project),
+            'source': "R{0}:C{1}".format(team['project_row'], first_project_column),
             'start_date': start_date,
-            'start_date_vm': start_date_vm
+            'start_date_vm': start_date_vm,
+            'customer_name': sheet_obj.cell(row = team['customer_name'], column = first_project_column).value,
+            'object_name': sheet_obj.cell(row = team['object_name'], column = first_project_column).value,
+            'object_street': sheet_obj.cell(row = team['object_street'], column = first_project_column).value,
+            'object_city': sheet_obj.cell(row = team['object_city'], column = first_project_column).value,
+            'object_drilling_detail': sheet_obj.cell(row = team['object_drilling_detail'], column = first_project_column).value,
+            'object_mud': sheet_obj.cell(row = team['object_mud'], column = first_project_column).value,
+            'object_project_manager': sheet_obj.cell(row = team['object_project_manager'], column = first_project_column).value,
+            'status': "Completed" if sheet_obj.cell(row = (team['project_row'] - 1), column = first_project_column).fill.start_color.index == done_color else "Open"
         }]
         # go through columns
         for i in range((first_project_column + 1), last_column):
             project = sheet_obj.cell(row = team['project_row'], column = i).value
-            if project and project != projects[-1]['name']:
+            customer_name = sheet_obj.cell(row = team['customer_name'], column = i).value
+            # if project and project != projects[-1]['name'] and len(str(project)) == 6:
+            if project and project != projects[-1]['name'] and customer_name:
                 last_date = sheet_obj.cell(row = date_row, column = (i - 1)).value
                 if not last_date:
                     last_date = sheet_obj.cell(row = date_row, column = (i - 2)).value
@@ -169,24 +184,25 @@ def get_projects(filename):
                     last_date_vm = True
                 this_date = sheet_obj.cell(row = date_row, column = i).value
                 if not this_date:
-                    this_date = sheet_obj.cell(row = date_row, column = (i - 2)).value
+                    this_date = sheet_obj.cell(row = date_row, column = (i - 1)).value
                     this_date_vm = False
                 else:
                     this_date_vm = True
                 projects[-1]['end_date'] = last_date
                 projects[-1]['end_date_vm'] = last_date_vm
                 projects.append({
-                    'name': project,
+                    'name': remove_links(project),
+                    'source': "R{0}:C{1}".format(team['project_row'], i),
                     'start_date': this_date,
                     'start_date_vm': this_date_vm,
-                    'customer_name': sheet_obj.cell(row = team['customer_name'], column = i).value,
+                    'customer_name': customer_name,
                     'object_name': sheet_obj.cell(row = team['object_name'], column = i).value,
                     'object_street': sheet_obj.cell(row = team['object_street'], column = i).value,
                     'object_city': sheet_obj.cell(row = team['object_city'], column = i).value,
                     'object_drilling_detail': sheet_obj.cell(row = team['object_drilling_detail'], column = i).value,
                     'object_mud': sheet_obj.cell(row = team['object_mud'], column = i).value,
                     'object_project_manager': sheet_obj.cell(row = team['object_project_manager'], column = i).value,
-                    'status': 
+                    'status': "Completed" if sheet_obj.cell(row = (team['project_row'] - 1), column = i).fill.start_color.index == done_color else "Open"
                 })
 
         # add last date
@@ -203,3 +219,8 @@ def get_projects(filename):
     
     # return teams with projects
     return teams
+
+def remove_links(name):
+    name = ("{0}".format(name)).replace("\\", "/")
+    name = name.split("/")
+    return name[-1]
