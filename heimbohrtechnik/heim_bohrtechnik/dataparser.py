@@ -129,6 +129,8 @@ sheet_obj = wb_obj.active
 # first date: AE4 (31/4)
 #cell_obj = sheet_obj.cell(row = 4, column = 31)
 #print(cell_obj.value)
+done_color = sheet_obj['D16'].fill.start_color.index
+print("Done color: {0}".format(done_color))
 
 # get last used column
 last_column = sheet_obj.max_column
@@ -157,7 +159,15 @@ for team in teams:
     projects = [{
         'name': project,
         'start_date': start_date,
-        'start_date_vm': start_date_vm
+        'start_date_vm': start_date_vm,
+        'customer_name': sheet_obj.cell(row = team['customer_name'], column = first_project_column).value,
+        'object_name': sheet_obj.cell(row = team['object_name'], column = first_project_column).value,
+        'object_street': sheet_obj.cell(row = team['object_street'], column = first_project_column).value,
+        'object_city': sheet_obj.cell(row = team['object_city'], column = first_project_column).value,
+        'object_drilling_detail': sheet_obj.cell(row = team['object_drilling_detail'], column = first_project_column).value,
+        'object_mud': sheet_obj.cell(row = team['object_mud'], column = first_project_column).value,
+        'object_project_manager': sheet_obj.cell(row = team['object_project_manager'], column = first_project_column).value,
+        'status': "Closed" if sheet_obj.cell(row = (team['project_row'] - 1), column = first_project_column).fill.start_color.index == "FF99CC00" else "Open"
     }]
     # go through columns
     for i in range((first_project_column + 1), last_column):
@@ -187,7 +197,8 @@ for team in teams:
                 'object_city': sheet_obj.cell(row = team['object_city'], column = i).value,
                 'object_drilling_detail': sheet_obj.cell(row = team['object_drilling_detail'], column = i).value,
                 'object_mud': sheet_obj.cell(row = team['object_mud'], column = i).value,
-                'object_project_manager': sheet_obj.cell(row = team['object_project_manager'], column = i).value
+                'object_project_manager': sheet_obj.cell(row = team['object_project_manager'], column = i).value,
+                'status': "Closed" if sheet_obj.cell(row = (team['project_row'] - 1), column = i).fill.start_color.index == "FF99CC00" else "Open"
             })
 
     # add last date
