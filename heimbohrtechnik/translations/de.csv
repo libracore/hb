@@ -130,8 +130,8 @@ Doctype: Project,End Half-Day,Halbtag Ende
 Doctype: Project,Supplier name,Lieferantenname
 Doctype: Project,Checklist,Checkliste
 Doctype: Project,Drilling Team,Bohrteam
-Doctype: Permit Type,Permit Type,Bewillingungsart
-Doctype: Permit Type,Permit,Bewillingung
+Doctype: Permit Type,Permit Type,Bewilligungsart
+Doctype: Permit Type,Permit,Bewilligung
 Doctype: Permit Type,Is Mandatory,Ist zwingend erforderlich
 Doctype: Checklist Activity,Checklist Activity,Aktivität
 Doctype: Drilling Type,Drilling Type,Bohrart
