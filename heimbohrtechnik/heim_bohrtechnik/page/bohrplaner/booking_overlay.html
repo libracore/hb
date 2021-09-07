@@ -1,0 +1,18 @@
+<div class="booking_overlay" id="{{ project }}"
+    style="width: {{ width }}px; {{ ampeln.bgc }} {{ ampeln.bc }}"
+    draggable="true" ondragstart="drag(event)">
+    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-1" style="background-color: {{ ampeln.a1.color }};"><span class="ampel-tooltiptext">{{ ampeln.a1.tooltip }}</span></div>
+    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-2" style="background-color: {{ ampeln.a2.color }};"><span class="ampel-tooltiptext">{{ ampeln.a2.tooltip }}</span></div>
+    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-3" style="background-color: {{ ampeln.a3.color }};"><span class="ampel-tooltiptext">{{ ampeln.a3.tooltip }}</span></div>
+    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-4" style="background-color: {{ ampeln.a4.color }};"><span class="ampel-tooltiptext">{{ ampeln.a4.tooltip }}</span></div>
+    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-5" style="background-color: {{ ampeln.a5.color }};"><span class="ampel-tooltiptext">{{ ampeln.a5.tooltip }}</span></div>
+    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-6" style="background-color: {{ ampeln.a6.color }};"><span class="ampel-tooltiptext">{{ ampeln.a6.tooltip }}</span></div>
+    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-7" style="background-color: {{ ampeln.a7.color }};"><span class="ampel-tooltiptext">{{ ampeln.a7.tooltip }}</span></div>
+    <i class="fa fa-info-circle pointer" style="margin-left: 5px; font-size: 20px; margin-top: 2px;" onclick="frappe.bohrplaner.show_detail_popup(this);" data-popupvalue="{{ project }}"></i>
+    <div class="object-div">
+        {{ object.name }}<br>
+        {{ object.object_street }}<br>
+        {{ object.plz }} {{ object.city }} {{ object.kanton }}<br>
+        {{ object.ews_details }}
+    </div>
+</div>
