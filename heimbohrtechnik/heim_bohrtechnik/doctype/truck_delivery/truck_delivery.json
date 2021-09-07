@@ -1,0 +1,236 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2021-09-07 15:51:59.073576",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "truck",
+  "truck_description",
+  "image",
+  "naming_series",
+  "truck_scale",
+  "column_main",
+  "date",
+  "customer",
+  "customer_name",
+  "column_object",
+  "object",
+  "object_name",
+  "object_street",
+  "object_location",
+  "section_weight",
+  "full_weight",
+  "column_weight_1",
+  "empty_weight",
+  "column_weight_2",
+  "net_weight",
+  "load_type",
+  "invoicing_item",
+  "section_invoicing",
+  "amended_from",
+  "sales_invoice"
+ ],
+ "fields": [
+  {
+   "fieldname": "truck",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Truck",
+   "options": "Truck",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "truck.title",
+   "fieldname": "truck_description",
+   "fieldtype": "Data",
+   "label": "Truck Description",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_object",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "object",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Object",
+   "options": "Object",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "object.object_name",
+   "fieldname": "object_name",
+   "fieldtype": "Data",
+   "label": "Object Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_weight",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "kg",
+   "fieldname": "full_weight",
+   "fieldtype": "Float",
+   "label": "Full Weight",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_weight_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "kg",
+   "fieldname": "empty_weight",
+   "fieldtype": "Float",
+   "label": "Empty Weight",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_weight_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "kg",
+   "fieldname": "net_weight",
+   "fieldtype": "Float",
+   "label": "Net Weight",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "object.object_street",
+   "fieldname": "object_street",
+   "fieldtype": "Data",
+   "label": "Object Street",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "object.object_location",
+   "fieldname": "object_location",
+   "fieldtype": "Data",
+   "label": "Object Location",
+   "read_only": 1
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "hidden": 1,
+   "label": "Image"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fetch_from": "customer.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "load_type",
+   "fieldtype": "Link",
+   "label": "Load Type",
+   "options": "Truck Load Type"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Truck Delivery",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Data",
+   "label": "Naming Series",
+   "options": "MLS-.#####"
+  },
+  {
+   "fieldname": "truck_scale",
+   "fieldtype": "Link",
+   "label": "Truck Scale",
+   "options": "Truck Scale"
+  },
+  {
+   "fieldname": "section_invoicing",
+   "fieldtype": "Section Break",
+   "label": "Invoicing"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "load_type.item",
+   "fieldname": "invoicing_item",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Invoicing Item",
+   "options": "Item"
+  }
+ ],
+ "image_field": "image",
+ "is_submittable": 1,
+ "modified": "2021-09-07 16:41:41.041955",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Truck Delivery",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

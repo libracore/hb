@@ -219,6 +219,18 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Truck",
+                   "label": _("Truck"),
+                   "description": _("Truck")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Truck Load Type",
+                   "label": _("Truck Load Type"),
+                   "description": _("Truck Load Type")
+                },
+                {
+                   "type": "doctype",
                    "name": "Heim Settings",
                    "label": _("Heim Settings"),
                    "description": _("Heim Settings")
@@ -229,6 +241,12 @@ def get_data():
             "label": _("MudEx"),
             "icon": "fa fa-money",
             "items": [
+                {
+                   "type": "doctype",
+                   "name": "Truck Delivery",
+                   "label": _("Truck Delivery"),
+                   "description": _("Truck Delivery")
+                },
                 {
                    "type": "doctype",
                    "name": "Truck Scale",
