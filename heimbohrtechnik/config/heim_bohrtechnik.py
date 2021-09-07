@@ -69,9 +69,9 @@ def get_data():
             "items": [
                 {
                    "type": "page",
-                   "name": "drill-planner",
-                   "label": _("Drill Planner"),
-                   "description": _("Drill Planner")
+                   "name": "bohrplaner",
+                   "label": _("Bohrplaner"),
+                   "description": _("Bohrplaner")
                 },
                 {
                    "type": "doctype",
