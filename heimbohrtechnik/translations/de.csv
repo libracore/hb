@@ -167,3 +167,10 @@ DocType: Quotation,Created by,Erstellt durch
 DocType: Quotation,Our contact,Unser Ansprechpartner
 DocType: Quotation,of,von
 DocType: Truck Scale,Truck Scale,Lastwagenwaage
+DocType: Truck,Truck,Fahrzeug
+DocType: Truck,Registration Number,Fahrzeugkennzeichen
+DocType: Truck Load Type,Truck Load Type,Ladungsart
+DocType: Truck Delivery,Truck Delivery,Lastwagenanlieferung
+DocType: Truck Delivery,Full Weight,Vollgewicht
+DocType: Truck Delivery,Empty Weight,Leergewicht
+DocType: Truck Delivery,Net Weight,Nettogewicht
