@@ -21,6 +21,11 @@ frappe.ui.form.on('Truck Delivery', {
     },
     empty_weight: function(frm) {
         update_net_weight(frm);
+    },
+    truck: function(frm) {
+        if ((frm.doc.truck) && ((!frm.doc.empty_weight) || (frm.doc.empty_weight === 0))) { 
+            fetch_truck_net_weight(frm); 
+        }
     }
 });
 
@@ -45,4 +50,21 @@ function update_net_weight(frm) {
     var empty_weight = frm.doc.empty_weight || 0;
     var net_weight = full_weight - empty_weight;
     cur_frm.set_value('net_weight', net_weight);
+}
+
+function fetch_truck_net_weight(frm) {
+    frappe.call({
+        'method': "frappe.client.get",
+        'args': {
+            'doctype': "Truck",
+            'name': frm.doc.truck
+        },
+        'callback': function(response) {
+            var truck = response.message;
+
+            if ((truck) && (truck.net_weight)) {
+                cur_frm.set_value('empty_weight', truck.net_weight);
+            } 
+        }
+    });
 }
