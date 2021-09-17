@@ -86,7 +86,7 @@ function set_conditional_grand_total(frm) {
 
 function recalculate_markups_discounts(frm) {
     var amount = frm.doc.conditional_net_total;
-    var discount = 0;
+    var total_discount = 0;
     // calculate markups
     if (frm.doc.markup_positions) {
         frm.doc.markup_positions.forEach(function (markup) {
@@ -95,7 +95,7 @@ function recalculate_markups_discounts(frm) {
                 frappe.model.set_value(markup.doctype, markup.name, "amount", markup_amount);
             }
             amount += markup.amount;
-            discount -= markup.amount;
+            total_discount -= markup.amount;
         });
     }
     // calculate discounts
@@ -106,11 +106,11 @@ function recalculate_markups_discounts(frm) {
                 frappe.model.set_value(discount.doctype, discount.name, "amount", discount_amount);
             }
             amount -= discount.amount;
-            discount += discount.amount;
+            total_discount += discount.amount;
         });
     }
     // apply to overall discount
-    update_additional_discount(frm, discount);
+    update_additional_discount(frm, total_discount);
 }
 
 function update_additional_discount(frm, discount_amount) {
