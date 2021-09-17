@@ -65,18 +65,64 @@ function get_object_description(frm) {
     }
 }
 
-function update_additional_discount(frm) {
-    if (frm.doc.discount_positions) {
-        var additional_discount = 0;
-        for (var i = 0; i < frm.doc.discount_positions.length; i++) {
-            additional_discount += frm.doc.discount_positions[i].discount;
+
+function set_conditional_net_total(frm) {
+    var conditional_net_total = 0;
+    frm.doc.items.forEach(function (item) {
+        if ((item.eventual !== 1) && (item.alternativ !== 1)) {
+            conditional_net_total += item.amount;
         }
-        if (frm.doc.total !== 0 ) {
-            cur_frm.set_value("additional_discount_percentage", (100 * additional_discount) / frm.doc.total);
-        } else {
-            cur_frm.set_value("discount_amount", additional_discount);
-        }
+    });
+    cur_frm.set_value("conditional_net_total", conditional_net_total);
+}
+
+function set_conditional_grand_total(frm) {
+    var conditional_grand_total = frm.doc.conditional_net_total - frm.doc.discount_amount;
+    frm.doc.taxes.forEach(function (tax) {
+        conditional_grand_total = conditional_grand_total * ((tax.rate / 100) + 1);
+    });
+    cur_frm.set_value("conditional_grand_total", conditional_grand_total); 
+}
+
+function recalculate_markups_discounts(frm) {
+    var amount = frm.doc.conditional_net_total;
+    var discount = 0;
+    // calculate markups
+    if (frm.doc.markup_positions) {
+        frm.doc.markup_positions.forEach(function (markup) {
+            if (markup.percent != 0) {
+                var markup_amount = amount * (markup.percent / 100);
+                frappe.model.set_value(markup.doctype, markup.name, "amount", markup_amount);
+            }
+            amount += markup.amount;
+            discount -= markup.amount;
+        });
     }
+    // calculate discounts
+    if (frm.doc.discount_positions) {
+        frm.doc.discount_positions.forEach(function (discount) {
+            if (discount.percent != 0) {
+                var discount_amount = amount * (discount.percent / 100);
+                frappe.model.set_value(discount.doctype, discount.name, "amount", discount_amount);
+            }
+            amount -= discount.amount;
+            discount += discount.amount;
+        });
+    }
+    // apply to overall discount
+    update_additional_discount(frm, discount);
+}
+
+function update_additional_discount(frm, discount_amount) {
+    if ((frm.doc.total !== 0 ) && (frm.doc.total >= discount_amount)) {
+        cur_frm.set_value("additional_discount_percentage", (100 * discount_amount) / frm.doc.total);
+        cur_frm.set_value("discount_amount", discount_amount);
+    } else {
+        cur_frm.set_value("additional_discount_percentage", null);
+        cur_frm.set_value("discount_amount", discount_amount);
+    }
+    
+    set_conditional_grand_total(frm);
 }
 
 function get_required_activities(frm, dt, dn) {

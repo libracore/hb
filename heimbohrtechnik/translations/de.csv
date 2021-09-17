@@ -166,6 +166,8 @@ DocType: Signature,Signature type,Unterschriftenregelung
 DocType: Quotation,Created by,Erstellt durch
 DocType: Quotation,Our contact,Unser Ansprechpartner
 DocType: Quotation,of,von
+DocType: Quotation,Discount Positions,Abzüge
+DocType: Quotation,Markup Positions,Zuschläge
 DocType: Truck Scale,Truck Scale,Lastwagenwaage
 DocType: Truck,Truck,Fahrzeug
 DocType: Truck,Registration Number,Fahrzeugkennzeichen
