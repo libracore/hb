@@ -142,8 +142,8 @@ def get_data():
                 {
                    "type": "doctype",
                    "name": "Salary Structure Assignment",
-                   "label": _("alary Structure Assignment"),
-                   "description": _("alary Structure Assignment")
+                   "label": _("Salary Structure Assignment"),
+                   "description": _("Salary Structure Assignment")
                 },
                 {
                    "type": "doctype",
