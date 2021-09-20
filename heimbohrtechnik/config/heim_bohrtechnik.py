@@ -201,6 +201,12 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Probe Type",
+                   "label": _("Probe Type"),
+                   "description": _("Probe Type")
+                },
+                {
+                   "type": "doctype",
                    "name": "BKP Group",
                    "label": _("BKP Group"),
                    "description": _("BKP Group")
