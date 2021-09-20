@@ -68,12 +68,17 @@ function get_object_description(frm) {
 
 function set_conditional_net_total(frm) {
     var conditional_net_total = 0;
+    var calculation_base = 0;
     frm.doc.items.forEach(function (item) {
         if ((item.eventual !== 1) && (item.alternativ !== 1)) {
             conditional_net_total += item.amount;
+            if (item.exclude_from_markup_discount !== 1) {
+                calculation_base += item.amount;
+            }
         }
     });
     cur_frm.set_value("conditional_net_total", conditional_net_total);
+    cur_frm.set_value("markup_discount_base", calculation_base);
 }
 
 function set_conditional_grand_total(frm) {
@@ -85,7 +90,7 @@ function set_conditional_grand_total(frm) {
 }
 
 function recalculate_markups_discounts(frm) {
-    var amount = frm.doc.conditional_net_total;
+    var amount = frm.doc.markup_discount_base;
     var total_discount = 0;
     // calculate markups
     if (frm.doc.markup_positions) {
@@ -93,6 +98,7 @@ function recalculate_markups_discounts(frm) {
             if (markup.percent != 0) {
                 var markup_amount = amount * (markup.percent / 100);
                 frappe.model.set_value(markup.doctype, markup.name, "amount", markup_amount);
+                frappe.model.set_value(markup.doctype, markup.name, "basis", amount);
             }
             amount += markup.amount;
             total_discount -= markup.amount;
@@ -104,6 +110,7 @@ function recalculate_markups_discounts(frm) {
             if (discount.percent != 0) {
                 var discount_amount = amount * (discount.percent / 100);
                 frappe.model.set_value(discount.doctype, discount.name, "amount", discount_amount);
+                frappe.model.set_value(discount.doctype, discount.name, "basis", amount);
             }
             amount -= discount.amount;
             total_discount += discount.amount;

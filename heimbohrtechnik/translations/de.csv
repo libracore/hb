@@ -168,6 +168,8 @@ DocType: Quotation,Our contact,Unser Ansprechpartner
 DocType: Quotation,of,von
 DocType: Quotation,Discount Positions,Abzüge
 DocType: Quotation,Markup Positions,Zuschläge
+DocType: Quotation,Base for Markup and Discount,Basis für Zuschläge und Abschläge
+DocType: Quotation,Exclude from Markup and Discount,Bei Zu-/Abschlägen ausschliessen
 DocType: Truck Scale,Truck Scale,Lastwagenwaage
 DocType: Truck,Truck,Fahrzeug
 DocType: Truck,Registration Number,Fahrzeugkennzeichen
