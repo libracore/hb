@@ -31,7 +31,7 @@
     <tr>
         <td>geplante Anzahl und Grösse der Sonden</td>
         <td>{% for ews in object.ews_specification %}
-            {{ ews.ews_count }} Stück, Tiefe {{ ews.ews_depth }} m, Durchmesser {{ ews.ews_diameter }} {{ ews.ews_diameter_unit }}<br>
+            {{ ews.ews_count }} x {{ ews.ews_depth }} m, {{ ews.ews_diameter }} {{ ews.ews_diameter_unit }}{% if ews.pressure_level %}, {{ ews.pressure_level }}{% endif %}{% if ews.probe_type %}, {{ ews.probe_type }}{% endif %}<br>
         {% endfor %}
         </td>
     </tr>
