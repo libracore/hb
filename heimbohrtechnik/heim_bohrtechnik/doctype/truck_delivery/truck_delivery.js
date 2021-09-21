@@ -15,6 +15,11 @@ frappe.ui.form.on('Truck Delivery', {
                 get_weight(frm, 'empty_weight')
             }).addClass("btn-primary");
         }
+        // make sure there is an object row
+        if ((!frm.doc.objects) || (frm.doc.objects.length < 1)) {
+            var child = cur_frm.add_child('objects');
+            cur_frm.refresh_field('objects');
+        }
     },
     full_weight: function(frm) {
         update_net_weight(frm);
@@ -38,6 +43,14 @@ function get_weight(frm, target) {
         'callback': function(r) {
             if (typeof r.message !== 'undefined') {
                 cur_frm.set_value(target, r.message);
+                // add trace
+                var child = cur_frm.add_child('trace');
+                frappe.model.set_value(child.doctype, child.name, 'date', frappe.datetime.nowdate());
+                frappe.model.set_value(child.doctype, child.name, 'scale', frm.doc.truck_scale);
+                frappe.model.set_value(child.doctype, child.name, 'weight', r.message);
+                cur_frm.refresh_field('trace');
+                cur_frm.save();
+
             } else {
                 console.log("Invalid response");
             }

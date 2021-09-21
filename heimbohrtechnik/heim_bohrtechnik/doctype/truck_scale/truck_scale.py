@@ -6,6 +6,8 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 import telnetlib
+from frappe.utils import cint
+from random import randrange 
 
 class TruckScale(Document):
     pass
@@ -15,6 +17,8 @@ class TruckScale(Document):
 def get_weight(truck_scale):
     try:
         scale = frappe.get_doc("Truck Scale", truck_scale)                  # read settings
+        if cint(scale.random_mode) == 1:
+            return randrange(1000, 40000)
         connection = telnetlib.Telnet(scale.host, scale.port, timeout=10)   # connect
         if scale.scale_type == "Pfister":
             connection.write(b"XB\r\n")                                     # send get weight command
