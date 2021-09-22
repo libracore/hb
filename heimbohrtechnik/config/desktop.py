@@ -14,21 +14,21 @@ def get_data():
         {
             "module_name": "MudEx",
             "color": "#0075b8",
-            "icon": "icon hb-blue",
+            "icon": "icon mudex-blue",
             "type": "module",
             "label": _("MudEx")
         },
         {
             "module_name": "Drilling Support",
             "color": "#0075b8",
-            "icon": "icon hb-blue",
+            "icon": "icon hb-ds-blue",
             "type": "module",
             "label": _("Drilling Support")
         },
         {
             "module_name": "Immo Heim",
             "color": "#0075b8",
-            "icon": "icon hb-blue",
+            "icon": "icon hb-ih-blue",
             "type": "module",
             "label": _("Immo Heim")
         }
