@@ -19,7 +19,7 @@ function get_weight(frm) {
         },
         'callback': function(r) {
             if (typeof r.message !== 'undefined') {
-                var html = __('Weight') + " " + r.message + " kg";
+                var html = __('Weight') + " " + r.message.weight + " kg";
                 cur_frm.set_df_property('weight_html', 'options', html);
             } else {
                 console.log("Invalid response");

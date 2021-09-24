@@ -42,12 +42,13 @@ function get_weight(frm, target) {
         },
         'callback': function(r) {
             if (typeof r.message !== 'undefined') {
-                cur_frm.set_value(target, r.message);
+                cur_frm.set_value(target, r.message.weight);
                 // add trace
                 var child = cur_frm.add_child('trace');
                 frappe.model.set_value(child.doctype, child.name, 'date', frappe.datetime.nowdate());
                 frappe.model.set_value(child.doctype, child.name, 'scale', frm.doc.truck_scale);
-                frappe.model.set_value(child.doctype, child.name, 'weight', r.message);
+                frappe.model.set_value(child.doctype, child.name, 'weight', r.message.weight);
+                frappe.model.set_value(child.doctype, child.name, 'process_id', r.message.process_id);
                 cur_frm.refresh_field('trace');
                 cur_frm.save();
 
