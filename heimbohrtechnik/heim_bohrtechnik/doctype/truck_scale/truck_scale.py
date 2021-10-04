@@ -21,7 +21,7 @@ def get_weight(truck_scale, validated=True, debug=False):
             return {'weight': randrange(1000, 40000), 'process_id': "RANDOM"}
         connection = telnetlib.Telnet(scale.host, scale.port, timeout=10)   # connect
         if scale.scale_type == "Pfister":
-            if validated:
+            if cint(scale.validated == 1) or validated:
                 connection.write(b"MP\r\n")                             # send get weight with process number command
                 response = connection.read_until(b'kg')                 # read response
                 lines = response.decode('ascii').split("\r\n")          # separate lines
