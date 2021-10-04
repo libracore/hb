@@ -14,7 +14,7 @@ class TruckScale(Document):
 
 
 @frappe.whitelist()
-def get_weight(truck_scale, validated=True, debug=False):
+def get_weight(truck_scale, validated=False, debug=False):
     try:
         scale = frappe.get_doc("Truck Scale", truck_scale)              # read settings
         if cint(scale.random_mode) == 1:
