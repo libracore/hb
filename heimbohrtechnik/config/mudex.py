@@ -33,6 +33,12 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Truck",
+                   "label": _("Truck"),
+                   "description": _("Truck")
+                },
+                {
+                   "type": "doctype",
                    "name": "Supplier",
                    "label": _("Supplier"),
                    "description": _("Supplier")

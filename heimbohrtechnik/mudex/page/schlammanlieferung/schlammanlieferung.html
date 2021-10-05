@@ -1,19 +1,55 @@
 <div style="margin: 5px; margin-top: 0px; border-top: 1px solid white; ">
-    <p class="text-muted">{%= __("Schlammanlieferung") %}</p>
     <div class="section-body">
         <div class="row">
             <div class="form-column col-sm-4">
-                <p>{{ __("Truck") }}</p>
-                <input id="truck">
-
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-truck"></i></span>
+                    <input type="text" class="form-control" placeholder="Fahrzeug" id="truck" readonly>
+                </div>
             </div>
             <div class="form-column col-sm-4">
-                <p>{{ __("Customer") }}</p>
-
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <input type="text" class="form-control" placeholder="Kunde" id="customer" readonly>
+                </div>
             </div>
             <div class="form-column col-sm-4">
-                <p>{{ __("Object") }}</p>
-
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-cube"></i></span>
+                    <input type="text" class="form-control" placeholder="Objekt" id="object">
+                </div>
+                <div style="margin: 10px; " id="object_text">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="form-column col-sm-4">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-tint"></i></span>
+                    <input type="text" class="form-control" placeholder="Vollgewicht" id="full_weight" readonly>
+                </div>
+            </div>
+            <div class="form-column col-sm-4">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-tint"></i></span>
+                    <input type="text" class="form-control" placeholder="Leergewicht" id="empty_weight" readonly>
+                </div>
+            </div>
+            <div class="form-column col-sm-4">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-tint"></i></span>
+                    <input type="text" class="form-control" placeholder="Nettogewicht" id="net_weight" readonly>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row" style="margin-top: 20px; ">
+            <div class="form-column col-sm-4">
+                <button type="button" class="btn btn-primary" id="weigh">Wägen</button>
+            </div>
+            <div class="form-column col-sm-4">
+                <button type="button" class="btn btn-success" id="weigh" disabled=true>Abschliessen</button>
             </div>
         </div>
     </div>
