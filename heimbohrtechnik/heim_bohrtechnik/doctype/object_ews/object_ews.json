@@ -7,9 +7,12 @@
   "ews_count",
   "ews_depth",
   "ews_diameter",
+  "ews_wall_strength",
   "ews_diameter_unit",
+  "column_main",
   "pressure_level",
-  "probe_type"
+  "probe_type",
+  "ews_material"
  ],
  "fields": [
   {
@@ -52,10 +55,26 @@
    "fieldtype": "Link",
    "label": "Probe Type",
    "options": "Probe Type"
+  },
+  {
+   "fieldname": "ews_wall_strength",
+   "fieldtype": "Int",
+   "label": "Wall Strength"
+  },
+  {
+   "default": "PE-100 RC",
+   "fieldname": "ews_material",
+   "fieldtype": "Select",
+   "label": "Material",
+   "options": "PE-100 RC\nPEX\nPE-100 RC/Alu"
+  },
+  {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
   }
  ],
  "istable": 1,
- "modified": "2021-09-20 17:06:14.921917",
+ "modified": "2021-10-05 06:57:02.330990",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object EWS",

@@ -1,0 +1,26 @@
+{
+ "content": null,
+ "creation": "2021-10-05 06:24:53.216536",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2021-10-05 06:25:09.237010",
+ "modified_by": "Administrator",
+ "module": "MudEx",
+ "name": "schlammanlieferung",
+ "owner": "Administrator",
+ "page_name": "Schlammanlieferung",
+ "roles": [
+  {
+   "role": "Customer"
+  },
+  {
+   "role": "Sales User"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Schlammanlieferung"
+}
