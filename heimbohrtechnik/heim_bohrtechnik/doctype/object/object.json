@@ -8,6 +8,7 @@
  "field_order": [
   "naming_series",
   "object_name",
+  "object_key",
   "column_main",
   "object_mode",
   "object_type",
@@ -265,9 +266,15 @@
    "fieldtype": "Int",
    "label": "Drilling meter",
    "read_only": 1
+  },
+  {
+   "fieldname": "object_key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Object key"
   }
  ],
- "modified": "2021-10-07 16:28:51.095975",
+ "modified": "2021-10-07 22:57:17.754177",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",

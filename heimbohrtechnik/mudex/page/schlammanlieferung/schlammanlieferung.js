@@ -42,12 +42,15 @@ frappe.schlammanlieferung = {
             if (args['customer']) {
                 document.getElementById('customer').value = args['customer'];
             }
+            if (args['key']) {
+                document.getElementById('key').value = args['key'];
+            }
             if (args['object']) {
                 var object_field = document.getElementById('object');
                 object_field.value = args['object'];
                 object_field.setAttribute('readonly', true);
                 // fetch object data
-                frappe.schlammanlieferung.get_object_details(args['object'], args['truck'], args['customer']);
+                frappe.schlammanlieferung.get_object_details(args['object'], args['truck'], args['customer'], args['key']);
             }
             
         } else {
@@ -55,14 +58,15 @@ frappe.schlammanlieferung = {
             
         }
     },
-    get_object_details: function(object, truck, customer) {
+    get_object_details: function(object, truck, customer, key) {
         // fetch object details
         frappe.call({
             'method': 'heimbohrtechnik.mudex.page.schlammanlieferung.schlammanlieferung.get_object_details',
             'args': {
                 'object_name': object,
                 'truck': truck,
-                'customer': customer
+                'customer': customer,
+                'key': key
             },
             'callback': function(r) {
                 if (r.message.address) {

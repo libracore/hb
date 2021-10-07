@@ -81,6 +81,35 @@ frappe.ui.form.on('Object', {
                     }
                 }
             });
+            // button to create truck link
+            frm.add_custom_button("<i class='fa fa-truck'></i> Link", function() {
+                frappe.prompt([
+                    {'fieldname': 'truck', 'fieldtype': 'Link', 'label': __('Truck'), 'options': 'Truck', 'reqd': 1}
+                ],
+                function(values){
+                    frappe.call({
+                        'method': "frappe.client.get",
+                        'args': {
+                            'doctype': "Truck",
+                            'name': values.truck
+                        },
+                        'callback': function(response) {
+                            var customer = response.message.customer;
+                            var link = window.location.origin + "/desk#schlammanlieferung?truck=" + values.truck 
+                                + "&customer=" + customer + "&object=" + frm.doc.name + "&key=" + frm.doc.object_key; 
+                            navigator.clipboard.writeText(link).then(function() {
+                                frappe.show_alert( __("Link in der Zwischenablage") );
+                              }, function() {
+                                 frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
+                            });
+                        }
+                    });
+                },
+                __("Select truck"),
+                __('OK')
+                )
+                
+            });
         } else {
             if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
                 // fresh document, no addresses - load template

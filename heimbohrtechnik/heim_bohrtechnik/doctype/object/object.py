@@ -7,6 +7,7 @@ import frappe
 from frappe.model.document import Document
 from erpnextswiss.erpnextswiss.swisstopo import GPSConverter
 from frappe import _
+import string, random
 
 class Object(Document):
     def has_project(self):
@@ -70,3 +71,26 @@ class Object(Document):
             except Exception as err:
                 frappe.msgprint( err, _("Conversion error") )
         return crds
+    
+    def set_key(self):
+        self.object_key = get_key()
+        self.save()
+        return
+
+@frappe.whitelist()
+def get_key():
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(32))
+    
+""" 
+This function will assign keys to all objects.
+"""
+def apply_keys():
+    objects = frappe.db.sql("""SELECT `name` 
+        FROM `tabObject` 
+        WHERE `object_key` IS NULL OR `object_key` = "";""", as_dict=True)
+    for o in objects:
+        o_rec = frappe.get_doc("Object", o['name'])
+        o_rec.set_key()
+        print("Updated {0}".format(o['name']))
+    frappe.db.commit()
+    return
