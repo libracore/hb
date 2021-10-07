@@ -29,10 +29,10 @@
     </tr>
     {% endif %}
     <tr>
-        <td>geplante Anzahl und Grösse der Sonden</td>
-        <td>{% for ews in object.ews_specification %}
+        <td><b>geplante Anzahl und Grösse der Sonden</b></td>
+        <td><b>{% for ews in object.ews_specification %}
             {{ ews.ews_count }} x {{ ews.ews_depth }} m, {% if ews.ews_wall_strength %}{{ ews.ews_wall_strength }}x{% endif %}{{ ews.ews_diameter }} {{ ews.ews_diameter_unit }}{% if ews.pressure_level %}, {{ ews.pressure_level }}{% endif %}{% if ews.probe_type %}, {{ ews.probe_type }}{% endif %}, {{ ews.ews_material }}<br>
-        {% endfor %}
+        {% endfor %}</b>
         </td>
     </tr>
 </table>
