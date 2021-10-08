@@ -110,6 +110,14 @@ frappe.ui.form.on('Object', {
                 )
                 
             });
+            // fill delivered mud
+            frappe.call({
+                'method': 'get_delivered_mud',
+                'doc': frm.doc,
+                'callback': function(response) {
+                    cur_frm.set_df_property('delivered_mud','options','<label class="control-label" style="padding-right: 0px;">' + __("Delivered Mud") + '</label><div class="control-value like-disabled-input" style="">' + response.message + '</div>');
+                }
+            });
         } else {
             if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
                 // fresh document, no addresses - load template
@@ -128,6 +136,13 @@ frappe.ui.form.on('Object', {
             }
             prepare_checklist_and_permits(frm);
         }
+    },
+    before_save: function(frm) {
+        var depth = 0;
+        (frm.doc.ews_specification || []).forEach(function (drilling) {
+            depth += ((drilling.ews_count || 0) * (drilling.ews_depth || 0));
+        });
+        cur_frm.set_value('expected_mud', get_mud_from_depth(depth));
     },
     validate: function(frm) {
         // check if all mandatory permits are present

@@ -18,7 +18,13 @@ def get_data():
                    "name": "Truck Scale",
                    "label": _("Truck Scale"),
                    "description": _("Truck Scale")
-                }
+                },
+                {
+                       "type": "page",
+                       "name": "schlammanlieferung",
+                       "label": _("Schlammanlieferung"),
+                       "description": _("Schlammanlieferung")
+                   }
             ]
         },
         {
@@ -108,6 +114,18 @@ def get_data():
                     "name": "General Ledger",
                     "doctype": "GL Entry",
                     "is_query_report": True,
+                }
+            ]
+        },
+        {
+            "label": _("Banking"),
+            "icon": "fa fa-money",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "MudEx Settings",
+                   "label": _("MudEx Settings"),
+                   "description": _("MudEx Settings")
                 }
             ]
         }

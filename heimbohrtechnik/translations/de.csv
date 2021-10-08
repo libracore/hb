@@ -122,6 +122,9 @@ DocType: Object,Cooling capacity,Kälteleistung (kW)
 DocType: Object,Withdrawal capacity,Entzugsleistung (W/m)
 DocType: Object,Drilling meter,Bohrmeter
 DocType: Object,Project EWS,Projektierung Wärmepumpe
+DocType: Object,Expected Mud,Erwarteter Schlamm
+DocType: Object,Delivered Mud,Angelieferter Schlamm
+DocType: Object,End Customer,Endkunde
 Doctype: Project,Mud Disposer,Schlammentsorger
 Doctype: Project,Mud disposer,Schlammentsorger
 Doctype: Project,Drilling Equipment,Bohrequipment
@@ -130,6 +133,8 @@ Doctype: Project,End Half-Day,Halbtag Ende
 Doctype: Project,Supplier name,Lieferantenname
 Doctype: Project,Checklist,Checkliste
 Doctype: Project,Drilling Team,Bohrteam
+DocType: Project,Invoice to,Rechnung an
+DocType: Project,Invoice to name,Rechnung an (Name)
 Doctype: Permit Type,Permit Type,Bewilligungsart
 Doctype: Permit Type,Permit,Bewilligung
 Doctype: Permit Type,Is Mandatory,Ist zwingend erforderlich
@@ -174,6 +179,7 @@ DocType: Truck Scale,Truck Scale,Lastwagenwaage
 DocType: Truck,Truck,Fahrzeug
 DocType: Truck,Registration Number,Fahrzeugkennzeichen
 DocType: Truck Load Type,Truck Load Type,Ladungsart
+DocType: Truck Load Type,Load Type,Ladungsart
 DocType: Truck Delivery,Truck Delivery,Lastwagenanlieferung
 DocType: Truck Delivery,Full Weight,Vollgewicht
 DocType: Truck Delivery,Empty Weight,Leergewicht

@@ -15,8 +15,8 @@
    "fieldtype": "Datetime",
    "in_list_view": 1,
    "label": "Date",
-   "reqd": 1,
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   },
   {
    "fieldname": "scale",
@@ -24,26 +24,26 @@
    "in_list_view": 1,
    "label": "Scale",
    "options": "Truck Scale",
-   "reqd": 1,
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   },
   {
    "fieldname": "weight",
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Weight",
-   "reqd": 1,
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   },
   {
    "fieldname": "process_id",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Weight",
+   "label": "Process ID",
    "read_only": 1
   }
  ],
- "modified": "2021-09-24 09:45:47.094668",
+ "modified": "2021-10-08 20:21:09.273056",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Truck Delivery Trace",

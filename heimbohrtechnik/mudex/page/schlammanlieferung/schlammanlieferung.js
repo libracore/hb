@@ -10,8 +10,6 @@ frappe.pages['schlammanlieferung'].on_page_load = function(wrapper) {
     
     // add the application reference
     frappe.breadcrumbs.add("MudEx");
-    
-    console.log(window.location);
 }
 
 frappe.schlammanlieferung = {
@@ -22,7 +20,39 @@ frappe.schlammanlieferung = {
         me.body = $('<div></div>').appendTo(me.page.main);
         var data = "";
         $(frappe.render_template('schlammanlieferung', data)).appendTo(me.body);
-
+        
+        // attach button handlers
+        this.page.main.find(".btn-weigh").on('click', function() { 
+            var full_weight = document.getElementById('full_weight').value;
+            var target = 'full_weight';
+            if ((full_weight) && (full_weight > 0)) {
+                target = 'empty_weight';
+            }
+            frappe.call({
+                'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.truck_scale.truck_scale.get_weight',
+                'args': {
+                    'truck_scale': document.getElementById('scale').value
+                },
+                'callback': function(r) {
+                    if (typeof r.message !== 'undefined') {
+                        document.getElementById(target).value = r.message.weight;
+                        if (target == "full_weight") {
+                            document.getElementById('full_time').value = frappe.datetime.now();
+                            document.getElementById('full_process_id').value = r.message.process_id;
+                        } else {
+                            document.getElementById('empty_time').value = frappe.datetime.now();
+                            document.getElementById('empty_process_id').value = r.message.process_id;
+                        }
+                        frappe.schlammanlieferung.compute_net();
+                    } else {
+                        console.log("Invalid response");
+                    }
+                }
+            });
+        });
+        this.page.main.find(".btn-submit").on('click', function() { 
+            
+        });
     },
     run: function() {
         // get command line parameters
@@ -38,6 +68,7 @@ frappe.schlammanlieferung = {
             });
             if (args['truck']) {
                 document.getElementById('truck').value = args['truck'];
+                frappe.schlammanlieferung.get_truck_weight(args['truck']);
             }
             if (args['customer']) {
                 document.getElementById('customer').value = args['customer'];
@@ -57,6 +88,13 @@ frappe.schlammanlieferung = {
             // no arguments provided
             
         }
+        // get scale 
+        frappe.call({
+            'method': 'heimbohrtechnik.mudex.page.schlammanlieferung.schlammanlieferung.get_default_scale',
+            'callback': function(r) {
+                document.getElementById('scale').value  = r.message
+            }
+        });
     },
     get_object_details: function(object, truck, customer, key) {
         // fetch object details
@@ -77,5 +115,32 @@ frappe.schlammanlieferung = {
                 }
             }
         });
+    },
+    get_truck_weight: function(truck) {
+        // fetch object details
+        frappe.call({
+            'method': 'heimbohrtechnik.mudex.page.schlammanlieferung.schlammanlieferung.get_truck_weight',
+            'args': {
+                'truck': truck
+            },
+            'callback': function(r) {
+                if (r.message.weight) {
+                    var empty_field = document.getElementById('empty_weight');
+                    empty_field.value = r.message.weight;
+                }
+            }
+        });
+    },
+    compute_net: function() {
+        var full_weight = document.getElementById('full_weight').value;
+        var empty_weight = document.getElementById('empty_weight').value;
+        if ((full_weight) && (empty_weight)) {
+            var net_weight = full_weight - empty_weight;
+            document.getElementById('net_weight').value = net_weight;
+            var btn_weigh = document.getElementById('weigh');
+            btn_weigh.classList.add("disabled");
+            var btn_submit = document.getElementById('submit');
+            btn_submit.classList.remove("disabled");
+        }
     }
 }

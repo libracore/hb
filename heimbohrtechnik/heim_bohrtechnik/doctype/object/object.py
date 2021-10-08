@@ -76,7 +76,18 @@ class Object(Document):
         self.object_key = get_key()
         self.save()
         return
-
+    
+    def get_delivered_mud(self):
+        data = frappe.db.sql("""SELECT SUM(`weight`) AS `weight_kg`
+            FROM `tabTruck Delivery Object`
+            LEFT JOIN `tabTruck Delivery` ON `tabTruck Delivery`.`name` = `tabTruck Delivery Object`.`parent`
+            WHERE `tabTruck Delivery`.`docstatus` = 1
+              AND `tabTruck Delivery Object`.`object` = '{obj}';""".format(obj=self.name), as_dict=True)
+        if len(data) > 0:
+            return (data[0]['weight_kg'] / 1000)
+        else:
+            return 0
+            
 @frappe.whitelist()
 def get_key():
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(32))

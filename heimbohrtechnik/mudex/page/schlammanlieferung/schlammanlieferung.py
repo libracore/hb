@@ -15,7 +15,20 @@ def get_object_details(truck, customer, object_name, key):
         }
     else:
         return {'error': 'Not allowed'}
-    
+
+@frappe.whitelist(allow_guest=True)
+def get_truck_weight(truck):
+    try:
+        weight = frappe.get_value("Truck", truck, "net_weight")
+        return {'weight': weight}
+    except Exception as err:
+        return {'error': err}
+
+@frappe.whitelist(allow_guest=True)
+def get_default_scale():
+    scale = frappe.get_value("MudEx Settings", "MudEx Settings", "default_scale")
+    return scale
+        
 def validate_credentials(truck, customer, object_name, key):
     truck = frappe.get_doc("Truck", truck)
     if truck.customer == customer:

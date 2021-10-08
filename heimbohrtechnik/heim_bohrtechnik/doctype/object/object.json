@@ -30,6 +30,9 @@
   "construction_site_inspected",
   "drilling_equipment",
   "manager",
+  "column_drilling",
+  "end_customer",
+  "load_type",
   "section_checklist_and_permits",
   "checklist",
   "permits",
@@ -39,6 +42,8 @@
   "column_project_ews",
   "withdrawal_capacity",
   "drilling_meter",
+  "expected_mud",
+  "delivered_mud",
   "section_ews_details",
   "ews_details",
   "ews_specification",
@@ -105,12 +110,11 @@
    "label": "Search PLZ"
   },
   {
-   "default": "O-.#####",
+   "default": "O-.######",
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Naming Series",
-   "options": "O-.#####",
-   "read_only": 1
+   "options": "O-.######\nEO-.######"
   },
   {
    "fieldname": "column_main",
@@ -272,9 +276,37 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Object key"
+  },
+  {
+   "fieldname": "expected_mud",
+   "fieldtype": "Int",
+   "label": "Expected Mud",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_drilling",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.naming_series == \"EO-.######\"",
+   "fieldname": "end_customer",
+   "fieldtype": "Link",
+   "label": "End Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "load_type",
+   "fieldtype": "Link",
+   "label": "Load Type",
+   "options": "Truck Load Type"
+  },
+  {
+   "fieldname": "delivered_mud",
+   "fieldtype": "HTML",
+   "label": "Delivered Mud"
   }
  ],
- "modified": "2021-10-07 22:57:17.754177",
+ "modified": "2021-10-08 20:04:20.459218",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
