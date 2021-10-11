@@ -37,7 +37,7 @@ frappe.schlammanlieferung = {
                     if (typeof r.message !== 'undefined') {
                         document.getElementById(target).value = r.message.weight;
                         if (target == "full_weight") {
-                            document.getElementById('full_time').value = frappe.datetime.now();
+                            document.getElementById('full_time').value = get_now();
                             document.getElementById('full_process_id').value = r.message.process_id;
                         } else {
                             document.getElementById('empty_time').value = frappe.datetime.now();
@@ -51,6 +51,38 @@ frappe.schlammanlieferung = {
             });
         });
         this.page.main.find(".btn-submit").on('click', function() { 
+            frappe.call({
+                'method': 'heimbohrtechnik.mudex.page.schlammanlieferung.schlammanlieferung.insert_delivery',
+                'args': {
+                    'truck': document.getElementById('truck').value, 
+                    'customer': document.getElementById('customer').value, 
+                    'object': document.getElementById('object').value, 
+                    'full_weight': document.getElementById('full_weight').value, 
+                    'empty_weight': document.getElementById('empty_weight').value, 
+                    'net_weight': document.getElementById('net_weight').value, 
+                    'traces': [{
+                        'date': document.getElementById('full_time').value,
+                        'scale': document.getElementById('scale').value,
+                        'weight': document.getElementById('full_weight').value,
+                        'process_id': document.getElementById('full_process_id').value
+                    },
+                    {
+                        'date': document.getElementById('empty_time').value,
+                        'scale': document.getElementById('empty_scale').value,
+                        'weight': document.getElementById('empty_weight').value,
+                        'process_id': document.getElementById('empty_process_id').value
+                    }]
+                },
+                'callback': function(r) {
+                    if (typeof r.message !== 'undefined') {
+                        var btn_submit = document.getElementById('submit');
+                        btn_submit.classList.add("disabled");
+                        btn_submit.innerHTML = r.message.delivery
+                    } else {
+                        console.log("Invalid response");
+                    }
+                }
+            });
             
         });
     },
@@ -125,8 +157,10 @@ frappe.schlammanlieferung = {
             },
             'callback': function(r) {
                 if (r.message.weight) {
-                    var empty_field = document.getElementById('empty_weight');
-                    empty_field.value = r.message.weight;
+                    document.getElementById('empty_weight').value = r.message.weight;
+                    document.getElementById('empty_time').value = get_now();
+                    document.getElementById('empty_process_id').value = ":" + truck;
+                    document.getElementById('empty_scale').value = null;
                 }
             }
         });
@@ -139,6 +173,7 @@ frappe.schlammanlieferung = {
             document.getElementById('net_weight').value = net_weight;
             var btn_weigh = document.getElementById('weigh');
             btn_weigh.classList.add("disabled");
+            btn_weigh.style.visibility = "hidden";
             var btn_submit = document.getElementById('submit');
             btn_submit.classList.remove("disabled");
         }

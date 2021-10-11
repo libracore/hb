@@ -5,6 +5,8 @@
 from __future__ import unicode_literals
 import frappe
 from frappe import _
+import json
+import datetime
 
 @frappe.whitelist(allow_guest=True)
 def get_object_details(truck, customer, object_name, key):
@@ -15,6 +17,7 @@ def get_object_details(truck, customer, object_name, key):
         }
     else:
         return {'error': 'Not allowed'}
+        
 
 @frappe.whitelist(allow_guest=True)
 def get_truck_weight(truck):
@@ -39,3 +42,47 @@ def validate_credentials(truck, customer, object_name, key):
             return False
     else:
         return False
+
+@frappe.whitelist()
+def insert_delivery(truck, customer, object, full_weight, empty_weight, net_weight, traces):
+    # prepare values
+    load_type = None
+    allocation = None
+    if frappe.db.exists("Object", object):
+        o = frappe.get_doc("Object", object)
+        allocation = [{
+            'object': object,
+            'oject_name': o.object_name,
+            'object_street': o.object_street,
+            'object_location': o.object_location,
+            'weight': float(net_weight)
+        }]
+        load_type = o.load_type
+    trace = json.loads(traces)
+    for t in trace:
+        t['weight'] = float(t['weight'])
+    truck_doc = frappe.get_doc("Truck", truck)
+    config = frappe.get_doc("MudEx Settings", "MudEx Settings")
+    customer_doc = frappe.get_doc("Customer", customer)
+    
+    # create new record
+    delivery = frappe.get_doc({
+        'doctype': 'Truck Delivery',
+        'truck': truck,
+        'truck_description': truck_doc.title,
+        'truck_owner': truck_doc.truck_owner,
+        'truck_scale': config.default_scale,
+        'date': datetime.datetime.now(),
+        'customer': customer,
+        'customer_name': customer_doc.customer_name,
+        'full_weight': float(full_weight),
+        'empty_weight': float(empty_weight),
+        'net_weight': float(net_weight),
+        'load_type': load_type,
+        'objects': allocation,
+        'trace': trace
+    })
+    delivery = delivery.insert()
+    delivery.submit()
+    return {'delivery': delivery.name}
+    

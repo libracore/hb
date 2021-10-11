@@ -83,32 +83,11 @@ frappe.ui.form.on('Object', {
             });
             // button to create truck link
             frm.add_custom_button("<i class='fa fa-truck'></i> Link", function() {
-                frappe.prompt([
-                    {'fieldname': 'truck', 'fieldtype': 'Link', 'label': __('Truck'), 'options': 'Truck', 'reqd': 1}
-                ],
-                function(values){
-                    frappe.call({
-                        'method': "frappe.client.get",
-                        'args': {
-                            'doctype': "Truck",
-                            'name': values.truck
-                        },
-                        'callback': function(response) {
-                            var customer = response.message.customer;
-                            var link = window.location.origin + "/desk#schlammanlieferung?truck=" + values.truck 
-                                + "&customer=" + customer + "&object=" + frm.doc.name + "&key=" + frm.doc.object_key; 
-                            navigator.clipboard.writeText(link).then(function() {
-                                frappe.show_alert( __("Link in der Zwischenablage") );
-                              }, function() {
-                                 frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
-                            });
-                        }
-                    });
-                },
-                __("Select truck"),
-                __('OK')
-                )
-                
+                create_delivery_link(frm, true);
+            });
+            // button to create truck QR code
+            frm.add_custom_button("<i class='fa fa-truck'></i> QR-Code", function() {
+                create_delivery_link(frm, false);
             });
             // fill delivered mud
             frappe.call({
@@ -445,4 +424,37 @@ function recalculate_drilling_meter(frm) {
     } else {
         cur_frm.set_value("drilling_meter", 0);
     }
+}
+
+function create_delivery_link(frm, as_link) {
+    frappe.prompt([
+            {'fieldname': 'truck', 'fieldtype': 'Link', 'label': __('Truck'), 'options': 'Truck', 'reqd': 1}
+        ],
+        function(values){
+            frappe.call({
+                'method': "frappe.client.get",
+                'args': {
+                    'doctype': "Truck",
+                    'name': values.truck
+                },
+                'callback': function(response) {
+                    var customer = response.message.customer;
+                    var link = window.location.origin + "/desk#schlammanlieferung?truck=" + values.truck 
+                        + "&customer=" + customer + "&object=" + frm.doc.name + "&key=" + frm.doc.object_key; 
+                    if (as_link) {
+                        navigator.clipboard.writeText(link).then(function() {
+                            frappe.show_alert( __("Link in der Zwischenablage") );
+                          }, function() {
+                             frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
+                        });
+                    } else {
+                        // open as QR code
+                        window.open("https://data.libracore.ch/phpqrcode/api/qrcode.php?content=" + encodeURIComponent(link) + "&ecc=H&size=6&frame=2", '_blank').focus();
+                    }
+                }
+            });
+        },
+        __("Select truck"),
+        __('OK')
+    );
 }
