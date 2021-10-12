@@ -78,7 +78,7 @@ class Object(Document):
         return
     
     def get_delivered_mud(self):
-        data = frappe.db.sql("""SELECT SUM(`weight`) AS `weight_kg`
+        data = frappe.db.sql("""SELECT IFNULL(SUM(`weight`), 0) AS `weight_kg`
             FROM `tabTruck Delivery Object`
             LEFT JOIN `tabTruck Delivery` ON `tabTruck Delivery`.`name` = `tabTruck Delivery Object`.`parent`
             WHERE `tabTruck Delivery`.`docstatus` = 1
