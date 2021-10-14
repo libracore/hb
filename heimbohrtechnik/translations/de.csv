@@ -150,6 +150,7 @@ Doctype: Heim Settings,Crane Activity,"Kran Aktivität"
 DocType: Construction Site Description,Construction Site Description,Baustellenbeschreibung
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
+DocType: Item,Material,Material
 DocType: Item Price,Base Rate,Grundpreis
 DocType: Item Price,Discount,Rabatt
 DocType: Item Price,Cost Markup,Teuerungszuschlag
