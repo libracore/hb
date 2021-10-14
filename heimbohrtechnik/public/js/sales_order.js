@@ -4,11 +4,19 @@
 frappe.ui.form.on('Sales Order', {
     object: function(frm) {
         get_object_address(frm);
+        get_object_description(frm);
+    },
+    before_save: function(frm) {
+        set_conditional_net_total(frm);
+        recalculate_markups_discounts(frm);
     }
 });
 
 frappe.ui.form.on('Discount Position', {
-    discount: function(frm, dt, dn) {
-        update_additional_discount(frm);
+    percent: function(frm, dt, dn) {
+        recalculate_markups_discounts(frm);
+    },
+    markup_positions_add: function(frm, dt, dn) {
+        set_conditional_net_total(frm);
     }
 });
