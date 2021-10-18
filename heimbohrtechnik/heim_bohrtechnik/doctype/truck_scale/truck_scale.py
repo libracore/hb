@@ -13,7 +13,7 @@ class TruckScale(Document):
     pass
 
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def get_weight(truck_scale, validated=False, debug=False):
     try:
         scale = frappe.get_doc("Truck Scale", truck_scale)              # read settings

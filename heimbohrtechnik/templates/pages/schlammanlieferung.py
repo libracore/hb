@@ -17,7 +17,6 @@ def get_object_details(truck, customer, object_name, key):
         }
     else:
         return {'error': 'Not allowed'}
-        
 
 @frappe.whitelist(allow_guest=True)
 def get_truck_weight(truck):

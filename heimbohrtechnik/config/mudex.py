@@ -18,13 +18,7 @@ def get_data():
                    "name": "Truck Scale",
                    "label": _("Truck Scale"),
                    "description": _("Truck Scale")
-                },
-                {
-                       "type": "page",
-                       "name": "schlammanlieferung",
-                       "label": _("Schlammanlieferung"),
-                       "description": _("Schlammanlieferung")
-                   }
+                }
             ]
         },
         {
