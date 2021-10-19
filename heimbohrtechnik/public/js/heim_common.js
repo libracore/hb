@@ -203,3 +203,17 @@ function get_now() {
     var timestamp = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
     return timestamp;
 }
+
+function create_mud_invoice(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.truck_delivery.truck_delivery.create_invoice',
+        'args': {
+            'object': frm.doc.name
+        },
+        'callback': function(response) {
+            frappe.show_alert("<a href=\"/desk#Form/Sales Invoice/" 
+                + response.message + "\">" + response.message + "</a>");
+            cur_frm.reload_doc();
+        }
+    });
+}

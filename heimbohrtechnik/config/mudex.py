@@ -18,6 +18,12 @@ def get_data():
                    "name": "Truck Scale",
                    "label": _("Truck Scale"),
                    "description": _("Truck Scale")
+                },
+                {
+                    "type": "report",
+                    "name": "Mud to invoice",
+                    "doctype": "Truck Delivery",
+                    "is_query_report": True,
                 }
             ]
         },

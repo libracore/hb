@@ -11,7 +11,7 @@
   "mud_activity",
   "mud_item",
   "column_invoicing",
-  "default_customer_fro_mud"
+  "default_customer_for_mud"
  ],
  "fields": [
   {
@@ -19,12 +19,6 @@
    "fieldtype": "Link",
    "label": "Defaul Scale",
    "options": "Truck Scale"
-  },
-  {
-   "fieldname": "default_customer_fro_mud",
-   "fieldtype": "Link",
-   "label": "Default Customer for Mud",
-   "options": "Customer"
   },
   {
    "fieldname": "section_invoicing",
@@ -56,10 +50,16 @@
    "fieldtype": "Link",
    "label": "Mud Item",
    "options": "Item"
+  },
+  {
+   "fieldname": "default_customer_for_mud",
+   "fieldtype": "Link",
+   "label": "Default Customer for Mud",
+   "options": "Customer"
   }
  ],
  "issingle": 1,
- "modified": "2021-10-19 08:06:33.285746",
+ "modified": "2021-10-19 21:33:24.992499",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "MudEx Settings",

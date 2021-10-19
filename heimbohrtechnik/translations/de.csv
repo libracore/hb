@@ -185,3 +185,4 @@ DocType: Truck Delivery,Truck Delivery,Lastwagenanlieferung
 DocType: Truck Delivery,Full Weight,Vollgewicht
 DocType: Truck Delivery,Empty Weight,Leergewicht
 DocType: Truck Delivery,Net Weight,Nettogewicht
+Report Mud to invoice,Mud to invoice,Verrechenbarer Schlamm

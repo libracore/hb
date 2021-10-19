@@ -34,16 +34,45 @@ def create_invoice(object):
     o = frappe.get_doc("Object", object)
     customer = config.default_customer_for_mud
     for c in o.checklist:
-        if o.activity == config.mud_activity:
-            if o.invoice_to:
-                customer = o.invoice_to
+        if c.activity == config.mud_activity:
+            if c.invoice_to:
+                customer = c.invoice_to
+    # find taxes from customer record
+    tax_templates = frappe.get_all('Party Account', 
+        filters={'parent': customer, 'company': config.company},
+        fields=['default_sales_taxes_and_charges'])
+    if tax_templates and len(tax_templates) > 0:
+        tax_template = tax_templates[0]['default_sales_taxes_and_charges']
+    else:
+        tax_template = None
+    # set default cost center from company
+    cost_center = frappe.get_value("Company", config.company, "cost_center")
+    # get project link
+    if frappe.db.exists("Project", object):
+        project = object
+    else:
+        project = None
     # create new invoice
     new_sinv = frappe.get_doc({
         'doctype': 'Sales Invoice',
         'company': config.company,
         'customer': customer,
-        'object': object
+        'object': object,
+        'taxes_and_charges': tax_template,
+        'cost_center': cost_center,
+        'project': project,
+        'naming_series': 'MRE-.YY.#####'
     })
+    # apply taxes
+    if tax_template:
+        tax_details = frappe.get_doc("Sales Taxes and Charges Template", tax_template)
+        for t in tax_details.taxes:
+            new_sinv.append('taxes', {
+                'charge_type': t.charge_type,
+                'account_head': t.account_head,
+                'description': t.description,
+                'rate': t.rate
+            })
     # get delivieries and add as positions
     invoiceable_deliveries = get_deliveries(object)
     if invoiceable_deliveries and len(invoiceable_deliveries) > 0:
@@ -53,11 +82,58 @@ def create_invoice(object):
                 'qty': i['weight'] / 1000,
                 'description': "{date}: {truck}".format(date=i['date'], truck=i['truck']),
                 'truck_delivery': i['delivery'],
-                'truck_delivery_detail': i['detail']
+                'truck_delivery_detail': i['detail'],
+                'cost_center': cost_center
             })
         # insert the new sales invoice
         new_sinv.insert()
-        
+        # submit directly internal/default customer
+        if customer == config.default_customer_for_mud:
+            new_sinv.submit()
+            # create mathing purchase invoice
+            pinv_company = new_sinv.customer_name
+            pinv_supplier = frappe.get_all("Supplier", 
+                filters={'supplier_name': config.company}, fields=['name'])[0]['name']
+            # find taxes from customer record
+            pinv_tax_templates = frappe.get_all('Party Account', 
+                filters={'parent': pinv_supplier, 'company': pinv_company},
+                fields=['default_purchase_taxes_and_charges'])
+            if pinv_tax_templates and len(pinv_tax_templates) > 0:
+                pinv_tax_template = pinv_tax_templates[0]['default_purchase_taxes_and_charges']
+            else:
+                pinv_tax_template = None
+            # create new purchase invoice
+            new_pinv = frappe.get_doc({
+                'doctype': 'Purchase Invoice',
+                'company': pinv_company,
+                'supplier': pinv_supplier,
+                'bill_no': new_sinv.name,
+                'bill_date': new_sinv.posting_date,
+                'due_date': new_sinv.due_date,
+                'object': new_sinv.object,
+                'project': new_sinv.project
+            })
+            # add item positions
+            for i in new_sinv.items:
+                new_pinv.append('items', {
+                    'item_code': i.item_code,
+                    'qty': i.qty,
+                    'description': i.description
+                })
+            # apply taxes
+            if pinv_tax_template:
+                pinv_tax_details = frappe.get_doc("Purchase Taxes and Charges Template", pinv_tax_template)
+                for t in pinv_tax_details.taxes:
+                    new_pinv.append('taxes', {
+                        'charge_type': t.charge_type,
+                        'account_head': t.account_head,
+                        'description': t.description,
+                        'rate': t.rate
+                    })
+            # insert
+            new_pinv.insert()
+            new_pinv.submit()
+        return new_sinv.name
     else:
         frappe.throw( _("Nothng to invoice") )
 
@@ -82,6 +158,7 @@ def get_deliveries(object):
     invoicable_deliveries = frappe.db.sql(sql_query, as_dict=True)
     return invoicable_deliveries
 
+@frappe.whitelist()
 def has_invoiceable_mud(object):
     invoiceable_deliveries = get_deliveries(object)
     if invoiceable_deliveries and len(invoiceable_deliveries) > 0:
