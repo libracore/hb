@@ -8,6 +8,7 @@ from frappe.model.document import Document
 from erpnextswiss.erpnextswiss.swisstopo import GPSConverter
 from frappe import _
 import string, random
+from heimbohrtechnik.heim_bohrtechnik.doctype.truck_delivery.truck_delivery import has_invoiceable_mud
 
 class Object(Document):
     def has_project(self):
@@ -87,6 +88,9 @@ class Object(Document):
             return (data[0]['weight_kg'] / 1000)
         else:
             return 0
+            
+    def invoiceable_mud(self):
+        return has_invoiceable_mud(self.name)
             
 @frappe.whitelist()
 def get_key():

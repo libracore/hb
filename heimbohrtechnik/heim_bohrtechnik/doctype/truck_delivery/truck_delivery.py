@@ -25,28 +25,66 @@ class TruckDelivery(Document):
         return
 
 """
-Run this function when cancelling a sales invoice to remove the links on the linked deliveries
+Create an invoice from all open positions of an object
 """
 @frappe.whitelist()
-def remove_sinv_links(sinv):
-    linked_deliveries = frappe.get_all("Truck Delivery", filters={'sales_invoice': sinv}, fields=['name'])
-    for d in linked_deliveries:
-        doc = frappe.get_doc("Truck Delivery", d['name'])
-        doc.sales_invoice = None
-        doc.save()
-    return
-    
+def create_invoice(object):
+    config = frappe.get_doc("MudEx Settings", "MudEx Settings")
+    # find customer: either from Object or default
+    o = frappe.get_doc("Object", object)
+    customer = config.default_customer_for_mud
+    for c in o.checklist:
+        if o.activity == config.mud_activity:
+            if o.invoice_to:
+                customer = o.invoice_to
+    # create new invoice
+    new_sinv = frappe.get_doc({
+        'doctype': 'Sales Invoice',
+        'company': config.company,
+        'customer': customer,
+        'object': object
+    })
+    # get delivieries and add as positions
+    invoiceable_deliveries = get_deliveries(object)
+    if invoiceable_deliveries and len(invoiceable_deliveries) > 0:
+        for i in invoiceable_deliveries:
+            new_sinv.append('items', {
+                'item_code': config.mud_item,
+                'qty': i['weight'] / 1000,
+                'description': "{date}: {truck}".format(date=i['date'], truck=i['truck']),
+                'truck_delivery': i['delivery'],
+                'truck_delivery_detail': i['detail']
+            })
+        # insert the new sales invoice
+        new_sinv.insert()
+        
+    else:
+        frappe.throw( _("Nothng to invoice") )
+
 """
 Use this function to get all deliveries to be invoiced
 """
 @frappe.whitelist()
-def get_deliveries(object, sales_invoice):
-    invoicable_deliveries = frappe.get_all("Truck Delivery", 
-        filters={'object': object, 'docstatus': 1, 'sales_invoice': None},
-        fields=['name', 'net_weight', 'date', 'truck', 'invoicing_item'])
-    for i in invoicable_deliveries:
-        doc = frappe.get_doc("Truck Delivery", i['name'])
-        doc.sales_invoice = sales_invoice
-        doc.save()
+def get_deliveries(object):
+    sql_query = """SELECT `tabTruck Delivery Object`.`name` AS `detail`, 
+            `tabTruck Delivery`.`name` AS `delivery`, 
+            `tabTruck Delivery Object`.`weight` AS `weight`,
+            `tabTruck Delivery`.`truck` AS `truck`,
+            `tabTruck Delivery`.`date` AS `date`
+        FROM `tabTruck Delivery Object`
+        LEFT JOIN `tabTruck Delivery` ON `tabTruck Delivery`.`name` = `tabTruck Delivery Object`.`parent`
+        LEFT JOIN `tabSales Invoice Item` ON 
+            (`tabTruck Delivery Object`.`name` = `tabSales Invoice Item`.`truck_delivery_detail`
+             AND `tabSales Invoice Item`.`docstatus` = 1)
+        WHERE `tabTruck Delivery`.`docstatus` = 1
+          AND `tabTruck Delivery Object`.`object` = "{object}"
+          AND `tabSales Invoice Item`.`name` IS NULL;""".format(object=object)
+    invoicable_deliveries = frappe.db.sql(sql_query, as_dict=True)
     return invoicable_deliveries
-    
+
+def has_invoiceable_mud(object):
+    invoiceable_deliveries = get_deliveries(object)
+    if invoiceable_deliveries and len(invoiceable_deliveries) > 0:
+        return True
+    else:
+        return False
