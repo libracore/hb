@@ -118,7 +118,8 @@ def create_invoice(object):
                 new_pinv.append('items', {
                     'item_code': i.item_code,
                     'qty': i.qty,
-                    'description': i.description
+                    'description': i.description,
+                    'rate': i.rate
                 })
             # apply taxes
             if pinv_tax_template:
