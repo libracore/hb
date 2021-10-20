@@ -106,6 +106,7 @@ def apply_keys():
     for o in objects:
         o_rec = frappe.get_doc("Object", o['name'])
         o_rec.set_key()
+        o_rec.save()
         print("Updated {0}".format(o['name']))
     frappe.db.commit()
     return
