@@ -25,7 +25,7 @@ function create_delivery_link(frm, as_link) {
         },
         'callback': function(response) {
             var customer = response.message.customer;
-            var link = window.location.origin + "/desk#schlammanlieferung?truck=" + frm.doc.name 
+            var link = window.location.origin + "/schlammanlieferung?truck=" + frm.doc.name 
                 + "&customer=" + customer; 
             if (as_link) {
                 navigator.clipboard.writeText(link).then(function() {
