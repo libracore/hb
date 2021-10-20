@@ -195,7 +195,7 @@ function prepare_checklist_and_permits(frm) {
 
 function get_mud_from_depth(depth) {
     // depth / 10 [m3] / 1.25 [t]
-    return Math.round((depth / 10) / 1.25);
+    return Math.floor((depth / 10) / 1.25);
 }
 
 function get_now() {
