@@ -10,6 +10,11 @@ from frappe import _
 import string, random
 
 class Object(Document):
+    def before_save(self):
+        if not self.object_key:
+            self.set_key()
+        return
+    
     def has_project(self):
         if frappe.db.exists("Project", self.name):
             return 1
@@ -74,7 +79,6 @@ class Object(Document):
     
     def set_key(self):
         self.object_key = get_key()
-        self.save()
         return
     
     def get_delivered_mud(self):
