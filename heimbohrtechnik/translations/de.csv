@@ -186,3 +186,8 @@ DocType: Truck Delivery,Full Weight,Vollgewicht
 DocType: Truck Delivery,Empty Weight,Leergewicht
 DocType: Truck Delivery,Net Weight,Nettogewicht
 Report Mud to invoice,Mud to invoice,Verrechenbarer Schlamm
+Page: Schlammanlieferung,Message,Nachricht
+Page: Schlammanlieferung,There is no valid weight recorded,Es wurde kein gültiges Gewicht erfasst.
+Page: Schlammanlieferung,Please provide an object,Bitte ein Objekt angeben
+Page: Schlammanlieferung,No weight,Kein Gewicht
+Page: Schlammanlieferung,Object missing,Objekt fehlt

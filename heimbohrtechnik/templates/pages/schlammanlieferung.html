@@ -182,16 +182,30 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
         
         <div class="row" style="margin-top: 20px; " id="action-row">
             <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Ladungstyp</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-tint"></i></span>
+                    <select class="form-control" placeholder="Ladungstyp" id="load_type">
+                    </select>
+                </div>
+            </div>
+            <div class="form-column col-sm-4" style="display: flex; ">
+                <label class="control-label" style="padding-right: 0px;"></label>
                 <button type="button" class="btn btn-primary btn-weigh" id="weigh">Wägen</button>
             </div>
-            <div class="form-column col-sm-4">
-                <button type="button" class="btn btn-success btn-submit disabled" id="submit">Abschliessen</button>
+            <div class="form-column col-sm-4" style="display: flex; ">
+                <button type="button" class="btn btn-success btn-submit" id="submit" disabled style="visibility: hidden; ">Abschliessen</button>
             </div>
         </div>
         
-        <div class="row" style="margin-top: 20px; visibility: hidden" id="finalised-row">
+        <div class="row" style="margin-top: 20px; visibility: hidden; " id="finalised-row">
             <div class="form-column col-sm-4">
-                <p>Der Prozess ist erfolgreich abgeschlossen. <span id="result-doc"></span></p>
+                <table>
+                    <tr>
+                        <td><img src="/assets/heimbohrtechnik/images/tick.png"></td>
+                        <td><p>Der Prozess ist erfolgreich abgeschlossen. <span id="result-doc"></span></p></td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

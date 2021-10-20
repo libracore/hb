@@ -62,13 +62,19 @@ function make() {
                     'scale': document.getElementById('empty_scale').value,
                     'weight': document.getElementById('empty_weight').value,
                     'process_id': document.getElementById('empty_process_id').value
-                }]
+                }],
+                'load_type': document.getElementById('load_type').value
             },
             'callback': function(r) {
                 if (typeof r.message !== 'undefined') {
                     var btn_submit = document.getElementById('submit');
-                    btn_submit.classList.add("disabled");
-                    btn_submit.innerHTML = r.message.delivery
+                    btn_submit.disabled = true;
+                    btn_submit.style.visibility = "hidden";
+                    var row_success = document.getElementById('finalised-row');
+                    row_success.style.visibility = "visible";
+                    var txt_success = document.getElementById('result-doc');
+                    txt_success.innerHTML = r.message.delivery;
+                    document.getElementById('load_type').disabled = true;
                 } else {
                     console.log("Invalid response");
                 }
@@ -118,6 +124,29 @@ function run() {
             document.getElementById('scale').value  = r.message
         }
     });
+    // get load types
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.schlammanlieferung.get_load_types',
+        'args': {
+            'object': args['object'] || null
+        },
+        'callback': function(r) {
+            console.log(r);
+            var select = document.getElementById('load_type');
+            if (r.message.types) {
+                var selector = "";
+                for (i = 0; i < r.message.types.length; i++) {
+                    if (r.message.types[i]['name'] === r.message.object_load_type) {
+                        selector = "selected";
+                    } else {
+                        selector = "";
+                    }
+                    select.innerHTML += "<option value=\"" + r.message.types[i]['name'] 
+                        + "\" " + selector + ">" + r.message.types[i]['name'] + "</option>";
+                }
+            }
+        }
+    });
 }
 
 function get_object_details(object, truck, customer, key) {
@@ -165,11 +194,14 @@ function compute_net() {
     if ((full_weight) && (empty_weight)) {
         var net_weight = full_weight - empty_weight;
         document.getElementById('net_weight').value = net_weight;
-        var btn_weigh = document.getElementById('weigh');
-        btn_weigh.classList.add("disabled");
-        btn_weigh.style.visibility = "hidden";
-        var btn_submit = document.getElementById('submit');
-        btn_submit.classList.remove("disabled");
+        if (net_weight > 0) {
+            var btn_weigh = document.getElementById('weigh');
+            btn_weigh.disabled = true;
+            btn_weigh.style.visibility = "hidden";
+            var btn_submit = document.getElementById('submit');
+            btn_submit.disabled = false;
+            btn_submit.style.visibility = "visible";
+        }
     }
 }
 

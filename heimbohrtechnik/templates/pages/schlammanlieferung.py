@@ -42,10 +42,9 @@ def validate_credentials(truck, customer, object_name, key):
     else:
         return False
 
-@frappe.whitelist()
-def insert_delivery(truck, customer, object, full_weight, empty_weight, net_weight, traces):
+@frappe.whitelist(allow_guest=True)
+def insert_delivery(truck, customer, object, full_weight, empty_weight, net_weight, traces, load_type):
     # prepare values
-    load_type = None
     allocation = None
     if frappe.db.exists("Object", object):
         o = frappe.get_doc("Object", object)
@@ -56,7 +55,8 @@ def insert_delivery(truck, customer, object, full_weight, empty_weight, net_weig
             'object_location': o.object_location,
             'weight': float(net_weight)
         }]
-        load_type = o.load_type
+        if not load_type:
+            load_type = o.load_type
     trace = json.loads(traces)
     for t in trace:
         t['weight'] = float(t['weight'])
@@ -81,7 +81,16 @@ def insert_delivery(truck, customer, object, full_weight, empty_weight, net_weig
         'objects': allocation,
         'trace': trace
     })
-    delivery = delivery.insert()
+    delivery = delivery.insert(ignore_permissions=True)
     delivery.submit()
     return {'delivery': delivery.name}
     
+@frappe.whitelist(allow_guest=True)
+def get_load_types(object=None):
+    all_load_types = frappe.get_all("Truck Load Type", fields=['name'])
+    if object:
+        load_type = frappe.get_value("Object", object, 'load_type')
+    else:
+        load_type = None
+        
+    return {'types': all_load_types, 'object_load_type': load_type}
