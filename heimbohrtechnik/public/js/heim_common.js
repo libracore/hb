@@ -69,23 +69,27 @@ function get_object_description(frm) {
 function set_conditional_net_total(frm) {
     var conditional_net_total = 0;
     var calculation_base = 0;
-    frm.doc.items.forEach(function (item) {
-        if ((item.eventual !== 1) && (item.alternativ !== 1)) {
-            conditional_net_total += item.amount;
-            if (item.exclude_from_markup_discount !== 1) {
-                calculation_base += item.amount;
+    if (frm.doc.items) {
+        frm.doc.items.forEach(function (item) {
+            if ((item.eventual !== 1) && (item.alternativ !== 1)) {
+                conditional_net_total += item.amount;
+                if (item.exclude_from_markup_discount !== 1) {
+                    calculation_base += item.amount;
+                }
             }
-        }
-    });
+        });
+    }
     cur_frm.set_value("conditional_net_total", conditional_net_total);
     cur_frm.set_value("markup_discount_base", calculation_base);
 }
 
 function set_conditional_grand_total(frm) {
     var conditional_grand_total = frm.doc.conditional_net_total - frm.doc.discount_amount;
-    frm.doc.taxes.forEach(function (tax) {
-        conditional_grand_total = conditional_grand_total * ((tax.rate / 100) + 1);
-    });
+    if (frm.doc.taxes) {
+        frm.doc.taxes.forEach(function (tax) {
+            conditional_grand_total = conditional_grand_total * ((tax.rate / 100) + 1);
+        });
+    }
     cur_frm.set_value("conditional_grand_total", conditional_grand_total); 
 }
 

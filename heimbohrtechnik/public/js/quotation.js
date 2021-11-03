@@ -9,6 +9,9 @@ frappe.ui.form.on('Quotation', {
     before_save: function(frm) {
         set_conditional_net_total(frm);
         recalculate_markups_discounts(frm);
+    },
+    button_plattmachen: function(frm) {
+        plattmachen(frm);
     }
 });
 
@@ -21,3 +24,32 @@ frappe.ui.form.on('Discount Position', {
     }
 });
 
+function plattmachen(frm) {
+    frappe.prompt([
+            {
+                'fieldname': 'target', 
+                'fieldtype': 'Currency', 
+                'label': 'Endbetrag brutto plattmachen auf', 
+                'reqd': 1,
+                'default': (frm.doc.rounded_total || frm.doc.grand_total)
+            }  
+        ],
+        function(values){
+            var factor = values.target / (frm.doc.rounded_total || frm.doc.grand_total);
+            console.log("f= " + factor);
+            var difference = frm.doc.net_total - (factor * frm.doc.net_total);
+            console.log("d= " + difference);
+            add_discount_amount("Spezialrabatt", difference);
+            recalculate_markups_discounts(frm);
+        },
+        'Plattmachen',
+        'OK'
+    )
+}
+
+function add_discount_amount(text, amount) {
+    var child = cur_frm.add_child('discount_positions');
+    frappe.model.set_value(child.doctype, child.name, 'description', text);
+    frappe.model.set_value(child.doctype, child.name, 'amount', amount);
+    cur_frm.refresh_field('discount_positions');
+}
