@@ -48,6 +48,12 @@
   "ews_details",
   "ews_specification",
   "ews_remarks",
+  "section_geology",
+  "drilling_method",
+  "accompaniment",
+  "drilling_samples",
+  "column_geology",
+  "assessment",
   "section_addresses",
   "addresses"
  ],
@@ -304,9 +310,39 @@
    "fieldname": "delivered_mud",
    "fieldtype": "HTML",
    "label": "Delivered Mud"
+  },
+  {
+   "fieldname": "section_geology",
+   "fieldtype": "Section Break",
+   "label": "Geology"
+  },
+  {
+   "fieldname": "drilling_method",
+   "fieldtype": "Link",
+   "label": "Drilling Method",
+   "options": "Drilling Method"
+  },
+  {
+   "fieldname": "accompaniment",
+   "fieldtype": "Data",
+   "label": "Accompaniment"
+  },
+  {
+   "fieldname": "drilling_samples",
+   "fieldtype": "Data",
+   "label": "Drilling Samples"
+  },
+  {
+   "fieldname": "column_geology",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "assessment",
+   "fieldtype": "Small Text",
+   "label": "Assessment"
   }
  ],
- "modified": "2021-10-19 13:47:19.970668",
+ "modified": "2021-11-03 20:25:11.077594",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",

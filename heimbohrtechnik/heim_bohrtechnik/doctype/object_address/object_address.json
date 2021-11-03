@@ -5,6 +5,8 @@
  "engine": "InnoDB",
  "field_order": [
   "address_type",
+  "is_simple",
+  "section_details",
   "dt",
   "party",
   "party_name",
@@ -14,7 +16,13 @@
   "address_display",
   "contact_name",
   "phone",
-  "email"
+  "email",
+  "section_simple_details",
+  "simple_name",
+  "simple_address",
+  "column_simple",
+  "simple_phone",
+  "simple_email"
  ],
  "fields": [
   {
@@ -43,14 +51,12 @@
   {
    "fieldname": "address",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Address",
    "options": "Address"
   },
   {
    "fieldname": "contact",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Contact",
    "options": "Contact"
   },
@@ -87,12 +93,56 @@
   {
    "fieldname": "party_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Party Name",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_simple",
+   "fieldtype": "Check",
+   "label": "Simple"
+  },
+  {
+   "depends_on": "eval:doc.is_simple === 0",
+   "fieldname": "section_details",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "depends_on": "eval:doc.is_simple === 1",
+   "fieldname": "section_simple_details",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "simple_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Name"
+  },
+  {
+   "fieldname": "simple_address",
+   "fieldtype": "Data",
+   "label": "Address"
+  },
+  {
+   "fieldname": "simple_phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "simple_email",
+   "fieldtype": "Data",
+   "label": "Email"
+  },
+  {
+   "fieldname": "column_simple",
+   "fieldtype": "Column Break"
   }
  ],
  "istable": 1,
- "modified": "2021-05-11 09:03:25.960169",
+ "modified": "2021-11-03 20:42:41.286810",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object Address",

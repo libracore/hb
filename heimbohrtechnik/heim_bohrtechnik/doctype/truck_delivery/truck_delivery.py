@@ -22,6 +22,13 @@ class TruckDelivery(Document):
         if len(self.objects) < 1:
             frappe.throw( _("Please provide an object"), _("Object missing") )
         self.objects[-1].weight = (self.objects[-1].weight or 0) + unallocated_weight
+        # collection information mails
+        objects = []
+        for o in self.objects:
+            if o.object:
+                objects.append("'{0}'".format(o.object))
+        objects = ", ".join(objects)
+        self.information_email = get_object_information_email(objects)
         return
 
 """
@@ -166,3 +173,16 @@ def has_invoiceable_mud(object):
         return True
     else:
         return False
+
+def get_object_information_email(objects):
+    mud_activity = frappe.get_value("MudEx Settings", "MudEx Settings", "mud_activity")
+    sql_query = """SELECT GROUP_CONCAT(`information_to`) AS `information_email`
+        FROM `tabProject Checklist`
+        WHERE `parent` IN ({objects})
+          AND `activity` = "{activity}";""".format(objects=objects, activity=mud_activity)
+    #frappe.throw(sql_query)
+    data = frappe.db.sql(sql_query, as_dict=True)
+    if data and len(data) > 0:
+        return data[0]['information_email']
+    else:
+        return None

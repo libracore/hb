@@ -237,6 +237,12 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Drilling Method",
+                   "label": _("Drilling Method"),
+                   "description": _("Drilling Method")
+                },
+                {
+                   "type": "doctype",
                    "name": "Heim Settings",
                    "label": _("Heim Settings"),
                    "description": _("Heim Settings")

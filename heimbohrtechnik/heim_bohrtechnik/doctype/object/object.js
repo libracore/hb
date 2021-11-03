@@ -218,6 +218,20 @@ frappe.ui.form.on('Object', {
     },
     withdrawal_capacity: function(frm) {
         recalculate_drilling_meter(frm);
+    },
+    drilling_method: function(frm) {
+        if (frm.doc.drilling_method) {
+            frappe.call({
+                'method': "frappe.client.get",
+                'args': {
+                    'doctype': "Drilling Method",
+                    'name': frm.doc.drilling_method
+                },
+                'callback': function(response) {
+                    cur_frm.set_value('load_type', response.message.load_type);
+                } 
+            });
+        }
     }
 });
 

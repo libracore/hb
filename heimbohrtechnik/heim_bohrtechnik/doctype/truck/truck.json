@@ -88,7 +88,7 @@
    "read_only": 1
   }
  ],
- "modified": "2021-10-05 22:07:19.019610",
+ "modified": "2021-11-03 21:06:12.540888",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Truck",
@@ -128,6 +128,7 @@
    "share": 1
   }
  ],
+ "search_fields": "truck_owner",
  "sort_field": "modified",
  "sort_order": "DESC",
  "title_field": "title",

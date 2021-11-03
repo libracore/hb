@@ -8,8 +8,10 @@
   "supplier",
   "supplier_name",
   "purchase_order",
+  "column_details",
   "invoice_to",
-  "invoice_to_name"
+  "invoice_to_name",
+  "information_to"
  ],
  "fields": [
   {
@@ -53,10 +55,20 @@
    "fieldtype": "Data",
    "label": "Invoice to name",
    "read_only": 1
+  },
+  {
+   "fieldname": "column_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Email",
+   "fieldname": "information_to",
+   "fieldtype": "Data",
+   "label": "Information to"
   }
  ],
  "istable": 1,
- "modified": "2021-10-08 19:59:57.909625",
+ "modified": "2021-11-03 20:45:11.128190",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Project Checklist",

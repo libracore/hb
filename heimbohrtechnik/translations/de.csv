@@ -125,6 +125,10 @@ DocType: Object,Project EWS,Projektierung Wärmepumpe
 DocType: Object,Expected Mud,Erwarteter Schlamm
 DocType: Object,Delivered Mud,Angelieferter Schlamm
 DocType: Object,End Customer,Endkunde
+DocType: Object,Geology,Geologie
+DocType: Object,Accompaniment,Begleitung
+DocType: Object,Drilling Samples,Bohrproben
+DocType: Object,Assessment,Einschätzung
 Doctype: Project,Mud Disposer,Schlammentsorger
 Doctype: Project,Mud disposer,Schlammentsorger
 Doctype: Project,Drilling Equipment,Bohrequipment
@@ -181,7 +185,7 @@ DocType: Truck,Truck,Fahrzeug
 DocType: Truck,Registration Number,Fahrzeugkennzeichen
 DocType: Truck Load Type,Truck Load Type,Ladungsart
 DocType: Truck Load Type,Load Type,Ladungsart
-DocType: Truck Delivery,Truck Delivery,Lastwagenanlieferung
+DocType: Truck Delivery,Truck Delivery,Schlammanlieferung
 DocType: Truck Delivery,Full Weight,Vollgewicht
 DocType: Truck Delivery,Empty Weight,Leergewicht
 DocType: Truck Delivery,Net Weight,Nettogewicht
@@ -191,3 +195,4 @@ Page: Schlammanlieferung,There is no valid weight recorded,Es wurde kein gültig
 Page: Schlammanlieferung,Please provide an object,Bitte ein Objekt angeben
 Page: Schlammanlieferung,No weight,Kein Gewicht
 Page: Schlammanlieferung,Object missing,Objekt fehlt
+DocType: Drilling Method,Drilling Method,Bohrverfahren
