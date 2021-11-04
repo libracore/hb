@@ -196,3 +196,7 @@ Page: Schlammanlieferung,Please provide an object,Bitte ein Objekt angeben
 Page: Schlammanlieferung,No weight,Kein Gewicht
 Page: Schlammanlieferung,Object missing,Objekt fehlt
 DocType: Drilling Method,Drilling Method,Bohrverfahren
+DocType: Customer,Post,Post
+Report: Drilling Rate Evaluation,Drilling Rate Evaluation,Auswertung Bohrpreise
+DocType: Heim Settings,Drilling Item,Bohrartikel
+DocType: Heim Settings,Evaluations,Auswertungen

@@ -248,5 +248,17 @@ def get_data():
                    "description": _("Heim Settings")
                 }
             ]
+        },
+        {
+            "label": _("Evaluations"),
+            "icon": "fa fa-money",
+            "items": [
+                {
+                    "type": "report",
+                    "name": "Drilling Rate Evaluation",
+                    "doctype": "Object",
+                    "is_query_report": True,
+                }
+            ]
         }
     ]
