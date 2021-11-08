@@ -201,3 +201,4 @@ DocType: Customer,Post,Post
 Report: Drilling Rate Evaluation,Drilling Rate Evaluation,Auswertung Bohrpreise
 DocType: Heim Settings,Drilling Item,Bohrartikel
 DocType: Heim Settings,Evaluations,Auswertungen
+DocType: Drilling Request,Drilling Request,Bohranfrage

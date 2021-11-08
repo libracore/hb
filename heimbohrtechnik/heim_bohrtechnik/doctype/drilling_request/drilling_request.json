@@ -1,0 +1,88 @@
+{
+ "creation": "2021-11-08 10:59:36.679897",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "planned_project",
+  "project_owner",
+  "object_type",
+  "classification",
+  "object_street",
+  "object_location",
+  "project_manager",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "planned_project",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Planned Project",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project_owner",
+   "fieldtype": "Data",
+   "label": "Project Owner"
+  },
+  {
+   "default": "EFH",
+   "fieldname": "object_type",
+   "fieldtype": "Select",
+   "label": "Object Type",
+   "options": "EFH\nDEFH\nREFH\nMFH\nGewerbe\nSonstige"
+  },
+  {
+   "default": "Neubau",
+   "fieldname": "classification",
+   "fieldtype": "Select",
+   "label": "Classification",
+   "options": "Neubau\nSanierung"
+  },
+  {
+   "fieldname": "object_street",
+   "fieldtype": "Data",
+   "label": "Street"
+  },
+  {
+   "fieldname": "object_location",
+   "fieldtype": "Data",
+   "label": "Location"
+  },
+  {
+   "fieldname": "project_manager",
+   "fieldtype": "Data",
+   "label": "Project Manager"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "modified": "2021-11-08 10:59:36.679897",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Drilling Request",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "object_street",
+ "track_changes": 1
+}

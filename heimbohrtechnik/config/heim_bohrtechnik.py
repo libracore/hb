@@ -45,6 +45,12 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Drilling Request",
+                   "label": _("Drilling Request"),
+                   "description": _("Drilling Request")
+                },
+                {
+                   "type": "doctype",
                    "name": "Quotation",
                    "label": _("Quotation"),
                    "description": _("Quotation")
