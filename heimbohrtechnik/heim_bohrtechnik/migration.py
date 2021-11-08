@@ -173,14 +173,14 @@ def load_projects(filename):
                     user = user[0]['name']
                     existing_object.manager = user
                 if project['object_street']:
-                    existing_object.object_street=cgi.escape(project['object_street'] or "??").replace("\"", "")
+                    existing_object.object_street=cgi.escape(str(project['object_street'] or "??")).replace("\"", "")
                 if project['object_name']:
-                    existing_object.object_name=cgi.escape(project['object_name'] or "??").replace("\"", "")
+                    existing_object.object_name=cgi.escape(str(project['object_name'] or "??")).replace("\"", "")
                 if project['object_city']:
-                    existing_object.object_location = cgi.escape(project['object_city'] or "??").replace("\"", "")
+                    existing_object.object_location = cgi.escape(str(project['object_city'] or "??")).replace("\"", "")
                     # break down location into plz, city, canton
                     try:
-                        location_parts = (project['object_city'] or "??").split(" ")
+                        location_parts = (str(project['object_city'] or "??"⁾).split(" ")
                         existing_object.plz = location_parts[0]
                         existing_object.kanton = location_parts[-1]
                         existing_object.city = " ".join(location_parts[1:-1])
@@ -222,7 +222,14 @@ def load_projects(filename):
                 if customer_matches and len(customer_matches) > 0:
                     existing_project.customer = customer_matches[0]['name']
                 else:
-                    print("Cannot match {0} in {1}".format(project['customer_name'], project['name']))
+                    # fallback: try to wilcard-match customer
+                    customer_matches = frappe.db.sql("""SELECT `name`
+                        FROM `tabCustomer`
+                        WHERE `customer_name` LIKE "%{0}%";""".format(project['customer_name'])
+                    if customer_matches and len(customer_matches) > 0:
+                        existing_project.customer = customer_matches[0]['name']
+                    else:
+                        print("Cannot match {0} in {1}".format(project['customer_name'], project['name']))
                 existing_project.project_type = "External"
                 existing_project.expected_start_date = project['start_date']
                 existing_project.expected_end_date = project['end_date']
