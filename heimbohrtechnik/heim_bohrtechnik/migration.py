@@ -225,7 +225,7 @@ def load_projects(filename):
                     # fallback: try to wilcard-match customer
                     customer_matches = frappe.db.sql("""SELECT `name`
                         FROM `tabCustomer`
-                        WHERE `customer_name` LIKE "%{0}%";""".format(project['customer_name'])
+                        WHERE `customer_name` LIKE "%{0}%";""".format(project['customer_name']), as_dict=True)
                     if customer_matches and len(customer_matches) > 0:
                         existing_project.customer = customer_matches[0]['name']
                     else:
