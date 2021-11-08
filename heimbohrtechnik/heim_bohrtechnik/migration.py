@@ -180,7 +180,7 @@ def load_projects(filename):
                     existing_object.object_location = cgi.escape(str(project['object_city'] or "??")).replace("\"", "")
                     # break down location into plz, city, canton
                     try:
-                        location_parts = (str(project['object_city'] or "??").split(" ")
+                        location_parts = (str(project['object_city'] or "??")).split(" ")
                         existing_object.plz = location_parts[0]
                         existing_object.kanton = location_parts[-1]
                         existing_object.city = " ".join(location_parts[1:-1])
