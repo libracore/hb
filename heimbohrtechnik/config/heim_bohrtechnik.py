@@ -45,6 +45,12 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Drilling Request",
+                   "label": _("Drilling Request"),
+                   "description": _("Drilling Request")
+                },
+                {
+                   "type": "doctype",
                    "name": "Quotation",
                    "label": _("Quotation"),
                    "description": _("Quotation")
@@ -246,6 +252,18 @@ def get_data():
                    "name": "Heim Settings",
                    "label": _("Heim Settings"),
                    "description": _("Heim Settings")
+                }
+            ]
+        },
+        {
+            "label": _("Evaluations"),
+            "icon": "fa fa-money",
+            "items": [
+                {
+                    "type": "report",
+                    "name": "Drilling Rate Evaluation",
+                    "doctype": "Object",
+                    "is_query_report": True,
                 }
             ]
         }
