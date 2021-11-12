@@ -226,3 +226,24 @@ function create_mud_invoice(frm) {
         }
     });
 }
+
+function cache_email_footer() {
+    try {
+        frappe.call({
+            'method': "frappe.client.get",
+            'args': {
+                'doctype': "Signature",
+                'name': frappe.session.user
+            },
+            'callback': function(response) {
+                var signature = response.message;
+
+                if (signature) {
+                    locals.email_footer = signature.email_footer;
+                } 
+            }
+        });
+    } catch { 
+        console.log("signature not found"); 
+    }
+}
