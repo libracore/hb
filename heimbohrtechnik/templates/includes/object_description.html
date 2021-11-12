@@ -1,40 +1,41 @@
-<p><b>Geplante Projektierung:</b></p>
-<p><br></p>
 <table style="width: 100%; ">
     {% if object.heat_capacity %}
     <tr>
-        <td>angegebene Heizleistung der W&auml;rmepumpe</td>
+        <td>Angegebene Heizleistung der W&auml;rmepumpe</td>
         <td>{{ object.heat_capacity }} kW
         </td>
     </tr>
     {% endif %}
     {% if object.cooling_capacity %}
     <tr>
-        <td>angegebene K&auml;lteleistung der W&auml;rmepumpe</td>
+        <td>Angegebene K&auml;lteleistung der W&auml;rmepumpe</td>
         <td>{{ object.cooling_capacity }} kW
         </td>
     </tr>
     {% endif %}
     {% if object.withdrawal_capacity %}
     <tr>
-        <td>theoretische spezifische Entzugsleistung</td>
+        <td>Theoretische spezifische Entzugsleistung</td>
         <td>{{ object.withdrawal_capacity }} W/m
         </td>
     </tr>
     {% endif %}
     {% if object.drilling_meter %}
     <tr>
-        <td>berechnete Bohrmeter</td>
+        <td>Berechnete Bohrmeter</td>
         <td>{{ object.drilling_meter }} m
         </td>
     </tr>
     {% endif %}
+    {% for ews in object.ews_specification %}
     <tr>
-        <td colspan=2><b>{% for ews in object.ews_specification %}
-            {{ ews.ews_count }} x {{ ews.ews_depth }} m{% if ews.probe_type %}, {{ ews.probe_type }}{% endif %}, {% if ews.ews_wall_strength %}{{ ews.ews_wall_strength }}x{% endif %}{{ ews.ews_diameter }} {{ ews.ews_diameter_unit }}{% if ews.pressure_level %}, {{ ews.pressure_level }}{% endif %}, {{ ews.ews_material }}<br>
-        {% endfor %}</b>
+        <td colspan=2>
+            <b>
+                {{ ews.ews_count }} x {{ ews.ews_depth }} m{% if ews.probe_type %}, {{ ews.probe_type }}{% endif %}, {% if ews.ews_wall_strength %}{{ ews.ews_wall_strength }}x{% endif %}{{ ews.ews_diameter }} {{ ews.ews_diameter_unit }}{% if ews.pressure_level %}, {{ ews.pressure_level }}{% endif %}, {{ ews.ews_material }}<br>
+            </b>
         </td>
     </tr>
+    {% endfor %}
 </table>
 <p><br></p>
 <p>Die geplante Bohrteufe muss unter Umst&auml;nden den &ouml;rtlichen geologischen Gegebenheiten, bzw. den beh&ouml;rdlichen
