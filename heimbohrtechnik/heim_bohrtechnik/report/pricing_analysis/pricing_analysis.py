@@ -98,8 +98,8 @@ def get_data(filters):
     buying_price_lists = "('{0}', '{1}')".format(config.buying_price_list_chf, config.buying_price_list_eur)
     eur_conversion_rate = frappe.db.sql("""SELECT IFNULL(`exchange_rate`, 1) AS `rate`
         FROM `tabCurrency Exchange`
-        WHERE `from_currency` = "CHF"
-          AND `to_currency` = "EUR"
+        WHERE `from_currency` = "EUR"
+          AND `to_currency` = "CHF"
         ORDER BY `date` DESC
         LIMIT 1;""", as_dict=True)[0]['rate']
     # add buying prices
