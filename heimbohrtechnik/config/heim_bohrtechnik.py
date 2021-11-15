@@ -30,6 +30,24 @@ def get_data():
                    "name": "Item",
                    "label": _("Item"),
                    "description": _("Item")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Item Price",
+                   "label": _("Item Price"),
+                   "description": _("Item Price")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Pricing Rule",
+                   "label": _("Pricing Rule"),
+                   "description": _("Pricing Rule")
+                },
+                {
+                    "type": "report",
+                    "name": "Pricing Analysis",
+                    "doctype": "Item Price",
+                    "is_query_report": True
                 }
             ]
         },

@@ -10,7 +10,12 @@
   "crane_activity",
   "mud_disposer_activity",
   "column_bohrplaner",
-  "drilling_item"
+  "drilling_item",
+  "section_pricing",
+  "buying_price_list_chf",
+  "buying_price_list_eur",
+  "column_pricing",
+  "selling_price_list"
  ],
  "fields": [
   {
@@ -54,10 +59,37 @@
    "fieldtype": "Link",
    "label": "Drilling Item",
    "options": "Item"
+  },
+  {
+   "fieldname": "section_pricing",
+   "fieldtype": "Section Break",
+   "label": "Pricing"
+  },
+  {
+   "fieldname": "selling_price_list",
+   "fieldtype": "Link",
+   "label": "Selling Price List",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "buying_price_list_chf",
+   "fieldtype": "Link",
+   "label": "Buying Price List CHF",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "buying_price_list_eur",
+   "fieldtype": "Link",
+   "label": "Buying Price List EUR",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "column_pricing",
+   "fieldtype": "Column Break"
   }
  ],
  "issingle": 1,
- "modified": "2021-11-04 21:28:07.141048",
+ "modified": "2021-11-15 21:10:14.809915",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",
