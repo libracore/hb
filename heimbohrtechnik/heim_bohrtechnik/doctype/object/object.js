@@ -83,11 +83,11 @@ frappe.ui.form.on('Object', {
             });
             // button to create truck link
             frm.add_custom_button("<i class='fa fa-truck'></i> Link", function() {
-                create_delivery_link(frm, true);
+                create_delivery_link(frm.doc.name, frm.doc.object_key, true);
             }, "MudEX");
             // button to create truck QR code
             frm.add_custom_button("<i class='fa fa-truck'></i> QR-Code", function() {
-                create_delivery_link(frm, false);
+                create_delivery_link(frm.doc.name, frm.doc.object_key, false);
             }, "MudEX");
             // fill delivered mud
             frappe.call({
@@ -104,7 +104,7 @@ frappe.ui.form.on('Object', {
                 'callback': function(response) {
                     if (response.message) {
                         frm.add_custom_button( __("Abrechnen"), function() {
-                            create_mud_invoice(frm);
+                            create_mud_invoice(frm.doc.name);
                         }, "MudEX");
                     }
                 }
@@ -450,37 +450,4 @@ function recalculate_drilling_meter(frm) {
     } else {
         cur_frm.set_value("drilling_meter", 0);
     }
-}
-
-function create_delivery_link(frm, as_link) {
-    frappe.prompt([
-            {'fieldname': 'truck', 'fieldtype': 'Link', 'label': __('Truck'), 'options': 'Truck', 'reqd': 1}
-        ],
-        function(values){
-            frappe.call({
-                'method': "frappe.client.get",
-                'args': {
-                    'doctype': "Truck",
-                    'name': values.truck
-                },
-                'callback': function(response) {
-                    var customer = response.message.customer;
-                    var link = window.location.origin + "/schlammanlieferung?truck=" + values.truck 
-                        + "&customer=" + customer + "&object=" + frm.doc.name + "&key=" + frm.doc.object_key; 
-                    if (as_link) {
-                        navigator.clipboard.writeText(link).then(function() {
-                            frappe.show_alert( __("Link in der Zwischenablage") );
-                          }, function() {
-                             frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
-                        });
-                    } else {
-                        // open as QR code
-                        window.open("https://data.libracore.ch/phpqrcode/api/qrcode.php?content=" + encodeURIComponent(link) + "&ecc=H&size=6&frame=2", '_blank').focus();
-                    }
-                }
-            });
-        },
-        __("Select truck"),
-        __('OK')
-    );
 }

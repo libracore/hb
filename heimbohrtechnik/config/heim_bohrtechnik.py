@@ -88,7 +88,7 @@ def get_data():
             ]
         },
         {
-            "label": _("Banking"),
+            "label": _("Finanzbuchhaltung"),
             "icon": "fa fa-money",
             "items": [
                 {
@@ -108,6 +108,24 @@ def get_data():
                     "name": "General Ledger",
                     "doctype": "GL Entry",
                     "is_query_report": True,
+                },
+                {
+                   "type": "doctype",
+                   "name": "Purchase Invoice",
+                   "label": _("Purchase Invoice"),
+                   "description": _("Purchase Invoice")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Payment Entry",
+                   "label": _("Payment Entry"),
+                   "description": _("Payment Entry")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Journal Entry",
+                   "label": _("Journal Entry"),
+                   "description": _("Journal Entry")
                 }
             ]
         },

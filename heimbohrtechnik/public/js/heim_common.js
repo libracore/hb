@@ -213,11 +213,11 @@ function get_now() {
     return timestamp;
 }
 
-function create_mud_invoice(frm) {
+function create_mud_invoice(object) {
     frappe.call({
         'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.truck_delivery.truck_delivery.create_invoice',
         'args': {
-            'object': frm.doc.name
+            'object': object
         },
         'callback': function(response) {
             frappe.show_alert("<a href=\"/desk#Form/Sales Invoice/" 
@@ -246,4 +246,37 @@ function cache_email_footer() {
     } catch { 
         console.log("signature not found"); 
     }
+}
+
+function create_delivery_link(object, object_key, as_link) {
+    frappe.prompt([
+            {'fieldname': 'truck', 'fieldtype': 'Link', 'label': __('Truck'), 'options': 'Truck', 'reqd': 1}
+        ],
+        function(values){
+            frappe.call({
+                'method': "frappe.client.get",
+                'args': {
+                    'doctype': "Truck",
+                    'name': values.truck
+                },
+                'callback': function(response) {
+                    var customer = response.message.customer;
+                    var link = window.location.origin + "/schlammanlieferung?truck=" + values.truck 
+                        + "&customer=" + customer + "&object=" + object + "&key=" + object_key; 
+                    if (as_link) {
+                        navigator.clipboard.writeText(link).then(function() {
+                            frappe.show_alert( __("Link in der Zwischenablage") );
+                          }, function() {
+                             frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
+                        });
+                    } else {
+                        // open as QR code
+                        window.open("https://data.libracore.ch/phpqrcode/api/qrcode.php?content=" + encodeURIComponent(link) + "&ecc=H&size=6&frame=2", '_blank').focus();
+                    }
+                }
+            });
+        },
+        __("Select truck"),
+        __('OK')
+    );
 }
