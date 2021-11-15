@@ -74,7 +74,11 @@ def get_data(filters):
                   (SELECT `tabItem Price`.`price_list_rate` 
                    FROM `tabItem Price` 
                    WHERE `tabItem Price`.`item_code` = `tabItem`.`item_code`
-                     AND `tabItem Price`.`price_list` = "{selling_price_list}") AS `price_list_rate`,
+                     AND `tabItem Price`.`price_list` = "{selling_price_list}"
+                     AND `tabItem Price`.`valid_from` <= DATE(NOW())
+                   ORDER BY `tabItem Price`.`valid_from` DESC
+                   LIMIT 1
+                  ) AS `price_list_rate`,
                   (SELECT `tabPricing Rule`.`name`
                    FROM `tabPricing Rule`
                    LEFT JOIN `tabPricing Rule Item Code` ON `tabPricing Rule Item Code`.`parent` = `tabPricing Rule`.`name`
