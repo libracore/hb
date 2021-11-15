@@ -38,6 +38,8 @@ def get_data(filters):
     else:
         filters.item_code = "%{0}%".format(filters.item_code)
 
+    config = frappe.get_doc("Heim Settings", "Heim Settings")
+        
     sql_query = """SELECT 
               `aggr`.`item_code`,
               `aggr`.`item_name`,
@@ -72,7 +74,7 @@ def get_data(filters):
                   (SELECT `tabItem Price`.`price_list_rate` 
                    FROM `tabItem Price` 
                    WHERE `tabItem Price`.`item_code` = `tabItem`.`item_code`
-                     AND `tabItem Price`.`price_list` = "Standard-Vertrieb") AS `price_list_rate`,
+                     AND `tabItem Price`.`price_list` = "{selling_price_list}") AS `price_list_rate`,
                   (SELECT `tabPricing Rule`.`name`
                    FROM `tabPricing Rule`
                    LEFT JOIN `tabPricing Rule Item Code` ON `tabPricing Rule Item Code`.`parent` = `tabPricing Rule`.`name`
@@ -92,9 +94,9 @@ def get_data(filters):
                   AND `tabItem`.`item_code` LIKE "{item_code}") AS `raw`
             LEFT JOIN `tabPricing Rule` AS `tPR` ON `tPR`.`name` = `raw`.`pricing_rule`
             ) AS `aggr`;""".format(customer=filters.customer, item_group=filters.item_group,
-                item_code=filters.item_code, item_name=filters.item_name)
+                item_code=filters.item_code, item_name=filters.item_name,
+                selling_price_list=config.selling_price_list)
     data = frappe.db.sql(sql_query, as_dict=True)
-    config = frappe.get_doc("Heim Settings", "Heim Settings")
     buying_price_lists = "('{0}', '{1}')".format(config.buying_price_list_chf, config.buying_price_list_eur)
     eur_conversion_rate = frappe.db.sql("""SELECT IFNULL(`exchange_rate`, 1) AS `rate`
         FROM `tabCurrency Exchange`
