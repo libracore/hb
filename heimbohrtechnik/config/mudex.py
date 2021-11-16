@@ -15,6 +15,12 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Truck Planning",
+                   "label": _("Truck Planning"),
+                   "description": _("Truck Planning")
+                },
+                {
+                   "type": "doctype",
                    "name": "Truck Scale",
                    "label": _("Truck Scale"),
                    "description": _("Truck Scale")

@@ -1,0 +1,175 @@
+{
+ "creation": "2021-11-16 07:16:10.114591",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "truck",
+  "truck_owner",
+  "truck_customer",
+  "truck_customer_name",
+  "column_main",
+  "object",
+  "object_name",
+  "object_street",
+  "object_location",
+  "object_details",
+  "object_address",
+  "object_key",
+  "section_planning",
+  "start_time",
+  "end_time",
+  "column_planning",
+  "color"
+ ],
+ "fields": [
+  {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "object",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Object",
+   "options": "Object",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "object.object_name",
+   "fieldname": "object_name",
+   "fieldtype": "Data",
+   "label": "Object name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "object.object_street",
+   "fieldname": "object_street",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Object street"
+  },
+  {
+   "fetch_from": "object.object_location",
+   "fieldname": "object_location",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Object location"
+  },
+  {
+   "fieldname": "object_address",
+   "fieldtype": "Small Text",
+   "label": "Object address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "truck",
+   "fieldtype": "Link",
+   "label": "Truck",
+   "options": "Truck",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "truck.truck_owner",
+   "fieldname": "truck_owner",
+   "fieldtype": "Data",
+   "label": "Truck owner",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "truck.customer",
+   "fieldname": "truck_customer",
+   "fieldtype": "Link",
+   "label": "Truck customer",
+   "options": "Customer",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "truck.customer_name",
+   "fieldname": "truck_customer_name",
+   "fieldtype": "Data",
+   "label": "Truck customer name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_planning",
+   "fieldtype": "Section Break",
+   "label": "Planning"
+  },
+  {
+   "fieldname": "start_time",
+   "fieldtype": "Datetime",
+   "label": "Start"
+  },
+  {
+   "fieldname": "end_time",
+   "fieldtype": "Datetime",
+   "label": "End"
+  },
+  {
+   "fieldname": "column_planning",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "label": "Color"
+  },
+  {
+   "fieldname": "object_details",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Object details"
+  },
+  {
+   "fetch_from": "object.object_key",
+   "fieldname": "object_key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Object key"
+  }
+ ],
+ "modified": "2021-11-16 08:50:59.750599",
+ "modified_by": "Administrator",
+ "module": "MudEx",
+ "name": "Truck Planning",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "object_name",
+ "track_changes": 1
+}

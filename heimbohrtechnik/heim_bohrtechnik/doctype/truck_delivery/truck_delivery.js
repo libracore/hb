@@ -20,6 +20,15 @@ frappe.ui.form.on('Truck Delivery', {
             var child = cur_frm.add_child('objects');
             cur_frm.refresh_field('objects');
         }
+        // pull object child item from object field (pre-populated from workflow)
+        if ((frm.doc.target_object) && (frm.doc.objects.length > 0) && (!frm.doc.objects[0].object)) {
+            frappe.model.set_value(frm.doc.objects[0].doctype, frm.doc.objects[0].name, 'object', frm.doc.target_object);
+        }
+        // fetch net weight (from workflow)
+        if ((cur_frm.doc.__islocal) && (frm.doc.truck)) {
+            console.log("get truck");
+            fetch_truck_net_weight(frm);
+        }
     },
     full_weight: function(frm) {
         update_net_weight(frm);

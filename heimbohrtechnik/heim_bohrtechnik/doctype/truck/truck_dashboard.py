@@ -5,16 +5,8 @@ from frappe import _
 
 def get_data():
    return {
-      'fieldname': 'object',
+      'fieldname': 'truck',
       'transactions': [
-         {
-            'label': _("Selling"),
-            'items': ['Quotation', 'Sales Order', 'Sales Invoice']
-         },
-         {
-            'label': _("Documentation"),
-            'items': ['Construction Site Description']
-         },
          {
             'label': _("MudEX"),
             'items': ['Truck Delivery', 'Truck Planning']
