@@ -121,7 +121,7 @@ def get_data(filters):
         """.format(item_code=d['item_code'], price_lists=buying_price_lists), as_dict=True)
         if len(buying_rates) > 0:
             if buying_rates[0]['currency'] == "EUR":
-                d['buying_rate'] = buying_rates[0]['rate'] / eur_conversion_rate
+                d['buying_rate'] = buying_rates[0]['rate'] * eur_conversion_rate
             else:
                 d['buying_rate'] = buying_rates[0]['rate']
         else:
