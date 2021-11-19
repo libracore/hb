@@ -17,6 +17,17 @@ frappe.ui.form.on('Truck Planning', {
                 + "&key=" + cur_frm.doc.object_key;
             window.open(url, '_blank').focus();
         });
+        // button to create truck link
+        frm.add_custom_button("<i class='fa fa-truck'></i> Link", function() {
+            var link = window.location.origin + "/schlammanlieferung?truck=" + cur_frm.doc.truck 
+                + "&customer=" + cur_frm.doc.truck_customer + "&object=" + cur_frm.doc.object 
+                + "&key=" + cur_frm.doc.object_key; 
+            navigator.clipboard.writeText(link).then(function() {
+                frappe.show_alert( __("Link in der Zwischenablage") );
+              }, function() {
+                 frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
+            });
+        });
     },
     object_name: function(frm) {
         cur_frm.set_value("object_address", cur_frm.doc.object_street + "<br>" + cur_frm.doc.object_location);
