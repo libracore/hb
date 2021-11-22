@@ -22,10 +22,10 @@ MwSt-Nr&nbsp;&nbsp;CHE-112.855.196
     </span>
 </div>
 {% if phone %}<div>
-<span style="color: rgb(0, 117, 184);">UC: </span><span style="color: rgb(239, 127, 0);">{{ phone }}</span>
+<span style="color: rgb(0, 117, 184);">UC: </span><a href="tel:{{ phone.replace(" ", "") }}" style="color: rgb(239, 127, 0);">{{ phone }}</a>
 </div>{% endif %}
 {% if mobile %}<div>
-<span style="color: rgb(0, 117, 184);">Mobil: </span><span style="color: rgb(239, 127, 0);">{{ mobile }}</span>
+<span style="color: rgb(0, 117, 184);">Mobil: </span><a href="tel:{{ mobile.replace(" ", "") }}" style="color: rgb(239, 127, 0);">{{ mobile }}</a>
 </div>{% endif %}
 <div>
 <span style="color: rgb(0, 117, 184);">Email: </span><a href="mailto:{{ user or 'info@hb-ag.ch' }}" style="color: rgb(239, 127, 0);">{{ user or "" }}</a>
@@ -49,7 +49,7 @@ MwSt-Nr&nbsp;&nbsp;CHE-112.855.196
 </div>
 
 <div>
-<strong style="color: rgb(0, 112, 192);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+41&nbsp;71&nbsp;575 05 00&nbsp;&nbsp;-&nbsp;&nbsp;Zentrale</strong>
+<a href="mailto:+41715750500"><strong style="color: rgb(0, 112, 192);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+41&nbsp;71&nbsp;575 05 00&nbsp;&nbsp;-&nbsp;&nbsp;Zentrale</strong></a>
 </div>
 
 <div>
