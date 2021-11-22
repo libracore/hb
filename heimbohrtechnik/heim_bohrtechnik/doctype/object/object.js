@@ -133,7 +133,7 @@ frappe.ui.form.on('Object', {
         (frm.doc.ews_specification || []).forEach(function (drilling) {
             depth += ((drilling.ews_count || 0) * (drilling.ews_depth || 0));
         });
-        cur_frm.set_value('expected_mud', get_mud_from_depth(depth));
+        cur_frm.set_value('expected_mud', 1000 * get_mud_from_depth(depth));    // store in kg not t
     },
     validate: function(frm) {
         // check if all mandatory permits are present
