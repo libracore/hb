@@ -28,10 +28,18 @@ frappe.ui.form.on('Truck Planning', {
                  frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
             });
         });
+        // button to create truck link
+        frm.add_custom_button("<i class='fa fa-map-marker'></i> Navigation", function() {
+            var url = "https://www.google.com/maps/dir//" 
+                + (cur_frm.doc.object_street || "").replace(" ", "+") + ","
+                + (cur_frm.doc.object_location || "").replace(" ", "+"); 
+            window.open(url, '_blank').focus();
+        });
     },
     object_name: function(frm) {
         cur_frm.set_value("object_address", cur_frm.doc.object_street + "<br>" + cur_frm.doc.object_location);
-        cur_frm.set_value("object_details", cur_frm.doc.object_name + ", " 
+        cur_frm.set_value("object_details", cur_frm.doc.truck_title + ": "
+            + cur_frm.doc.object_name + ", " 
             + cur_frm.doc.object_street + ", "
             + cur_frm.doc.object_location);
     },
