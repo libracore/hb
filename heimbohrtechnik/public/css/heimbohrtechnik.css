@@ -1,0 +1,4 @@
+/* hard-set calendar font color to black for better contrast */
+.fc-content {
+    color: black;
+}

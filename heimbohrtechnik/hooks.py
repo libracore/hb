@@ -15,8 +15,7 @@ app_license = "AGPL"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/heimbohrtechnik/css/heimbohrtechnik.css"
-# app_include_js = "/assets/heimbohrtechnik/js/heimbohrtechnik.js"
+app_include_css = "/assets/heimbohrtechnik/css/heimbohrtechnik.css"
 app_include_js = [
     "/assets/heimbohrtechnik/js/heim_common.js"
     ]
@@ -53,7 +52,7 @@ doctype_js = {
 
 # website user home page (by Role)
 # role_home_page = {
-#	"Role": "home_page"
+#    "Role": "home_page"
 # }
 
 # Website user home page (by function)
@@ -82,11 +81,11 @@ doctype_js = {
 # Permissions evaluated in scripted ways
 
 # permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
+#     "Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
 # }
 #
 # has_permission = {
-# 	"Event": "frappe.desk.doctype.event.event.has_permission",
+#     "Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
 # Document Events
@@ -94,32 +93,32 @@ doctype_js = {
 # Hook on document methods and events
 
 # doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-#	}
+#     "*": {
+#         "on_update": "method",
+#         "on_cancel": "method",
+#         "on_trash": "method"
+#    }
 # }
 
 # Scheduled Tasks
 # ---------------
 
 # scheduler_events = {
-# 	"all": [
-# 		"heimbohrtechnik.tasks.all"
-# 	],
-# 	"daily": [
-# 		"heimbohrtechnik.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"heimbohrtechnik.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"heimbohrtechnik.tasks.weekly"
-# 	]
-# 	"monthly": [
-# 		"heimbohrtechnik.tasks.monthly"
-# 	]
+#     "all": [
+#         "heimbohrtechnik.tasks.all"
+#     ],
+#     "daily": [
+#         "heimbohrtechnik.tasks.daily"
+#     ],
+#     "hourly": [
+#         "heimbohrtechnik.tasks.hourly"
+#     ],
+#     "weekly": [
+#         "heimbohrtechnik.tasks.weekly"
+#     ]
+#     "monthly": [
+#         "heimbohrtechnik.tasks.monthly"
+#     ]
 # }
 
 # Testing
@@ -131,14 +130,14 @@ doctype_js = {
 # ------------------------------
 #
 # override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "heimbohrtechnik.event.get_events"
+#     "frappe.desk.doctype.event.event.get_events": "heimbohrtechnik.event.get_events"
 # }
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps
 # override_doctype_dashboards = {
-# 	"Task": "heimbohrtechnik.task.get_dashboard_data"
+#     "Task": "heimbohrtechnik.task.get_dashboard_data"
 # }
 
 # hook for migrate cleanup tasks
