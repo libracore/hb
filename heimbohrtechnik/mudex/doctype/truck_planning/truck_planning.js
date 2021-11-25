@@ -38,10 +38,7 @@ frappe.ui.form.on('Truck Planning', {
     },
     object_name: function(frm) {
         cur_frm.set_value("object_address", cur_frm.doc.object_street + "<br>" + cur_frm.doc.object_location);
-        cur_frm.set_value("object_details", cur_frm.doc.truck_title + ": "
-            + cur_frm.doc.object + " - " 
-            + cur_frm.doc.object_street + ", "
-            + cur_frm.doc.object_location);
+        set_details();
     },
     truck: function(frm) {
         if (frm.doc.truck) {
@@ -54,9 +51,19 @@ frappe.ui.form.on('Truck Planning', {
                 'callback': function(response) {
                     var truck = response.message;
                     cur_frm.set_value('color', truck.default_color);
+                    
+                    if (frm.doc.object) {
+                        set_details();
+                    }
                 }
             });
         }
     }
 });
 
+function set_details() {
+    cur_frm.set_value("object_details", cur_frm.doc.truck_title + ": "
+        + cur_frm.doc.object + " - " 
+        + cur_frm.doc.object_street + ", "
+        + cur_frm.doc.object_location);
+}
