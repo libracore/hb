@@ -187,6 +187,10 @@ DocType: Quotation,Manual depth,Tiefe händische eingeben (ohne autom. Berechnun
 DocType: Truck Scale,Truck Scale,Lastwagenwaage
 DocType: Truck,Truck,Fahrzeug
 DocType: Truck,Registration Number,Fahrzeugkennzeichen
+DocType: Truck,Truck owner,LKW-Besitzer
+DocType: Truck,Truck customer,LKW-Kunde
+DocType: Truck,Truck customer name,LKW-Kundenname
+DocType: Truck,Object address,Objektadresse
 DocType: Truck Load Type,Truck Load Type,Ladungsart
 DocType: Truck Load Type,Load Type,Ladungsart
 DocType: Truck Delivery,Truck Delivery,Schlammanlieferung
