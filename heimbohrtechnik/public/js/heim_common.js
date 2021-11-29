@@ -40,7 +40,7 @@ function get_object_address(frm) {
                 var object = response.message;
 
                 if (object) {
-                    cur_frm.set_value('object_address_display', object.object_street + "<br>" + object.object_location);
+                    cur_frm.set_value('object_address_display', (object.object_street || "") + "<br>" + (object.object_location || ""));
                 } 
             }
         });
