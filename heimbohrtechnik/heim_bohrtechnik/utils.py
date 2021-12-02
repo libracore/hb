@@ -36,3 +36,17 @@ def get_object_description(object_name):
     }
     html = frappe.render_template("heimbohrtechnik/templates/includes/object_description.html", data)
     return html
+
+@frappe.whitelist()
+def get_project_description(project):
+    if frappe.db.exists("Project", project):
+        p_doc = frappe.get_doc("Project", project)
+    else:
+        return get_object_description(project)
+    o_doc = frappe.get_doc("Object", project)
+    data = {
+        'object': o_doc.as_dict(),
+        'project': p_doc.as_dict()
+    }
+    html = frappe.render_template("heimbohrtechnik/templates/includes/project_description.html", data)
+    return html

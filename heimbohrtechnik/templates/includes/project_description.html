@@ -1,0 +1,7 @@
+<p><b>Ausgeführt vom {{ frappe.utils.get_datetime(project.planned_start_date).strftime('%d.%m.%Y') }} bis {{ frappe.utils.get_datetime(project.planned_end_date).strftime('%d.%m.%Y') }}</b></p>
+<p><br></p>
+{% for ews in object.ews_specification %}
+<p><b>{{ ews.ews_count }} x {{ ews.ews_depth }} m{% if ews.probe_type %}, {{ ews.probe_type }}{% endif %}, {% if ews.ews_wall_strength %}{{ ews.ews_wall_strength }}x{% endif %}{{ ews.ews_diameter }} {{ ews.ews_diameter_unit }}{% if ews.pressure_level %}, {{ ews.pressure_level }}{% endif %}, {{ ews.ews_material }}</b></p>
+{% endfor %}
+
+

@@ -65,6 +65,23 @@ function get_object_description(frm) {
     }
 }
 
+function get_project_description(frm) {
+    if (frm.doc.object) {
+        frappe.call({
+            'method': "heimbohrtechnik.heim_bohrtechnik.utils.get_project_description",
+            'args': {
+                'project': frm.doc.object
+            },
+            'callback': function(response) {
+                var html = response.message;
+
+                if (html) {
+                    cur_frm.set_value('object_description', html);
+                } 
+            }
+        });
+    }
+}
 
 function set_conditional_net_total(frm) {
     var conditional_net_total = 0;
