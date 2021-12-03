@@ -142,6 +142,7 @@ Doctype: Project,Checklist,Checkliste
 Doctype: Project,Drilling Team,Bohrteam
 DocType: Project,Invoice to,Rechnung an
 DocType: Project,Invoice to name,Rechnung an (Name)
+DocType: Project,Order date,Bestelldatum
 Doctype: Permit Type,Permit Type,Bewilligungsart
 Doctype: Permit Type,Permit,Bewilligung
 Doctype: Permit Type,Is Mandatory,Ist zwingend erforderlich
