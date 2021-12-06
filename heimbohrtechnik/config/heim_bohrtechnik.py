@@ -81,6 +81,12 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Delivery Note",
+                   "label": _("Delivery Note"),
+                   "description": _("Delivery Note")
+                },
+                {
+                   "type": "doctype",
                    "name": "Sales Invoice",
                    "label": _("Sales Invoice"),
                    "description": _("Sales Invoice")
