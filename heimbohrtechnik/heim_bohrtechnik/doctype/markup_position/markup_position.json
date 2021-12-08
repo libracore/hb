@@ -1,5 +1,5 @@
 {
- "creation": "2021-05-12 19:12:55.818717",
+ "creation": "2021-12-08 19:52:09.706907",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -22,29 +22,14 @@
    "reqd": 1
   },
   {
+   "fieldname": "column_main",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "bkp",
    "fieldtype": "Data",
    "hidden": 1,
    "label": "BKP"
-  },
-  {
-   "default": "0",
-   "fieldname": "percent",
-   "fieldtype": "Percent",
-   "in_list_view": 1,
-   "label": "Percent"
-  },
-  {
-   "fieldname": "amount",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Amount",
-   "options": "currency",
-   "reqd": 1
-  },
-  {
-   "fieldname": "column_main",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "section_calculation",
@@ -59,15 +44,30 @@
    "read_only": 1
   },
   {
+   "default": "0",
+   "fieldname": "percent",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "Percent"
+  },
+  {
    "fieldname": "column_calculation",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "options": "currency",
+   "reqd": 1
   }
  ],
  "istable": 1,
- "modified": "2021-12-08 19:48:00.346694",
+ "modified": "2021-12-08 19:52:09.706907",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
- "name": "Discount Position",
+ "name": "Markup Position",
  "owner": "Administrator",
  "permissions": [],
  "quick_entry": 1,
