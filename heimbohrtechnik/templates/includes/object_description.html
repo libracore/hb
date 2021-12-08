@@ -29,7 +29,7 @@
     {% endif %}
 </table>
 {% for ews in object.ews_specification %}
-<p><b>{{ ews.ews_count }} x {{ ews.ews_depth }} m{% if ews.probe_type %}, {{ ews.probe_type }}{% endif %}, {% if ews.ews_wall_strength %}{{ ews.ews_wall_strength }}x{% endif %}{{ ews.ews_diameter }} {{ ews.ews_diameter_unit }}{% if ews.pressure_level %}, {{ ews.pressure_level }}{% endif %}, {{ ews.ews_material }}</b></p>
+<p><b>{{ ews.ews_count }} x {{ ews.ews_depth }} m{% if ews.probe_type %}, {{ ews.probe_type }}{% endif %}, {{ ews.ews_diameter }}{% if ews.ews_wall_strength %}x{{ ews.ews_wall_strength }}{% endif %} {{ ews.ews_diameter_unit }}{% if ews.pressure_level %}, {{ ews.pressure_level }}{% endif %}, {{ ews.ews_material }}</b></p>
 {% endfor %}
 <p><br></p>
 <p>Die geplante Bohrteufe muss unter Umst&auml;nden den &ouml;rtlichen geologischen Gegebenheiten, bzw. den beh&ouml;rdlichen
