@@ -313,7 +313,7 @@ function show_pincode_information(object) {
                     + details.bohrmeterpreis.toFixed(2) + " CHF/m, Arteser: "
                     + ((details.arteser) ? "ja" : "nein") 
                     + ", " + (details.hinweise || "keine Hinweise") 
-                , 'blue', true);
+                , 'yellow', true);
             }
         }
     });
