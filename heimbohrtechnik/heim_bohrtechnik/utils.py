@@ -50,3 +50,20 @@ def get_project_description(project):
     }
     html = frappe.render_template("heimbohrtechnik/templates/includes/project_description.html", data)
     return html
+
+@frappe.whitelist()
+def get_object_pincode_details(object):
+    pincode = frappe.get_value("Object", object, 'plz')
+    if pincode:
+        pincodes = frappe.db.get_all("Pincode", filters={'pincode': pincode}, fields=['name'])
+        if len(pincodes) > 0:
+            details = frappe.get_doc("Pincode", pincodes[0]['name'])
+            return {
+                'plz': details.pincode, 
+                'city': details.city, 
+                'bohrmeterpreis': details.bohrmeterpreis,
+                'arteser': details.arteser,
+                'hinweise': details.hinweise
+            }
+        else:
+            return

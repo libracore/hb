@@ -48,6 +48,12 @@ def get_data():
                     "name": "Pricing Analysis",
                     "doctype": "Item Price",
                     "is_query_report": True
+                },
+                {
+                   "type": "doctype",
+                   "name": "Pincode",
+                   "label": _("Pincode"),
+                   "description": _("Pincode")
                 }
             ]
         },

@@ -12,6 +12,11 @@ frappe.ui.form.on('Quotation', {
     },
     button_plattmachen: function(frm) {
         plattmachen(frm);
+    },
+    refresh: function(frm) {
+        if (frm.doc.object) {
+            show_pincode_information(frm.doc.object);
+        }
     }
 });
 

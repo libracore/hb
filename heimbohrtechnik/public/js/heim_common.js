@@ -297,3 +297,24 @@ function create_delivery_link(object, object_key, as_link) {
         __('OK')
     );
 }
+
+function show_pincode_information(object) {
+    frappe.call({
+        'method': "heimbohrtechnik.heim_bohrtechnik.utils.get_object_pincode_details",
+        'args': {
+            'object': object
+        },
+        'callback': function(response) {
+            console.log(response);
+            var details = response.message;
+            if (details) {
+                console.log(details);
+                cur_frm.dashboard.add_comment( details.plz + " (" + details.city + "): " 
+                    + details.bohrmeterpreis.toFixed(2) + " CHF/m, Arteser: "
+                    + ((details.arteser) ? "ja" : "nein") 
+                    + ", " + (details.hinweise || "keine Hinweise") 
+                , 'blue', true);
+            }
+        }
+    });
+}
