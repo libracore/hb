@@ -132,6 +132,7 @@ DocType: Object,Assessment,Einschätzung
 DocType: Object,Project Owner,Eigentümer
 DocType: Object,Planned Project,Geplantes Projekt
 DocType: Object,Classification,Klassifizierung
+DocType: Object,Print Owner,Eigentümer andrucken
 Doctype: Project,Mud Disposer,Schlammentsorger
 Doctype: Project,Mud disposer,Schlammentsorger
 Doctype: Project,Drilling Equipment,Bohrequipment
