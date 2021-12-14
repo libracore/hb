@@ -100,6 +100,36 @@ def get_data():
             ]
         },
         {
+            "label": _("Buying"),
+            "icon": "fa fa-tools",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "Supplier",
+                   "label": _("Supplier"),
+                   "description": _("Supplier")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Purchase Order",
+                   "label": _("Purchase Order"),
+                   "description": _("Purchase Order")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Purchase Receipt",
+                   "label": _("Purchase Receipt"),
+                   "description": _("Purchase Receipt")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Purchase Invoice",
+                   "label": _("Purchase Invoice"),
+                   "description": _("Purchase invoice")
+                }
+            ]
+        },
+        {
             "label": _("Planning"),
             "icon": "fa fa-bank",
             "items": [
