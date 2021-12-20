@@ -38,6 +38,7 @@ doctype_js = {
     "Sales Invoice": "public/js/sales_invoice.js",
     "Purchase Order": "public/js/purchase_order.js",
     "Project": "public/js/project.js",
+    "Item": "public/js/item.js",
     "Item Price": "public/js/item_price.js"
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
@@ -142,5 +143,6 @@ doctype_js = {
 
 # hook for migrate cleanup tasks
 after_migrate = [
-    'heimbohrtechnik.heim_bohrtechnik.updater.cleanup_languages'
+    'heimbohrtechnik.heim_bohrtechnik.updater.cleanup_languages',
+    'heimbohrtechnik.heim_bohrtechnik.updater.assert_kg'
 ]

@@ -11,6 +11,10 @@ frappe.ui.form.on('Sales Invoice', {
         if ((frm.doc.__islocal) && (frm.doc.object)) {
             get_project_description(frm);
         }
+    },
+    before_save: function(frm) {
+        set_conditional_net_total(frm);
+        recalculate_markups_discounts(frm);
     }
 });
 
