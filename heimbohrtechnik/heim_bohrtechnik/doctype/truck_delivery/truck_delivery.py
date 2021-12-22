@@ -68,7 +68,8 @@ def create_invoice(object):
         'taxes_and_charges': tax_template,
         'cost_center': cost_center,
         'project': project,
-        'naming_series': 'MRE-.YY.#####'
+        'naming_series': 'MRE-.YY.#####',
+        'title': 'Rechnung'
     })
     # apply taxes
     if tax_template:
