@@ -129,6 +129,10 @@ DocType: Object,Geology,Geologie
 DocType: Object,Accompaniment,Begleitung
 DocType: Object,Drilling Samples,Bohrproben
 DocType: Object,Assessment,Einschätzung
+DocType: Object,Project Owner,Eigentümer
+DocType: Object,Planned Project,Geplantes Projekt
+DocType: Object,Classification,Klassifizierung
+DocType: Object,Print Owner,Eigentümer andrucken
 Doctype: Project,Mud Disposer,Schlammentsorger
 Doctype: Project,Mud disposer,Schlammentsorger
 Doctype: Project,Drilling Equipment,Bohrequipment
@@ -139,6 +143,7 @@ Doctype: Project,Checklist,Checkliste
 Doctype: Project,Drilling Team,Bohrteam
 DocType: Project,Invoice to,Rechnung an
 DocType: Project,Invoice to name,Rechnung an (Name)
+DocType: Project,Order date,Bestelldatum
 Doctype: Permit Type,Permit Type,Bewilligungsart
 Doctype: Permit Type,Permit,Bewilligung
 Doctype: Permit Type,Is Mandatory,Ist zwingend erforderlich
@@ -184,6 +189,10 @@ DocType: Quotation,Manual depth,Tiefe händische eingeben (ohne autom. Berechnun
 DocType: Truck Scale,Truck Scale,Lastwagenwaage
 DocType: Truck,Truck,Fahrzeug
 DocType: Truck,Registration Number,Fahrzeugkennzeichen
+DocType: Truck,Truck owner,LKW-Besitzer
+DocType: Truck,Truck customer,LKW-Kunde
+DocType: Truck,Truck customer name,LKW-Kundenname
+DocType: Truck,Object address,Objektadresse
 DocType: Truck Load Type,Truck Load Type,Ladungsart
 DocType: Truck Load Type,Load Type,Ladungsart
 DocType: Truck Delivery,Truck Delivery,Schlammanlieferung

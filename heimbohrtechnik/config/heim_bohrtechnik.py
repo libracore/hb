@@ -48,6 +48,12 @@ def get_data():
                     "name": "Pricing Analysis",
                     "doctype": "Item Price",
                     "is_query_report": True
+                },
+                {
+                   "type": "doctype",
+                   "name": "Pincode",
+                   "label": _("Pincode"),
+                   "description": _("Pincode")
                 }
             ]
         },
@@ -81,9 +87,45 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Delivery Note",
+                   "label": _("Delivery Note"),
+                   "description": _("Delivery Note")
+                },
+                {
+                   "type": "doctype",
                    "name": "Sales Invoice",
                    "label": _("Sales Invoice"),
                    "description": _("Sales Invoice")
+                }
+            ]
+        },
+        {
+            "label": _("Buying"),
+            "icon": "fa fa-tools",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "Supplier",
+                   "label": _("Supplier"),
+                   "description": _("Supplier")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Purchase Order",
+                   "label": _("Purchase Order"),
+                   "description": _("Purchase Order")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Purchase Receipt",
+                   "label": _("Purchase Receipt"),
+                   "description": _("Purchase Receipt")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Purchase Invoice",
+                   "label": _("Purchase Invoice"),
+                   "description": _("Purchase invoice")
                 }
             ]
         },

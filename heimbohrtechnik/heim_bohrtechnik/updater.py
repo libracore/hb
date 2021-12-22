@@ -11,3 +11,14 @@ def cleanup_languages():
     sql_query = """DELETE FROM `tabLanguage` WHERE `language_code` NOT IN ({lang});""".format(lang=lang)
     frappe.db.sql(sql_query, as_dict=1)
     return
+
+def assert_kg():
+    # this function will make sure that there is always the kg UOM
+    print("Make sure kg is available as UOM...")
+    if not frappe.db.exists("UOM", "kg"):
+        kg = frappe.get_doc({
+            'doctype': 'UOM',
+            'uom_name': 'kg'
+        })
+        kg.insert()
+    return

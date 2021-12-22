@@ -40,7 +40,7 @@ function get_object_address(frm) {
                 var object = response.message;
 
                 if (object) {
-                    cur_frm.set_value('object_address_display', object.object_street + "<br>" + object.object_location);
+                    cur_frm.set_value('object_address_display', (object.object_street || "") + "<br>" + (object.object_location || ""));
                 } 
             }
         });
@@ -65,6 +65,23 @@ function get_object_description(frm) {
     }
 }
 
+function get_project_description(frm) {
+    if (frm.doc.object) {
+        frappe.call({
+            'method': "heimbohrtechnik.heim_bohrtechnik.utils.get_project_description",
+            'args': {
+                'project': frm.doc.object
+            },
+            'callback': function(response) {
+                var html = response.message;
+
+                if (html) {
+                    cur_frm.set_value('object_description', html);
+                } 
+            }
+        });
+    }
+}
 
 function set_conditional_net_total(frm) {
     var conditional_net_total = 0;
@@ -279,4 +296,25 @@ function create_delivery_link(object, object_key, as_link) {
         __("Select truck"),
         __('OK')
     );
+}
+
+function show_pincode_information(object) {
+    frappe.call({
+        'method': "heimbohrtechnik.heim_bohrtechnik.utils.get_object_pincode_details",
+        'args': {
+            'object': object
+        },
+        'callback': function(response) {
+            console.log(response);
+            var details = response.message;
+            if (details) {
+                console.log(details);
+                cur_frm.dashboard.add_comment( details.plz + " (" + details.city + "): " 
+                    + details.bohrmeterpreis.toFixed(2) + " CHF/m, Arteser: "
+                    + ((details.arteser) ? "ja" : "nein") 
+                    + ", " + (details.hinweise || "keine Hinweise") 
+                , 'blue', true);
+            }
+        }
+    });
 }

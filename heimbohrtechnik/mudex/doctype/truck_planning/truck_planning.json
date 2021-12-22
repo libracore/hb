@@ -5,6 +5,7 @@
  "engine": "InnoDB",
  "field_order": [
   "truck",
+  "truck_title",
   "truck_owner",
   "truck_customer",
   "truck_customer_name",
@@ -31,6 +32,7 @@
    "fieldname": "object",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Object",
    "options": "Object",
    "reqd": 1
@@ -65,6 +67,7 @@
   {
    "fieldname": "truck",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Truck",
    "options": "Truck",
    "reqd": 1
@@ -127,9 +130,16 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Object key"
+  },
+  {
+   "fetch_from": "truck.title",
+   "fieldname": "truck_title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "read_only": 1
   }
  ],
- "modified": "2021-11-16 08:50:59.750599",
+ "modified": "2021-11-22 08:58:41.177614",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "Truck Planning",

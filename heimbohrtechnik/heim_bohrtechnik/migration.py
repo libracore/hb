@@ -261,3 +261,72 @@ def load_projects(filename):
                 new_project.insert()
                 print("Created project {0}".format(project['name']))
             frappe.db.commit()
+
+# this is a manual patch to correct older discount configurations (hotfix 2021-12-08)
+def patch_discount_positions():
+    # fetch wrong markups
+    markups = frappe.db.sql("""
+        SELECT * 
+        FROM `tabDiscount Position` 
+        WHERE `parentfield` = "markup_positions";""", 
+        as_dict=True)
+    
+    for m in markups:
+        print("Moving {0} from {1}".format(m['name'], m['parent']))
+        # copy to new table
+        frappe.db.sql("""
+        INSERT INTO `tabMarkup Position`
+        (`name`,
+        `creation`,
+        `modified`,
+        `modified_by`,
+        `owner`,
+        `docstatus`,
+        `parent`,
+        `parentfield`,
+        `parenttype`,
+        `idx`,
+        `description`,
+        `bkp`,
+        `basis`,
+        `amount`,
+        `percent`)
+        VALUES
+        ("{name}",
+        "{creation}",
+        "{modified}",
+        "{modified_by}",
+        "{owner}",
+        {docstatus},
+        "{parent}",
+        "{parentfield}",
+        "{parenttype}",
+        {idx},
+        "{description}",
+        "{bkp}",
+        {basis},
+        {amount},
+        {percent});
+        """.format(
+        name=m['name'],
+        creation=m['creation'],
+        modified=m['modified'],
+        modified_by=m['modified_by'],
+        owner=m['owner'],
+        docstatus=m['docstatus'],
+        parent=m['parent'],
+        parentfield=m['parentfield'],
+        parenttype=m['parenttype'],
+        idx=m['idx'],
+        description=m['description'],
+        bkp=m['bkp'],
+        basis=m['basis'],
+        amount=m['amount'],
+        percent=m['percent']
+        ))
+        # delete old record
+        frappe.db.sql("""DELETE FROM `tabDiscount Position`
+            WHERE `name` = "{name}";""".format(name=m['name']))
+    frappe.db.commit()
+    print("done")
+    return

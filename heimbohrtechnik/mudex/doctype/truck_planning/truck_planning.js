@@ -17,12 +17,28 @@ frappe.ui.form.on('Truck Planning', {
                 + "&key=" + cur_frm.doc.object_key;
             window.open(url, '_blank').focus();
         });
+        // button to create truck link
+        frm.add_custom_button("<i class='fa fa-truck'></i> Link", function() {
+            var link = window.location.origin + "/schlammanlieferung?truck=" + cur_frm.doc.truck 
+                + "&customer=" + cur_frm.doc.truck_customer + "&object=" + cur_frm.doc.object 
+                + "&key=" + cur_frm.doc.object_key; 
+            navigator.clipboard.writeText(link).then(function() {
+                frappe.show_alert( __("Link in der Zwischenablage") );
+              }, function() {
+                 frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
+            });
+        });
+        // button to create truck link
+        frm.add_custom_button("<i class='fa fa-map-marker'></i> Navigation", function() {
+            var url = "https://www.google.com/maps/dir//" 
+                + (cur_frm.doc.object_street || "").replace(" ", "+") + ","
+                + (cur_frm.doc.object_location || "").replace(" ", "+"); 
+            window.open(url, '_blank').focus();
+        });
     },
     object_name: function(frm) {
         cur_frm.set_value("object_address", cur_frm.doc.object_street + "<br>" + cur_frm.doc.object_location);
-        cur_frm.set_value("object_details", cur_frm.doc.object_name + ", " 
-            + cur_frm.doc.object_street + ", "
-            + cur_frm.doc.object_location);
+        set_details();
     },
     truck: function(frm) {
         if (frm.doc.truck) {
@@ -35,9 +51,19 @@ frappe.ui.form.on('Truck Planning', {
                 'callback': function(response) {
                     var truck = response.message;
                     cur_frm.set_value('color', truck.default_color);
+                    
+                    if (frm.doc.object) {
+                        set_details();
+                    }
                 }
             });
         }
     }
 });
 
+function set_details() {
+    cur_frm.set_value("object_details", cur_frm.doc.truck_title + ": "
+        + cur_frm.doc.object + " - " 
+        + cur_frm.doc.object_street + ", "
+        + cur_frm.doc.object_location);
+}

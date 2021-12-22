@@ -36,3 +36,34 @@ def get_object_description(object_name):
     }
     html = frappe.render_template("heimbohrtechnik/templates/includes/object_description.html", data)
     return html
+
+@frappe.whitelist()
+def get_project_description(project):
+    if frappe.db.exists("Project", project):
+        p_doc = frappe.get_doc("Project", project)
+    else:
+        return get_object_description(project)
+    o_doc = frappe.get_doc("Object", project)
+    data = {
+        'object': o_doc.as_dict(),
+        'project': p_doc.as_dict()
+    }
+    html = frappe.render_template("heimbohrtechnik/templates/includes/project_description.html", data)
+    return html
+
+@frappe.whitelist()
+def get_object_pincode_details(object):
+    pincode = frappe.get_value("Object", object, 'plz')
+    if pincode:
+        pincodes = frappe.db.get_all("Pincode", filters={'pincode': pincode}, fields=['name'])
+        if len(pincodes) > 0:
+            details = frappe.get_doc("Pincode", pincodes[0]['name'])
+            return {
+                'plz': details.pincode, 
+                'city': details.city, 
+                'bohrmeterpreis': details.bohrmeterpreis,
+                'arteser': details.arteser,
+                'hinweise': details.hinweise
+            }
+        else:
+            return

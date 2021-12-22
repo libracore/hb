@@ -3,8 +3,8 @@
 </div>
 
 <p>
-<span style="color: rgb(239, 127, 0);">{{ user_name or "" }}</span><br>
-<span style="color: rgb(0, 117, 184);">{{ function or "" }}</span>
+<span style="color: rgb(239, 127, 0);">{{ user_name or "" }}</span>
+<br><span style="color: rgb(0, 117, 184);">{{ function or "" }}</span>
 </p>
 
 <div>
@@ -13,23 +13,19 @@
     </a>
 </div>
 
-<div>
-    <span style="color: rgb(0, 117, 184);">
-Bafflesstrasse 15<br>
-9450 Altst&auml;tten SG<br>
-Switzerland<br>
-MwSt-Nr&nbsp;&nbsp;CHE-112.855.196
+<div><span style="color: rgb(0, 117, 184);">Bafflesstrasse 15
+<br>9450 Altst&auml;tten SG
+<br>Switzerland
+<br>MwSt-Nr&nbsp;&nbsp;CHE-112.855.196
     </span>
 </div>
-{% if phone %}<div>
-<span style="color: rgb(0, 117, 184);">UC: </span><span style="color: rgb(239, 127, 0);">{{ phone }}</span>
-</div>{% endif %}
-{% if mobile %}<div>
-<span style="color: rgb(0, 117, 184);">Mobil: </span><span style="color: rgb(239, 127, 0);">{{ mobile }}</span>
-</div>{% endif %}
-<div>
-<span style="color: rgb(0, 117, 184);">Email: </span><a href="mailto:{{ user or 'info@hb-ag.ch' }}" style="color: rgb(239, 127, 0);">{{ user or "" }}</a>
-</div>
+{% if phone %}
+<div><span style="color: rgb(0, 117, 184);">UC: </span><a href="tel:{{ phone.replace(" ", "") }}" style="color: rgb(239, 127, 0);">{{ phone }}</a></div>
+{% endif %}
+{% if mobile %}
+<div><span style="color: rgb(0, 117, 184);">Mobil: </span><a href="tel:{{ mobile.replace(" ", "") }}" style="color: rgb(239, 127, 0);">{{ mobile }}</a></div>
+{% endif %}
+<div><span style="color: rgb(0, 117, 184);">Email: </span><a href="mailto:{{ user or 'info@hb-ag.ch' }}" style="color: rgb(239, 127, 0);">{{ user or "" }}</a></div>
 
 
 <div>
@@ -49,12 +45,19 @@ MwSt-Nr&nbsp;&nbsp;CHE-112.855.196
 </div>
 
 <div>
-<strong style="color: rgb(0, 112, 192);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+41&nbsp;71&nbsp;575 05 00&nbsp;&nbsp;-&nbsp;&nbsp;Zentrale</strong>
+<a href="tel:+41715750500"><strong style="color: rgb(0, 112, 192);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+41&nbsp;71&nbsp;575 05 00&nbsp;&nbsp;-&nbsp;&nbsp;Zentrale</strong></a>
 </div>
 
 <div>
 <span style="color: rgb(0, 112, 192);">
 <br>Ihre gewohnten Ansprechpartner, erreichen Sie &uuml;ber die Unified Communication (UC)-Nummer. Egal ob er unterwegs, im Home-office oder im B&uuml;ro ist.
+</span>
+</div>
+
+<div>
+<span style="color: rgb(0, 176, 80);">
+<br><img src="https://data.libracore.ch/hbag/betriebsruhe.jpeg" alt="Betriebsruhe" width="250" height="52">
+<br><b>vom 24.12.2021 bis 09.01.2022</b>
 </span>
 </div>
 
@@ -65,8 +68,8 @@ Sollten Sie diese E-Mail irrt&uuml;mlich erhalten haben, ist Ihnen eine Kenntnis
 Bitte benachrichtigen Sie uns und vernichten Sie die E- Mail. Der Absender hat alle erdenklichen Vorsichtsmaßnahmen getroffen,
 dass die Anlagen dieser E-Mail frei von Computerviren o.&auml;. sind. Gleichwohl schließen wir die Haftung f&uuml;r jeden Schaden aus, der durch Computerviren o.&auml;.
 verursacht wurde, soweit wir nicht vors&auml;tzlich oder grob fahrl&auml;ssig gehandelt haben. Wir raten Ihnen, dass Sie in jedem Fall Ihre eigene
-Virenpr&uuml;fung vornehmen, bevor Sie Anlagen &ouml;ffnen. Vielen Dank.<br>
-E-mail Correspondence with the Heim Bohrtechnik AG is only for information purposes and exclusively for the person adressed or their representative.
+Virenpr&uuml;fung vornehmen, bevor Sie Anlagen &ouml;ffnen. Vielen Dank.
+<br>E-mail Correspondence with the Heim Bohrtechnik AG is only for information purposes and exclusively for the person adressed or their representative.
 This medium is not be used for the exchange of legally-binding communications. Any form of the unauthorized use, publication, reproduction,
 copying or disclosure of the content of this e-mail is not permitted. The falsification of the original content of this message in the course
 of date transmission cannot be excluded.<br>
