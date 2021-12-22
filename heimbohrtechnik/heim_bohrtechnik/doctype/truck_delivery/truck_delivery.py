@@ -118,7 +118,8 @@ def create_invoice(object):
                 'bill_date': new_sinv.posting_date,
                 'due_date': new_sinv.due_date,
                 'object': new_sinv.object,
-                'project': new_sinv.project
+                'project': new_sinv.project,
+                'taxes_and_charges': pinv_tax_template
             })
             # add item positions
             for i in new_sinv.items:
