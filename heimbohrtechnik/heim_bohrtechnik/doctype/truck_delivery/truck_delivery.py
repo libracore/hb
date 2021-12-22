@@ -80,7 +80,7 @@ def create_invoice(object):
                 'description': t.description,
                 'rate': t.rate
             })
-    # get delivieries and add as positions
+    # get deliveries and add as positions
     invoiceable_deliveries = get_deliveries(object)
     if invoiceable_deliveries and len(invoiceable_deliveries) > 0:
         for i in invoiceable_deliveries:
