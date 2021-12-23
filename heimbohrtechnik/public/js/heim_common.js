@@ -232,7 +232,7 @@ function get_now() {
 
 function create_mud_invoice(object) {
     frappe.call({
-        'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.truck_delivery.truck_delivery.create_invoice',
+        'method': 'heimbohrtechnik.mudex.doctype.truck_delivery.truck_delivery.create_invoice',
         'args': {
             'object': object
         },

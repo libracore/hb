@@ -1,6 +1,14 @@
 // Copyright (c) 2021, libracore AG and contributors
 // For license information, please see license.txt
 
+// extend dashboard
+cur_frm.dashboard.add_transactions([
+    {
+        'label': 'Fulfillment',
+        'items': ['Akonto Invoice']
+    }
+]);
+        
 frappe.ui.form.on('Sales Order', {
     object: function(frm) {
         get_object_address(frm);
@@ -32,7 +40,7 @@ frappe.ui.form.on('Sales Order', {
             });
             // check if mud can be invoiced
             frappe.call({
-                'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.truck_delivery.truck_delivery.has_invoiceable_mud',
+                'method': 'heimbohrtechnik.mudex.doctype.truck_delivery.truck_delivery.has_invoiceable_mud',
                 'args': {'object': frm.doc.object},
                 'callback': function(response) {
                     if (response.message) {
@@ -42,6 +50,23 @@ frappe.ui.form.on('Sales Order', {
                     }
                 }
             });
+        }
+        if (frm.doc.docstatus === 1) {
+            // add create akonto function
+            frm.add_custom_button(__("Akonto Invoice"),  function() { 
+                create_akonto(frm);
+            }, __("Create"));
+            // remove obsolete menu items
+            setTimeout(function() {
+                $("a[data-label='" + encodeURI(__("Pick List")) + "']").parent().remove();
+                $("a[data-label='" + encodeURI(__("Work Order")) + "']").parent().remove();
+                $("a[data-label='" + encodeURI(__("Material Request")) + "']").parent().remove();
+                $("a[data-label='" + encodeURI(__("Request for Raw Materials")) + "']").parent().remove();
+                $("a[data-label='" + encodeURI(__("Purchase Order")) + "']").parent().remove();
+                $("a[data-label='" + encodeURI(__("Project")) + "']").parent().remove();
+                $("a[data-label='" + encodeURI(__("Subscription")) + "']").parent().remove();
+                $("a[data-label='" + encodeURI(__("Payment Request")) + "']").parent().remove();
+            }, 1000);
         }
     }
 });
@@ -54,3 +79,11 @@ frappe.ui.form.on('Discount Position', {
         set_conditional_net_total(frm);
     }
 });
+
+function create_akonto(frm) {
+    frappe.model.open_mapped_doc({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.create_akonto',
+        'frm': frm
+    });
+}
+

@@ -13,7 +13,7 @@ frappe.ui.form.on('Truck Scale', {
 
 function get_weight(frm) {
     frappe.call({
-        'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.truck_scale.truck_scale.get_weight',
+        'method': 'heimbohrtechnik.mudex.doctype.truck_scale.truck_scale.get_weight',
         'args': {
             'truck_scale': frm.doc.name
         },

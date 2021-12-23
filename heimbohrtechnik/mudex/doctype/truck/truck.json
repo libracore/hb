@@ -37,6 +37,11 @@
    "unique": 1
   },
   {
+   "fieldname": "default_color",
+   "fieldtype": "Color",
+   "label": "Default Color"
+  },
+  {
    "fieldname": "column_main",
    "fieldtype": "Column Break"
   },
@@ -46,6 +51,23 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Owner"
+  },
+  {
+   "fieldname": "column_main2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer ",
+   "options": "Customer"
+  },
+  {
+   "fetch_from": "customer.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer name",
+   "read_only": 1
   },
   {
    "fieldname": "section_weight",
@@ -70,33 +92,11 @@
    "fieldtype": "Float",
    "label": "Max. Weight",
    "precision": "1"
-  },
-  {
-   "fieldname": "column_main2",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "customer",
-   "fieldtype": "Link",
-   "label": "Customer ",
-   "options": "Customer"
-  },
-  {
-   "fetch_from": "customer.customer_name",
-   "fieldname": "customer_name",
-   "fieldtype": "Data",
-   "label": "Customer name",
-   "read_only": 1
-  },
-  {
-   "fieldname": "default_color",
-   "fieldtype": "Color",
-   "label": "Default Color"
   }
  ],
- "modified": "2021-11-16 08:25:07.342095",
+ "modified": "2021-12-23 21:15:52.006337",
  "modified_by": "Administrator",
- "module": "Heim Bohrtechnik",
+ "module": "MudEx",
  "name": "Truck",
  "owner": "Administrator",
  "permissions": [

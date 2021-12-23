@@ -99,7 +99,7 @@ frappe.ui.form.on('Object', {
             });
             // check if mud can be invoiced
             frappe.call({
-                'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.truck_delivery.truck_delivery.has_invoiceable_mud',
+                'method': 'heimbohrtechnik.mudex.doctype.truck_delivery.truck_delivery.has_invoiceable_mud',
                 'args': {'object': frm.doc.name},
                 'callback': function(response) {
                     if (response.message) {

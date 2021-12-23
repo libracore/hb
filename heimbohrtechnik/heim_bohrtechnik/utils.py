@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 import frappe
+from frappe.model.mapper import get_mapped_doc
 
 @frappe.whitelist()
 def get_standard_permits():
@@ -67,3 +68,30 @@ def get_object_pincode_details(object):
             }
         else:
             return
+
+@frappe.whitelist()
+def create_akonto(sales_order):
+    akonto = get_mapped_doc("Sales Order", sales_order, 
+        {
+            "Sales Order": {
+                "doctype": "Akonto Invoice",
+                "field_map": {
+                    "name": "sales_order"
+                }
+            },
+            "Sales Taxes and Charges": {
+                "doctype": "Sales Taxes and Charges",
+                "add_if_empty": True
+            },
+            "Sales Order Item": {
+                "doctype": "Akonto Invoice Item"
+            },
+            "Markup Position": {
+                "doctype": "Markup Position"
+            },
+            "Discount Position": {
+                "doctype": "Discount Position"
+            }
+        }
+    )
+    return akonto

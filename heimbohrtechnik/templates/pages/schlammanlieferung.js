@@ -20,7 +20,7 @@ function make() {
             target = 'empty_weight';
         }
         frappe.call({
-            'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.truck_scale.truck_scale.get_weight',
+            'method': 'heimbohrtechnik.mudex.doctype.truck_scale.truck_scale.get_weight',
             'args': {
                 'truck_scale': document.getElementById('scale').value
             },
