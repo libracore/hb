@@ -45,6 +45,13 @@ doctype_js = {
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
+# additional Jinja environment
+jenv = {
+    "methods": [
+        "get_object_reference_address:heimbohrtechnik.heim_bohrtechnik.utils.get_object_reference_address"
+    ]
+}
+
 # Home Pages
 # ----------
 

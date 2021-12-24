@@ -302,10 +302,8 @@ function show_pincode_information(object) {
             'object': object
         },
         'callback': function(response) {
-            console.log(response);
             var details = response.message;
             if (details) {
-                console.log(details);
                 cur_frm.dashboard.add_comment( details.plz + " (" + details.city + "): " 
                     + details.bohrmeterpreis.toFixed(2) + " CHF/m, Arteser: "
                     + ((details.arteser) ? "ja" : "nein") 

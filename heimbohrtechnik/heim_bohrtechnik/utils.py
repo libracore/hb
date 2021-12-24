@@ -95,3 +95,26 @@ def create_akonto(sales_order):
         }
     )
     return akonto
+
+@frappe.whitelist()
+def get_object_reference_address(object, address_type):
+    entry = frappe.db.sql("""SELECT *
+        FROM `tabObject Address` 
+        WHERE `parent` = "{object}" 
+          AND `address_type` = "{address_type}"
+        ;""".format(object=object, address_type=address_type), as_dict=True)
+    if len(entry) > 0:
+        if entry[0]['is_simple']:
+            address = "{0}<br>{1}".format(entry[0]['simple_name'], entry[0]['simple_address'])
+        else:
+            address = "{0}<br>".format(entry[0]['party_name'] or "")
+            if entry[0]['address']:
+                adr_doc= frappe.get_doc("Address", entry[0]['address'])
+                address_template = frappe.db.sql("""
+                    SELECT `template`
+                    FROM `tabAddress Template`
+                    WHERE `is_default` = 1;""", as_dict=True)[0]['template']
+                address += frappe.render_template(address_template, adr_doc.as_dict())
+    else:
+        address = None
+    return address
