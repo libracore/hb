@@ -4,15 +4,16 @@
 
 // 1 sec after start (has to be delayed after document ready)
 window.onload = async function () {
-    await sleep(1000);
-    // mark navbar
-    var navbars = document.getElementsByClassName("navbar");
-    if (navbars.length > 0) {
-        if (window.location.hostname.includes("erp-test")) {
-            navbars[0].style.backgroundColor = "#d68080";
-            console.log("colored");
+    setTimeout(function() {
+        // mark navbar
+        var navbars = document.getElementsByClassName("navbar");
+        if (navbars.length > 0) {
+            if (window.location.hostname.includes("erp-test")) {
+                navbars[0].style.backgroundColor = "#d68080";
+                console.log("colored");
+            }
         }
-    }
+    }, 1000);
 }
 
 // document loaded
@@ -23,10 +24,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
         sheet.insertRule('.attachment-row>.close { display: none !important; }');
     }
 });
-
-function sleep(milliseconds) {
-   return new Promise(resolve => setTimeout(resolve, milliseconds));
-}
 
 function get_object_address(frm) {
     if (frm.doc.object) {
