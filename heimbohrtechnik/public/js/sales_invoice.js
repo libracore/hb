@@ -23,3 +23,9 @@ frappe.ui.form.on('Discount Position', {
         update_additional_discount(frm);
     }
 });
+
+frappe.ui.form.on('Markup Position', {
+    discount: function(frm, dt, dn) {
+        update_additional_discount(frm);
+    }
+});

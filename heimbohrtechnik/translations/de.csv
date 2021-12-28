@@ -213,3 +213,6 @@ DocType: Heim Settings,Evaluations,Auswertungen
 DocType: Drilling Request,Drilling Request,Bohranfrage
 Report Pricing Analysis,Pricing Analysis,Preisfindung
 DocType: Truck Planning,Truck Planning,LKW-Planung
+DocType: Akonto Invoice,Akonto Invoice,Akonto-Rechnung
+DocType: Akonto Invoice,Without Items,Ohne Artikel
+DocType: Akonto Invoice,No Item Net Amount,Betrag ohne Artikel
