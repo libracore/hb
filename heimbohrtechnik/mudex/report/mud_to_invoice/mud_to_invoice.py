@@ -18,7 +18,8 @@ def get_columns():
         {"label": _("Project"), "fieldname": "project", "fieldtype": "Link", "options": "Project", "width": 100},
         #{"label": _("Customer"), "fieldname": "customer", "fieldtype": "Link", "options": "Customer", "width": 100},
         #{"label": _("Customer name"), "fieldname": "customer_name", "fieldtype": "Data", "width": 150},
-        {"label": _("Qty"), "fieldname": "qty", "fieldtype": "Float", "width": 100},
+        {"label": _("Expected Mud"), "fieldname": "expected_mud", "fieldtype": "Float", "width": 100, "precision": 1},
+        {"label": _("Qty"), "fieldname": "qty", "fieldtype": "Float", "width": 100, "precision": 1},
         {"label": _("Expected End Date"), "fieldname": "expected_end_date", "fieldtype": "Date", "width": 250},
         {"label": _("Last Delivery Date"), "fieldname": "last_delivery_date", "fieldtype": "Date", "width": 250},
         {"label": _(""), "fieldname": "blank", "fieldtype": "Data", "width": 20}
@@ -32,10 +33,11 @@ def get_data():
             SUM(`tabTruck Delivery Object`.`weight`) AS `qty`,
             `tabProject`.`expected_end_date` AS `expected_end_date`,
             `tabObject`.`object_name` AS `object_name`,
-			(SELECT MAX(DATE(`tTD`.`date`)) 
-			 FROM `tabTruck Delivery Object` AS `tTDO`
-			 LEFT JOIN `tabTruck Delivery` AS `tTD` ON `tTD`.`name` = `tTDO`.`parent`
-			 WHERE `tTDO`.`object` = `tabTruck Delivery Object`.`object`) AS `last_delivery_date`
+	    `tabObject`.`expected_mud` AS `expected_mud`,
+	    (SELECT MAX(DATE(`tTD`.`date`)) 
+		 FROM `tabTruck Delivery Object` AS `tTDO`
+		 LEFT JOIN `tabTruck Delivery` AS `tTD` ON `tTD`.`name` = `tTDO`.`parent`
+		 WHERE `tTDO`.`object` = `tabTruck Delivery Object`.`object`) AS `last_delivery_date`
         FROM `tabTruck Delivery Object`
         LEFT JOIN `tabTruck Delivery` ON `tabTruck Delivery`.`name` = `tabTruck Delivery Object`.`parent`
         LEFT JOIN `tabSales Invoice Item` ON 
