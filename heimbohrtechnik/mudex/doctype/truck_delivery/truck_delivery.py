@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 from frappe import _
+from datetime import datetime
 
 class TruckDelivery(Document):
     def on_submit(self): 
@@ -85,10 +86,11 @@ def create_invoice(object):
     invoiceable_deliveries = get_deliveries(object)
     if invoiceable_deliveries and len(invoiceable_deliveries) > 0:
         for i in invoiceable_deliveries:
+            d = datetime.strptime(i['date'][:19], "%Y-%m-%d %H:%M:%S")
             new_sinv.append('items', {
                 'item_code': config.mud_item,
                 'qty': i['weight'] / 1000,
-                'description': "{date}: {truck}".format(date=i['date'], truck=i['truck']),
+                'description': "{date}: {truck}".format(date=d.strftime("%d.%m.%Y, %H:%M"), truck=i['truck']),
                 'truck_delivery': i['delivery'],
                 'truck_delivery_detail': i['detail'],
                 'cost_center': cost_center
