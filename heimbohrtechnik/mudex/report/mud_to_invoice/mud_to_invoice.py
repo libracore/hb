@@ -20,6 +20,7 @@ def get_columns():
         #{"label": _("Customer name"), "fieldname": "customer_name", "fieldtype": "Data", "width": 150},
         {"label": _("Qty"), "fieldname": "qty", "fieldtype": "Float", "width": 100},
         {"label": _("Expected End Date"), "fieldname": "expected_end_date", "fieldtype": "Date", "width": 250},
+        {"label": _("Last Delivery Date"), "fieldname": "last_delivery_date", "fieldtype": "Date", "width": 250},
         {"label": _(""), "fieldname": "blank", "fieldtype": "Data", "width": 20}
     ]
 
@@ -30,7 +31,11 @@ def get_data():
             `tabProject`.`name` AS `project`,
             SUM(`tabTruck Delivery Object`.`weight`) AS `qty`,
             `tabProject`.`expected_end_date` AS `expected_end_date`,
-            `tabObject`.`object_name` AS `object_name`
+            `tabObject`.`object_name` AS `object_name`,
+			(SELECT MAX(DATE(`tTD`.`date`)) 
+			 FROM `tabTruck Delivery Object` AS `tTDO`
+			 LEFT JOIN `tabTruck Delivery` AS `tTD` ON `tTD`.`name` = `tTDO`.`parent`
+			 WHERE `tTDO`.`object` = `tabTruck Delivery Object`.`object`) AS `last_delivery_date`
         FROM `tabTruck Delivery Object`
         LEFT JOIN `tabTruck Delivery` ON `tabTruck Delivery`.`name` = `tabTruck Delivery Object`.`parent`
         LEFT JOIN `tabSales Invoice Item` ON 
@@ -41,7 +46,7 @@ def get_data():
         WHERE `tabTruck Delivery`.`docstatus` = 1
           AND `tabSales Invoice Item`.`name` IS NULL
         GROUP BY `tabTruck Delivery Object`.`object`
-        ORDER BY `tabProject`.`expected_end_date` ASC;""" 
+        ORDER BY `last_delivery_date` ASC;""" 
     data = frappe.db.sql(sql_query, as_dict = True)
     
     return data
