@@ -67,6 +67,7 @@ def create_invoice(object):
         'customer': customer,
         'object': object,
         'taxes_and_charges': tax_template,
+        'tax_id': frappe.get_value("Customer", customer, "tax_id"),
         'cost_center': cost_center,
         # 'project': project,               # do not link to project, as project customer is end customer (will create a validation error)
         'naming_series': 'MRE-.YY.#####',
@@ -169,7 +170,8 @@ def get_deliveries(object):
              AND `tabSales Invoice Item`.`docstatus` = 1)
         WHERE `tabTruck Delivery`.`docstatus` = 1
           AND `tabTruck Delivery Object`.`object` = "{object}"
-          AND `tabSales Invoice Item`.`name` IS NULL;""".format(object=object)
+          AND `tabSales Invoice Item`.`name` IS NULL
+        ORDER BY `tabTruck Delivery`.`date` ASC;""".format(object=object)
     invoicable_deliveries = frappe.db.sql(sql_query, as_dict=True)
     return invoicable_deliveries
 
