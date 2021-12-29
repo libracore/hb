@@ -67,7 +67,7 @@ def create_invoice(object):
         'object': object,
         'taxes_and_charges': tax_template,
         'cost_center': cost_center,
-        'project': project,
+        # 'project': project,               # do not link to project, as project customer is end customer (will create a validation error)
         'naming_series': 'MRE-.YY.#####',
         'title': 'Rechnung'
     })
