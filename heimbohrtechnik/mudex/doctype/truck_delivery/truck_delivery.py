@@ -104,6 +104,7 @@ def create_invoice(object):
             pinv_company = new_sinv.customer_name
             pinv_supplier = frappe.get_all("Supplier", 
                 filters={'supplier_name': config.company}, fields=['name'])[0]['name']
+            pinv_cost_center = frappe.get_value("Company", pinv_company, "cost_center")
             # find taxes from customer record
             pinv_tax_templates = frappe.get_all('Party Account', 
                 filters={'parent': pinv_supplier, 'company': pinv_company},
@@ -122,6 +123,7 @@ def create_invoice(object):
                 'due_date': new_sinv.due_date,
                 'object': new_sinv.object,
                 'project': new_sinv.project,
+                'cost_center': pinv_cost_center,
                 'taxes_and_charges': pinv_tax_template
             })
             # add item positions
@@ -130,7 +132,8 @@ def create_invoice(object):
                     'item_code': i.item_code,
                     'qty': i.qty,
                     'description': i.description,
-                    'rate': i.rate
+                    'rate': i.rate,
+                    'cost_center': pinv_cost_center
                 })
             # apply taxes
             if pinv_tax_template:
