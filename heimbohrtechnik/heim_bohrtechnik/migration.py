@@ -166,8 +166,11 @@ def load_projects(filename):
         for project in team['projects']:
             print("Project data: {0}".format(project))
             # check if object exists
-            if frappe.db.exists("Object", project['name']):
-                existing_object = frappe.get_doc("Object", project['name'])
+            if frappe.db.exists("Object", project['name']) or frappe.db.exists("Object", "P-{0}".format(project['name'])):  # retrofit, check new number where P- was left out on Excel
+                if frappe.db.exists("Object", project['name']):
+                    existing_object = frappe.get_doc("Object", project['name'])
+                else:
+                    existing_object = frappe.get_doc("Object", "P-{0}".format(project['name']))
                 user = frappe.get_all("User", filters={'username': project['object_project_manager']}, fields=['name'])
                 if user and len(user) > 0:
                     user = user[0]['name']
