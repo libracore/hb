@@ -125,7 +125,8 @@ def create_invoice(object):
                 'object': new_sinv.object,
                 'project': new_sinv.project,
                 'cost_center': pinv_cost_center,
-                'taxes_and_charges': pinv_tax_template
+                'taxes_and_charges': pinv_tax_template,
+                'disable_rounded_total': 1
             })
             # add item positions
             for i in new_sinv.items:
