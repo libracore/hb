@@ -86,7 +86,7 @@ def create_invoice(object):
     invoiceable_deliveries = get_deliveries(object)
     if invoiceable_deliveries and len(invoiceable_deliveries) > 0:
         for i in invoiceable_deliveries:
-            d = datetime.strptime(i['date'][:19], "%Y-%m-%d %H:%M:%S")
+            d = i['date']                       # datetime.strptime(str(i['date'])[:19], "%Y-%m-%d %H:%M:%S")
             new_sinv.append('items', {
                 'item_code': config.mud_item,
                 'qty': i['weight'] / 1000,
