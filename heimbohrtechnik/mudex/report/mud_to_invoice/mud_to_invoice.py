@@ -48,7 +48,7 @@ def get_data():
         WHERE `tabTruck Delivery`.`docstatus` = 1
           AND `tabSales Invoice Item`.`name` IS NULL
         GROUP BY `tabTruck Delivery Object`.`object`
-        ORDER BY `last_delivery_date` ASC;""" 
+        ORDER BY `last_delivery_date` ASC, `object` ASC;""" 
     data = frappe.db.sql(sql_query, as_dict = True)
     
     return data
