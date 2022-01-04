@@ -11,6 +11,9 @@ window.onload = async function () {
             if (window.location.hostname.includes("erp-test")) {
                 navbars[0].style.backgroundColor = "#d68080";
                 console.log("colored");
+            } else if (frappe.defaults.get_user_default("company") === "MudEX AG") {
+                navbars[0].style.backgroundColor = "#006400";
+                console.log("colored MudEX");
             }
         }
     }, 1000);

@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 from frappe import _
+from datetime import datetime
 
 class TruckDelivery(Document):
     def on_submit(self): 
@@ -66,8 +67,9 @@ def create_invoice(object):
         'customer': customer,
         'object': object,
         'taxes_and_charges': tax_template,
+        'tax_id': frappe.get_value("Customer", customer, "tax_id"),
         'cost_center': cost_center,
-        'project': project,
+        # 'project': project,               # do not link to project, as project customer is end customer (will create a validation error)
         'naming_series': 'MRE-.YY.#####',
         'title': 'Rechnung'
     })
@@ -85,10 +87,11 @@ def create_invoice(object):
     invoiceable_deliveries = get_deliveries(object)
     if invoiceable_deliveries and len(invoiceable_deliveries) > 0:
         for i in invoiceable_deliveries:
+            d = i['date']                       # datetime.strptime(str(i['date'])[:19], "%Y-%m-%d %H:%M:%S")
             new_sinv.append('items', {
                 'item_code': config.mud_item,
                 'qty': i['weight'] / 1000,
-                'description': "{date}: {truck}".format(date=i['date'], truck=i['truck']),
+                'description': "{date}: {truck}".format(date=d.strftime("%d.%m.%Y, %H:%M"), truck=i['truck']),
                 'truck_delivery': i['delivery'],
                 'truck_delivery_detail': i['detail'],
                 'cost_center': cost_center
@@ -102,6 +105,7 @@ def create_invoice(object):
             pinv_company = new_sinv.customer_name
             pinv_supplier = frappe.get_all("Supplier", 
                 filters={'supplier_name': config.company}, fields=['name'])[0]['name']
+            pinv_cost_center = frappe.get_value("Company", pinv_company, "cost_center")
             # find taxes from customer record
             pinv_tax_templates = frappe.get_all('Party Account', 
                 filters={'parent': pinv_supplier, 'company': pinv_company},
@@ -120,7 +124,9 @@ def create_invoice(object):
                 'due_date': new_sinv.due_date,
                 'object': new_sinv.object,
                 'project': new_sinv.project,
-                'taxes_and_charges': pinv_tax_template
+                'cost_center': pinv_cost_center,
+                'taxes_and_charges': pinv_tax_template,
+                'disable_rounded_total': 1
             })
             # add item positions
             for i in new_sinv.items:
@@ -128,7 +134,8 @@ def create_invoice(object):
                     'item_code': i.item_code,
                     'qty': i.qty,
                     'description': i.description,
-                    'rate': i.rate
+                    'rate': i.rate,
+                    'cost_center': pinv_cost_center
                 })
             # apply taxes
             if pinv_tax_template:
@@ -164,7 +171,8 @@ def get_deliveries(object):
              AND `tabSales Invoice Item`.`docstatus` = 1)
         WHERE `tabTruck Delivery`.`docstatus` = 1
           AND `tabTruck Delivery Object`.`object` = "{object}"
-          AND `tabSales Invoice Item`.`name` IS NULL;""".format(object=object)
+          AND `tabSales Invoice Item`.`name` IS NULL
+        ORDER BY `tabTruck Delivery`.`date` ASC;""".format(object=object)
     invoicable_deliveries = frappe.db.sql(sql_query, as_dict=True)
     return invoicable_deliveries
 
