@@ -85,149 +85,31 @@ class AkontoInvoice(SellingController):
         self.check_sales_order_on_hold_or_close("sales_order")
         self.add_remarks()
 
-        # validate service stop date to lie in between start and end date
-        validate_service_stop_date(self)
-
         self.validate_multiple_billing("Delivery Note", "dn_detail", "amount", "items")
         self.set_status()
 
     def on_submit(self):
-        self.validate_pos_paid_amount()
-
-        if not self.auto_repeat:
-            frappe.get_doc('Authorization Control').validate_approving_authority(self.doctype,
-                self.company, self.base_grand_total, self)
-
         self.check_prev_docstatus()
 
-        if self.is_return and not self.update_billed_amount_in_sales_order:
-            # NOTE status updating bypassed for is_return
-            self.status_updater = []
-
-        self.update_status_updater_args()
-        self.update_prevdoc_status()
-        self.update_billing_status_in_dn()
-
-        # Updating stock ledger should always be called after updating prevdoc status,
-        # because updating reserved qty in bin depends upon updated delivered qty in SO
-        if self.update_stock == 1:
-            self.update_stock_ledger()
-
         # this sequence because outstanding may get -ve
-        self.make_gl_entries()
-
-        if not self.is_return:
-            self.update_billing_status_for_zero_amount_refdoc("Delivery Note")
-            self.update_billing_status_for_zero_amount_refdoc("Sales Order")
-            self.check_credit_limit()
-
-        self.update_serial_no()
-
-        if not cint(self.is_pos) == 1 and not self.is_return:
-            self.update_against_document_in_jv()
-
-        self.update_time_sheet(self.name)
-
-        if frappe.db.get_single_value('Selling Settings', 'sales_update_frequency') == "Each Transaction":
-            update_company_current_month_sales(self.company)
-            self.update_project()
-        update_linked_doc(self.doctype, self.name, self.inter_company_invoice_reference)
-
-        # create the loyalty point ledger entry if the customer is enrolled in any loyalty program
-        if not self.is_return and self.loyalty_program:
-            self.make_loyalty_point_entry()
-        elif self.is_return and self.return_against and self.loyalty_program:
-            against_si_doc = frappe.get_doc("Akonto Invoice", self.return_against)
-            against_si_doc.delete_loyalty_point_entry()
-            against_si_doc.make_loyalty_point_entry()
-        if self.redeem_loyalty_points and self.loyalty_points:
-            self.apply_loyalty_points()
-
-    def before_cancel(self):
-        self.update_time_sheet(None)
-
+        #self.make_gl_entries()
 
     def on_cancel(self):
         super(AkontoInvoice, self).on_cancel()
 
         self.check_sales_order_on_hold_or_close("sales_order")
 
-        if self.is_return and not self.update_billed_amount_in_sales_order:
-            # NOTE status updating bypassed for is_return
-            self.status_updater = []
-
-        self.update_status_updater_args()
         self.update_prevdoc_status()
-        self.update_billing_status_in_dn()
 
         if not self.is_return:
             self.update_billing_status_for_zero_amount_refdoc("Delivery Note")
             self.update_billing_status_for_zero_amount_refdoc("Sales Order")
             self.update_serial_no(in_cancel=True)
 
-        self.validate_c_form_on_cancel()
-
-        # Updating stock ledger should always be called after updating prevdoc status,
-        # because updating reserved qty in bin depends upon updated delivered qty in SO
-        if self.update_stock == 1:
-            self.update_stock_ledger()
-
-        self.make_gl_entries_on_cancel()
+        #self.make_gl_entries_on_cancel()
         frappe.db.set(self, 'status', 'Cancelled')
 
-        if frappe.db.get_single_value('Selling Settings', 'sales_update_frequency') == "Each Transaction":
-            update_company_current_month_sales(self.company)
-            self.update_project()
-        if not self.is_return and self.loyalty_program:
-            self.delete_loyalty_point_entry()
-        elif self.is_return and self.return_against and self.loyalty_program:
-            against_si_doc = frappe.get_doc("Akonto Invoice", self.return_against)
-            against_si_doc.delete_loyalty_point_entry()
-            against_si_doc.make_loyalty_point_entry()
-
         unlink_inter_company_doc(self.doctype, self.name, self.inter_company_invoice_reference)
-
-        # Healthcare Service Invoice.
-        domain_settings = frappe.get_doc('Domain Settings')
-        active_domains = [d.domain for d in domain_settings.active_domains]
-
-        if "Healthcare" in active_domains:
-            manage_invoice_submit_cancel(self, "on_cancel")
-
-    def update_status_updater_args(self):
-        if cint(self.update_stock):
-            self.status_updater.append({
-                'source_dt':'Akonto Invoice Item',
-                'target_dt':'Sales Order Item',
-                'target_parent_dt':'Sales Order',
-                'target_parent_field':'per_delivered',
-                'target_field':'delivered_qty',
-                'target_ref_field':'qty',
-                'source_field':'qty',
-                'join_field':'so_detail',
-                'percent_join_field':'sales_order',
-                'status_field':'delivery_status',
-                'keyword':'Delivered',
-                'second_source_dt': 'Delivery Note Item',
-                'second_source_field': 'qty',
-                'second_join_field': 'so_detail',
-                'overflow_type': 'delivery',
-                'extra_cond': """ and exists(select name from `tabAkonto Invoice`
-                    where name=`tabAkonto Invoice Item`.parent and update_stock = 1)"""
-            })
-            if cint(self.is_return):
-                self.status_updater.append({
-                    'source_dt': 'Akonto Invoice Item',
-                    'target_dt': 'Sales Order Item',
-                    'join_field': 'so_detail',
-                    'target_field': 'returned_qty',
-                    'target_parent_dt': 'Sales Order',
-                    'source_field': '-1 * qty',
-                    'second_source_dt': 'Delivery Note Item',
-                    'second_source_field': '-1 * qty',
-                    'second_join_field': 'so_detail',
-                    'extra_cond': """ and exists (select name from `tabAkonto Invoice` where name=`tabAkonto Invoice Item`.parent and update_stock=1 and is_return=1)"""
-                })
 
     def check_credit_limit(self):
         from erpnext.selling.doctype.customer.customer import check_credit_limit
@@ -828,136 +710,6 @@ class AkontoInvoice(SellingController):
             if entry.amount > 0:
                 frappe.throw(_("Row #{0} (Payment Table): Amount must be negative").format(entry.idx))
 
-    # collection of the loyalty points, create the ledger entry for that.
-    def make_loyalty_point_entry(self):
-        returned_amount = self.get_returned_amount()
-        current_amount = flt(self.grand_total) - cint(self.loyalty_amount)
-        eligible_amount = current_amount - returned_amount
-        lp_details = get_loyalty_program_details_with_points(self.customer, company=self.company,
-            current_transaction_amount=current_amount, loyalty_program=self.loyalty_program,
-            expiry_date=self.posting_date, include_expired_entry=True)
-        if lp_details and getdate(lp_details.from_date) <= getdate(self.posting_date) and \
-            (not lp_details.to_date or getdate(lp_details.to_date) >= getdate(self.posting_date)):
-            points_earned = cint(eligible_amount/lp_details.collection_factor)
-            doc = frappe.get_doc({
-                "doctype": "Loyalty Point Entry",
-                "company": self.company,
-                "loyalty_program": lp_details.loyalty_program,
-                "loyalty_program_tier": lp_details.tier_name,
-                "customer": self.customer,
-                "sales_invoice": self.name,
-                "loyalty_points": points_earned,
-                "purchase_amount": eligible_amount,
-                "expiry_date": add_days(self.posting_date, lp_details.expiry_duration),
-                "posting_date": self.posting_date
-            })
-            doc.flags.ignore_permissions = 1
-            doc.save()
-            self.set_loyalty_program_tier()
-
-    # valdite the redemption and then delete the loyalty points earned on cancel of the invoice
-    def delete_loyalty_point_entry(self):
-        lp_entry = frappe.db.sql("select name from `tabLoyalty Point Entry` where sales_invoice=%s",
-            (self.name), as_dict=1)
-
-        if not lp_entry: return
-        against_lp_entry = frappe.db.sql('''select name, sales_invoice from `tabLoyalty Point Entry`
-            where redeem_against=%s''', (lp_entry[0].name), as_dict=1)
-        if against_lp_entry:
-            invoice_list = ", ".join([d.sales_invoice for d in against_lp_entry])
-            frappe.throw(_('''Akonto Invoice can't be cancelled since the Loyalty Points earned has been redeemed.
-                First cancel the Akonto Invoice No {0}''').format(invoice_list))
-        else:
-            frappe.db.sql('''delete from `tabLoyalty Point Entry` where sales_invoice=%s''', (self.name))
-            # Set loyalty program
-            self.set_loyalty_program_tier()
-
-    def set_loyalty_program_tier(self):
-        lp_details = get_loyalty_program_details_with_points(self.customer, company=self.company,
-                loyalty_program=self.loyalty_program, include_expired_entry=True)
-        frappe.db.set_value("Customer", self.customer, "loyalty_program_tier", lp_details.tier_name)
-
-    def get_returned_amount(self):
-        returned_amount = frappe.db.sql("""
-            select sum(grand_total)
-            from `tabAkonto Invoice`
-            where docstatus=1 and is_return=1 and ifnull(return_against, '')=%s
-        """, self.name)
-        return abs(flt(returned_amount[0][0])) if returned_amount else 0
-
-    # redeem the loyalty points.
-    def apply_loyalty_points(self):
-        from erpnext.accounts.doctype.loyalty_point_entry.loyalty_point_entry \
-            import get_loyalty_point_entries, get_redemption_details
-        loyalty_point_entries = get_loyalty_point_entries(self.customer, self.loyalty_program, self.company, self.posting_date)
-        redemption_details = get_redemption_details(self.customer, self.loyalty_program, self.company)
-
-        points_to_redeem = self.loyalty_points
-        for lp_entry in loyalty_point_entries:
-            if lp_entry.sales_invoice == self.name:
-                continue
-            available_points = lp_entry.loyalty_points - flt(redemption_details.get(lp_entry.name))
-            if available_points > points_to_redeem:
-                redeemed_points = points_to_redeem
-            else:
-                redeemed_points = available_points
-            doc = frappe.get_doc({
-                "doctype": "Loyalty Point Entry",
-                "company": self.company,
-                "loyalty_program": self.loyalty_program,
-                "loyalty_program_tier": lp_entry.loyalty_program_tier,
-                "customer": self.customer,
-                "sales_invoice": self.name,
-                "redeem_against": lp_entry.name,
-                "loyalty_points": -1*redeemed_points,
-                "purchase_amount": self.grand_total,
-                "expiry_date": lp_entry.expiry_date,
-                "posting_date": self.posting_date
-            })
-            doc.flags.ignore_permissions = 1
-            doc.save()
-            points_to_redeem -= redeemed_points
-            if points_to_redeem < 1: # since points_to_redeem is integer
-                break
-
-    # Healthcare
-    def set_healthcare_services(self, checked_values):
-        self.set("items", [])
-        from erpnext.stock.get_item_details import get_item_details
-        for checked_item in checked_values:
-            item_line = self.append("items", {})
-            price_list, price_list_currency = frappe.db.get_values("Price List", {"selling": 1}, ['name', 'currency'])[0]
-            args = {
-                'doctype': "Akonto Invoice",
-                'item_code': checked_item['item'],
-                'company': self.company,
-                'customer': frappe.db.get_value("Patient", self.patient, "customer"),
-                'selling_price_list': price_list,
-                'price_list_currency': price_list_currency,
-                'plc_conversion_rate': 1.0,
-                'conversion_rate': 1.0
-            }
-            item_details = get_item_details(args)
-            item_line.item_code = checked_item['item']
-            item_line.qty = 1
-            if checked_item['qty']:
-                item_line.qty = checked_item['qty']
-            if checked_item['rate']:
-                item_line.rate = checked_item['rate']
-            else:
-                item_line.rate = item_details.price_list_rate
-            item_line.amount = float(item_line.rate) * float(item_line.qty)
-            if checked_item['income_account']:
-                item_line.income_account = checked_item['income_account']
-            if checked_item['dt']:
-                item_line.reference_dt = checked_item['dt']
-            if checked_item['dn']:
-                item_line.reference_dn = checked_item['dn']
-            if checked_item['description']:
-                item_line.description = checked_item['description']
-
-        self.set_missing_values(for_validate = True)
-
     def get_discounting_status(self):
         status = None
         if self.is_discounted:
@@ -986,22 +738,7 @@ class AkontoInvoice(SellingController):
             if self.docstatus == 2:
                 status = "Cancelled"
             elif self.docstatus == 1:
-                if flt(self.outstanding_amount) > 0 and getdate(self.due_date) < getdate(nowdate()) and self.is_discounted and self.get_discounting_status()=='Disbursed':
-                    self.status = "Overdue and Discounted"
-                elif flt(self.outstanding_amount) > 0 and getdate(self.due_date) < getdate(nowdate()):
-                    self.status = "Overdue"
-                elif flt(self.outstanding_amount) > 0 and getdate(self.due_date) >= getdate(nowdate()) and self.is_discounted and self.get_discounting_status()=='Disbursed':
-                    self.status = "Unpaid and Discounted"
-                elif flt(self.outstanding_amount) > 0 and getdate(self.due_date) >= getdate(nowdate()):
-                    self.status = "Unpaid"
-                elif flt(self.outstanding_amount) < 0 and self.is_return==0 and frappe.db.get_value('Akonto Invoice', {'is_return': 1, 'return_against': self.name, 'docstatus': 1}):
-                    self.status = "Credit Note Issued"
-                elif self.is_return == 1:
-                    self.status = "Return"
-                elif flt(self.outstanding_amount)<=0:
-                    self.status = "Paid"
-                else:
-                    self.status = "Submitted"
+                self.status = "Submitted"
             else:
                 self.status = "Draft"
 
@@ -1012,7 +749,7 @@ def validate_inter_company_party(doctype, party, company, inter_company_referenc
     if not party:
         return
 
-    if doctype in ["Akonto Invoice", "Sales Order"]:
+    if doctype in ["Sales Invoice", "Akonto Invoice", "Sales Order"]:
         partytype, ref_partytype, internal = "Customer", "Supplier", "is_internal_customer"
 
         if doctype == "Akonto Invoice":

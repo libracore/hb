@@ -76,7 +76,8 @@ def create_akonto(sales_order):
             "Sales Order": {
                 "doctype": "Akonto Invoice",
                 "field_map": {
-                    "name": "sales_order"
+                    "name": "sales_order",
+                    "net_total": "no_item_net_amount"
                 }
             },
             "Sales Taxes and Charges": {
@@ -94,6 +95,7 @@ def create_akonto(sales_order):
             }
         }
     )
+    akonto.set_missing_values()
     return akonto
 
 @frappe.whitelist()
