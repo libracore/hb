@@ -14,6 +14,12 @@ window.onload = async function () {
             } else if (frappe.defaults.get_user_default("company") === "MudEX AG") {
                 navbars[0].style.backgroundColor = "#006400";
                 console.log("colored MudEX");
+            } else if (frappe.defaults.get_user_default("company").includes("Drilling")) {
+                navbars[0].style.backgroundColor = "#f4ca16";
+                console.log("colored Drilling Support");
+            } else if (frappe.defaults.get_user_default("company").includes("Immo")) {
+                navbars[0].style.backgroundColor = "#800000";
+                console.log("colored Immo");
             }
         }
     }, 1000);
