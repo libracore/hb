@@ -341,7 +341,7 @@ def set_supplier_first_address():
         s = frappe.get_doc("Supplier", supplier['name'])
         address = get_primary_supplier_address(s.name)
         if address:
-            s.hauptadresse = address.address_line1 + ", " + address.pincode + " " + address.city
+            s.hauptadresse = "{0}, {1} {2}".format(address.address_line1 or "", address.pincode or "", address.city or "")
             s.save()
             print("Updated {0}".format(s.name))
     return
