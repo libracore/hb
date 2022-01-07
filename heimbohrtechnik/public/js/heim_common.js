@@ -1,4 +1,4 @@
-// Copyright (c) 2021, libracore AG and contributors
+// Copyright (c) 2021-2022, libracore AG and contributors
 // For license information, please see license.txt
 // Common functions
 
@@ -315,4 +315,60 @@ function show_pincode_information(object) {
             }
         }
     });
+}
+
+function select_naming_series(frm) {
+    if (frm.doc.doctype === "Quotation") {
+        if (frm.doc.company.includes("MudEX")) {
+            cur_frm.set_value("naming_series", "AN-MX-.YY.#####");
+        } else if (frm.doc.company.includes("Drilling")) {
+            cur_frm.set_value("naming_series", "AN-HDSE-.YY.#####");
+        } else if (frm.doc.company.includes("Immo")) {
+            cur_frm.set_value("naming_series", "AN-IH-.YY.#####");
+        }
+    } else if (frm.doc.doctype === "Sales Order") {
+        if (frm.doc.company.includes("MudEX")) {
+            cur_frm.set_value("naming_series", "AB-MX-.YY.#####");
+        } else if (frm.doc.company.includes("Drilling")) {
+            cur_frm.set_value("naming_series", "AB-HDSE-.YY.#####");
+        } else if (frm.doc.company.includes("Immo")) {
+            cur_frm.set_value("naming_series", "AB-IH-.YY.#####");
+        }
+    } else if (frm.doc.doctype === "Delivery Note") {
+        if (frm.doc.company.includes("MudEX")) {
+            cur_frm.set_value("naming_series", "LS-MX-.YY.#####");
+        } else if (frm.doc.company.includes("Drilling")) {
+            cur_frm.set_value("naming_series", "LS-HDSE-.YY.#####");
+        } else if (frm.doc.company.includes("Immo")) {
+            cur_frm.set_value("naming_series", "LS-IH-.YY.#####");
+        }
+    } else if (frm.doc.doctype === "Sales Invoice") {
+        if (frm.doc.is_return === 1) {
+            if (frm.doc.company.includes("MudEX")) {
+                cur_frm.set_value("naming_series", "GS-MX-.YY.#####");
+            } else if (frm.doc.company.includes("Drilling")) {
+                cur_frm.set_value("naming_series", "GS-HDSE-.YY.#####");
+            } else if (frm.doc.company.includes("Immo")) {
+                cur_frm.set_value("naming_series", "GS-IH-.YY.#####");
+            } else {
+                cur_frm.set_value("naming_series", "GS-.YY.#####");
+            }
+        } else {
+            if (frm.doc.company.includes("MudEX")) {
+                cur_frm.set_value("naming_series", "RE-MX-.YY.#####");
+            } else if (frm.doc.company.includes("Drilling")) {
+                cur_frm.set_value("naming_series", "RE-HDSE-.YY.#####");
+            } else if (frm.doc.company.includes("Immo")) {
+                cur_frm.set_value("naming_series", "RE-IH-.YY.#####");
+            }
+        }
+    } else if (frm.doc.doctype === "Payment Reminder") {
+        if (frm.doc.company.includes("MudEX")) {
+            cur_frm.set_value("naming_series", "MA-MX-.YY.#####");
+        } else if (frm.doc.company.includes("Drilling")) {
+            cur_frm.set_value("naming_series", "MA-HDSE-.YY.#####");
+        } else if (frm.doc.company.includes("Immo")) {
+            cur_frm.set_value("naming_series", "MA-IH-.YY.#####");
+        }
+    }
 }

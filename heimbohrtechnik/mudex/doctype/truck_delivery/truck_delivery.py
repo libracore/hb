@@ -70,7 +70,7 @@ def create_invoice(object):
         'tax_id': frappe.get_value("Customer", customer, "tax_id"),
         'cost_center': cost_center,
         # 'project': project,               # do not link to project, as project customer is end customer (will create a validation error)
-        'naming_series': 'MRE-.YY.#####',
+        'naming_series': 'RE-MX-.YY.#####',
         'title': 'Rechnung'
     })
     # apply taxes
