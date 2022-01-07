@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 from heimbohrtechnik.heim_bohrtechnik.dataparser import get_projects
+from erpnextswiss.scripts.crm_tools import get_primary_supplier_address
 from datetime import datetime
 import cgi
 
@@ -332,4 +333,15 @@ def patch_discount_positions():
             WHERE `name` = "{name}";""".format(name=m['name']))
     frappe.db.commit()
     print("done")
+    return
+
+def set_supplier_first_address():
+    suppliers = frappe.get_all("Supplier", filters={'disabled': 0}, fields=['name'])
+    for supplier in suppliers:
+        s = frappe.get_doc("Supplier", supplier['name'])
+        address = get_primary_supplier_address(s.name)
+        if address:
+            s.hauptadresse = address.address_line1 + ", " + address.pincode + " " + address.city
+            s.save()
+            print("Updated {0}".format(s.name))
     return
