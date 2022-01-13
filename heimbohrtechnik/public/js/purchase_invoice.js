@@ -11,7 +11,6 @@ frappe.ui.form.on('Purchase Invoice', {
 
 function set_project(frm) {
     // check if there is a project for this object and set it
-    console.log("set project");
     frappe.call({
         'method': 'frappe.client.get_list',
         'args': {
@@ -26,7 +25,6 @@ function set_project(frm) {
             if ((response.message) && (response.message.length > 0)) {
                 var project = response.message[0]['name'];
                 for (var i = 0; i < frm.doc.items.length; i++) {
-                    console.log("set " + i + ": " + project);
                     frappe.model.set_value(frm.doc.items[i].doctype, frm.doc.items[i].name, 'project', project);
                 }
             }

@@ -1,4 +1,4 @@
-# Copyright (c) 2021, libracore AG and contributors
+# Copyright (c) 2021-2022, libracore AG and contributors
 # For license information, please see license.txt
 
 from frappe import _
@@ -10,6 +10,10 @@ def get_data():
          {
             'label': _("Selling"),
             'items': ['Quotation', 'Sales Order', 'Sales Invoice']
+         },
+         {
+            'label': _("Buying"),
+            'items': ['Purchase Order', 'Purchase Receipt', 'Purchase Invoice']
          },
          {
             'label': _("Documentation"),
