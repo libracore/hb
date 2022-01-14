@@ -27,6 +27,16 @@ frappe.ui.form.on('Quotation', {
         if (frm.doc.__islocal) {
             select_naming_series(frm);
         }
+        
+        // get tax id
+        if ((frm.doc.party_name) && (!frm.doc.tax_id)) {
+            get_tax_id(frm);
+        }
+    },
+    party_name: function(frm) {
+        if (frm.doc.party_name) {
+            get_tax_id(frm);
+        }
     }
 });
 
@@ -84,4 +94,19 @@ function add_discount_amount(text, amount) {
     frappe.model.set_value(child.doctype, child.name, 'description', text);
     frappe.model.set_value(child.doctype, child.name, 'amount', amount);
     cur_frm.refresh_field('discount_positions');
+}
+
+function get_tax_id(frm) {
+    frappe.call({
+        "method": "frappe.client.get",
+        "args": {
+            "doctype": "Customer",
+            "name": frm.doc.party_name
+        },
+        "async": false,
+        "callback": function(response) {
+            var customer = response.message;
+            cur_frm.set_value("tax_id", customer.tax_id);
+        }
+    });
 }
