@@ -22,3 +22,17 @@ def assert_kg():
         })
         kg.insert()
     return
+
+def diable_prepared_report():
+    # this will disable prepared reports 
+    print("Disabling prepared reports...")
+    reports = frappe.get_all("Report", filters={'disabled': 0}, fields=['name'])
+    for r in reports:
+        report = frappe.get_doc("Report", r['name'])
+        report.disable_prepared_report = 1;
+        try:
+            report.save()
+        except Exception as err:
+            print("Report {0}: {1}".format(report.name, err))
+    frappe.db.commit()
+    return

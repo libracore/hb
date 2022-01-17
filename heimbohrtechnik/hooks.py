@@ -153,5 +153,6 @@ jenv = {
 # hook for migrate cleanup tasks
 after_migrate = [
     'heimbohrtechnik.heim_bohrtechnik.updater.cleanup_languages',
-    'heimbohrtechnik.heim_bohrtechnik.updater.assert_kg'
+    'heimbohrtechnik.heim_bohrtechnik.updater.assert_kg',
+    'heimbohrtechnik.heim_bohrtechnik.updater.diable_prepared_report'
 ]

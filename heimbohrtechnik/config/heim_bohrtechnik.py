@@ -192,6 +192,12 @@ def get_data():
                    "name": "Journal Entry",
                    "label": _("Journal Entry"),
                    "description": _("Journal Entry")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Payment Reminder",
+                   "label": _("Payment Reminder"),
+                   "description": _("Payment Reminder")
                 }
             ]
         },
