@@ -29,7 +29,7 @@ frappe.ui.form.on('Quotation', {
         }
         
         // get tax id
-        if ((frm.doc.party_name) && (!frm.doc.tax_id)) {
+        if ((frm.doc.party_name) && (!frm.doc.tax_id) ((frm.doc.docstatus === 0)) {
             get_tax_id(frm);
         }
     },
