@@ -1,5 +1,5 @@
 {
     "js/heim_common.js": [
-        "public/js/heims_common.js"
+        "public/js/heim_common.js"
     ]
 }
