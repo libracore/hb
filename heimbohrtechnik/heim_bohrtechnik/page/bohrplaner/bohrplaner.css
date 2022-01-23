@@ -57,9 +57,9 @@ tbody tr td:nth-child(even) {
   max-width: 230px;
   left: 0px;
   
-  height: 120px;
-  min-height: 120px;
-  max-height: 120px;
+  height: 150px;
+  min-height: 150px;
+  max-height: 150px;
   
   border: 1px solid #d1d8dd;
   
@@ -118,7 +118,7 @@ tbody tr td:nth-child(even) {
 }
 
 .weekend {
-    background-color: #ffeae9 !important;
+    background-color: #9dc7f0 !important;
 }
 
 .no-border-bottom {

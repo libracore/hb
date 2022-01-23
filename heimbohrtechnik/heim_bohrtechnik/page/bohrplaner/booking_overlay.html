@@ -1,18 +1,18 @@
-<div class="booking_overlay" id="{{ project }}"
-    style="width: {{ width }}px; {{ ampeln.bgc }} {{ ampeln.bc }}"
+<div class="booking_overlay" id="{{ project.name }}"
+    style="width: {{ width }}px; background-color: #ffffbf;"
     draggable="true" ondragstart="drag(event)">
-    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-1" style="background-color: {{ ampeln.a1.color }};"><span class="ampel-tooltiptext">{{ ampeln.a1.tooltip }}</span></div>
-    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-2" style="background-color: {{ ampeln.a2.color }};"><span class="ampel-tooltiptext">{{ ampeln.a2.tooltip }}</span></div>
-    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-3" style="background-color: {{ ampeln.a3.color }};"><span class="ampel-tooltiptext">{{ ampeln.a3.tooltip }}</span></div>
-    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-4" style="background-color: {{ ampeln.a4.color }};"><span class="ampel-tooltiptext">{{ ampeln.a4.tooltip }}</span></div>
-    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-5" style="background-color: {{ ampeln.a5.color }};"><span class="ampel-tooltiptext">{{ ampeln.a5.tooltip }}</span></div>
-    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-6" style="background-color: {{ ampeln.a6.color }};"><span class="ampel-tooltiptext">{{ ampeln.a6.tooltip }}</span></div>
-    <div class="ampel-div ampeltool pointer" id="{{ project }}-ampel-7" style="background-color: {{ ampeln.a7.color }};"><span class="ampel-tooltiptext">{{ ampeln.a7.tooltip }}</span></div>
-    <i class="fa fa-info-circle pointer" style="margin-left: 5px; font-size: 20px; margin-top: 2px;" onclick="frappe.bohrplaner.show_detail_popup(this);" data-popupvalue="{{ project }}"></i>
-    <div class="object-div">
-        {{ object.name }}<br>
-        {{ object.object_street }}<br>
-        {{ object.plz }} {{ object.city }} {{ object.kanton }}<br>
-        {{ object.ews_details }}
+    <div class="object-div" style="font-size: 7pt;" onclick="frappe.bohrplaner.show_detail_popup(this);" data-popupvalue="{{ project.name }}">
+        <div style="background-color: {{ ampeln[0] }} min-width:35px; max-width: 70px;">{{ project.name }}</div>
+        <div style="background-color: {{ ampeln[1] }} min-width:35px; max-width: 70px;">{% if project.customer_name %}{{ project.customer_name }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[2] }} min-width:35px; max-width: 70px;">{% if project.object_name %}{{ project.object_name }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[3] }} min-width:35px; max-width: 70px;">{% if project.object_street %}{{ project.object_street }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[4] }} color: {{ ampeln[5] }}  {{ ampeln[6] }} min-width:35px; max-width: 70px;">{% if project.object_location %}{{ project.object_location }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[7] }} min-width:35px; max-width: 70px;">{% if project.ews_details %}{{ project.ews_details }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[8] }} min-width:35px; max-width: 70px;">{% if saugauftrag %}{{ saugauftrag }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[9] }} min-width:35px; max-width: 70px;">{% if pneukran %}{{ pneukran }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[10] }} min-width:35px; max-width: 70px;">{% if drilling_equipment %}{{ drilling_equipment }}{% else %}&nbsp;{% endif %}</div>
+        <div style="float:left; min-width:35px; max-width:35px; background-color: {{ ampeln[11] }} overflow: hidden;">{% if manager_short %}{{ manager_short }}{% else %}&nbsp;{% endif %}</div>
+        <div style="float:left; min-width:35px; max-width:35px; background-color: {{ ampeln[12] }}">&nbsp;</div>
+        <div style="clear: both;"></div>
     </div>
 </div>

@@ -17,7 +17,7 @@ def get_overlay_datas(from_date, to_date):
             ['expected_start_date', 'between', [from_date, to_date]],
             ['name', 'not in', name_list]
         ],
-        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'object', 'end_half_day']
+        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
     )
     for p in projects_start:
         correction = 0
@@ -34,14 +34,30 @@ def get_overlay_datas(from_date, to_date):
         if p.end_half_day.lower() == 'vm':
             dauer -= 1
         name_list.append(p.name)
+        
+        project = frappe.get_doc("Project", p.name)
+        p_object = frappe.get_doc("Object", p.object)
+        manager_short = frappe.db.get_value("User", p_object.manager, "username") if p_object.manager else ''
+        drilling_equipment = p_object.drilling_equipment if p_object.drilling_equipment else ''
+        saugauftrag = ''
+        pneukran = ''
+        for cl_entry in project.checklist:
+            if cl_entry.activity == 'Schlammentsorgung':
+                saugauftrag = cl_entry.supplier_name
+            if cl_entry.activity == 'Kran':
+                pneukran = cl_entry.supplier_name
+        
         p_data = {
             'bohrteam': p.drilling_team,
             'start': get_datetime(p.expected_start_date).strftime('%d.%m.%Y'),
             'vmnm': p.start_half_day.lower(),
             'dauer': dauer,
-            'object': frappe.get_doc("Object", p.object),
-            'name': p.name,
-            'ampeln': get_traffic_lights_indicator(p.name)
+            'ampeln': get_traffic_lights_indicator(project),
+            'project': project,
+            'saugauftrag': saugauftrag,
+            'pneukran': pneukran,
+            'manager_short': manager_short,
+            'drilling_equipment': drilling_equipment
         }
         projects.append(p_data)
     
@@ -50,7 +66,7 @@ def get_overlay_datas(from_date, to_date):
             ['expected_end_date', 'between', [from_date, to_date]],
             ['name', 'not in', name_list]
         ],
-        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'object', 'end_half_day']
+        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
     )
     for p in projects_end:
         correction = 0
@@ -67,14 +83,30 @@ def get_overlay_datas(from_date, to_date):
         if p.end_half_day.lower() == 'vm':
             dauer -= 1
         name_list.append(p.name)
+        
+        project = frappe.get_doc("Project", p.name)
+        p_object = frappe.get_doc("Object", p.object)
+        manager_short = frappe.db.get_value("User", p_object.manager, "username") if p_object.manager else ''
+        drilling_equipment = p_object.drilling_equipment if p_object.drilling_equipment else ''
+        saugauftrag = ''
+        pneukran = ''
+        for cl_entry in project.checklist:
+            if cl_entry.activity == 'Schlammentsorgung':
+                saugauftrag = cl_entry.supplier_name
+            if cl_entry.activity == 'Kran':
+                pneukran = cl_entry.supplier_name
+        
         p_data = {
             'bohrteam': p.drilling_team,
             'start': get_datetime(p.expected_start_date).strftime('%d.%m.%Y'),
             'vmnm': p.start_half_day.lower(),
             'dauer': dauer,
-            'object': frappe.get_doc("Object", p.object),
-            'name': p.name,
-            'ampeln': get_traffic_lights_indicator(p.name)
+            'ampeln': get_traffic_lights_indicator(project),
+            'project': project,
+            'saugauftrag': saugauftrag,
+            'pneukran': pneukran,
+            'manager_short': manager_short,
+            'drilling_equipment': drilling_equipment
         }
         projects.append(p_data)
     
@@ -84,7 +116,7 @@ def get_overlay_datas(from_date, to_date):
             ['expected_end_date', '>', from_date],
             ['name', 'not in', name_list]
         ],
-        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'object', 'end_half_day']
+        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
     )
     for p in projects_outside:
         correction = 0
@@ -101,207 +133,147 @@ def get_overlay_datas(from_date, to_date):
         if p.end_half_day.lower() == 'vm':
             dauer -= 1
         name_list.append(p.name)
+        
+        project = frappe.get_doc("Project", p.name)
+        p_object = frappe.get_doc("Object", p.object)
+        manager_short = frappe.db.get_value("User", p_object.manager, "username") if p_object.manager else ''
+        drilling_equipment = p_object.drilling_equipment if p_object.drilling_equipment else ''
+        saugauftrag = ''
+        pneukran = ''
+        for cl_entry in project.checklist:
+            if cl_entry.activity == 'Schlammentsorgung':
+                saugauftrag = cl_entry.supplier_name
+            if cl_entry.activity == 'Kran':
+                pneukran = cl_entry.supplier_name
+        
         p_data = {
             'bohrteam': p.drilling_team,
             'start': get_datetime(p.expected_start_date).strftime('%d.%m.%Y'),
             'vmnm': p.start_half_day.lower(),
             'dauer': dauer,
-            'object': frappe.get_doc("Object", p.object),
-            'name': p.name,
-            'ampeln': get_traffic_lights_indicator(p.name)
+            'ampeln': get_traffic_lights_indicator(project),
+            'project': project,
+            'saugauftrag': saugauftrag,
+            'pneukran': pneukran,
+            'manager_short': manager_short,
+            'drilling_equipment': drilling_equipment
         }
         projects.append(p_data)
         
     return projects
     
 def get_traffic_lights_indicator(project):
-    # Ampeln:
-    # a1 = Baustelle besichtigt (construction_site_inspected auf Objekt)
-    # a2 = Bewilligungen (permits in Project)
-    # a3 = Kundenauftrag (Sales Order in Project)
-    # a4 = Materialstatus (Purchase Order and Delivery note linkt o Project)
-    # a5 = Kran benötigt (Checklist in Project)
-    # a6 = Bohrschlammentsorgung (Checklist in Project)
-    # a7 = Bohranzeige versendet (Checkbox in Project)
-                                 
-    project = frappe.get_doc("Project", project)
-    drilling_object = frappe.get_doc("Object", project.object)
-    a1 = False
-    a2 = False
-    a3 = False
-    a4 = False
-    a5 = False
-    a6 = False
-    a7 = False
-    data = {}
+    colors = []
     
-    #if typ == 'a1':
-    if drilling_object.construction_site_inspected == 1:
-        data['a1'] = {
-            'color': 'green',
-            'tooltip': _('The construction site was visited')
-        }
-        a1 = True
-    else:
-        data['a1'] = {
-            'color': 'red',
-            'tooltip': _("The construction site was <b>not</b> visited")
-        }
+    # projeknummer
+    projeknummer_color = '#ffa6a6;'
+    if int(project.termin_bestaetigt) == 1:
+        projeknummer_color = '#ffffbf;'
+    if project.sales_order:
+        akonto = int(frappe.db.sql("""SELECT COUNT(`name`) AS `qty` FROM `tabAkonto Invoice` WHERE `sales_order` = '{so}' AND `docstatus` = 1""".format(so=project.sales_order), as_dict=True)[0].qty)
+        if akonto > 0:
+            projeknummer_color = '#eefdec;'
+        sinv = int(frappe.db.sql("""SELECT COUNT(`name`) AS `qty` FROM `tabSales Invoice Item` WHERE `parenttype` = 'Sales Invoice' AND `sales_order` = '{so}' AND `docstatus` = 1""".format(so=project.sales_order), as_dict=True)[0].qty)
+        if sinv > 0:
+            projeknummer_color = '#81d41a;'
+    colors.append(projeknummer_color)
     
-    #if typ == 'a2':
-    missing_permits = []
+    # auftraggeber
+    auftraggeber_color = '#ffa6a6;'
+    if project.sales_order:
+        unterzeichnete_ab = frappe.get_doc("Sales Order", project.sales_order).unterzeichnete_ab
+        if unterzeichnete_ab:
+            auftraggeber_color = '#81d41a;'
+    colors.append(auftraggeber_color)
+    
+    # objektname
+    objektname_color = '#ffa6a6;'
+    found_permits = 0
+    found_permits_with_file = 0
     for permit in project.permits:
-        if not permit.file:
-            missing_permits.append(permit.permit)
-    if len(missing_permits) > 0:
-        if len(missing_permits) == len(project.permits):
-            # all missing
-            data['a2'] =  {
-                'color': 'red',
-                'tooltip': _("All permits are missing")
-            }
-        else:
-            # some missing
-            data['a2'] = {
-                'color': 'yellow',
-                'tooltip': _("Following permits are missing:") + "<br>{missing_permits}".format(missing_permits='<br>'.join(missing_permits))
-            }
-    else:
-        # all good
-        data['a2'] = {
-            'color': 'green',
-            'tooltip': _("All permits available")
-        }
-        a2 = True
+        if 'Bohrbewilligung' in permit.permit:
+            found_permits += 1
+            if permit.file:
+                found_permits_with_file += 1
+    if found_permits == found_permits_with_file:
+        objektname_color = '#81d41a;'
+    colors.append(objektname_color)
     
-    #if typ == 'a3':
-    if not project.sales_order:
-        data['a3'] = {
-            'color': 'red',
-            'tooltip': _("No sales order available")
-        }
-    else:
-        sales_order = frappe.get_doc("Sales Order", project.sales_order)
-        if sales_order.docstatus == 1:
-            data['a3'] = {
-                'color': 'green',
-                'tooltip': _("The sales order is submitted")
-            }
-            a3 = True
-        elif  sales_order.docstatus == 0:
-            data['a3'] = {
-                'color': 'yellow',
-                'tooltip': _("The sales order is <b>not</b> submitted")
-            }
-        else:
-            data['a3'] = {
-                'color': 'red',
-                'tooltip': _("The sales order is cancelled")
-            }
+    # objekt_strasse
+    objekt_strasse_color = '#c4c7ca;'
+    '''
+        Status Rot --> Ich weiss nicht wie prüfen -> "Bohranzeige eingereicht: Projekt hat Bohranzeige"
+    '''
+    if int(project.drill_notice_sent) == 1:
+        objekt_strasse_color = '#81d41a;'
+    colors.append(objekt_strasse_color)
     
-    #if typ == 'a4':
-    pos = frappe.db.sql("""SELECT DISTINCT `parent` FROM `tabPurchase Order Item` WHERE `project` = '{project}' AND `docstatus` != 2 LIMIT 1""".format(project=project.name), as_dict=True)
-    if len(pos) > 0:
-        po = frappe.get_doc("Purchase Order", pos[0].parent)
-        if po.docstatus != 1:
-            data['a4'] = {
-                'color': 'red',
-                'tooltip': _("Purchase Order") + " {po} ".format(po=po.name) + _("<b>not</b> submitted")
-            }
-        else:
-            if po.per_received == 100:
-                data['a4'] = {
-                    'color': 'green',
-                    'tooltip': _("Purchase Order delivered")
-                }
-                a4 = True
-            else:
-                data['a4'] = {
-                    'color': 'yellow',
-                    'tooltip': _("Purchase Order") + " {percent}% " + "delivered".format(percent=po.per_received)
-                }
-    else:
-        data['a4'] = {
-            'color': 'red',
-            'tooltip': _("No Purchase Order available")
-        }
+    # objekt_plz_ort
+    objekt_plz_ort_color = '#c4c7ca;'
+    if int(project.thermozement) == 1:
+        objekt_plz_ort_color = '#9dc7f0;'
+    colors.append(objekt_plz_ort_color)
+    objekt_plz_ort_font_color = 'black;'
+    objekt_plz_ort_border_color = ''
+    for permit in project.permits:
+        if 'Lärmschutzbewilligung' in permit.permit:
+            objekt_plz_ort_font_color = 'red;'
+            if permit.file:
+                objekt_plz_ort_font_color = 'yellow;'
+        elif 'Strassensperrung' in permit.permit:
+            if not permit.file:
+                objekt_plz_ort_border_color = 'border: 1px solid red;'
+    colors.append(objekt_plz_ort_font_color)
+    colors.append(objekt_plz_ort_border_color)
     
-    #if typ == 'a5':
-    crane_activity = frappe.get_single("Heim Settings").crane_activity or 'Kran'
-    crane = frappe.db.sql("""SELECT `name`, `supplier` FROM `tabProject Checklist` WHERE `parent` = '{project}' AND `activity` = '{crane_activity}'""".format(project=project.name, crane_activity=crane_activity), as_dict=True)
-    if not len(crane) > 0:
-        data['a5'] = {
-            'color': 'grey',
-            'tooltip': _("No crane is needed")
-        }
-        a5 = True
-    else:
-        if crane[0].supplier:
-            data['a5'] = {
-                'color': 'green',
-                'tooltip': _("The crane was organized")
-            }
-            a5 = True
-        else:
-            data['a5'] = {
-                'color': 'red',
-                'tooltip': _("The crane has not yet been organized")
-            }
+    #ews_details
+    ews_details_color = '#ffa6a6;'
+    po = frappe.db.sql("""SELECT `per_received` FROM `tabPurchase Order` WHERE `object` = '{0}' AND `docstatus` = 1""".format(project.object), as_dict=True)
+    if len(po) > 0:
+        ews_details_color = '#ffffbf;'
+        if int(po[0].per_received) == 100:
+            ews_details_color = '#81d41a;'
+    colors.append(ews_details_color)
     
-    #if typ == 'a6':
-    mud_disposer_activity = frappe.get_single("Heim Settings").mud_disposer_activity or 'Schlammentsorgung'
-    mud_disposer = frappe.db.sql("""SELECT `name`, `supplier` FROM `tabProject Checklist` WHERE `parent` = '{project}' AND `activity` = '{mud_disposer_activity}'""".format(project=project.name, mud_disposer_activity=mud_disposer_activity), as_dict=True)
-    if not len(mud_disposer) > 0:
-        data['a6'] = {
-            'color': 'red',
-            'tooltip': _("The Mud Disposer has not yet been organized")
-        }
-    else:
-        if mud_disposer[0].supplier:
-            data['a6'] = {
-                'color': 'green',
-                'tooltip': _("The Mud Disposer was organized")
-            }
-            a6 = True
-        else:
-            data['a6'] = {
-                'color': 'red',
-                'tooltip': _("The Mud Disposer has not yet been organized")
-            }
+    # saugauftrag
+    saugauftrag_color = 'transparent;'
+    for cl_entry in project.checklist:
+        if cl_entry.activity == 'Schlammentsorgung':
+            saugauftrag_color = '#ffa6a6;'
+            if cl_entry.supplier_name:
+                saugauftrag_color = '#81d41a;'
+    colors.append(saugauftrag_color)
     
-    #if typ == 'a7':
-    if project.drill_notice_sent == 1:
-        data['a7'] = {
-            'color': 'green',
-            'tooltip': _("Drill notice sent")
-        }
-        a7 = True
-    else:
-       data['a7'] = {
-            'color': 'red',
-            'tooltip': _("Drill notice <b>not</b> sent")
-        }
-        
-    if a1 and \
-       a2 and \
-       a3 and \
-       a4 and \
-       a6 and \
-       a7 and \
-       a5:
-        data['bgc'] = 'background-color: #eefdec;'
-        data ['bc'] = 'border: 2px solid #81d41a;'
-    elif a1 and \
-         a2 and \
-         a3 and \
-         a7:
-        data['bgc'] = 'background-color: #ffffbf;'
-        data ['bc'] = 'border: 2px solid #ffff6d;'
-    else:
-        data['bgc'] = 'background-color: #ffeae9;'
-        data ['bc'] = 'border: 2px solid #ffa6a6;'
-        
-    return data
+    # pneukran
+    pneukran_color = '#c4c7ca;'
+    if int(project.crane_required) == 1:
+        if int(project.crane_organized) == 1:
+            pneukran_color = '#81d41a;'
+        else:
+            pneukran_color = '#ffa6a6;'
+    colors.append(pneukran_color)
+    
+    # typ_bohrgeraet
+    typ_bohrgeraet_color = 'white;'
+    colors.append(typ_bohrgeraet_color)
+    
+    # kuerzel_pl
+    kuerzel_pl_color = '#ffa6a6;'
+    baustelle_besichtigt = int(frappe.get_doc("Object", project.object).construction_site_inspected)
+    if baustelle_besichtigt == 1:
+        kuerzel_pl_color = '#81d41a;'
+    colors.append(kuerzel_pl_color)
+    
+    # strassensperrung
+    strassensperrung_color = '#c4c7ca;'
+    for permit in project.permits:
+        if 'Strassensperrung' in permit.permit:
+            strassensperrung_color = '#ffa6a6;'
+            if permit.file:
+                strassensperrung_color = '#81d41a;'
+    colors.append(strassensperrung_color)
+    
+    return colors
     
 @frappe.whitelist()
 def reschedule_project(project=None, team=None, day=None, start_half_day=None, popup=False, new_project_start=None, new_project_end_date=None, end_half_day=None):
@@ -339,7 +311,7 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
                     project.end_half_day = 'VM'
         
         project.drilling_team = team
-        
+        project.crane_organized = '0'
         project.save()
     else:
         project.expected_start_date = getdate(new_project_start)
@@ -347,7 +319,7 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
         project.start_half_day = start_half_day
         project.end_half_day = end_half_day
         project.drilling_team = team
-        
+        project.crane_organized = '0'
         project.save()
     
 @frappe.whitelist()

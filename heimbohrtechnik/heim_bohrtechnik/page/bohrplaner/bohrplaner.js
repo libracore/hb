@@ -1,9 +1,9 @@
 frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
-	var page = frappe.ui.make_app_page({
-		parent: wrapper,
-		title: 'Bohrplaner',
-		single_column: true
-	});
+    var page = frappe.ui.make_app_page({
+        parent: wrapper,
+        title: 'Bohrplaner',
+        single_column: true
+    });
     
     // set full-width if not
     if (document.getElementsByTagName("body")[0].className != 'full-width') {
@@ -16,6 +16,27 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
         frappe.bohrplaner.make(page);
         // run page
         frappe.bohrplaner.run(page);
+        
+        page.set_secondary_action('Soft Reload', () => {
+            frappe.bohrplaner.reset_dates(page);
+        });
+        
+        if (frappe.route_options.from && frappe.route_options.project_name) {
+            document.getElementById("from").value = frappe.datetime.add_days(frappe.route_options.from, -14);
+            document.getElementById("to").value = frappe.datetime.add_days(frappe.route_options.from, 14);
+            let date_reset = new Promise(function(ok, nok) {
+                frappe.bohrplaner.reset_dates(page);
+                ok();
+            });
+            date_reset.then(
+                function(value) {
+                    var project_element = document.getElementById(frappe.route_options.project_name);
+                    project_element.scrollIntoView({inline: 'center'});
+                    document.getElementById("bohrplan_wrapper").scrollTop = document.getElementById("bohrplan_wrapper").scrollTop - 150;
+                },
+                function(error) { /* code if some error */ }
+            );
+        }
     }
 }
 
@@ -36,7 +57,7 @@ frappe.bohrplaner = {
         $(frappe.render_template('calendar_grid', data)).appendTo(me.page.body);
     },
     run: function(page) {
-		// set today as default "from" date
+        // set today as default "from" date
         var now = new Date();
         document.getElementById("from").value = frappe.datetime.add_days(now, 0);
         
@@ -57,14 +78,14 @@ frappe.bohrplaner = {
         
         // get drilling teams
         frappe.call({
-		   method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_content",
-		   args: {
-				"from_date": from_date,
-				"to_date": to_date
-		   },
+           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_content",
+           args: {
+                "from_date": from_date,
+                "to_date": to_date
+           },
            async: false,
-		   callback: function(response) {
-				var content = response.message;
+           callback: function(response) {
+                var content = response.message;
                 data = {
                     drilling_teams: content.drilling_teams,
                     days: content.days,
@@ -73,8 +94,8 @@ frappe.bohrplaner = {
                     day_list: content.day_list,
                     today: content.today
                 };
-		   }
-		});
+           }
+        });
         
         return data
     },
@@ -82,28 +103,28 @@ frappe.bohrplaner = {
         var from = $("#from").val();
         var to = $("#to").val();
         frappe.call({
-		   method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_overlay_datas",
-		   args: {
-				"from_date": from,
-				"to_date": to
-		   },
+           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_overlay_datas",
+           args: {
+                "from_date": from,
+                "to_date": to
+           },
            async: false,
-		   callback: function(response) {
-				var contents = response.message;
+           callback: function(response) {
+                var contents = response.message;
                 for (var i = 0; i < contents.length; i++) {
                     var data = contents[i];
                     frappe.bohrplaner.add_overlay(page, data);
                 }
                 
-		   }
-		});
+           }
+        });
     },
     add_overlay: function(page, data) {
         var place = $('[data-bohrteam="' + data.bohrteam + '"][data-date="' + data.start + '"][data-vmnm="' + data.vmnm + '"]');
         $(place).css("position", "relative");
         var qty = data.dauer
         var width = 42 * qty;
-        $(frappe.render_template('booking_overlay', {'width': width, 'object': data.object, 'project': data.name, 'ampeln': data.ampeln})).appendTo(place);
+        $(frappe.render_template('booking_overlay', {'width': width, 'project': data.project, 'saugauftrag': data.saugauftrag, 'pneukran': data.pneukran, 'manager_short': data.manager_short, 'drilling_equipment': data.drilling_equipment, 'ampeln': data.ampeln})).appendTo(place);
         return
     },
     reset_dates: function(page) {
@@ -186,6 +207,11 @@ frappe.bohrplaner = {
                                     manager = '<a href="/desk#Form/User/' + object.manager + '" target="_blank">' + object.manager + '</a>';
                                 }
                                 
+                                var ews_details = __('No EWS Details found');
+                                if (project.ews_details) {
+                                    ews_details = project.ews_details;
+                                }
+                                
                                 var html = '<table style="width: 100%;">';
                                 html = html + '<tr><td><b>' + __('Project') + '</b></td>';
                                 html = html + '<td>' + '<a href="/desk#Form/Project/' + project.name + '" target="_blank">' + project.name + '</a></td></tr>';
@@ -196,15 +222,16 @@ frappe.bohrplaner = {
                                 html = html + '<tr><td><b>' + __('Location') + '</b></td>';
                                 html = html + '<td>' + project.object_location + '</td></tr>';
                                 html = html + '<tr><td><b>' + __('EWS Details') + '</b></td>';
-                                html = html + '<td>' + project.ews_details + '</td></tr>';
+                                html = html + '<td>' + ews_details + '</td></tr>';
+                                html = html + '<tr><td><b>' + __('Pneukran') + '</b></td>';
+                                html = html + '<td>' + 'Muss noch umgesetzt werden' + '</td></tr>';
                                 html = html + '<tr><td><b>' + __('Mud Disposer') + '</b></td>';
                                 html = html + '<td>' + mud_disposer + ' ' + mud_disposer_name +'</td></tr>';
                                 html = html + '<tr><td><b>' + __('Drilling Equipment') + '</b></td>';
                                 html = html + '<td>' + drilling_equipment + '</td></tr>';
                                 html = html + '<tr><td><b>' + __('Manager') + '</b></td>';
                                 html = html + '<td>' + manager + '</td></tr>';
-                                html = html + '<tr><td><b>' + __('Status') + '</b></td>';
-                                html = html + '<td>Status - Details...</td></tr>';
+                                html = html + '</tabler>';
                                 
                                 var d = new frappe.ui.Dialog({
                                     'fields': [
