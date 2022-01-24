@@ -242,6 +242,7 @@ def load_projects(filename):
                 existing_project.end_half_day = "VM" if project['end_date_vm'] else "NM"
                 existing_project.status = project['status']
                 existing_project.object = project['name']
+                existing_project.object_street=cgi.escape(str(project['object_street'] or "??")).replace("\"", "")
                 existing_project.save()
                 print("Updated project {0}".format(project['name']))
             else:
@@ -256,6 +257,7 @@ def load_projects(filename):
                     'end_half_day': "VM" if project['end_date_vm'] else "NM",
                     'status': project['status'],
                     'object': project['name'],
+                    'object_street': cgi.escape(str(project['object_street'] or "??")).replace("\"", ""),
                     'project_type': "External"
                 })
                 # find customer
