@@ -11,11 +11,20 @@ frappe.ui.form.on('Delivery Note', {
             select_naming_series(frm);
         }
     },
-    refrehs: function(frm) {
+    refresh: function(frm) {
         // set naming series (for company)
         if (frm.doc.__islocal) {
             select_naming_series(frm);
         }
+        
+        // remove obsolete menu items
+        setTimeout(function() {
+            $("a[data-label='" + encodeURI(__("Packing Slip")) + "']").parent().remove();
+            $("a[data-label='" + encodeURI(__("Installation Note")) + "']").parent().remove();
+            $("a[data-label='" + encodeURI(__("Sales Return")) + "']").parent().remove();
+            $("a[data-label='" + encodeURI(__("Delivery Trip")) + "']").parent().remove();
+            $("a[data-label='" + encodeURI(__("Subscription")) + "']").parent().remove();
+        }, 1000);
     }
 });
 
