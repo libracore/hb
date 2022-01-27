@@ -24,3 +24,15 @@ def get_required_activities(supplier, activity):
     for a in data:
         activities.append(a['required_activity'])
     return activities
+
+# searches for supplier
+def get_company_sales_items(doctype, txt, searchfield, start, page_len, filters):
+    return frappe.db.sql(
+        """SELECT `tabItem`.`item_code`, `tabItem`.`item_name`, `tabItem`.`item_group`
+           FROM `tabItem`
+           WHERE `tabItem`.`is_sales_item` = 1 
+             AND `tabItem`.`item_group` LIKE "{c}" 
+             AND (`tabItem`.`item_code` LIKE "%{s}%" 
+                  OR `tabItem`.`item_name` LIKE "%{s}%"
+                  OR `tabItem`.`description` LIKE "%{s}%");
+        """.format(c=filters['group_code'], s=txt))
