@@ -16,7 +16,7 @@ frappe.ui.form.on('Project', {
             'callback': function(response) {
                 if (response.message) {
                     frm.add_custom_button( __("Abrechnen"), function() {
-                        create_mud_invoice(frm);
+                        create_mud_invoice(frm.doc.name);
                     }, "MudEX");
                 }
             }

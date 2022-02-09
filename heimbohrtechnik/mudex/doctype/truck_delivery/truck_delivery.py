@@ -165,7 +165,7 @@ def create_invoice(object):
                 frappe.log_error("Unable to attach pdf: {0}".format(err), "Truck delivery document creation {0}".format(object))
         return new_sinv.name
     else:
-        frappe.throw( _("Nothng to invoice") )
+        frappe.throw( _("Nothing to invoice") )
 
 """
 Use this function to get all deliveries to be invoiced
