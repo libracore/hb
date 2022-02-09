@@ -11,7 +11,8 @@
   "mud_activity",
   "mud_item",
   "column_invoicing",
-  "default_customer_for_mud"
+  "default_customer_for_mud",
+  "sales_invoice_print_format"
  ],
  "fields": [
   {
@@ -56,10 +57,16 @@
    "fieldtype": "Link",
    "label": "Default Customer for Mud",
    "options": "Customer"
+  },
+  {
+   "fieldname": "sales_invoice_print_format",
+   "fieldtype": "Link",
+   "label": "Sales Invoice Print Format",
+   "options": "Print Format"
   }
  ],
  "issingle": 1,
- "modified": "2021-10-19 21:33:24.992499",
+ "modified": "2022-02-09 07:44:35.544369",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "MudEx Settings",
