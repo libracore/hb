@@ -67,6 +67,8 @@ frappe.ui.form.on('Object', {
                         frm.add_custom_button( frm.doc.name, function() {
                             frappe.set_route("Form", "Project", frm.doc.name);
                         }).addClass("btn-primary");
+                        // hide permits & checklist
+                        document.querySelectorAll("[data-fieldname='checklist']")[0].parentElement.parentElement.parentElement.parentElement.style.display = "None";
                     } else {
                         // has no project
                         frm.add_custom_button(__('Create project'), function() {

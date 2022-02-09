@@ -1,3 +1,13 @@
+// extend dashboard
+try {
+    cur_frm.dashboard.add_transactions([
+        {
+            'label': 'Drilling',
+            'items': ['Construction Site Description']
+        }
+    ]);
+} catch { /* do nothing for older versions */ }
+
 frappe.ui.form.on('Project', {
     refresh(frm) {
         // filter suppliers by activity

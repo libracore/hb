@@ -5,6 +5,7 @@
  "engine": "InnoDB",
  "field_order": [
   "object",
+  "project",
   "column_main",
   "object_name",
   "section_images",
@@ -42,9 +43,16 @@
    "in_standard_filter": 1,
    "label": "Object Name",
    "read_only": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Project",
+   "options": "Project"
   }
  ],
- "modified": "2021-06-08 17:08:24.443587",
+ "modified": "2022-02-09 19:29:32.053482",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
