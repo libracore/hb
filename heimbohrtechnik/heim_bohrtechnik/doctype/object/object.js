@@ -56,6 +56,10 @@ cur_frm.fields_dict.checklist.grid.get_field('supplier').get_query =
     
 frappe.ui.form.on('Object', {
     refresh: function(frm) {
+        // show permits & checklist
+        try {
+            document.querySelectorAll("[data-fieldname='checklist']")[0].parentElement.parentElement.parentElement.parentElement.style.display = "Block";
+        } catch { /* do nothing */ }
         if (!frm.doc.__islocal) {
             // check if project exists
             frappe.call({
@@ -68,7 +72,9 @@ frappe.ui.form.on('Object', {
                             frappe.set_route("Form", "Project", frm.doc.name);
                         }).addClass("btn-primary");
                         // hide permits & checklist
-                        document.querySelectorAll("[data-fieldname='checklist']")[0].parentElement.parentElement.parentElement.parentElement.style.display = "None";
+                        try {
+                            document.querySelectorAll("[data-fieldname='checklist']")[0].parentElement.parentElement.parentElement.parentElement.style.display = "None";
+                        } catch { /* do nothing */ }
                     } else {
                         // has no project
                         frm.add_custom_button(__('Create project'), function() {
