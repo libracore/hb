@@ -1,3 +1,13 @@
+// extend dashboard
+try {
+    cur_frm.dashboard.add_transactions([
+        {
+            'label': 'Drilling',
+            'items': ['Construction Site Description']
+        }
+    ]);
+} catch { /* do nothing for older versions */ }
+
 frappe.ui.form.on('Project', {
     refresh(frm) {
         // filter suppliers by activity
@@ -16,7 +26,7 @@ frappe.ui.form.on('Project', {
             'callback': function(response) {
                 if (response.message) {
                     frm.add_custom_button( __("Abrechnen"), function() {
-                        create_mud_invoice(frm);
+                        create_mud_invoice(frm.doc.name);
                     }, "MudEX");
                 }
             }

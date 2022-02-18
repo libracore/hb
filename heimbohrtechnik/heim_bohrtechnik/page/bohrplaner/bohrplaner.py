@@ -37,8 +37,11 @@ def get_overlay_datas(from_date, to_date):
         
         project = frappe.get_doc("Project", p.name)
         p_object = frappe.get_doc("Object", p.object)
-        manager_short = frappe.db.get_value("User", p_object.manager, "username") if p_object.manager else ''
-        drilling_equipment = p_object.drilling_equipment if p_object.drilling_equipment else ''
+        manager_short = frappe.db.get_value("User", project.manager, "username") if project.manager else ''
+        drilling_equipments = []
+        for d in project.drilling_equipment:
+            drilling_equipments.append(d.drilling_equipment)
+        drilling_equipment = ", ".join(drilling_equipments)
         saugauftrag = ''
         pneukran = ''
         for cl_entry in project.checklist:
@@ -259,7 +262,7 @@ def get_traffic_lights_indicator(project):
     
     # kuerzel_pl
     kuerzel_pl_color = '#ffa6a6;'
-    baustelle_besichtigt = int(frappe.get_doc("Object", project.object).construction_site_inspected)
+    baustelle_besichtigt = int(project.construction_site_inspected)
     if baustelle_besichtigt == 1:
         kuerzel_pl_color = '#81d41a;'
     colors.append(kuerzel_pl_color)

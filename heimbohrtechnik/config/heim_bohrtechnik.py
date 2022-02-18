@@ -342,6 +342,12 @@ def get_data():
                    "name": "Heim Settings",
                    "label": _("Heim Settings"),
                    "description": _("Heim Settings")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Email Footer Template",
+                   "label": _("Email Footer Template"),
+                   "description": _("Email Footer Template")
                 }
             ]
         },

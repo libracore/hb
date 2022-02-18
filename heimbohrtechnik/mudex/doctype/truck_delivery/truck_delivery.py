@@ -7,6 +7,8 @@ import frappe
 from frappe.model.document import Document
 from frappe import _
 from datetime import datetime
+from erpnextswiss.erpnextswiss.attach_pdf import attach_pdf, execute
+from frappe.utils.file_manager import add_attachments
 
 class TruckDelivery(Document):
     def on_submit(self): 
@@ -150,9 +152,20 @@ def create_invoice(object):
             # insert
             new_pinv.insert()
             new_pinv.submit()
+            # create pdf attachments
+            try:
+                # use execute instead of attach_pdf to make it sync for the subsequent doc
+                execute("Sales Invoice", new_sinv.name, lang="de", title=new_sinv.title, print_format=config.sales_invoice_print_format)
+                frappe.db.commit()
+                attached_file = frappe.get_all("File", 
+                    filters={'attached_to_name': new_sinv.name, 'attached_to_doctype': "Sales Invoice"},
+                    fields=['name']) 
+                add_attachments("Purchase Invoice", new_pinv.name, [attached_file[0]['name']])
+            except Exception as err:
+                frappe.log_error("Unable to attach pdf: {0}".format(err), "Truck delivery document creation {0}".format(object))
         return new_sinv.name
     else:
-        frappe.throw( _("Nothng to invoice") )
+        frappe.throw( _("Nothing to invoice") )
 
 """
 Use this function to get all deliveries to be invoiced

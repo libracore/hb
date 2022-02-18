@@ -12,6 +12,8 @@
   "mobile",
   "column_main",
   "signature_type",
+  "section_email_footer",
+  "email_footer_template",
   "email_footer"
  ],
  "fields": [
@@ -51,8 +53,8 @@
   {
    "fieldname": "email_footer",
    "fieldtype": "Code",
-   "hidden": 1,
-   "label": "Email Footer"
+   "label": "Email Footer",
+   "read_only": 1
   },
   {
    "fieldname": "mobile",
@@ -63,9 +65,20 @@
    "fieldname": "function",
    "fieldtype": "Data",
    "label": "Function"
+  },
+  {
+   "fieldname": "section_email_footer",
+   "fieldtype": "Section Break",
+   "label": "Email Footer"
+  },
+  {
+   "fieldname": "email_footer_template",
+   "fieldtype": "Link",
+   "label": "Template",
+   "options": "Email Footer Template"
   }
  ],
- "modified": "2021-11-12 20:04:29.338513",
+ "modified": "2022-02-09 10:22:50.060566",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Signature",
