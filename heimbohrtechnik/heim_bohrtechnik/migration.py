@@ -220,7 +220,10 @@ def load_projects(filename):
             # check if project exists
             if frappe.db.exists("Project", project['name']) or frappe.db.exists("Project", "P-{0}".format(project['name'])):
                 # existing project, update
-                existing_project = frappe.get_doc("Project", project['name'])
+                if frappe.db.exists("Project", "P-{0}".format(project['name'])):
+                    existing_project = frappe.get_doc("Project", "P-{0}".format(project['name']))
+                else:
+                    existing_project = frappe.get_doc("Project", project['name'])
                 # find customer
                 customer_matches = frappe.get_all("Customer", filters={'customer_name': project['customer_name']}, fields=['name'])
                 if customer_matches and len(customer_matches) > 0:
