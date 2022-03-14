@@ -218,9 +218,12 @@ def load_projects(filename):
                         object_street=cgi.escape(project['object_street'] or "??").replace("\"", "")))
                         
             # check if project exists
-            if frappe.db.exists("Project", project['name']):
+            if frappe.db.exists("Project", project['name']) or frappe.db.exists("Project", "P-{0}".format(project['name'])):
                 # existing project, update
-                existing_project = frappe.get_doc("Project", project['name'])
+                if frappe.db.exists("Project", "P-{0}".format(project['name'])):
+                    existing_project = frappe.get_doc("Project", "P-{0}".format(project['name']))
+                else:
+                    existing_project = frappe.get_doc("Project", project['name'])
                 # find customer
                 customer_matches = frappe.get_all("Customer", filters={'customer_name': project['customer_name']}, fields=['name'])
                 if customer_matches and len(customer_matches) > 0:
@@ -247,16 +250,21 @@ def load_projects(filename):
                 print("Updated project {0}".format(project['name']))
             else:
                 # this project is not yet in the database, create
+                # check if this should be on a P- object
+                if frappe.db.exists("Object", "P-{0}".format(project['name'])):
+                    name = "P-{0}".format(project['name'])
+                else:
+                    name = project['name']
                 new_project = frappe.get_doc({
                     'doctype': 'Project',
-                    'project_name': project['name'],
+                    'project_name': name,
                     'drilling_team': team_name,
                     'expected_start_date': project['start_date'],
                     'expected_end_date': project['end_date'],
                     'start_half_day': "VM" if project['start_date_vm'] else "NM",
                     'end_half_day': "VM" if project['end_date_vm'] else "NM",
                     'status': project['status'],
-                    'object': project['name'],
+                    'object': name,
                     'object_street': cgi.escape(str(project['object_street'] or "??")).replace("\"", ""),
                     'project_type': "External"
                 })
