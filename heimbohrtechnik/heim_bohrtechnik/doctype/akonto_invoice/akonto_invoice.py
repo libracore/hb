@@ -101,11 +101,6 @@ class AkontoInvoice(SellingController):
 
         self.update_prevdoc_status()
 
-        if not self.is_return:
-            self.update_billing_status_for_zero_amount_refdoc("Delivery Note")
-            self.update_billing_status_for_zero_amount_refdoc("Sales Order")
-            self.update_serial_no(in_cancel=True)
-
         #self.make_gl_entries_on_cancel()
         frappe.db.set(self, 'status', 'Cancelled')
 
