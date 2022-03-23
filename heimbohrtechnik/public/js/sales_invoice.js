@@ -25,6 +25,22 @@ frappe.ui.form.on('Sales Invoice', {
         if (frm.doc.__islocal) {
             select_naming_series(frm);
         }
+    },
+    after_cancel: function(frm) {
+        // if this is a MudEX invoice to HB, cancel related invoice
+        if ((frm.doc.company.includes("MudEX")) && (frm.doc.customer === "K-00010")) {
+            frappe.call({
+                'method': 'heimbohrtechnik.heim_bohrtechnik.utils.cancel_mudex_invoice',
+                'args': {
+                    'reference': frm.doc.name
+                },
+                'callback': function(r) {
+                    if (r.message) {
+                        frappe.show_alert(r.message + " wurde auch storniert");
+                    }
+                }
+            });
+        }
     }
 });
 

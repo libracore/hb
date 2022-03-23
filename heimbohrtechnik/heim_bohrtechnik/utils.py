@@ -120,3 +120,13 @@ def get_object_reference_address(object, address_type):
     else:
         address = None
     return address
+
+@frappe.whitelist()
+def cancel_mudex_invoice(reference):
+    open_pinvs = frappe.get_all("Purchase Invoice", filters={'bill_no': reference, 'docstatus': 1}, fields=['name'])
+    if open_pinvs and len(open_pinvs) > 0:
+        pinv = frappe.get_doc("Purchase Invoice", open_pinvs[0]['name'])
+        pinv.cancel()
+        frappe.db.commit()
+        return pinv.name
+    return None
