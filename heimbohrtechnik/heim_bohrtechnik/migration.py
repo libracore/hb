@@ -1,4 +1,4 @@
-# Copyright (c) 2021, libracore and Contributors
+# Copyright (c) 2021-2022, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 
 from __future__ import unicode_literals
@@ -244,7 +244,7 @@ def load_projects(filename):
                 existing_project.start_half_day = "VM" if project['start_date_vm'] else "NM"
                 existing_project.end_half_day = "VM" if project['end_date_vm'] else "NM"
                 existing_project.status = project['status']
-                existing_project.object = project['name']
+                existing_project.object = existing_object.name
                 existing_project.object_street=cgi.escape(str(project['object_street'] or "??")).replace("\"", "")
                 existing_project.save()
                 print("Updated project {0}".format(project['name']))
