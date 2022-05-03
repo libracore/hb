@@ -359,7 +359,13 @@ def get_data():
                     "type": "report",
                     "name": "Drilling Rate Evaluation",
                     "doctype": "Object",
-                    "is_query_report": True,
+                    "is_query_report": True
+                },
+                {
+                    "type": "report",
+                    "name": "Artikelzusammenfassung",
+                    "doctype": "Item",
+                    "is_query_report": True
                 }
             ]
         }
