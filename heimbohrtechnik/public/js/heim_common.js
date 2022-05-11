@@ -28,7 +28,7 @@ window.onload = async function () {
 // document loaded
 document.addEventListener("DOMContentLoaded", function(event) {
     var sheet = window.document.styleSheets[0];
-    if (!frappe.user.has_role("System Manager")) {
+    if ((!frappe.user.has_role("System Manager")) && (!frappe.user.name === "beuggert@hb-ag.ch")) {
         // disable deleting document attachments
         sheet.insertRule('.attachment-row>.close { display: none !important; }');
     }
