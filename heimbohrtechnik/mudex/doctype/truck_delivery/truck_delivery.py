@@ -88,10 +88,16 @@ def create_invoice(object):
     # get deliveries and add as positions
     invoiceable_deliveries = get_deliveries(object)
     if invoiceable_deliveries and len(invoiceable_deliveries) > 0:
+        # fetch mud type - item data
+        mud_type_items = frappe.get_all("Truck Load Type", fields=['title', 'item'])
+        mud_type_map = {}
+        for m in mud_type_items:
+            mud_type_map[m['title']] = m['item']
+        # append invoice positions
         for i in invoiceable_deliveries:
             d = i['date']                       # datetime.strptime(str(i['date'])[:19], "%Y-%m-%d %H:%M:%S")
             new_sinv.append('items', {
-                'item_code': config.mud_item,
+                'item_code': mud_type_map[i['load_type']],
                 'qty': i['weight'] / 1000,
                 'description': "{date}: {truck}".format(date=d.strftime("%d.%m.%Y, %H:%M"), truck=i['truck']),
                 'truck_delivery': i['delivery'],
@@ -176,7 +182,8 @@ def get_deliveries(object):
             `tabTruck Delivery`.`name` AS `delivery`, 
             `tabTruck Delivery Object`.`weight` AS `weight`,
             `tabTruck Delivery`.`truck` AS `truck`,
-            `tabTruck Delivery`.`date` AS `date`
+            `tabTruck Delivery`.`date` AS `date`,
+            `tabTruck Delivery`.`load_type` AS `load_type`
         FROM `tabTruck Delivery Object`
         LEFT JOIN `tabTruck Delivery` ON `tabTruck Delivery`.`name` = `tabTruck Delivery Object`.`parent`
         LEFT JOIN `tabSales Invoice Item` ON 
