@@ -217,3 +217,4 @@ DocType: Truck Planning,Truck Planning,LKW-Planung
 DocType: Akonto Invoice,Akonto Invoice,Akonto-Rechnung
 DocType: Akonto Invoice,Without Items,Ohne Artikel
 DocType: Akonto Invoice,No Item Net Amount,Betrag ohne Artikel
+DocType: Object Overview,Object Overview,Objektübersicht
