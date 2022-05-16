@@ -1,4 +1,4 @@
-// Copyright (c) 2021, libracore AG and contributors
+// Copyright (c) 2021-2022, libracore AG and contributors
 // For license information, please see license.txt
 
 // child table filter sets

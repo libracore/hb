@@ -130,3 +130,27 @@ def cancel_mudex_invoice(reference):
         frappe.db.commit()
         return pinv.name
     return None
+
+@frappe.whitelist()
+def get_object_geographic_environment(object_name):
+    obj = frappe.get_doc("Object", object_name)
+    data = {
+        'object': object_name,
+        'gps_lat': obj.gps_lat,
+        'gps_long': obj.gps_long
+    }
+    
+    data['environment'] = frappe.db.sql("""
+        SELECT `name`, `gps_lat`, `gps_long`
+        FROM `tabObject`
+        WHERE 
+            `gps_lat` >= ({lat} - {lat_offset})
+            AND `gps_lat` <= ({lat} + {lat_offset})
+            AND `gps_long` >= ({long} - {long_offset})
+            AND `gps_long` <= ({long} + {long_offset})
+            AND `name` != "{reference}";
+    """.format(reference=object_name, lat=obj.gps_lat, lat_offset=0.1
+        long=obj.gps_long, long_offset=0.1), as_dict=True)
+    
+    return data
+    

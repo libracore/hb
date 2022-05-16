@@ -355,3 +355,16 @@ def set_supplier_first_address():
             s.save()
             print("Updated {0}".format(s.name))
     return
+
+def update_object_lat_long():
+    objects = frappe.get_all("Object", filters=[['gps_coordinates', 'LIKE', '%,%']], fields=['name'])
+    count = 0
+    for o in objects:
+        count += 1
+        print("Processing {0} ({1})".format(o['name'], 100 * count / len(objects)))
+        o_doc = frappe.get_doc("Object", o['name'])
+        o_doc.set_gps()
+        o_doc.save()
+    frappe.db.commit()
+    print("done")
+    return

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021, libracore AG and contributors
+# Copyright (c) 2021-2022, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
@@ -13,8 +13,17 @@ class Object(Document):
     def before_save(self):
         if not self.object_key:
             self.set_key()
+        
         return
     
+    def set_gps(self):
+        if self.gps_coordinates:
+            parts = self.gps_coordinates.split(",")
+            if len(parts) == 2:
+                self.gps_lat = float(parts[0].replace("'", ""))
+                self.gps_long = float(parts[1].replace("'", ""))
+        return
+        
     def has_project(self):
         if frappe.db.exists("Project", self.name):
             return 1
