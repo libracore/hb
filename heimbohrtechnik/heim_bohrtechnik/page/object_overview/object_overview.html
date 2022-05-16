@@ -1,40 +1,5 @@
 <div style="margin: 5px; margin-top: 0px; border-top: 1px solid white; ">
-    <p class="text-muted">{%= __("Object Overview") %}</p>
-    <div class="section-body">
-        <div class="row">
-            <div class="form-column col-sm-4">
-
-            </div>
-            <div class="form-column col-sm-4">
-
-            </div>
-            <div class="form-column col-sm-4">
-
-            </div>
-        </div>
-        
-        
-        <div class="row">
-            <div id =”map” style = “width:800px; height:600px;”></div>
-        </div>
-    </div>
-</div>
+    <div id ="map" style = "width:100%; height:600px;"></div>
+</div> 
 
 <script src="/assets/heimbohrtechnik/js/leaflet.js"></script>
-
-<script>
-    // Creating map options
-    var mapOptions = {
-        center: [17.385044, 78.486671],
-        zoom: 10
-    }
-
-    // Creating a map object
-    var map = new L.map(‘map’, mapOptions);
-
-    // Creating a Layer object
-    var layer = new     L.TileLayer(‘http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png’);
-
-    // Adding layer to the map
-    map.addLayer(layer);
-</script>

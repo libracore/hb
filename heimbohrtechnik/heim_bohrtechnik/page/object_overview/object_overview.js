@@ -30,7 +30,7 @@ frappe.object_overview = {
             link.id   = cssId;
             link.rel  = 'stylesheet';
             link.type = 'text/css';
-            link.href = '/assets/heimbohrtechnik/leaflet.css';
+            link.href = '/assets/heimbohrtechnik/css/leaflet.css';
             link.media = 'all';
             head.appendChild(link);
         }
@@ -47,7 +47,18 @@ frappe.object_overview = {
 
     },
     run: function() {
-        // populate bank accounts
+        // create map        
+        var map = L.map('map').setView([47.37767, 9.56121], 15);
+        // create layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+        
+        // add marker
+        L.marker([47.37767, 9.56121]).addTo(map)
+            .bindPopup('HB-AG<br>Altstätten');
 
+        // hack: issue a resize event
+        window.dispatchEvent(new Event('resize')); 
     }
 }
