@@ -141,16 +141,27 @@ def get_object_geographic_environment(object_name):
     }
     
     data['environment'] = frappe.db.sql("""
-        SELECT `name`, `gps_lat`, `gps_long`
+        SELECT 
+            `name` AS `object`, 
+            `gps_lat` AS `gps_lat`, 
+            `gps_long` AS `gps_long`,
+            (SELECT `rate`
+             FROM `tabQuotation Item`
+             LEFT JOIN `tabQuotation` ON `tabQuotation`.`name` = `tabQuotation Item`.`parent`
+             WHERE `tabQuotation`.`docstatus` = 1
+               AND `tabQuotation`.`object` = `tabObject`.`name`
+               AND `tabQuotation Item`.`item_code` = "1.01.03.01"
+             ORDER By `tabQuotation`.`modified` DESC
+             LIMIT 1) AS `rate`
         FROM `tabObject`
         WHERE 
-            `gps_lat` >= ({lat} - {lat_offset})
-            AND `gps_lat` <= ({lat} + {lat_offset})
-            AND `gps_long` >= ({long} - {long_offset})
-            AND `gps_long` <= ({long} + {long_offset})
+            `gps_lat` >= ({gps_lat} - {lat_offset})
+            AND `gps_lat` <= ({gps_lat} + {lat_offset})
+            AND `gps_long` >= ({gps_long} - {long_offset})
+            AND `gps_long` <= ({gps_long} + {long_offset})
             AND `name` != "{reference}";
-    """.format(reference=object_name, lat=obj.gps_lat, lat_offset=0.1
-        long=obj.gps_long, long_offset=0.1), as_dict=True)
+    """.format(reference=object_name, gps_lat=obj.gps_lat, lat_offset=0.1,
+        gps_long=obj.gps_long, long_offset=0.1), as_dict=True)
     
     return data
     

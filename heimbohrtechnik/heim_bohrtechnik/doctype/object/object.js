@@ -117,6 +117,12 @@ frappe.ui.form.on('Object', {
                     }
                 }
             });
+            // navigate to environment
+            if (frm.doc.gps_coordinates) {
+                frm.add_custom_button("Umgebung", function() {
+                    window.location = "/desk#object-overview?object=" + frm.doc.name;
+                });
+            }
         } else {
             if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
                 // fresh document, no addresses - load template
