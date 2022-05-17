@@ -368,3 +368,23 @@ def update_object_lat_long():
     frappe.db.commit()
     print("done")
     return
+
+def update_gps_from_address():
+    from heimbohrtechnik.heim_bohrtechnik.doctype.object.object import get_gps
+    objects = frappe.db.sql("""SELECT `name` FROM `tabObject` 
+        WHERE `object_street` IS NOT NULL
+          AND `object_location` IS NOT NULL
+          AND (`gps_coordinates` IS NULL
+           OR `gps_coordinates` = ""); """, as_dict=True)
+    count = 0
+    for o in objects:
+        count += 1
+        print("Processing {0} ({1}%)".format(o['name'], int(100 * count / len(objects))))
+        o_doc = frappe.get_doc("Object", o['name'])
+        gps_coordinates = get_gps(o_doc.object_street, o_doc.object_location)
+        o_doc.gps_coordinates = gps_coordinates
+        o_doc.ch_coordinates = o_doc.convert_gps_to_ch()
+        o_doc.save()
+    frappe.db.commit()
+    print("done")
+    return
