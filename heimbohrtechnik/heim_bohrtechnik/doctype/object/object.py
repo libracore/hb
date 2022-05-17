@@ -8,6 +8,8 @@ from frappe.model.document import Document
 from erpnextswiss.erpnextswiss.swisstopo import GPSConverter
 from frappe import _
 import string, random
+import requests
+import json
 
 class Object(Document):
     def before_save(self):
@@ -120,3 +122,16 @@ def apply_keys():
         print("Updated {0}".format(o['name']))
     frappe.db.commit()
     return
+
+"""
+This function will find the GPS coordinates from OpenStreetMaps
+"""
+@frappe.whitelist()
+def get_gps(street, location):
+    url = "https://nominatim.openstreetmap.org/search?q={street},{location}&format=json&polygon=1&addressdetails=0".format(street=street, location=location)
+    response = requests.get(url)
+    data = response.json()
+    gps_coordinates = None
+    if len(data) > 0:
+        gps_coordinates = "{0}, {1}".format(data[0]['lat'], data[0]['lon'])
+    return gps_coordinates

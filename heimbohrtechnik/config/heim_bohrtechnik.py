@@ -368,5 +368,17 @@ def get_data():
                     "is_query_report": True
                 }
             ]
+        },
+        {
+            "label": _("Datenpflege"),
+            "icon": "fa fa-money",
+            "items": [
+                {
+                    "type": "report",
+                    "name": "Objekte ohne GPS-Position",
+                    "doctype": "Object",
+                    "is_query_report": True
+                }
+            ]
         }
     ]
