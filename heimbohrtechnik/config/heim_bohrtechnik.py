@@ -150,6 +150,12 @@ def get_data():
                    "name": "Project",
                    "label": _("Project"),
                    "description": _("Project")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Bohranzeige",
+                   "label": _("Bohranzeige"),
+                   "description": _("Project")
                 }
             ]
         },
