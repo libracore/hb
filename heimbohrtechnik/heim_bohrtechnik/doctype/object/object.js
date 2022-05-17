@@ -120,7 +120,8 @@ frappe.ui.form.on('Object', {
             // navigate to environment
             if (frm.doc.gps_coordinates) {
                 frm.add_custom_button("Umgebung", function() {
-                    window.location = "/desk#object-overview?object=" + frm.doc.name;
+                    window.location = ("/desk#object-overview?object=" + frm.doc.name);
+                    location.reload(true); 
                 });
             }
         } else {
