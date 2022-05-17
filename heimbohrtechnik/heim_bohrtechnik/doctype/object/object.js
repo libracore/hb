@@ -310,18 +310,52 @@ frappe.ui.form.on('Object Address', {
                     "callback": function(response) {
                         var customer = response.message;
                         frappe.model.set_value(dt, dn, 'party_name', customer.customer_name);
+                        // get default address
+                        frappe.call({
+                            'method': "erpnextswiss.scripts.crm_tools.get_primary_customer_address",
+                            'args': {
+                                'customer': v.party
+                            },
+                            'callback': function(response) {
+                                var address = response.message;
+                                frappe.model.set_value(dt, dn, 'address', address.name);
+                            }
+                        });
+                        // get default contact
+                        frappe.call({
+                            'method': "erpnextswiss.scripts.crm_tools.get_primary_customer_contact",
+                            'args': {
+                                'customer': v.party
+                            },
+                            'callback': function(response) {
+                                var contact = response.message;
+                                frappe.model.set_value(dt, dn, 'contact', contact.name);
+                            }
+                        });
                     }
                 });
             } else if (v.dt === "Supplier") {
                 frappe.call({
-                    "method": "frappe.client.get",
-                    "args": {
-                        "doctype": "Supplier",
-                        "name": v.party
+                    'method': "frappe.client.get",
+                    'args': {
+                        'doctype': "Supplier",
+                        'name': v.party
                     },
-                    "callback": function(response) {
+                    'callback': function(response) {
                         var supplier = response.message;
                         frappe.model.set_value(dt, dn, 'party_name', supplier.supplier_name);
+                        
+                        // get default address
+                        frappe.call({
+                            'method': "erpnextswiss.scripts.crm_tools.get_primary_supplier_address",
+                            'args': {
+                                'supplier': v.party
+                            },
+                            'callback': function(response) {
+                                var address = response.message;
+                                frappe.model.set_value(dt, dn, 'address', address.name);
+                            }
+                        });
                     }
                 });
             }
@@ -342,14 +376,14 @@ function search_plz(frm) {
     function(values){
         var filters = [['pincode','=', values.plz]];
         frappe.call({
-            method: 'frappe.client.get_list',
-            args: {
-                doctype: 'Pincode',
-                filters: filters,
-                fields: ['name', 'pincode', 'city', 'canton_code']
+            'method': 'frappe.client.get_list',
+            'args': {
+                'doctype': 'Pincode',
+                'filters': filters,
+                'fields': ['name', 'pincode', 'city', 'canton_code']
             },
-            async: false,
-            callback: function(response) {
+            'async': false,
+            'callback': function(response) {
                 if (response.message) {
                     if (response.message.length == 1) {
                         // got exactly one city
@@ -409,9 +443,9 @@ function convert_ch_to_gps(frm) {
         locals.topo_prevent_loop = false;
     } else {
         frappe.call({
-            method: 'convert_ch_to_gps',
-            doc: frm.doc,
-            callback: function(response) {
+            'method': 'convert_ch_to_gps',
+            'doc': frm.doc,
+            'callback': function(response) {
                 if (response.message) {
                     locals.topo_prevent_loop = true;
                     cur_frm.set_value("gps_coordinates", response.message);
@@ -426,9 +460,9 @@ function convert_gps_to_ch(frm) {
         locals.topo_prevent_loop = false;
     } else {
         frappe.call({
-            method: 'convert_gps_to_ch',
-            doc: frm.doc,
-            callback: function(response) {
+            'method': 'convert_gps_to_ch',
+            'doc': frm.doc,
+            'callback': function(response) {
                 if (response.message) {
                     locals.topo_prevent_loop = true;
                     cur_frm.set_value("ch_coordinates", response.message);

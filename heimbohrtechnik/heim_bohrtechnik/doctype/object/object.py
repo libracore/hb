@@ -13,7 +13,8 @@ class Object(Document):
     def before_save(self):
         if not self.object_key:
             self.set_key()
-        
+        if self.gps_coordinates and not self.gps_lat:
+            self.set_gps()
         return
     
     def set_gps(self):
@@ -57,8 +58,8 @@ class Object(Document):
         if self.ch_coordinates and "/" in self.ch_coordinates:
             try:
                 parts = self.ch_coordinates.split("/")
-                x = int(parts[0].replace("'", "").replace(" ", ""))
-                y = int(parts[1].replace("'", "").replace(" ", ""))
+                x = int(float(parts[0].replace("'", "").replace(" ", "")))
+                y = int(float(parts[1].replace("'", "").replace(" ", "")))
                 converter = GPSConverter()
                 #lat = converter.CHtoWGSlat(x, y)
                 #lng = converter.CHtoWGSlng(x, y)

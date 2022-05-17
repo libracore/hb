@@ -116,7 +116,6 @@ function get_popup_str(object_name, rate=null) {
     html = "<b><a href=\"/desk#Form/Object/" 
         + (object_name || "HB-AG") + "\">" 
         + (object_name || "HB-AG") + "</a></b>";
-    console.log(rate);
     if (rate) {
         html += "<br>CHF " + parseFloat(rate).toFixed(2);
     }
