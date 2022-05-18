@@ -26,92 +26,92 @@ Page: Drill Planner,The Mud Disposer has not yet been organized,Der Schlammentso
 Page: Drill Planner,The Mud Disposer was organized,Der Schlammentsorger wurde organisiert
 Page: Drill Planner,Drill notice sent,Die Bohranzeige wurde versendet
 Page: Drill Planner,"Drill notice <b>not</b> sent","Die Bohranzeige wurde <b>noch nicht</b> versendet"
-Doctype: Object,Object,Objekt
-Doctype: Object,Object name,Objektname
-Doctype: Object,Object location,Objektort
-Doctype: Object,Object Mode,Objektart
-Doctype: Object,Object Type,Objekttyp
-Doctype: Object,Street,Strasse
-Doctype: Object,Drilling Details,Bohrdetails
-Doctype: Object,Owner,Eigentümer
-Doctype: Object,Owner address,Adresse Eigentümer
-Doctype: Object,Owner contact,Kontakt Eigentümer
-Doctype: Object,Owner contact name,Kontaktname Eigentümer
-Doctype: Object,Owner contact email,Email Eigentümer
-Doctype: Object,Owner contact phone,Telefon Eigentümer
-Doctype: Object,Architect,Architekt
-Doctype: Object,Architect address,Adresse Architekt
-Doctype: Object,Architect contact,Kontakt Architekt
-Doctype: Object,Architect contact name,Kontaktname Architekt
-Doctype: Object,Architect contact email,Email Architekt
-Doctype: Object,Architect contact phone,Telefon Architekt
-Doctype: Object,Construction Manager,Bauleiter
-Doctype: Object,Construction Manager address,Adresse Bauleiter
-Doctype: Object,Construction Manager contact,Kontakt Bauleiter
-Doctype: Object,Construction Manager contact name,Kontaktname Bauleiter
-Doctype: Object,Construction Manager contact email,Email Bauleiter
-Doctype: Object,Construction Manager contact phone,Telefon Bauleiter
-Doctype: Object,Plumber,Sanitär
-Doctype: Object,Plumber address,Adresse Sanitär
-Doctype: Object,Plumber contact,Kontakt Sanitär
-Doctype: Object,Plumber contact name,Kontaktname Sanitär
-Doctype: Object,Plumber contact email,Email Sanitär
-Doctype: Object,Plumber contact phone,Telefon Sanitär
-Doctype: Object,TGA Planer,TGA-Planer
-Doctype: Object,TGA Planer address,Adresse TGA-Planer
-Doctype: Object,TGA Planer contact,Kontakt TGA-Planer
-Doctype: Object,TGA Planer contact name,Kontaktname TGA-Planer
-Doctype: Object,TGA Planer contact email,Email TGA-Planer
-Doctype: Object,TGA Planer contact phone,Telefon TGA-Planer
-Doctype: Object,Trough,Mulde
-Doctype: Object,Trough address,Adresse Mulde
-Doctype: Object,Trough contact,Kontakt Mulde
-Doctype: Object,Trough contact name,Kontaktname Mulde
-Doctype: Object,Trough contact email,Email Mulde
-Doctype: Object,Trough contact phone,Telefon Mulde
-Doctype: Object,Mud,Schlamm
-Doctype: Object,Mud address,Adresse Schlamm
-Doctype: Object,Mud contact,Kontakt Schlamm
-Doctype: Object,Mud contact name,Kontaktname Schlamm
-Doctype: Object,Mud contact email,Email Schlamm
-Doctype: Object,Mud contact phone,Telefon Schlamm
-Doctype: Object,Crane,Kran
-Doctype: Object,Crane address,Adresse Kran
-Doctype: Object,Crane contact,Kontakt Kran
-Doctype: Object,Crane contact name,Kontaktname Kran
-Doctype: Object,Crane contact email,Email Kran
-Doctype: Object,Crane contact phone,Telefon Kran
-Doctype: Object,Authority,Behörde
-Doctype: Object,Authority address,Adresse Behörde
-Doctype: Object,Authority contact,Kontakt Behörde
-Doctype: Object,Authority contact name,Kontaktname Behörde
-Doctype: Object,Authority contact email,Email Behörde
-Doctype: Object,Authority contact phone,Telefon Behörde
-Doctype: Object,Community,Gemeinde
-Doctype: Object,Community address,Adresse Gemeinde
-Doctype: Object,Community contact,Kontakt Gemeinde
-Doctype: Object,Community contact name,Kontaktname Gemeinde
-Doctype: Object,Community contact email,Email Gemeinde
-Doctype: Object,Community contact phone,Telefon Gemeinde
-Doctype: Object,Geologist,Geologe
-Doctype: Object,Geologist address,Adresse Geologe
-Doctype: Object,Geologist contact,Kontakt Geologe
-Doctype: Object,Geologist contact name,Kontaktname Geologe
-Doctype: Object,Geologist contact email,Email Geologe
-Doctype: Object,Geologist contact phone,Telefon Geologe
-Doctype: Object,Geometer,Geometer
-Doctype: Object,Geometer address,Adresse Geometer
-Doctype: Object,Geometer contact,Kontakt Geometer
-Doctype: Object,Geometer contact name,Kontaktname Geometer
-Doctype: Object,Geometer contact email,Email Geometer
-Doctype: Object,Geometer contact phone,Telefon Geometer
-Doctype: Object,Parcel,Parzelle
-Doctype: Object,Search PLZ,Postleitzahl suchen
-Doctype: Object,CH Coordinates,Schweizer Koordindaten
-Doctype: Object,GPS Coordinates,GPS-Koordinaten
-Doctype: Object,Open Map,Karte öffnen
-Doctype: Object,Drilling Details,Bohrdetails
-Doctype: Object,Construction site inspected,Baustelle besichtigt
+DocType: Object,Object,Objekt
+DocType: Object,Object name,Objektname
+DocType: Object,Object location,Objektort
+DocType: Object,Object Mode,Objektart
+DocType: Object,Object Type,Objekttyp
+DocType: Object,Street,Strasse
+DocType: Object,Drilling Details,Bohrdetails
+DocType: Object,Owner,Eigentümer
+DocType: Object,Owner address,Adresse Eigentümer
+DocType: Object,Owner contact,Kontakt Eigentümer
+DocType: Object,Owner contact name,Kontaktname Eigentümer
+DocType: Object,Owner contact email,Email Eigentümer
+DocType: Object,Owner contact phone,Telefon Eigentümer
+DocType: Object,Architect,Architekt
+DocType: Object,Architect address,Adresse Architekt
+DocType: Object,Architect contact,Kontakt Architekt
+DocType: Object,Architect contact name,Kontaktname Architekt
+DocType: Object,Architect contact email,Email Architekt
+DocType: Object,Architect contact phone,Telefon Architekt
+DocType: Object,Construction Manager,Bauleiter
+DocType: Object,Construction Manager address,Adresse Bauleiter
+DocType: Object,Construction Manager contact,Kontakt Bauleiter
+DocType: Object,Construction Manager contact name,Kontaktname Bauleiter
+DocType: Object,Construction Manager contact email,Email Bauleiter
+DocType: Object,Construction Manager contact phone,Telefon Bauleiter
+DocType: Object,Plumber,Sanitär
+DocType: Object,Plumber address,Adresse Sanitär
+DocType: Object,Plumber contact,Kontakt Sanitär
+DocType: Object,Plumber contact name,Kontaktname Sanitär
+DocType: Object,Plumber contact email,Email Sanitär
+DocType: Object,Plumber contact phone,Telefon Sanitär
+DocType: Object,TGA Planer,TGA-Planer
+DocType: Object,TGA Planer address,Adresse TGA-Planer
+DocType: Object,TGA Planer contact,Kontakt TGA-Planer
+DocType: Object,TGA Planer contact name,Kontaktname TGA-Planer
+DocType: Object,TGA Planer contact email,Email TGA-Planer
+DocType: Object,TGA Planer contact phone,Telefon TGA-Planer
+DocType: Object,Trough,Mulde
+DocType: Object,Trough address,Adresse Mulde
+DocType: Object,Trough contact,Kontakt Mulde
+DocType: Object,Trough contact name,Kontaktname Mulde
+DocType: Object,Trough contact email,Email Mulde
+DocType: Object,Trough contact phone,Telefon Mulde
+DocType: Object,Mud,Schlamm
+DocType: Object,Mud address,Adresse Schlamm
+DocType: Object,Mud contact,Kontakt Schlamm
+DocType: Object,Mud contact name,Kontaktname Schlamm
+DocType: Object,Mud contact email,Email Schlamm
+DocType: Object,Mud contact phone,Telefon Schlamm
+DocType: Object,Crane,Kran
+DocType: Object,Crane address,Adresse Kran
+DocType: Object,Crane contact,Kontakt Kran
+DocType: Object,Crane contact name,Kontaktname Kran
+DocType: Object,Crane contact email,Email Kran
+DocType: Object,Crane contact phone,Telefon Kran
+DocType: Object,Authority,Behörde
+DocType: Object,Authority address,Adresse Behörde
+DocType: Object,Authority contact,Kontakt Behörde
+DocType: Object,Authority contact name,Kontaktname Behörde
+DocType: Object,Authority contact email,Email Behörde
+DocType: Object,Authority contact phone,Telefon Behörde
+DocType: Object,Community,Gemeinde
+DocType: Object,Community address,Adresse Gemeinde
+DocType: Object,Community contact,Kontakt Gemeinde
+DocType: Object,Community contact name,Kontaktname Gemeinde
+DocType: Object,Community contact email,Email Gemeinde
+DocType: Object,Community contact phone,Telefon Gemeinde
+DocType: Object,Geologist,Geologe
+DocType: Object,Geologist address,Adresse Geologe
+DocType: Object,Geologist contact,Kontakt Geologe
+DocType: Object,Geologist contact name,Kontaktname Geologe
+DocType: Object,Geologist contact email,Email Geologe
+DocType: Object,Geologist contact phone,Telefon Geologe
+DocType: Object,Geometer,Geometer
+DocType: Object,Geometer address,Adresse Geometer
+DocType: Object,Geometer contact,Kontakt Geometer
+DocType: Object,Geometer contact name,Kontaktname Geometer
+DocType: Object,Geometer contact email,Email Geometer
+DocType: Object,Geometer contact phone,Telefon Geometer
+DocType: Object,Parcel,Parzelle
+DocType: Object,Search PLZ,Postleitzahl suchen
+DocType: Object,CH Coordinates,Schweizer Koordindaten
+DocType: Object,GPS Coordinates,GPS-Koordinaten
+DocType: Object,Open Map,Karte öffnen
+DocType: Object,Drilling Details,Bohrdetails
+DocType: Object,Construction site inspected,Baustelle besichtigt
 DocType: Object,Depth,Tiefe
 DocType: Object,Object Specification,Objekt-Spezifikation
 DocType: Object,Object Details,Objekt-Details
@@ -133,29 +133,31 @@ DocType: Object,Project Owner,Eigentümer
 DocType: Object,Planned Project,Geplantes Projekt
 DocType: Object,Classification,Klassifizierung
 DocType: Object,Print Owner,Eigentümer andrucken
-Doctype: Project,Mud Disposer,Schlammentsorger
-Doctype: Project,Mud disposer,Schlammentsorger
-Doctype: Project,Drilling Equipment,Bohrequipment
-Doctype: Project,Start Half-Day,Halbtag Anfang
-Doctype: Project,End Half-Day,Halbtag Ende
-Doctype: Project,Supplier name,Lieferantenname
-Doctype: Project,Checklist,Checkliste
-Doctype: Project,Drilling Team,Bohrteam
+DocType: Project,Mud Disposer,Schlammentsorger
+DocType: Project,Mud disposer,Schlammentsorger
+DocType: Project,Drilling Equipment,Bohrequipment
+DocType: Project,Start Half-Day,Halbtag Anfang
+DocType: Project,End Half-Day,Halbtag Ende
+DocType: Project,Supplier name,Lieferantenname
+DocType: Project,Checklist,Checkliste
+DocType: Project,Drilling Team,Bohrteam
 DocType: Project,Invoice to,Rechnung an
 DocType: Project,Invoice to name,Rechnung an (Name)
 DocType: Project,Order date,Bestelldatum
-Doctype: Permit Type,Permit Type,Bewilligungsart
-Doctype: Permit Type,Permit,Bewilligung
-Doctype: Permit Type,Is Mandatory,Ist zwingend erforderlich
-Doctype: Checklist Activity,Checklist Activity,Aktivität
-Doctype: Drilling Type,Drilling Type,Bohrart
-Doctype: Pressure Level,Pressure Level,Druckstufe
-Doctype: Heim Settings,Core Data,Kerndaten
-Doctype: Heim Settings,Heim Settings,Heim-Einstellungen
-Doctype: Heim Settings,Address Template,Adressvorlage
-Doctype: Heim Settings,Is Standard,Ist Standard
-Doctype: Heim Settings,Mud Disposer Activity,"Schlammentsorger Aktivität"
-Doctype: Heim Settings,Crane Activity,"Kran Aktivität"
+DocType: Permit Type,Permit Type,Bewilligungsart
+DocType: Permit Type,Permit,Bewilligung
+DocType: Project,Permit number,Bewilligungsnummer
+DocType: Project,Permit date,Bewilligungsdatum
+DocType: Permit Type,Is Mandatory,Ist zwingend erforderlich
+DocType: Checklist Activity,Checklist Activity,Aktivität
+DocType: Drilling Type,Drilling Type,Bohrart
+DocType: Pressure Level,Pressure Level,Druckstufe
+DocType: Heim Settings,Core Data,Kerndaten
+DocType: Heim Settings,Heim Settings,Heim-Einstellungen
+DocType: Heim Settings,Address Template,Adressvorlage
+DocType: Heim Settings,Is Standard,Ist Standard
+DocType: Heim Settings,Mud Disposer Activity,"Schlammentsorger Aktivität"
+DocType: Heim Settings,Crane Activity,"Kran Aktivität"
 DocType: Construction Site Description,Construction Site Description,Baustellenbeschreibung
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke

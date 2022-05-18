@@ -29,6 +29,7 @@ function autocomplete_object(frm) {
         'callback': function(response) {
             var object = response.message;
             cur_frm.set_value("object_name", object.object_name);
+            cur_frm.set_value("parcel", object.parcel);
             
             for (var i = 0; i < object.addresses.length; i++) {
                 if (object.addresses[i].address_type === "Eigentümer") {
@@ -37,6 +38,27 @@ function autocomplete_object(frm) {
                             .replaceAll("<br>", " - ").replaceAll("\n", " - "));
                 }
             }
+            
+            frappe.call({
+                'method': "frappe.client.get",
+                'args': {
+                    'doctype': "Project",
+                    'name': frm.doc.object
+                },
+                'async': false,
+                'callback': function(response) {
+                    var project = response.message;
+                                        
+                    for (var i = 0; i < project.permits.length; i++) {
+                        if (project.permits[i].permit.includes("Bohrbewilligung")) {
+                            cur_frm.set_value("bewilligung", 
+                                (project.permits[i].permit_number || ""));
+                            cur_frm.set_value("bewilligungsdatum", 
+                                (project.permits[i].permit_date));
+                        }
+                    }
+                }
+            });
         }
     });
 }
