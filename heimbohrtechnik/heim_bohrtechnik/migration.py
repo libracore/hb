@@ -345,6 +345,29 @@ def patch_discount_positions():
     print("done")
     return
 
+"""
+This function goes through projects and cleans the links.
+"""
+def clean_project_object_links():
+    projects = frappe.get_all("Project", fields=['name'])
+    count = 0;
+    for p in projects:
+        count += 1
+        print("Processing {0} ({1}%)".format(p['name'], int(100 * count/len(projects))))
+        p_doc = frappe.get_doc("Project", p['name'])
+        if p_doc.object and not frappe.db.exists("Object", p_doc.object):
+            print("link broken, try to repair")
+            matches = frappe.db.sql("""SELECT `name` 
+                FROM `tabObject` 
+                WHERE `name` LIKE "%{0}";""".format(p_doc.object), as_dict=True)
+            if len(matches) == 1:
+                print("found {0}".format(matches[0]['name']))
+                p_doc.object = matches[0]['name']
+                p_doc.save()
+    print("done")
+    frappe.db.commit()
+    return
+        
 def set_supplier_first_address():
     suppliers = frappe.get_all("Supplier", filters={'disabled': 0}, fields=['name'])
     for supplier in suppliers:
