@@ -297,6 +297,23 @@ frappe.ui.form.on('Object Address', {
             frappe.model.set_value(dt, dn, 'address_display', null);
         }
     },
+    contact: function(frm, dt, dn) {
+        var v = locals[dt][dn];
+        if (v.contact) {
+            frappe.call({
+                "method": "frappe.client.get",
+                "args": {
+                    "doctype": "Contact",
+                    "name": v.contact
+                },
+                "callback": function(response) {
+                    var contact = response.message;
+                    frappe.model.set_value(dt, dn, 'phone', contact.phone);
+                    frappe.model.set_value(dt, dn, 'email', contact.email_id);
+                }
+            });
+        } 
+    },
     party: function(frm, dt, dn) {
         var v = locals[dt][dn];
         if (v.party) {

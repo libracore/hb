@@ -66,7 +66,6 @@
    "read_only": 1
   },
   {
-   "fetch_from": "contact.full_name",
    "fieldname": "contact_name",
    "fieldtype": "Data",
    "label": "Contact",
@@ -80,7 +79,6 @@
    "read_only": 1
   },
   {
-   "fetch_from": "contact.email_id",
    "fieldname": "email",
    "fieldtype": "Data",
    "label": "Email",
@@ -142,7 +140,7 @@
   }
  ],
  "istable": 1,
- "modified": "2021-11-03 20:42:41.286810",
+ "modified": "2022-05-18 20:03:28.990076",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object Address",
