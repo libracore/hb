@@ -156,6 +156,12 @@ def get_data():
                    "name": "object-overview",
                    "label": _("Object Overview"),
                    "description": _("Object Overview")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Bohranzeige",
+                   "label": _("Bohranzeige"),
+                   "description": _("Project")
                 }
             ]
         },
