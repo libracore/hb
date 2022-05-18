@@ -35,16 +35,8 @@ frappe.object_overview = {
             head.appendChild(link);
         }
 
-        /*// add menu button
-        this.page.add_menu_item(__("Match payments"), function() {
-            // navigate to bank import tool
-            window.location.href="/desk#match_payments";
-        });
-        this.page.add_menu_item(__("Debug Template"), function() {
-            // navigate to bank import tool
-            $('.btn-parse-file').trigger('click', [true]);
-        });*/
-
+        frappe.object_overview.start_wait();
+        
     },
     run: function() {
         // fetch object
@@ -72,7 +64,9 @@ frappe.object_overview = {
         }).addTo(map);
         // hack: issue a resize event
         window.dispatchEvent(new Event('resize')); 
-          
+        
+        document.getElementById("overlay-text").innerHTML = "<p>Objekte suchen...</p>";
+        
         frappe.call({
             'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_object_geographic_environment',
             'args': { 
@@ -86,6 +80,8 @@ frappe.object_overview = {
                     gps_long = geo.gps_long;
                     map.panTo(new L.LatLng(gps_lat, gps_long));
                 }
+                
+                document.getElementById("overlay-text").innerHTML = "<p>" + geo.environment.length + " Objekte platzieren...</p>";
                 
                 // add marker for the reference object
                 L.marker([gps_lat, gps_long], {'icon': red_icon}).addTo(map)
@@ -111,6 +107,8 @@ frappe.object_overview = {
                 
                 // hack: issue a resize event
                 window.dispatchEvent(new Event('resize')); 
+                frappe.object_overview.end_wait();
+                frappe.show_alert(geo.environment.length + " Objekte geladen");
             }
         }); 
     },
@@ -129,8 +127,13 @@ frappe.object_overview = {
                 return args['object'];
             }
         } 
+    },
+    start_wait: function() {
+        document.getElementById("waitingScreen").style.display = "block";
+    },
+    end_wait: function() {
+        document.getElementById("waitingScreen").style.display = "none";
     }
-
 }
 
 function get_popup_str(object_name, rate=null, sales_order=null) {
