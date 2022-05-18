@@ -32,6 +32,13 @@ frappe.ui.form.on('Quotation', {
         if ((frm.doc.party_name) && (!frm.doc.tax_id) && (frm.doc.docstatus === 0)) {
             get_tax_id(frm);
         }
+        
+        // navigate to environment
+        if (frm.doc.object) {
+            frm.add_custom_button("Umgebung", function() {
+                window.open("/desk#object-overview?object=" + frm.doc.object, "_blank");
+            });
+        }
     },
     party_name: function(frm) {
         if (frm.doc.party_name) {

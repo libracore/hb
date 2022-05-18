@@ -53,45 +53,66 @@ frappe.object_overview = {
         var gps_long = 9.56121;
         var initial_zoom = 13;
         var geo = null;
-        if (object_name) {
-            frappe.call({
-                'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_object_geographic_environment',
-                'args': { 
-                    'object_name': object_name
-                },
-                'callback': function(r) {
-                    if (r.message) {
-                        geo = r.message;
-                        gps_lat = geo.gps_lat;
-                        gps_long = geo.gps_long;
-                    }
-                    
-                    // create map        
-                    var map = L.map('map').setView([gps_lat, gps_long], initial_zoom);
-                    // create layer
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    }).addTo(map);
-                    
-                    
-                    // add marker for the reference object
-                    L.marker([gps_lat, gps_long]).addTo(map)
-                        .bindPopup(get_popup_str(object_name));
-                    // add other markers
-                    if (geo) {
-                        console.log(geo);
-                        for (var i = 0; i < geo.environment.length; i++) {
-                            L.marker([geo.environment[i].gps_lat, geo.environment[i].gps_long]).addTo(map)
-                                .bindPopup(get_popup_str(geo.environment[i].object, 
-                                    rate=geo.environment[i].rate));
-                        }
-                    }
-                    
-                    // hack: issue a resize event
-                    window.dispatchEvent(new Event('resize')); 
+        var radius = 0.1;
+        if (!object_name) {
+            radius = 10;    // no object: load full map
+        }
+        
+        // prepare various icons
+        var green_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-green.png'});
+        var red_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-red.png'});
+        var grey_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-grey.png'});
+        var blue_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon.png'});
+        
+        // create map        
+        var map = L.map('map').setView([gps_lat, gps_long], initial_zoom);
+        // create layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+        // hack: issue a resize event
+        window.dispatchEvent(new Event('resize')); 
+          
+        frappe.call({
+            'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_object_geographic_environment',
+            'args': { 
+                'object_name': object_name,
+                'radius': radius
+            },
+            'callback': function(r) {
+                if (r.message) {
+                    geo = r.message;
+                    gps_lat = geo.gps_lat;
+                    gps_long = geo.gps_long;
+                    map.panTo(new L.LatLng(gps_lat, gps_long));
                 }
-            }); 
-        } 
+                
+                // add marker for the reference object
+                L.marker([gps_lat, gps_long], {'icon': red_icon}).addTo(map)
+                    .bindPopup(get_popup_str(object_name));
+                // add other markers
+                if (geo) {
+                    console.log(geo);
+                    for (var i = 0; i < geo.environment.length; i++) {
+                        // set icon color
+                        var icon = grey_icon;
+                        if (geo.environment[i].sales_order) {
+                            icon = green_icon;
+                        } else if (geo.environment[i].rate) {
+                            icon = blue_icon;
+                        }
+                        L.marker([geo.environment[i].gps_lat, geo.environment[i].gps_long],
+                            {'icon': icon}).addTo(map)
+                            .bindPopup(get_popup_str(geo.environment[i].object, 
+                                rate=geo.environment[i].rate,
+                                sales_order=geo.environment[i].sales_order));
+                    }
+                }
+                
+                // hack: issue a resize event
+                window.dispatchEvent(new Event('resize')); 
+            }
+        }); 
     },
     get_arguments: function() {
         var arguments = window.location.toString().split("?");
@@ -112,12 +133,17 @@ frappe.object_overview = {
 
 }
 
-function get_popup_str(object_name, rate=null) {
+function get_popup_str(object_name, rate=null, sales_order=null) {
     html = "<b><a href=\"/desk#Form/Object/" 
         + (object_name || "HB-AG") + "\">" 
         + (object_name || "HB-AG") + "</a></b>";
     if (rate) {
         html += "<br>CHF " + parseFloat(rate).toFixed(2);
+    }
+    if (sales_order) {
+        html += "<br><a href=\"/desk#Form/Sales Order/" 
+        + sales_order + "\">" 
+        + sales_order + "</a>";
     }
     return html;
 }

@@ -150,6 +150,12 @@ def get_data():
                    "name": "Project",
                    "label": _("Project"),
                    "description": _("Project")
+                },
+                {
+                   "type": "page",
+                   "name": "object-overview",
+                   "label": _("Object Overview"),
+                   "description": _("Object Overview")
                 }
             ]
         },

@@ -132,13 +132,20 @@ def cancel_mudex_invoice(reference):
     return None
 
 @frappe.whitelist()
-def get_object_geographic_environment(object_name):
-    obj = frappe.get_doc("Object", object_name)
-    data = {
-        'object': object_name,
-        'gps_lat': obj.gps_lat,
-        'gps_long': obj.gps_long
-    }
+def get_object_geographic_environment(object_name=None, radius=0.1):
+    if frappe.db.exists("Object", object_name):
+        obj = frappe.get_doc("Object", object_name)
+        data = {
+            'object': object_name,
+            'gps_lat': obj.gps_lat,
+            'gps_long': obj.gps_long
+        }
+    else:
+        data = {
+            'object': "HB-AG",
+            'gps_lat': 47.37767,
+            'gps_long': 9.56121
+        }
     
     data['environment'] = frappe.db.sql("""
         SELECT 
@@ -152,7 +159,13 @@ def get_object_geographic_environment(object_name):
                AND `tabQuotation`.`object` = `tabObject`.`name`
                AND `tabQuotation Item`.`item_code` = "1.01.03.01"
              ORDER By `tabQuotation`.`modified` DESC
-             LIMIT 1) AS `rate`
+             LIMIT 1) AS `rate`,
+            (SELECT `name`
+             FROM `tabSales Order`
+             WHERE `tabSales Order`.`docstatus` = 1
+               AND `tabSales Order`.`object` = `tabObject`.`name`
+             ORDER By `tabSales Order`.`modified` DESC
+             LIMIT 1) AS `sales_order`
         FROM `tabObject`
         WHERE 
             `gps_lat` >= ({gps_lat} - {lat_offset})
@@ -160,8 +173,8 @@ def get_object_geographic_environment(object_name):
             AND `gps_long` >= ({gps_long} - {long_offset})
             AND `gps_long` <= ({gps_long} + {long_offset})
             AND `name` != "{reference}";
-    """.format(reference=object_name, gps_lat=obj.gps_lat, lat_offset=0.1,
-        gps_long=obj.gps_long, long_offset=0.1), as_dict=True)
+    """.format(reference=object_name, gps_lat=data['gps_lat'], lat_offset=float(radius),
+        gps_long=data['gps_long'], long_offset=(2 * float(radius))), as_dict=True)
     
     return data
     
