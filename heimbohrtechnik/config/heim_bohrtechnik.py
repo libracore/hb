@@ -132,6 +132,12 @@ def get_data():
                    "name": "Purchase Invoice",
                    "label": _("Purchase Invoice"),
                    "description": _("Purchase invoice")
+                },
+                {
+                    "type": "report",
+                    "name": "Versicherungsanmeldung",
+                    "doctype": "Project",
+                    "is_query_report": True,
                 }
             ]
         },

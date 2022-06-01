@@ -113,13 +113,13 @@ jenv = {
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
+scheduler_events = {
 #     "all": [
 #         "heimbohrtechnik.tasks.all"
 #     ],
-#     "daily": [
-#         "heimbohrtechnik.tasks.daily"
-#     ],
+     "daily": [
+         "heimbohrtechnik.heim_bohrtechnik.data_maintenance.link_sales_orders_to_projects"
+     ]
 #     "hourly": [
 #         "heimbohrtechnik.tasks.hourly"
 #     ],
@@ -129,7 +129,7 @@ jenv = {
 #     "monthly": [
 #         "heimbohrtechnik.tasks.monthly"
 #     ]
-# }
+}
 
 # Testing
 # -------
