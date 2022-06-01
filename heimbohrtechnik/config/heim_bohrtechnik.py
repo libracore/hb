@@ -138,6 +138,12 @@ def get_data():
                     "name": "Versicherungsanmeldung",
                     "doctype": "Project",
                     "is_query_report": True,
+                },
+                {
+                    "type": "report",
+                    "name": "Sondenbestellung",
+                    "doctype": "Project",
+                    "is_query_report": True,
                 }
             ]
         },

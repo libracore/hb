@@ -178,3 +178,66 @@ def get_object_geographic_environment(object_name=None, radius=0.1):
     
     return data
     
+"""
+Prepare a purchase order for the probes for an object
+"""
+@frappe.whitelist()
+def order_ews(object):
+    obj = frappe.get_doc("Object", object)
+    # check if there are probes defined
+    if not obj.ews_specification or len(obj.ews_specification) == 0:
+        return {'error': "No EWS Details", 'po': None}
+    # find probe items
+    items = []
+    for p in obj.ews_specification:
+        item = find_item_for_ews(p.ews_depth, p.ews_diameter, p.ews_wall_strength)
+        if item:
+            items.append({
+                'item_code': item,
+                'qty': p.ews_count,
+                'project': object
+            })
+    if len(items) == 0:
+        return {'error': "No suitable EWS found", 'po': None}
+    # create purchase order
+    po = frappe.get_doc({
+        'doctype': "Purchase Order",
+        'items': items,
+        'schedule_date': frappe.get_value("Project", object, "expected_start_date") or datetime.now(),
+        'supplier': get_default_supplier(items[0]['item_code']),
+        'object': object        
+    })
+    
+    po.flags.ignore_mandatory = True
+    po.insert(ignore_permissions=True)
+    frappe.db.commit()
+    return {'error': None, 'po': po.name}
+
+# get default supplier from first item supplier (not company defaults, as not company specific)
+def get_default_supplier(item):
+    i = frappe.get_doc("Item", item)
+    if i.supplier_items and len(i.supplier_items) > 0:
+        return i.supplier_items[0].supplier
+    else:
+        return None
+
+def find_item_for_ews(depth, diameter, wall_strength, material=None):
+    conditions = ""
+    if material:
+        conditions = """AND `material` LIKE "%{material}%" """.format(material=material)
+    sql_query = """SELECT
+            `item_code`
+        FROM `tabItem`
+        WHERE 
+            `diameter` = {diameter}
+            AND `wall_strength` >= {wall_strength}
+            AND `length` >= {depth}
+            {conditions}
+        ORDER BY `length` ASC, `wall_strength` ASC
+        LIMIT 1;""".format(depth=depth, diameter=diameter, wall_strength=wall_strength, conditions=conditions)
+        
+    hits = frappe.db.sql(sql_query, as_dict=True)
+    if len(hits) > 0:
+        return hits[0]['item_code']
+    else:
+        return None
