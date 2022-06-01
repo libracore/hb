@@ -37,6 +37,10 @@ frappe.ui.form.on('Project', {
             frappe.route_options = {"from": cur_frm.doc.expected_start_date, "project_name": cur_frm.doc.name}
             frappe.set_route("bohrplaner");
         });
+        // show insurance information
+        if (!frm.doc.__islocal) {
+            show_insurance_information(frm.doc.name);
+        }
     }
 });
 

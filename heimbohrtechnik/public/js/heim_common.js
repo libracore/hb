@@ -323,6 +323,24 @@ function show_pincode_information(object) {
     });
 }
 
+function show_insurance_information(project) {
+    frappe.call({
+        'method': "heimbohrtechnik.heim_bohrtechnik.report.versicherungsanmeldung.versicherungsanmeldung.has_insurance",
+        'args': {
+            'project': project
+        },
+        'callback': function(response) {
+            var details = response.message;
+            if ((details) && (details.length > 0)) {
+                cur_frm.dashboard.add_comment( "Versicherungen aus Auftrag "
+                    + details[0].sales_order + ": "
+                    + details[0].insurances
+                , 'blue', true);
+            }
+        }
+    });
+}
+
 function select_naming_series(frm) {
     if (frm.doc.doctype === "Quotation") {
         if (frm.doc.company.includes("MudEX")) {
