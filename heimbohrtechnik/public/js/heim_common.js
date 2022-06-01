@@ -396,3 +396,71 @@ function select_naming_series(frm) {
         }
     }
 }
+
+// compute wall strength according to DIN 8074
+function get_wall_strength_from_diameter(diameter, pressure_level) {
+    var wall_strength = 0;
+    switch (diameter) {
+        case 32:
+            if (pressure_level.includes("PN16")) {
+                wall_strength = 2.9;
+            } else if (pressure_level.includes("PN20")) {
+                wall_strength = 0;
+            } else if (pressure_level.includes("PN25")) {
+                wall_strength = 0;
+            } else if (pressure_level.includes("PN30")) {
+                wall_strength = 0;
+            } else if (pressure_level.includes("PN35")) {
+                wall_strength = 0;
+            } else if (pressure_level.includes("PN40")) {
+                wall_strength = 0;
+            }
+            break;
+        case 40:
+            if (pressure_level.includes("PN16")) {
+                wall_strength = 3.7;
+            } else if (pressure_level.includes("PN20")) {
+                wall_strength = 4.5;
+            } else if (pressure_level.includes("PN25")) {
+                wall_strength = 5.4;
+            } else if (pressure_level.includes("PN30")) {
+                wall_strength = 7.0;
+            } else if (pressure_level.includes("PN35")) {
+                wall_strength = 0;
+            } else if (pressure_level.includes("PN40")) {
+                wall_strength = 0;
+            }
+            break;
+        case 42:        // hipress
+            if (pressure_level.includes("PN16")) {
+                wall_strength = 3.5;
+            } else if (pressure_level.includes("PN20")) {
+                wall_strength = 4.7;
+            } else if (pressure_level.includes("PN25")) {
+                wall_strength = 5.7;
+            } else if (pressure_level.includes("PN30")) {
+                wall_strength = 7.0;
+            } else if (pressure_level.includes("PN35")) {
+                wall_strength = 0;
+            } else if (pressure_level.includes("PN40")) {
+                wall_strength = 0;
+            }
+            break;
+        case 50:        // vertex
+            if (pressure_level.includes("PN16")) {
+                wall_strength = 4.6;
+            } else if (pressure_level.includes("PN20")) {
+                wall_strength = 5.6;
+            } else if (pressure_level.includes("PN25")) {
+                wall_strength = 6.9;
+            } else if (pressure_level.includes("PN30")) {
+                wall_strength = 7.9;
+            } else if (pressure_level.includes("PN35")) {
+                wall_strength = 0;
+            } else if (pressure_level.includes("PN40")) {
+                wall_strength = 0;
+            }
+            break;
+    }
+    return wall_strength;
+}
