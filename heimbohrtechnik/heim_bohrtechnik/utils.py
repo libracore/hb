@@ -233,7 +233,7 @@ def find_item_for_ews(depth, diameter, wall_strength, material=None):
             AND `wall_strength` >= {wall_strength}
             AND `length` >= {depth}
             {conditions}
-        ORDER BY `length` ASC, `wall_strength` ASC
+        ORDER BY `wall_strength` ASC, `length` ASC
         LIMIT 1;""".format(depth=depth, diameter=diameter, wall_strength=wall_strength, conditions=conditions)
         
     hits = frappe.db.sql(sql_query, as_dict=True)
