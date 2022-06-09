@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.mapper import get_mapped_doc
 from datetime import datetime, timedelta
+import json
 
 @frappe.whitelist()
 def get_standard_permits():
@@ -253,3 +254,24 @@ def find_item_for_ews(depth, diameter, wall_strength, material=None):
         return hits[0]['item_code']
     else:
         return None
+
+@frappe.whitelist()
+def mutate_prices(selected, discount, markup):
+    if type(selected) == str:
+        selected = json.loads(selected)
+    
+    for s in selected:
+        price = frappe.get_doc("Item Price", s['name'])
+        if price.base_rate:
+            price.discount = float(discount)
+            price.cost_markup = float(markup)
+            
+            rate = ((price.base_rate * (((price.discount or 0) + 100) / 100)) \
+                    * (((price.cost_markup or 0) + 100) / 100))                 \
+                    * (((price.skonto_discount or 0) + 100) / 100)
+            price.price_list_rate = rate
+            price.save()
+            
+    frappe.db.commit()
+    return
+    
