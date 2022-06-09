@@ -17,6 +17,7 @@ def get_columns(filters):
         {"label": _("Objekt"), "fieldname": "project", "fieldtype": "Link", "options": "Object", "width": 75},
         {"label": _("Kundenauftrag"), "fieldname": "sales_order", "fieldtype": "Link", "options": "Sales Order", "width": 90},
         {"label": _("Bestellung"), "fieldname": "purchase_order", "fieldtype": "Link", "options": "Purchase Order", "width": 90},
+        {"label": _("Bohrteam"), "fieldname": "drilling_team", "fieldtype": "Link", "options": "Drilling Team", "width": 150},
         {"label": _("Objektname"), "fieldname": "object_name", "fieldtype": "Data", "width": 150},
         {"label": _("Bohrdatum"), "fieldname": "drilling_date", "fieldtype": "Date", "width": 90},
         {"label": _("Sonden"), "fieldname": "probes", "fieldtype": "Data", "width": 300}
@@ -34,6 +35,7 @@ def get_data(filters):
             `tabSales Order`.`name` AS `sales_order`,
             `tabPurchase Order`.`name` AS `purchase_order`,
             `tabObject`.`name` AS `object`,
+            `tabProject`.`drilling_team` AS `drilling_team`,
             `tabObject`.`object_name` AS `object_name`,
             `tabProject`.`expected_start_date` AS `drilling_date`,
             0 AS `indent`,
@@ -50,7 +52,7 @@ def get_data(filters):
             AND `tabProject`.`expected_start_date` <= "{to_date}"
             {conditions}
         GROUP BY `tabProject`.`name`
-        ORDER BY `tabProject`.`expected_start_date` ASC, `tabProject`.`name` ASC
+        ORDER BY `tabProject`.`drilling_team` ASC, `tabProject`.`expected_start_date` ASC, `tabProject`.`name` ASC
     ;""".format(from_date=filters.from_date, to_date=filters.to_date, conditions=conditions)
     data = frappe.db.sql(sql_query, as_dict=True)
     

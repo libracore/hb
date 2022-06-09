@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.mapper import get_mapped_doc
+from datetime import datetime, timedelta
 
 @frappe.whitelist()
 def get_standard_permits():
@@ -199,11 +200,14 @@ def order_ews(object):
             })
     if len(items) == 0:
         return {'error': "No suitable EWS found", 'po': None}
+    # schedule date: Friday before start (weekday: Monday = 0
+    start_date = frappe.get_value("Project", object, "expected_start_date") or datetime.today()
+    schedule_date = start_date - timedelta(days = 3 + start_date.weekday())
     # create purchase order
     po = frappe.get_doc({
         'doctype': "Purchase Order",
         'items': items,
-        'schedule_date': frappe.get_value("Project", object, "expected_start_date") or datetime.now(),
+        'schedule_date': schedule_date,
         'supplier': get_default_supplier(items[0]['item_code']),
         'object': object        
     })
