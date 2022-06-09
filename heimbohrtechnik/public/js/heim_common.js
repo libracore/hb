@@ -431,7 +431,7 @@ function get_wall_strength_from_diameter(diameter, pressure_level) {
                 wall_strength = 0;
             }
             break;
-        case 42:        // hipress
+        case 42:        
             if (pressure_level.includes("PN16")) {
                 wall_strength = 3.5;
             } else if (pressure_level.includes("PN20")) {
@@ -440,8 +440,8 @@ function get_wall_strength_from_diameter(diameter, pressure_level) {
                 wall_strength = 5.7;
             } else if (pressure_level.includes("PN30")) {
                 wall_strength = 7.0;
-            } else if (pressure_level.includes("PN35")) {
-                wall_strength = 0;
+            } else if (pressure_level.includes("PN35")) {   // hipress
+                wall_strength = 3.5;
             } else if (pressure_level.includes("PN40")) {
                 wall_strength = 0;
             }
