@@ -64,6 +64,7 @@ def get_data(filters):
             `tabProject`.`expected_start_date` >= "{from_date}"
             AND `tabProject`.`expected_start_date` <= "{to_date}"
             AND `tabSales Order Item`.`alternativ` = 0
+            AND `tabSales Order Item`.`eventual` = 0
         GROUP BY `tabProject`.`name`
         ORDER BY `tabProject`.`expected_start_date` ASC, `tabProject`.`name` ASC
     ;""".format(from_date=filters.from_date, to_date=filters.to_date)
