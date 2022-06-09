@@ -198,6 +198,14 @@ def order_ews(object):
                 'qty': p.ews_count,
                 'project': object
             })
+            # add injection tube
+            injection_tube = frappe.get_value("Item", item, "injektionsrohr")
+            if injection_tube:
+                items.append({
+                    'item_code': injection_tube,
+                    'qty': p.ews_count,
+                    'project': object
+                })
     if len(items) == 0:
         return {'error': "No suitable EWS found", 'po': None}
     # schedule date: Friday before start (weekday: Monday = 0
