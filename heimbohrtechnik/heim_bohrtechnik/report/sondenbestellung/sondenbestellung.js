@@ -35,21 +35,7 @@ frappe.query_reports["Sondenbestellung"] = {
             }
             if (content === "bestellen") {
                 var object = frappe.query_report.data[row].object;
-                frappe.call({
-                        'method': "heimbohrtechnik.heim_bohrtechnik.utils.order_ews",
-                        'args':{
-                            'object': object
-                        },
-                        'callback': function(r)
-                        {
-                            var po = r.message;
-                            if (po.error) {
-                                frappe.msgprint( __(po.error) );
-                            } else if (po.po) {
-                                window.open("/desk#Form/Purchase Order/" + po.po, '_blank').focus();
-                            }
-                        }
-                });
+                order_ews(object);
             }
         });
 }

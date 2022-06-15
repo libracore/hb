@@ -124,6 +124,10 @@ frappe.ui.form.on('Object', {
                     location.reload(true); 
                 });
             }
+            // button to order probes
+            frm.add_custom_button("EWS bestellen", function() {
+                order_ews(frm.doc.name);
+            });
         } else {
             if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
                 // fresh document, no addresses - load template

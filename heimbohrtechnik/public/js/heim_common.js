@@ -464,3 +464,21 @@ function get_wall_strength_from_diameter(diameter, pressure_level) {
     }
     return wall_strength;
 }
+
+function order_ews(object) {
+    frappe.call({
+        'method': "heimbohrtechnik.heim_bohrtechnik.utils.order_ews",
+        'args':{
+            'object': object
+        },
+        'callback': function(r)
+        {
+            var po = r.message;
+            if (po.error) {
+                frappe.msgprint( __(po.error) );
+            } else if (po.po) {
+                window.open("/desk#Form/Purchase Order/" + po.po, '_blank').focus();
+            }
+        }
+    });
+}
