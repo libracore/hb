@@ -534,7 +534,7 @@ function update_ews_details(frm, cdt, cdn) {
         }
     }
     // set wall strength
-    if ((v.ews_wall_strength === 0) && (v.ews_diameter > 0) && (v.pressure_level)) {
+    if ((v.ews_diameter > 0) && (v.pressure_level)) {
         frappe.model.set_value(v.doctype, v.name, "ews_wall_strength", 
             get_wall_strength_from_diameter(v.ews_diameter, v.pressure_level));
     }
