@@ -61,6 +61,10 @@ frappe.ui.form.on('Sales Order', {
             frm.add_custom_button(__("Akonto Invoice"),  function() { 
                 create_akonto(frm);
             }, __("Create"));
+            // add create blank invoice
+            frm.add_custom_button(__("Nebenleistungsabrechnung"), function() {
+                create_blank_invoice(frm);
+            }, __("Create"));
             // remove obsolete menu items
             setTimeout(function() {
                 $("a[data-label='" + encodeURI(__("Pick List")) + "']").parent().remove();
@@ -108,6 +112,13 @@ frappe.ui.form.on('Markup Position', {
 function create_akonto(frm) {
     frappe.model.open_mapped_doc({
         'method': 'heimbohrtechnik.heim_bohrtechnik.utils.create_akonto',
+        'frm': frm
+    });
+}
+
+function create_blank_invoice(frm) {
+    frappe.model.open_mapped_doc({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.create_empty_invoice_from_order',
         'frm': frm
     });
 }

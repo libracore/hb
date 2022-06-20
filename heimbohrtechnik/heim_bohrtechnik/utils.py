@@ -1,4 +1,4 @@
-# Copyright (c) 2021, libracore and Contributors
+# Copyright (c) 2021-2022, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 
 from __future__ import unicode_literals
@@ -275,3 +275,30 @@ def mutate_prices(selected, discount, markup):
     frappe.db.commit()
     return
     
+"""
+Create separate invoice from sales order
+"""
+@frappe.whitelist()
+def create_empty_invoice_from_order(sales_order, target_doc=None):
+    def postprocess(source, target):
+        set_missing_values(source, target)
+
+    def set_missing_values(source, target):
+        target.is_pos = 0
+        target.run_method("set_missing_values")
+
+        
+    invoice = get_mapped_doc("Sales Order", sales_order, {
+        "Sales Order": {
+            "doctype": "Sales Invoice",
+            "field_map": {
+                "name": "sales_order",
+                "net_total": "no_item_net_amount"
+            }
+        },
+        "Sales Taxes and Charges": {
+            "doctype": "Sales Taxes and Charges",
+            "add_if_empty": True
+        }
+    }, target_doc, postprocess)
+    return invoice
