@@ -465,7 +465,7 @@ function get_wall_strength_from_diameter(diameter, pressure_level) {
     return wall_strength;
 }
 
-function order_ews(object) {
+function order_ews(object, callback=null) {
     frappe.call({
         'method': "heimbohrtechnik.heim_bohrtechnik.utils.order_ews",
         'args':{
@@ -478,6 +478,9 @@ function order_ews(object) {
                 frappe.msgprint( __(po.error) );
             } else if (po.po) {
                 window.open("/desk#Form/Purchase Order/" + po.po, '_blank').focus();
+            }
+            if (callback) {
+                callback();
             }
         }
     });

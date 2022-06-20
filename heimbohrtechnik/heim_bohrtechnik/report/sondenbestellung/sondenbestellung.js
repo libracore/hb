@@ -8,7 +8,7 @@ frappe.query_reports["Sondenbestellung"] = {
             "fieldname":"from_date",
             "label": __("From Date"),
             "fieldtype": "Date",
-            "default": frappe.datetime.add_days(frappe.datetime.get_today(), (-1) * ((new Date().getDay() - 1)) + 14),
+            "default": frappe.datetime.add_days(frappe.datetime.get_today(), (-1) * ((new Date().getDay() - 1)) + 7),
             "reqd": 1
         },
         {
@@ -35,7 +35,9 @@ frappe.query_reports["Sondenbestellung"] = {
             }
             if (content === "bestellen") {
                 var object = frappe.query_report.data[row].object;
-                order_ews(object);
+                order_ews(object, function() { 
+                    setTimeout( function() { frappe.query_report.refresh(); console.log("refresh"); }, 1000); 
+                } );
             }
         });
 }
