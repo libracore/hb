@@ -8,11 +8,21 @@ from datetime import datetime, timedelta
 import json
 
 @frappe.whitelist()
-def get_standard_permits():
+def get_standard_permits(pincode=None):
     permits = frappe.get_all("Permit Type", filters={'is_standard': 1}, fields=['name'])
     standard_permits = []
+    if pincode:
+        pincode = int(pincode)
     for p in permits:
-        standard_permits.append(p['name'])
+        permit = frappe.get_doc("Permit Type", p['name'])
+        if pincode and permit.pincodes and len(permit.pincodes) > 0:
+            # only insert this if it is in range
+            for plz in permit.pincodes:
+                if pincode >= plz.from_pincode and pincode <= plz.to_pincode:
+                    standard_permits.append(p['name'])
+                    break
+        else:
+            standard_permits.append(p['name'])
     return standard_permits
 
 @frappe.whitelist()
@@ -25,7 +35,7 @@ def get_mandatory_permits():
 
 @frappe.whitelist()
 def get_standard_activities():
-    activities = frappe.get_all("Checklist Activity", filters={'is_standard': 1}, fields=['name'])
+    activities = frappe.get_all("Checklist Activity", filters={'is_standard': 1}, fields=['name'], order_by='prio')
     standard_activities = []
     for a in activities:
         standard_activities.append(a['name'])

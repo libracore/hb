@@ -8,7 +8,8 @@
   "title",
   "party_type",
   "column_main",
-  "is_standard"
+  "is_standard",
+  "prio"
  ],
  "fields": [
   {
@@ -23,6 +24,7 @@
    "default": "Customer",
    "fieldname": "party_type",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Party Type",
    "options": "DocType",
    "reqd": 1
@@ -31,14 +33,22 @@
    "default": "0",
    "fieldname": "is_standard",
    "fieldtype": "Check",
+   "in_list_view": 1,
    "label": "Is Standard"
   },
   {
    "fieldname": "column_main",
    "fieldtype": "Column Break"
+  },
+  {
+   "default": "100",
+   "fieldname": "prio",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Prio"
   }
  ],
- "modified": "2021-05-14 11:09:36.938700",
+ "modified": "2022-06-22 16:10:57.807798",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Checklist Activity",

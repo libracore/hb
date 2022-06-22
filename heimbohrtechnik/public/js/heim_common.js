@@ -196,11 +196,7 @@ function prepare_checklist_and_permits(frm) {
             "method": "heimbohrtechnik.heim_bohrtechnik.utils.get_standard_permits",
             "callback": function(response) {
                 var standard_permits = response.message;
-                for (var i = 0; i < standard_permits.length; i++) {
-                    var child = cur_frm.add_child('permits');
-                    frappe.model.set_value(child.doctype, child.name, 'permit', standard_permits[i]);
-                }
-                cur_frm.refresh_field('permits');
+                fill_permits(frm, standard_permits);
             }
         });
     }
@@ -218,6 +214,14 @@ function prepare_checklist_and_permits(frm) {
             }
         });
     }
+}
+
+function fill_permits(frm, permits) {
+    for (var i = 0; i < permits.length; i++) {
+        var child = cur_frm.add_child('permits');
+        frappe.model.set_value(child.doctype, child.name, 'permit', permits[i]);
+    }
+    cur_frm.refresh_field('permits');
 }
 
 function get_mud_from_depth(depth) {
