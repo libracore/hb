@@ -1,0 +1,50 @@
+<table style="width: 100%;">
+    <tr>
+        <td><b>{{ __("Customer") }}</b></td>
+        <td><a href="/desk#Form/Customer/{{ customer }}" target="_blank">{{ customer }}</a> ({{ customer_name }})</td>
+    </tr>   
+    <tr>
+        <td><b>{{ __("Object") }}</b></td>
+        <td><a href="/desk#Form/Object/{{ object }}" target="_blank">{{ object }}</a></td>
+    </tr>
+    <tr>
+        <td><b>{{ __("Project") }}</b></td>
+        <td><a href="/desk#Form/Project/{{ project }}" target="_blank">{{ project }}</a></td>
+    </tr>
+    <tr>
+        <td><b>{{ __("Sales Order") }}</b></td>
+        <td>{% if sales_order %}
+            <a href="/desk#Form/Sales Order/{{ sales_order }}" target="_blank">{{ sales_order }}</a>
+            {% else %}-{% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td><b>{{ __("Location") }}</b></td>
+        <td>{{ object_location }}</td>
+    </tr>
+    <tr>
+        <td><b>{{__("EWS Details") }}</b></td>
+        <td>{{ ews_details }}</td>
+    </tr>
+    <!-- <tr>
+        <td><b>{{ __("Pneukran") }}</b></td>
+        <td>{{ "Muss noch umgesetzt werden" }}</td>
+    </tr> -->
+    <tr>
+        <td><b>{{ __("Mud Disposer") }}</b></td>
+        <td>{% if mud_disposer %}
+            <a href="/desk#Form/Mud Disposer/{{ mud_disposer }}" target="_blank">{{ mud_disposer }}</a> ({{ mud_disposer_name }})
+            {% else %} - {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td><b>{{ __("Drilling Equipment") }}</b></td>
+        <td>{% for de in drilling_equipment %}
+            {{ de }}
+            {% endfor %}
+        </td>
+    </tr>
+    <tr><td><b>{{ __("Manager") }}</b></td>
+        <td>{{ manager }}</td>
+    </tr>
+</table>

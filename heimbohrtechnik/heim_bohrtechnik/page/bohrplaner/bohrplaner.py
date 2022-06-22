@@ -6,6 +6,7 @@ import frappe
 from frappe import _
 from frappe.utils.data import getdate, date_diff, add_days, get_datetime
 from datetime import date, timedelta
+from frappe.desk.form.load import get_attachments
 
 @frappe.whitelist()
 def get_overlay_datas(from_date, to_date):
@@ -184,7 +185,7 @@ def get_traffic_lights_indicator(project):
     # auftraggeber
     auftraggeber_color = '#ffa6a6;'
     if project.sales_order:
-        unterzeichnete_ab = frappe.get_doc("Sales Order", project.sales_order).unterzeichnete_ab
+        unterzeichnete_ab = get_attachments("Sales Order", project.sales_order)
         if unterzeichnete_ab:
             auftraggeber_color = '#81d41a;'
     colors.append(auftraggeber_color)

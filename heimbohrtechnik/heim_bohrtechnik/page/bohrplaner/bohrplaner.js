@@ -168,17 +168,21 @@ frappe.bohrplaner = {
                             var object = r.message;
 
                             if (object) {
-                                var customer = __('No Customer found');
-                                var customer_name = '';
+                                var data = {};
+                                data.customer = __('No Customer found');
+                                data.customer_name = '';
                                 if (project.customer) {
-                                    customer = '<a href="/desk#Form/Customer/' + project.customer + '" target="_blank">' + project.customer + '</a>';
-                                    customer_name = "(" + project.customer_name + ")";
+                                    data.customer = project.customer;
+                                    data.customer_name = project.customer_name;
                                 }
                                 
-                                var object_link = '<a href="/desk#Form/Object/' + object.name + '" target="_blank">' + project.object_name + '</a>';
+                                data.object = object.name;
+                                data.project = project.name;
+                                data.sales_order = project.sales_order;
+                                data.object_location = object.object_location;
                                 
-                                var mud_disposer = __('No Mud Disposer found');
-                                var mud_disposer_name = '';
+                                data.mud_disposer = null;
+                                data.mud_disposer_name = null;
                                 if (object.mud_disposer) {
                                     frappe.call({
                                         "method": "frappe.client.get",
@@ -190,49 +194,31 @@ frappe.bohrplaner = {
                                         "callback": function(_supplier) {
                                             if (_supplier.message) {
                                                 var supplier = _supplier.message;
-                                                mud_disposer_name = "(" + supplier.supplier_name + ")";
+                                                data.mud_disposer_name = supplier.supplier_name;
                                             }
                                         }
                                     });
-                                    mud_disposer = '<a href="/desk#Form/Mud Disposer/' + object.mud_disposer + '" target="_blank">' + object.mud_disposer + '</a>';
+                                    data.mud_disposer = object.mud_disposer;
                                 }
                                 
-                                var drilling_equipment = __('No Drilling Equipment found');
-                                if (object.drilling_equipment) {
-                                    drilling_equipment = '<a href="/desk#Form/Drilling Equipment/' + object.drilling_equipment + '" target="_blank">' + object.drilling_equipment + '</a>';
+                                data.drilling_equipment = [];
+                                if (project.drilling_equipment) {
+                                    for (var i = 0; i < project.drilling_equipment.length; i++) {
+                                        data.drilling_equipment.push(project.drilling_equipment[i].drilling_equipment);
+                                    }
                                 }
                                 
-                                var manager = __('No Manager found');
-                                if (object.manager) {
-                                    manager = '<a href="/desk#Form/User/' + object.manager + '" target="_blank">' + object.manager + '</a>';
+                                data.manager = __('No Manager found');
+                                if (project.manager) {
+                                    data.manager = project.manager;
                                 }
                                 
-                                var ews_details = __('No EWS Details found');
+                                data.ews_details = __('No EWS Details found');
                                 if (project.ews_details) {
-                                    ews_details = project.ews_details;
+                                    data.ews_details = project.ews_details;
                                 }
                                 
-                                var html = '<table style="width: 100%;">';
-                                html = html + '<tr><td><b>' + __('Project') + '</b></td>';
-                                html = html + '<td>' + '<a href="/desk#Form/Project/' + project.name + '" target="_blank">' + project.name + '</a></td></tr>';
-                                html = html + '<tr><td><b>' + __('Customer') + '</b></td>';
-                                html = html + '<td>' + customer + ' ' + customer_name + '</td></tr>';
-                                html = html + '<tr><td><b>' + __('Object') + '</b></td>';
-                                html = html + '<td>' + object_link + '</td></tr>';
-                                html = html + '<tr><td><b>' + __('Location') + '</b></td>';
-                                html = html + '<td>' + project.object_location + '</td></tr>';
-                                html = html + '<tr><td><b>' + __('EWS Details') + '</b></td>';
-                                html = html + '<td>' + ews_details + '</td></tr>';
-                                html = html + '<tr><td><b>' + __('Pneukran') + '</b></td>';
-                                html = html + '<td>' + 'Muss noch umgesetzt werden' + '</td></tr>';
-                                html = html + '<tr><td><b>' + __('Mud Disposer') + '</b></td>';
-                                html = html + '<td>' + mud_disposer + ' ' + mud_disposer_name +'</td></tr>';
-                                html = html + '<tr><td><b>' + __('Drilling Equipment') + '</b></td>';
-                                html = html + '<td>' + drilling_equipment + '</td></tr>';
-                                html = html + '<tr><td><b>' + __('Manager') + '</b></td>';
-                                html = html + '<td>' + manager + '</td></tr>';
-                                html = html + '</tabler>';
-                                
+                                html = frappe.render_template("detail_dialog", data );
                                 var d = new frappe.ui.Dialog({
                                     'fields': [
                                         {'fieldname': 'ht', 'fieldtype': 'HTML'},
