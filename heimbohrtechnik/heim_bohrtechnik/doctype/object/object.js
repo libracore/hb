@@ -381,6 +381,17 @@ frappe.ui.form.on('Object Address', {
                                 frappe.model.set_value(dt, dn, 'address', address.name);
                             }
                         });
+                        // get default contact
+                        frappe.call({
+                            'method': "erpnextswiss.scripts.crm_tools.get_primary_supplier_contact",
+                            'args': {
+                                'supplier': v.party
+                            },
+                            'callback': function(response) {
+                                var contact = response.message;
+                                frappe.model.set_value(dt, dn, 'contact', contact.name);
+                            }
+                        });
                     }
                 });
             }
