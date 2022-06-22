@@ -100,7 +100,7 @@ class Object(Document):
             WHERE `tabTruck Delivery`.`docstatus` = 1
               AND `tabTruck Delivery Object`.`object` = '{obj}';""".format(obj=self.name), as_dict=True)
         if len(data) > 0:
-            return (data[0]['weight_kg'] / 1000)
+            return (data[0]['weight_kg'])
         else:
             return 0
                         

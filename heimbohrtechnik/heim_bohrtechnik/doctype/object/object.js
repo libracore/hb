@@ -102,7 +102,7 @@ frappe.ui.form.on('Object', {
                 'method': 'get_delivered_mud',
                 'doc': frm.doc,
                 'callback': function(response) {
-                    cur_frm.set_df_property('delivered_mud','options','<label class="control-label" style="padding-right: 0px;">' + __("Delivered Mud") + '</label><div class="control-value like-disabled-input" style="">' + (response.message || 0) + '</div>');
+                    cur_frm.set_df_property('delivered_mud','options','<label class="control-label" style="padding-right: 0px;">' + __("Delivered Mud") + '</label><div class="control-value like-disabled-input" style="">' + (response.message || 0).toLocaleString() + '</div><p class="help-box small text-muted hidden-xs">kg</p>');
                 }
             });
             // check if mud can be invoiced
