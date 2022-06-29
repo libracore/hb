@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 from heimbohrtechnik.heim_bohrtechnik.dataparser import get_projects
+from heimbohrtechnik.heim_bohrtechnik.utils import update_project
 from erpnextswiss.scripts.crm_tools import get_primary_supplier_address
 from datetime import datetime
 import cgi
@@ -408,6 +409,24 @@ def update_gps_from_address():
         o_doc.gps_coordinates = gps_coordinates
         o_doc.ch_coordinates = o_doc.convert_gps_to_ch()
         o_doc.save()
+    frappe.db.commit()
+    print("done")
+    return
+
+def update_projects():
+    projects = frappe.get_all("Project", fields=['name'])
+    count = 0
+    for p in projects:
+        count += 1
+        print("Processing {0} ({1}%)".format(p['name'], int(100 * count / len(projects))))
+        update_project(p['name'])
+        p_doc = frappe.get_doc("Project", p['name'])
+        if p_doc.expected_end_date and p_doc.expected_end_date < datetime.now().date() and p_doc.status == "Open":
+            p_doc.status = "Completed"
+        try:
+            p_doc.save()
+        except Exception as err:
+            print(err)
     frappe.db.commit()
     print("done")
     return
