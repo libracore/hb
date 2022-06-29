@@ -22,6 +22,9 @@ frappe.ui.form.on('Sales Order', {
         if (frm.doc.__islocal) {
             select_naming_series(frm);
         }
+        
+        // make sure project is created
+        check_create_project(frm);
     },
     refresh: function(frm) {
         if (frm.doc.object) {
@@ -123,3 +126,11 @@ function create_blank_invoice(frm) {
     });
 }
 
+function check_create_project(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.check_create_project',
+        'args': {
+            'sales_order': frm.doc
+        }
+    });
+}

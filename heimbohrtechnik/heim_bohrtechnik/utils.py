@@ -312,3 +312,39 @@ def create_empty_invoice_from_order(sales_order, target_doc=None):
         }
     }, target_doc, postprocess)
     return invoice
+
+"""
+Create a project if required from sales order
+"""
+@frappe.whitelist()
+def check_create_project(sales_order):
+    if type(sales_order) == str:
+        sales_order = json.loads(sales_order)
+    if sales_order['object']:
+        if not frappe.db.exists("Project", sales_order['object']):
+            o = frappe.get_doc("Object", sales_order['object'])
+            o.create_project()
+        # reference customer and sales order
+        p = frappe.get_doc("Project", sales_order['object'])
+        p.customer = sales_order['customer']
+        if frappe.db.exists("Sales Order", sales_order['name']):
+            p.sales_order = sales_order['name']
+        p.save()
+        # update project data
+        update_project(p.name)
+    return
+
+"""
+Update project data
+"""
+def update_project(project):
+    p = frappe.get_doc("Project", project)
+    # find sales order data (Thermozement)
+    if p.sales_order and frappe.db.exists("Sales Order", p.sales_order):
+        so = frappe.get_doc("Sales Order", p.sales_order)
+        p.thermozement = 0
+        for i in so.items:
+            if "Thermohinterfüllung" in i.item_name:
+                p.thermozement = 1
+                break
+    return

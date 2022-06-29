@@ -34,25 +34,28 @@ class Object(Document):
             return 0
     
     def create_project(self):
-        project = frappe.get_doc({
-            "doctype": "Project",
-            "name": self.name,
-            "project_name": self.name,
-            "object": self.name
-        })
-        # add checklist and permits
-        for c in self.checklist:
-            project.append("checklist", {
-              'activity': c.activity,
-              'supplier': c.supplier,
-              'supplier_name': c.supplier_name  
+        if not frappe.db.exists("Project", self.name):
+            project = frappe.get_doc({
+                "doctype": "Project",
+                "name": self.name,
+                "project_name": self.name,
+                "object": self.name,
+                "project_type": "External"
             })
-        for p in self.permits:
-            project.append("permits", {
-              'permit': p.permit,
-              'file': p.file
-            })
-        project.insert()
+            # add checklist and permits
+            for c in self.checklist:
+                project.append("checklist", {
+                  'activity': c.activity,
+                  'supplier': c.supplier,
+                  'supplier_name': c.supplier_name  
+                })
+            for p in self.permits:
+                project.append("permits", {
+                  'permit': p.permit,
+                  'file': p.file
+                })
+            project.insert()
+            frappe.db.commit()
         return
         
     def convert_ch_to_gps(self):
