@@ -173,10 +173,6 @@ def load_projects(filename):
                     existing_object = frappe.get_doc("Object", project['name'])
                 else:
                     existing_object = frappe.get_doc("Object", "P-{0}".format(project['name']))
-                user = frappe.get_all("User", filters={'username': project['object_project_manager']}, fields=['name'])
-                if user and len(user) > 0:
-                    user = user[0]['name']
-                    existing_object.manager = user
                 if project['object_street']:
                     existing_object.object_street=cgi.escape(str(project['object_street'] or "??")).replace("\"", "")
                 if project['object_name']:
@@ -247,6 +243,7 @@ def load_projects(filename):
                 existing_project.status = project['status']
                 existing_project.object = existing_object.name
                 existing_project.object_street=cgi.escape(str(project['object_street'] or "??")).replace("\"", "")
+                existing_project.manager = find_manager((project['object_project_manager'] or "")[0:2])
                 existing_project.save()
                 print("Updated project {0}".format(project['name']))
             else:
@@ -267,7 +264,8 @@ def load_projects(filename):
                     'status': project['status'],
                     'object': name,
                     'object_street': cgi.escape(str(project['object_street'] or "??")).replace("\"", ""),
-                    'project_type': "External"
+                    'project_type': "External",
+                    'manager': find_manager((project['object_project_manager'] or "")[0:2])
                 })
                 # find customer
                 customer_matches = frappe.get_all("Customer", filters={'customer_name': project['customer_name']}, fields=['name'])
@@ -430,3 +428,12 @@ def update_projects():
     frappe.db.commit()
     print("done")
     return
+
+def find_manager(short_name):
+    matches = frappe.db.sql("""SELECT `name`
+        FROM `tabUser`
+        WHERE `username` LIKE "{short_name}";""".format(short_name=short_name), as_dict=True)
+    if len(matches) > 0:
+        return matches[0]['name']
+    else: 
+        return None
