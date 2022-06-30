@@ -25,6 +25,9 @@ frappe.ui.form.on('Sales Invoice', {
         if (frm.doc.__islocal) {
             select_naming_series(frm);
         }
+        
+        // check and apply accrual
+        check_warranty(frm);
     },
     after_cancel: function(frm) {
         // if this is a MudEX invoice to HB, cancel related invoice

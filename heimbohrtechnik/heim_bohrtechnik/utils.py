@@ -348,3 +348,29 @@ def update_project(project):
                 p.thermozement = 1
                 break
     return
+
+"""
+Get warranty accrual from sales order
+"""
+@frappe.whitelist()
+def get_warranty_accural_percent(sales_order):
+    return frappe.get_value("Sales Order", sales_order, "garantierueckbehalt")
+    
+""" 
+Get warranty accruals that have been applied in a sales order
+"""
+@frappe.whitelist()
+def get_applied_warranty_accruals(sales_order):
+    amount = frappe.db.sql("""
+        SELECT IFNULL(SUM(`tabDiscount Position`.`amount`), 0) AS `amount`
+        FROM `tabDiscount Position`
+        WHERE `tabDiscount Position`.`parent` IN (
+            SELECT `tabSales Invoice Item`.`parent`
+            FROM `tabSales Invoice Item`
+            WHERE `tabSales Invoice Item`.`sales_order` = "{sales_order}"
+              AND `tabSales Invoice Item`.`docstatus` = 1
+            GROUP BY `tabSales Invoice Item`.`parent`
+          )
+          AND `tabDiscount Position`.`description` LIKE "%Garantierückbehalt%";
+        """.format(sales_order=sales_order), as_dict=True)[0]['amount']
+    return amount

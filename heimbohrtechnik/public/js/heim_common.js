@@ -489,3 +489,86 @@ function order_ews(object, callback=null) {
         }
     });
 }
+
+function check_warranty(frm) {
+    // find sales order
+    var sales_order = null;
+    for (var i = 0; i < frm.doc.items.length; i++) {
+        if (frm.doc.items[i].sales_order) {
+            sales_order = frm.doc.items[i].sales_order;
+            break;
+        }
+    }
+    if (sales_order) {
+        if (frm.doc.title === "Teilrechnung") {
+            // get percentage
+            frappe.call({
+                'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_warranty_accural_percent',
+                'args': {
+                    'sales_order': sales_order
+                },
+                'async': false,
+                'callback': function(r) {
+                    var accrual = r.message;
+                    // apply to deductions
+                    var applied = false;
+                    // check if this is already in the list
+                    for (var i = 0; i < frm.doc.discount_positions.length; i++) {
+                        if (frm.doc.discount_positions[i].description.includes("Garantierückbehalt")) {
+                            frappe.model.set_value(frm.doc.discount_positions[i].doctype, frm.doc.discount_positions[i].name,
+                            'percent', accrual);
+                            applied = true;
+                            break;
+                        }
+                    }
+                    if (!applied) {
+                        // add if it was not in the list
+                        var child = cur_frm.add_child('discount_positions');
+                        frappe.model.set_value(child.doctype, child.name, 'description', "Garantierückbehalt");
+                        frappe.model.set_value(child.doctype, child.name, 'percent', accrual);
+                    }
+                }
+            });
+            // update calculation
+            set_conditional_net_total(frm);
+            recalculate_markups_discounts(frm);
+        } else if (frm.doc.title === "Schlussrechnung") {
+            // remove warranty accrual from discounts
+            for (var i = (frm.doc.discount_positions.length - 1); i >= 0 ; i--) {
+                if (frm.doc.discount_positions[i].description.includes("Garantierückbehalt")) {
+                    cur_frm.get_field("discount_positions").grid.grid_rows[i].remove();
+                }
+            }
+            // compute earlier accruals
+            frappe.call({
+                'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_applied_warranty_accruals',
+                'args': {
+                    'sales_order': sales_order
+                },
+                'async': false,
+                'callback': function(r) {
+                    var accrual = r.message;
+                    // apply to markup
+                    var applied = false;
+                    // check if this is already in the list
+                    for (var i = 0; i < frm.doc.markup_positions.length; i++) {
+                        if (frm.doc.markup_positions[i].description.includes("Garantierückbehalt")) {
+                            frappe.model.set_value(frm.doc.markup_positions[i].doctype, frm.doc.markup_positions[i].name,
+                            'percent', 0);
+                            frappe.model.set_value(frm.doc.markup_positions[i].doctype, frm.doc.markup_positions[i].name,
+                            'amount', accrual);
+                            applied = true;
+                            break;
+                        }
+                    }
+                    if (!applied) {
+                        // add if it was not in the list
+                        var child = cur_frm.add_child('markup_positions');
+                        frappe.model.set_value(child.doctype, child.name, 'description', "Garantierückbehalt");
+                        frappe.model.set_value(child.doctype, child.name, 'amount', accrual);
+                    }
+                }
+            });
+        }
+    }
+}
