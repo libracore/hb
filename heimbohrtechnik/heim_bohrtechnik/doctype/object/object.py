@@ -138,3 +138,19 @@ def get_gps(street, location):
     if len(data) > 0:
         gps_coordinates = "{0}, {1}".format(data[0]['lat'], data[0]['lon'])
     return gps_coordinates
+
+"""
+Helper function to get a specific address type more easily (Jinja env)
+"""
+def get_object_address(object, address_type):
+    o = frappe.get_doc("Object", object)
+    address = None
+    for r in o.addresses:
+        if r.address_type == address_type:
+            address = r
+            break
+    if address and address.contact:
+        address.contact_doc = frappe.get_doc("Contact", address.contact)
+    if address and address.address:
+        address.address_doc = frappe.get_doc("Address", address.address)
+    return address
