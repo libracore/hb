@@ -53,7 +53,7 @@ doctype_list_js = {
 jenv = {
     "methods": [
         "get_object_reference_address:heimbohrtechnik.heim_bohrtechnik.utils.get_object_reference_address",
-        "get_object_address:heimbohrtechnik.heim_bohrtechnik.utils.get_object_address"
+        "get_object_address:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_object_address"
     ]
 }
 
