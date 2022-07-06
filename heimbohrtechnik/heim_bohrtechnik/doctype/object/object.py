@@ -154,3 +154,37 @@ def get_object_address(object, address_type):
     if address and address.address:
         address.address_doc = frappe.get_doc("Address", address.address)
     return address
+
+"""
+Helper function to get a specific checklist item more easily (Jinja env)
+"""
+def get_checklist_details(checklist_item, object=None, project=None):
+    if not object and not project:
+        return None
+    if object:
+        doc = frappe.get_doc("Object", object)
+    else:
+        doc = frappe.get_doc("Project", project)
+    checklist_details = None
+    for r in doc.checklist:
+        if r.activity == checklist_item:
+            checklist_details = r
+            break
+    return checklist_details
+
+"""
+Helper function to get a specific permit item more easily (Jinja env)
+"""
+def get_checklist_details(permit_item, object=None, project=None):
+    if not object and not project:
+        return None
+    if object:
+        doc = frappe.get_doc("Object", object)
+    else:
+        doc = frappe.get_doc("Project", project)
+    permit_details = None
+    for r in doc.permits:
+        if r.permit == permit_item:
+            permit_details = r
+            break
+    return permit_details
