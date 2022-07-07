@@ -175,7 +175,7 @@ def get_checklist_details(checklist_item, object=None, project=None):
 """
 Helper function to get a specific permit item more easily (Jinja env)
 """
-def get_checklist_details(permit_item, object=None, project=None):
+def get_permit_details(permit_item, object=None, project=None):
     if not object and not project:
         return None
     if object:
