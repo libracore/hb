@@ -209,11 +209,11 @@ def order_ews(object):
                 'qty': p.ews_count,
                 'project': object
             })
-            # add injection tube
-            injection_tube = frappe.get_value("Item", item, "injektionsrohr")
-            if injection_tube:
+            # add realetd items
+            related_items = get_related_items(item)
+            for r in related_items:
                 items.append({
-                    'item_code': injection_tube,
+                    'item_code': r,
                     'qty': p.ews_count,
                     'project': object
                 })
@@ -374,3 +374,13 @@ def get_applied_warranty_accruals(sales_order):
           AND `tabDiscount Position`.`description` LIKE "%Garantierückbehalt%";
         """.format(sales_order=sales_order), as_dict=True)[0]['amount']
     return amount
+
+"""
+Return the related item list for an item
+"""
+def get_related_items(item_code):
+    item = frappe.get_doc("Item", item_code)
+    related_items = []
+    for i in item.related_items:
+        related_items.append(i.item_code)
+    return related_items
