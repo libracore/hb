@@ -51,12 +51,12 @@ DocType: Object,Construction Manager contact,Kontakt Bauleiter
 DocType: Object,Construction Manager contact name,Kontaktname Bauleiter
 DocType: Object,Construction Manager contact email,Email Bauleiter
 DocType: Object,Construction Manager contact phone,Telefon Bauleiter
-DocType: Object,Plumber,Sanitär
-DocType: Object,Plumber address,Adresse Sanitär
-DocType: Object,Plumber contact,Kontakt Sanitär
-DocType: Object,Plumber contact name,Kontaktname Sanitär
-DocType: Object,Plumber contact email,Email Sanitär
-DocType: Object,Plumber contact phone,Telefon Sanitär
+DocType: Object,Plumber,Installateur
+DocType: Object,Plumber address,Adresse Installateur
+DocType: Object,Plumber contact,Kontakt Installateur
+DocType: Object,Plumber contact name,Kontaktname Installateur
+DocType: Object,Plumber contact email,Email Installateur
+DocType: Object,Plumber contact phone,Telefon Installateur
 DocType: Object,TGA Planer,TGA-Planer
 DocType: Object,TGA Planer address,Adresse TGA-Planer
 DocType: Object,TGA Planer contact,Kontakt TGA-Planer
@@ -165,6 +165,7 @@ DocType: Construction Site Description,Construction Site Description,Baustellenb
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
 DocType: Item,Material,Material
+DocType: Item,Related Items,Verwandte Artikel
 DocType: Item Price,Base Rate,Grundpreis
 DocType: Item Price,Discount,Rabatt
 DocType: Item Price,Cost Markup,Teuerungszuschlag

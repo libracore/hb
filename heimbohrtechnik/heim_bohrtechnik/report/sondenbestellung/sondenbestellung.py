@@ -88,25 +88,3 @@ def get_data(filters):
             })
             
     return output
-
-"""
-This function returns the insurances, in case a project has such
-"""
-@frappe.whitelist()
-def has_insurance(project):
-    sql_query = """SELECT
-            `tabProject`.`name` AS `project`,
-            `tabSales Order`.`name` AS `sales_order`,
-            GROUP_CONCAT(`tabSales Order Item`.`item_name`) AS `insurances`
-        FROM `tabProject`
-        LEFT JOIN `tabSales Order` ON `tabSales Order`.`name` = `tabProject`.`sales_order`
-        LEFT JOIN `tabSales Order Item` ON 
-            (`tabSales Order Item`.`parent` = `tabSales Order`.`name`
-             AND `tabSales Order Item`.`item_name` LIKE "%Versicherung%")
-        WHERE 
-            `tabProject`.`name` = "{project}"
-            AND `tabSales Order Item`.`name` IS NOT NULL
-        GROUP BY `tabProject`.`name`
-    ;""".format(project=project)
-    data = frappe.db.sql(sql_query, as_dict=True)
-    return data
