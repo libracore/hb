@@ -9,9 +9,9 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
     if (document.getElementsByTagName("body")[0].className != 'full-width') {
         frappe.ui.toolbar.toggle_full_width();
     }
-    if (frappe.is_mobile()) {
-        frappe.bohrplaner.make_mobile(page);
-    } else {
+    // if (frappe.is_mobile()) {
+    //    frappe.bohrplaner.make_mobile(page);
+    // } else { 
         // create page
         frappe.bohrplaner.make(page);
         // run page
@@ -37,7 +37,7 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
                 function(error) { /* code if some error */ }
             );
         }
-    }
+    //}
 }
 
 frappe.bohrplaner = {
