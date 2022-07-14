@@ -368,7 +368,7 @@ def clean_project_object_links():
                 p_doc.save()
         # check sales order validity
         if p_doc.sales_order:
-            so_doc = frappe.get_doc("Sales order", p_doc.sales_order)
+            so_doc = frappe.get_doc("Sales Order", p_doc.sales_order)
             if so_doc.docstatus == 2:
                 # cancelled, find valid revision
                 valid_sos = frappe.db.sql("""SELECT `name` FROM `tabSales Order` WHERE `name` LIKE "{0}%" and `docstatus` < 2;""".format(p_doc.sales_order), as_dict=True)
