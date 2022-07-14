@@ -356,6 +356,7 @@ def clean_project_object_links():
         count += 1
         print("Processing {0} ({1}%)".format(p['name'], int(100 * count/len(projects))))
         p_doc = frappe.get_doc("Project", p['name'])
+        # check objetc link
         if p_doc.object and not frappe.db.exists("Object", p_doc.object):
             print("link broken, try to repair")
             matches = frappe.db.sql("""SELECT `name` 
@@ -365,6 +366,16 @@ def clean_project_object_links():
                 print("found {0}".format(matches[0]['name']))
                 p_doc.object = matches[0]['name']
                 p_doc.save()
+        # check sales order validity
+        if p_doc.sales_order:
+            so_doc = frappe.get_doc("Sales order", p_doc.sales_order)
+            if so_doc.docstatus == 2:
+                # cancelled, find valid revision
+                valid_sos = frappe.db.sql("""SELECT `name` FROM `tabSales Order` WHERE `name` LIKE "{0}%" and `docstatus` < 2;""".format(p_doc.sales_order), as_dict=True)
+                if len(valid_sos) > 0:
+                    p_doc.sales_order = valid_sos[0]['name']
+                    p_doc.save() 
+                    print("updated sales order {0}: {1}".format(p_doc.name, p_doc.sales_order))
     print("done")
     frappe.db.commit()
     return
