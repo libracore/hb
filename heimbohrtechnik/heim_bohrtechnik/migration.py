@@ -167,6 +167,8 @@ def load_projects(filename):
         team_name = frappe.db.sql("""SELECT `name` FROM `tabDrilling Team` WHERE `name` LIKE "%{0}%" LIMIT 1;""".format(team['drilling_team']), as_dict=True)[0]['name']
         for project in team['projects']:
             print("Project data: {0}".format(project))
+            # clean up project name
+            project['name'] = (project['name'] or "").strip()
             # check if object exists
             if frappe.db.exists("Object", project['name']) or frappe.db.exists("Object", "P-{0}".format(project['name'])):  # retrofit, check new number where P- was left out on Excel
                 if frappe.db.exists("Object", project['name']):
