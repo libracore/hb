@@ -167,6 +167,8 @@ def load_projects(filename):
         team_name = frappe.db.sql("""SELECT `name` FROM `tabDrilling Team` WHERE `name` LIKE "%{0}%" LIMIT 1;""".format(team['drilling_team']), as_dict=True)[0]['name']
         for project in team['projects']:
             print("Project data: {0}".format(project))
+            # clean up project name
+            project['name'] = (project['name'] or "").strip()
             # check if object exists
             if frappe.db.exists("Object", project['name']) or frappe.db.exists("Object", "P-{0}".format(project['name'])):  # retrofit, check new number where P- was left out on Excel
                 if frappe.db.exists("Object", project['name']):
@@ -354,6 +356,7 @@ def clean_project_object_links():
         count += 1
         print("Processing {0} ({1}%)".format(p['name'], int(100 * count/len(projects))))
         p_doc = frappe.get_doc("Project", p['name'])
+        # check objetc link
         if p_doc.object and not frappe.db.exists("Object", p_doc.object):
             print("link broken, try to repair")
             matches = frappe.db.sql("""SELECT `name` 
@@ -363,6 +366,16 @@ def clean_project_object_links():
                 print("found {0}".format(matches[0]['name']))
                 p_doc.object = matches[0]['name']
                 p_doc.save()
+        # check sales order validity
+        if p_doc.sales_order:
+            so_doc = frappe.get_doc("Sales Order", p_doc.sales_order)
+            if so_doc.docstatus == 2:
+                # cancelled, find valid revision
+                valid_sos = frappe.db.sql("""SELECT `name` FROM `tabSales Order` WHERE `name` LIKE "{0}%" and `docstatus` < 2;""".format(p_doc.sales_order), as_dict=True)
+                if len(valid_sos) > 0:
+                    p_doc.sales_order = valid_sos[0]['name']
+                    p_doc.save() 
+                    print("updated sales order {0}: {1}".format(p_doc.name, p_doc.sales_order))
     print("done")
     frappe.db.commit()
     return
