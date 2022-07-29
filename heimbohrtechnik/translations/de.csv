@@ -28,6 +28,7 @@ Page: Drill Planner,Drill notice sent,Die Bohranzeige wurde versendet
 Page: Drill Planner,"Drill notice <b>not</b> sent","Die Bohranzeige wurde <b>noch nicht</b> versendet"
 DocType: Object,Object,Objekt
 DocType: Object,Object name,Objektname
+DocType: Object,Object Name,Objektname
 DocType: Object,Object location,Objektort
 DocType: Object,Object Mode,Objektart
 DocType: Object,Object Type,Objekttyp
@@ -162,6 +163,29 @@ DocType: Heim Settings,Is Standard,Ist Standard
 DocType: Heim Settings,Mud Disposer Activity,"Schlammentsorger Aktivität"
 DocType: Heim Settings,Crane Activity,"Kran Aktivität"
 DocType: Construction Site Description,Construction Site Description,Baustellenbeschreibung
+DocType: Construction Site Description,Construction Plan,Werkleitungspläne
+DocType: Construction Site Description,Construction Plan File,Werkleitungsplan-Datei
+DocType: Construction Site Description,Checks,Prüfungen
+DocType: Construction Site Description,Pipes checked,Werkleitung sondiert
+DocType: Construction Site Description,Drilling Points marked,Bohrpunkte markiert
+DocType: Construction Site Description,Road,Strasse
+DocType: Construction Site Description,Use public area,Benutzung öffentlicher Grund erforderlich
+DocType: Construction Site Description,Road block required,Absperrung erforderlich
+DocType: Construction Site Description,Road block meters,Laufmeter Absperrung
+DocType: Construction Site Description,Requires Traffic Tech,Verkehrstechnik erforderlich
+DocType: Construction Site Description,Requires Traffic Light,Lichtisgnal aufstellen
+DocType: Construction Site Description,Requires Traffic Control,Verkehrsregelung erforderlich
+DocType: Construction Site Description,Equipment,Asurüstung
+DocType: Construction Site Description,Internal Crane required,Pneukran Heim erforderlich
+DocType: Construction Site Description,External Crane required,Pneukran extern erforderlich
+DocType: Construction Site Description,Crane Length,Kran-Auslegung
+DocType: Construction Site Description,Crane organized,Kran organisiert
+DocType: Construction Site Description,Site Access,Zufahrt
+DocType: Construction Site Description,Site Access Remarks,Bemerkungen Zufahrt
+DocType: Construction Site Description,Electricity,Stromanschluss
+DocType: Construction Site Description,Water supply,Wasserbezugsort
+DocType: Construction Site Description,Hydrant number,Hydrantennummer
+DocType: Construction Site Description,Hydrant contact,Hydrantenkontakt
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
 DocType: Item,Material,Material

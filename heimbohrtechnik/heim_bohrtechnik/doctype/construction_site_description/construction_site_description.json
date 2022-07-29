@@ -9,7 +9,44 @@
   "column_main",
   "object_name",
   "section_images",
-  "images"
+  "images",
+  "sec_plans",
+  "construction_plan",
+  "col_plans",
+  "construction_plan_file",
+  "sec_checks",
+  "pipes_checked",
+  "col_pipes",
+  "drilling_points_marked",
+  "sec_road",
+  "use_public_area",
+  "road_block_required",
+  "road_block_meters",
+  "col_road",
+  "requires_traffic_tech",
+  "requires_traffic_light",
+  "requires_traffic_control",
+  "sec_equipment",
+  "drilling_equipment",
+  "carrymax",
+  "col_equipment",
+  "internal_crane_required",
+  "external_crane_required",
+  "crane_length",
+  "crane_organized",
+  "sec_access",
+  "site_access",
+  "column_break_34",
+  "site_access_remarks",
+  "sec_other",
+  "electricity",
+  "water_supply",
+  "col_other",
+  "hydrant",
+  "hydrant_no",
+  "hydrant_contact",
+  "sec_remarks",
+  "remarks"
  ],
  "fields": [
   {
@@ -50,9 +87,214 @@
    "hidden": 1,
    "label": "Project",
    "options": "Project"
+  },
+  {
+   "fieldname": "sec_plans",
+   "fieldtype": "Section Break",
+   "label": "Plans"
+  },
+  {
+   "default": "0",
+   "fieldname": "construction_plan",
+   "fieldtype": "Check",
+   "label": "Construction Plan"
+  },
+  {
+   "fieldname": "col_plans",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "construction_plan_file",
+   "fieldtype": "Attach",
+   "label": "Construction Plan File"
+  },
+  {
+   "fieldname": "sec_checks",
+   "fieldtype": "Section Break",
+   "label": "Checks"
+  },
+  {
+   "default": "0",
+   "fieldname": "pipes_checked",
+   "fieldtype": "Check",
+   "label": "Pipes checked"
+  },
+  {
+   "fieldname": "col_pipes",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "drilling_points_marked",
+   "fieldtype": "Check",
+   "label": "Drilling Points marked"
+  },
+  {
+   "fieldname": "sec_road",
+   "fieldtype": "Section Break",
+   "label": "Road"
+  },
+  {
+   "default": "0",
+   "fieldname": "use_public_area",
+   "fieldtype": "Check",
+   "label": "Use public area"
+  },
+  {
+   "default": "0",
+   "fieldname": "road_block_required",
+   "fieldtype": "Check",
+   "label": "Road block required"
+  },
+  {
+   "depends_on": "eval:doc.road_block_required==1",
+   "fieldname": "road_block_meters",
+   "fieldtype": "Int",
+   "label": "Road block meters"
+  },
+  {
+   "fieldname": "col_road",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "requires_traffic_tech",
+   "fieldtype": "Check",
+   "label": "Requires Traffic Tech"
+  },
+  {
+   "default": "0",
+   "fieldname": "requires_traffic_light",
+   "fieldtype": "Check",
+   "label": "Requires Traffic Light"
+  },
+  {
+   "default": "0",
+   "fieldname": "requires_traffic_control",
+   "fieldtype": "Check",
+   "label": "Requires Traffic Control"
+  },
+  {
+   "fieldname": "sec_equipment",
+   "fieldtype": "Section Break",
+   "label": "Equipment"
+  },
+  {
+   "fieldname": "drilling_equipment",
+   "fieldtype": "Table MultiSelect",
+   "label": "Drilling Equipment",
+   "options": "Drilling Equipment Link"
+  },
+  {
+   "default": "0",
+   "fieldname": "carrymax",
+   "fieldtype": "Check",
+   "label": "Carrymax"
+  },
+  {
+   "fieldname": "col_equipment",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "internal_crane_required",
+   "fieldtype": "Check",
+   "label": "Internal Crane required"
+  },
+  {
+   "default": "0",
+   "fieldname": "external_crane_required",
+   "fieldtype": "Check",
+   "label": "External Crane required"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:(doc.internal_crane_required==1 || doc.external_crane_required==1)",
+   "fieldname": "crane_organized",
+   "fieldtype": "Check",
+   "label": "Crane organized"
+  },
+  {
+   "depends_on": "eval:(doc.internal_crane_required==1 || doc.external_crane_required==1)",
+   "fieldname": "crane_length",
+   "fieldtype": "Select",
+   "label": "Crane Length",
+   "options": "\n10m\n15m\n20m\n30m"
+  },
+  {
+   "fieldname": "sec_access",
+   "fieldtype": "Section Break",
+   "label": "Site Access"
+  },
+  {
+   "default": "frei",
+   "fieldname": "site_access",
+   "fieldtype": "Select",
+   "label": "Site Access",
+   "options": "frei\nbeschr\u00e4nkt\nBewilligung\nSondertransport"
+  },
+  {
+   "fieldname": "column_break_34",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.site_access==\"beschr\u00e4nkt\"",
+   "fieldname": "site_access_remarks",
+   "fieldtype": "Text Editor",
+   "label": "Site Access Remarks"
+  },
+  {
+   "fieldname": "sec_other",
+   "fieldtype": "Section Break",
+   "label": "Other"
+  },
+  {
+   "default": "0",
+   "fieldname": "electricity",
+   "fieldtype": "Check",
+   "label": "Electricity"
+  },
+  {
+   "default": "0",
+   "fieldname": "water_supply",
+   "fieldtype": "Check",
+   "label": "Water supply"
+  },
+  {
+   "fieldname": "col_other",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "hydrant",
+   "fieldtype": "Check",
+   "label": "Hydrant"
+  },
+  {
+   "depends_on": "eval:doc.hydrant == 1",
+   "fieldname": "hydrant_no",
+   "fieldtype": "Data",
+   "label": "Hydrant number"
+  },
+  {
+   "depends_on": "eval:doc.hydrant == 1",
+   "fieldname": "hydrant_contact",
+   "fieldtype": "Link",
+   "label": "Hydrant contact",
+   "options": "Contact"
+  },
+  {
+   "fieldname": "sec_remarks",
+   "fieldtype": "Section Break",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Text Editor",
+   "label": "Remarks"
   }
  ],
- "modified": "2022-02-09 19:29:32.053482",
+ "modified": "2022-07-29 12:29:44.589614",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
@@ -80,6 +322,24 @@
    "role": "Projects User",
    "share": 1,
    "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1
   }
  ],
  "sort_field": "modified",
