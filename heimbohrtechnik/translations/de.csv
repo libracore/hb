@@ -175,7 +175,7 @@ DocType: Construction Site Description,Road block meters,Laufmeter Absperrung
 DocType: Construction Site Description,Requires Traffic Tech,Verkehrstechnik erforderlich
 DocType: Construction Site Description,Requires Traffic Light,Lichtisgnal aufstellen
 DocType: Construction Site Description,Requires Traffic Control,Verkehrsregelung erforderlich
-DocType: Construction Site Description,Equipment,Asurüstung
+DocType: Construction Site Description,Equipment,Ausrüstung
 DocType: Construction Site Description,Internal Crane required,Pneukran Heim erforderlich
 DocType: Construction Site Description,External Crane required,Pneukran extern erforderlich
 DocType: Construction Site Description,Crane Length,Kran-Auslegung
