@@ -129,7 +129,7 @@ frappe.ui.form.on('Object', {
                 order_ews(frm.doc.name);
             });
             // add button to open construction site description
-            add_construction_site_description_button(frm, frm.doc.object)
+            add_construction_site_description_button(frm, frm.doc.name)
         } else {
             if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
                 // fresh document, no addresses - load template
