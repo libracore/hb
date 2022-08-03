@@ -51,6 +51,10 @@
   "drilling_method",
   "accompaniment",
   "drilling_samples",
+  "restrictions",
+  "organisational_measures",
+  "trt",
+  "progress_measurement",
   "column_geology",
   "assessment",
   "section_addresses",
@@ -338,9 +342,31 @@
    "hidden": 1,
    "label": "GPS Longitude",
    "precision": "9"
+  },
+  {
+   "fieldname": "restrictions",
+   "fieldtype": "Data",
+   "label": "Governmental restrictions"
+  },
+  {
+   "fieldname": "organisational_measures",
+   "fieldtype": "Data",
+   "label": "Organisational measures"
+  },
+  {
+   "default": "0",
+   "fieldname": "trt",
+   "fieldtype": "Check",
+   "label": "TRT (Thermal Response Test)"
+  },
+  {
+   "default": "0",
+   "fieldname": "progress_measurement",
+   "fieldtype": "Check",
+   "label": "Progress measurement"
   }
  ],
- "modified": "2022-06-22 15:45:34.482754",
+ "modified": "2022-08-03 15:42:25.194286",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",

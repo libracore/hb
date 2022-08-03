@@ -140,6 +140,9 @@ DocType: Object,Permits,Bewilligungen
 DocType: Object,Coordinates,Koordinaten
 DocType: Object,Send Mail,Mail senden
 DocType: Object,Checklist and Permits,Checkliste und Bewilligungen
+DocType: Object,Governmental restrictions,Behördliche Auflagen
+DocType: Object,Organisational measures,Betriebliche Massnamhen
+DocType: Object,Progress measurement,Verlaufsmessung
 DocType: Project,Mud Disposer,Schlammentsorger
 DocType: Project,Mud disposer,Schlammentsorger
 DocType: Project,Drilling Equipment,Bohrequipment
