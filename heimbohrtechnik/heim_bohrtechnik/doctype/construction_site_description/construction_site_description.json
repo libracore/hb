@@ -44,7 +44,10 @@
   "col_other",
   "hydrant",
   "hydrant_no",
-  "hydrant_contact",
+  "sec_add_meas",
+  "protect_fassade",
+  "col_add_meas",
+  "gras_cover",
   "sec_remarks",
   "remarks"
  ],
@@ -277,13 +280,6 @@
    "label": "Hydrant number"
   },
   {
-   "depends_on": "eval:doc.hydrant == 1",
-   "fieldname": "hydrant_contact",
-   "fieldtype": "Link",
-   "label": "Hydrant contact",
-   "options": "Contact"
-  },
-  {
    "fieldname": "sec_remarks",
    "fieldtype": "Section Break",
    "label": "Remarks"
@@ -292,9 +288,29 @@
    "fieldname": "remarks",
    "fieldtype": "Text Editor",
    "label": "Remarks"
+  },
+  {
+   "fieldname": "sec_add_meas",
+   "fieldtype": "Section Break",
+   "label": "Additional measures"
+  },
+  {
+   "default": "0",
+   "fieldname": "protect_fassade",
+   "fieldtype": "Check",
+   "label": "Protect fassade"
+  },
+  {
+   "fieldname": "col_add_meas",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "gras_cover",
+   "fieldtype": "Heading",
+   "label": "Gras cover"
   }
  ],
- "modified": "2022-07-29 12:29:44.589614",
+ "modified": "2022-08-03 10:14:18.591174",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
