@@ -173,7 +173,7 @@ DocType: Construction Site Description,Use public area,Benutzung öffentlicher G
 DocType: Construction Site Description,Road block required,Absperrung erforderlich
 DocType: Construction Site Description,Road block meters,Laufmeter Absperrung
 DocType: Construction Site Description,Requires Traffic Tech,Verkehrstechnik erforderlich
-DocType: Construction Site Description,Requires Traffic Light,Lichtisgnal aufstellen
+DocType: Construction Site Description,Requires Traffic Light,Lichtsignal aufstellen
 DocType: Construction Site Description,Requires Traffic Control,Verkehrsregelung erforderlich
 DocType: Construction Site Description,Equipment,Ausrüstung
 DocType: Construction Site Description,Internal Crane required,Pneukran Heim erforderlich
