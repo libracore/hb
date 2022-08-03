@@ -577,3 +577,27 @@ function check_warranty(frm) {
         }
     }
 }
+
+function add_construction_site_description_button(frm, object) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.construction_site_description.construction_site_description.has_construction_site_description',
+        'args': {'object': object},
+        'callback': function(response) {
+            var btn_class = "btn-warning";
+            if ((response.message) && (response.message.length > 0)) {
+                btn_class = "btn-primary";
+            }
+            frm.add_custom_button( __("Construction Site Description"), function() {
+                frappe.call({
+                    'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.construction_site_description.construction_site_description.find_create_construction_site_description',
+                    'args': {'object': object},
+                    'callback': function(response) {
+                        if (response.message) {
+                            frappe.set_route("Form", "Construction Site Description", response.message);
+                        }
+                    }
+                });
+            }).addClass(btn_class);
+        }
+    });
+}

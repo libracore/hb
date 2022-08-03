@@ -11,7 +11,8 @@
   "column_details",
   "invoice_to",
   "invoice_to_name",
-  "information_to"
+  "information_to",
+  "appointment"
  ],
  "fields": [
   {
@@ -65,10 +66,16 @@
    "fieldname": "information_to",
    "fieldtype": "Data",
    "label": "Information to"
+  },
+  {
+   "fieldname": "appointment",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Appointment"
   }
  ],
  "istable": 1,
- "modified": "2021-11-03 20:45:11.128190",
+ "modified": "2022-08-03 11:51:14.937335",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Project Checklist",

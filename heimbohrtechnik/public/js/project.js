@@ -41,6 +41,8 @@ frappe.ui.form.on('Project', {
         if (!frm.doc.__islocal) {
             show_insurance_information(frm.doc.name);
         }
+        // add button to open construction site description
+        add_construction_site_description_button(frm, frm.doc.object);
     }
 });
 

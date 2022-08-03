@@ -148,6 +148,7 @@ DocType: Project,Drilling Team,Bohrteam
 DocType: Project,Invoice to,Rechnung an
 DocType: Project,Invoice to name,Rechnung an (Name)
 DocType: Project,Order date,Bestelldatum
+DocType: Project,Appointment,Termin
 DocType: Permit Type,Permit Type,Bewilligungsart
 DocType: Permit Type,Permit,Bewilligung
 DocType: Project,Permit number,Bewilligungsnummer

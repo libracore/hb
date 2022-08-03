@@ -128,6 +128,8 @@ frappe.ui.form.on('Object', {
             frm.add_custom_button("EWS bestellen", function() {
                 order_ews(frm.doc.name);
             });
+            // add button to open construction site description
+            add_construction_site_description_button(frm, frm.doc.object)
         } else {
             if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
                 // fresh document, no addresses - load template
