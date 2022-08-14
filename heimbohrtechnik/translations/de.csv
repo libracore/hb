@@ -197,6 +197,7 @@ DocType: Construction Site Description,Hydrant contact,Hydrantenkontakt
 DocType: Construction Site Description,Additional measures,Zusätzliche Massnahmen
 DocType: Construction Site Description,Protect fassade,Fassade schützern
 DocType: Construction Site Description,Gras cover,Rasenmatte
+DocType: Construction Site Description,Hydrant action,Hydrantenvorgehen
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
 DocType: Item,Material,Material
