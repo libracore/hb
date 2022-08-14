@@ -135,6 +135,7 @@ DocType: Object,Planned Project,Geplantes Projekt
 DocType: Object,Classification,Klassifizierung
 DocType: Object,Print Owner,Eigentümer andrucken
 DocType: Object,Name (simple),Name (einfach)
+DocType: Object,Simple,Einfach
 DocType: Object,Create project,Projekt erstellen
 DocType: Object,Permits,Bewilligungen
 DocType: Object,Coordinates,Koordinaten
