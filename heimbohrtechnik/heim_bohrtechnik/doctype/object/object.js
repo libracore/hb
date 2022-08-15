@@ -406,6 +406,11 @@ frappe.ui.form.on('Object Address', {
                         });
                     }
                 });
+                
+                // in checklist cases: link in checklist as well
+                if (["Kran", "Kran intern", "Geologe", "Mulde", "Schlammentsorgung"].includes(v.address_type)) {
+                    set_checklist_supplier(frm, v.address_type, v.party);
+                }
             }
         }
     }
@@ -619,4 +624,28 @@ function check_add_checkliste(frm, activity_type) {
         cur_frm.refresh_field('checklist');
 
     }
+}
+
+function set_checklist_supplier(frm, activity_type, supplier) {
+    // make sure this item is in the checklist
+    check_add_checkliste(frm, activity_type);
+    // find supplier name
+    frappe.call({
+        'method': "frappe.client.get",
+        'args': {
+            'doctype': "Supplier",
+            'name': supplier
+        },
+        'callback': function(response) {
+            // find activity and assign supplier
+            for (var a = 0; a < (frm.doc.checklist || []).length; a++) {
+                if (frm.doc.checklist[a].activity === activity_type) {
+                    frappe.model.set_value(frm.doc.checklist[a].doctype, frm.doc.checklist[a].name, 'supplier', supplier);
+                    frappe.model.set_value(frm.doc.checklist[a].doctype, frm.doc.checklist[a].name, 'supplier_name', response.message.supplier_name);
+                    break;
+                }
+            }
+        }
+    });
+    
 }
