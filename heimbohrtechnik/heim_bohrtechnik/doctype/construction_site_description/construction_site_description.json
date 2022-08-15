@@ -12,8 +12,7 @@
   "images",
   "sec_plans",
   "construction_plan",
-  "col_plans",
-  "construction_plan_file",
+  "plans",
   "sec_checks",
   "pipes_checked",
   "col_pipes",
@@ -102,15 +101,6 @@
    "fieldname": "construction_plan",
    "fieldtype": "Check",
    "label": "Construction Plan"
-  },
-  {
-   "fieldname": "col_plans",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "construction_plan_file",
-   "fieldtype": "Attach",
-   "label": "Construction Plan File"
   },
   {
    "fieldname": "sec_checks",
@@ -316,9 +306,15 @@
    "fieldtype": "Select",
    "label": "Hydrant action",
    "options": "\nWasseruhr holen\nWasseruhr nutzen\nAnmeldung telefonisch"
+  },
+  {
+   "fieldname": "plans",
+   "fieldtype": "Table",
+   "label": "Plans",
+   "options": "Construction Site Description Plan"
   }
  ],
- "modified": "2022-08-14 21:17:14.095974",
+ "modified": "2022-08-15 20:45:10.241859",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
