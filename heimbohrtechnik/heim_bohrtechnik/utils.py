@@ -340,13 +340,15 @@ Update project data
 def update_project(project):
     p = frappe.get_doc("Project", project)
     # find sales order data (Thermozement)
+    thermo_item = frappe.get_value("Heim Settings", "Heim Settings", "thermozement_item")
     if p.sales_order and frappe.db.exists("Sales Order", p.sales_order):
         so = frappe.get_doc("Sales Order", p.sales_order)
         p.thermozement = 0
         for i in so.items:
-            if "Thermohinterfüllung" in i.item_name:
+            if i.item_code == thermo_item:
                 p.thermozement = 1
                 break
+        p.save()
     return
 
 """

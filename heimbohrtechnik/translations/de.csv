@@ -144,6 +144,8 @@ DocType: Object,Checklist and Permits,Checkliste und Bewilligungen
 DocType: Object,Governmental restrictions,Behördliche Auflagen
 DocType: Object,Organisational measures,Betriebliche Massnamhen
 DocType: Object,Progress measurement,Verlaufsmessung
+DocType: Object,Has drilling samples,Hat Bohrproben
+DocType: Object,Drilling sample storage,Lagerort Bohrproben
 DocType: Project,Mud Disposer,Schlammentsorger
 DocType: Project,Mud disposer,Schlammentsorger
 DocType: Project,Drilling Equipment,Bohrequipment

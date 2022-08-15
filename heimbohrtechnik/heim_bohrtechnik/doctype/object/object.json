@@ -50,13 +50,15 @@
   "section_geology",
   "drilling_method",
   "accompaniment",
+  "has_drilling_samples",
   "drilling_samples",
-  "restrictions",
-  "organisational_measures",
+  "drilling_sample_storage",
   "trt",
   "progress_measurement",
   "column_geology",
   "assessment",
+  "restrictions",
+  "organisational_measures",
   "section_addresses",
   "addresses"
  ],
@@ -310,6 +312,7 @@
    "options": "Drilling Method"
   },
   {
+   "depends_on": "eval:doc.has_drilling_samples == 1",
    "fieldname": "drilling_samples",
    "fieldtype": "Data",
    "label": "Drilling Samples"
@@ -364,9 +367,23 @@
    "fieldname": "progress_measurement",
    "fieldtype": "Check",
    "label": "Progress measurement"
+  },
+  {
+   "default": "0",
+   "fieldname": "has_drilling_samples",
+   "fieldtype": "Check",
+   "label": "Has drilling samples"
+  },
+  {
+   "default": "HB AG",
+   "depends_on": "eval:doc.has_drilling_samples == 1",
+   "fieldname": "drilling_sample_storage",
+   "fieldtype": "Select",
+   "label": "Drilling sample storage",
+   "options": "\nVor Ort\nHB AG\nGeologe"
   }
  ],
- "modified": "2022-08-03 15:42:25.194286",
+ "modified": "2022-08-15 11:39:05.432125",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
