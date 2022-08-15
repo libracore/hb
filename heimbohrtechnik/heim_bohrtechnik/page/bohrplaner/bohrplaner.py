@@ -38,10 +38,16 @@ def get_overlay_datas(from_date, to_date):
         
         project = frappe.get_doc("Project", p.name)
         p_object = frappe.get_doc("Object", p.object)
+        construction_sites = frappe.get_all("Construction Site Description", filters={'project': p.name}, fields=['name'])
+        if len(construction_sites) > 0:
+            p_construction_site = frappe.get_doc("Construction Site Description", construction_sites[0]['name'])
+        else:
+            p_construction_site = None
         manager_short = frappe.db.get_value("User", project.manager, "username") if project.manager else ''
         drilling_equipments = []
-        for d in project.drilling_equipment:
-            drilling_equipments.append(d.drilling_equipment)
+        if p_construction_site:
+            for d in p_construction_site.drilling_equipment:
+                drilling_equipments.append(d.drilling_equipment)
         drilling_equipment = ", ".join(drilling_equipments)
         saugauftrag = ''
         pneukran = ''
@@ -174,10 +180,24 @@ def get_traffic_lights_indicator(project):
     if int(project.termin_bestaetigt) == 1:
         projeknummer_color = '#ffffbf;'
     if project.sales_order:
-        akonto = int(frappe.db.sql("""SELECT COUNT(`name`) AS `qty` FROM `tabAkonto Invoice` WHERE `sales_order` = '{so}' AND `docstatus` = 1""".format(so=project.sales_order), as_dict=True)[0].qty)
+        akonto = int(frappe.db.sql("""
+            SELECT COUNT(`tabSales Invoice`.`name`) AS `qty` 
+            FROM `tabSales Invoice Item`
+            LEFT JOIN `tabSales Invoice` ON `tabSales Invoice`.`name` = `tabSales Invoice Item`.`parent`
+            WHERE `tabSales Invoice Item`.`sales_order` = '{so}' 
+              AND `tabSales Invoice`.`docstatus` = 1
+              AND `tabSales Invoice`.`title` = "Teilrechnung"; """.format(so=project.sales_order), as_dict=True)[0].qty)
         if akonto > 0:
             projeknummer_color = '#eefdec;'
-        sinv = int(frappe.db.sql("""SELECT COUNT(`name`) AS `qty` FROM `tabSales Invoice Item` WHERE `parenttype` = 'Sales Invoice' AND `sales_order` = '{so}' AND `docstatus` = 1""".format(so=project.sales_order), as_dict=True)[0].qty)
+        sinv = int(frappe.db.sql("""
+            SELECT COUNT(`tabSales Invoice`.`name`) AS `qty` 
+            FROM `tabSales Invoice Item` 
+            LEFT JOIN `tabSales Invoice` ON `tabSales Invoice`.`name` = `tabSales Invoice Item`.`parent`
+            WHERE `tabSales Invoice Item`.`parenttype` = 'Sales Invoice' 
+              AND `tabSales Invoice Item`.`sales_order` = '{so}' 
+              AND `tabSales Invoice`.`docstatus` = 1 
+              AND `tabSales Invoice`.`title` IN ("Schlussrechnung", "Rechnung"); 
+            """.format(so=project.sales_order), as_dict=True)[0].qty)
         if sinv > 0:
             projeknummer_color = '#81d41a;'
     colors.append(projeknummer_color)
