@@ -259,6 +259,13 @@ frappe.ui.form.on('Object', {
                 } 
             });
         }
+    },
+    accompaniment: function(frm) {
+        if (frm.doc.accompaniment == 1) {
+            // make sure geologist is in address and checklist
+            check_add_address(frm, "Geologe");
+            check_add_checkliste(frm, "Geologe");
+        }
     }
 });
 
@@ -580,4 +587,36 @@ function update_permits_on_plz(frm) {
             fill_permits(frm, standard_permits);
         }
     });
+}
+
+function check_add_address(frm, address_type) {
+    var has_address = false;
+    for (var a = 0; a < (frm.doc.addresses || []).length; a++) {
+        if (frm.doc.addresses[a].address_type === address_type) {
+            has_address = true;
+            break;
+        }
+    }
+    if (!has_address) {
+        var child = cur_frm.add_child('addresses');
+        frappe.model.set_value(child.doctype, child.name, 'address_type', address_type);
+        cur_frm.refresh_field('addresses');
+
+    }
+}
+
+function check_add_checkliste(frm, activity_type) {
+    var has_checklist = false;
+    for (var a = 0; a < (frm.doc.checklist || []).length; a++) {
+        if (frm.doc.checklist[a].activity === activity_type) {
+            has_checklist = true;
+            break;
+        }
+    }
+    if (!has_checklist) {
+        var child = cur_frm.add_child('checklist');
+        frappe.model.set_value(child.doctype, child.name, 'activity', activity_type);
+        cur_frm.refresh_field('checklist');
+
+    }
 }

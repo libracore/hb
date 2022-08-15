@@ -17,6 +17,7 @@ class Object(Document):
             self.set_key()
         if self.gps_coordinates and not self.gps_lat:
             self.set_gps()
+            
         return
     
     def set_gps(self):
