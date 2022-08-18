@@ -64,9 +64,12 @@ cur_frm.fields_dict.checklist.grid.get_field('supplier').get_query =
     
 frappe.ui.form.on('Object', {
     refresh: function(frm) {
-        // show permits & checklist
+        // show permits & checklist (in case coming from another record where it was hidden)
+        var checklists = document.querySelectorAll("[data-fieldname='checklist']");
         try {
-            document.querySelectorAll("[data-fieldname='checklist']")[0].parentElement.parentElement.parentElement.parentElement.style.display = "Block";
+            for (var i = 0; i < checklists.length; i++) {
+                checklists[i].parentElement.parentElement.parentElement.parentElement.style.display = "Block";
+            }
         } catch { /* do nothing */ }
         if (!frm.doc.__islocal) {
             // check if project exists
@@ -81,7 +84,10 @@ frappe.ui.form.on('Object', {
                         }).addClass("btn-primary");
                         // hide permits & checklist
                         try {
-                            document.querySelectorAll("[data-fieldname='checklist']")[0].parentElement.parentElement.parentElement.parentElement.style.display = "None";
+                            
+                            for (var i = 0; i < checklists.length; i++) {
+                                checklists[i].parentElement.parentElement.parentElement.parentElement.style.display = "None";
+                            }
                         } catch { /* do nothing */ }
                     } else {
                         // has no project
