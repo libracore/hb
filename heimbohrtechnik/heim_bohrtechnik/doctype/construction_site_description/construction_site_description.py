@@ -51,7 +51,7 @@ def check_object_address(obj, address_type):
 """
 Checks, if a checklist item is in an object/project and add it if not
 """
-def check_object_checklist(obj, activity_type, has_project):
+def check_object_checklist(obj, activity_type, has_project, supplier=None):
     if has_project:
         doc = frappe.get_doc("Project", obj)
     else:
@@ -60,12 +60,20 @@ def check_object_checklist(obj, activity_type, has_project):
     for chk in doc.checklist:
         if chk.activity == activity_type:
             has_entry = True
+            if supplier:
+                chk.supplier = supplier
+                chk.supplier_name = frappe.get_value("Supplier", supplier, "supplier_name")
+                chk.save(ignore_permissions=True)
             break
     
     if not has_entry:
-        doc.append('checklist', {
+        entry = {
             'activity': activity_type
-        })
+        }
+        if supplier:
+            entry['supplier'] = supplier
+            entry['supplier_name'] = frappe.get_value("Supplier", supplier, "supplier_name")
+        doc.append('checklist', entry)
         doc.save(ignore_permissions=True)
         
     return

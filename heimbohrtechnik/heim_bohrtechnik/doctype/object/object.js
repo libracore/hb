@@ -264,7 +264,7 @@ frappe.ui.form.on('Object', {
         if (frm.doc.accompaniment == 1) {
             // make sure geologist is in address and checklist
             check_add_address(frm, "Geologe");
-            check_add_checkliste(frm, "Geologe");
+            check_add_checklist(frm, "Geologe");
         }
     }
 });
@@ -610,7 +610,7 @@ function check_add_address(frm, address_type) {
     }
 }
 
-function check_add_checkliste(frm, activity_type) {
+function check_add_checklist(frm, activity_type) {
     var has_checklist = false;
     for (var a = 0; a < (frm.doc.checklist || []).length; a++) {
         if (frm.doc.checklist[a].activity === activity_type) {
@@ -628,7 +628,7 @@ function check_add_checkliste(frm, activity_type) {
 
 function set_checklist_supplier(frm, activity_type, supplier) {
     // make sure this item is in the checklist
-    check_add_checkliste(frm, activity_type);
+    check_add_checklist(frm, activity_type);
     // find supplier name
     frappe.call({
         'method': "frappe.client.get",
@@ -647,5 +647,13 @@ function set_checklist_supplier(frm, activity_type, supplier) {
             }
         }
     });
-    
+    // add to related project if applicable
+    frappe.call({
+        'method': "heimbohrtechnik.heim_bohrtechnik.doctype.object.object.update_project_checklist",
+        'args': {
+            'obj': frm.doc.name,
+            'activity_type': activity_type,
+            'supplier': supplier
+        }
+    });
 }

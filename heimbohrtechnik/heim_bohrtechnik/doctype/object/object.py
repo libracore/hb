@@ -10,6 +10,7 @@ from frappe import _
 import string, random
 import requests
 import json
+from heimbohrtechnik.heim_bohrtechnik.doctype.construction_site_description.construction_site_description import check_object_checklist
 
 class Object(Document):
     def before_save(self):
@@ -189,3 +190,12 @@ def get_permit_details(permit_item, object=None, project=None):
             permit_details = r
             break
     return permit_details
+
+"""
+Update project checklist from address
+"""
+@frappe.whitelist()
+def update_project_checklist(obj, activity_type, supplier):
+    if frappe.db.exists("Project", obj):
+        check_object_checklist(obj, activity_type, has_project=True, supplier=supplier)
+    return
