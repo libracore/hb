@@ -22,7 +22,14 @@ cur_frm.fields_dict.addresses.grid.get_field('party').get_query =
             filters = {
                 'query': 'heimbohrtechnik.heim_bohrtechnik.filters.supplier_by_capability',
                 'filters': {
-                    'capability': v.address_type
+                    'capability': v.address_type,
+                    'disabled': 0
+                }
+            }
+        } else {
+            filters = {
+                'filters': {
+                    "disabled": 0
                 }
             }
         }
@@ -48,7 +55,8 @@ cur_frm.fields_dict.checklist.grid.get_field('supplier').get_query =
             filters = {
                 'query': 'heimbohrtechnik.heim_bohrtechnik.filters.supplier_by_capability',
                 'filters': {
-                    'capability': v.activity
+                    'capability': v.activity,
+                    'disabled': 0
                 }
             }
         return filters

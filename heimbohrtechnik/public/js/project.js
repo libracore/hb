@@ -15,8 +15,11 @@ frappe.ui.form.on('Project', {
             function(doc, cdt, cdn) {    
                 var row = locals[cdt][cdn];
                 return {
-                    filters: {'capability': row.activity},
-                    query: "heimbohrtechnik.heim_bohrtechnik.filters.supplier_by_capability"
+                    query: "heimbohrtechnik.heim_bohrtechnik.filters.supplier_by_capability",
+                    filters: {
+                        'capability': row.activity,
+                        'disabled': 0
+                    }
                 };
         };
         // check if mud can be invoiced

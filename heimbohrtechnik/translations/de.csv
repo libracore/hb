@@ -146,6 +146,7 @@ DocType: Object,Organisational measures,Betriebliche Massnamhen
 DocType: Object,Progress measurement,Verlaufsmessung
 DocType: Object,Has drilling samples,Hat Bohrproben
 DocType: Object,Drilling sample storage,Lagerort Bohrproben
+DocType: Object,Party,Kunde/Lieferant
 DocType: Project,Mud Disposer,Schlammentsorger
 DocType: Project,Mud disposer,Schlammentsorger
 DocType: Project,Drilling Equipment,Bohrequipment
