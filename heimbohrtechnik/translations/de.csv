@@ -147,6 +147,7 @@ DocType: Object,Progress measurement,Verlaufsmessung
 DocType: Object,Has drilling samples,Hat Bohrproben
 DocType: Object,Drilling sample storage,Lagerort Bohrproben
 DocType: Object,Party,Kunde/Lieferant
+DocType: Object,Staged cementation,Stufenzementation
 DocType: Project,Mud Disposer,Schlammentsorger
 DocType: Project,Mud disposer,Schlammentsorger
 DocType: Project,Drilling Equipment,Bohrequipment
@@ -183,7 +184,7 @@ DocType: Construction Site Description,Drilling Points marked,Bohrpunkte markier
 DocType: Construction Site Description,Road,Strasse
 DocType: Construction Site Description,Use public area,Benutzung öffentlicher Grund erforderlich
 DocType: Construction Site Description,Road block required,Absperrung erforderlich
-DocType: Construction Site Description,Road block meters,Laufmeter Absperrung
+DocType: Construction Site Description,Road block meters,Laufmeter/Absperrung
 DocType: Construction Site Description,Requires Traffic Tech,Verkehrstechnik erforderlich
 DocType: Construction Site Description,Requires Traffic Light,Lichtsignal aufstellen
 DocType: Construction Site Description,Requires Traffic Control,Verkehrsregelung erforderlich
