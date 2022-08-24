@@ -10,6 +10,13 @@ try {
 
 frappe.ui.form.on('Project', {
     refresh(frm) {
+        // show permits & checklist (in case coming from another record where it was hidden)
+        var checklists = document.querySelectorAll("[data-fieldname='checklist']");
+        try {
+            for (var i = 0; i < checklists.length; i++) {
+                checklists[i].parentElement.parentElement.parentElement.parentElement.style.display = "Block";
+            }
+        } catch { /* do nothing */ }
         // filter suppliers by activity
         frm.fields_dict.checklist.grid.get_field('supplier').get_query =   
             function(doc, cdt, cdn) {    
