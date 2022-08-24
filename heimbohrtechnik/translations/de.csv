@@ -148,7 +148,7 @@ DocType: Object,Has drilling samples,Mit Bohrproben
 DocType: Object,Drilling sample storage,Lagerort Bohrproben
 DocType: Object,Party,Kunde/Lieferant
 DocType: Object,Staged cementation,Stufenzementation
-DocType: Object,Staged cementation depth,Stufenzementation ab
+DocType: Object,Staged cementation depth,Stufenzementation bei
 DocType: Project,Mud Disposer,Schlammentsorger
 DocType: Project,Mud disposer,Schlammentsorger
 DocType: Project,Drilling Equipment,Bohrequipment
@@ -224,6 +224,7 @@ DocType: Drilling Team,Drilling rig type,Typenbezeichnung der Bohrausrüstung
 DocType: Drilling Team,Truck and Weight,LKW und Gewicht
 DocType: Drilling Team,Trough Details,Muldendetails
 DocType: Drilling Team,Crane Details,Krandetails
+DocType: Drilling Team,Drilling Master,Bohrmeister
 DocType: Probe Type,Probe Type,Sondenart
 DocType: Signature,Signature,Unterschrift
 DocType: Signature,Signature type,Unterschriftenregelung
