@@ -25,7 +25,6 @@ function autocomplete_object(frm) {
             'doctype': "Object",
             'name': frm.doc.object
         },
-        'async': false,
         'callback': function(response) {
             var object = response.message;
             cur_frm.set_value("object_name", object.object_name);
@@ -33,9 +32,15 @@ function autocomplete_object(frm) {
             
             for (var i = 0; i < object.addresses.length; i++) {
                 if (object.addresses[i].address_type === "Eigentümer") {
-                    cur_frm.set_value("bewilligungsinhaber", 
-                        (object.addresses[i].address_display || "")
-                            .replaceAll("<br>", " - ").replaceAll("\n", " - "));
+                    if (object.addresses[i].is_simple === 1) {
+                        cur_frm.set_value("bewilligungsinhaber", 
+                            (object.addresses[i].simple_name || "") + ", " 
+                                + (object.addresses[i].simple_address || ""));
+                    } else {
+                        cur_frm.set_value("bewilligungsinhaber", 
+                            (object.addresses[i].address_display || "")
+                                .replaceAll("<br>", " - ").replaceAll("\n", " - "));
+                    }
                 }
             }
             
@@ -45,7 +50,6 @@ function autocomplete_object(frm) {
                     'doctype': "Project",
                     'name': frm.doc.object
                 },
-                'async': false,
                 'callback': function(response) {
                     var project = response.message;
                                         

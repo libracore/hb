@@ -173,7 +173,19 @@ def get_data():
                    "type": "doctype",
                    "name": "Bohranzeige",
                    "label": _("Bohranzeige"),
-                   "description": _("Project")
+                   "description": _("Bohranzeige")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Construction Site Delivery",
+                   "label": _("Construction Site Delivery"),
+                   "description": _("Construction Site Delivery")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Subcontracting Order",
+                   "label": _("Subcontracting Order"),
+                   "description": _("Subcontracting Order")
                 }
             ]
         },

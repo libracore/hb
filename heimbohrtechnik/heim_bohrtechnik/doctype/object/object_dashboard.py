@@ -17,7 +17,7 @@ def get_data():
          },
          {
             'label': _("Documentation"),
-            'items': ['Construction Site Description', 'Bohranzeige']
+            'items': ['Construction Site Description', 'Bohranzeige', 'Construction Site Delivery', 'Subcontracting Order']
          },
          {
             'label': _("MudEX"),
