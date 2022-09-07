@@ -6,6 +6,7 @@ import frappe
 from frappe.model.mapper import get_mapped_doc
 from datetime import datetime, timedelta
 import json
+from frappe.utils import cint
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -217,6 +218,16 @@ def order_ews(object):
                     'qty': p.ews_count,
                     'project': object
                 })
+                # recursion: in case of staged cementation, check sub-level also
+                if cint(obj.staged_cementation) == 1:
+                    sub_related_items = get_related_items(r)
+                    for sr in sub_related_items:
+                        items.append({
+                            'item_code': sr,
+                            'qty': p.ews_count,
+                            'project': object
+                        })
+                    
     if len(items) == 0:
         return {'error': "No suitable EWS found", 'po': None}
     # schedule date: Friday before start (weekday: Monday = 0
