@@ -407,6 +407,8 @@ def get_drill_notice_recipients(project, address_types):
     # drilling manager
     if p_doc.drilling_team:
         recipients['cc'].append(frappe.get_value("Drilling Team", p_doc.drilling_team, "email"))
+    if p_doc.manager:
+        recipients['cc'].append(p_doc.manager)
     # addresses
     o_doc = frappe.get_doc("Object", p_doc.object)
     for a in o_doc.addresses:
