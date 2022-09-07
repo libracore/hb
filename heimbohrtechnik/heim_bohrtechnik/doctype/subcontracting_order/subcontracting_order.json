@@ -1,5 +1,5 @@
 {
- "autoname": "naming_series",
+ "autoname": "naming_series:",
  "creation": "2022-08-25 20:42:57.828153",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -101,7 +101,7 @@
    "label": "Remarks"
   }
  ],
- "modified": "2022-08-25 20:57:41.872883",
+ "modified": "2022-09-02 17:26:04.264900",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order",
