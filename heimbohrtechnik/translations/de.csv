@@ -149,6 +149,8 @@ DocType: Object,Drilling sample storage,Lagerort Bohrproben
 DocType: Object,Party,Kunde/Lieferant
 DocType: Object,Staged cementation,Stufenzementation
 DocType: Object,Staged cementation depth,Stufenzementation bei
+DocType: Object,Capabilities,Fähigkeiten
+DocType: Object,Object Address,Objektadresse
 DocType: Project,Mud Disposer,Schlammentsorger
 DocType: Project,Mud disposer,Schlammentsorger
 DocType: Project,Drilling Equipment,Bohrequipment
