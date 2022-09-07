@@ -205,6 +205,7 @@ DocType: Construction Site Description,Protect fassade,Fassade schützern
 DocType: Construction Site Description,Gras cover,Rasenmatte
 DocType: Construction Site Description,Hydrant action,Hydrantenvorgehen
 DocType: Construction Site Description,Plans,Pläne
+DocType: Construction Site Description,Drilling Point Remarks,Anmerkungen Bohrpunkte
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
 DocType: Item,Material,Material

@@ -17,6 +17,7 @@
   "pipes_checked",
   "col_pipes",
   "drilling_points_marked",
+  "drilling_point_remarks",
   "sec_road",
   "use_public_area",
   "road_block_required",
@@ -154,6 +155,7 @@
    "default": "0",
    "fieldname": "requires_traffic_tech",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Requires Traffic Tech"
   },
   {
@@ -312,9 +314,15 @@
    "fieldtype": "Table",
    "label": "Plans",
    "options": "Construction Site Description Plan"
+  },
+  {
+   "depends_on": "eval:doc.drilling_points_marked",
+   "fieldname": "drilling_point_remarks",
+   "fieldtype": "Data",
+   "label": "Drilling Point Remarks"
   }
  ],
- "modified": "2022-08-18 21:26:19.442197",
+ "modified": "2022-09-07 07:03:59.776354",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
