@@ -96,12 +96,6 @@ def get_data():
                    "name": "Sales Invoice",
                    "label": _("Sales Invoice"),
                    "description": _("Sales Invoice")
-                },
-                {
-                   "type": "doctype",
-                   "name": "Akonto Invoice",
-                   "label": _("Akonto Invoice"),
-                   "description": _("Akonto Invoice")
                 }
             ]
         },
