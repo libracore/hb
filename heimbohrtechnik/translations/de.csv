@@ -197,11 +197,11 @@ DocType: Construction Site Description,Crane organized,Kran organisiert
 DocType: Construction Site Description,Site Access,Zufahrt
 DocType: Construction Site Description,Site Access Remarks,Bemerkungen Zufahrt
 DocType: Construction Site Description,Electricity,Stromanschluss
-DocType: Construction Site Description,Water supply,Wasserbezugsort
+DocType: Construction Site Description,Water supply,Wasserbezug
 DocType: Construction Site Description,Hydrant number,Hydrantennummer
 DocType: Construction Site Description,Hydrant contact,Hydrantenkontakt
 DocType: Construction Site Description,Additional measures,Zusätzliche Massnahmen
-DocType: Construction Site Description,Protect fassade,Fassade schützern
+DocType: Construction Site Description,Protect fassade,Fassade schützen
 DocType: Construction Site Description,Gras cover,Rasenmatte
 DocType: Construction Site Description,Hydrant action,Hydrantenvorgehen
 DocType: Construction Site Description,Plans,Pläne

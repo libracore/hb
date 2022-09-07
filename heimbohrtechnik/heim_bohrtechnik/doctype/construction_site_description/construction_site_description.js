@@ -7,6 +7,14 @@ frappe.ui.form.on('Construction Site Description', {
         if ((frm.doc.object) && (!frm.doc.project)) {
             cur_frm.set_value("project", frm.doc.object);
         }
+        
+        frm.add_custom_button( __("Object") , function() {
+            frappe.set_route("Form", "Object", frm.doc.object);
+        }).addClass("btn-primary");
+        
+        frm.add_custom_button( __("Project") , function() {
+            frappe.set_route("Form", "Project", frm.doc.project);
+        }).addClass("btn-primary");
     },
     before_save: function(frm) {
         if (!frm.doc.object_name) {
