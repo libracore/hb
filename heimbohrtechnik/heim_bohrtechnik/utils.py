@@ -394,3 +394,25 @@ def get_related_items(item_code):
     for i in item.related_items:
         related_items.append(i.item_code)
     return related_items
+
+"""
+Compile recipients for drilling notice
+"""
+@frappe.whitelist()
+def get_drill_notice_recipients(project, address_types):
+    if type(address_types) == str:
+        address_types = json.loads(address_types)
+    recipients = {'recipients': [], 'cc': []}
+    p_doc = frappe.get_doc("Project", project)
+    # drilling manager
+    if p_doc.drilling_team:
+        recipients['cc'].append(frappe.get_value("Drilling Team", p_doc.drilling_team, "email"))
+    # addresses
+    o_doc = frappe.get_doc("Object", p_doc.object)
+    for a in o_doc.addresses:
+        if a.address_type in address_types:
+            if a.is_simple == 0 and a.email:
+                recipients['recipients'].append(a.email)
+            elif a.is_simple == 1 and a.simple_email:
+                recipients['recipients'].append(a.simple_email)
+    return recipients
