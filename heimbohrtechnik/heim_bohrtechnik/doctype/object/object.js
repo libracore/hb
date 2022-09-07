@@ -278,7 +278,7 @@ frappe.ui.form.on('Object', {
         if (frm.doc.accompaniment == 1) {
             // make sure geologist is in address and checklist
             check_add_address(frm, "Geologe");
-            check_add_checklist(frm, "Geologe");
+            // check_add_checklist(frm, "Geologe"); // 2022-09-07: not required
         }
     }
 });

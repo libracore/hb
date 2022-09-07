@@ -20,6 +20,7 @@
   "drilling_point_remarks",
   "sec_road",
   "use_public_area",
+  "use_public_area_remarks",
   "road_block_required",
   "road_block_meters",
   "col_road",
@@ -211,7 +212,7 @@
    "label": "Crane organized"
   },
   {
-   "depends_on": "eval:(doc.internal_crane_required==1 || doc.external_crane_required==1)",
+   "depends_on": "eval:(doc.external_crane_required==1)",
    "fieldname": "crane_length",
    "fieldtype": "Select",
    "label": "Crane Length",
@@ -321,9 +322,16 @@
    "fieldname": "drilling_point_remarks",
    "fieldtype": "Data",
    "label": "Drilling Point Remarks"
+  },
+  {
+   "depends_on": "eval:doc.use_public_area == 1",
+   "fieldname": "use_public_area_remarks",
+   "fieldtype": "Select",
+   "label": "Use public area ",
+   "options": "Anmeldung bauseitig\nAnmeldung durch HB-AG\nAnmeldung nicht erforderlich"
   }
  ],
- "modified": "2022-09-07 09:20:10.966344",
+ "modified": "2022-09-07 17:32:41.369285",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
