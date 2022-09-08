@@ -10,6 +10,8 @@
   "col_main",
   "object",
   "object_name",
+  "object_street",
+  "object_location",
   "section_details",
   "parcel",
   "column_details",
@@ -104,9 +106,23 @@
    "fieldname": "bewilligungsdatum",
    "fieldtype": "Date",
    "label": "Bewilligungsdatum"
+  },
+  {
+   "fetch_from": "object.object_street",
+   "fieldname": "object_street",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Object street"
+  },
+  {
+   "fetch_from": "object.object_location",
+   "fieldname": "object_location",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Object location"
   }
  ],
- "modified": "2022-09-05 08:18:06.817323",
+ "modified": "2022-09-08 08:36:33.174706",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Bohranzeige",
@@ -121,17 +137,6 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Projects User",
    "share": 1,
    "write": 1
   }

@@ -28,6 +28,8 @@ function autocomplete_object(frm) {
         'callback': function(response) {
             var object = response.message;
             cur_frm.set_value("object_name", object.object_name);
+            cur_frm.set_value("object_street", object.object_street);
+            cur_frm.set_value("object_location", object.object_location);
             cur_frm.set_value("parcel", object.parcel);
             
             for (var i = 0; i < object.addresses.length; i++) {
