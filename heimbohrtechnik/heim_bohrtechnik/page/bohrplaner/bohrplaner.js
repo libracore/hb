@@ -319,7 +319,7 @@ frappe.bohrplaner = {
     },
     open_parent_project: function(elemnt) {
         var parent_project = $(elemnt).attr("data-parentproject");
-        frappe.set_route("Form", "Project", parent_project);
+        url_to_form("Project", parent_project, function (r) { window.open(r.message, '_blank'); });
     }
 }
 
