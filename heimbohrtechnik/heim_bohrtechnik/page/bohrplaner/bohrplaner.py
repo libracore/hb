@@ -177,12 +177,17 @@ def get_subproject_overlay_datas(from_date, to_date):
     subproject_list = []
     shift_controll = {}
     subprojects = frappe.db.sql("""SELECT
-                                        `start`,
-                                        `end`,
-                                        `team`,
-                                        `description`
+                                        `tabProject Subproject`.`start`,
+                                        `tabProject Subproject`.`end`,
+                                        `tabProject Subproject`.`team`,
+                                        `tabProject Subproject`.`description`,
+                                        `tabProject`.`name` as `project`,
+                                        `tabProject`.`object_name`,
+                                        `tabProject`.`object_street`,
+                                        `tabProject`.`object_location`
                                     FROM `tabProject Subproject`
-                                    ORDER BY `team` ASC, `idx` ASC""", as_dict=True)
+                                    LEFT JOIN `tabProject` ON `tabProject`.`name` = `tabProject Subproject`.`parent`
+                                    ORDER BY `tabProject Subproject`.`team` ASC, `tabProject Subproject`.`idx` ASC""", as_dict=True)
     for subproject in subprojects:
         subproject_duration = calc_subproject_duration(subproject.start, subproject.end, from_date, to_date)
         subproject_shift, shift_controll = subproject_shift_controll(subproject, get_datetime(subproject_duration['start']).strftime('%d.%m.%Y'), shift_controll)
@@ -193,7 +198,11 @@ def get_subproject_overlay_datas(from_date, to_date):
             'dauer': subproject_duration['dauer'],
             'description': subproject.description,
             'id': subproject.name,
-            'subproject_shift': subproject_shift
+            'subproject_shift': subproject_shift,
+            'project': subproject.project,
+            'object_name': subproject.object_name,
+            'object_street': subproject.object_street,
+            'object_location': subproject.object_location
         }
         subproject_list.append(subproject_data)
     

@@ -158,7 +158,16 @@ frappe.bohrplaner = {
             var width = (42 * qty);
         }
         
-        $(frappe.render_template('subproject_overlay', {'width': width, 'subproject': data.id, 'description': data.description, 'subproject_shift': data.subproject_shift})).appendTo(place);
+        $(frappe.render_template('subproject_overlay', {
+            'width': width, 
+            'subproject': data.id, 
+            'description': data.description, 
+            'subproject_shift': data.subproject_shift,
+            'project': data.project,
+            'object_name': data.object_name,
+            'object_street': data.object_street,
+            'object_location': data.object_location
+        })).appendTo(place);
         return
     },
     reset_dates: function(page) {
