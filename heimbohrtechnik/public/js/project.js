@@ -43,7 +43,6 @@ frappe.ui.form.on('Project', {
         });
         // add link-button to drillplanner
         frm.add_custom_button(__("Öffne Bohrplaner"), function() {
-            //window.location = '/desk#bohrplaner';
             frappe.route_options = {"from": cur_frm.doc.expected_start_date, "project_name": cur_frm.doc.name}
             frappe.set_route("bohrplaner");
         });

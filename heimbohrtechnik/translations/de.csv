@@ -151,6 +151,7 @@ DocType: Object,Staged cementation,Stufenzementation
 DocType: Object,Staged cementation depth,Stufenzementation bei
 DocType: Object,Capabilities,Fähigkeiten
 DocType: Object,Object Address,Objektadresse
+DocType: Object,Information to,Informationen an
 DocType: Project,Mud Disposer,Schlammentsorger
 DocType: Project,Mud disposer,Schlammentsorger
 DocType: Project,Drilling Equipment,Bohrequipment
