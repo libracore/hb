@@ -26,6 +26,8 @@ Page: Drill Planner,The Mud Disposer has not yet been organized,Der Schlammentso
 Page: Drill Planner,The Mud Disposer was organized,Der Schlammentsorger wurde organisiert
 Page: Drill Planner,Drill notice sent,Die Bohranzeige wurde versendet
 Page: Drill Planner,"Drill notice <b>not</b> sent","Die Bohranzeige wurde <b>noch nicht</b> versendet"
+Page: Drill Planner,Soft Reload,Aktualisieren
+Page: Drill Planner,Reshedule,Umplanen
 DocType: Object,Object,Objekt
 DocType: Object,Object name,Objektname
 DocType: Object,Object Name,Objektname

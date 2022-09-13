@@ -15,8 +15,12 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
     // run page
     frappe.bohrplaner.run(page);
     
-    page.set_secondary_action('Soft Reload', () => {
+    // buttons
+    page.set_secondary_action( __('Soft Reload'), () => {
         frappe.bohrplaner.reset_dates(page);
+    });
+    page.set_primary_action( __('Search'), () => {
+        frappe.bohrplaner.search(page);
     });
     
     // check routes and if there is a route, navigate to this
@@ -37,7 +41,7 @@ frappe.bohrplaner = {
         var now = new Date();
         var from_date = frappe.datetime.add_days(now, 0);
         var to_date = frappe.datetime.add_days(now, 30);
-        
+                
         //get template data
         var data = frappe.bohrplaner.get_content(page, from_date, to_date);
         
@@ -334,6 +338,30 @@ frappe.bohrplaner = {
         } else {
             console.log("Project element to be marked not found: " + project_name);
         }
+    },
+    search: function(page) {
+        frappe.prompt([
+                {'fieldname': 'project', 'fieldtype': 'Link', 'label': __('Project'), 'options': 'Object', 'reqd': 1}  
+            ],
+            function(values){
+                frappe.call({
+                    'method': 'frappe.client.get',
+                    'args': {
+                        'doctype': 'Project',
+                        'name': values.project
+                    },
+                    'callback': function(r) {
+                        if (r.message) {
+                            frappe.route_options.from = r.message.expected_start_date;
+                            frappe.route_options.project_name = values.project;
+                            frappe.bohrplaner.load_route(page);
+                        }
+                    }
+                });
+            },
+            __('Search project'),
+            __('OK')
+        );
     }
 }
 
