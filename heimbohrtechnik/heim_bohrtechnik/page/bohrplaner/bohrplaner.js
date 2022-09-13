@@ -143,7 +143,26 @@ frappe.bohrplaner = {
                     var data = contents[i];
                     frappe.bohrplaner.add_subproject_overlay(page, data);
                 }
-                
+                frappe.bohrplaner.get_absences_overlay_data(page);
+           }
+        });
+    },
+    get_absences_overlay_data: function(page) {
+        var from = $("#from").val();
+        var to = $("#to").val();
+        frappe.call({
+           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_absences_overlay_datas",
+           args: {
+                "from_date": from,
+                "to_date": to
+           },
+           async: false,
+           callback: function(response) {
+                var contents = response.message;
+                for (var i = 0; i < contents.length; i++) {
+                    var data = contents[i];
+                    frappe.bohrplaner.add_absences_overlay(page, data);
+                }
            }
         });
     },
@@ -176,6 +195,20 @@ frappe.bohrplaner = {
             'object_street': data.object_street,
             'object_location': data.object_location,
             'parent_project': data.project
+        })).appendTo(place);
+        return
+    },
+    add_absences_overlay: function(page, data) {
+        var place = $('[data-bohrteam="absences"][data-date="' + data.start + '"][data-vmnm="vm"]');
+        $(place).css("position", "relative");
+        var qty = data.dauer
+        var width = (42 * qty);
+        
+        $(frappe.render_template('absence_overlay', {
+            'width': width, 
+            'absence': data.absence,
+            'employee_name': data.employee_name,
+            'shift': data.shift
         })).appendTo(place);
         return
     },
