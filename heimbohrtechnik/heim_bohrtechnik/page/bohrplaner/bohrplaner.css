@@ -146,6 +146,8 @@ tbody tr td:nth-child(even) {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    background-color: #ffffe0; 
+    border: 1px solid #f0e68c; 
 }
 
 .ampel-div {
