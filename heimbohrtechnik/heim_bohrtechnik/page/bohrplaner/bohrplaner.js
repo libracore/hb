@@ -166,7 +166,8 @@ frappe.bohrplaner = {
             'project': data.project,
             'object_name': data.object_name,
             'object_street': data.object_street,
-            'object_location': data.object_location
+            'object_location': data.object_location,
+            'parent_project': data.project
         })).appendTo(place);
         return
     },
@@ -315,6 +316,10 @@ frappe.bohrplaner = {
         me.page = page;
         
         $(frappe.render_template('mobile_view', {})).appendTo(me.page.main);
+    },
+    open_parent_project: function(elemnt) {
+        var parent_project = $(elemnt).attr("data-parentproject");
+        frappe.set_route("Form", "Project", parent_project);
     }
 }
 

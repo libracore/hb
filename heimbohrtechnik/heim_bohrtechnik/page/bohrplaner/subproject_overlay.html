@@ -1,7 +1,7 @@
 <div class="subproject_booking_overlay" id="{{ subproject }}"
     style="width: {{ width }}px;{% if subproject_shift > 0 %} top: {{ subproject_shift }}px !important; left: {{ subproject_shift / 2 }}px !important;{% endif %}"
     draggable="false">
-    <div class="object-div" style="font-size: 7pt;">
+    <div class="object-div" style="font-size: 7pt;" onclick="frappe.bohrplaner.open_parent_project(this);" data-parentproject="{{ parent_project }}">
         <div style="min-width:35px; ">{{ description }}</div>
         <div style="min-width:35px; ">{{ project }}</div>
         <div style="min-width:35px; ">{{ object_name }}</div>
