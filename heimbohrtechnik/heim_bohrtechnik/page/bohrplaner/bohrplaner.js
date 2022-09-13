@@ -115,6 +115,26 @@ frappe.bohrplaner = {
                     var data = contents[i];
                     frappe.bohrplaner.add_overlay(page, data);
                 }
+                frappe.bohrplaner.get_subproject_overlay_data(page);
+           }
+        });
+    },
+    get_subproject_overlay_data: function(page) {
+        var from = $("#from").val();
+        var to = $("#to").val();
+        frappe.call({
+           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_subproject_overlay_datas",
+           args: {
+                "from_date": from,
+                "to_date": to
+           },
+           async: false,
+           callback: function(response) {
+                var contents = response.message;
+                for (var i = 0; i < contents.length; i++) {
+                    var data = contents[i];
+                    frappe.bohrplaner.add_subproject_overlay(page, data);
+                }
                 
            }
         });
@@ -125,6 +145,20 @@ frappe.bohrplaner = {
         var qty = data.dauer
         var width = 42 * qty;
         $(frappe.render_template('booking_overlay', {'width': width, 'project': data.project, 'saugauftrag': data.saugauftrag, 'pneukran': data.pneukran, 'manager_short': data.manager_short, 'drilling_equipment': data.drilling_equipment, 'ampeln': data.ampeln})).appendTo(place);
+        return
+    },
+    add_subproject_overlay: function(page, data) {
+        var place = $('[data-bohrteam="' + data.bohrteam + '"][data-date="' + data.start + '"][data-vmnm="vm"]');
+        $(place).css("position", "relative");
+        var qty = data.dauer
+        var subproject_shift = data.subproject_shift;
+        if (subproject_shift > 0) {
+            var width = (42 * qty) - (data.subproject_shift / 2);
+        } else {
+            var width = (42 * qty);
+        }
+        
+        $(frappe.render_template('subproject_overlay', {'width': width, 'subproject': data.id, 'description': data.description, 'subproject_shift': data.subproject_shift})).appendTo(place);
         return
     },
     reset_dates: function(page) {

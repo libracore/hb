@@ -171,7 +171,55 @@ def get_overlay_datas(from_date, to_date):
         projects.append(p_data)
         
     return projects
+
+@frappe.whitelist()
+def get_subproject_overlay_datas(from_date, to_date):
+    subproject_list = []
+    shift_controll = {}
+    subprojects = frappe.db.sql("""SELECT
+                                        `start`,
+                                        `end`,
+                                        `team`,
+                                        `description`
+                                    FROM `tabProject Subproject`
+                                    ORDER BY `team` ASC, `idx` ASC""", as_dict=True)
+    for subproject in subprojects:
+        subproject_duration = calc_subproject_duration(subproject.start, subproject.end, from_date, to_date)
+        subproject_shift, shift_controll = subproject_shift_controll(subproject, get_datetime(subproject_duration['start']).strftime('%d.%m.%Y'), shift_controll)
+        
+        subproject_data = {
+            'bohrteam': subproject.team,
+            'start': get_datetime(subproject_duration['start']).strftime('%d.%m.%Y'),
+            'dauer': subproject_duration['dauer'],
+            'description': subproject.description,
+            'id': subproject.name,
+            'subproject_shift': subproject_shift
+        }
+        subproject_list.append(subproject_data)
     
+    return subproject_list
+
+def calc_subproject_duration(start, end, from_date, to_date):
+    correction = 0
+    if start < getdate(from_date):
+        correction = date_diff(end, start) - date_diff(end, getdate(from_date))
+        dauer = ((date_diff(end, start) - correction) + 1) * 2
+        start = getdate(from_date)
+    else:
+        dauer = ((date_diff(end, start) - correction) + 1) * 2
+    return {
+        'dauer': dauer,
+        'start': start
+    }
+
+def subproject_shift_controll(subproject, start, shift_controll):
+    if str(start) + str(subproject.team) in shift_controll:
+        shift_controll[str(start) + str(subproject.team)] += 20
+        return shift_controll[str(start) + str(subproject.team)], shift_controll
+    else:
+        shift_controll[str(start) + str(subproject.team)] = 0
+        return 0, shift_controll
+
 def get_traffic_lights_indicator(project):
     colors = []
     
