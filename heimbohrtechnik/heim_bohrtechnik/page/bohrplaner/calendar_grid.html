@@ -74,6 +74,24 @@
                     {% endfor %}
                 </tr>
             {% endfor %}
+            <!-- Absences -->
+            <tr>
+                <td class="sticky-left">
+                    <b>{{ __("Absences") }}</b>
+                </td>
+                {% for day in days %}
+                    <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                        data-bohrteam="absences"
+                        data-date="{{ day }}"
+                        data-vmnm="vm">
+                    </td>
+                    <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                        data-bohrteam="absences"
+                        data-date="{{ day }}"
+                        data-vmnm="nm">
+                    </td>
+                {% endfor %}
+            </tr>
         </tbody>
     </table>
 </div>

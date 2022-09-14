@@ -189,7 +189,7 @@ def get_subproject_overlay_datas(from_date, to_date):
                                     LEFT JOIN `tabProject` ON `tabProject`.`name` = `tabProject Subproject`.`parent`
                                     ORDER BY `tabProject Subproject`.`team` ASC, `tabProject Subproject`.`idx` ASC""", as_dict=True)
     for subproject in subprojects:
-        subproject_duration = calc_subproject_duration(subproject.start, subproject.end, from_date, to_date)
+        subproject_duration = calc_duration(subproject.start, subproject.end, from_date, to_date)
         subproject_shift, shift_controll = subproject_shift_controll(subproject, get_datetime(subproject_duration['start']).strftime('%d.%m.%Y'), shift_controll)
         
         subproject_data = {
@@ -208,7 +208,7 @@ def get_subproject_overlay_datas(from_date, to_date):
     
     return subproject_list
 
-def calc_subproject_duration(start, end, from_date, to_date):
+def calc_duration(start, end, from_date, to_date):
     correction = 0
     if start < getdate(from_date):
         correction = date_diff(end, start) - date_diff(end, getdate(from_date))
@@ -466,3 +466,44 @@ def get_drilling_teams():
         drilling_teams.append(data)
     
     return drilling_teams
+
+# Absences
+@frappe.whitelist()
+def get_absences_overlay_datas(from_date, to_date):
+    from_date = getdate(from_date)
+    to_date = getdate(to_date)
+    absences = []
+    shift = -20
+    emp = ''
+    absences_raw = frappe.db.sql("""SELECT
+                                    `name`,
+                                    `employee`,
+                                    `employee_name`,
+                                    `from_date`,
+                                    `to_date`
+                                FROM `tabLeave Application`
+                                WHERE `status` = 'Approved'
+                                AND `docstatus` = 1
+                                AND 
+                                    (`from_date` BETWEEN '{from_date}' AND '{to_date}')
+                                OR
+                                    (`to_date` BETWEEN '{from_date}' AND '{to_date}')
+                                OR
+                                    (`from_date` < '{from_date}' AND `to_date` > '{to_date}')
+                                ORDER BY `employee_name` ASC""".format(from_date=from_date, to_date=to_date), as_dict=True)
+    for absence in absences_raw:
+        duration = calc_duration(absence.from_date, absence.to_date, from_date, to_date)
+        if absence.employee != emp:
+            shift += 20
+            emp = absence.employee
+        
+        _absence = {
+            'start': get_datetime(duration['start']).strftime('%d.%m.%Y'),
+            'dauer': duration['dauer'],
+            'employee_name': absence.employee_name,
+            'absence': absence.name,
+            'shift': shift
+        }
+        absences.append(_absence)
+    
+    return absences
