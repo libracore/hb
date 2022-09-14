@@ -268,25 +268,29 @@ def get_traffic_lights_indicator(project):
     colors.append(auftraggeber_color)
     
     # objektname
-    objektname_color = '#ffa6a6;'
+    objektname_color = '#ffa6a6;'               # base: red
     found_permits = 0
     found_permits_with_file = 0
-    for permit in project.permits:
-        if 'Bohrbewilligung' in permit.permit:
-            found_permits += 1
-            if permit.file:
-                found_permits_with_file += 1
-    if found_permits == found_permits_with_file:
-        objektname_color = '#81d41a;'
+    if not project.permits or len(project.permits) == 0:
+        objektname_color = '#c4c7ca;'           # project has not permit records: grey
+    else:
+        for permit in project.permits:
+            if 'Bohrbewilligung' in permit.permit:
+                found_permits += 1
+                if permit.file:
+                    found_permits_with_file += 1
+        if found_permits == found_permits_with_file:
+            objektname_color = '#81d41a;'       # all permits available: green
     colors.append(objektname_color)
     
     # objekt_strasse
-    objekt_strasse_color = '#c4c7ca;'
-    '''
-        Status Rot --> Ich weiss nicht wie prüfen -> "Bohranzeige eingereicht: Projekt hat Bohranzeige"
-    '''
+    objekt_strasse_color = '#c4c7ca;'           # start with grey
+    drill_notices = frappe.get_all("Bohranzeige", filters={'project': project.name}, fields={'name'})
+    if len(drill_notices) > 0:
+        # has a drill notice: red
+        objekt_strasse_color = '#ffa6a6;'
     if int(project.drill_notice_sent) == 1:
-        objekt_strasse_color = '#81d41a;'
+        objekt_strasse_color = '#81d41a;'       # green
     colors.append(objekt_strasse_color)
     
     # objekt_plz_ort
