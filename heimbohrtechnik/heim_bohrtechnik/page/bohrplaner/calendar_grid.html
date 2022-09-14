@@ -60,17 +60,17 @@
                     </td>
                     {% for day in days %}
                         <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
-                            data-bohrteam="{{ drilling_team.title }}"
+                            data-bohrteam="{{ drilling_team.team_id }}"
                             data-date="{{ day }}"
                             data-vmnm="vm"
                             ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"
-                            data-dropid="{{ drilling_team.title }}-{{ day }}-vm"></td>
+                            data-dropid="{{ drilling_team.team_id }}-{{ day }}-vm"></td>
                         <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
-                            data-bohrteam="{{ drilling_team.title }}"
+                            data-bohrteam="{{ drilling_team.team_id }}"
                             data-date="{{ day }}"
                             data-vmnm="nm"
                             ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"
-                            data-dropid="{{ drilling_team.title }}-{{ day }}-nm"></td>
+                            data-dropid="{{ drilling_team.team_id }}-{{ day }}-nm"></td>
                     {% endfor %}
                 </tr>
             {% endfor %}

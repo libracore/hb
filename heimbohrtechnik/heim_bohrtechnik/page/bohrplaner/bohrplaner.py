@@ -455,6 +455,7 @@ def get_drilling_teams():
     for team in _drilling_teams:
         data = {}
         data["title"] = team.title
+        data["team_id"] = team.name
         data["drm"] = team.drm
         data["drt"] = team.drt
         data["truck_and_weight"] = team.truck_and_weight
