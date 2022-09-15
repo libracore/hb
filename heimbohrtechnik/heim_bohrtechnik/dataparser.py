@@ -117,6 +117,17 @@ def get_projects(filename):
             'object_drilling_detail': 121,    # drilling details
             'object_mud': 122,                # mud disposer MudEx/Fremd
             'object_project_manager': 125     # object project manager (short)
+        },
+        {
+            'drilling_team': '11',
+            'project_row': 128,                # row with the project number
+            'customer_name': 129,              # customer name
+            'object_name': 130,               # object name
+            'object_street': 131,             # object street
+            'object_city': 132,               # object plz city and canton
+            'object_drilling_detail': 133,    # drilling details
+            'object_mud': 134,                # mud disposer MudEx/Fremd
+            'object_project_manager': 137     # object project manager (short)
         }
     ]
     date_row = 4            # date field in row 3 (two colums for a day or the weekend)
