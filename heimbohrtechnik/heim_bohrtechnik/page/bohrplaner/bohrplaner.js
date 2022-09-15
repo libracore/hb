@@ -400,14 +400,18 @@ frappe.bohrplaner = {
 
 function allowDrop(ev) {
     ev.preventDefault();
-    var to_get_droped = $("[data-dropid='" + ev.target.dataset.dropid + "']")[0];
-    to_get_droped.classList.add("ondragover");
+    try {
+        var to_get_droped = $("[data-dropid='" + ev.target.dataset.dropid + "']")[0];
+        to_get_droped.classList.add("ondragover");
+    } catch(err) {}
 }
 
 function dragLeave(ev) {
     ev.preventDefault();
-    var leaved = $("[data-dropid='" + ev.target.dataset.dropid + "']")[0];
-    leaved.classList.remove("ondragover");
+    try {
+        var leaved = $("[data-dropid='" + ev.target.dataset.dropid + "']")[0];
+        leaved.classList.remove("ondragover");
+    } catch(err) {}
 }
 
 function drag(ev) {
