@@ -56,7 +56,7 @@ function autocomplete_object(frm) {
                     var project = response.message;
                                         
                     for (var i = 0; i < project.permits.length; i++) {
-                        if (project.permits[i].permit.includes("Bohrbewilligung")) {
+                        if (project.permits[i].permit.includes("Bohrbewilligung kantonal")) {
                             cur_frm.set_value("bewilligung", 
                                 (project.permits[i].permit_number || ""));
                             cur_frm.set_value("bewilligungsdatum", 
