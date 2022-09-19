@@ -17,7 +17,9 @@
   "section_items",
   "items",
   "section_remarks",
-  "remarks"
+  "remarks",
+  "section_images",
+  "images"
  ],
  "fields": [
   {
@@ -99,9 +101,20 @@
    "fieldname": "section_remarks",
    "fieldtype": "Section Break",
    "label": "Remarks"
+  },
+  {
+   "fieldname": "section_images",
+   "fieldtype": "Section Break",
+   "label": "Images"
+  },
+  {
+   "fieldname": "images",
+   "fieldtype": "Table",
+   "label": "Images",
+   "options": "Construction Site Description Image"
   }
  ],
- "modified": "2022-09-02 17:26:04.264900",
+ "modified": "2022-09-19 15:32:05.145215",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order",
