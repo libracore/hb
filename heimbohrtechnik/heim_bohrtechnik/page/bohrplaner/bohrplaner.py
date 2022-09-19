@@ -16,7 +16,8 @@ def get_overlay_datas(from_date, to_date):
     projects_start = frappe.get_all('Project',
         filters=[
             ['expected_start_date', 'between', [from_date, to_date]],
-            ['name', 'not in', name_list]
+            ['name', 'not in', name_list],
+            ['project_type', '=', 'External']
         ],
         fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
     )
@@ -74,7 +75,8 @@ def get_overlay_datas(from_date, to_date):
     projects_end = frappe.get_all('Project',
         filters=[
             ['expected_end_date', 'between', [from_date, to_date]],
-            ['name', 'not in', name_list]
+            ['name', 'not in', name_list],
+            ['project_type', '=', 'External']
         ],
         fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
     )
@@ -124,7 +126,8 @@ def get_overlay_datas(from_date, to_date):
         filters=[
             ['expected_start_date', '<', to_date],
             ['expected_end_date', '>', from_date],
-            ['name', 'not in', name_list]
+            ['name', 'not in', name_list],
+            ['project_type', '=', 'External']
         ],
         fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
     )
@@ -172,6 +175,119 @@ def get_overlay_datas(from_date, to_date):
         
     return projects
 
+@frappe.whitelist()
+def get_internal_overlay_datas(from_date, to_date):
+    projects = []
+    name_list = []
+    
+    projects_start = frappe.get_all('Project',
+        filters=[
+            ['expected_start_date', 'between', [from_date, to_date]],
+            ['name', 'not in', name_list],
+            ['project_type', '=', 'Internal']
+        ],
+        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day']
+    )
+    for p in projects_start:
+        correction = 0
+        if p.expected_start_date < getdate(from_date):
+            correction = date_diff(p.expected_end_date, p.expected_start_date) - date_diff(p.expected_end_date, getdate(from_date))
+            dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
+            p.expected_start_date = getdate(from_date)
+            if p.start_half_day.lower() == 'nm':
+                p.start_half_day = 'vm'
+        else:
+            dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
+        if p.start_half_day.lower() == 'nm':
+            dauer -= 1
+        if p.end_half_day.lower() == 'vm':
+            dauer -= 1
+        name_list.append(p.name)
+        
+        project = frappe.get_doc("Project", p.name)
+        
+        p_data = {
+            'bohrteam': p.drilling_team,
+            'start': get_datetime(p.expected_start_date).strftime('%d.%m.%Y'),
+            'vmnm': p.start_half_day.lower(),
+            'dauer': dauer,
+            'project': project
+        }
+        projects.append(p_data)
+    
+    projects_end = frappe.get_all('Project',
+        filters=[
+            ['expected_end_date', 'between', [from_date, to_date]],
+            ['name', 'not in', name_list],
+            ['project_type', '=', 'Internal']
+        ],
+        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
+    )
+    for p in projects_end:
+        correction = 0
+        if p.expected_start_date < getdate(from_date):
+            correction = date_diff(p.expected_end_date, p.expected_start_date) - date_diff(p.expected_end_date, getdate(from_date))
+            dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
+            p.expected_start_date = getdate(from_date)
+            if p.start_half_day.lower() == 'nm':
+                p.start_half_day = 'vm'
+        else:
+            dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
+        if p.start_half_day.lower() == 'nm':
+            dauer -= 1
+        if p.end_half_day.lower() == 'vm':
+            dauer -= 1
+        name_list.append(p.name)
+        
+        project = frappe.get_doc("Project", p.name)
+        
+        p_data = {
+            'bohrteam': p.drilling_team,
+            'start': get_datetime(p.expected_start_date).strftime('%d.%m.%Y'),
+            'vmnm': p.start_half_day.lower(),
+            'dauer': dauer,
+            'project': project
+        }
+        projects.append(p_data)
+    
+    projects_outside = frappe.get_all('Project',
+        filters=[
+            ['expected_start_date', '<', to_date],
+            ['expected_end_date', '>', from_date],
+            ['name', 'not in', name_list],
+            ['project_type', '=', 'Internal']
+        ],
+        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
+    )
+    for p in projects_outside:
+        correction = 0
+        if p.expected_start_date < getdate(from_date):
+            correction = date_diff(p.expected_end_date, p.expected_start_date) - date_diff(p.expected_end_date, getdate(from_date))
+            dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
+            p.expected_start_date = getdate(from_date)
+            if p.start_half_day.lower() == 'nm':
+                p.start_half_day = 'vm'
+        else:
+            dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
+        if p.start_half_day.lower() == 'nm':
+            dauer -= 1
+        if p.end_half_day.lower() == 'vm':
+            dauer -= 1
+        name_list.append(p.name)
+        
+        project = frappe.get_doc("Project", p.name)
+        
+        p_data = {
+            'bohrteam': p.drilling_team,
+            'start': get_datetime(p.expected_start_date).strftime('%d.%m.%Y'),
+            'vmnm': p.start_half_day.lower(),
+            'dauer': dauer,
+            'project': project
+        }
+        projects.append(p_data)
+        
+    return projects
+    
 @frappe.whitelist()
 def get_subproject_overlay_datas(from_date, to_date):
     subproject_list = []

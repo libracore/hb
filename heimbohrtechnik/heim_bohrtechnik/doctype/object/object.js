@@ -342,14 +342,18 @@ frappe.ui.form.on('Object Address', {
                     frappe.model.set_value(dt, dn, 'email', contact.email_id);
                 }
             });
-        } 
+        } else {
+            frappe.model.set_value(dt, dn, 'phone', null);
+            frappe.model.set_value(dt, dn, 'email', null);
+        }
     },
     party: function(frm, dt, dn) {
         var v = locals[dt][dn];
+        // clean address and contact
+        frappe.model.set_value(dt, dn, 'address', null);
+        frappe.model.set_value(dt, dn, 'contact', null);
+        frappe.model.set_value(dt, dn, 'party_name', null);
         if (v.party) {
-            // clean address and contact
-            frappe.model.set_value(dt, dn, 'address', null);
-            frappe.model.set_value(dt, dn, 'contact', null);
             // fetch party name
             if (v.dt === "Customer") {
                 frappe.call({
@@ -415,7 +419,9 @@ frappe.ui.form.on('Object Address', {
                             },
                             'callback': function(response) {
                                 var contact = response.message;
-                                frappe.model.set_value(dt, dn, 'contact', contact.name);
+                                if (contact) {
+                                    frappe.model.set_value(dt, dn, 'contact', contact.name);
+                                }
                             }
                         });
                     }

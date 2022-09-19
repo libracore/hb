@@ -30,28 +30,29 @@ frappe.ui.form.on('Project', {
                 };
         };
         // check if mud can be invoiced
-        frappe.call({
-            'method': 'heimbohrtechnik.mudex.doctype.truck_delivery.truck_delivery.has_invoiceable_mud',
-            'args': {'object': frm.doc.name},
-            'callback': function(response) {
-                if (response.message) {
-                    frm.add_custom_button( __("Abrechnen"), function() {
-                        create_mud_invoice(frm.doc.name);
-                    }, "MudEX");
-                }
-            }
-        });
-        // add link-button to drillplanner
-        frm.add_custom_button(__("Öffne Bohrplaner"), function() {
-            frappe.route_options = {"from": cur_frm.doc.expected_start_date, "project_name": cur_frm.doc.name}
-            frappe.set_route("bohrplaner");
-        });
-        // show insurance information
         if (!frm.doc.__islocal) {
+            frappe.call({
+                'method': 'heimbohrtechnik.mudex.doctype.truck_delivery.truck_delivery.has_invoiceable_mud',
+                'args': {'object': frm.doc.name},
+                'callback': function(response) {
+                    if (response.message) {
+                        frm.add_custom_button( __("Abrechnen"), function() {
+                            create_mud_invoice(frm.doc.name);
+                        }, "MudEX");
+                    }
+                }
+            });
+            // add link-button to drillplanner
+            frm.add_custom_button(__("Öffne Bohrplaner"), function() {
+                frappe.route_options = {"from": cur_frm.doc.expected_start_date, "project_name": cur_frm.doc.name}
+                frappe.set_route("bohrplaner");
+            });
+            // add button to open construction site description
+            add_construction_site_description_button(frm, frm.doc.name);
+            // show insurance information
             show_insurance_information(frm.doc.name);
         }
-        // add button to open construction site description
-        add_construction_site_description_button(frm, frm.doc.object);
+        
     }
 });
 

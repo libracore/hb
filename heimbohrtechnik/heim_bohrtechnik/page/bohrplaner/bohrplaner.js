@@ -126,6 +126,21 @@ frappe.bohrplaner = {
                 frappe.bohrplaner.get_subproject_overlay_data(page);
            }
         });
+        frappe.call({
+           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_internal_overlay_datas",
+           args: {
+                "from_date": from,
+                "to_date": to
+           },
+           async: false,
+           callback: function(response) {
+                var contents = response.message;
+                for (var i = 0; i < contents.length; i++) {
+                    var data = contents[i];
+                    frappe.bohrplaner.add_internal_overlay(page, data);
+                }
+           }
+        });
     },
     get_subproject_overlay_data: function(page) {
         var from = $("#from").val();
@@ -172,6 +187,15 @@ frappe.bohrplaner = {
         var qty = data.dauer
         var width = 42 * qty;
         $(frappe.render_template('booking_overlay', {'width': width, 'project': data.project, 'saugauftrag': data.saugauftrag, 'pneukran': data.pneukran, 'manager_short': data.manager_short, 'drilling_equipment': data.drilling_equipment, 'ampeln': data.ampeln})).appendTo(place);
+        return
+    },
+    add_internal_overlay: function(page, data) {
+        console.log(data);
+        var place = $('[data-bohrteam="' + data.bohrteam + '"][data-date="' + data.start + '"][data-vmnm="' + data.vmnm + '"]');
+        $(place).css("position", "relative");
+        var qty = data.dauer
+        var width = 42 * qty;
+        $(frappe.render_template('internal_overlay', {'width': width, 'project': data.project})).appendTo(place);
         return
     },
     add_subproject_overlay: function(page, data) {

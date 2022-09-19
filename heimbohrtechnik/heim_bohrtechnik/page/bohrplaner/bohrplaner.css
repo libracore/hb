@@ -147,7 +147,22 @@ tbody tr td:nth-child(even) {
     overflow: hidden;
     white-space: nowrap;
     background-color: #ffffe0; 
-    border: 1px solid #f0e68c; 
+    border: 1px solid #f0e68c;  
+}
+
+.internal_overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    border-radius: 20px;
+    padding: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    background-color: #f08080; 
+    border: 1px solid #dc143c;
 }
 
 .subproject_booking_overlay {
