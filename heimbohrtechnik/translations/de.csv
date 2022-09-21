@@ -234,6 +234,7 @@
 "DocType: Drilling Team","Trough Details","Muldendetails"
 "DocType: Drilling Team","Crane Details","Krandetails"
 "DocType: Drilling Team","Drilling Master","Bohrmeister"
+"DocType: Drilling Team","Drilling team type","Bohrteamart"
 "DocType: Probe Type","Probe Type","Sondenart"
 "DocType: Signature","Signature","Unterschrift"
 "DocType: Signature","Signature type","Unterschriftenregelung"
@@ -282,3 +283,4 @@
 "DocType: Purchase Order","Reqd By Date","Benötigt bis"
 "DocType: Construction Site Delivery","Construction Site Delivery","Baustellenlieferung"
 "DocType: Subcontracting Order","Subcontracting Order","Verlängerungsauftrag"
+"DocType: Subcontracting Order","Subcontracting Team","Verlängerungsteam"

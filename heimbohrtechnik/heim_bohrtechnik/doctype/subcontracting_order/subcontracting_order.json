@@ -94,7 +94,7 @@
   {
    "fieldname": "drilling_team",
    "fieldtype": "Link",
-   "label": "Drilling Team",
+   "label": "Subcontracting Team",
    "options": "Drilling Team"
   },
   {
@@ -114,7 +114,7 @@
    "options": "Construction Site Description Image"
   }
  ],
- "modified": "2022-09-19 15:32:05.145215",
+ "modified": "2022-09-21 10:17:23.551249",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order",
