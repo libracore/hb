@@ -3,6 +3,15 @@
 
 frappe.ui.form.on('Subcontracting Order', {
     refresh: function(frm) {
+        // filters
+        cur_frm.fields_dict['drilling_team'].get_query = function(doc) {
+             return {
+                 filters: {
+                     "drilling_team_type": "Verlängerungsteam"
+                 }
+             }
+        }
+    
         // from object: new bohranzeige: link project
         if ((frm.doc.object) && (!frm.doc.project)) {
             cur_frm.set_value("project", frm.doc.object);
