@@ -378,7 +378,7 @@ def get_traffic_lights_indicator(project):
     # auftraggeber [1]
     auftraggeber_color = '#ffa6a6;'
     if project.sales_order:
-        unterzeichnete_ab = get_attachments("Sales Order", project.sales_order)
+        unterzeichnete_ab = frappe.get_value("Sales Order", project.sales_order, "unterzeichnete_ab")
         if unterzeichnete_ab:
             auftraggeber_color = '#81d41a;'
     colors.append(auftraggeber_color)
