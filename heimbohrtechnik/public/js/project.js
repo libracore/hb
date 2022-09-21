@@ -29,6 +29,22 @@ frappe.ui.form.on('Project', {
                     }
                 };
         };
+        // filter for drilling teams
+        cur_frm.fields_dict['drilling_team'].get_query = function(doc) {
+            return {
+                filters: {
+                    "drilling_team_type": "Bohrteam"
+                }
+            }
+        }
+        frm.fields_dict.subprojects.grid.get_field('team').get_query = function(doc, cdt, cdn) {    
+            return {
+                filters: {
+                    "drilling_team_type": "Verlängerungsteam"
+                }
+            };
+        };
+        
         // check if mud can be invoiced
         if (!frm.doc.__islocal) {
             frappe.call({
