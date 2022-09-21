@@ -224,11 +224,10 @@
    "label": "Site Access"
   },
   {
-   "default": "frei",
    "fieldname": "site_access",
    "fieldtype": "Select",
    "label": "Site Access",
-   "options": "frei\nbeschr\u00e4nkt\nBewilligung\nSondertransport"
+   "options": "\nfrei\nbeschr\u00e4nkt\nBewilligung\nSondertransport"
   },
   {
    "fieldname": "column_break_34",
@@ -331,7 +330,7 @@
    "options": "Anmeldung bauseitig\nAnmeldung durch HB-AG\nAnmeldung nicht erforderlich"
   }
  ],
- "modified": "2022-09-07 17:39:51.344359",
+ "modified": "2022-09-21 21:19:25.223766",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
