@@ -7,6 +7,7 @@ from frappe.model.mapper import get_mapped_doc
 from datetime import datetime, timedelta
 import json
 from frappe.utils import cint
+from erpnextswiss.erpnextswiss.utils import get_numeric_part
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -429,3 +430,20 @@ def get_drill_notice_recipients(project, address_types):
             elif a.is_simple == 1 and a.simple_email:
                 recipients['recipients'].append(a.simple_email)
     return recipients
+
+"""
+Get next available internal project number
+"""
+@frappe.whitelist()
+def get_next_internal_project_number():
+    last_internal_project = frappe.db.sql("""
+        SELECT MAX(`name`) AS `name`
+        FROM `tabProject`
+        WHERE `project_type` = "Internal";
+    """, as_dict=True)
+    if len(last_internal_project) == 0:
+        return "P-INT-000001"
+    else:
+        n = int(get_numeric_part(last_internal_project[0]['name']))
+        return "P-INT-{num:06d}".format(num=n+1)
+        

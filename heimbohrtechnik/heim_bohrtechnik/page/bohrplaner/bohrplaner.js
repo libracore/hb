@@ -382,6 +382,10 @@ frappe.bohrplaner = {
         
         $(frappe.render_template('mobile_view', {})).appendTo(me.page.main);
     },
+    open_project: function(elemnt) {
+        var project = $(elemnt).attr("data-project");
+        url_to_form("Project", project, function (r) { window.open(r.message, '_blank'); });
+    },
     open_parent_project: function(elemnt) {
         var parent_project = $(elemnt).attr("data-parentproject");
         url_to_form("Project", parent_project, function (r) { window.open(r.message, '_blank'); });

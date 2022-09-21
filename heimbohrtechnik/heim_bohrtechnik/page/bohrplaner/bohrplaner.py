@@ -186,7 +186,7 @@ def get_internal_overlay_datas(from_date, to_date):
             ['name', 'not in', name_list],
             ['project_type', '=', 'Internal']
         ],
-        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day']
+        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object_name']
     )
     for p in projects_start:
         correction = 0
@@ -221,7 +221,7 @@ def get_internal_overlay_datas(from_date, to_date):
             ['name', 'not in', name_list],
             ['project_type', '=', 'Internal']
         ],
-        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
+        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object_name']
     )
     for p in projects_end:
         correction = 0
@@ -257,7 +257,7 @@ def get_internal_overlay_datas(from_date, to_date):
             ['name', 'not in', name_list],
             ['project_type', '=', 'Internal']
         ],
-        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
+        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object_name']
     )
     for p in projects_outside:
         correction = 0

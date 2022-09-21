@@ -51,8 +51,44 @@ frappe.ui.form.on('Project', {
             add_construction_site_description_button(frm, frm.doc.name);
             // show insurance information
             show_insurance_information(frm.doc.name);
+        } else {
+            // new project: switch to internal and assign name/title
+            frappe.call({
+                'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_next_internal_project_number',
+                'callback': function(response) {
+                    cur_frm.set_value("object_name", "Wartung");
+                    cur_frm.set_value("project_type", "Internal");
+                    cur_frm.set_value("project_name", response.message);
+                }
+            });
         }
-        
+        if (frm.doc.project_type === "Internal") {
+            // button to change description
+            frm.add_custom_button(__("Beschreibung ändern"), function() {
+                frappe.prompt([
+                    {
+                        'fieldname': 'description', 
+                        'fieldtype': 'Data', 
+                        'label': __("Description"), 
+                        'reqd': 1,
+                        'default': frm.doc.object_name
+                    }  
+                ],
+                function(values){
+                    cur_frm.set_value("object_name", values.descripton);
+                },
+                'Beschreibung ändern',
+                'OK'
+                )
+            });
+            // hide drilling fields
+            cur_frm.set_df_property('object', 'hidden', 1);
+            cur_frm.set_df_property('drill_notice_sent', 'hidden', 1);
+            cur_frm.set_df_property('thermozement', 'hidden', 1);
+            cur_frm.set_df_property('section_checklist', 'hidden', 1);
+            cur_frm.set_df_property('customer_details', 'hidden', 1);
+            cur_frm.set_df_property('section_subprojects', 'hidden', 1);
+        }  
     }
 });
 
