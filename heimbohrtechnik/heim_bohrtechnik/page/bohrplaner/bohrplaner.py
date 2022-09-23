@@ -624,3 +624,11 @@ def get_absences_overlay_datas(from_date, to_date):
         absences.append(_absence)
     
     return absences
+
+@frappe.whitelist()
+def get_user_planning_days(user):
+    if frappe.db.exists("Signature", user):
+        return frappe.get_value("Signature", user, "planning_days")
+    else:
+        return 30
+        

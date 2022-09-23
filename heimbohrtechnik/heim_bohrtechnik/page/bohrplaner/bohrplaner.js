@@ -37,11 +37,24 @@ frappe.bohrplaner = {
         var me = frappe.bohrplaner;
         me.page = page;
         
+        var planning_days = 30;
+        // fetch planning days
+        frappe.call({
+            'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_user_planning_days',
+            'async': false,
+            'args': {
+                'user': frappe.session.user
+            },
+            callback: function(response) {
+                locals.planning_days = response.message;
+            }
+        });
+        
         // set today as default "from" date
         var now = new Date();
         var from_date = frappe.datetime.add_days(now, 0);
-        var to_date = frappe.datetime.add_days(now, 30);
-                
+        var to_date = frappe.datetime.add_days(now, locals.planning_days);
+        
         //get template data
         var data = frappe.bohrplaner.get_content(page, from_date, to_date);
         
@@ -54,7 +67,7 @@ frappe.bohrplaner = {
         document.getElementById("from").value = frappe.datetime.add_days(now, 0);
         
         // set today + 30d as default "to" date
-        document.getElementById("to").value = frappe.datetime.add_days(now, 30);
+        document.getElementById("to").value = frappe.datetime.add_days(now, locals.planning_days);
         
         // set trigger for date changes
         this.page.main.find("#from").on('change', function() {frappe.bohrplaner.reset_dates(page);});
