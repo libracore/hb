@@ -237,6 +237,17 @@ frappe.bohrplaner = {
         return
     },
     reset_dates: function(page) {
+        // pre safe scroll-positions
+        var top_position = 0;
+        var lef_position = 0;
+        try {
+            top_position = $("#bohrplan_wrapper").scrollTop();
+            lef_position = $("#bohrplan_wrapper").scrollLeft();
+        } catch {
+            top_position = 0;
+            lef_position = 0;
+        }
+        
         // pre safe new dates
         var from = $("#from").val();
         var to = $("#to").val();
@@ -249,6 +260,9 @@ frappe.bohrplaner = {
         // set safed dates
         document.getElementById("from").value = from;
         document.getElementById("to").value = to;
+        // set scroll-positions
+        $("#bohrplan_wrapper").scrollTop(top_position);
+        $("#bohrplan_wrapper").scrollLeft(lef_position);
         // reset triggers
         this.page.main.find("#from").on('change', function() {frappe.bohrplaner.reset_dates(page);});
         this.page.main.find("#to").on('change', function() {frappe.bohrplaner.reset_dates(page);});
