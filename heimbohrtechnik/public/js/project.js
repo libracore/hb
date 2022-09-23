@@ -105,6 +105,18 @@ frappe.ui.form.on('Project', {
             cur_frm.set_df_property('customer_details', 'hidden', 1);
             cur_frm.set_df_property('section_subprojects', 'hidden', 1);
         }  
+    },
+    before_save(frm) {
+        if (!frm.doc.__islocal) {
+            console.log("printing");
+            frappe.call({
+                'method': 'heimbohrtechnik.heim_bohrtechnik.utils.update_attached_project_pdf',
+                'args': {'project': frm.doc.name},
+                'callback': function(response) {
+                    console.log("create print");
+                }
+            });
+        }
     }
 });
 

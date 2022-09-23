@@ -8,6 +8,9 @@ from datetime import datetime, timedelta
 import json
 from frappe.utils import cint
 from erpnextswiss.erpnextswiss.utils import get_numeric_part
+from erpnextswiss.erpnextswiss.attach_pdf import attach_pdf
+from frappe.desk.form.load import get_attachments
+from frappe.utils.file_manager import remove_file
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -447,3 +450,16 @@ def get_next_internal_project_number():
         n = int(get_numeric_part(last_internal_project[0]['name']))
         return "P-INT-{num:06d}".format(num=n+1)
         
+"""
+Update attached drilling instruction pdf
+"""
+@frappe.whitelist()
+def update_attached_project_pdf(project):
+    # check if this is already attached
+    attachments = get_attachments("Project", project)
+    for a in attachments:
+        if a.file_name == "{0}.pdf".format(project):
+            remove_file(a.name, "Project", project)
+    # create and attach
+    attach_pdf("Project", project, print_format="Bohrauftrag")
+    return
