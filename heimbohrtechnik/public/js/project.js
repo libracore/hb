@@ -67,6 +67,18 @@ frappe.ui.form.on('Project', {
             add_construction_site_description_button(frm, frm.doc.name);
             // show insurance information
             show_insurance_information(frm.doc.name);
+            // split project button
+            frm.add_custom_button(__("Projekt teilen"), function() {
+                frappe.call({
+                    'method': "heimbohrtechnik.heim_bohrtechnik.project.split_project",
+                    'args': {
+                        'project': frm.doc.name
+                    },
+                    'callback': function(response) {
+                        window.location.href=response.message.uri;
+                    }
+                });
+            }, __("More") );
         } else {
             // new project: switch to internal and assign name/title
             frappe.call({
@@ -104,7 +116,7 @@ frappe.ui.form.on('Project', {
             cur_frm.set_df_property('section_checklist', 'hidden', 1);
             cur_frm.set_df_property('customer_details', 'hidden', 1);
             cur_frm.set_df_property('section_subprojects', 'hidden', 1);
-        }  
+        } 
     }
 });
 
