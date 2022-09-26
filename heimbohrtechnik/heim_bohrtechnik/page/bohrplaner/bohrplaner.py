@@ -37,39 +37,7 @@ def get_overlay_datas(from_date, to_date):
             dauer -= 1
         name_list.append(p.name)
         
-        project = frappe.get_doc("Project", p.name)
-        p_object = frappe.get_doc("Object", p.object)
-        construction_sites = frappe.get_all("Construction Site Description", filters={'project': p.name}, fields=['name'])
-        if len(construction_sites) > 0:
-            p_construction_site = frappe.get_doc("Construction Site Description", construction_sites[0]['name'])
-        else:
-            p_construction_site = None
-        manager_short = frappe.db.get_value("User", project.manager, "username") if project.manager else ''
-        drilling_equipments = []
-        if p_construction_site:
-            for d in p_construction_site.drilling_equipment:
-                drilling_equipments.append(d.drilling_equipment)
-        drilling_equipment = ", ".join(drilling_equipments)
-        saugauftrag = ''
-        pneukran = ''
-        for cl_entry in project.checklist:
-            if cl_entry.activity == 'Schlammentsorgung':
-                saugauftrag = cl_entry.supplier_name
-            if cl_entry.activity == 'Kran':
-                pneukran = cl_entry.supplier_name
-        
-        p_data = {
-            'bohrteam': p.drilling_team,
-            'start': get_datetime(p.expected_start_date).strftime('%d.%m.%Y'),
-            'vmnm': p.start_half_day.lower(),
-            'dauer': dauer,
-            'ampeln': get_traffic_lights_indicator(project),
-            'project': project,
-            'saugauftrag': saugauftrag,
-            'pneukran': pneukran,
-            'manager_short': manager_short,
-            'drilling_equipment': drilling_equipment
-        }
+        p_data = get_project_data(p, dauer)
         projects.append(p_data)
     
     projects_end = frappe.get_all('Project',
@@ -96,30 +64,7 @@ def get_overlay_datas(from_date, to_date):
             dauer -= 1
         name_list.append(p.name)
         
-        project = frappe.get_doc("Project", p.name)
-        p_object = frappe.get_doc("Object", p.object)
-        manager_short = frappe.db.get_value("User", p_object.manager, "username") if p_object.manager else ''
-        drilling_equipment = p_object.drilling_equipment if p_object.drilling_equipment else ''
-        saugauftrag = ''
-        pneukran = ''
-        for cl_entry in project.checklist:
-            if cl_entry.activity == 'Schlammentsorgung':
-                saugauftrag = cl_entry.supplier_name
-            if cl_entry.activity == 'Kran':
-                pneukran = cl_entry.supplier_name
-        
-        p_data = {
-            'bohrteam': p.drilling_team,
-            'start': get_datetime(p.expected_start_date).strftime('%d.%m.%Y'),
-            'vmnm': p.start_half_day.lower(),
-            'dauer': dauer,
-            'ampeln': get_traffic_lights_indicator(project),
-            'project': project,
-            'saugauftrag': saugauftrag,
-            'pneukran': pneukran,
-            'manager_short': manager_short,
-            'drilling_equipment': drilling_equipment
-        }
+        p_data = get_project_data(p, dauer)
         projects.append(p_data)
     
     projects_outside = frappe.get_all('Project',
@@ -147,19 +92,37 @@ def get_overlay_datas(from_date, to_date):
             dauer -= 1
         name_list.append(p.name)
         
-        project = frappe.get_doc("Project", p.name)
-        p_object = frappe.get_doc("Object", p.object)
-        manager_short = frappe.db.get_value("User", p_object.manager, "username") if p_object.manager else ''
-        drilling_equipment = p_object.drilling_equipment if p_object.drilling_equipment else ''
-        saugauftrag = ''
-        pneukran = ''
-        for cl_entry in project.checklist:
-            if cl_entry.activity == 'Schlammentsorgung':
-                saugauftrag = cl_entry.supplier_name
-            if cl_entry.activity == 'Kran':
-                pneukran = cl_entry.supplier_name
+        p_data = get_project_data(p, dauer)
+        projects.append(p_data)
         
-        p_data = {
+    return projects
+
+def get_project_data(p, dauer):
+    project = frappe.get_doc("Project", p.name)
+    p_object = frappe.get_doc("Object", p.object)
+    construction_sites = frappe.get_all("Construction Site Description", 
+        filters={'project': p.name}, 
+        fields=['name', 'internal_crane_required', 'external_crane_Required', 'carrymax'])
+    manager_short = frappe.db.get_value("User", p_object.manager, "username") if p_object.manager else ''
+    drilling_equipment = p_object.drilling_equipment if p_object.drilling_equipment else ''
+    saugauftrag = 'Schlamm fremd'
+    pneukran = ''
+    for cl_entry in project.checklist:
+        if cl_entry.activity == 'Schlammentsorgung':
+            saugauftrag = cl_entry.supplier_name
+        if cl_entry.activity == 'Kran':
+            pneukran = cl_entry.supplier_name
+    # carrymax from construction site
+    if len(construction_sites) > 0:
+        if not pneukran:
+            if construction_sites[0].get('carrymax') == 1:
+                pneukran = "Carrymax"
+            elif construction_sites[0].get('internal_crane_required') == 1:
+                pneukran = "int. Kran"
+            elif construction_sites[0].get('external_crane_required') == 1:
+                pneukran = "ext. Kran"
+    
+    p_data = {
             'bohrteam': p.drilling_team,
             'start': get_datetime(p.expected_start_date).strftime('%d.%m.%Y'),
             'vmnm': p.start_half_day.lower(),
@@ -171,10 +134,9 @@ def get_overlay_datas(from_date, to_date):
             'manager_short': manager_short,
             'drilling_equipment': drilling_equipment
         }
-        projects.append(p_data)
         
-    return projects
-
+    return p_data
+    
 @frappe.whitelist()
 def get_internal_overlay_datas(from_date, to_date):
     projects = []
@@ -420,7 +382,7 @@ def get_traffic_lights_indicator(project):
         if 'Lärmschutzbewilligung' in permit.permit:
             objekt_plz_ort_font_color = 'red;'
             if permit.file:
-                objekt_plz_ort_font_color = 'amber;'
+                objekt_plz_ort_font_color = '#ffbf00;'
         elif 'Strassensperrung' in permit.permit:
             if not permit.file:
                 objekt_plz_ort_border_color = 'border: 1px solid red;'
@@ -624,3 +586,11 @@ def get_absences_overlay_datas(from_date, to_date):
         absences.append(_absence)
     
     return absences
+
+@frappe.whitelist()
+def get_user_planning_days(user):
+    if frappe.db.exists("Signature", user):
+        return frappe.get_value("Signature", user, "planning_days")
+    else:
+        return 30
+        

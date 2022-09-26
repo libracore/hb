@@ -37,11 +37,24 @@ frappe.bohrplaner = {
         var me = frappe.bohrplaner;
         me.page = page;
         
+        var planning_days = 30;
+        // fetch planning days
+        frappe.call({
+            'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_user_planning_days',
+            'async': false,
+            'args': {
+                'user': frappe.session.user
+            },
+            callback: function(response) {
+                locals.planning_days = response.message;
+            }
+        });
+        
         // set today as default "from" date
         var now = new Date();
         var from_date = frappe.datetime.add_days(now, 0);
-        var to_date = frappe.datetime.add_days(now, 30);
-                
+        var to_date = frappe.datetime.add_days(now, locals.planning_days);
+        
         //get template data
         var data = frappe.bohrplaner.get_content(page, from_date, to_date);
         
@@ -54,7 +67,7 @@ frappe.bohrplaner = {
         document.getElementById("from").value = frappe.datetime.add_days(now, 0);
         
         // set today + 30d as default "to" date
-        document.getElementById("to").value = frappe.datetime.add_days(now, 30);
+        document.getElementById("to").value = frappe.datetime.add_days(now, locals.planning_days);
         
         // set trigger for date changes
         this.page.main.find("#from").on('change', function() {frappe.bohrplaner.reset_dates(page);});
@@ -237,6 +250,17 @@ frappe.bohrplaner = {
         return
     },
     reset_dates: function(page) {
+        // pre safe scroll-positions
+        var top_position = 0;
+        var lef_position = 0;
+        try {
+            top_position = $("#bohrplan_wrapper").scrollTop();
+            lef_position = $("#bohrplan_wrapper").scrollLeft();
+        } catch {
+            top_position = 0;
+            lef_position = 0;
+        }
+        
         // pre safe new dates
         var from = $("#from").val();
         var to = $("#to").val();
@@ -249,6 +273,9 @@ frappe.bohrplaner = {
         // set safed dates
         document.getElementById("from").value = from;
         document.getElementById("to").value = to;
+        // set scroll-positions
+        $("#bohrplan_wrapper").scrollTop(top_position);
+        $("#bohrplan_wrapper").scrollLeft(lef_position);
         // reset triggers
         this.page.main.find("#from").on('change', function() {frappe.bohrplaner.reset_dates(page);});
         this.page.main.find("#to").on('change', function() {frappe.bohrplaner.reset_dates(page);});

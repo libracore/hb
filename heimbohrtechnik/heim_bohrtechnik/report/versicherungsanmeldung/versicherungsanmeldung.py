@@ -88,6 +88,8 @@ def has_insurance(project):
              AND `tabSales Order Item`.`item_name` LIKE "%Versicherung%")
         WHERE 
             `tabProject`.`name` = "{project}"
+            AND `tabSales Order Item`.`alternativ` = 0
+            AND `tabSales Order Item`.`eventual` = 0
             AND `tabSales Order Item`.`name` IS NOT NULL
         GROUP BY `tabProject`.`name`
     ;""".format(project=project)
