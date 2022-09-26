@@ -420,7 +420,7 @@ def get_traffic_lights_indicator(project):
         if 'Lärmschutzbewilligung' in permit.permit:
             objekt_plz_ort_font_color = 'red;'
             if permit.file:
-                objekt_plz_ort_font_color = 'amber;'
+                objekt_plz_ort_font_color = '#ffbf00;'
         elif 'Strassensperrung' in permit.permit:
             if not permit.file:
                 objekt_plz_ort_border_color = 'border: 1px solid red;'
