@@ -7,7 +7,7 @@
         <div style="background-color: {{ ampeln[2] }} min-width:35px; max-width: 70px;">{% if project.object_name %}{{ project.object_name }}{% else %}&nbsp;{% endif %}</div>
         <div style="background-color: {{ ampeln[3] }} min-width:35px; max-width: 70px;">{% if project.object_street %}{{ project.object_street }}{% else %}&nbsp;{% endif %}</div>
         <div style="background-color: {{ ampeln[4] }} color: {{ ampeln[5] }}  {{ ampeln[6] }} min-width:35px; max-width: 70px;">{% if project.object_location %}{{ project.object_location }}{% else %}&nbsp;{% endif %}</div>
-        <div style="background-color: {{ ampeln[7] }} min-width:35px; max-width: 70px;">{% if project.ews_details %}{{ project.ews_details }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[7] }} min-width:35px; max-width: 70px;" class="ews-details">{% if project.ews_details %}{{ project.ews_details.replace("PN20", "<b>PN20</b>").replace("PN35", "<b>PN35</b>") }}{% else %}&nbsp;{% endif %}</div>
         <div style="background-color: {{ ampeln[8] }} min-width:35px; max-width: 70px;">{% if saugauftrag %}{{ saugauftrag }}{% else %}&nbsp;{% endif %}</div>
         <div style="background-color: {{ ampeln[9] }} min-width:35px; max-width: 70px;">{% if pneukran %}{{ pneukran }}{% else %}&nbsp;{% endif %}</div>
         <div style="background-color: {{ ampeln[10] }} min-width:35px; max-width: 70px;">{% if drilling_equipment %}{{ drilling_equipment }}{% else %}&nbsp;{% endif %}</div>
