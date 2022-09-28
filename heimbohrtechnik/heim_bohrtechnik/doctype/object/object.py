@@ -11,6 +11,7 @@ import string, random
 import requests
 import json
 from heimbohrtechnik.heim_bohrtechnik.doctype.construction_site_description.construction_site_description import check_object_checklist
+from frappe.utils import get_url_to_form
 
 class Object(Document):
     def before_save(self):
@@ -199,3 +200,23 @@ def update_project_checklist(obj, activity_type, supplier):
     if frappe.db.exists("Project", obj):
         check_object_checklist(obj, activity_type, has_project=True, supplier=supplier)
     return
+
+"""
+Split one object into a sub-object
+"""
+@frappe.whitelist()
+def split_object(object_name):
+    # create new object
+    new_object = frappe.copy_doc(frappe.get_doc("Object", object_name), ignore_no_copy = False)
+    new_object.save()
+    # move to target name (=original name -revision)
+    if object_name[-2:-1] == "-":
+        target_name = "{0}-{1}".format(object_name[:-2],
+            (int(object_name[-1:]) + 1))
+    else:
+        target_name = object_name + "-1"
+    frappe.rename_doc("Object", new_object.name, target_name)
+    
+    frappe.db.commit()
+    
+    return {'object': target_name, 'uri': get_url_to_form("Object", target_name)}

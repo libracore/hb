@@ -144,6 +144,18 @@ frappe.ui.form.on('Object', {
             });
             // add button to open construction site description
             add_construction_site_description_button(frm, frm.doc.name)
+            // split project button
+            frm.add_custom_button(__("Objekt teilen"), function() {
+                frappe.call({
+                    'method': "heimbohrtechnik.heim_bohrtechnik.doctype.object.object.split_object",
+                    'args': {
+                        'object_name': frm.doc.name
+                    },
+                    'callback': function(response) {
+                        window.location.href=response.message.uri;
+                    }
+                });
+            }, __("More") );
         } else {
             if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
                 // fresh document, no addresses - load template
