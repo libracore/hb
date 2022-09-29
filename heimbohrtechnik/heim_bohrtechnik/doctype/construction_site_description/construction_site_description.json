@@ -10,9 +10,6 @@
   "object_name",
   "section_images",
   "images",
-  "sec_plans",
-  "construction_plan",
-  "plans",
   "sec_checks",
   "pipes_checked",
   "col_pipes",
@@ -93,17 +90,6 @@
    "hidden": 1,
    "label": "Project",
    "options": "Project"
-  },
-  {
-   "fieldname": "sec_plans",
-   "fieldtype": "Section Break",
-   "label": "Plans"
-  },
-  {
-   "default": "0",
-   "fieldname": "construction_plan",
-   "fieldtype": "Check",
-   "label": "Construction Plan"
   },
   {
    "fieldname": "sec_checks",
@@ -312,12 +298,6 @@
    "options": "\nWasseruhr holen\nAnmeldung telefonisch"
   },
   {
-   "fieldname": "plans",
-   "fieldtype": "Table",
-   "label": "Plans",
-   "options": "Construction Site Description Plan"
-  },
-  {
    "depends_on": "eval:doc.drilling_points_marked",
    "fieldname": "drilling_point_remarks",
    "fieldtype": "Data",
@@ -337,7 +317,7 @@
    "label": "Distance to drill site"
   }
  ],
- "modified": "2022-09-22 22:43:47.028611",
+ "modified": "2022-09-29 22:34:44.420528",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
