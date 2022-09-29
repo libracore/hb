@@ -103,7 +103,7 @@ def get_project_data(p, dauer):
     construction_sites = frappe.get_all("Construction Site Description", 
         filters={'project': p.name}, 
         fields=['name', 'internal_crane_required', 'external_crane_Required', 'carrymax'])
-    manager_short = frappe.db.get_value("User", p_object.manager, "username") if p_object.manager else ''
+    manager_short = frappe.db.get_value("User", project.manager, "username") if project.manager else ''
     drilling_equipment = p_object.drilling_equipment if p_object.drilling_equipment else ''
     saugauftrag = 'Schlamm fremd'
     pneukran = ''
