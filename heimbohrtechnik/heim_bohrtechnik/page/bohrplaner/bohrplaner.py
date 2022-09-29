@@ -402,9 +402,10 @@ def get_traffic_lights_indicator(project):
     saugauftrag_color = 'transparent;'
     for cl_entry in project.checklist:
         if cl_entry.activity == 'Schlammentsorgung':
-            saugauftrag_color = '#ffa6a6;'
-            if cl_entry.supplier_name:
-                saugauftrag_color = '#81d41a;'
+            saugauftrag_color = '#ffa6a6;'              # orange
+            #if cl_entry.supplier_name:
+            if project.trough_ordered:
+                saugauftrag_color = '#81d41a;'          # green
     colors.append(saugauftrag_color)
     
     # pneukran [9]

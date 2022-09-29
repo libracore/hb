@@ -39,3 +39,11 @@ def mark_as_sent(project):
     p_doc.save()
     frappe.db.commit()
     return
+
+@frappe.whitelist()
+def mark_trough_as_ordered(project):
+    p_doc = frappe.get_doc("Project", project)
+    p_doc.trough_ordered = 1
+    p_doc.save()
+    frappe.db.commit()
+    return

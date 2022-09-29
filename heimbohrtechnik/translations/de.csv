@@ -169,6 +169,7 @@
 "DocType: Project","Appointment","Termin"
 "DocType: Project","Appointment End","Endtermin"
 "DocType: Project","Subprojects","Unterprojekte"
+"DocType: Project","Trough ordered","Mulden bestellt"
 "DocType: Permit Type","Permit Type","Bewilligungsart"
 "DocType: Permit Type","Permit","Bewilligung"
 "DocType: Project","Permit number","Bewilligungsnummer"
