@@ -423,8 +423,7 @@ def get_traffic_lights_indicator(project):
     
     # kuerzel_pl [11]
     kuerzel_pl_color = '#ffa6a6;'
-    baustelle_besichtigt = int(project.construction_site_inspected)
-    if baustelle_besichtigt == 1:
+    if is_construction_site_inspected(project.name) == 1:
         kuerzel_pl_color = '#81d41a;'
     colors.append(kuerzel_pl_color)
     
@@ -438,6 +437,15 @@ def get_traffic_lights_indicator(project):
     colors.append(strassensperrung_color)
     
     return colors
+
+def is_construction_site_inspected(project):
+    images = frappe.db.sql("""
+        SELECT IF(IFNULL(COUNT(`tabConstruction Site Description Image`.`name`), 0) = 0, 0, 1) AS `is_inspected`
+        FROM `tabConstruction Site Description Image`
+        LEFT JOIN `tabConstruction Site Description` ON `tabConstruction Site Description Image`.`parent` = `tabConstruction Site Description`.`name`
+        WHERE `tabConstruction Site Description`.`project` = "{project}";
+    """.format(project=project), as_dict=True)
+    return images[0]['is_inspected']
     
 @frappe.whitelist()
 def reschedule_project(project=None, team=None, day=None, start_half_day=None, popup=False, new_project_start=None, new_project_end_date=None, end_half_day=None):
