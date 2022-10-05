@@ -3,7 +3,7 @@ try {
     cur_frm.dashboard.add_transactions([
         {
             'label': 'Drilling',
-            'items': ['Construction Site Description', 'Bohranzeige', 'Construction Site Delivery', 'Subcontracting Order']
+            'items': ['Construction Site Description', 'Bohranzeige', 'Construction Site Delivery', 'Subcontracting Order', 'Request for Public Area Use']
         }
     ]);
 } catch { /* do nothing for older versions */ }

@@ -375,19 +375,19 @@ def get_traffic_lights_indicator(project):
     objekt_plz_ort_color = '#c4c7ca;'
     if int(project.thermozement) == 1:
         objekt_plz_ort_color = '#9dc7f0;'
-    colors.append(objekt_plz_ort_color)
+    colors.append(objekt_plz_ort_color)             # 4
     objekt_plz_ort_font_color = 'black;'
     objekt_plz_ort_border_color = ''
     for permit in project.permits:
         if 'Lärmschutzbewilligung' in permit.permit:
             objekt_plz_ort_font_color = 'red;'
             if permit.file:
-                objekt_plz_ort_font_color = '#ffbf00;'
-        elif 'Strassensperrung' in permit.permit:
-            if not permit.file:
-                objekt_plz_ort_border_color = 'border: 1px solid red;'
-    colors.append(objekt_plz_ort_font_color)
-    colors.append(objekt_plz_ort_border_color)
+                objekt_plz_ort_font_color = '#ffbf00;'          # orange
+        #elif 'Strassensperrung' in permit.permit:              # removed by change request RB/2022-10-05
+        #    if not permit.file:
+        #        objekt_plz_ort_border_color = 'border: 1px solid red;'
+    colors.append(objekt_plz_ort_font_color)       # 5
+    colors.append(objekt_plz_ort_border_color)     # 6
     
     #ews_details [7]
     ews_details_color = '#ffa6a6;'
@@ -429,16 +429,28 @@ def get_traffic_lights_indicator(project):
     colors.append(kuerzel_pl_color)
     
     # strassensperrung [12]
-    strassensperrung_color = '#c4c7ca;'
+    strassensperrung_color = '#c4c7ca;'         # grey: not applicable
     for permit in project.permits:
         if 'Strassensperrung' in permit.permit:
-            strassensperrung_color = '#ffa6a6;'
-            if permit.file:
-                strassensperrung_color = '#81d41a;'
+            strassensperrung_color = '#ffa6a6;' # red: required
+            if has_public_area_request(project.name):
+                strassensperrung_color = '#ffa6a6';     # orange: requested
+            if permit.file:                         
+                strassensperrung_color = '#81d41a;'     # green: permit available
     colors.append(strassensperrung_color)
     
     return colors
-    
+
+def has_public_area_request(project):
+    public_area_requests = frappe.get_all("Request for Public Area Use",
+        filters={'project': project},
+        fields=['name']
+    )
+    if len(public_area_requests) > 0:
+        return True
+    else:
+        return False
+
 @frappe.whitelist()
 def reschedule_project(project=None, team=None, day=None, start_half_day=None, popup=False, new_project_start=None, new_project_end_date=None, end_half_day=None):
     project = frappe.get_doc("Project", project)
