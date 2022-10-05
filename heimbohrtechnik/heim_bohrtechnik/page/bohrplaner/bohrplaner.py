@@ -606,4 +606,31 @@ def get_user_planning_days(user):
         return frappe.get_value("Signature", user, "planning_days")
     else:
         return 30
+    
+@frappe.whitelist()
+def print_bohrplaner(html):
+    from frappe.utils.pdf import get_pdf
+    from PyPDF2 import PdfFileWriter
+    from frappe.utils.pdf import get_file_data_from_writer
+    
+    borhplaner_css = frappe.read_file("/home/frappe/frappe-bench/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css")
+
+    html = html + '<body><meta name="pdfkit-orientation" content="Landscape"/><style>' + borhplaner_css + "</style></body>"
+    output = PdfFileWriter()
+    output = get_pdf(html, output=output)
+    
+    file_name = "{0}.pdf".format(frappe.generate_hash(length=14))
         
+    filedata = get_file_data_from_writer(output)
+    
+    _file = frappe.get_doc({
+        "doctype": "File",
+        "file_name": file_name,
+        "folder": "Home/Bohrplaner-Prints",
+        "is_private": 1,
+        "content": filedata
+    })
+    
+    _file.save(ignore_permissions=True)
+    
+    return _file.file_url

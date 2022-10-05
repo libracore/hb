@@ -121,7 +121,8 @@ scheduler_events = {
 #         "heimbohrtechnik.tasks.all"
 #     ],
      "daily": [
-         "heimbohrtechnik.heim_bohrtechnik.data_maintenance.link_sales_orders_to_projects"
+         "heimbohrtechnik.heim_bohrtechnik.data_maintenance.link_sales_orders_to_projects",
+         "heimbohrtechnik.heim_bohrtechnik.data_maintenance.remove_bohrplaner_prints"
      ]
 #     "hourly": [
 #         "heimbohrtechnik.tasks.hourly"
@@ -157,5 +158,6 @@ scheduler_events = {
 after_migrate = [
     'heimbohrtechnik.heim_bohrtechnik.updater.cleanup_languages',
     'heimbohrtechnik.heim_bohrtechnik.updater.assert_kg',
-    'heimbohrtechnik.heim_bohrtechnik.updater.diable_prepared_report'
+    'heimbohrtechnik.heim_bohrtechnik.updater.diable_prepared_report',
+    'heimbohrtechnik.heim_bohrtechnik.updater.create_folder'
 ]

@@ -19,6 +19,20 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
     page.set_secondary_action( __('Soft Reload'), () => {
         frappe.bohrplaner.reset_dates(page);
     });
+    page.add_menu_item(__('Drucken'), () => {
+        var bp_html = $("#bohrplan_wrapper").html();
+        frappe.dom.freeze('Bitte warten, das PDF wird erzeugt...');
+        frappe.call({
+            'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.print_bohrplaner',
+            'args': {
+                'html': bp_html
+            },
+            callback: function(r) {
+                frappe.dom.unfreeze();
+                window.open(r.message, '_blank');
+            }
+        });
+    });
     page.set_primary_action( __('Search'), () => {
         frappe.bohrplaner.search(page);
     });

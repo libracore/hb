@@ -278,3 +278,9 @@ tbody tr td:nth-child(even) {
 .ews-details b {
     color: red;
 }
+
+@media print {
+  body {
+    zoom: 45%;
+  }
+}
