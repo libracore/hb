@@ -444,9 +444,9 @@ def get_traffic_lights_indicator(project):
 def has_public_area_request(project):
     public_area_requests = frappe.get_all("Request for Public Area Use",
         filters={'project': project},
-        fields=['name']
+        fields=['name', 'sent']
     )
-    if len(public_area_requests) > 0:
+    if len(public_area_requests) > 0 and public_area_requests[0]['sent'] == 1:
         return True
     else:
         return False
