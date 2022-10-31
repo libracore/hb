@@ -39,7 +39,7 @@ class SubcontractingOrder(Document):
                 p.append('subprojects', {
                     'start': self.from_date,
                     'end': self.to_date,
-                    'description': (self.remarks or "")[:140],
+                    'description': (self.remarks or "")[:100],
                     'team': self.drilling_team,
                     'subcontracting_order': self.name
                 })
