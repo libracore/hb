@@ -60,15 +60,16 @@ frappe.bohrplaner = {
                 'user': frappe.session.user
             },
             callback: function(response) {
-                locals.planning_days = response.message;
+                locals.planning_days = response.message.planning_days;
+                locals.planning_past_days = response.message.planning_past_days;
             }
         });
         
         // set today as default "from" date
         var now = new Date();
-        var from_date = frappe.datetime.add_days(now, 0);
+        var from_date = frappe.datetime.add_days(now, (-1) * locals.planning_past_days);
         var to_date = frappe.datetime.add_days(now, locals.planning_days);
-        
+        console.log(locals.planning_past_days + " - " + from_date);
         //get template data
         var data = frappe.bohrplaner.get_content(page, from_date, to_date);
         
@@ -78,7 +79,7 @@ frappe.bohrplaner = {
     run: function(page) {
         // set today as default "from" date
         var now = new Date();
-        document.getElementById("from").value = frappe.datetime.add_days(now, 0);
+        document.getElementById("from").value = frappe.datetime.add_days(now, (-1) * locals.planning_past_days);
         
         // set today + 30d as default "to" date
         document.getElementById("to").value = frappe.datetime.add_days(now, locals.planning_days);

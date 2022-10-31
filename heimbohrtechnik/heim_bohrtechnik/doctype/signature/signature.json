@@ -16,7 +16,9 @@
   "email_footer_template",
   "email_footer",
   "sec_planning",
-  "planning_days"
+  "planning_days",
+  "col_planning",
+  "planning_past_days"
  ],
  "fields": [
   {
@@ -90,9 +92,18 @@
    "fieldname": "planning_days",
    "fieldtype": "Int",
    "label": "Planning days"
+  },
+  {
+   "fieldname": "col_planning",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "planning_past_days",
+   "fieldtype": "Int",
+   "label": "Past days"
   }
  ],
- "modified": "2022-09-23 17:28:02.968903",
+ "modified": "2022-10-31 08:21:00.629396",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Signature",

@@ -254,18 +254,24 @@ def get_internal_overlay_datas(from_date, to_date):
 def get_subproject_overlay_datas(from_date, to_date):
     subproject_list = []
     shift_controll = {}
-    subprojects = frappe.db.sql("""SELECT
-                                        `tabProject Subproject`.`start`,
-                                        `tabProject Subproject`.`end`,
-                                        `tabProject Subproject`.`team`,
-                                        `tabProject Subproject`.`description`,
-                                        `tabProject`.`name` as `project`,
-                                        `tabProject`.`object_name`,
-                                        `tabProject`.`object_street`,
-                                        `tabProject`.`object_location`
-                                    FROM `tabProject Subproject`
-                                    LEFT JOIN `tabProject` ON `tabProject`.`name` = `tabProject Subproject`.`parent`
-                                    ORDER BY `tabProject Subproject`.`team` ASC, `tabProject Subproject`.`idx` ASC""", as_dict=True)
+    subprojects = frappe.db.sql("""
+        SELECT
+            `tabProject Subproject`.`start`,
+            `tabProject Subproject`.`end`,
+            `tabProject Subproject`.`team`,
+            `tabProject Subproject`.`description`,
+            `tabProject`.`name` as `project`,
+            `tabProject`.`object_name`,
+            `tabProject`.`object_street`,
+            `tabProject`.`object_location`
+        FROM `tabProject Subproject`
+        LEFT JOIN `tabProject` ON `tabProject`.`name` = `tabProject Subproject`.`parent`
+        WHERE 
+            `tabProject Subproject`.`start` BETWEEN "{from_date}" AND "{to_date}"
+            OR `tabProject Subproject`.`end` BETWEEN "{from_date}" AND "{to_date}"
+        ORDER BY 
+            `tabProject Subproject`.`team` ASC, `tabProject Subproject`.`idx` ASC;""".format(
+            from_date=from_date, to_date=to_date), as_dict=True)
     for subproject in subprojects:
         subproject_duration = calc_duration(subproject.start, subproject.end, from_date, to_date)
         subproject_shift, shift_controll = subproject_shift_controll(subproject, get_datetime(subproject_duration['start']).strftime('%d.%m.%Y'), shift_controll)
@@ -603,9 +609,15 @@ def get_absences_overlay_datas(from_date, to_date):
 @frappe.whitelist()
 def get_user_planning_days(user):
     if frappe.db.exists("Signature", user):
-        return frappe.get_value("Signature", user, "planning_days")
+        return {
+            'planning_days': frappe.get_value("Signature", user, "planning_days") or 30,
+            'planning_past_days': frappe.get_value("Signature", user, "planning_past_days") or 0
+        }
     else:
-        return 30
+        return {
+            'planning_days': 30,
+            'planning_past_Days': 0
+        }
     
 @frappe.whitelist()
 def print_bohrplaner(html):
