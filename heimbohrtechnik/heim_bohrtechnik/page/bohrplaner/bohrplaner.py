@@ -261,6 +261,8 @@ def get_subproject_overlay_datas(from_date, to_date):
             `tabProject Subproject`.`team`,
             `tabProject Subproject`.`description`,
             `tabProject`.`name` as `project`,
+            `tabProject`.`customer_name` as `customer_name`,
+            `tabProject`.`ews_details` as `ews_details`,
             `tabProject`.`object_name`,
             `tabProject`.`object_street`,
             `tabProject`.`object_location`
@@ -284,6 +286,8 @@ def get_subproject_overlay_datas(from_date, to_date):
             'id': subproject.name,
             'subproject_shift': subproject_shift,
             'project': subproject.project,
+            'customer_name': subproject.customer_name,
+            'ews_details': subproject.ews_details,
             'object_name': subproject.object_name,
             'object_street': subproject.object_street,
             'object_location': subproject.object_location

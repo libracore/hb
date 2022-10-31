@@ -24,6 +24,16 @@ frappe.ui.form.on('Subcontracting Order', {
     },
     project: function(frm) {
         autocomplete_object(frm);
+    },
+    to_date: function(frm) {
+        if (frm.doc.from_date > frm.doc.to_date) {
+            cur_frm.set_value("from_date", frm.doc.to_date);
+        }
+    },
+    from_date: function(frm) {
+        if (frm.doc.from_date > frm.doc.to_date) {
+            cur_frm.set_value("to_date", frm.doc.from_date);
+        }
     }
 });
 

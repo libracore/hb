@@ -69,7 +69,7 @@ frappe.bohrplaner = {
         var now = new Date();
         var from_date = frappe.datetime.add_days(now, (-1) * locals.planning_past_days);
         var to_date = frappe.datetime.add_days(now, locals.planning_days);
-        console.log(locals.planning_past_days + " - " + from_date);
+        
         //get template data
         var data = frappe.bohrplaner.get_content(page, from_date, to_date);
         
@@ -236,13 +236,14 @@ frappe.bohrplaner = {
         } else {
             var width = (42 * qty);
         }
-        
         $(frappe.render_template('subproject_overlay', {
             'width': width, 
             'subproject': data.id, 
             'description': data.description, 
             'subproject_shift': data.subproject_shift,
             'project': data.project,
+            'customer_name': data.customer_name,
+            'ews_details': data.ews_details,
             'object_name': data.object_name,
             'object_street': data.object_street,
             'object_location': data.object_location,
