@@ -628,21 +628,24 @@ def print_bohrplaner(html):
     from frappe.utils.pdf import get_pdf
     from PyPDF2 import PdfFileWriter
     from frappe.utils.pdf import get_file_data_from_writer
+    from erpnextswiss.erpnextswiss.attach_pdf import create_folder
     
-    borhplaner_css = frappe.read_file("/home/frappe/frappe-bench/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css")
+    #bohrplaner_css = frappe.read_file("/home/frappe/frappe-bench/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css")
+    bohrplaner_css = frappe.read_file("{0}{1}".format(frappe.utils.get_bench_path(), "/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css"))
 
-    html = html + '<body><meta name="pdfkit-orientation" content="Landscape"/><style>' + borhplaner_css + "</style></body>"
+    html = html + '<body><meta name="pdfkit-orientation" content="Portrait"/><style>' + bohrplaner_css + "</style></body>"
     output = PdfFileWriter()
     output = get_pdf(html, output=output)
     
     file_name = "{0}.pdf".format(frappe.generate_hash(length=14))
-        
+    folder = create_folder("Bohrplaner-Prints", "Home")
+    
     filedata = get_file_data_from_writer(output)
     
     _file = frappe.get_doc({
         "doctype": "File",
         "file_name": file_name,
-        "folder": "Home/Bohrplaner-Prints",
+        "folder": folder,
         "is_private": 1,
         "content": filedata
     })

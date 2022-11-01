@@ -20,18 +20,7 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
         frappe.bohrplaner.reset_dates(page);
     });
     page.add_menu_item(__('Drucken'), () => {
-        var bp_html = $("#bohrplan_wrapper").html();
-        frappe.dom.freeze('Bitte warten, das PDF wird erzeugt...');
-        frappe.call({
-            'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.print_bohrplaner',
-            'args': {
-                'html': bp_html
-            },
-            callback: function(r) {
-                frappe.dom.unfreeze();
-                window.open(r.message, '_blank');
-            }
-        });
+        print_content();
     });
     page.set_primary_action( __('Search'), () => {
         frappe.bohrplaner.search(page);
@@ -286,7 +275,7 @@ frappe.bohrplaner = {
         var data = frappe.bohrplaner.get_content(page, from, to);
         // render calendar grid
         $(frappe.render_template('calendar_grid', data)).appendTo(page.body);
-        // set safed dates
+        // set saved dates
         document.getElementById("from").value = from;
         document.getElementById("to").value = to;
         // set scroll-positions
@@ -514,5 +503,20 @@ function reshedule(project, team, day, start_half_day) {
        callback: function(response) {
             
        }
+    });
+}
+
+function print_content() {
+    var bp_html = $("#bohrplan_wrapper").html();
+    frappe.dom.freeze('Bitte warten, das PDF wird erzeugt...');
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.print_bohrplaner',
+        'args': {
+            'html': bp_html
+        },
+        callback: function(r) {
+            frappe.dom.unfreeze();
+            window.open(r.message, '_blank');
+        }
     });
 }
