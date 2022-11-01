@@ -550,23 +550,22 @@ def get_days(from_date, to_date):
     return date_list, weekend_list, kw_list, day_list, today
     
 def get_drilling_teams():
-    drilling_teams = []
-    _drilling_teams = frappe.db.sql("""SELECT `name`, `title`, `drm`, `drt`, `truck_and_weight`, `has_trough`, `trough_details`, `has_crane`, `crane_details`, `phone` FROM `tabDrilling Team`""", as_dict=True)
-    
-    for team in _drilling_teams:
-        data = {}
-        data["title"] = team.title
-        data["team_id"] = team.name
-        data["drm"] = team.drm
-        data["drt"] = team.drt
-        data["truck_and_weight"] = team.truck_and_weight
-        data["has_trough"] = team.has_trough
-        data["trough_details"] = team.trough_details or _('Has Trough')
-        data["has_crane"] = team.has_crane
-        data['crane_details'] = team.crane_details or _('Has Crane')
-        data["phone"] = team.phone
-        drilling_teams.append(data)
-    
+    drilling_teams = frappe.db.sql("""
+        SELECT 
+            `name` AS `team_id`, 
+            `title`, 
+            `drm`, 
+            `drt`, 
+            `truck_and_weight`, 
+            `has_trough`, 
+            IFNULL(`trough_details`, "{trough}") AS `trough_details`, 
+            `has_crane`, 
+            IFNULL(`crane_details`, "{crane}") AS `crane_details`, 
+            `phone`,
+            `drilling_team_type`
+        FROM `tabDrilling Team`""".format(
+            trough=_('Has Trough'), crane=_('Has Crane')), as_dict=True)
+        
     return drilling_teams
 
 # Absences
@@ -630,7 +629,6 @@ def print_bohrplaner(html):
     from frappe.utils.pdf import get_file_data_from_writer
     from erpnextswiss.erpnextswiss.attach_pdf import create_folder
     
-    #bohrplaner_css = frappe.read_file("/home/frappe/frappe-bench/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css")
     bohrplaner_css = frappe.read_file("{0}{1}".format(frappe.utils.get_bench_path(), "/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css"))
 
     html = html + '<body><meta name="pdfkit-orientation" content="Portrait"/><style>' + bohrplaner_css + "</style></body>"
