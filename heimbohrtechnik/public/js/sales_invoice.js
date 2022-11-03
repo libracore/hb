@@ -16,6 +16,11 @@ frappe.ui.form.on('Sales Invoice', {
         if (frm.doc.__islocal) {
             select_naming_series(frm);
         }
+        
+        // check duplicate discount
+        if (frm.doc.docstatus === 0) {
+            check_duplicate_discounts(frm);
+        }
     },
     before_save: function(frm) {
         set_conditional_net_total(frm);
@@ -70,3 +75,48 @@ frappe.ui.form.on('Markup Position', {
         set_conditional_net_total(frm);
     }
 });
+
+function check_duplicate_discounts(frm) {
+    var sales_order = null;
+    for (var i = 0; i < frm.doc.items.length; i++) {
+        if (frm.doc.items[i].sales_order) {
+            sales_order = frm.doc.items[i].sales_order;
+            break;
+        }
+    }
+    frappe.call({
+        "method": "heimbohrtechnik.heim_bohrtechnik.utils.get_invoiced_markup_discounts",
+        "args": {
+            "sales_order": sales_order
+        },
+        "async": false,
+        "callback": function(response) {
+            var positions = response.message;
+            console.log(positions);
+            // check markups
+            for (var m = frm.doc.markup_positions.length - 1; m >= 0; m--) {
+                for (var i = 0; i < response.message.length; i++) {
+                    if ((frm.doc.markup_positions[m].description === response.message[i].description)
+                        && (response.message[i].parent !== frm.doc.name)) {
+                        // already in another invoice - remove
+                        cur_frm.get_field("markup_positions").grid.grid_rows[m].remove();
+                        frappe.show_alert(__("Doppelten Zuschlag {0} entfernt").replace("{0}", frm.doc.markup_positions[m].description))
+                        break;
+                    }
+                }
+            }
+            for (var m = frm.doc.discount_positions.length - 1; m >= 0; m--) {
+                for (var i = 0; i < response.message.length; i++) {
+                    if ((frm.doc.discount_positions[m].description === response.message[i].description)
+                        && (response.message[i].parent !== frm.doc.name)) {
+                        // already in another invoice - remove
+                        cur_frm.get_field("discount_positions").grid.grid_rows[m].remove();
+                        frappe.show_alert(__("Doppelten Abzug {0} entfernt").replace("{0}", frm.doc.discount_positions[m].description))
+                        break;
+                    }
+                }
+            }
+            cur_frm.refresh_fields(["markup_positions", "discount_positions"]);
+        }
+    });
+}

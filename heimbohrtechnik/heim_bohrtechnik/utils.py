@@ -463,3 +463,29 @@ def update_attached_project_pdf(project):
     # create and attach
     attach_pdf("Project", project, print_format="Bohrauftrag")
     return
+
+"""
+Return other invoiced markup/discounts in the same sales order
+"""
+@frappe.whitelist()
+def get_invoiced_markup_discounts(sales_order):
+    positions = frappe.db.sql("""
+        SELECT `description`, `percent`, `amount`, `parent`
+        FROM `tabMarkup Position`
+        WHERE `parent` IN 
+            (SELECT `parent`
+            FROM `tabSales Invoice Item` 
+            WHERE `sales_order` = "{sales_order}"
+              AND `docstatus` < 2
+              AND `percent` = 0
+            GROUP BY `parent`)
+        UNION SELECT `description`, `percent`, `amount`, `parent`
+        FROM `tabDiscount Position`
+        WHERE `parent` IN 
+            (SELECT `parent`
+            FROM `tabSales Invoice Item` 
+            WHERE `sales_order` = "AB-2200469"
+              AND `docstatus` < 2
+              AND `percent` = 0
+            GROUP BY `parent`);""".format(sales_order=sales_order), as_dict=True)
+    return positions
