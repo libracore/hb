@@ -11,19 +11,29 @@ from frappe.desk.form.load import get_attachments
 @frappe.whitelist()
 def get_overlay_datas(from_date, to_date):
     projects = []
-    name_list = []
     
-    projects_start = frappe.get_all('Project',
-        filters=[
-            ['expected_start_date', 'between', [from_date, to_date]],
-            ['name', 'not in', name_list],
-            ['project_type', '=', 'External']
-        ],
-        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
-    )
-    for p in projects_start:
+    matching_projects = frappe.db.sql("""
+        SELECT 
+            `name`, 
+            `drilling_team`, 
+            `expected_start_date`, 
+            `expected_end_date`, 
+            `start_half_day`, 
+            `end_half_day`, 
+            `object`
+        FROM `tabProject`
+        WHERE `project_type` = "External"
+          AND 
+            ((`expected_start_date` BETWEEN '{from_date}' AND '{to_date}')
+             OR (`expected_end_date` BETWEEN '{from_date}' AND '{to_date}')
+             OR (`expected_start_date` < '{from_date}' AND `expected_end_date` > '{to_date}')
+            )
+        """.format(from_date=from_date, to_date=to_date), as_dict=True)
+
+    for p in matching_projects:
         correction = 0
         if p.expected_start_date < getdate(from_date):
+            # start is before from_date
             correction = date_diff(p.expected_end_date, p.expected_start_date) - date_diff(p.expected_end_date, getdate(from_date))
             dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
             p.expected_start_date = getdate(from_date)
@@ -31,72 +41,20 @@ def get_overlay_datas(from_date, to_date):
                 p.start_half_day = 'vm'
         else:
             dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
+        # compensate for duration exceeding to_date
+        if p.expected_end_date > getdate(to_date):
+            duration_correction = (date_diff(p.expected_end_date, getdate(to_date)) - 1) * 2
+            dauer -= duration_correction
         if p.start_half_day.lower() == 'nm':
             dauer -= 1
         if p.end_half_day.lower() == 'vm':
             dauer -= 1
-        name_list.append(p.name)
-        
-        p_data = get_project_data(p, dauer)
-        projects.append(p_data)
-    
-    projects_end = frappe.get_all('Project',
-        filters=[
-            ['expected_end_date', 'between', [from_date, to_date]],
-            ['name', 'not in', name_list],
-            ['project_type', '=', 'External']
-        ],
-        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
-    )
-    for p in projects_end:
-        correction = 0
-        if p.expected_start_date < getdate(from_date):
-            correction = date_diff(p.expected_end_date, p.expected_start_date) - date_diff(p.expected_end_date, getdate(from_date))
-            dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
-            p.expected_start_date = getdate(from_date)
-            if p.start_half_day.lower() == 'nm':
-                p.start_half_day = 'vm'
-        else:
-            dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
-        if p.start_half_day.lower() == 'nm':
-            dauer -= 1
-        if p.end_half_day.lower() == 'vm':
-            dauer -= 1
-        name_list.append(p.name)
-        
-        p_data = get_project_data(p, dauer)
-        projects.append(p_data)
-    
-    projects_outside = frappe.get_all('Project',
-        filters=[
-            ['expected_start_date', '<', to_date],
-            ['expected_end_date', '>', from_date],
-            ['name', 'not in', name_list],
-            ['project_type', '=', 'External']
-        ],
-        fields=['name', 'drilling_team', 'expected_start_date', 'expected_end_date', 'start_half_day', 'end_half_day', 'object']
-    )
-    for p in projects_outside:
-        correction = 0
-        if p.expected_start_date < getdate(from_date):
-            correction = date_diff(p.expected_end_date, p.expected_start_date) - date_diff(p.expected_end_date, getdate(from_date))
-            dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
-            p.expected_start_date = getdate(from_date)
-            if p.start_half_day.lower() == 'nm':
-                p.start_half_day = 'vm'
-        else:
-            dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
-        if p.start_half_day.lower() == 'nm':
-            dauer -= 1
-        if p.end_half_day.lower() == 'vm':
-            dauer -= 1
-        name_list.append(p.name)
         
         p_data = get_project_data(p, dauer)
         projects.append(p_data)
         
     return projects
-
+    
 def get_project_data(p, dauer):
     project = frappe.get_doc("Project", p.name)
     p_object = frappe.get_doc("Object", p.object)
