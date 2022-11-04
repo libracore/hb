@@ -589,7 +589,14 @@ def print_bohrplaner(html):
     
     bohrplaner_css = frappe.read_file("{0}{1}".format(frappe.utils.get_bench_path(), "/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css"))
 
-    html = html + '<body><meta name="pdfkit-orientation" content="Portrait"/><style>' + bohrplaner_css + "</style></body>"
+    html = html + """<body>
+        <meta name="pdfkit-orientation" content="Portrait"/><style>
+        .print-format {
+         margin-top: 0mm;
+         margin-left: 0mm;
+         margin-right: 0mm;
+        }
+        """ + bohrplaner_css + "</style></body>"
     output = PdfFileWriter()
     output = get_pdf(html, output=output)
     
