@@ -87,8 +87,8 @@ frappe.bohrplaner = {
     },
     load_route: function(page) {
         if (frappe.route_options.from && frappe.route_options.project_name) {
-            document.getElementById("from").value = frappe.datetime.add_days(frappe.route_options.from, -14);
-            document.getElementById("to").value = frappe.datetime.add_days(frappe.route_options.from, 14);
+            document.getElementById("from").value = frappe.datetime.add_days(frappe.route_options.from, (-1) * locals.planning_past_days);
+            document.getElementById("to").value = frappe.datetime.add_days(frappe.route_options.from, locals.planning_days);
             let date_reset = new Promise(function(ok, nok) {
                 frappe.bohrplaner.reset_dates(page);
                 ok();
