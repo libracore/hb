@@ -448,7 +448,7 @@ frappe.bohrplaner = {
     },
     search: function(page) {
         frappe.prompt([
-                {'fieldname': 'project', 'fieldtype': 'Link', 'label': __('Project'), 'options': 'Object', 'reqd': 1}  
+                {'fieldname': 'project', 'fieldtype': 'Link', 'label': __('Project'), 'options': 'Project', 'reqd': 1}  
             ],
             function(values){
                 frappe.call({
