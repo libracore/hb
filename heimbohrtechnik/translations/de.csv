@@ -299,3 +299,5 @@
 "DocType: Request for Public Area Use","Address Location","PLZ, Ort"
 "DocType: Request for Public Area Use","Area in m2","Fläche in m2"
 "DocType: Request for Public Area Use","Installation Plan","Installationsplan"
+"DocType: Request for Public Area Use","From Customer","Vom Auftraggeber"
+"DocType: Request for Public Area Use","From Owner","Vom Eigentümer"
