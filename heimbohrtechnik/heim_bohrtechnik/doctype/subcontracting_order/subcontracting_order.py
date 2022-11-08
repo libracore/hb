@@ -30,6 +30,9 @@ class SubcontractingOrder(Document):
                     if s.end != self.to_date:
                         s.end = self.to_date
                         modified = True
+                    if s.description != self.order_description:
+                        s.description = self.order_description
+                        modified = True
                     if modified:
                         p.save()
                         updated = True
@@ -39,7 +42,7 @@ class SubcontractingOrder(Document):
                 p.append('subprojects', {
                     'start': self.from_date,
                     'end': self.to_date,
-                    'description': (self.remarks or "")[:100],
+                    'description': (self.order_description or "")[:100],
                     'team': self.drilling_team,
                     'subcontracting_order': self.name
                 })

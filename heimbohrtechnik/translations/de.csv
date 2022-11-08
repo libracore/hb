@@ -286,6 +286,7 @@
 "DocType: Construction Site Delivery","Construction Site Delivery","Baustellenlieferung"
 "DocType: Subcontracting Order","Subcontracting Order","Verlängerungsauftrag"
 "DocType: Subcontracting Order","Subcontracting Team","Verlängerungsteam"
+"DocType: Subcontracting Order","Order Description","Auftragsbeschreibung"
 "DocType: Request for Public Area Use","Request for Public Area Use","Gesuch Benutzung öffentlicher Grund"
 "DocType: Request for Public Area Use","No Parking","Aufhebung Parkzone"
 "DocType: Request for Public Area Use","Inform Residents","Anwohner werden informiert"

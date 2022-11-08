@@ -221,6 +221,7 @@ def get_subproject_overlay_datas(from_date, to_date):
             `tabProject Subproject`.`end`,
             `tabProject Subproject`.`team`,
             `tabProject Subproject`.`description`,
+            `tabProject Subproject`.`subcontracting_order` AS `subcontracting_order`,
             `tabProject`.`name` as `project`,
             `tabProject`.`customer_name` as `customer_name`,
             `tabProject`.`ews_details` as `ews_details`,
@@ -229,11 +230,12 @@ def get_subproject_overlay_datas(from_date, to_date):
             `tabProject`.`object_location`
         FROM `tabProject Subproject`
         LEFT JOIN `tabProject` ON `tabProject`.`name` = `tabProject Subproject`.`parent`
+        LEFT JOIN `tabSubcontracting Order` ON `tabSubcontracting Order`.`name` = `tabProject Subproject`.`subcontracting_order`
         WHERE 
             `tabProject Subproject`.`start` BETWEEN "{from_date}" AND "{to_date}"
             OR `tabProject Subproject`.`end` BETWEEN "{from_date}" AND "{to_date}"
         ORDER BY 
-            `tabProject Subproject`.`team` ASC, `tabProject Subproject`.`idx` ASC;""".format(
+            `tabProject Subproject`.`team` ASC, `tabSubcontracting Order`.`prio` ASC;""".format(
             from_date=from_date, to_date=to_date), as_dict=True)
     for subproject in subprojects:
         subproject_duration = calc_duration(subproject.start, subproject.end, from_date, to_date)
@@ -251,7 +253,8 @@ def get_subproject_overlay_datas(from_date, to_date):
             'ews_details': subproject.ews_details,
             'object_name': subproject.object_name,
             'object_street': subproject.object_street,
-            'object_location': subproject.object_location
+            'object_location': subproject.object_location,
+            'subcontracting_order': subproject.subcontracting_order
         }
         subproject_list.append(subproject_data)
     

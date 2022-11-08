@@ -23,7 +23,9 @@ frappe.ui.form.on('Subcontracting Order', {
         }
     },
     project: function(frm) {
-        autocomplete_object(frm);
+        if (frm.doc.project) {
+            find_object(frm, frm.doc.project);
+        }
     },
     to_date: function(frm) {
         if (frm.doc.from_date > frm.doc.to_date) {
@@ -36,6 +38,21 @@ frappe.ui.form.on('Subcontracting Order', {
         }
     }
 });
+
+function find_object(frm, project) {
+    frappe.call({
+        'method': "frappe.client.get",
+        'args': {
+            'doctype': "Project",
+            'name': project
+        },
+        'callback': function(response) {
+            var project = response.message;
+            cur_frm.set_value("object", project.object);
+            autocomplete_object(frm);
+        }
+    });
+}
 
 function autocomplete_object(frm) {
     frappe.call({

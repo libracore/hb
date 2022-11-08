@@ -249,7 +249,8 @@ frappe.bohrplaner = {
             'object_name': data.object_name,
             'object_street': data.object_street,
             'object_location': data.object_location,
-            'parent_project': data.project
+            'parent_project': data.project,
+            'subcontracting_order': data.subcontracting_order
         })).appendTo(place);
         return
     },
@@ -428,13 +429,17 @@ frappe.bohrplaner = {
         
         $(frappe.render_template('mobile_view', {})).appendTo(me.page.main);
     },
-    open_project: function(elemnt) {
-        var project = $(elemnt).attr("data-project");
+    open_project: function(element) {
+        var project = $(element).attr("data-project");
         url_to_form("Project", project, function (r) { window.open(r.message, '_blank'); });
     },
-    open_parent_project: function(elemnt) {
-        var parent_project = $(elemnt).attr("data-parentproject");
+    open_parent_project: function(element) {
+        var parent_project = $(element).attr("data-parentproject");
         url_to_form("Project", parent_project, function (r) { window.open(r.message, '_blank'); });
+    },
+    open_subcontracting_order: function(element) {
+        var parent_project = $(element).attr("data-subcontracting_order");
+        url_to_form("Subcontracting Order", parent_project, function (r) { window.open(r.message, '_blank'); });
     },
     mark_project: function(project_name) {
         var project_element = document.getElementById(project_name);
