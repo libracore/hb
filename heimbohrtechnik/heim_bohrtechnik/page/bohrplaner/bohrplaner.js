@@ -214,7 +214,7 @@ frappe.bohrplaner = {
             'saugauftrag': data.saugauftrag, 
             'pneukran': data.pneukran, 
             'manager_short': data.manager_short, 
-            'drilling_equipment': data.dauer, // data.drilling_equipment, 
+            'drilling_equipment': data.drilling_equipment, 
             'ampeln': data.ampeln
         })).appendTo(place);
         return
