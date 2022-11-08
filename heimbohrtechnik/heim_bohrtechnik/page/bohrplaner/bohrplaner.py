@@ -602,6 +602,10 @@ def print_bohrplaner(html):
          margin-left: 0mm;
          margin-right: 0mm;
         }
+        
+        .object-div {
+            font-size: 9pt !important;
+        }
         """ + bohrplaner_css + "</style></body>"
     output = PdfFileWriter()
     output = get_pdf(html, output=output)
