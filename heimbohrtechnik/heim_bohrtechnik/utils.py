@@ -461,7 +461,7 @@ def update_attached_project_pdf(project):
         if a.file_name == "{0}.pdf".format(project):
             remove_file(a.name, "Project", project)
     # create and attach
-    execute("Project", project, title=projectprint_format="Bohrauftrag")
+    execute("Project", project, title=project, print_format="Bohrauftrag")
     return
 
 """
