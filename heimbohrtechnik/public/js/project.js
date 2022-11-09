@@ -126,6 +126,7 @@ frappe.ui.form.on('Project', {
                 'args': {'project': frm.doc.name},
                 'callback': function(response) {
                     console.log("create print");
+                    cur_frm.reload_doc();
                 }
             });
         }
