@@ -82,7 +82,11 @@ frappe.ui.form.on('Project', {
             // create full project file
             frm.add_custom_button(__("Dossier erstellen"), function() {
                 create_full_file(frm);
-            });
+            }, __("PDFs"));
+            // create and attach pdf
+            frm.add_custom_button(__("Bohrauftrag"), function() {
+                create_pdf(frm);
+            }, __("PDFs"));
         } else {
             // new project: switch to internal and assign name/title
             frappe.call({
@@ -121,20 +125,6 @@ frappe.ui.form.on('Project', {
             cur_frm.set_df_property('customer_details', 'hidden', 1);
             cur_frm.set_df_property('section_subprojects', 'hidden', 1);
         }  
-    },
-    before_save(frm) {
-        /* disbaled 2022-11-09 leads to issues with attach files */
-        /* if (!frm.doc.__islocal) {
-            console.log("printing");
-            frappe.call({
-                'method': 'heimbohrtechnik.heim_bohrtechnik.utils.update_attached_project_pdf',
-                'args': {'project': frm.doc.name},
-                'callback': function(response) {
-                    console.log("create print");
-                    cur_frm.reload_doc();
-                }
-            });
-        } */
     }
 });
 
@@ -145,13 +135,25 @@ frappe.ui.form.on('Project Checklist', {
 });
 
 function create_full_file(frm) {
-    // html-content of the label
-    var url = "/api/method/heimbohrtechnik.heim_bohrtechnik.utils.create_full_project_file"  
-            + "?project=" + encodeURIComponent("'" + frm.doc.name + "'");
-    var w = window.open(
-         frappe.urllib.get_full_url(url)
-    );
-    if (!w) {
-        frappe.msgprint(__("Please enable pop-ups")); return;
-    }
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.create_full_project_file',
+        'args': {'project': frm.doc.name},
+        'callback': function(response) {
+            cur_frm.reload_doc();
+        },
+        'freeze': true,
+        'freeze_message': __("Dossier erstellen, bitte warten...")
+    });
+}
+
+function create_pdf(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.update_attached_project_pdf',
+        'args': {'project': frm.doc.name},
+        'callback': function(response) {
+            cur_frm.reload_doc();
+        },
+        'freeze': true,
+        'freeze_message': __("Bohrauftrag (pdf) erstellen, bitte warten...")
+    });
 }

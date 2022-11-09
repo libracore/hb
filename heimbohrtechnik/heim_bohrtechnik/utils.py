@@ -469,19 +469,59 @@ Create a full project file
 """
 @frappe.whitelist()
 def create_full_project_file(project):
+    import uuid
+    from frappe.utils import get_bench_path, get_files_path
+    from PyPDF2 import PdfFileMerger
+    from frappe.utils.file_manager import save_file
+    from erpnextswiss.erpnextswiss.attach_pdf import create_folder
+    
     # first part: order
     html = frappe.get_print("Project", project, print_format="Bohrauftrag")
-    #pdf = frappe.utils.pdf.get_pdf(html)
+    pdf = frappe.utils.pdf.get_pdf(html)
+    pdf_file = "/tmp/{0}.pdf".format(uuid.uuid4().hex)
+    with open(pdf_file, mode='wb') as file:
+        file.write(pdf)
+    # create merger
+    merger = PdfFileMerger()
+    merger.append(pdf_file)
     # other pages from construction plans
+    p_doc = frappe.get_doc("Project", project)
+    if p_doc.plans:
+        for plan in p_doc.plans:
+            merger.append("{0}/sites/{1}{2}".format(
+                get_bench_path(), 
+                get_files_path().split("/")[1],
+                plan.file))
     
     
+    tmp_name = "/tmp/project-dossier-{0}.pdf".format(uuid.uuid4().hex)
+    merger.write(tmp_name)
+    merger.close()
+    cleanup(pdf_file)
+    
+    # attach
+    # check if this is already attached
+    target_name = "Dossier_{name}.pdf".format(name=project.replace(" ", "-").replace("/", "-"))
+    attachments = get_attachments("Project", project)
+    for a in attachments:
+        if a.file_name == target_name:
+            remove_file(a.name, "Project", project)
+    
+    with open(tmp_name, mode='rb') as file:
+        combined_pdf = file.read()
+    cleanup(tmp_name)
+    
+    # create and attach
+    folder = create_folder("Dossier", "Home")
+    save_file(target_name, combined_pdf, "Project", project, folder, is_private=True)
 
-    # return download
-    #frappe.local.response.filename = "{name}.pdf".format(name=project.replace(" ", "-").replace("/", "-"))
-    #frappe.local.response.filecontent = pdf
-    #frappe.local.response.type = "download"
     return
 
+def cleanup(fname):
+    import os
+    if os.path.exists(fname):
+        os.remove(fname)
+    
 """
 Return other invoiced markup/discounts in the same sales order
 """
