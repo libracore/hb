@@ -79,6 +79,10 @@ frappe.ui.form.on('Project', {
                     }
                 });
             }, __("More") );
+            // create full project file
+            frm.add_custom_button(__("Dossier erstellen"), function() {
+                create_full_file(frm);
+            });
         } else {
             // new project: switch to internal and assign name/title
             frappe.call({
@@ -119,7 +123,8 @@ frappe.ui.form.on('Project', {
         }  
     },
     before_save(frm) {
-        if (!frm.doc.__islocal) {
+        /* disbaled 2022-11-09 leads to issues with attach files */
+        /* if (!frm.doc.__islocal) {
             console.log("printing");
             frappe.call({
                 'method': 'heimbohrtechnik.heim_bohrtechnik.utils.update_attached_project_pdf',
@@ -129,7 +134,7 @@ frappe.ui.form.on('Project', {
                     cur_frm.reload_doc();
                 }
             });
-        }
+        } */
     }
 });
 
@@ -138,3 +143,15 @@ frappe.ui.form.on('Project Checklist', {
         get_required_activities(frm, dt, dn);
     }
 });
+
+function create_full_file(frm) {
+    // html-content of the label
+    var url = "/api/method/heimbohrtechnik.heim_bohrtechnik.utils.create_full_project_file"  
+            + "?project=" + encodeURIComponent("'" + frm.doc.name + "'");
+    var w = window.open(
+         frappe.urllib.get_full_url(url)
+    );
+    if (!w) {
+        frappe.msgprint(__("Please enable pop-ups")); return;
+    }
+}

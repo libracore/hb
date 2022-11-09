@@ -464,6 +464,24 @@ def update_attached_project_pdf(project):
     execute("Project", project, title=project, print_format="Bohrauftrag")
     return
 
+""" 
+Create a full project file
+"""
+@frappe.whitelist()
+def create_full_project_file(project):
+    # first part: order
+    html = frappe.get_print("Project", project, print_format="Bohrauftrag")
+    #pdf = frappe.utils.pdf.get_pdf(html)
+    # other pages from construction plans
+    
+    
+
+    # return download
+    #frappe.local.response.filename = "{name}.pdf".format(name=project.replace(" ", "-").replace("/", "-"))
+    #frappe.local.response.filecontent = pdf
+    #frappe.local.response.type = "download"
+    return
+
 """
 Return other invoiced markup/discounts in the same sales order
 """
