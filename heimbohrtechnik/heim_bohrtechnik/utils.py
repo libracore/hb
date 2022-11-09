@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import json
 from frappe.utils import cint
 from erpnextswiss.erpnextswiss.utils import get_numeric_part
-from erpnextswiss.erpnextswiss.attach_pdf import attach_pdf
+from erpnextswiss.erpnextswiss.attach_pdf import execute
 from frappe.desk.form.load import get_attachments
 from frappe.utils.file_manager import remove_file
 
@@ -461,7 +461,7 @@ def update_attached_project_pdf(project):
         if a.file_name == "{0}.pdf".format(project):
             remove_file(a.name, "Project", project)
     # create and attach
-    attach_pdf("Project", project, print_format="Bohrauftrag")
+    execute("Project", project, title=projectprint_format="Bohrauftrag")
     return
 
 """
