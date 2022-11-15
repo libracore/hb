@@ -159,6 +159,21 @@ def get_object_address(object, address_type):
     return address
 
 """
+Helper function to get a multiple specific address type more easily (Jinja env)
+"""
+def get_object_addresses(object, address_type):
+    o = frappe.get_doc("Object", object)
+    addresses = []
+    for r in o.addresses:
+        if r.address_type == address_type:
+            addresses.append(r)
+            if address.contact:
+                addresses[-1]['contact_doc'] = frappe.get_doc("Contact", address.contact)
+            if address.address:
+                addresses[-1]['address_doc'] = frappe.get_doc("Address", address.address)
+    return addresses
+    
+"""
 Helper function to get a specific checklist item more easily (Jinja env)
 """
 def get_checklist_details(checklist_item, object=None, project=None):
