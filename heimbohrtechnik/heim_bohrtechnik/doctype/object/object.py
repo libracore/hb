@@ -166,7 +166,7 @@ def get_object_addresses(object, address_type):
     addresses = []
     for r in o.addresses:
         if r.address_type == address_type:
-            addresses.append(r)
+            addresses.append(r.as_dict())
             if r.contact:
                 addresses[-1]['contact_doc'] = frappe.get_doc("Contact", r.contact)
             if r.address:
