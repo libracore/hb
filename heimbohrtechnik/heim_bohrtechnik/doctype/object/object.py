@@ -167,10 +167,10 @@ def get_object_addresses(object, address_type):
     for r in o.addresses:
         if r.address_type == address_type:
             addresses.append(r)
-            if address.contact:
-                addresses[-1]['contact_doc'] = frappe.get_doc("Contact", address.contact)
-            if address.address:
-                addresses[-1]['address_doc'] = frappe.get_doc("Address", address.address)
+            if r.contact:
+                addresses[-1]['contact_doc'] = frappe.get_doc("Contact", r.contact)
+            if r.address:
+                addresses[-1]['address_doc'] = frappe.get_doc("Address", r.address)
     return addresses
     
 """
