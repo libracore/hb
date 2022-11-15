@@ -1567,7 +1567,7 @@
    "_user_tags": null,
    "allow_on_submit": 0,
    "bold": 0,
-   "collapsible": 0,
+   "collapsible": 1,
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2022-11-15 13:49:39.864183",
