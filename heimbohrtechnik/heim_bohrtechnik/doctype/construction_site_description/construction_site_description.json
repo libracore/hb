@@ -12,6 +12,7 @@
   "images",
   "sec_checks",
   "pipes_checked",
+  "construction_plan_checked",
   "col_pipes",
   "drilling_points_marked",
   "drilling_point_remarks",
@@ -315,9 +316,15 @@
    "fieldname": "distance_to_drill_site",
    "fieldtype": "Data",
    "label": "Distance to drill site"
+  },
+  {
+   "default": "0",
+   "fieldname": "construction_plan_checked",
+   "fieldtype": "Check",
+   "label": "Construction Plan checked"
   }
  ],
- "modified": "2022-09-29 22:34:44.420528",
+ "modified": "2022-11-15 20:12:00.236279",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
