@@ -1,3 +1,5 @@
+var disable_text = __("Disable Auto Update");
+
 frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
     var page = frappe.ui.make_app_page({
         parent: wrapper,
@@ -16,6 +18,10 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
     frappe.bohrplaner.run(page);
     
     // buttons
+    page.add_menu_item( __('Auto Update'), () => {
+        frappe.bohrplaner.auto_update(page);
+    });
+    
     page.set_secondary_action( __('Soft Reload'), () => {
         frappe.bohrplaner.reset_dates(page);
     });
@@ -301,6 +307,33 @@ frappe.bohrplaner = {
         this.page.main.find("#to").on('change', function() {frappe.bohrplaner.reset_dates(page);});
         // get/add overlays
         frappe.bohrplaner.get_overlay_data(page);
+    },
+    auto_update: function(page) {
+        var target = "[data-label='" + __("Auto Update") + "'";
+        try {
+            if ($(target)[0].innerHTML === disable_text) {
+                $(target)[0].innerHTML = __("Auto Update");
+            } else {
+                $(target)[0].innerHTML = disable_text;
+                frappe.bohrplaner.delay_update(page);
+            }
+        } catch (e) {
+            console.log("element not found");
+        }
+    },
+    delay_update: function(page) {
+        setTimeout( function(page) {
+            var target = "[data-label='" + __("Auto Update") + "'";
+            try {
+                if ($(target)[0].innerHTML === disable_text) {
+                    frappe.bohrplaner.reset_dates(page);
+                    frappe.bohrplaner.delay_update(page);
+                }
+            }
+            catch (e) {
+                console.log("element not found");
+            }
+        }, (5 * 60 * 1000), page);          // reload every 5 minutes
     },
     show_detail_popup: function(elemnt) {
         var _project = $(elemnt).attr("data-popupvalue");

@@ -29,6 +29,8 @@
 "Page: Drill Planner","Soft Reload","Aktualisieren"
 "Page: Drill Planner","Reshedule","Umplanen"
 "Page: Drill Planner","Absences","Abwesenheiten"
+"Page: Drill Planner","Auto Update","Autom. aktualisieren"
+"Page: Drill Planner","Disable Auto Update","Automatisch aktualisieren ausschalten"
 "DocType: Object","Object","Objekt"
 "DocType: Object","Object name","Objektname"
 "DocType: Object","Object Name","Objektname"
