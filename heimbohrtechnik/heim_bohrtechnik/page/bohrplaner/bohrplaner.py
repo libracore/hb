@@ -420,7 +420,7 @@ def is_construction_site_inspected(project):
         FROM `tabConstruction Site Description Image`
         WHERE `tabConstruction Site Description`.`project` = "{project}";
     """.format(project=project), as_dict=True)
-    return inspected[0]['is_inspected'] in len(inspected) > 0 else 0
+    return inspected[0]['is_inspected'] if len(inspected) > 0 else 0
     
 def has_public_area_request(project):
     public_area_requests = frappe.get_all("Request for Public Area Use",
