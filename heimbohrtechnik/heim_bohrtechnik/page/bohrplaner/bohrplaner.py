@@ -8,6 +8,13 @@ from frappe.utils.data import getdate, date_diff, add_days, get_datetime
 from datetime import date, timedelta
 from frappe.desk.form.load import get_attachments
 
+BG_GREEN = '#81d41a;'
+BG_ORANGE = '#ffbf00;'
+BG_RED = '#ffa6a6;'
+BG_LIGHT_GREEN = '#eefdec;'
+BG_GREY = '#c4c7ca;'
+BG_BLUE = '#9dc7f0;'
+
 @frappe.whitelist()
 def get_overlay_datas(from_date, to_date):
     projects = []
@@ -285,9 +292,9 @@ def get_traffic_lights_indicator(project):
     colors = []
     
     # projeknummer [0]
-    projeknummer_color = '#ffa6a6;'
+    projeknummer_color = BG_RED                     # red
     if int(project.termin_bestaetigt) == 1:
-        projeknummer_color = '#ffffbf;'
+        projeknummer_color = BG_ORANGE              # orange
     if project.sales_order:
         akonto = int(frappe.db.sql("""
             SELECT COUNT(`tabSales Invoice`.`name`) AS `qty` 
@@ -297,7 +304,7 @@ def get_traffic_lights_indicator(project):
               AND `tabSales Invoice`.`docstatus` = 1
               AND `tabSales Invoice`.`title` = "Teilrechnung"; """.format(so=project.sales_order), as_dict=True)[0].qty)
         if akonto > 0:
-            projeknummer_color = '#eefdec;'
+            projeknummer_color = BG_LIGHT_GREEN         # light green
         sinv = int(frappe.db.sql("""
             SELECT COUNT(`tabSales Invoice`.`name`) AS `qty` 
             FROM `tabSales Invoice Item` 
@@ -308,55 +315,58 @@ def get_traffic_lights_indicator(project):
               AND `tabSales Invoice`.`title` IN ("Schlussrechnung", "Rechnung"); 
             """.format(so=project.sales_order), as_dict=True)[0].qty)
         if sinv > 0:
-            projeknummer_color = '#81d41a;'
+            projeknummer_color = BG_GREEN           # green
     colors.append(projeknummer_color)
     
     # auftraggeber [1]
-    auftraggeber_color = '#ffa6a6;'
+    auftraggeber_color = BG_RED                     # red
     if project.sales_order:
         unterzeichnete_ab = frappe.get_value("Sales Order", project.sales_order, "unterzeichnete_ab")
         if unterzeichnete_ab:
-            auftraggeber_color = '#81d41a;'
+            auftraggeber_color = BG_GREEN           # green: signed sales order file
     colors.append(auftraggeber_color)
     
     # objektname [2]
-    objektname_color = '#ffa6a6;'               # base: red
+    objektname_color = BG_RED                       # base: red
     found_permits = 0
     found_permits_with_file = 0
     if not project.permits or len(project.permits) == 0:
-        objektname_color = '#c4c7ca;'           # project has not permit records: grey
+        objektname_color = BG_GREY                  # project has not permit records: grey
     else:
         for permit in project.permits:
             if 'Bohrbewilligung kantonal' in permit.permit:
                 found_permits += 1
                 if permit.file:
                     found_permits_with_file += 1
-        if found_permits == found_permits_with_file:
-            objektname_color = '#81d41a;'       # all permits available: green
+        if found_permits > 0 and found_permits == found_permits_with_file:
+            objektname_color = BG_GREEN         # all permits available: green
     colors.append(objektname_color)
     
     # objekt_strasse [3]
-    objekt_strasse_color = '#c4c7ca;'           # start with grey
+    objekt_strasse_color = BG_GREY              # start with grey
     drill_notices = frappe.get_all("Bohranzeige", filters={'project': project.name}, fields={'name'})
     if len(drill_notices) > 0:
         # has a drill notice: red
-        objekt_strasse_color = '#ffa6a6;'
+        objekt_strasse_color = BG_RED           # red
     if int(project.drill_notice_sent) == 1:
-        objekt_strasse_color = '#81d41a;'       # green
+        objekt_strasse_color = BG_GREEN         # green
     colors.append(objekt_strasse_color)
     
     # objekt_plz_ort [4, 5, 6]
-    objekt_plz_ort_color = '#c4c7ca;'
+    objekt_plz_ort_color = BG_GREY              # grey
     if int(project.thermozement) == 1:
-        objekt_plz_ort_color = '#9dc7f0;'
-    colors.append(objekt_plz_ort_color)             # 4
+        objekt_plz_ort_color = BG_BLUE          # blue
+    colors.append(objekt_plz_ort_color)         # 4
     objekt_plz_ort_font_color = 'black;'
     objekt_plz_ort_border_color = ''
+    noise_permit = 'white;'
     for permit in project.permits:
         if 'Lärmschutzbewilligung' in permit.permit:
             objekt_plz_ort_font_color = 'red;'
+            noise_permit = BG_RED                               # red
             if permit.file:
-                objekt_plz_ort_font_color = '#ffbf00;'          # orange
+                objekt_plz_ort_font_color = BG_ORANGE           # orange
+                noise_permit = BG_GREEN                         # green
         #elif 'Strassensperrung' in permit.permit:              # removed by change request RB/2022-10-05
         #    if not permit.file:
         #        objekt_plz_ort_border_color = 'border: 1px solid red;'
@@ -364,52 +374,52 @@ def get_traffic_lights_indicator(project):
     colors.append(objekt_plz_ort_border_color)     # 6
     
     #ews_details [7]
-    ews_details_color = '#ffa6a6;'
+    ews_details_color = BG_RED                      # red
     po = frappe.db.sql("""SELECT `per_received` FROM `tabPurchase Order` WHERE `object` = '{0}' AND `docstatus` = 1""".format(project.object), as_dict=True)
     if len(po) > 0:
-        ews_details_color = '#ffffbf;'
+        ews_details_color = BG_ORANGE               # yellow: ordered
         if int(po[0].per_received) == 100:
-            ews_details_color = '#81d41a;'
+            ews_details_color = BG_GREEN            # green: available
     colors.append(ews_details_color)
     
     # saugauftrag [8]
-    saugauftrag_color = 'transparent;'
+    saugauftrag_color = BG_GREY                     # grey
     for cl_entry in project.checklist:
         if cl_entry.activity == 'Schlammentsorgung':
-            saugauftrag_color = '#ffa6a6;'              # orange
+            saugauftrag_color = BG_ORANGE           # orange
             #if cl_entry.supplier_name:
             if project.trough_ordered:
-                saugauftrag_color = '#81d41a;'          # green
+                saugauftrag_color = BG_GREEN        # green
     colors.append(saugauftrag_color)
     
     # pneukran [9]
-    pneukran_color = '#c4c7ca;'
+    pneukran_color = BG_GREY                        # grey
     if int(project.crane_required) == 1:
         if int(project.crane_organized) == 1:
-            pneukran_color = '#81d41a;'
+            pneukran_color = BG_GREEN               # green
         else:
-            pneukran_color = '#ffa6a6;'
+            pneukran_color = BG_ORANGE              # orange
     colors.append(pneukran_color)
     
     # typ_bohrgeraet [10]
-    typ_bohrgeraet_color = 'white;'
+    typ_bohrgeraet_color = noise_permit             # see section 4,5,6
     colors.append(typ_bohrgeraet_color)
     
     # kuerzel_pl [11]
-    kuerzel_pl_color = '#ffa6a6;'
+    kuerzel_pl_color = BG_RED                       # red
     if is_construction_site_inspected(project.name) == 1:
-        kuerzel_pl_color = '#81d41a;'
+        kuerzel_pl_color = BG_GREEN                 # green
     colors.append(kuerzel_pl_color)
     
     # strassensperrung [12]
-    strassensperrung_color = '#c4c7ca;'         # grey: not applicable
+    strassensperrung_color = BG_GREY                    # grey: not applicable
     for permit in project.permits:
         if 'Strassensperrung' in permit.permit:
-            strassensperrung_color = '#ffa6a6;' # red: required
+            strassensperrung_color = BG_RED             # red: required
             if has_public_area_request(project.name):
-                strassensperrung_color = '#ffa6a6';     # orange: requested
+                strassensperrung_color = BG_ORANGE      # orange: requested
             if permit.file:                         
-                strassensperrung_color = '#81d41a;'     # green: permit available
+                strassensperrung_color = BG_GREEN       # green: permit available
     colors.append(strassensperrung_color)
     
     return colors
