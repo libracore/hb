@@ -1,4 +1,4 @@
-# Copyright (c) 2021, libracore and Contributors
+# Copyright (c) 2021-2022, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 
 from __future__ import unicode_literals
@@ -7,10 +7,13 @@ import frappe
 # searches for supplier
 def supplier_by_capability(doctype, txt, searchfield, start, page_len, filters):
     return frappe.db.sql(
-        """SELECT `tabSupplier`.`name`, `tabSupplier`.`supplier_name`
+        """SELECT `tabSupplier`.`name`, `tabSupplier`.`supplier_name`, `tabSupplier`.`remarks`
            FROM `tabSupplier`
            LEFT JOIN `tabSupplier Activity` ON `tabSupplier Activity`.`parent` = `tabSupplier`.`name`
-           WHERE `tabSupplier Activity`.`activity` = "{c}" AND `tabSupplier`.`supplier_name` LIKE "%{s}%";
+           WHERE `tabSupplier Activity`.`activity` = "{c}" 
+             AND (`tabSupplier`.`supplier_name` LIKE "%{s}%" 
+                  OR `tabSupplier`.`name` LIKE "%{s}%"
+                  OR `tabSupplier`.`remarks` LIKE "%{s}%");
         """.format(c=filters['capability'], s=txt))
 
 @frappe.whitelist()

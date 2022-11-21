@@ -1,13 +1,16 @@
 <div class="subproject_booking_overlay" id="{{ subproject }}"
     style="width: {{ width }}px;{% if subproject_shift > 0 %} top: {{ subproject_shift }}px !important; left: {{ subproject_shift / 2 }}px !important;{% endif %}"
     draggable="false"
-    onclick="frappe.bohrplaner.open_parent_project(this);" 
-    data-parentproject="{{ parent_project }}">
+    onclick="frappe.bohrplaner.open_subcontracting_order(this);" 
+    data-parentproject="{{ parent_project }}"
+    data-subcontracting_order="{{ subcontracting_order }}">
     <div class="object-div" style="font-size: 7pt;">
-        <div style="min-width:35px; ">{{ description }}</div>
-        <div style="min-width:35px; ">{{ project }}</div>
+        <div style="min-width:35px; "><b>{{ project }}</b></div>
+        <div style="min-width:35px; ">{% if customer_name %}{{ customer_name }}{% else %}&nbsp;{% endif %}</div>
         <div style="min-width:35px; ">{{ object_name }}</div>
         <div style="min-width:35px; ">{{ object_street }}</div>
         <div style="min-width:35px; ">{{ object_location }}</div>
+        <div style="min-width:35px; ">{% if ews_details %}{{ ews_details }}{% endif %}</div>
+        <div style="min-width:35px; white-space: normal;"><b>{{ description }}</b></div>
     </div>
 </div>

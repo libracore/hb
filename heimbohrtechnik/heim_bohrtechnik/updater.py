@@ -37,3 +37,9 @@ def diable_prepared_report():
                 print("Report {0}: {1}".format(report.name, err))
     frappe.db.commit()
     return
+
+def create_folder():
+    """Make sure the folder exists"""
+    from erpnextswiss.erpnextswiss.attach_pdf import create_folder
+    print("Make sure the folder Bohrplaner-Prints exists...")
+    create_folder(folder='Bohrplaner-Prints', parent='Home')

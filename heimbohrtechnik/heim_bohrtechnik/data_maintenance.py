@@ -32,3 +32,12 @@ def link_sales_orders_to_projects():
         except Exception as err:
             frappe.log_error( "Link Sales Order to Project Issue: {0}: {1}".format(u['project'], err), "link_sales_orders_to_projects")
     return
+
+"""
+Remove old Bohrplaner-Prints
+"""
+def remove_bohrplaner_prints():
+    prints = frappe.db.sql("""SELECT `name` FROM `tabFile` WHERE `folder` = 'Home/Bohrplaner-Prints'""", as_dict=True)
+    for print_doc in prints:
+        p = frappe.get_doc("File", print_doc.name)
+        p.delete()

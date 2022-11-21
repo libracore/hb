@@ -661,18 +661,26 @@ function check_add_checklist(frm, activity_type) {
 function set_checklist_supplier(frm, activity_type, supplier) {
     // make sure this item is in the checklist
     check_add_checklist(frm, activity_type);
+    // make sure only to use the first supplier of this type (e.g. mud can occur multiple times)
+    var first_supplier = supplier;
+    for (var i = 0; i < frm.doc.addresses.length; i++) {
+        if (frm.doc.addresses[i].address_type == activity_type) {
+            first_supplier = frm.doc.addresses[i].party;
+            break;
+        }
+    }
     // find supplier name
     frappe.call({
         'method': "frappe.client.get",
         'args': {
             'doctype': "Supplier",
-            'name': supplier
+            'name': first_supplier
         },
         'callback': function(response) {
             // find activity and assign supplier
             for (var a = 0; a < (frm.doc.checklist || []).length; a++) {
                 if (frm.doc.checklist[a].activity === activity_type) {
-                    frappe.model.set_value(frm.doc.checklist[a].doctype, frm.doc.checklist[a].name, 'supplier', supplier);
+                    frappe.model.set_value(frm.doc.checklist[a].doctype, frm.doc.checklist[a].name, 'supplier', first_supplier);
                     frappe.model.set_value(frm.doc.checklist[a].doctype, frm.doc.checklist[a].name, 'supplier_name', response.message.supplier_name);
                     break;
                 }
@@ -685,7 +693,7 @@ function set_checklist_supplier(frm, activity_type, supplier) {
         'args': {
             'obj': frm.doc.name,
             'activity_type': activity_type,
-            'supplier': supplier
+            'supplier': first_supplier
         }
     });
 }

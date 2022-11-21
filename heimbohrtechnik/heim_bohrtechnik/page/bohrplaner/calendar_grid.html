@@ -35,9 +35,10 @@
         </thead>
         <tbody>
             {% for drilling_team in drilling_teams %}
+                {% if not print_view || drilling_team.drilling_team_type == "Bohrteam" %}
                 <tr>
                     <td class="sticky-left">
-                        <b>{{ drilling_team.title }}</b><br>
+                        <b>{{ drilling_team.title }} - {{ drilling_team.drilling_team_type }}</b><br>
                         {% if drilling_team.drm %}{{ drilling_team.drm }}, {% endif %}{% if drilling_team.drt %}{{ drilling_team.drt }}{% endif %}<br>
                         {% if drilling_team.truck_and_weight %}{{ drilling_team.truck_and_weight }}<br>{% endif %}
                         {% if drilling_team.has_trough == 1 %}
@@ -73,8 +74,10 @@
                             data-dropid="{{ drilling_team.team_id }}-{{ day }}-nm"></td>
                     {% endfor %}
                 </tr>
+                {% endif %}
             {% endfor %}
             <!-- Absences -->
+            {% if not print_view %}
             <tr>
                 <td class="sticky-left">
                     <b>{{ __("Absences") }}</b>
@@ -92,6 +95,7 @@
                     </td>
                 {% endfor %}
             </tr>
+            {% endif %}
         </tbody>
     </table>
 </div>
