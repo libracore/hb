@@ -416,8 +416,8 @@ def get_traffic_lights_indicator(project):
 
 def is_construction_site_inspected(project):
     inspected = frappe.db.sql("""
-        SELECT MAX(`tabConstruction Site Description `.`site_inspected`) AS `is_inspected`
-        FROM `tabConstruction Site Description Image`
+        SELECT MAX(`tabConstruction Site Description`.`site_inspected`) AS `is_inspected`
+        FROM `tabConstruction Site Description`
         WHERE `tabConstruction Site Description`.`project` = "{project}";
     """.format(project=project), as_dict=True)
     return inspected[0]['is_inspected'] if len(inspected) > 0 else 0
