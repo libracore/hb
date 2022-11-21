@@ -515,6 +515,12 @@ def create_full_project_file(project):
     folder = create_folder("Dossier", "Home")
     save_file(target_name, combined_pdf, "Project", project, folder, is_private=True)
 
+    # set project file as created
+    if not p_doc.project_file_created:
+        p_doc.project_file_created = 1
+        p_doc.save(ignore_permissions=True)
+        frappe.db.commit()
+        
     return
 
 def cleanup(fname):
@@ -547,3 +553,41 @@ def get_invoiced_markup_discounts(sales_order):
               AND `percent` = 0
             GROUP BY `parent`);""".format(sales_order=sales_order), as_dict=True)
     return positions
+
+"""
+Find conversations from Infomails and create infomail records
+"""
+def check_infomails():
+    new_communications = frappe.db.sql("""
+        SELECT 
+            `tabCommunication`.`name`,
+            `tabCommunication`.`subject`,
+            `tabCommunication`.`sender`,
+            `tabCommunication`.`recipients`,
+            `tabCommunication`.`cc`,
+            `tabCommunication`.`reference_name` AS `project`,
+            `tabCommunication`.`content`,
+            `tabCommunication`.`communication_date`
+        FROM `tabCommunication`
+        LEFT JOIN `tabInfomail` ON `tabInfomail`.`communication` = `tabCommunication`.`name`
+        WHERE 
+            `reference_doctype` = "Project"
+            AND `sent_or_received` = "Sent"
+            AND `tabInfomail`.`name` IS NULL
+            AND `subject` LIKE "Bohrstart%";
+    """, as_dict=True)
+    for c in new_communications:
+        # this communication has not been linked yet - create infomal record
+        infomail = frappe.get_doc({
+            'doctype': 'Infomail',
+            'project': c['project'],
+            'date': c['communication_date'],
+            'sender': c['sender'],
+            'recipients': c['recipients'],
+            'cc': c['cc'],
+            'content': c['content'],
+            'communication': c['name']
+        })
+        infomail.insert(ignore_permissions=True)
+    frappe.db.commit()
+    return

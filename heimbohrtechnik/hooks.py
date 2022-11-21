@@ -118,9 +118,9 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
-#     "all": [
-#         "heimbohrtechnik.tasks.all"
-#     ],
+     "all": [
+         "heimbohrtechnik.heim_bohrtechnik.utils.check_infomails"
+     ],
      "daily": [
          "heimbohrtechnik.heim_bohrtechnik.data_maintenance.link_sales_orders_to_projects",
          "heimbohrtechnik.heim_bohrtechnik.data_maintenance.remove_bohrplaner_prints"

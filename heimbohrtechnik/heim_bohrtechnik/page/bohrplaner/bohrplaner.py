@@ -359,14 +359,11 @@ def get_traffic_lights_indicator(project):
     colors.append(objekt_plz_ort_color)         # 4
     objekt_plz_ort_font_color = 'black;'
     objekt_plz_ort_border_color = ''
-    noise_permit = 'white;'
     for permit in project.permits:
         if 'Lärmschutzbewilligung' in permit.permit:
             objekt_plz_ort_font_color = 'red;'
-            noise_permit = BG_RED                               # red
             if permit.file:
                 objekt_plz_ort_font_color = BG_ORANGE           # orange
-                noise_permit = BG_GREEN                         # green
         #elif 'Strassensperrung' in permit.permit:              # removed by change request RB/2022-10-05
         #    if not permit.file:
         #        objekt_plz_ort_border_color = 'border: 1px solid red;'
@@ -401,8 +398,12 @@ def get_traffic_lights_indicator(project):
             pneukran_color = BG_ORANGE              # orange
     colors.append(pneukran_color)
     
-    # typ_bohrgeraet [10]
-    typ_bohrgeraet_color = noise_permit             # see section 4,5,6
+    # typ_bohrgeraet [10] - find infomail and file
+    typ_bohrgeraet_color = BG_RED                   # start with red
+    if has_infomail(project.name):
+        typ_bohrgeraet_color = BG_ORANGE            # has infomail: orange
+        if project.project_file_created:
+            typ_bohrgeraet_color = BG_GREEN         # project file has been created
     colors.append(typ_bohrgeraet_color)
     
     # kuerzel_pl [11]
@@ -442,6 +443,13 @@ def has_public_area_request(project):
     else:
         return False
 
+def has_infomail(project):
+    infomails = frappe.get_all("Infomail",
+        filters={'project': project},
+        fields=['name']
+    )
+    return True if len(infomails) > 0 else False
+        
 @frappe.whitelist()
 def reschedule_project(project=None, team=None, day=None, start_half_day=None, popup=False, new_project_start=None, new_project_end_date=None, end_half_day=None):
     project = frappe.get_doc("Project", project)
