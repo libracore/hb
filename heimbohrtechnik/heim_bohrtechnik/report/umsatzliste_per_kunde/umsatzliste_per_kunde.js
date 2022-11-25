@@ -19,6 +19,12 @@ frappe.query_reports["Umsatzliste per Kunde"] = {
             "options": "Auftragsdatum\nLieferdatum\nRechnungsdatum",
             "default": "Lieferdatum",
             "reqd": 1
+        },
+        {
+            "fieldname":"item_code",
+            "label": __("Item"),
+            "fieldtype": "Link",
+            "options": "Item"
         }
     ]
 };

@@ -22,54 +22,64 @@ def get_columns(filters):
 
 def get_data(filters):
     fiscal_year = frappe.get_doc("Fiscal Year", filters.fiscal_year)
-    
+    if filters.item_code:
+        item = filters.item_code
+    else:
+        item = "%"
+        
     if filters.options == "Auftragsdatum":
         sql_query = """
             SELECT
                 `tabSales Order`.`customer` AS `customer`,
                 `tabSales Order` .`customer_name` AS `customer_name`,
-                SUM(`tabSales Order`.`base_net_total`) AS `revenue`,
+                SUM(`tabSales Order Item`.`base_net_amount`) AS `revenue`,
                 MAX(`tabProject`.`manager`) AS `project_manager`
             FROM `tabSales Order`
             LEFT JOIN `tabProject` ON `tabProject`.`sales_order` = `tabSales Order`.`name`
+            LEFT JOIN `tabSales Order Item` ON `tabSales Order Item`.`parent` = `tabSales Order`.`name`
             WHERE
                 `tabSales Order`.`transaction_date` >= "{from_date}"
                 AND `tabSales Order`.`transaction_date` <= "{to_date}"
                 AND `tabSales Order`.`docstatus` = 1
+                AND `tabSales Order Item`.`item_code` LIKE "{item}"
             GROUP BY `tabSales Order`.`customer`
-            ORDER BY SUM(`tabSales Order`.`base_net_total`) DESC;
-        """.format(from_date=fiscal_year.year_start_date, to_date=fiscal_year.year_end_date)
+            ORDER BY SUM(`tabSales Order Item`.`base_net_amount`) DESC;
+        """.format(from_date=fiscal_year.year_start_date, to_date=fiscal_year.year_end_date, item=item)
     elif filters.options == "Lieferdatum":
         sql_query = """
             SELECT
                 `tabSales Order`.`customer` AS `customer`,
                 `tabSales Order` .`customer_name` AS `customer_name`,
-                SUM(`tabSales Order`.`base_net_total`) AS `revenue`,
+                SUM(`tabSales Order Item`.`base_net_amount`) AS `revenue`,
                 MAX(`tabProject`.`manager`) AS `project_manager`
             FROM `tabSales Order`
             LEFT JOIN `tabProject` ON `tabProject`.`sales_order` = `tabSales Order`.`name`
+            LEFT JOIN `tabSales Order Item` ON `tabSales Order Item`.`parent` = `tabSales Order`.`name`
             WHERE
                 `tabSales Order`.`delivery_date` >= "{from_date}"
                 AND `tabSales Order`.`delivery_date` <= "{to_date}"
                 AND `tabSales Order`.`docstatus` = 1
+                AND `tabSales Order Item`.`item_code` LIKE "{item}"
             GROUP BY `tabSales Order`.`customer`
-            ORDER BY SUM(`tabSales Order`.`base_net_total`) DESC;
-        """.format(from_date=fiscal_year.year_start_date, to_date=fiscal_year.year_end_date)
+            ORDER BY SUM(`tabSales Order Item`.`base_net_amount`) DESC;
+        """.format(from_date=fiscal_year.year_start_date, to_date=fiscal_year.year_end_date, item=item)
     elif filters.options == "Rechnungsdatum":
         sql_query = """
             SELECT
                 `tabSales Invoice`.`customer` AS `customer`,
                 `tabSales Invoice` .`customer_name` AS `customer_name`,
-                SUM(`tabSales Invoice`.`base_net_total`) AS `revenue`,
+                SUM(`tabSales Invoice Item`.`base_net_amount`) AS `revenue`,
                 MAX(`tabSales Invoice`.`reference_user`) AS `project_manager`
             FROM `tabSales Invoice`
+            LEFT JOIN `tabSales Invoice Item` ON `tabSales Invoice Item`.`parent` = `tabSales Invoice`.`name`
             WHERE
                 `tabSales Invoice`.`posting_date` >= "{from_date}"
                 AND `tabSales Invoice`.`posting_date` <= "{to_date}"
                 AND `tabSales Invoice`.`docstatus` = 1
+                AND `tabSales Invoice Item`.`item_code` LIKE "{item}"
             GROUP BY `tabSales Invoice`.`customer`
-            ORDER BY SUM(`tabSales Invoice`.`base_net_total`) DESC;
-        """.format(from_date=fiscal_year.year_start_date, to_date=fiscal_year.year_end_date)
+            ORDER BY SUM(`tabSales Invoice Item`.`base_net_amount`) DESC;
+        """.format(from_date=fiscal_year.year_start_date, to_date=fiscal_year.year_end_date, item=item)
     
     data = frappe.db.sql(sql_query, as_dict=True)
     return data
