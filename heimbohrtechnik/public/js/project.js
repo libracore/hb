@@ -2,8 +2,13 @@
 try {
     cur_frm.dashboard.add_transactions([
         {
+            'label': 'Documents',
+            'items': ['Construction Site Description', 'Bohranzeige', 'Request for Public Area Use', 'Infomail']
+        },
+        {
             'label': 'Drilling',
-            'items': ['Construction Site Description', 'Bohranzeige', 'Construction Site Delivery', 'Subcontracting Order', 'Request for Public Area Use', 'Infomail']
+            'items': ['Construction Site Delivery', 'Subcontracting Order', 'Request for Public Area Use', 'Layer Directory']
+
         }
     ]);
 } catch { /* do nothing for older versions */ }
