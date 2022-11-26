@@ -11,7 +11,7 @@ frappe.ui.form.on('Bohranzeige', {
         cur_frm.fields_dict['print_format'].get_query = function(doc) {
             return {
                 filters: {
-                    "doc_type": "Request for Public Area Use"
+                    "doc_type": "Bohranzeige"
                 }
             }
         }
