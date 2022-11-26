@@ -7,6 +7,14 @@ frappe.ui.form.on('Bohranzeige', {
         if ((frm.doc.object) && (!frm.doc.project)) {
             cur_frm.set_value("project", frm.doc.object);
         }
+        // filter print formats
+        cur_frm.fields_dict['print_format'].get_query = function(doc) {
+            return {
+                filters: {
+                    "doc_type": "Request for Public Area Use"
+                }
+            }
+        }
     },
     before_save: function(frm) {
         if (!frm.doc.object_name) {

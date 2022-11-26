@@ -57,7 +57,7 @@ tbody tr td:nth-child(even) {
   max-width: 230px;
   left: 0px;
   
-  height: 150px;
+  height: 140px;
   min-height: 150px;
   max-height: 150px;
   
@@ -141,8 +141,7 @@ tbody tr td:nth-child(even) {
     left: 0px;
     right: 0px;
     bottom: 0px;
-    border-radius: 20px;
-    padding: 5px;
+    padding: 2px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;

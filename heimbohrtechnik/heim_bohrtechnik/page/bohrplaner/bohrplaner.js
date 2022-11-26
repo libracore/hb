@@ -529,7 +529,6 @@ function dragLeave(ev) {
 function drag(ev) {
     ev.dataTransfer.setData('text', ev.target.id);
     var drag_element = document.getElementById(event.target.id);
-    drag_element.classList.add("hidden");
 }
 
 function drop(ev) {
@@ -538,7 +537,6 @@ function drop(ev) {
     $("[data-dropid='" + ev.target.dataset.dropid + "']").css("position", "relative");
     var dropped_element = document.getElementById(data);
     ev.target.appendChild(dropped_element);
-    dropped_element.classList.remove("hidden");
     $("[data-dropid='" + ev.target.dataset.dropid + "']").removeClass("ondragover");
     reshedule(data, $(ev.target).attr("data-bohrteam"), $(ev.target).attr("data-date"), $(ev.target).attr("data-vmnm"))
 }

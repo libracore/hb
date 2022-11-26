@@ -9,6 +9,7 @@
   "project",
   "from_date",
   "to_date",
+  "print_format",
   "sent",
   "column_break_3",
   "object",
@@ -40,7 +41,6 @@
    "default": "GB\u00f6G-.#####",
    "fieldname": "naming_series",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "label": "Naming Series",
    "options": "GB\u00f6G-.#####",
    "reqd": 1
@@ -49,6 +49,7 @@
    "fieldname": "project",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Project",
    "options": "Project",
    "reqd": 1
@@ -61,6 +62,7 @@
    "fetch_from": "project.object",
    "fieldname": "object",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "Object",
    "options": "Object",
    "read_only": 1
@@ -74,12 +76,16 @@
   {
    "fieldname": "object_street",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Object street",
    "read_only": 1
   },
   {
    "fieldname": "object_location",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Object location",
    "read_only": 1
   },
@@ -200,9 +206,15 @@
    "fieldname": "btn_from_owner",
    "fieldtype": "Button",
    "label": "From Owner"
+  },
+  {
+   "fieldname": "print_format",
+   "fieldtype": "Link",
+   "label": "Print Format",
+   "options": "Print Format"
   }
  ],
- "modified": "2022-11-08 10:09:58.726152",
+ "modified": "2022-11-26 11:46:45.711852",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Request for Public Area Use",

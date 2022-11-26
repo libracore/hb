@@ -2,6 +2,16 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Request for Public Area Use', {
+    refresh: function(frm) {
+        // filter print formats
+        cur_frm.fields_dict['print_format'].get_query = function(doc) {
+            return {
+                filters: {
+                    "doc_type": "Request for Public Area Use"
+                }
+            }
+        }
+    },
     object: function(frm) {
         if (frm.doc.object) {
             fetch_object_details(frm.doc.object, "Auftraggeber");
