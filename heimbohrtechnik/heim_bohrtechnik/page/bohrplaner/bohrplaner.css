@@ -155,7 +155,6 @@ tbody tr td:nth-child(even) {
     left: 0px;
     right: 0px;
     bottom: 0px;
-    border-radius: 20px;
     padding: 5px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -170,8 +169,7 @@ tbody tr td:nth-child(even) {
     left: 0px;
     right: 0px;
     bottom: 0px;
-    border-radius: 20px;
-    padding: 5px;
+    padding: 2px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
