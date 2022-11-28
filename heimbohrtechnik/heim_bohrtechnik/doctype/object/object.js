@@ -156,6 +156,8 @@ frappe.ui.form.on('Object', {
                     }
                 });
             }, __("More") );
+            // show siblings
+            check_display_siblings("Object", frm.doc.name);
         } else {
             if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
                 // fresh document, no addresses - load template

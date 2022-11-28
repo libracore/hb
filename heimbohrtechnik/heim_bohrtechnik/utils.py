@@ -616,3 +616,16 @@ def check_sent_public_access_requests():
             r.save()
             frappe.db.commit()
     return
+
+"""
+Check if there are projects/objects of the same root
+"""
+@frappe.whitelist()
+def has_siblings(doctype, name):
+    siblings = frappe.db.sql("""
+        SELECT `name`
+        FROM `tab{dt}`
+        WHERE 
+            `name` LIKE "{dn_pre}%"
+            AND `name` != "{dn}";""".format(dt=doctype, dn_pre=name[:8], dn=name), as_dict=True)
+    return siblings

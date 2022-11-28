@@ -601,3 +601,24 @@ function add_construction_site_description_button(frm, object) {
         }
     });
 }
+
+
+function check_display_siblings(dt, dn) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.has_siblings',
+        'args': {
+            'doctype': dt,
+            'name': dn
+        },
+        'callback': function(response) {
+            var siblings = response.message;
+            if (siblings.length > 0) {
+                var comment = __('This document has siblings') + ": ";
+                for (var i = 0; i < siblings.length; i++) {
+                    comment += "<a href='/desk#Form/" + dt + "/" + siblings[i].name + "'>" + siblings[i].name + "</a> ";
+                }
+                cur_frm.dashboard.add_comment(comment, 'blue', true);
+            }
+        }
+    });
+}

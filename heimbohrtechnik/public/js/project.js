@@ -92,6 +92,8 @@ frappe.ui.form.on('Project', {
             frm.add_custom_button(__("Bohrauftrag"), function() {
                 create_pdf(frm);
             }, __("PDFs"));
+            // show siblings
+            check_display_siblings("Project", frm.doc.name);
         } else {
             // new project: switch to internal and assign name/title
             frappe.call({

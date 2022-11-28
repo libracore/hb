@@ -180,6 +180,7 @@
 "DocType: Project","Project File created","Dossier erstellt"
 "DocType: Project","Drilling","Bohren"
 "DocType: Project","Drill order created","Bohrauftrag vorbereitet"
+"DocType: Project","This document has siblings","Dieses Dokument hat andere Teil-Dokumente"
 "DocType: Permit Type","Permit Type","Bewilligungsart"
 "DocType: Permit Type","Permit","Bewilligung"
 "DocType: Project","Permit number","Bewilligungsnummer"
