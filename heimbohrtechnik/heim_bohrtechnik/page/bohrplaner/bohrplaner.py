@@ -7,6 +7,7 @@ from frappe import _
 from frappe.utils.data import getdate, date_diff, add_days, get_datetime
 from datetime import date, timedelta
 from frappe.desk.form.load import get_attachments
+from frappe.utils import cint
 
 BG_GREEN = '#81d41a;'
 BG_ORANGE = '#ffbf00;'
@@ -14,6 +15,8 @@ BG_RED = '#ffa6a6;'
 BG_LIGHT_GREEN = '#eefdec;'
 BG_GREY = '#c4c7ca;'
 BG_BLUE = '#9dc7f0;'
+BG_WHITE = '#ffffff;'
+BG_BLACK = '#000000;'
 
 @frappe.whitelist()
 def get_overlay_datas(from_date, to_date):
@@ -293,7 +296,7 @@ def get_traffic_lights_indicator(project):
     
     # projeknummer [0]
     projeknummer_color = BG_RED                     # red
-    if int(project.termin_bestaetigt) == 1:
+    if cint(project.termin_bestaetigt) == 1:
         projeknummer_color = BG_ORANGE              # orange
     if project.sales_order:
         akonto = int(frappe.db.sql("""
@@ -348,7 +351,7 @@ def get_traffic_lights_indicator(project):
     if len(drill_notices) > 0:
         # has a drill notice: red
         objekt_strasse_color = BG_RED           # red
-    if int(project.drill_notice_sent) == 1:
+    if cint(project.drill_notice_sent) == 1:
         objekt_strasse_color = BG_GREEN         # green
     colors.append(objekt_strasse_color)
     
@@ -375,7 +378,7 @@ def get_traffic_lights_indicator(project):
     po = frappe.db.sql("""SELECT `per_received` FROM `tabPurchase Order` WHERE `object` = '{0}' AND `docstatus` = 1""".format(project.object), as_dict=True)
     if len(po) > 0:
         ews_details_color = BG_ORANGE               # yellow: ordered
-        if int(po[0].per_received) == 100:
+        if cint(po[0].per_received) == 100:
             ews_details_color = BG_GREEN            # green: available
     colors.append(ews_details_color)
     
@@ -391,8 +394,8 @@ def get_traffic_lights_indicator(project):
     
     # pneukran [9]
     pneukran_color = BG_GREY                        # grey
-    if int(project.crane_required) == 1:
-        if int(project.crane_organized) == 1:
+    if cint(project.crane_required) == 1:
+        if cint(project.crane_organized) == 1:
             pneukran_color = BG_GREEN               # green
         else:
             pneukran_color = BG_ORANGE              # orange
@@ -423,6 +426,11 @@ def get_traffic_lights_indicator(project):
                 strassensperrung_color = BG_GREEN       # green: permit available
     colors.append(strassensperrung_color)
     
+    # drill order [13]
+    kuerzel_pl_font_color = BG_BLACK
+    if cint(project.drill_order_created) == 1:
+        kuerzel_pl_font_color = BG_WHITE              # white
+    colors.append(kuerzel_pl_font_color)
     return colors
 
 def is_construction_site_inspected(project):

@@ -591,3 +591,28 @@ def check_infomails():
         infomail.insert(ignore_permissions=True)
     frappe.db.commit()
     return
+
+"""
+Check that public access requests that have been mailed are marked as sent
+"""
+def check_sent_public_access_requests():
+    unsent_requests = frappe.db.sql(""" 
+        SELECT `name`
+        FROM `tabRequest for Public Area Use`
+        WHERE `sent` = 0;""", as_dict=True)
+        
+    for request in unsent_requests:
+        communications = frappe.db.sql("""
+            SELECT 
+                `tabCommunication`.`name`
+            FROM `tabCommunication`
+            WHERE 
+                `reference_doctype` = "Request for Public Area Use"
+                AND `sent_or_received` = "Sent"
+                AND `reference_name` = "{request_name}";""".format(request_name=request['name']), as_dict=True)
+        if communications and len(communications) > 0:
+            r = frappe.get_doc("Request for Public Area Use", request['name'])
+            r.sent = 1
+            r.save()
+            frappe.db.commit()
+    return

@@ -16,6 +16,7 @@
  ],
  "fields": [
   {
+   "columns": 1,
    "fieldname": "ews_count",
    "fieldtype": "Int",
    "in_list_view": 1,
@@ -23,6 +24,7 @@
    "reqd": 1
   },
   {
+   "columns": 1,
    "description": "m",
    "fieldname": "ews_depth",
    "fieldtype": "Int",
@@ -53,6 +55,7 @@
   {
    "fieldname": "probe_type",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Probe Type",
    "options": "Probe Type"
   },
@@ -74,7 +77,7 @@
   }
  ],
  "istable": 1,
- "modified": "2021-10-07 15:43:47.102352",
+ "modified": "2022-11-28 10:39:07.721682",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object EWS",
