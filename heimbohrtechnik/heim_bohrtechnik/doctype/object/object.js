@@ -18,12 +18,11 @@ cur_frm.fields_dict.addresses.grid.get_field('party').get_query =
     function(frm, dt, dn) {   
         var filters = {};
         var v = locals[dt][dn];
-        if (v.dt === "Supplier") {
+        if (v.dt === "Supplier") {              // note: disabled controlled in server-side query
             filters = {
                 'query': 'heimbohrtechnik.heim_bohrtechnik.filters.supplier_by_capability',
                 'filters': {
-                    'capability': v.address_type,
-                    'disabled': 0
+                    'capability': v.address_type
                 }
             }
         } else {

@@ -11,6 +11,7 @@ def supplier_by_capability(doctype, txt, searchfield, start, page_len, filters):
            FROM `tabSupplier`
            LEFT JOIN `tabSupplier Activity` ON `tabSupplier Activity`.`parent` = `tabSupplier`.`name`
            WHERE `tabSupplier Activity`.`activity` = "{c}" 
+             AND `tabSupplier`.`disabled` = 0
              AND (`tabSupplier`.`supplier_name` LIKE "%{s}%" 
                   OR `tabSupplier`.`name` LIKE "%{s}%"
                   OR `tabSupplier`.`remarks` LIKE "%{s}%");
