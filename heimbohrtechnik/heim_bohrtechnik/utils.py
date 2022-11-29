@@ -492,7 +492,14 @@ def create_full_project_file(project):
                 get_bench_path(), 
                 get_files_path().split("/")[1],
                 plan.file))
-    
+    # ... and from permits
+    if p_doc.permits:
+        for permit in p_doc.permits:
+            if permit.file and permit.file[-4:].lower() == ".pdf":
+                merger.append("{0}/sites/{1}{2}".format(
+                    get_bench_path(), 
+                    get_files_path().split("/")[1],
+                    permit.file))
     
     tmp_name = "/tmp/project-dossier-{0}.pdf".format(uuid.uuid4().hex)
     merger.write(tmp_name)
