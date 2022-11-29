@@ -61,9 +61,9 @@ frappe.ui.form.on('Sales Order', {
         }
         if (frm.doc.docstatus === 1) {
             // add create akonto function
-            /* frm.add_custom_button(__("Akonto Invoice"),  function() { 
+            frm.add_custom_button(__("Akonto Invoice"),  function() { 
                 create_akonto(frm);
-            }, __("Create")); */
+            }, __("Create"));
             // add create blank invoice
             frm.add_custom_button(__("Nebenleistungsabrechnung"), function() {
                 create_blank_invoice(frm);

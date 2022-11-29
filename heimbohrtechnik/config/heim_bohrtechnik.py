@@ -96,6 +96,12 @@ def get_data():
                    "name": "Sales Invoice",
                    "label": _("Sales Invoice"),
                    "description": _("Sales Invoice")
+                },
+                {
+                    "type": "report",
+                    "name": "Offene Akonto-Rechnungen",
+                    "doctype": "Sales Invoice",
+                    "is_query_report": True,
                 }
             ]
         },

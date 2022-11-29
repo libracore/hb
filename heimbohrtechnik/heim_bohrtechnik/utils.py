@@ -91,7 +91,7 @@ def create_akonto(sales_order):
     akonto = get_mapped_doc("Sales Order", sales_order, 
         {
             "Sales Order": {
-                "doctype": "Akonto Invoice",
+                "doctype": "Sales Invoice",
                 "field_map": {
                     "name": "sales_order",
                     "net_total": "no_item_net_amount"
@@ -100,21 +100,66 @@ def create_akonto(sales_order):
             "Sales Taxes and Charges": {
                 "doctype": "Sales Taxes and Charges",
                 "add_if_empty": True
-            },
-            "Sales Order Item": {
-                "doctype": "Akonto Invoice Item"
-            },
-            "Markup Position": {
-                "doctype": "Markup Position"
-            },
-            "Discount Position": {
-                "doctype": "Discount Position"
             }
         }
     )
+    akonto.append('items', {
+        'item_code': frappe.get_value("Heim Settings", "Heim Settings", "akonto_item"),
+        'qty': 1,
+        'rate': 10000,
+        'sales_order': sales_order
+    })
+    akonto.title = "Akonto-Rechnung"
     akonto.set_missing_values()
     return akonto
 
+"""
+This function find applicable akonto invoices
+"""
+@frappe.whitelist()
+def get_available_akonto(sales_order):
+    from heimbohrtechnik.heim_bohrtechnik.report.offene_akonto_rechnungen.offene_akonto_rechnungen import get_data
+    akonto = get_data({'sales_order': sales_order})
+    return akonto
+
+"""
+This function will transfer the previous akonto amount to the revenue
+"""
+@frappe.whitelist()
+def book_akonto(sales_invoice, net_amount):
+    sinv = frappe.get_doc("Sales Invoice", sales_invoice)
+    akonto_item = frappe.get_doc("Item", frappe.get_value("Heim Settings", "Heim Settings", "akonto_item"))
+    akonto_account = None
+    for d in akonto_item.item_defaults:
+        if d.company == sinv.company:
+            akonto_account = d.income_account
+    if not akonto_account:
+        frappe.throw("Please define an income account for the Akonto Item")
+
+    revenue_account = frappe.get_value("Company", sinv.company, "default_income_account")
+    if not revenue_account:
+        frappe.throw("Please define a default revenue account for {0}".format(sinv.company))
+        
+    jv = frappe.get_doc({
+        'doctype': 'Journal Entry',
+        'posting_date': sinv.posting_date,
+        'company': sinv.company,
+        'accounts': [
+            {
+                'account': akonto_account,
+                'debit_in_account_currency': net_amount
+            },{
+                'account': revenue_account,
+                'credit_in_account_currency': net_amount
+            }
+        ],
+        'user_remark': "Akonto from {0}".format(sales_invoice)
+    })
+    jv.insert(ignore_permissions=True)
+    jv.submit()
+    frappe.db.commit()
+    return jv.name
+    
 @frappe.whitelist()
 def get_object_reference_address(object, address_type):
     entry = frappe.db.sql("""SELECT *
