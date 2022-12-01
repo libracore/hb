@@ -19,7 +19,9 @@
   "column_pricing",
   "selling_price_list",
   "section_invoicing",
-  "akonto_item"
+  "akonto_item",
+  "sec_buying",
+  "sondenparkplatz"
  ],
  "fields": [
   {
@@ -115,10 +117,21 @@
    "fieldtype": "Link",
    "label": "Staged cementation item",
    "options": "Item"
+  },
+  {
+   "fieldname": "sec_buying",
+   "fieldtype": "Section Break",
+   "label": "Buying"
+  },
+  {
+   "fieldname": "sondenparkplatz",
+   "fieldtype": "Link",
+   "label": "Sondenparkplatz",
+   "options": "Project"
   }
  ],
  "issingle": 1,
- "modified": "2022-08-25 13:58:43.371607",
+ "modified": "2022-12-01 20:08:27.464527",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",

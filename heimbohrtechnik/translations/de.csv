@@ -251,6 +251,7 @@
 "DocType: Drilling Team","Drilling Master","Bohrmeister"
 "DocType: Drilling Team","Drilling team type","Bohrteamart"
 "DocType: Probe Type","Probe Type","Sondenart"
+"DocType: Probe Type","Diameters","Durchmesser"
 "DocType: Signature","Signature","Unterschrift"
 "DocType: Signature","Signature type","Unterschriftenregelung"
 "DocType: Quotation","Created by","Erstellt durch"

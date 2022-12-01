@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 import frappe
+from frappe import _
 from frappe.model.mapper import get_mapped_doc
 from datetime import datetime, timedelta
 import json
@@ -681,3 +682,20 @@ def has_siblings(doctype, name):
             `name` LIKE "{dn_pre}%"
             AND `name` != "{dn}";""".format(dt=doctype, dn_pre=name[:8], dn=name), as_dict=True)
     return siblings
+
+"""
+This function move a purchase order to another project
+"""
+@frappe.whitelist()
+def reassign_project(purchase_order, old_project, new_project):
+    frappe.db.sql("""
+        UPDATE `tabPurchase Order Item`
+        SET `project` = "{project}"
+        WHERE `parent` = "{purchase_order}"
+          AND `project` = "{old_project}";
+    """.format(purchase_order=purchase_order, project=new_project, old_project=old_project))
+    
+    doc = frappe.get_doc("Purchase Order", purchase_order)
+    doc.add_comment("Info", _("Umbuchen von {0} auf {1}").format(old_project, new_project))
+    
+    return

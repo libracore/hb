@@ -144,6 +144,12 @@ def get_data():
                     "name": "Sondenbestellung",
                     "doctype": "Project",
                     "is_query_report": True,
+                },
+                {
+                    "type": "report",
+                    "name": "Sondenparkplatz",
+                    "doctype": "Purchase Order",
+                    "is_query_report": True,
                 }
             ]
         },
