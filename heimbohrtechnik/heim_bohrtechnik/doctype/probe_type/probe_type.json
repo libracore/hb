@@ -6,7 +6,8 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "title"
+  "title",
+  "diameters"
  ],
  "fields": [
   {
@@ -16,9 +17,14 @@
    "label": "Title",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "diameters",
+   "fieldtype": "Data",
+   "label": "Diameters"
   }
  ],
- "modified": "2021-06-28 21:17:15.022393",
+ "modified": "2022-12-01 19:33:39.829683",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Probe Type",

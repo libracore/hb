@@ -311,7 +311,10 @@ frappe.ui.form.on('Object EWS', {
     },
     pressure_level: function(frm, cdt, cdn) {
         update_ews_details(frm, cdt, cdn);
-    }    
+    }  ,
+    probe_type: function(frm, cdt, cdn) {
+        verify_diameter(frm, cdt, cdn);
+    } 
 });
 
 frappe.ui.form.on('Object Address', {
@@ -697,4 +700,24 @@ function set_checklist_supplier(frm, activity_type, supplier) {
             'supplier': first_supplier
         }
     });
+}
+
+function verify_diameter(frm, cdt, cdn) {
+    var row = locals[cdt][cdn];
+    if ((row.probe_type) && (row.ews_diameter)) {
+        // fetch possible diameters
+        frappe.call({
+            'method': "frappe.client.get",
+            'args': {
+                'doctype': "Probe Type",
+                'name': row.probe_type
+            },
+            'callback': function(response) {
+                var probe_type = response.message;
+                if ((probe_type.diameters) && (!probe_type.diameters.includes(row.ews_diameter.toString()))) {
+                    frappe.msgprint("Vorsicht: dieser Durchmesser ist bei dem Sondentyp nicht verfügbar.");
+                }
+            }
+        });
+    }
 }
