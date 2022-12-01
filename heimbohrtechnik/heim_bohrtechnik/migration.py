@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import frappe
 from heimbohrtechnik.heim_bohrtechnik.dataparser import get_projects
 from heimbohrtechnik.heim_bohrtechnik.utils import update_project
-from erpnextswiss.scripts.crm_tools import get_primary_supplier_address
+from erpnextswiss.scripts.crm_tools import get_primary_supplier_address, get_primary_customer_address
 from datetime import datetime
 import cgi
 
@@ -389,6 +389,17 @@ def set_supplier_first_address():
             s.hauptadresse = "{0}, {1} {2}".format(address.address_line1 or "", address.pincode or "", address.city or "")
             s.save()
             print("Updated {0}".format(s.name))
+    return
+    
+def set_customer_first_address():
+    customers = frappe.get_all("Customer", filters={'disabled': 0}, fields=['name'])
+    for customer in customers:
+        c = frappe.get_doc("Customer", customer['name'])
+        address = get_primary_customer_address(c.name)
+        if address:
+            c.hauptadresse = "{0}, {1} {2}".format(address.address_line1 or "", address.pincode or "", address.city or "")
+            c.save()
+            print("Updated {0}".format(c.name))
     return
 
 def update_object_lat_long():

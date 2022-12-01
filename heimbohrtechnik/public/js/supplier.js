@@ -29,6 +29,7 @@ function set_first_address(frm) {
         'args': {
             'supplier': frm.doc.name
         },
+        'async': false,
         'callback': function(response) {
             if (response.message) {
                 var address = response.message;
