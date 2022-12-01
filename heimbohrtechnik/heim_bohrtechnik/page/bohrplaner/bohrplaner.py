@@ -80,9 +80,9 @@ def get_project_data(p, dauer):
     pneukran = ''
     for cl_entry in project.checklist:
         if cl_entry.activity == 'Schlammentsorgung':
-            saugauftrag = cl_entry.supplier_name
+            saugauftrag = cl_entry.supplier_short_display or cl_entry.supplier_name
         if cl_entry.activity == 'Kran':
-            pneukran = cl_entry.supplier_name
+            pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name
     # carrymax from construction site
     if len(construction_sites) > 0:
         if not pneukran:
