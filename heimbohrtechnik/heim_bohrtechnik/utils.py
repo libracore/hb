@@ -212,35 +212,24 @@ def get_object_geographic_environment(object_name=None, radius=0.1):
     
     data['environment'] = frappe.db.sql("""
         SELECT 
-            `name` AS `object`, 
-            `gps_lat` AS `gps_lat`, 
-            `gps_long` AS `gps_long`,
-            (SELECT `rate`
-             FROM `tabQuotation Item`
-             LEFT JOIN `tabQuotation` ON `tabQuotation`.`name` = `tabQuotation Item`.`parent`
-             WHERE `tabQuotation`.`docstatus` = 1
-               AND `tabQuotation`.`object` = `tabObject`.`name`
-               AND `tabQuotation Item`.`item_code` = "1.01.03.01"
-             ORDER By `tabQuotation`.`modified` DESC
-             LIMIT 1) AS `rate`,
-            (SELECT `name`
-             FROM `tabSales Order`
-             WHERE `tabSales Order`.`docstatus` = 1
-               AND `tabSales Order`.`object` = `tabObject`.`name`
-             ORDER By `tabSales Order`.`modified` DESC
-             LIMIT 1) AS `sales_order`
+            `tabObject`.`name` AS `object`, 
+            `tabObject`.`gps_lat` AS `gps_lat`, 
+            `tabObject`.`gps_long` AS `gps_long`,
+            `tabObject`.`qtn_meter_rate` AS `rate`,
+            `tabProject`.`sales_order` AS `sales_order`
         FROM `tabObject`
+        LEFT JOIN `tabProject` ON `tabProject`.`object` = `tabObject`.`name`
         WHERE 
-            `gps_lat` >= ({gps_lat} - {lat_offset})
-            AND `gps_lat` <= ({gps_lat} + {lat_offset})
-            AND `gps_long` >= ({gps_long} - {long_offset})
-            AND `gps_long` <= ({gps_long} + {long_offset})
-            AND `name` != "{reference}";
+            `tabObject`.`gps_lat` >= ({gps_lat} - {lat_offset})
+            AND `tabObject`.`gps_lat` <= ({gps_lat} + {lat_offset})
+            AND `tabObject`.`gps_long` >= ({gps_long} - {long_offset})
+            AND `tabObject`.`gps_long` <= ({gps_long} + {long_offset})
+            AND `tabObject`.`name` != "{reference}";
     """.format(reference=object_name, gps_lat=data['gps_lat'], lat_offset=float(radius),
         gps_long=data['gps_long'], long_offset=(2 * float(radius))), as_dict=True)
     
     return data
-    
+
 """
 Prepare a purchase order for the probes for an object
 """

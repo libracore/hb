@@ -125,13 +125,14 @@ scheduler_events = {
      "daily": [
          "heimbohrtechnik.heim_bohrtechnik.data_maintenance.link_sales_orders_to_projects",
          "heimbohrtechnik.heim_bohrtechnik.data_maintenance.remove_bohrplaner_prints"
+     ],
+     "weekly": [
+         "heimbohrtechnik.heim_bohrtechnik.migration.update_object_meter_rates"
      ]
 #     "hourly": [
 #         "heimbohrtechnik.tasks.hourly"
 #     ],
-#     "weekly": [
-#         "heimbohrtechnik.tasks.weekly"
-#     ]
+#     
 #     "monthly": [
 #         "heimbohrtechnik.tasks.monthly"
 #     ]

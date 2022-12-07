@@ -90,6 +90,7 @@ frappe.object_overview = {
                 if (geo) {
                     console.log(geo);
                     for (var i = 0; i < geo.environment.length; i++) {
+                        
                         // set icon color
                         var icon = grey_icon;
                         if (geo.environment[i].sales_order) {
@@ -102,6 +103,7 @@ frappe.object_overview = {
                             .bindPopup(get_popup_str(geo.environment[i].object, 
                                 rate=geo.environment[i].rate,
                                 sales_order=geo.environment[i].sales_order));
+
                     }
                 }
                 

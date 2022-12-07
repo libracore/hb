@@ -44,6 +44,7 @@
   "drilling_meter",
   "expected_mud",
   "delivered_mud",
+  "qtn_meter_rate",
   "section_ews_details",
   "ews_details",
   "ews_specification",
@@ -403,9 +404,15 @@
    "fieldname": "gps_checked",
    "fieldtype": "Check",
    "label": "GPS checked"
+  },
+  {
+   "fieldname": "qtn_meter_rate",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "Quotation Meter Rate"
   }
  ],
- "modified": "2022-11-22 10:52:49.506634",
+ "modified": "2022-12-07 20:24:58.133360",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",

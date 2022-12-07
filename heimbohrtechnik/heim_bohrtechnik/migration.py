@@ -461,3 +461,27 @@ def find_manager(short_name):
         return matches[0]['name']
     else: 
         return None
+
+"""
+This function will update the meter rates of each object
+"""
+def update_object_meter_rates():
+    sql_query = """
+        SELECT `rate`
+        FROM `tabQuotation Item`
+        LEFT JOIN `tabQuotation` ON `tabQuotation`.`name` = `tabQuotation Item`.`parent`
+        WHERE `tabQuotation`.`docstatus` = 1
+        AND `tabQuotation`.`object` = "{object}"
+        AND `tabQuotation Item`.`item_code` = "1.01.03.01"
+        ORDER BY `tabQuotation`.`modified` DESC
+        LIMIT 1;"""
+    objects = frappe.get_all("Object", fields=['name', 'qtn_meter_rate'])
+    for o in objects:
+        rate = frappe.db.sql(sql_query.replace("{object}", o['name']), as_dict=True)
+        if len(rate) > 0 and rate[0]['rate'] != o['qtn_meter_rate']:
+            print("Updating {0} from {1} to {2}...".format(o['name'], o['qtn_meter_rate'], rate[0]['rate']))
+            o_doc = frappe.get_doc("Object", o['name'])
+            o_doc.qtn_meter_rate = rate[0]['rate']
+            o_doc.save()
+            frappe.db.commit()
+    return
