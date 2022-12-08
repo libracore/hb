@@ -19,9 +19,13 @@ BG_WHITE = '#ffffff;'
 BG_BLACK = '#000000;'
 
 @frappe.whitelist()
-def get_overlay_datas(from_date, to_date):
+def get_overlay_datas(from_date, to_date, customer=None):
     projects = []
     
+    customer_filter = ""
+    if customer:
+        customer_filter =  """ AND `tabProject`.`customer` = "{customer}" """.format(customer=customer)
+        
     matching_projects = frappe.db.sql("""
         SELECT 
             `name`, 
@@ -38,7 +42,8 @@ def get_overlay_datas(from_date, to_date):
              OR (`expected_end_date` BETWEEN '{from_date}' AND '{to_date}')
              OR (`expected_start_date` < '{from_date}' AND `expected_end_date` > '{to_date}')
             )
-        """.format(from_date=from_date, to_date=to_date), as_dict=True)
+          {customer_filter}
+        """.format(from_date=from_date, to_date=to_date, customer_filter=customer_filter), as_dict=True)
 
     for p in matching_projects:
         correction = 0

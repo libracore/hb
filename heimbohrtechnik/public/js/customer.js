@@ -19,6 +19,15 @@ frappe.ui.form.on('Customer', {
         if (!frm.doc.__islocal) {
             set_first_address(frm);
         }
+    },
+    refresh(frm) {
+        frm.add_custom_button("<i class='fa fa-calendar'></i>  Link", function() {
+            get_calendar_link(frm);
+        }, __("Bohrplan") );
+        frm.add_custom_button("Löschen", function() {
+            cur_frm.set_value("key", null);
+            cur_frm.save();
+        }, __("Bohrplan") );
     }
 });
 
@@ -37,4 +46,37 @@ function set_first_address(frm) {
             }
         }
     });
+}
+
+function get_calendar_link(frm) {
+    if (!frm.doc.key) {
+        frappe.call({
+            'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_key',
+            'async': false,
+            'callback': function(response) {
+                if (response.message) {
+                    cur_frm.set_value('key', response.message);
+                    copy_calendar_link(true);
+                    cur_frm.save();
+                }
+            }
+        });
+    } else {
+        copy_calendar_link(true);
+    }
+}
+
+function copy_calendar_link(as_link) {
+    var link = window.location.origin + "/bohrplan?customer=" + cur_frm.doc.name
+        + "&key=" + cur_frm.doc.key; 
+    if (as_link) {
+        navigator.clipboard.writeText(link).then(function() {
+            frappe.show_alert( __("Link in der Zwischenablage") );
+          }, function() {
+             frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
+        });
+    } else {
+        // open as QR code
+        window.open("https://data.libracore.ch/phpqrcode/api/qrcode.php?content=" + encodeURIComponent(link) + "&ecc=H&size=6&frame=2", '_blank').focus();
+    }
 }
