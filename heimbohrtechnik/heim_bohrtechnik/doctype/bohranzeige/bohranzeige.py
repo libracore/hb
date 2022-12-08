@@ -7,6 +7,7 @@ import frappe
 from frappe.model.document import Document
 from erpnextswiss.erpnextswiss.attach_pdf import execute
 from frappe.desk.form.load import get_attachments
+from frappe.utils.file_manager import remove_file
 
 class Bohranzeige(Document):
     def get_autocomplete_data(self, project):
@@ -31,9 +32,14 @@ class Bohranzeige(Document):
 
     def before_save(self):
         # create pdf
-        self.attach_pdf()
+        if frappe.db.exists("Bohranzeige", self.name):
+            self.attach_pdf()
         return
     
+    def after_insert(self):
+        # initial pdf
+        self.attach_pdf()
+        return
     
     def attach_pdf(self):
         # check if this is already attached
