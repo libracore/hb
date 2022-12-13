@@ -1,0 +1,101 @@
+<div id="bohrplan_wrapper" style="position: relative;">
+    <table id="bohrplan_table">
+        <thead>
+            <tr>
+                <th rowspan="2" class="sticky-corner calendar-grid-header">
+                    <div class="form-group">
+                        <label for="from">{{ __("From") }}</label>
+                        <input type="date" class="form-control" id="from">
+                    </div>
+                    <div class="form-group">
+                        <label for="to">{{ __("To") }}</label>
+                        <input type="date" class="form-control" id="to">
+                    </div> 
+                </th>
+                {% for day in days %}
+                    <th colspan="2" class="sticky-top calendar-grid-header no-border-bottom
+                        {% if day == today %}today{% endif %}
+                        {% if (in_list(weekend, day)) %}weekend{% endif %}">
+                        KW {{ kw_list[day] }}<br>{{ day }}<br>({{ __(day_list[day]) }})
+                    </th>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for day in days %}
+                    <th class="sticky-top-small calendar-grid-header no-border-top-rigth-dotted
+                        {% if day == today %}today{% endif %}
+                        {% if (in_list(weekend, day)) %}weekend{% endif %}">
+                        VM</th>
+                    <th class="sticky-top-small calendar-grid-header no-border-top-left-dotted
+                        {% if day == today %}today{% endif %}
+                        {% if (in_list(weekend, day)) %}weekend{% endif %}">
+                        NM</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for drilling_team in drilling_teams %}
+                {% if not print_view || drilling_team.drilling_team_type == "Bohrteam" %}
+                <tr>
+                    <td class="sticky-left">
+                        <b>{{ drilling_team.title }} - {{ drilling_team.drilling_team_type }}</b><br>
+                        {% if drilling_team.drm %}{{ drilling_team.drm }}, {% endif %}{% if drilling_team.drt %}{{ drilling_team.drt }}{% endif %}<br>
+                        {% if drilling_team.truck_and_weight %}{{ drilling_team.truck_and_weight }}<br>{% endif %}
+                        {% if drilling_team.has_trough == 1 %}
+                            <a class="drilling_team-tooltip" href="/desk#bohrplaner">
+                                <img src="/assets/heimbohrtechnik/images/trough.png" width="24">
+                                <span class="drilling_team-tooltiptext">{{ drilling_team.trough_details }}</span>
+                            </a>
+                        {% endif %} {% if drilling_team.has_crane == 1 %}
+                            <a class="drilling_team-tooltip" href="/desk#bohrplaner">
+                                <img src="/assets/heimbohrtechnik/images/crane_hook.png" width="24">
+                                <span class="drilling_team-tooltiptext">{{ drilling_team.crane_details }}</span>
+                            </a>
+                        {% endif %}
+                        {% if drilling_team.phone %}
+                            <a class="drilling_team-tooltip" href="tel:{{ drilling_team.phone }}">
+                                <img src="/assets/heimbohrtechnik/images/phone.png" width="24">
+                                <span class="drilling_team-tooltiptext">{{ drilling_team.phone }}</span>
+                            </a>
+                        {% endif %}
+                    </td>
+                    {% for day in days %}
+                        <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                            data-bohrteam="{{ drilling_team.team_id }}"
+                            data-date="{{ day }}"
+                            data-vmnm="vm"
+                            ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"
+                            data-dropid="{{ drilling_team.team_id }}-{{ day }}-vm"></td>
+                        <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                            data-bohrteam="{{ drilling_team.team_id }}"
+                            data-date="{{ day }}"
+                            data-vmnm="nm"
+                            ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"
+                            data-dropid="{{ drilling_team.team_id }}-{{ day }}-nm"></td>
+                    {% endfor %}
+                </tr>
+                {% endif %}
+            {% endfor %}
+            <!-- Absences -->
+            {% if not print_view %}
+            <tr>
+                <td class="sticky-left">
+                    <b>{{ __("Absences") }}</b>
+                </td>
+                {% for day in days %}
+                    <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                        data-bohrteam="absences"
+                        data-date="{{ day }}"
+                        data-vmnm="vm">
+                    </td>
+                    <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                        data-bohrteam="absences"
+                        data-date="{{ day }}"
+                        data-vmnm="nm">
+                    </td>
+                {% endfor %}
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>

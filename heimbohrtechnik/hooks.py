@@ -21,7 +21,7 @@ app_include_js = [
     ]
 # include js, css files in header of web template
 # web_include_css = "/assets/heimbohrtechnik/css/heimbohrtechnik.css"
-# web_include_js = "/assets/heimbohrtechnik/js/heimbohrtechnik.js"
+web_include_js = "/assets/js/heim_templates.js"
 
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
