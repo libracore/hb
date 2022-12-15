@@ -439,7 +439,8 @@ def get_next_internal_project_number():
     last_internal_project = frappe.db.sql("""
         SELECT MAX(`name`) AS `name`
         FROM `tabProject`
-        WHERE `project_type` = "Internal";
+        WHERE `project_type` = "Internal"
+          AND LENGTH(`name`) = 12;
     """, as_dict=True)
     if len(last_internal_project) == 0:
         return "P-INT-000001"
