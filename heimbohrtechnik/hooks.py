@@ -21,7 +21,7 @@ app_include_js = [
     ]
 # include js, css files in header of web template
 # web_include_css = "/assets/heimbohrtechnik/css/heimbohrtechnik.css"
-# web_include_js = "/assets/heimbohrtechnik/js/heimbohrtechnik.js"
+web_include_js = "/assets/js/heim_templates.js"
 
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
@@ -54,6 +54,7 @@ jenv = {
     "methods": [
         "get_object_reference_address:heimbohrtechnik.heim_bohrtechnik.utils.get_object_reference_address",
         "get_object_address:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_object_address",
+        "get_object_addresses:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_object_addresses",
         "get_checklist_details:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_checklist_details",
         "get_permit_details:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_permit_details"
     ]
@@ -107,30 +108,31 @@ jenv = {
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-#     "*": {
-#         "on_update": "method",
-#         "on_cancel": "method",
-#         "on_trash": "method"
-#    }
-# }
+doc_events = {
+    "Project": {
+         "before_save": "heimbohrtechnik.heim_bohrtechnik.project.before_save"
+    }
+ }
 
 # Scheduled Tasks
 # ---------------
 
 scheduler_events = {
-#     "all": [
-#         "heimbohrtechnik.tasks.all"
-#     ],
+     "all": [
+         "heimbohrtechnik.heim_bohrtechnik.utils.check_infomails",
+         "heimbohrtechnik.heim_bohrtechnik.utils.check_sent_public_access_requests"
+     ],
      "daily": [
-         "heimbohrtechnik.heim_bohrtechnik.data_maintenance.link_sales_orders_to_projects"
+         "heimbohrtechnik.heim_bohrtechnik.data_maintenance.link_sales_orders_to_projects",
+         "heimbohrtechnik.heim_bohrtechnik.data_maintenance.remove_bohrplaner_prints"
+     ],
+     "weekly": [
+         "heimbohrtechnik.heim_bohrtechnik.migration.update_object_meter_rates"
      ]
 #     "hourly": [
 #         "heimbohrtechnik.tasks.hourly"
 #     ],
-#     "weekly": [
-#         "heimbohrtechnik.tasks.weekly"
-#     ]
+#     
 #     "monthly": [
 #         "heimbohrtechnik.tasks.monthly"
 #     ]
@@ -159,5 +161,6 @@ scheduler_events = {
 after_migrate = [
     'heimbohrtechnik.heim_bohrtechnik.updater.cleanup_languages',
     'heimbohrtechnik.heim_bohrtechnik.updater.assert_kg',
-    'heimbohrtechnik.heim_bohrtechnik.updater.diable_prepared_report'
+    'heimbohrtechnik.heim_bohrtechnik.updater.diable_prepared_report',
+    'heimbohrtechnik.heim_bohrtechnik.updater.create_folder'
 ]

@@ -3,11 +3,15 @@
 
 from __future__ import unicode_literals
 import frappe
+from frappe import _
 from frappe.model.mapper import get_mapped_doc
 from datetime import datetime, timedelta
 import json
 from frappe.utils import cint
 from erpnextswiss.erpnextswiss.utils import get_numeric_part
+from erpnextswiss.erpnextswiss.attach_pdf import execute
+from frappe.desk.form.load import get_attachments
+from frappe.utils.file_manager import remove_file
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -88,7 +92,7 @@ def create_akonto(sales_order):
     akonto = get_mapped_doc("Sales Order", sales_order, 
         {
             "Sales Order": {
-                "doctype": "Akonto Invoice",
+                "doctype": "Sales Invoice",
                 "field_map": {
                     "name": "sales_order",
                     "net_total": "no_item_net_amount"
@@ -97,21 +101,66 @@ def create_akonto(sales_order):
             "Sales Taxes and Charges": {
                 "doctype": "Sales Taxes and Charges",
                 "add_if_empty": True
-            },
-            "Sales Order Item": {
-                "doctype": "Akonto Invoice Item"
-            },
-            "Markup Position": {
-                "doctype": "Markup Position"
-            },
-            "Discount Position": {
-                "doctype": "Discount Position"
             }
         }
     )
+    akonto.append('items', {
+        'item_code': frappe.get_value("Heim Settings", "Heim Settings", "akonto_item"),
+        'qty': 1,
+        'rate': 10000,
+        'sales_order': sales_order
+    })
+    akonto.title = "Akonto-Rechnung"
     akonto.set_missing_values()
     return akonto
 
+"""
+This function find applicable akonto invoices
+"""
+@frappe.whitelist()
+def get_available_akonto(sales_order):
+    from heimbohrtechnik.heim_bohrtechnik.report.offene_akonto_rechnungen.offene_akonto_rechnungen import get_data
+    akonto = get_data({'sales_order': sales_order})
+    return akonto
+
+"""
+This function will transfer the previous akonto amount to the revenue
+"""
+@frappe.whitelist()
+def book_akonto(sales_invoice, net_amount):
+    sinv = frappe.get_doc("Sales Invoice", sales_invoice)
+    akonto_item = frappe.get_doc("Item", frappe.get_value("Heim Settings", "Heim Settings", "akonto_item"))
+    akonto_account = None
+    for d in akonto_item.item_defaults:
+        if d.company == sinv.company:
+            akonto_account = d.income_account
+    if not akonto_account:
+        frappe.throw("Please define an income account for the Akonto Item")
+
+    revenue_account = frappe.get_value("Company", sinv.company, "default_income_account")
+    if not revenue_account:
+        frappe.throw("Please define a default revenue account for {0}".format(sinv.company))
+        
+    jv = frappe.get_doc({
+        'doctype': 'Journal Entry',
+        'posting_date': sinv.posting_date,
+        'company': sinv.company,
+        'accounts': [
+            {
+                'account': akonto_account,
+                'debit_in_account_currency': net_amount
+            },{
+                'account': revenue_account,
+                'credit_in_account_currency': net_amount
+            }
+        ],
+        'user_remark': "Akonto from {0}".format(sales_invoice)
+    })
+    jv.insert(ignore_permissions=True)
+    jv.submit()
+    frappe.db.commit()
+    return jv.name
+    
 @frappe.whitelist()
 def get_object_reference_address(object, address_type):
     entry = frappe.db.sql("""SELECT *
@@ -163,35 +212,24 @@ def get_object_geographic_environment(object_name=None, radius=0.1):
     
     data['environment'] = frappe.db.sql("""
         SELECT 
-            `name` AS `object`, 
-            `gps_lat` AS `gps_lat`, 
-            `gps_long` AS `gps_long`,
-            (SELECT `rate`
-             FROM `tabQuotation Item`
-             LEFT JOIN `tabQuotation` ON `tabQuotation`.`name` = `tabQuotation Item`.`parent`
-             WHERE `tabQuotation`.`docstatus` = 1
-               AND `tabQuotation`.`object` = `tabObject`.`name`
-               AND `tabQuotation Item`.`item_code` = "1.01.03.01"
-             ORDER By `tabQuotation`.`modified` DESC
-             LIMIT 1) AS `rate`,
-            (SELECT `name`
-             FROM `tabSales Order`
-             WHERE `tabSales Order`.`docstatus` = 1
-               AND `tabSales Order`.`object` = `tabObject`.`name`
-             ORDER By `tabSales Order`.`modified` DESC
-             LIMIT 1) AS `sales_order`
+            `tabObject`.`name` AS `object`, 
+            `tabObject`.`gps_lat` AS `gps_lat`, 
+            `tabObject`.`gps_long` AS `gps_long`,
+            `tabObject`.`qtn_meter_rate` AS `rate`,
+            `tabProject`.`sales_order` AS `sales_order`
         FROM `tabObject`
+        LEFT JOIN `tabProject` ON `tabProject`.`object` = `tabObject`.`name`
         WHERE 
-            `gps_lat` >= ({gps_lat} - {lat_offset})
-            AND `gps_lat` <= ({gps_lat} + {lat_offset})
-            AND `gps_long` >= ({gps_long} - {long_offset})
-            AND `gps_long` <= ({gps_long} + {long_offset})
-            AND `name` != "{reference}";
+            `tabObject`.`gps_lat` >= ({gps_lat} - {lat_offset})
+            AND `tabObject`.`gps_lat` <= ({gps_lat} + {lat_offset})
+            AND `tabObject`.`gps_long` >= ({gps_long} - {long_offset})
+            AND `tabObject`.`gps_long` <= ({gps_long} + {long_offset})
+            AND `tabObject`.`name` != "{reference}";
     """.format(reference=object_name, gps_lat=data['gps_lat'], lat_offset=float(radius),
         gps_long=data['gps_long'], long_offset=(2 * float(radius))), as_dict=True)
     
     return data
-    
+
 """
 Prepare a purchase order for the probes for an object
 """
@@ -448,3 +486,206 @@ def get_next_internal_project_number():
         n = int(get_numeric_part(last_internal_project[0]['name']))
         return "P-INT-{num:06d}".format(num=n+1)
         
+"""
+Update attached drilling instruction pdf
+"""
+@frappe.whitelist()
+def update_attached_project_pdf(project):
+    # check if this is already attached
+    attachments = get_attachments("Project", project)
+    for a in attachments:
+        if a.file_name == "{0}.pdf".format(project):
+            remove_file(a.name, "Project", project)
+    # create and attach
+    execute("Project", project, title=project, print_format="Bohrauftrag")
+    return
+
+""" 
+Create a full project file
+"""
+@frappe.whitelist()
+def create_full_project_file(project):
+    import uuid
+    from frappe.utils import get_bench_path, get_files_path
+    from PyPDF2 import PdfFileMerger
+    from frappe.utils.file_manager import save_file
+    from erpnextswiss.erpnextswiss.attach_pdf import create_folder
+    
+    # first part: order
+    html = frappe.get_print("Project", project, print_format="Bohrauftrag")
+    pdf = frappe.utils.pdf.get_pdf(html)
+    pdf_file = "/tmp/{0}.pdf".format(uuid.uuid4().hex)
+    with open(pdf_file, mode='wb') as file:
+        file.write(pdf)
+    # create merger
+    merger = PdfFileMerger()
+    merger.append(pdf_file)
+    # other pages from construction plans
+    p_doc = frappe.get_doc("Project", project)
+    if p_doc.plans:
+        for plan in p_doc.plans:
+            merger.append("{0}/sites/{1}{2}".format(
+                get_bench_path(), 
+                get_files_path().split("/")[1],
+                plan.file))
+    # ... and from permits
+    if p_doc.permits:
+        for permit in p_doc.permits:
+            if permit.file and permit.file[-4:].lower() == ".pdf":
+                merger.append("{0}/sites/{1}{2}".format(
+                    get_bench_path(), 
+                    get_files_path().split("/")[1],
+                    permit.file))
+    
+    tmp_name = "/tmp/project-dossier-{0}.pdf".format(uuid.uuid4().hex)
+    merger.write(tmp_name)
+    merger.close()
+    cleanup(pdf_file)
+    
+    # attach
+    # check if this is already attached
+    target_name = "Dossier_{name}.pdf".format(name=project.replace(" ", "-").replace("/", "-"))
+    attachments = get_attachments("Project", project)
+    for a in attachments:
+        if a.file_name == target_name:
+            remove_file(a.name, "Project", project)
+    
+    with open(tmp_name, mode='rb') as file:
+        combined_pdf = file.read()
+    cleanup(tmp_name)
+    
+    # create and attach
+    folder = create_folder("Dossier", "Home")
+    save_file(target_name, combined_pdf, "Project", project, folder, is_private=True)
+
+    # set project file as created
+    if not p_doc.project_file_created:
+        p_doc.project_file_created = 1
+        p_doc.save(ignore_permissions=True)
+        frappe.db.commit()
+        
+    return
+
+def cleanup(fname):
+    import os
+    if os.path.exists(fname):
+        os.remove(fname)
+    
+"""
+Return other invoiced markup/discounts in the same sales order
+"""
+@frappe.whitelist()
+def get_invoiced_markup_discounts(sales_order):
+    positions = frappe.db.sql("""
+        SELECT `description`, `percent`, `amount`, `parent`
+        FROM `tabMarkup Position`
+        WHERE `parent` IN 
+            (SELECT `parent`
+            FROM `tabSales Invoice Item` 
+            WHERE `sales_order` = "{sales_order}"
+              AND `docstatus` < 2
+              AND `percent` = 0
+            GROUP BY `parent`)
+        UNION SELECT `description`, `percent`, `amount`, `parent`
+        FROM `tabDiscount Position`
+        WHERE `parent` IN 
+            (SELECT `parent`
+            FROM `tabSales Invoice Item` 
+            WHERE `sales_order` = "AB-2200469"
+              AND `docstatus` < 2
+              AND `percent` = 0
+            GROUP BY `parent`);""".format(sales_order=sales_order), as_dict=True)
+    return positions
+
+"""
+Find conversations from Infomails and create infomail records
+"""
+def check_infomails():
+    new_communications = frappe.db.sql("""
+        SELECT 
+            `tabCommunication`.`name`,
+            `tabCommunication`.`subject`,
+            `tabCommunication`.`sender`,
+            `tabCommunication`.`recipients`,
+            `tabCommunication`.`cc`,
+            `tabCommunication`.`reference_name` AS `project`,
+            `tabCommunication`.`content`,
+            `tabCommunication`.`communication_date`
+        FROM `tabCommunication`
+        LEFT JOIN `tabInfomail` ON `tabInfomail`.`communication` = `tabCommunication`.`name`
+        WHERE 
+            `reference_doctype` = "Project"
+            AND `sent_or_received` = "Sent"
+            AND `tabInfomail`.`name` IS NULL
+            AND `subject` LIKE "Bohrstart%";
+    """, as_dict=True)
+    for c in new_communications:
+        # this communication has not been linked yet - create infomal record
+        infomail = frappe.get_doc({
+            'doctype': 'Infomail',
+            'project': c['project'],
+            'date': c['communication_date'],
+            'sender': c['sender'],
+            'recipients': c['recipients'],
+            'cc': c['cc'],
+            'content': c['content'],
+            'communication': c['name']
+        })
+        infomail.insert(ignore_permissions=True)
+    frappe.db.commit()
+    return
+
+"""
+Check that public access requests that have been mailed are marked as sent
+"""
+def check_sent_public_access_requests():
+    unsent_requests = frappe.db.sql(""" 
+        SELECT `name`
+        FROM `tabRequest for Public Area Use`
+        WHERE `sent` = 0;""", as_dict=True)
+        
+    for request in unsent_requests:
+        communications = frappe.db.sql("""
+            SELECT 
+                `tabCommunication`.`name`
+            FROM `tabCommunication`
+            WHERE 
+                `reference_doctype` = "Request for Public Area Use"
+                AND `sent_or_received` = "Sent"
+                AND `reference_name` = "{request_name}";""".format(request_name=request['name']), as_dict=True)
+        if communications and len(communications) > 0:
+            r = frappe.get_doc("Request for Public Area Use", request['name'])
+            r.sent = 1
+            r.save()
+            frappe.db.commit()
+    return
+
+"""
+Check if there are projects/objects of the same root
+"""
+@frappe.whitelist()
+def has_siblings(doctype, name):
+    siblings = frappe.db.sql("""
+        SELECT `name`
+        FROM `tab{dt}`
+        WHERE 
+            `name` LIKE "{dn_pre}%"
+            AND `name` != "{dn}";""".format(dt=doctype, dn_pre=name[:8], dn=name), as_dict=True)
+    return siblings
+
+"""
+This function move a purchase order to another project
+"""
+@frappe.whitelist()
+def reassign_project(purchase_order, old_project, new_project):
+    frappe.db.sql("""
+        UPDATE `tabPurchase Order Item`
+        SET `project` = "{project}"
+        WHERE `parent` = "{purchase_order}"
+          AND `project` = "{old_project}";
+    """.format(purchase_order=purchase_order, project=new_project, old_project=old_project))
+    
+    doc = frappe.get_doc("Purchase Order", purchase_order)
+    doc.add_comment("Info", _("Umbuchen von {0} auf {1}").format(old_project, new_project))
+    
+    return

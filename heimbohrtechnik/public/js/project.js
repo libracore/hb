@@ -2,8 +2,13 @@
 try {
     cur_frm.dashboard.add_transactions([
         {
+            'label': 'Documents',
+            'items': ['Construction Site Description', 'Bohranzeige', 'Request for Public Area Use', 'Infomail']
+        },
+        {
             'label': 'Drilling',
-            'items': ['Construction Site Description', 'Bohranzeige', 'Construction Site Delivery', 'Subcontracting Order']
+            'items': ['Construction Site Delivery', 'Subcontracting Order', 'Request for Public Area Use', 'Layer Directory']
+
         }
     ]);
 } catch { /* do nothing for older versions */ }
@@ -29,6 +34,22 @@ frappe.ui.form.on('Project', {
                     }
                 };
         };
+        // filter for drilling teams
+        cur_frm.fields_dict['drilling_team'].get_query = function(doc) {
+            return {
+                filters: {
+                    "drilling_team_type": "Bohrteam"
+                }
+            }
+        }
+        frm.fields_dict.subprojects.grid.get_field('team').get_query = function(doc, cdt, cdn) {    
+            return {
+                filters: {
+                    "drilling_team_type": "Verlängerungsteam"
+                }
+            };
+        };
+        
         // check if mud can be invoiced
         if (!frm.doc.__islocal) {
             frappe.call({
@@ -51,6 +72,28 @@ frappe.ui.form.on('Project', {
             add_construction_site_description_button(frm, frm.doc.name);
             // show insurance information
             show_insurance_information(frm.doc.name);
+            // split project button
+            frm.add_custom_button(__("Projekt teilen"), function() {
+                frappe.call({
+                    'method': "heimbohrtechnik.heim_bohrtechnik.project.split_project",
+                    'args': {
+                        'project': frm.doc.name
+                    },
+                    'callback': function(response) {
+                        window.location.href=response.message.uri;
+                    }
+                });
+            }, __("More") );
+            // create full project file
+            frm.add_custom_button(__("Dossier erstellen"), function() {
+                create_full_file(frm);
+            }, __("PDFs"));
+            // create and attach pdf
+            frm.add_custom_button(__("Bohrauftrag"), function() {
+                create_pdf(frm);
+            }, __("PDFs"));
+            // show siblings
+            check_display_siblings("Project", frm.doc.name);
         } else {
             // new project: switch to internal and assign name/title
             frappe.call({
@@ -97,3 +140,27 @@ frappe.ui.form.on('Project Checklist', {
         get_required_activities(frm, dt, dn);
     }
 });
+
+function create_full_file(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.create_full_project_file',
+        'args': {'project': frm.doc.name},
+        'callback': function(response) {
+            cur_frm.reload_doc();
+        },
+        'freeze': true,
+        'freeze_message': __("Dossier erstellen, bitte warten...")
+    });
+}
+
+function create_pdf(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.update_attached_project_pdf',
+        'args': {'project': frm.doc.name},
+        'callback': function(response) {
+            cur_frm.reload_doc();
+        },
+        'freeze': true,
+        'freeze_message': __("Bohrauftrag (pdf) erstellen, bitte warten...")
+    });
+}

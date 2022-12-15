@@ -57,7 +57,7 @@ tbody tr td:nth-child(even) {
   max-width: 230px;
   left: 0px;
   
-  height: 150px;
+  height: 140px;
   min-height: 150px;
   max-height: 150px;
   
@@ -141,12 +141,11 @@ tbody tr td:nth-child(even) {
     left: 0px;
     right: 0px;
     bottom: 0px;
-    border-radius: 20px;
-    padding: 5px;
+    padding: 2px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    background-color: #ffffe0; 
+    background-color: rgba(255, 255, 224, 0.6); 
     border: 1px solid #f0e68c;  
 }
 
@@ -156,7 +155,6 @@ tbody tr td:nth-child(even) {
     left: 0px;
     right: 0px;
     bottom: 0px;
-    border-radius: 20px;
     padding: 5px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -171,8 +169,7 @@ tbody tr td:nth-child(even) {
     left: 0px;
     right: 0px;
     bottom: 0px;
-    border-radius: 20px;
-    padding: 5px;
+    padding: 2px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -273,4 +270,14 @@ tbody tr td:nth-child(even) {
 
 [draggable=true] {
   cursor: move;
+}
+
+.ews-details b {
+    color: red;
+}
+
+@media print {
+  body {
+    zoom: 45%;
+  }
 }

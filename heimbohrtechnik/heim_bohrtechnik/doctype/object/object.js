@@ -18,12 +18,11 @@ cur_frm.fields_dict.addresses.grid.get_field('party').get_query =
     function(frm, dt, dn) {   
         var filters = {};
         var v = locals[dt][dn];
-        if (v.dt === "Supplier") {
+        if (v.dt === "Supplier") {              // note: disabled controlled in server-side query
             filters = {
                 'query': 'heimbohrtechnik.heim_bohrtechnik.filters.supplier_by_capability',
                 'filters': {
-                    'capability': v.address_type,
-                    'disabled': 0
+                    'capability': v.address_type
                 }
             }
         } else {
@@ -144,6 +143,20 @@ frappe.ui.form.on('Object', {
             });
             // add button to open construction site description
             add_construction_site_description_button(frm, frm.doc.name)
+            // split project button
+            frm.add_custom_button(__("Objekt teilen"), function() {
+                frappe.call({
+                    'method': "heimbohrtechnik.heim_bohrtechnik.doctype.object.object.split_object",
+                    'args': {
+                        'object_name': frm.doc.name
+                    },
+                    'callback': function(response) {
+                        window.location.href=response.message.uri;
+                    }
+                });
+            }, __("More") );
+            // show siblings
+            check_display_siblings("Object", frm.doc.name);
         } else {
             if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
                 // fresh document, no addresses - load template
@@ -298,7 +311,10 @@ frappe.ui.form.on('Object EWS', {
     },
     pressure_level: function(frm, cdt, cdn) {
         update_ews_details(frm, cdt, cdn);
-    }    
+    }  ,
+    probe_type: function(frm, cdt, cdn) {
+        verify_diameter(frm, cdt, cdn);
+    } 
 });
 
 frappe.ui.form.on('Object Address', {
@@ -649,18 +665,26 @@ function check_add_checklist(frm, activity_type) {
 function set_checklist_supplier(frm, activity_type, supplier) {
     // make sure this item is in the checklist
     check_add_checklist(frm, activity_type);
+    // make sure only to use the first supplier of this type (e.g. mud can occur multiple times)
+    var first_supplier = supplier;
+    for (var i = 0; i < frm.doc.addresses.length; i++) {
+        if (frm.doc.addresses[i].address_type == activity_type) {
+            first_supplier = frm.doc.addresses[i].party;
+            break;
+        }
+    }
     // find supplier name
     frappe.call({
         'method': "frappe.client.get",
         'args': {
             'doctype': "Supplier",
-            'name': supplier
+            'name': first_supplier
         },
         'callback': function(response) {
             // find activity and assign supplier
             for (var a = 0; a < (frm.doc.checklist || []).length; a++) {
                 if (frm.doc.checklist[a].activity === activity_type) {
-                    frappe.model.set_value(frm.doc.checklist[a].doctype, frm.doc.checklist[a].name, 'supplier', supplier);
+                    frappe.model.set_value(frm.doc.checklist[a].doctype, frm.doc.checklist[a].name, 'supplier', first_supplier);
                     frappe.model.set_value(frm.doc.checklist[a].doctype, frm.doc.checklist[a].name, 'supplier_name', response.message.supplier_name);
                     break;
                 }
@@ -673,7 +697,27 @@ function set_checklist_supplier(frm, activity_type, supplier) {
         'args': {
             'obj': frm.doc.name,
             'activity_type': activity_type,
-            'supplier': supplier
+            'supplier': first_supplier
         }
     });
+}
+
+function verify_diameter(frm, cdt, cdn) {
+    var row = locals[cdt][cdn];
+    if ((row.probe_type) && (row.ews_diameter)) {
+        // fetch possible diameters
+        frappe.call({
+            'method': "frappe.client.get",
+            'args': {
+                'doctype': "Probe Type",
+                'name': row.probe_type
+            },
+            'callback': function(response) {
+                var probe_type = response.message;
+                if ((probe_type.diameters) && (!probe_type.diameters.includes(row.ews_diameter.toString()))) {
+                    frappe.msgprint("Vorsicht: dieser Durchmesser ist bei dem Sondentyp nicht verfügbar.");
+                }
+            }
+        });
+    }
 }

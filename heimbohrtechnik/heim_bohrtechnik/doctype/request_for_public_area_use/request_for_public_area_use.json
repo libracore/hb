@@ -1,0 +1,265 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2022-10-05 12:05:42.521622",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "project",
+  "from_date",
+  "to_date",
+  "print_format",
+  "sent",
+  "column_break_3",
+  "object",
+  "object_name",
+  "object_street",
+  "object_location",
+  "sec_invoice",
+  "same_as_requestor",
+  "btn_from_customer",
+  "btn_from_owner",
+  "col_invoice",
+  "address_name",
+  "address_street",
+  "address_location",
+  "details",
+  "description",
+  "area",
+  "col_details",
+  "remarks",
+  "col_options",
+  "no_parking",
+  "inform_residents",
+  "comply_min_width",
+  "sec_installation",
+  "installation_plan"
+ ],
+ "fields": [
+  {
+   "default": "GB\u00f6G-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "GB\u00f6G-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "project.object",
+   "fieldname": "object",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Object",
+   "options": "Object",
+   "read_only": 1
+  },
+  {
+   "fieldname": "object_name",
+   "fieldtype": "Data",
+   "label": "Object name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "object_street",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Object street",
+   "read_only": 1
+  },
+  {
+   "fieldname": "object_location",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Object location",
+   "read_only": 1
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "default": "Installationsplatz f\u00fcr LKW, Mulde, Kompressor, etc.",
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description"
+  },
+  {
+   "fieldname": "col_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "default": "Today",
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date"
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date"
+  },
+  {
+   "fieldname": "col_options",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "no_parking",
+   "fieldtype": "Check",
+   "label": "No Parking"
+  },
+  {
+   "default": "0",
+   "fieldname": "inform_residents",
+   "fieldtype": "Check",
+   "label": "Inform Residents"
+  },
+  {
+   "default": "0",
+   "fieldname": "comply_min_width",
+   "fieldtype": "Check",
+   "label": "Comply with Minimum Width of 3.5m"
+  },
+  {
+   "fieldname": "sec_invoice",
+   "fieldtype": "Section Break",
+   "label": "Invoice Address"
+  },
+  {
+   "default": "0",
+   "fieldname": "same_as_requestor",
+   "fieldtype": "Check",
+   "label": "Same as Requestor"
+  },
+  {
+   "fieldname": "col_invoice",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.same_as_requestor == 0",
+   "fieldname": "address_name",
+   "fieldtype": "Data",
+   "label": "Address Name"
+  },
+  {
+   "depends_on": "eval:doc.same_as_requestor == 0",
+   "fieldname": "address_street",
+   "fieldtype": "Data",
+   "label": "Address Street"
+  },
+  {
+   "depends_on": "eval:doc.same_as_requestor == 0",
+   "fieldname": "address_location",
+   "fieldtype": "Data",
+   "label": "Address Location"
+  },
+  {
+   "fieldname": "area",
+   "fieldtype": "Data",
+   "label": "Area in m2"
+  },
+  {
+   "depends_on": "eval:!doc.__islocal",
+   "fieldname": "sec_installation",
+   "fieldtype": "Section Break",
+   "label": "Installation"
+  },
+  {
+   "fieldname": "installation_plan",
+   "fieldtype": "Attach",
+   "label": "Installation Plan"
+  },
+  {
+   "default": "0",
+   "fieldname": "sent",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Sent"
+  },
+  {
+   "fieldname": "btn_from_customer",
+   "fieldtype": "Button",
+   "label": "From Customer"
+  },
+  {
+   "fieldname": "btn_from_owner",
+   "fieldtype": "Button",
+   "label": "From Owner"
+  },
+  {
+   "fieldname": "print_format",
+   "fieldtype": "Link",
+   "label": "Print Format",
+   "options": "Print Format"
+  }
+ ],
+ "modified": "2022-12-02 11:51:05.833888",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Request for Public Area Use",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "object_name",
+ "track_changes": 1
+}

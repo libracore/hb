@@ -1,0 +1,150 @@
+{
+ "creation": "2022-11-25 20:31:55.876259",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "depth",
+  "layer_type",
+  "color",
+  "col_main",
+  "wet",
+  "humid",
+  "dry",
+  "sec_drilling",
+  "drilling_type",
+  "sec_remarks",
+  "observations",
+  "sec_water",
+  "water_ingress",
+  "flushing_losses",
+  "injection_losses",
+  "caverns",
+  "suspected_gas",
+  "col_water",
+  "water_depth"
+ ],
+ "fields": [
+  {
+   "description": "bis m",
+   "fieldname": "depth",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Depth",
+   "reqd": 1
+  },
+  {
+   "fieldname": "layer_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Type",
+   "options": "\nDeckschicht\nTorf\nLockermaterial, lehmig - kiesig\nLockermaterial, sandif - kiesig\nLockermaterial, siltig - sandig\nLockermaterial, tonig - siltig\nKies, Steine\nSand\nTon - Siltstein\nTon\nMor\u00e4ne\nMergel\nSandstein\nKonglomerat (Brekzie)\nSiltstein\nKalkstein\nKalkstein hart, kompakt\nFlysch\nTonschiefer\nKalkschiefer\nDolomit\nMarmor\nDiorit\nGlimmerschiefer\nGabbro\nGneis\nGranit\nSulfatgestein (Gips)\nQuarzit\nEndteufe (Bohrteufe)"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Color",
+   "options": "\nweiss\ngelb\nbeige\ngrau-beige\ngrau-gr\u00fcn\ngrau\ndunkelgrau\nschwarz\nbr\u00e4unlich\ngr\u00fcnlich\nr\u00f6tlich\nbunt"
+  },
+  {
+   "fieldname": "col_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "wet",
+   "fieldtype": "Check",
+   "label": "Wet"
+  },
+  {
+   "default": "0",
+   "fieldname": "humid",
+   "fieldtype": "Check",
+   "label": "Humid"
+  },
+  {
+   "default": "0",
+   "fieldname": "dry",
+   "fieldtype": "Check",
+   "label": "Dry"
+  },
+  {
+   "fieldname": "sec_drilling",
+   "fieldtype": "Section Break",
+   "label": "Drilling Type"
+  },
+  {
+   "fieldname": "drilling_type",
+   "fieldtype": "Select",
+   "label": "Drilling Type",
+   "options": "\nSp\u00fchlbohrung - nass\nSp\u00fchlbohrung - trocken\nHammerbohrung - nass\nHammerbohrung - trocken"
+  },
+  {
+   "fieldname": "sec_remarks",
+   "fieldtype": "Section Break",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "observations",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Observations"
+  },
+  {
+   "fieldname": "sec_water",
+   "fieldtype": "Section Break",
+   "label": "Water protection"
+  },
+  {
+   "default": "0",
+   "fieldname": "water_ingress",
+   "fieldtype": "Check",
+   "label": "Water ingress"
+  },
+  {
+   "default": "0",
+   "fieldname": "flushing_losses",
+   "fieldtype": "Check",
+   "label": "Flushing losses"
+  },
+  {
+   "default": "0",
+   "fieldname": "injection_losses",
+   "fieldtype": "Check",
+   "label": "Injection losses"
+  },
+  {
+   "default": "0",
+   "fieldname": "caverns",
+   "fieldtype": "Check",
+   "label": "Caverns"
+  },
+  {
+   "default": "0",
+   "fieldname": "suspected_gas",
+   "fieldtype": "Check",
+   "label": "Suspected gas"
+  },
+  {
+   "fieldname": "col_water",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "water_depth",
+   "fieldtype": "Int",
+   "label": "Depth"
+  }
+ ],
+ "istable": 1,
+ "modified": "2022-11-25 20:54:27.800082",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Layer Directory Layer",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

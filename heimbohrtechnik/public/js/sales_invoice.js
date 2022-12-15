@@ -16,6 +16,16 @@ frappe.ui.form.on('Sales Invoice', {
         if (frm.doc.__islocal) {
             select_naming_series(frm);
         }
+        
+        // check duplicate discount
+        if (frm.doc.docstatus === 0) {
+            check_duplicate_discounts(frm);
+        }
+        
+        // check if there are available akonto positions
+        if (frm.doc.__islocal) {
+            find_akontos(frm);
+        }
     },
     before_save: function(frm) {
         set_conditional_net_total(frm);
@@ -44,6 +54,9 @@ frappe.ui.form.on('Sales Invoice', {
                 }
             });
         }
+    },
+    on_submit: function(frm) {
+        check_create_akonto_booking(frm);
     }
 });
 
@@ -70,3 +83,104 @@ frappe.ui.form.on('Markup Position', {
         set_conditional_net_total(frm);
     }
 });
+
+function check_duplicate_discounts(frm) {
+    var sales_order = null;
+    for (var i = 0; i < frm.doc.items.length; i++) {
+        if (frm.doc.items[i].sales_order) {
+            sales_order = frm.doc.items[i].sales_order;
+            break;
+        }
+    }
+    frappe.call({
+        "method": "heimbohrtechnik.heim_bohrtechnik.utils.get_invoiced_markup_discounts",
+        "args": {
+            "sales_order": sales_order
+        },
+        "async": false,
+        "callback": function(response) {
+            var positions = response.message;
+            console.log(positions);
+            // check markups
+            for (var m = frm.doc.markup_positions.length - 1; m >= 0; m--) {
+                for (var i = 0; i < response.message.length; i++) {
+                    if ((frm.doc.markup_positions[m].description === response.message[i].description)
+                        && (response.message[i].parent !== frm.doc.name)) {
+                        // already in another invoice - remove
+                        cur_frm.get_field("markup_positions").grid.grid_rows[m].remove();
+                        frappe.show_alert(__("Doppelten Zuschlag {0} entfernt").replace("{0}", frm.doc.markup_positions[m].description))
+                        break;
+                    }
+                }
+            }
+            for (var m = frm.doc.discount_positions.length - 1; m >= 0; m--) {
+                for (var i = 0; i < response.message.length; i++) {
+                    if ((frm.doc.discount_positions[m].description === response.message[i].description)
+                        && (response.message[i].parent !== frm.doc.name)) {
+                        // already in another invoice - remove
+                        cur_frm.get_field("discount_positions").grid.grid_rows[m].remove();
+                        frappe.show_alert(__("Doppelten Abzug {0} entfernt").replace("{0}", frm.doc.discount_positions[m].description))
+                        break;
+                    }
+                }
+            }
+            cur_frm.refresh_fields(["markup_positions", "discount_positions"]);
+        }
+    });
+}
+
+function find_akontos(frm) {
+    if ((frm.doc.items) && (frm.doc.items.length > 0)) {
+        frappe.call({
+            "method": "heimbohrtechnik.heim_bohrtechnik.utils.get_available_akonto",
+            "args": {
+                "sales_order": frm.doc.items[0].sales_order
+            },
+            "callback": function(response) {
+                var akonto = response.message;
+                console.log(akonto);
+                if (akonto.length > 0) {
+                    for (var a = 0; a < akonto.length; a++) {
+                        add_akonto(
+                            "Akonto vom " + new Date(akonto[a].date).toLocaleString("de", {'day': '2-digit', 'month': '2-digit', 'year': 'numeric'}) + " (" + frm.doc.currency + " " + akonto[a].amount.toLocaleString("de-ch") + " inkl. MwSt)", 
+                            akonto[a].amount, 
+                            akonto[a].net_amount, 
+                            akonto[a].reference
+                        );
+                    }
+                }
+            }
+        });
+    }
+}
+
+function add_akonto(text, amount, net_amount, reference) {
+    var child = cur_frm.add_child('discount_positions');
+    frappe.model.set_value(child.doctype, child.name, 'description', text);
+    frappe.model.set_value(child.doctype, child.name, 'amount', net_amount);
+    frappe.model.set_value(child.doctype, child.name, 'akonto_net_amount', net_amount);
+    frappe.model.set_value(child.doctype, child.name, 'akonto_gross_amount', amount);
+    frappe.model.set_value(child.doctype, child.name, 'akonto_invoice_item', reference);
+    cur_frm.refresh_field('discount_positions');
+}
+
+// This function checks if an akonto has been used and books it
+function check_create_akonto_booking(frm) {
+    if (frm.doc.discount_positions) {
+        for (var a = 0; a < frm.doc.discount_positions.length; a++) {
+            if (frm.doc.discount_positions[a].akonto_invoice_item) {
+                frappe.call({
+                    "method": "heimbohrtechnik.heim_bohrtechnik.utils.book_akonto",
+                    "args": {
+                        "sales_invoice": frm.doc.name,
+                        "net_amount": frm.doc.discount_positions[a].akonto_net_amount
+                    },
+                    "callback": function(response) {
+                        console.log("Akonto booked: " + response.message);
+
+                    }
+                });
+            }
+        }
+    }
+}

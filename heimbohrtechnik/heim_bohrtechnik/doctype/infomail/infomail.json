@@ -1,0 +1,161 @@
+{
+ "creation": "2022-11-21 12:28:14.173101",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "project",
+  "date",
+  "sender",
+  "communication",
+  "col_main",
+  "object",
+  "object_name",
+  "object_street",
+  "object_location",
+  "sec_adr",
+  "recipients",
+  "col_adr",
+  "cc",
+  "sec_content",
+  "content"
+ ],
+ "fields": [
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cc",
+   "fieldtype": "Code",
+   "label": "Cc",
+   "read_only": 1
+  },
+  {
+   "fieldname": "content",
+   "fieldtype": "Text Editor",
+   "label": "Content",
+   "read_only": 1
+  },
+  {
+   "fieldname": "communication",
+   "fieldtype": "Link",
+   "label": "Communication",
+   "options": "Communication",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sender",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Sender",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recipients",
+   "fieldtype": "Code",
+   "label": "Recipients",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "project.object",
+   "fieldname": "object",
+   "fieldtype": "Link",
+   "label": "Object",
+   "options": "Object",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "project.object_name",
+   "fieldname": "object_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Object name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "project.object_street",
+   "fieldname": "object_street",
+   "fieldtype": "Data",
+   "label": "Object Street",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "project.object_location",
+   "fieldname": "object_location",
+   "fieldtype": "Data",
+   "label": "Object Location",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sec_adr",
+   "fieldtype": "Section Break",
+   "label": "Address"
+  },
+  {
+   "fieldname": "col_adr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sec_content",
+   "fieldtype": "Section Break",
+   "label": "Content"
+  }
+ ],
+ "modified": "2022-11-21 15:30:39.023653",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Infomail",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "object_name",
+ "track_changes": 1
+}

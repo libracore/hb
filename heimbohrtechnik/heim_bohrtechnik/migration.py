@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import frappe
 from heimbohrtechnik.heim_bohrtechnik.dataparser import get_projects
 from heimbohrtechnik.heim_bohrtechnik.utils import update_project
-from erpnextswiss.scripts.crm_tools import get_primary_supplier_address
+from erpnextswiss.scripts.crm_tools import get_primary_supplier_address, get_primary_customer_address
 from datetime import datetime
 import cgi
 
@@ -390,6 +390,17 @@ def set_supplier_first_address():
             s.save()
             print("Updated {0}".format(s.name))
     return
+    
+def set_customer_first_address():
+    customers = frappe.get_all("Customer", filters={'disabled': 0}, fields=['name'])
+    for customer in customers:
+        c = frappe.get_doc("Customer", customer['name'])
+        address = get_primary_customer_address(c.name)
+        if address:
+            c.hauptadresse = "{0}, {1} {2}".format(address.address_line1 or "", address.pincode or "", address.city or "")
+            c.save()
+            print("Updated {0}".format(c.name))
+    return
 
 def update_object_lat_long():
     objects = frappe.get_all("Object", filters=[['gps_coordinates', 'LIKE', '%,%']], fields=['name'])
@@ -450,3 +461,27 @@ def find_manager(short_name):
         return matches[0]['name']
     else: 
         return None
+
+"""
+This function will update the meter rates of each object
+"""
+def update_object_meter_rates():
+    sql_query = """
+        SELECT `rate`
+        FROM `tabQuotation Item`
+        LEFT JOIN `tabQuotation` ON `tabQuotation`.`name` = `tabQuotation Item`.`parent`
+        WHERE `tabQuotation`.`docstatus` = 1
+        AND `tabQuotation`.`object` = "{object}"
+        AND `tabQuotation Item`.`item_code` = "1.01.03.01"
+        ORDER BY `tabQuotation`.`modified` DESC
+        LIMIT 1;"""
+    objects = frappe.get_all("Object", fields=['name', 'qtn_meter_rate'])
+    for o in objects:
+        rate = frappe.db.sql(sql_query.replace("{object}", o['name']), as_dict=True)
+        if len(rate) > 0 and rate[0]['rate'] != o['qtn_meter_rate']:
+            print("Updating {0} from {1} to {2}...".format(o['name'], o['qtn_meter_rate'], rate[0]['rate']))
+            o_doc = frappe.get_doc("Object", o['name'])
+            o_doc.qtn_meter_rate = rate[0]['rate']
+            o_doc.save()
+            frappe.db.commit()
+    return

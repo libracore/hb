@@ -1,0 +1,291 @@
+<style>
+    /* override frappe */
+html {
+    overflow-y: hidden;
+}
+#page-bohrplan {
+    margin-top: -100px !important;
+}
+
+.layout-main-section {
+    overflow-x: scroll;
+    overflow-y: scroll;
+    border-bottom: unset !important;
+}
+
+.layout-main-section-wrapper {
+    margin-bottom: 0 !important;
+}
+
+/* calendar */
+
+#bohrplan_wrapper {
+    height: calc(100vh - 110px);
+    overflow-x: scroll;
+}
+
+table {
+    border-collapse: separate;
+}
+
+td {
+    border-top: 1px solid #d1d8dd;
+    border-bottom: 1px solid #d1d8dd;
+    
+    width: 42px;
+    min-width: 42px;
+    max-width: 42px;
+}
+
+tbody tr td:nth-child(odd) {
+    border-right: 1px solid #d1d8dd;
+    border-left: 1px dotted #d1d8dd;
+}
+
+tbody tr td:nth-child(even) {
+    border-left: 1px solid #d1d8dd;
+    border-right: 1px dotted #d1d8dd;
+}
+
+.calendar-grid-header {
+    text-align: center;
+    padding: 5px;
+}
+
+.sticky-left {
+  position: -webkit-sticky;
+  position: sticky;
+  background-color: #f8f8f8;
+  width: 230px;
+  min-width: 230px;
+  max-width: 230px;
+  left: 0px;
+  
+  height: 140px;
+  min-height: 150px;
+  max-height: 150px;
+  
+  border: 1px solid #d1d8dd;
+  
+  z-index: 25;
+}
+
+.sticky-corner {
+  position: -webkit-sticky;
+  position: sticky;
+  background-color: #f8f8f8;
+  width: 230px;
+  min-width: 230px;
+  max-width: 230px;
+  left: 0px;
+  
+  height: 120px;
+  min-height: 120px;
+  max-height: 120px;
+  top: 0px;
+  
+  border: 1px solid #d1d8dd;
+  
+  z-index: 30;
+}
+
+.sticky-top {
+  position: -webkit-sticky;
+  position: sticky;
+  background-color: #f8f8f8;
+  height: 120px;
+  min-height: 120px;
+  max-height: 120px;
+  top: 0px;
+  
+  border: 1px solid #d1d8dd;
+  
+  z-index: 25;
+}
+
+.sticky-top-small {
+  position: -webkit-sticky;
+  position: sticky;
+  background-color: #f8f8f8;
+  height: 31px;
+  min-height: 31px;
+  max-height: 31px;
+  top: 120px;
+  
+  border: 1px solid #d1d8dd;
+  
+  z-index: 25;
+}
+
+.today {
+    background-color: #eefdec !important;
+}
+
+.weekend {
+    background-color: #9dc7f0 !important;
+}
+
+.no-border-bottom {
+    border-bottom: unset;
+}
+
+.no-border-top-rigth-dotted {
+    border-top: unset;
+    border-right: 1px dotted #d1d8dd;
+}
+
+.no-border-top-left-dotted {
+    border-top: unset;
+    border-left: 1px dotted #d1d8dd;
+}
+
+.booking_overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    padding: 2px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    background-color: rgba(255, 255, 224, 0.6); 
+    border: 1px solid #f0e68c;  
+}
+
+.internal_overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    padding: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    background-color: #f08080; 
+    border: 1px solid #dc143c;
+}
+
+.subproject_booking_overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    padding: 2px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    background-color: #ffffe0; 
+    border: 1px solid #f0e68c;
+}
+.subproject_booking_overlay:hover {
+    z-index: 3;
+    cursor: pointer;
+}
+
+.absence_booking_overlay {
+    position: absolute;
+    z-index: 1;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    border-radius: 20px;
+    padding: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    background-color: #ffffe0; 
+    border: 1px solid #f0e68c;
+}
+
+.ampel-div {
+    width: 15px;
+    min-width: 15px;
+    max-width: 15px;
+    height: 15px;
+    min-height: 15px;
+    max-height: 15px;
+    border: 1px solid black;
+    float: left;
+    margin: 5px 2px 2px 2px;
+}
+
+.object-div {
+    clear: left;
+}
+
+/* Tooltip */
+.ampeltool {
+  position: relative;
+  display: inline-block;
+}
+
+.ampel-tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: left;
+  padding: 5px 0;
+  border-radius: 6px;
+  
+  width: 300px;
+  top: 100%;
+  left: 50%;
+ 
+  position: absolute;
+  z-index: 100;
+}
+
+.ampeltool:hover .ampel-tooltiptext {
+  visibility: visible;
+}
+
+.drilling_team-tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: left;
+  padding: 5px 0;
+  border-radius: 6px;
+  
+  width: 230px;
+  bottom: 50%;
+  left: 0%;
+ 
+  position: absolute;
+  z-index: 100;
+}
+
+.drilling_team-tooltip:hover .drilling_team-tooltiptext {
+  visibility: visible;
+}
+
+.ondragover {
+    background-color: yellow !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+[draggable=true] {
+  cursor: move;
+}
+
+.ews-details b {
+    color: red;
+}
+
+@media print {
+  body {
+    zoom: 45%;
+  }
+}
+
+</style>
+
+<div id="grid"></div>

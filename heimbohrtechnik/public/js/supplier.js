@@ -19,6 +19,7 @@ frappe.ui.form.on('Supplier', {
         if (!frm.doc.__islocal) {
             set_first_address(frm);
         }
+        compile_remarks(frm);
     }
 });
 
@@ -28,6 +29,7 @@ function set_first_address(frm) {
         'args': {
             'supplier': frm.doc.name
         },
+        'async': false,
         'callback': function(response) {
             if (response.message) {
                 var address = response.message;
@@ -36,4 +38,16 @@ function set_first_address(frm) {
             }
         }
     });
+}
+
+function compile_remarks(frm) {
+    if (frm.doc.capabilities) {
+        var remarks = [];
+        for (var i = 0; i < frm.doc.capabilities.length; i++) {
+            if (frm.doc.capabilities[i].remarks) {
+                remarks.push(frm.doc.capabilities[i].remarks);
+            }
+        }
+        cur_frm.set_value("remarks", remarks.join(", "));
+    }
 }

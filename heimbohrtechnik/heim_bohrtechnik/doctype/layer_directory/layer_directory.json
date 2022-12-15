@@ -1,0 +1,193 @@
+{
+ "allow_import": 1,
+ "autoname": "naming_series:",
+ "creation": "2022-11-25 08:59:52.553448",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "project",
+  "amended_from",
+  "col_main",
+  "object",
+  "object_name",
+  "object_street",
+  "object_location",
+  "sec_drilling",
+  "permit",
+  "permit_date",
+  "drilling_master",
+  "ews_details",
+  "col_drilling",
+  "start_date",
+  "end_date",
+  "drilling_number",
+  "coordinates",
+  "sec_layers",
+  "layers"
+ ],
+ "fields": [
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "project.object",
+   "fieldname": "object",
+   "fieldtype": "Link",
+   "label": "Object",
+   "options": "Object",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "object.object_name",
+   "fieldname": "object_name",
+   "fieldtype": "Data",
+   "label": "Object name",
+   "read_only": 1
+  },
+  {
+   "default": "SV-.YY.-#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "SV-.YY.-#####"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Layer Directory",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "object.object_street",
+   "fieldname": "object_street",
+   "fieldtype": "Data",
+   "label": "Object street",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "object.object_location",
+   "fieldname": "object_location",
+   "fieldtype": "Data",
+   "label": "Object location",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_drilling",
+   "fieldtype": "Section Break",
+   "label": "Drilling Details"
+  },
+  {
+   "fieldname": "permit",
+   "fieldtype": "Data",
+   "label": "Permit"
+  },
+  {
+   "fieldname": "permit_date",
+   "fieldtype": "Date",
+   "label": "Permit Date"
+  },
+  {
+   "fieldname": "drilling_master",
+   "fieldtype": "Data",
+   "label": "Drilling Master"
+  },
+  {
+   "fieldname": "ews_details",
+   "fieldtype": "Data",
+   "label": "EWS Details"
+  },
+  {
+   "fieldname": "col_drilling",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End date"
+  },
+  {
+   "fieldname": "drilling_number",
+   "fieldtype": "Data",
+   "label": "Drilling number"
+  },
+  {
+   "fetch_from": "object.ch_coordinates",
+   "fieldname": "coordinates",
+   "fieldtype": "Data",
+   "label": "Coordinates",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_layers",
+   "fieldtype": "Section Break",
+   "label": "Layer Directory"
+  },
+  {
+   "fieldname": "layers",
+   "fieldtype": "Table",
+   "label": "Layers",
+   "options": "Layer Directory Layer"
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2022-11-25 20:32:09.953326",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Layer Directory",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "object_name",
+ "track_changes": 1
+}

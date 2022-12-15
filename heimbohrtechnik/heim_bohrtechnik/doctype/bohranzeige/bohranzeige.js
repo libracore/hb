@@ -7,6 +7,14 @@ frappe.ui.form.on('Bohranzeige', {
         if ((frm.doc.object) && (!frm.doc.project)) {
             cur_frm.set_value("project", frm.doc.object);
         }
+        // filter print formats
+        cur_frm.fields_dict['print_format'].get_query = function(doc) {
+            return {
+                filters: {
+                    "doc_type": "Bohranzeige"
+                }
+            }
+        }
     },
     before_save: function(frm) {
         if (!frm.doc.object_name) {
@@ -20,51 +28,47 @@ frappe.ui.form.on('Bohranzeige', {
 
 function autocomplete_object(frm) {
     frappe.call({
-        'method': "frappe.client.get",
+        'method': "get_autocomplete_data",
+        'doc': frm.doc,
         'args': {
-            'doctype': "Object",
-            'name': frm.doc.object
+            'project': frm.doc.project
         },
         'callback': function(response) {
-            var object = response.message;
-            cur_frm.set_value("object_name", object.object_name);
-            cur_frm.set_value("object_street", object.object_street);
-            cur_frm.set_value("object_location", object.object_location);
-            cur_frm.set_value("parcel", object.parcel);
+            cur_frm.set_value("object_name", response.message.object.object_name);
+            cur_frm.set_value("object_street", response.message.object.object_street);
+            cur_frm.set_value("object_location", response.message.object.object_location);
+            cur_frm.set_value("parcel", response.message.object.parcel);
             
-            for (var i = 0; i < object.addresses.length; i++) {
-                if (object.addresses[i].address_type === "Eigentümer") {
-                    if (object.addresses[i].is_simple === 1) {
+            for (var i = 0; i < response.message.object.addresses.length; i++) {
+                if (response.message.object.addresses[i].address_type === "Eigentümer") {
+                    if (response.message.object.addresses[i].is_simple === 1) {
                         cur_frm.set_value("bewilligungsinhaber", 
-                            (object.addresses[i].simple_name || "") + ", " 
-                                + (object.addresses[i].simple_address || ""));
+                            (response.message.object.addresses[i].simple_name || "") + ", " 
+                                + (response.message.object.addresses[i].simple_address || ""));
                     } else {
                         cur_frm.set_value("bewilligungsinhaber", 
-                            (object.addresses[i].address_display || "")
+                            (response.message.object.addresses[i].address_display || "")
                                 .replaceAll("<br>", " - ").replaceAll("\n", " - "));
                     }
                 }
             }
-            
-            frappe.call({
-                'method': "frappe.client.get",
-                'args': {
-                    'doctype': "Project",
-                    'name': frm.doc.object
-                },
-                'callback': function(response) {
-                    var project = response.message;
                                         
-                    for (var i = 0; i < project.permits.length; i++) {
-                        if (project.permits[i].permit.includes("Bohrbewilligung kantonal")) {
-                            cur_frm.set_value("bewilligung", 
-                                (project.permits[i].permit_number || ""));
-                            cur_frm.set_value("bewilligungsdatum", 
-                                (project.permits[i].permit_date));
-                        }
-                    }
+            for (var i = 0; i < response.message.project.permits.length; i++) {
+                if (response.message.project.permits[i].permit.includes("Bohrbewilligung kantonal")) {
+                    cur_frm.set_value("bewilligung", 
+                        (response.message.project.permits[i].permit_number || ""));
+                    cur_frm.set_value("bewilligungsdatum", 
+                        (response.message.project.permits[i].permit_date));
                 }
-            });
+            }
+            
+            if (response.message.construction_site_description) {
+                if (response.message.construction_site_description.hydrant == 1) {
+                    cur_frm.set_value("wasserbezugsort", "Hausanschluss, falls nötig Hydrant");
+                } else {
+                    cur_frm.set_value("wasserbezugsort", "Hausanschluss");
+                }
+            }
         }
     });
 }
