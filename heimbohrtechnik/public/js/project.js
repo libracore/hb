@@ -93,7 +93,9 @@ frappe.ui.form.on('Project', {
                 create_pdf(frm);
             }, __("PDFs"));
             // show siblings
-            check_display_siblings("Project", frm.doc.name);
+            if (frm.doc.project_type === "External") {
+                check_display_siblings("Project", frm.doc.name);
+            }
         } else {
             // new project: switch to internal and assign name/title
             frappe.call({
