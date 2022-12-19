@@ -66,7 +66,7 @@ function run(from_date, to_date) {
             customer = args['customer'];
         }
         if (args['key']) {
-            key = args['customer'];
+            key = args['key'];
         }
         
     } else {
@@ -75,7 +75,6 @@ function run(from_date, to_date) {
     }
     
     //~ var data = get_data(from_date, to_date, customer, key);
-    
     frappe.call({
        method: "heimbohrtechnik.templates.pages.bohrplan.get_data",
        args: {
@@ -87,9 +86,10 @@ function run(from_date, to_date) {
        async: false,
        callback: function(response) {
             var contents = response.message;
+            console.log(contents)
             for (var i = 0; i < contents.length; i++) {
                 var data = contents[i];
-                add_overlay(page, data);
+                add_overlay(data);
             }
        }
     });

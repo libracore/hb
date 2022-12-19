@@ -26,6 +26,6 @@ def get_data(customer, key, from_date, to_date):
     if frappe.get_value("Customer", customer, "key") != key:
         return []
     
-    data = get_overlay_datas(from_date, to_date, customer)
+    data = get_overlay_datas(from_date[1:11], to_date[1:11], customer)
     
     return data
