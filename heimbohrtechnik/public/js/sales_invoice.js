@@ -102,25 +102,29 @@ function check_duplicate_discounts(frm) {
             var positions = response.message;
             console.log(positions);
             // check markups
-            for (var m = frm.doc.markup_positions.length - 1; m >= 0; m--) {
-                for (var i = 0; i < response.message.length; i++) {
-                    if ((frm.doc.markup_positions[m].description === response.message[i].description)
-                        && (response.message[i].parent !== frm.doc.name)) {
-                        // already in another invoice - remove
-                        cur_frm.get_field("markup_positions").grid.grid_rows[m].remove();
-                        frappe.show_alert(__("Doppelten Zuschlag {0} entfernt").replace("{0}", frm.doc.markup_positions[m].description))
-                        break;
+            if (frm.doc.markup_positions) {
+                for (var m = frm.doc.markup_positions.length - 1; m >= 0; m--) {
+                    for (var i = 0; i < response.message.length; i++) {
+                        if ((frm.doc.markup_positions[m].description === response.message[i].description)
+                            && (response.message[i].parent !== frm.doc.name)) {
+                            // already in another invoice - remove
+                            cur_frm.get_field("markup_positions").grid.grid_rows[m].remove();
+                            frappe.show_alert(__("Doppelten Zuschlag {0} entfernt").replace("{0}", frm.doc.markup_positions[m].description))
+                            break;
+                        }
                     }
                 }
             }
-            for (var m = frm.doc.discount_positions.length - 1; m >= 0; m--) {
-                for (var i = 0; i < response.message.length; i++) {
-                    if ((frm.doc.discount_positions[m].description === response.message[i].description)
-                        && (response.message[i].parent !== frm.doc.name)) {
-                        // already in another invoice - remove
-                        cur_frm.get_field("discount_positions").grid.grid_rows[m].remove();
-                        frappe.show_alert(__("Doppelten Abzug {0} entfernt").replace("{0}", frm.doc.discount_positions[m].description))
-                        break;
+            if (frm.doc.discount_positions) {
+                for (var m = frm.doc.discount_positions.length - 1; m >= 0; m--) {
+                    for (var i = 0; i < response.message.length; i++) {
+                        if ((frm.doc.discount_positions[m].description === response.message[i].description)
+                            && (response.message[i].parent !== frm.doc.name)) {
+                            // already in another invoice - remove
+                            cur_frm.get_field("discount_positions").grid.grid_rows[m].remove();
+                            frappe.show_alert(__("Doppelten Abzug {0} entfernt").replace("{0}", frm.doc.discount_positions[m].description))
+                            break;
+                        }
                     }
                 }
             }
