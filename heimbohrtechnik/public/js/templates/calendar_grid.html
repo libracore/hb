@@ -13,23 +13,41 @@
                     </div> 
                 </th>
                 {% for day in days %}
-                    <th colspan="2" class="sticky-top calendar-grid-header no-border-bottom
-                        {% if day == today %}today{% endif %}
-                        {% if (in_list(weekend, day)) %}weekend{% endif %}">
-                        KW {{ kw_list[day] }}<br>{{ day }}<br>({{ __(day_list[day]) }})
-                    </th>
+                    {% if day_list[day] != "Sun" %}
+                        {% if day_list[day] != "Sat" %}
+                            <th colspan="2" class="sticky-top calendar-grid-header no-border-bottom
+                                {% if day == today %}today{% endif %}
+                                {% if (in_list(weekend, day)) %}weekend{% endif %}">
+                                KW {{ kw_list[day] }}<br>{{ day }}<br>({{ __(day_list[day]) }})
+                            </th>
+                        {% else %}
+                            <th colspan="2" class="sticky-top calendar-grid-header no-border-bottom
+                                {% if day == today %}today{% endif %}
+                                weekend">
+                                KW {{ kw_list[day] }}<br>WE
+                            </th>
+                        {% endif %}
+                    {% endif %}
                 {% endfor %}
             </tr>
             <tr>
                 {% for day in days %}
-                    <th class="sticky-top-small calendar-grid-header no-border-top-rigth-dotted
-                        {% if day == today %}today{% endif %}
-                        {% if (in_list(weekend, day)) %}weekend{% endif %}">
-                        VM</th>
-                    <th class="sticky-top-small calendar-grid-header no-border-top-left-dotted
-                        {% if day == today %}today{% endif %}
-                        {% if (in_list(weekend, day)) %}weekend{% endif %}">
-                        NM</th>
+                    {% if day_list[day] != "Sun" %}
+                        {% if day_list[day] != "Sat" %}
+                            <th class="sticky-top-small calendar-grid-header no-border-top-rigth-dotted
+                                {% if day == today %}today{% endif %}
+                                {% if (in_list(weekend, day)) %}weekend{% endif %}">
+                                VM</th>
+                            <th class="sticky-top-small calendar-grid-header no-border-top-left-dotted
+                                {% if day == today %}today{% endif %}
+                                {% if (in_list(weekend, day)) %}weekend{% endif %}">
+                                NM</th>
+                        {% else %}
+                            <th colspan="2" class="sticky-top-small calendar-grid-header 
+                                {% if day == today %}today{% endif %}
+                                weekend" style="border-top: None;"></th>
+                        {% endif %}
+                    {% endif %}
                 {% endfor %}
             </tr>
         </thead>
@@ -60,18 +78,22 @@
                         {% endif %}
                     </td>
                     {% for day in days %}
-                        <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
-                            data-bohrteam="{{ drilling_team.team_id }}"
-                            data-date="{{ day }}"
-                            data-vmnm="vm"
-                            ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"
-                            data-dropid="{{ drilling_team.team_id }}-{{ day }}-vm"></td>
-                        <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
-                            data-bohrteam="{{ drilling_team.team_id }}"
-                            data-date="{{ day }}"
-                            data-vmnm="nm"
-                            ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"
-                            data-dropid="{{ drilling_team.team_id }}-{{ day }}-nm"></td>
+                        {% if day_list[day] != "Sun" %}
+                            <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                                data-bohrteam="{{ drilling_team.team_id }}"
+                                data-date="{{ day }}"
+                                data-vmnm="vm"
+                                {% if day_list[day] != "Sat" %}
+                                ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"
+                                data-dropid="{{ drilling_team.team_id }}-{{ day }}-vm"{% endif %}></td>
+                            <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                                data-bohrteam="{{ drilling_team.team_id }}"
+                                data-date="{{ day }}"
+                                data-vmnm="nm"
+                                {% if day_list[day] != "Sat" %}
+                                ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"
+                                data-dropid="{{ drilling_team.team_id }}-{{ day }}-nm"{% endif %}></td>
+                        {% endif %}
                     {% endfor %}
                 </tr>
                 {% endif %}
@@ -83,16 +105,18 @@
                     <b>{{ __("Absences") }}</b>
                 </td>
                 {% for day in days %}
-                    <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
-                        data-bohrteam="absences"
-                        data-date="{{ day }}"
-                        data-vmnm="vm">
-                    </td>
-                    <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
-                        data-bohrteam="absences"
-                        data-date="{{ day }}"
-                        data-vmnm="nm">
-                    </td>
+                    {% if day_list[day] != "Sun" %}
+                        <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                            data-bohrteam="absences"
+                            data-date="{{ day }}"
+                            data-vmnm="vm">
+                        </td>
+                        <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                            data-bohrteam="absences"
+                            data-date="{{ day }}"
+                            data-vmnm="nm">
+                        </td>
+                    {% endif %}
                 {% endfor %}
             </tr>
             {% endif %}

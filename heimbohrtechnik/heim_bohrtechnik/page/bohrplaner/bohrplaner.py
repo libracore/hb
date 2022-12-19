@@ -50,16 +50,22 @@ def get_overlay_datas(from_date, to_date, customer=None):
         if p.expected_start_date < getdate(from_date):
             # start is before from_date
             correction = date_diff(p.expected_end_date, p.expected_start_date) - date_diff(p.expected_end_date, getdate(from_date))
+            weekend_day_correction = get_weekend_day_correction(getdate(from_date), p.expected_end_date)
             dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
+            dauer -= weekend_day_correction
             p.expected_start_date = getdate(from_date)
             if p.start_half_day.lower() == 'nm':
                 p.start_half_day = 'vm'
         else:
+            weekend_day_correction = get_weekend_day_correction(p.expected_start_date, p.expected_end_date)
             dauer = ((date_diff(p.expected_end_date, p.expected_start_date) - correction) + 1) * 2
+            dauer -= weekend_day_correction
         # compensate for duration exceeding to_date
         if p.expected_end_date > getdate(to_date):
+            weekend_day_correction = get_weekend_day_correction(p.expected_end_date, getdate(to_date))
             duration_correction = (date_diff(p.expected_end_date, getdate(to_date)) - 1) * 2
             dauer -= duration_correction
+            dauer -= weekend_day_correction
         if p.start_half_day.lower() == 'nm':
             dauer -= 1
         if p.end_half_day.lower() == 'vm':
@@ -67,6 +73,7 @@ def get_overlay_datas(from_date, to_date, customer=None):
         
         p_data = get_project_data(p, dauer)
         projects.append(p_data)
+        
         
     return projects
     
@@ -550,6 +557,19 @@ def get_days(from_date, to_date):
     today = today.strftime("%d.%m.%Y")
     
     return date_list, weekend_list, kw_list, day_list, today
+
+def get_weekend_day_correction(from_date, to_date):
+    start_date = getdate(from_date)
+    end_date = getdate(to_date)
+    delta = timedelta(days=1)
+    sundays = 0
+    while start_date <= end_date:
+        week_day_no = start_date.weekday()
+        if week_day_no == 6:
+            sundays += 2
+        start_date += delta
+    
+    return sundays
     
 def get_drilling_teams(only_teams=False):
     team_filter = ''
