@@ -14,7 +14,7 @@ This function checks the access and returns the restricted information
 """
 @frappe.whitelist(allow_guest=True)
 def get_grid(from_date, to_date):
-    data = get_content(from_date[1:11], to_date[1:11])
+    data = get_content(from_date[1:11], to_date[1:11], only_teams=True)
 
     return data
     

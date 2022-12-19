@@ -32,7 +32,7 @@ function make() {
                 kw_list: content.kw_list,
                 day_list: content.day_list,
                 today: content.today,
-                print_view: false
+                print_view: true
             };
             
             $(frappe.render_template(frappe.templates.calendar_grid, data)).appendTo($("#page-bohrplan"));
@@ -86,7 +86,6 @@ function run(from_date, to_date) {
        async: false,
        callback: function(response) {
             var contents = response.message;
-            console.log(contents)
             for (var i = 0; i < contents.length; i++) {
                 var data = contents[i];
                 add_overlay(data);

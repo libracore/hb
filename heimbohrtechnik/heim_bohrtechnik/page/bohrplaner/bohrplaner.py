@@ -511,9 +511,9 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
         project.save()
     
 @frappe.whitelist()
-def get_content(from_date, to_date):
+def get_content(from_date, to_date, only_teams=False):
     data = {}
-    data["drilling_teams"] = get_drilling_teams()
+    data["drilling_teams"] = get_drilling_teams(only_teams)
     data["days"], data["weekend"], data["kw_list"], data["day_list"], data["today"] = get_days(from_date, to_date)
     return data
     
@@ -551,7 +551,10 @@ def get_days(from_date, to_date):
     
     return date_list, weekend_list, kw_list, day_list, today
     
-def get_drilling_teams():
+def get_drilling_teams(only_teams=False):
+    team_filter = ''
+    if only_teams:
+        team_filter = """WHERE `drilling_team_type` = 'Bohrteam'"""
     drilling_teams = frappe.db.sql("""
         SELECT 
             `name` AS `team_id`, 
@@ -565,8 +568,9 @@ def get_drilling_teams():
             IFNULL(`crane_details`, "{crane}") AS `crane_details`, 
             `phone`,
             `drilling_team_type`
-        FROM `tabDrilling Team`""".format(
-            trough=_('Has Trough'), crane=_('Has Crane')), as_dict=True)
+        FROM `tabDrilling Team`
+        {team_filter}""".format(
+            trough=_('Has Trough'), crane=_('Has Crane'), team_filter=team_filter), as_dict=True)
         
     return drilling_teams
 
