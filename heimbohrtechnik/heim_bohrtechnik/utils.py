@@ -118,7 +118,9 @@ def create_akonto(sales_order):
 This function find applicable akonto invoices
 """
 @frappe.whitelist()
-def get_available_akonto(sales_order):
+def get_available_akonto(sales_order=None):
+    if not sales_order:
+        return []
     from heimbohrtechnik.heim_bohrtechnik.report.offene_akonto_rechnungen.offene_akonto_rechnungen import get_data
     akonto = get_data({'sales_order': sales_order})
     return akonto
