@@ -21,7 +21,7 @@
                                 KW {{ kw_list[day] }}<br>{{ day }}<br>({{ __(day_list[day]) }})
                             </th>
                         {% else %}
-                            <th colspan="2" class="sticky-top calendar-grid-header no-border-bottom
+                            <th class="sticky-top calendar-grid-header no-border-bottom
                                 {% if day == today %}today{% endif %}
                                 weekend">
                                 KW {{ kw_list[day] }}<br>WE
@@ -43,7 +43,7 @@
                                 {% if (in_list(weekend, day)) %}weekend{% endif %}">
                                 NM</th>
                         {% else %}
-                            <th colspan="2" class="sticky-top-small calendar-grid-header 
+                            <th class="sticky-top-small calendar-grid-header 
                                 {% if day == today %}today{% endif %}
                                 weekend" style="border-top: None;"></th>
                         {% endif %}
@@ -79,20 +79,28 @@
                     </td>
                     {% for day in days %}
                         {% if day_list[day] != "Sun" %}
-                            <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
-                                data-bohrteam="{{ drilling_team.team_id }}"
-                                data-date="{{ day }}"
-                                data-vmnm="vm"
-                                {% if day_list[day] != "Sat" %}
-                                ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"
-                                data-dropid="{{ drilling_team.team_id }}-{{ day }}-vm"{% endif %}></td>
-                            <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
-                                data-bohrteam="{{ drilling_team.team_id }}"
-                                data-date="{{ day }}"
-                                data-vmnm="nm"
-                                {% if day_list[day] != "Sat" %}
-                                ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"
-                                data-dropid="{{ drilling_team.team_id }}-{{ day }}-nm"{% endif %}></td>
+                            {% if day_list[day] != "Sat" %}
+                                <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                                    style="border-left: 1px solid #d1d8dd; border-right: 1px dotted #d1d8dd;"
+                                    data-bohrteam="{{ drilling_team.team_id }}"
+                                    data-date="{{ day }}"
+                                    data-vmnm="vm"
+                                    ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"
+                                    data-dropid="{{ drilling_team.team_id }}-{{ day }}-vm"></td>
+                                <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                                    style="border-right: 1px solid #d1d8dd; border-left: 1px dotted #d1d8dd;"
+                                    data-bohrteam="{{ drilling_team.team_id }}"
+                                    data-date="{{ day }}"
+                                    data-vmnm="nm"
+                                    ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)"
+                                    data-dropid="{{ drilling_team.team_id }}-{{ day }}-nm"></td>
+                            {% else %}
+                                <td class="weekend"
+                                    style="border-right: 1px solid #d1d8dd; border-left: 1px dotted #d1d8dd;"
+                                    data-bohrteam="{{ drilling_team.team_id }}"
+                                    data-date="{{ day }}"
+                                    data-vmnm="nm"></td>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </tr>

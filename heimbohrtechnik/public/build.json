@@ -3,7 +3,7 @@
         "public/js/heim_common.js"
     ],
     "js/heim_templates.js": [
-        "public/js/templates/calendar_grid.html",
-        "public/js/templates/booking_overlay.html"
+        "heim_bohrtechnik/page/bohrplaner/calendar_grid.html",
+        "heim_bohrtechnik/page/bohrplaner/booking_overlay.html"
     ]
 }

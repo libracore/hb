@@ -33,16 +33,6 @@ td {
     max-width: 42px;
 }
 
-tbody tr td:nth-child(odd) {
-    border-right: 1px solid #d1d8dd;
-    border-left: 1px dotted #d1d8dd;
-}
-
-tbody tr td:nth-child(even) {
-    border-left: 1px solid #d1d8dd;
-    border-right: 1px dotted #d1d8dd;
-}
-
 .calendar-grid-header {
     text-align: center;
     padding: 5px;

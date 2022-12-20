@@ -566,7 +566,7 @@ def get_weekend_day_correction(from_date, to_date):
     while start_date <= end_date:
         week_day_no = start_date.weekday()
         if week_day_no == 6:
-            sundays += 2
+            sundays += 3
         start_date += delta
     
     return sundays
