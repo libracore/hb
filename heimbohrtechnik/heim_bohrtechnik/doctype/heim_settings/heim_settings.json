@@ -23,7 +23,9 @@
   "sec_buying",
   "sondenparkplatz",
   "sec_nextcloud",
-  "projects_folder"
+  "projects_folder",
+  "col_nextcloud",
+  "projects_url"
  ],
  "fields": [
   {
@@ -141,10 +143,19 @@
    "fieldname": "projects_folder",
    "fieldtype": "Data",
    "label": "Projects Folder"
+  },
+  {
+   "fieldname": "col_nextcloud",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "projects_url",
+   "fieldtype": "Data",
+   "label": "Projects URL"
   }
  ],
  "issingle": 1,
- "modified": "2022-12-21 20:50:06.229077",
+ "modified": "2022-12-21 21:11:37.531258",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",

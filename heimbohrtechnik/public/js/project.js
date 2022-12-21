@@ -92,9 +92,26 @@ frappe.ui.form.on('Project', {
             frm.add_custom_button(__("Bohrauftrag"), function() {
                 create_pdf(frm);
             }, __("PDFs"));
-            // show siblings
+            
+            // for external projects
             if (frm.doc.project_type === "External") {
+                // show siblings
                 check_display_siblings("Project", frm.doc.name);
+                // open cloud button
+                if (!frm.doc.cloud_url) {
+                    frappe.call({
+                        'method': "heimbohrtechnik.heim_bohrtechnik.nextcloud.get_cloud_url",
+                        'args': {
+                            'project': frm.doc.name
+                        },
+                        'callback': function(response) {
+                            cur_frm.set_value("cloud_url", response.message);
+                        }
+                    });
+                }
+                frm.add_custom_button(__("Cloud"), function() {
+                    window.open(frm.doc.cloud_url, '_blank').focus();
+                });
             }
         } else {
             // new project: switch to internal and assign name/title

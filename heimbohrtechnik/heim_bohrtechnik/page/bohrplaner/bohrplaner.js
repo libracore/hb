@@ -357,18 +357,20 @@ frappe.bohrplaner = {
                             var object = r.message;
 
                             if (object) {
-                                var data = {};
+                                var data = {
+                                    'object': object.name,
+                                    'project': project.name,
+                                    'sales_order': project.sales_order,
+                                    'object_location': object.object_location,
+                                    'cloud_url': project.cloud_url
+                                };
+                                
                                 data.customer = __('No Customer found');
                                 data.customer_name = '';
                                 if (project.customer) {
                                     data.customer = project.customer;
                                     data.customer_name = project.customer_name;
                                 }
-                                
-                                data.object = object.name;
-                                data.project = project.name;
-                                data.sales_order = project.sales_order;
-                                data.object_location = object.object_location;
                                 
                                 data.mud_disposer = null;
                                 data.mud_disposer_name = null;

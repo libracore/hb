@@ -12,6 +12,10 @@
         <td><a href="/desk#Form/Project/{{ project }}" target="_blank">{{ project }}</a></td>
     </tr>
     <tr>
+        <td><b>{{ __("Cloud") }}</b></td>
+        <td><a href="{{ cloud_url }}" target="_blank">{{ __("Cloud") }}</a></td>
+    </tr>
+    <tr>
         <td><b>{{ __("Sales Order") }}</b></td>
         <td>{% if sales_order %}
             <a href="/desk#Form/Sales Order/{{ sales_order }}" target="_blank">{{ sales_order }}</a>

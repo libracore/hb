@@ -32,3 +32,11 @@ def create_path(path):
     except Exception as err:
         frappe.throw("{0}: {1}".format(path, err), "Create project folder (NextCloud")
     return
+
+"""
+This function gets the cloud link to a project
+"""
+@frappe.whitelist()
+def get_cloud_url(project):
+    projects_url = frappe.get_value("Heim Settings", "Heim Settings", "projects_url")
+    return "{0}/{1}".format(projects_url, project)

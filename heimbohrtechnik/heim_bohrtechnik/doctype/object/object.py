@@ -12,7 +12,7 @@ import requests
 import json
 from heimbohrtechnik.heim_bohrtechnik.doctype.construction_site_description.construction_site_description import check_object_checklist
 from frappe.utils import get_url_to_form
-from heimbohrtechnik.heim_bohrtechnik.nextcloud import create_project_folder
+from heimbohrtechnik.heim_bohrtechnik.nextcloud import create_project_folder, get_cloud_url
 
 class Object(Document):
     def before_save(self):
@@ -44,7 +44,8 @@ class Object(Document):
                 "name": self.name,
                 "project_name": self.name,
                 "object": self.name,
-                "project_type": "External"
+                "project_type": "External",
+                "cloud_url": get_cloud_url(self.name)
             })
             # add checklist and permits
             for c in self.checklist:
