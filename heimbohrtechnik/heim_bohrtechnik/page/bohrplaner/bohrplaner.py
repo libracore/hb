@@ -431,7 +431,7 @@ def get_traffic_lights_indicator(project):
     strassensperrung_color = BG_GREY                    # grey: not applicable
     for permit in project.permits:
         if 'Strassensperrung' in permit.permit:
-            strassensperrung_color = BG_RED             # red: required
+            #strassensperrung_color = BG_RED            # red: not used - should always be in the list
             if has_public_area_request(project.name):
                 strassensperrung_color = BG_ORANGE      # orange: requested
             if permit.file:                         
