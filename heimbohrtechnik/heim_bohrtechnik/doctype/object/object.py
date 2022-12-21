@@ -12,6 +12,7 @@ import requests
 import json
 from heimbohrtechnik.heim_bohrtechnik.doctype.construction_site_description.construction_site_description import check_object_checklist
 from frappe.utils import get_url_to_form
+from heimbohrtechnik.heim_bohrtechnik.nextcloud import create_project_folder
 
 class Object(Document):
     def before_save(self):
@@ -59,6 +60,8 @@ class Object(Document):
                 })
             project.insert()
             frappe.db.commit()
+            # create nextcloud folder
+            create_project_folder(project.name)
         return
         
     def convert_ch_to_gps(self):
