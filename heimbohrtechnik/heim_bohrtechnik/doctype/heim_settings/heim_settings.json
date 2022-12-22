@@ -23,12 +23,15 @@
   "sec_buying",
   "sondenparkplatz",
   "sec_nextcloud",
-  "projects_folder",
+  "cloud_hostname",
+  "cloud_user",
+  "cloud_password",
   "col_nextcloud",
-  "projects_url"
+  "projects_folder"
  ],
  "fields": [
   {
+   "collapsible": 1,
    "fieldname": "section_object",
    "fieldtype": "Section Break",
    "label": "Object"
@@ -139,7 +142,7 @@
    "label": "NextCloud"
   },
   {
-   "description": "Unix path to the projects folder, like /var/share/nextcloud/Projekte",
+   "description": "Name of the projects folder in NextCloud",
    "fieldname": "projects_folder",
    "fieldtype": "Data",
    "label": "Projects Folder"
@@ -149,13 +152,24 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "projects_url",
+   "description": "Hostname, like https://cloud.example.com",
+   "fieldname": "cloud_hostname",
    "fieldtype": "Data",
-   "label": "Projects URL"
+   "label": "NextCloud Host"
+  },
+  {
+   "fieldname": "cloud_user",
+   "fieldtype": "Data",
+   "label": "NextCloud User"
+  },
+  {
+   "fieldname": "cloud_password",
+   "fieldtype": "Password",
+   "label": "NextCloud Password"
   }
  ],
  "issingle": 1,
- "modified": "2022-12-21 21:11:37.531258",
+ "modified": "2022-12-22 08:38:33.399364",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",
