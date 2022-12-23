@@ -35,10 +35,12 @@ def create_project_folder(project):
     create_path(client, project_path)
     # create child folders
     create_path(client, os.path.join(project_path, "01_Fotos"))
-    create_path(client, os.path.join(project_path, "02_Bohren"))
-    create_path(client, os.path.join(project_path, "03_Anbindung"))
-    create_path(client, os.path.join(project_path, "04_Lieferanten"))
-    create_path(client, os.path.join(project_path, "05_Schadenfälle"))
+    create_path(client, os.path.join(project_path, "02_Werkpläne"))
+    create_path(client, os.path.join(project_path, "03_Strassensperrung"))
+    create_path(client, os.path.join(project_path, "04_Bohren"))
+    create_path(client, os.path.join(project_path, "05_Anbindung"))
+    create_path(client, os.path.join(project_path, "06_Lieferanten"))
+    create_path(client, os.path.join(project_path, "07_Schadenfälle"))
     return
     
 def create_path(client, path):
