@@ -236,16 +236,18 @@ frappe.bohrplaner = {
     },
     add_subproject_overlay: function(page, data) {
         var place = $('[data-bohrteam="' + data.bohrteam + '"][data-date="' + data.start + '"][data-vmnm="vm"]');
+        
+        if (data.subproject_shift === 1) {
+            place = $('[data-bohrteam="' + data.bohrteam + '-2"][data-date="' + data.start + '"][data-vmnm="vm"]');
+        } else if (data.subproject_shift > 1) {
+            place = $('[data-bohrteam="' + data.bohrteam + '-3"][data-date="' + data.start + '"][data-vmnm="vm"]');
+        }
+        
         $(place).css("position", "relative");
         var qty = data.dauer
-        var subproject_shift = data.subproject_shift;
-        if (subproject_shift > 0) {
-            var width = (42 * qty) - (data.subproject_shift / 2);
-        } else {
-            var width = (42 * qty);
-        }
+        
         $(frappe.render_template('subproject_overlay', {
-            'width': width, 
+            'width': (42 * data.dauer), 
             'subproject': data.id, 
             'description': data.description, 
             'subproject_shift': data.subproject_shift,

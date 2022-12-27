@@ -297,7 +297,7 @@ def calc_duration(start, end, from_date, to_date):
 
 def subproject_shift_controll(subproject, start, shift_controll):
     if str(start) + str(subproject.team) in shift_controll:
-        shift_controll[str(start) + str(subproject.team)] += 20
+        shift_controll[str(start) + str(subproject.team)] += 1
         return shift_controll[str(start) + str(subproject.team)], shift_controll
     else:
         shift_controll[str(start) + str(subproject.team)] = 0
