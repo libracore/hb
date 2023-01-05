@@ -18,6 +18,15 @@ BG_BLUE = '#9dc7f0;'
 BG_WHITE = '#ffffff;'
 BG_BLACK = '#000000;'
 
+WEEKDAYS = {
+    0: "So",
+    1: "Mo", 
+    2: "Di",
+    3: "Mi",
+    4: "Do",
+    5: "Fr",
+    6: "Sa"
+}
 @frappe.whitelist()
 def get_overlay_datas(from_date, to_date, customer=None):
     projects = []
@@ -90,11 +99,13 @@ def get_project_data(p, dauer):
     drilling_equipment = ", ".join(drilling_equipment)
     saugauftrag = 'Schlamm fremd'
     pneukran = ''
+    pneukran_details = {}
     for cl_entry in project.checklist:
         if cl_entry.activity == 'Schlammentsorgung':
             saugauftrag = cl_entry.supplier_short_display or cl_entry.supplier_name
         if cl_entry.activity == 'Kran':
             pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name
+            pneukran_details = cl_entry.as_dict()
     # carrymax from construction site
     if len(construction_sites) > 0:
         if not pneukran:
@@ -104,7 +115,14 @@ def get_project_data(p, dauer):
                 pneukran = "int. Kran"
             elif construction_sites[0].get('external_crane_required') == 1:
                 pneukran = "ext. Kran"
-    
+        else:
+            # extend crane details
+            if pneukran_details['appointment']:
+                
+                pneukran += ", {0}".format(get_short_time(pneukran_details['appointment']))
+            if pneukran_details['appointment_end']:
+                pneukran += " bis {0}".format(get_short_time(pneukran_details['appointment_end']))
+                
     p_data = {
             'bohrteam': p.drilling_team,
             'start': get_datetime(p.expected_start_date).strftime('%d.%m.%Y'),
@@ -119,6 +137,11 @@ def get_project_data(p, dauer):
         }
         
     return p_data
+
+def get_short_time(d):
+    day = WEEKDAYS[cint(d.strftime("%w"))]
+    s = "{0} {1}".format(day, d.strftime("%H:%M"))
+    return s
     
 @frappe.whitelist()
 def get_internal_overlay_datas(from_date, to_date):
