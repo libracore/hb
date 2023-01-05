@@ -33,7 +33,6 @@
   "internal_crane_required",
   "external_crane_required",
   "crane_length",
-  "crane_organized",
   "sec_access",
   "site_access",
   "column_break_34",
@@ -194,13 +193,6 @@
    "label": "External Crane required"
   },
   {
-   "default": "0",
-   "depends_on": "eval:(doc.internal_crane_required==1 || doc.external_crane_required==1)",
-   "fieldname": "crane_organized",
-   "fieldtype": "Check",
-   "label": "Crane organized"
-  },
-  {
    "depends_on": "eval:(doc.external_crane_required==1)",
    "fieldname": "crane_length",
    "fieldtype": "Select",
@@ -331,7 +323,7 @@
    "label": "Construction site inspected"
   }
  ],
- "modified": "2022-11-21 11:16:12.951436",
+ "modified": "2023-01-05 14:29:14.650808",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
