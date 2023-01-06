@@ -179,16 +179,24 @@
                 </td>
                 {% for day in days %}
                     {% if day_list[day] != "Sun" %}
-                        <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
-                            data-bohrteam="absences"
-                            data-date="{{ day }}"
-                            data-vmnm="vm">
-                        </td>
-                        <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
-                            data-bohrteam="absences"
-                            data-date="{{ day }}"
-                            data-vmnm="nm">
-                        </td>
+                        {% if day_list[day] != "Sat" %}
+                            <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                                data-bohrteam="absences"
+                                data-date="{{ day }}"
+                                data-vmnm="vm">
+                            </td>
+                            <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                                data-bohrteam="absences"
+                                data-date="{{ day }}"
+                                data-vmnm="nm">
+                            </td>
+                        {% else %}
+                            <td class="{% if (in_list(weekend, day)) %}weekend{% endif %}"
+                                data-bohrteam="absences"
+                                data-date="{{ day }}"
+                                data-vmnm="nm">
+                            </td>
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             </tr>
