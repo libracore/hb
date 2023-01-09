@@ -33,6 +33,9 @@ class SubcontractingOrder(Document):
                     if s.description != self.order_description:
                         s.description = self.order_description
                         modified = True
+                    if s.team != self.drilling_team:
+                        s.team = self.drilling_team
+                        modified = True
                     if modified:
                         p.save()
                         updated = True
