@@ -539,6 +539,34 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
         project.drilling_team = team
         project.crane_organized = '0'
         project.save()
+
+@frappe.whitelist()
+def reschedule_subcontracting(subcontracting=None, team=None, day=None):
+    subcontracting = frappe.get_doc("Subcontracting Order", subcontracting)
+    
+    start_date = subcontracting.from_date
+    end_date = subcontracting.to_date
+    subcontracting_duration = date_diff(end_date, start_date)
+    delta = timedelta(days=subcontracting_duration)
+    
+    new_subcontracting_start_day = day.split(".")[0]
+    new_subcontracting_start_month = day.split(".")[1]
+    new_subcontracting_start_year = day.split(".")[2]
+    new_subcontracting_start = getdate(new_subcontracting_start_year + "-" + new_subcontracting_start_month + "-" + new_subcontracting_start_day)
+    
+    new_subcontracting_end_date = new_subcontracting_start
+    new_subcontracting_end_date += delta
+    
+    subcontracting.from_date = new_subcontracting_start
+    subcontracting.to_date = new_subcontracting_end_date
+    
+    if frappe.db.exists("Drilling Team", team):
+        subcontracting.drilling_team = team
+    else:
+        team = team.replace("-2", "").replace("-3", "")
+        if frappe.db.exists("Drilling Team", team):
+            subcontracting.drilling_team = team
+    subcontracting.save()
     
 @frappe.whitelist()
 def get_content(from_date, to_date, only_teams=False):

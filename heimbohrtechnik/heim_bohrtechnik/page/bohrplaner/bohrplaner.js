@@ -527,7 +527,6 @@ function allowDrop(ev) {
                 var to_get_droped = $("[data-dropid='" + ev.target.dataset.dropid + "']")[0];
                 to_get_droped.classList.add("ondragover");
             } else {
-                //show_alert('Projekte und Verlängerungsteams können nicht vermischt werden.');
                 // stop it
                 var to_get_droped = $("[data-dropid='" + ev.target.dataset.dropid + "']")[0];
                 to_get_droped.classList.add("ondragover_dissallow");
@@ -565,9 +564,7 @@ function drop(ev) {
             var dropped_element = document.getElementById(data);
             ev.target.appendChild(dropped_element);
             $("[data-dropid='" + ev.target.dataset.dropid + "']").removeClass("ondragover");
-            if (lanetype_drop_element == 'Project') {
-                reshedule(data, $(ev.target).attr("data-bohrteam"), $(ev.target).attr("data-date"), $(ev.target).attr("data-vmnm"))
-            }
+            reshedule(data, $(ev.target).attr("data-bohrteam"), $(ev.target).attr("data-date"), $(ev.target).attr("data-vmnm"), lanetype_drop_element)
         } else {
             // stop it
             show_alert('Projekte und Verlängerungsteams können nicht vermischt werden.');
@@ -576,19 +573,33 @@ function drop(ev) {
     }
 }
 
-function reshedule(project, team, day, start_half_day) {
-    frappe.call({
-       method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.reschedule_project",
-       args: {
-            "project": project,
-            "team": team,
-            "day": day,
-            "start_half_day": start_half_day
-       },
-       callback: function(response) {
-            
-       }
-    });
+function reshedule(ref_id, team, day, start_half_day, lanetype) {
+    if (lanetype == 'Project') {
+        frappe.call({
+           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.reschedule_project",
+           args: {
+                "project": ref_id,
+                "team": team,
+                "day": day,
+                "start_half_day": start_half_day
+           },
+           callback: function(response) {
+                
+           }
+        });
+    } else {
+        frappe.call({
+           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.reschedule_subcontracting",
+           args: {
+                "subcontracting": ref_id,
+                "team": team,
+                "day": day
+           },
+           callback: function(response) {
+                
+           }
+        });
+    }
 }
 
 function print_content(page, from, to) {
