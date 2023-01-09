@@ -12,6 +12,7 @@ from erpnextswiss.erpnextswiss.utils import get_numeric_part
 from erpnextswiss.erpnextswiss.attach_pdf import execute
 from frappe.desk.form.load import get_attachments
 from frappe.utils.file_manager import remove_file
+from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_project_file_from_local_file
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -543,6 +544,9 @@ def create_full_project_file(project):
     merger.write(tmp_name)
     merger.close()
     cleanup(pdf_file)
+    
+    # send full file to nextcloud
+    write_project_file_from_local_file(project, tmp_name)
     
     # attach
     # check if this is already attached
