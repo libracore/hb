@@ -253,6 +253,9 @@ td {
 .ondragover {
     background-color: yellow !important;
 }
+.ondragover_dissallow {
+    background-color: red !important;
+}
 
 .pointer {
     cursor: pointer;

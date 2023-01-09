@@ -226,7 +226,6 @@ frappe.bohrplaner = {
         return
     },
     add_internal_overlay: function(page, data) {
-        console.log(data);
         var place = $('[data-bohrteam="' + data.bohrteam + '"][data-date="' + data.start + '"][data-vmnm="' + data.vmnm + '"]');
         $(place).css("position", "relative");
         var qty = data.dauer
@@ -517,8 +516,23 @@ frappe.bohrplaner = {
 function allowDrop(ev) {
     ev.preventDefault();
     try {
-        var to_get_droped = $("[data-dropid='" + ev.target.dataset.dropid + "']")[0];
-        to_get_droped.classList.add("ondragover");
+        // Check Lanetyp of drop-element and target
+        var drop_data = ev.dataTransfer.getData('text');
+        var drop_element = document.getElementById(drop_data);
+        var lanetype_drop_element = $(drop_element).attr("data-lanetype");
+        var lanetype_drop_target = ev.target.dataset.lanetype;
+        if (lanetype_drop_element && lanetype_drop_target) {
+            if (lanetype_drop_element == lanetype_drop_target) {
+                // go for it
+                var to_get_droped = $("[data-dropid='" + ev.target.dataset.dropid + "']")[0];
+                to_get_droped.classList.add("ondragover");
+            } else {
+                //show_alert('Projekte und Verlängerungsteams können nicht vermischt werden.');
+                // stop it
+                var to_get_droped = $("[data-dropid='" + ev.target.dataset.dropid + "']")[0];
+                to_get_droped.classList.add("ondragover_dissallow");
+            }
+        }
     } catch(err) {}
 }
 
@@ -527,6 +541,7 @@ function dragLeave(ev) {
     try {
         var leaved = $("[data-dropid='" + ev.target.dataset.dropid + "']")[0];
         leaved.classList.remove("ondragover");
+        leaved.classList.remove("ondragover_dissallow");
     } catch(err) {}
 }
 
@@ -537,12 +552,28 @@ function drag(ev) {
 
 function drop(ev) {
     ev.preventDefault();
-    var data = ev.dataTransfer.getData('text');
-    $("[data-dropid='" + ev.target.dataset.dropid + "']").css("position", "relative");
-    var dropped_element = document.getElementById(data);
-    ev.target.appendChild(dropped_element);
-    $("[data-dropid='" + ev.target.dataset.dropid + "']").removeClass("ondragover");
-    reshedule(data, $(ev.target).attr("data-bohrteam"), $(ev.target).attr("data-date"), $(ev.target).attr("data-vmnm"))
+    // Check Lanetyp of drop-element and target
+    var drop_data = ev.dataTransfer.getData('text');
+    var drop_element = document.getElementById(drop_data);
+    var lanetype_drop_element = $(drop_element).attr("data-lanetype");
+    var lanetype_drop_target = ev.target.dataset.lanetype;
+    if (lanetype_drop_element && lanetype_drop_target) {
+        if (lanetype_drop_element == lanetype_drop_target) {
+            // go for it
+            var data = ev.dataTransfer.getData('text');
+            $("[data-dropid='" + ev.target.dataset.dropid + "']").css("position", "relative");
+            var dropped_element = document.getElementById(data);
+            ev.target.appendChild(dropped_element);
+            $("[data-dropid='" + ev.target.dataset.dropid + "']").removeClass("ondragover");
+            if (lanetype_drop_element == 'Project') {
+                reshedule(data, $(ev.target).attr("data-bohrteam"), $(ev.target).attr("data-date"), $(ev.target).attr("data-vmnm"))
+            }
+        } else {
+            // stop it
+            show_alert('Projekte und Verlängerungsteams können nicht vermischt werden.');
+            $("[data-dropid='" + ev.target.dataset.dropid + "']").removeClass("ondragover_dissallow");
+        }
+    }
 }
 
 function reshedule(project, team, day, start_half_day) {
