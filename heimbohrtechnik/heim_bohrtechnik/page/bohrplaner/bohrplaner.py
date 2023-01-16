@@ -100,28 +100,39 @@ def get_project_data(p, dauer):
     saugauftrag = 'Schlamm fremd'
     pneukran = ''
     pneukran_details = {}
+    flag_ext_crane = False
+    flag_int_crane = False
     for cl_entry in project.checklist:
         if cl_entry.activity == 'Schlammentsorgung':
             saugauftrag = cl_entry.supplier_short_display or cl_entry.supplier_name
-        if cl_entry.activity == 'Kran':
-            pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name
+        if cl_entry.activity == 'Kran extern':
+            pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name or "ext. Kran"
             pneukran_details = cl_entry.as_dict()
+            flag_ext_crane = True
+        if cl_entry.activity == 'Kran intern':
+            pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name or "int. Kran"
+            pneukran_details = cl_entry.as_dict()
+            flag_int_crane = True
     # carrymax from construction site
     if len(construction_sites) > 0:
-        if not pneukran:
+        if not pneukran or pneukran in ("ext. Kran", "int. Kran"):
             if construction_sites[0].get('carrymax') == 1:
                 pneukran = "Carrymax"
             elif construction_sites[0].get('internal_crane_required') == 1:
                 pneukran = "int. Kran"
+                if flag_ext_crane:
+                    pneukran = "(!)" + pneukran
             elif construction_sites[0].get('external_crane_required') == 1:
                 pneukran = "ext. Kran"
+                if flag_int_crane:
+                    pneukran = "(!)" + pneukran
         else:
             # extend crane details
             if pneukran_details['appointment']:
                 
                 pneukran += ", {0}".format(get_short_time(pneukran_details['appointment']))
             if pneukran_details['appointment_end']:
-                pneukran += " bis {0}".format(get_short_time(pneukran_details['appointment_end']))
+                pneukran += " / {0}".format(get_short_time(pneukran_details['appointment_end']))
                 
     p_data = {
             'bohrteam': p.drilling_team,
