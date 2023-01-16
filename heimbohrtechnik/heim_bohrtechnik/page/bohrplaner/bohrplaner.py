@@ -98,21 +98,27 @@ def get_project_data(p, dauer):
         drilling_equipment.append(de.drilling_equipment)
     drilling_equipment = ", ".join(drilling_equipment)
     saugauftrag = 'Schlamm fremd'
+    mud = None
     pneukran = ''
     pneukran_details = {}
     flag_ext_crane = False
     flag_int_crane = False
+    flag_override_mud = False
     for cl_entry in project.checklist:
         if cl_entry.activity == 'Schlammentsorgung':
             saugauftrag = cl_entry.supplier_short_display or cl_entry.supplier_name
-        if cl_entry.activity == 'Kran extern':
+            if cl_entry.supplier == "K-03749":
+                flag_override_mud = True
+        elif cl_entry.activity == 'Kran extern':
             pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name or "ext. Kran"
             pneukran_details = cl_entry.as_dict()
             flag_ext_crane = True
-        if cl_entry.activity == 'Kran intern':
+        elif cl_entry.activity == 'Kran intern':
             pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name or "int. Kran"
             pneukran_details = cl_entry.as_dict()
             flag_int_crane = True
+        elif cl_entry.activity == 'Mulde':
+            mud = cl_entry.supplier_short_display or cl_entry.supplier_name
     # carrymax from construction site
     if len(construction_sites) > 0:
         if not pneukran or pneukran in ("ext. Kran", "int. Kran"):
@@ -133,7 +139,11 @@ def get_project_data(p, dauer):
                 pneukran += ", {0}".format(get_short_time(pneukran_details['appointment']))
             if pneukran_details['appointment_end']:
                 pneukran += " / {0}".format(get_short_time(pneukran_details['appointment_end']))
-                
+    
+    # override mud for special case
+    if flag_override_mud:
+        saugauftrag = mud
+        
     p_data = {
             'bohrteam': p.drilling_team,
             'start': get_datetime(p.expected_start_date).strftime('%d.%m.%Y'),
