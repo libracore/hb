@@ -37,7 +37,7 @@ class Object(Document):
         else:
             return 0
     
-    def create_project(self):
+    def create_project(self, sales_order=None):
         if not frappe.db.exists("Project", self.name):
             project = frappe.get_doc({
                 "doctype": "Project",
@@ -48,17 +48,46 @@ class Object(Document):
                 "cloud_url": get_cloud_url(self.name)
             })
             # add checklist and permits
+            has_int_crane = False
+            has_ext_crane = False
             for c in self.checklist:
                 project.append("checklist", {
                   'activity': c.activity,
                   'supplier': c.supplier,
                   'supplier_name': c.supplier_name  
                 })
+                if c.activity == "Kran extern":
+                    has_ext_crane = True
+                elif c.activity == "Kran intern":
+                    has_int_crane = True
+                    
             for p in self.permits:
                 project.append("permits", {
                   'permit': p.permit,
                   'file': p.file
                 })
+            # check sales order positions to extend checklist
+            if sales_order:
+                so_doc = frappe.get_doc("Sales Order", sales_order)
+                needs_int_crane = False
+                needs_ext_crane = False
+                for item in so_doc.items:
+                    if item.item_code == "1.01.02.04":
+                        needs_int_crane = True
+                    elif item.item_name == "Kranarbeit mit Subunternehmer":
+                        needs_ext_crane = True
+                        
+                
+                if needs_int_crane and not has_int_crane:
+                    project.append("checklist", {
+                      'activity': "Kran intern"
+                    })
+                elif needs_ext_crane and not has_ext_crane:
+                    project.append("checklist", {
+                      'activity': "Kran extern"
+                    })
+                    
+                    
             project.insert()
             frappe.db.commit()
             # create nextcloud folder

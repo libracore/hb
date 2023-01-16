@@ -376,7 +376,7 @@ def check_create_project(sales_order):
     if 'object' in sales_order and sales_order['object']:
         if not frappe.db.exists("Project", sales_order['object']):
             o = frappe.get_doc("Object", sales_order['object'])
-            o.create_project()
+            o.create_project(sales_order)
         # reference customer and sales order
         p = frappe.get_doc("Project", sales_order['object'])
         p.customer = sales_order['customer']
