@@ -67,7 +67,7 @@ class Object(Document):
                   'file': p.file
                 })
             # check sales order positions to extend checklist
-            if sales_order:
+            if sales_order and frappe.db.exists("Sales Order", sales_order):
                 so_doc = frappe.get_doc("Sales Order", sales_order)
                 needs_int_crane = False
                 needs_ext_crane = False
