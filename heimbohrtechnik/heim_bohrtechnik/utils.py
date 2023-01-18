@@ -690,11 +690,12 @@ def reassign_project(purchase_order, old_project, new_project):
         WHERE `parent` = "{purchase_order}"
           AND `project` = "{old_project}";
     """.format(purchase_order=purchase_order, project=new_project, old_project=old_project))
-    frappe.db.sql("""
-        UPDATE `tabPurchase Order`
-        SET `object` = "{project}"
-        WHERE `name` = "{purchase_order}";
-    """.format(purchase_order=purchase_order, project=new_project))
+    if "P-" in new_project:
+        frappe.db.sql("""
+            UPDATE `tabPurchase Order`
+            SET `object` = "{project}"
+            WHERE `name` = "{purchase_order}";
+        """.format(purchase_order=purchase_order, project=new_project))
     
     doc = frappe.get_doc("Purchase Order", purchase_order)
     doc.add_comment("Info", _("Umbuchen von {0} auf {1}").format(old_project, new_project))
