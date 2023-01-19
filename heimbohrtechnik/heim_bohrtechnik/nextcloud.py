@@ -93,7 +93,7 @@ def get_cloud_url(project):
 Extract the physical path from a file record
 """
 def get_physical_path(file_name):
-    file_url = frappe.get_value("File", file_name, "file_name")     # something like /private/files/myfile.pdf
+    file_url = frappe.get_value("File", file_name, "file_url")     # something like /private/files/myfile.pdf
     
     base_path = os.path.join(frappe.utils.get_bench_path(), frappe.utils.get_site_path()[2:])
     
