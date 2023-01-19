@@ -444,7 +444,7 @@ frappe.ui.form.on('Object Address', {
                 });
                 
                 // in checklist cases: link in checklist as well
-                if (["Kran", "Kran intern", "Geologe", "Mulde", "Schlammentsorgung"].includes(v.address_type)) {
+                if (["Kran extern", "Kran intern", "Geologe", "Mulde", "Schlammentsorgung"].includes(v.address_type)) {
                     set_checklist_supplier(frm, v.address_type, v.party);
                 }
             }
