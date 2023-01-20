@@ -80,7 +80,7 @@
    "label": "Appointment"
   },
   {
-   "depends_on": "eval:([\"Kran\", \"Mulde\"].includes(doc.activity))",
+   "depends_on": "eval:([\"Kran extern\", \"Mulde\"].includes(doc.activity))",
    "fieldname": "appointment_end",
    "fieldtype": "Datetime",
    "label": "Appointment End"
@@ -117,7 +117,7 @@
   }
  ],
  "istable": 1,
- "modified": "2022-12-01 11:38:45.990573",
+ "modified": "2023-01-20 20:33:11.524920",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Project Checklist",
