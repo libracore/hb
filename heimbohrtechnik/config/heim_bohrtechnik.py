@@ -240,6 +240,12 @@ def get_data():
                    "name": "Payment Reminder",
                    "label": _("Payment Reminder"),
                    "description": _("Payment Reminder")
+                },
+                {
+                    "type": "report",
+                    "name": "Account Sheets",
+                    "doctype": "GL Entry",
+                    "is_query_report": True,
                 }
             ]
         },

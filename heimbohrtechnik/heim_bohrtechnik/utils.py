@@ -521,7 +521,7 @@ def create_full_project_file(project):
     with open(pdf_file, mode='wb') as file:
         file.write(pdf)
     # create merger
-    merger = PdfFileMerger()
+    merger = PdfFileMerger(strict=False)                    # accept technically incorrect PDFs
     merger.append(pdf_file)
     # other pages from construction plans
     p_doc = frappe.get_doc("Project", project)
