@@ -78,7 +78,14 @@ Write the project file (local file path) to nextcloud
 def write_project_file_from_local_file (project, file_name):
     client = get_client()
     project_path = get_project_path(project)
-    client.upload_sync(os.path.join(project_path, PATHS['drilling'], file_name.split("/")[-1]), file_name)
+    try:
+        client.upload_sync(os.path.join(project_path, PATHS['drilling'], file_name.split("/")[-1]), file_name)
+    except:
+        # fallback to root (for migartion projects)
+        try:
+            client.upload_sync(os.path.join(project_path, file_name.split("/")[-1]), file_name)
+        except Exception as err:
+            frappe.log_error( err, "Nextcloud: {0} project file cannot be uploaded".format(project) )
     return
     
 """
