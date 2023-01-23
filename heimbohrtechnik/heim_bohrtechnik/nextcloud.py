@@ -81,7 +81,7 @@ def write_project_file_from_local_file (project, file_name):
     if client.check(os.path.join(project_path, PATHS['drilling'])):
         client.upload_sync(os.path.join(project_path, PATHS['drilling'], file_name.split("/")[-1]), file_name)
     else:
-        # fallback to root (for migartion projects)
+        # fallback to root (for migration projects)
         client.upload_sync(os.path.join(project_path, file_name.split("/")[-1]), file_name)
 
     return

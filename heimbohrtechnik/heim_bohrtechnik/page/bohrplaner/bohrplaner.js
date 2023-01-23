@@ -293,7 +293,13 @@ frappe.bohrplaner = {
         // remove old grid
         $("#bohrplan_wrapper").remove();
         //get template data
-        var data = frappe.bohrplaner.get_content(page, from, to);
+        var view_from = from;
+        var view_to = to;
+        if (locals.print_view) {            // for print view, use 3 weeks from now
+            view_from = frappe.datetime.add_days(new Date(), 0);
+            view_to = frappe.datetime.add_days(new Date(), 21);
+        }
+        var data = frappe.bohrplaner.get_content(page, view_from, view_to);
         data['print_view'] = locals.print_view;
         // render calendar grid
         $(frappe.render_template('calendar_grid', data)).appendTo(page.body);
