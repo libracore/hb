@@ -375,22 +375,11 @@ frappe.bohrplaner = {
                                 
                                 data.mud_disposer = null;
                                 data.mud_disposer_name = null;
-                                if (object.mud_disposer) {
-                                    frappe.call({
-                                        "method": "frappe.client.get",
-                                        "args": {
-                                            "doctype": "Supplier",
-                                            "name": object.mud_disposer
-                                        },
-                                        "async": false,
-                                        "callback": function(_supplier) {
-                                            if (_supplier.message) {
-                                                var supplier = _supplier.message;
-                                                data.mud_disposer_name = supplier.supplier_name;
-                                            }
-                                        }
-                                    });
-                                    data.mud_disposer = object.mud_disposer;
+                                for (var i = 0; i < project.checklist.length; i++) {
+                                    if (project.checklist[i].activity === "Schlammentsorgung") {
+                                        data.mud_disposer_name = project.checklist[i].supplier_name;
+                                        data.mud_disposer = project.checklist[i].supplier;
+                                    }
                                 }
                                 
                                 data.drilling_equipment = [];
