@@ -314,7 +314,11 @@ frappe.ui.form.on('Object EWS', {
     }  ,
     probe_type: function(frm, cdt, cdn) {
         verify_diameter(frm, cdt, cdn);
-    } 
+    },
+    ews_specification_remove(frm, cdt, cdn) {
+        console.log("remove");
+        update_ews_details(frm, cdt, cdn);
+    }
 });
 
 frappe.ui.form.on('Object Address', {
@@ -584,7 +588,10 @@ function convert_gps_to_ch(frm) {
 }
 
 function update_ews_details(frm, cdt, cdn) {
-    var v = locals[cdt][cdn];
+    if (frm.doc.ews_specification.length === 0) {
+        return;
+    }
+    var v = frm.doc.ews_specification[0];
     if (frm.doc.ews_specification) {
         if (frm.doc.ews_specification.length === 1) {
             var details = (v.ews_count || "?") + "x "
