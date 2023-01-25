@@ -1,4 +1,4 @@
-# Copyright (c) 2022, libracore and Contributors
+# Copyright (c) 2022-2023, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 
 from __future__ import unicode_literals
