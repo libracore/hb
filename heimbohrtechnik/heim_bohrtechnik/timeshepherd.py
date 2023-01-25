@@ -99,8 +99,25 @@ def get_absences():
     settings = get_settings()
     employees = get_employees(only_active_ids=True)
     
-    absences_raw = None
+    absences = []
     
+    # use pagination because otherwise the API overloads
+    from_date = datetime.now()
+    to_date = from_date
+    
+    for i in range(1, 7):
+        from_date = to_date
+        to_date = (from_date + relativedelta(months=1))
+        _absences = get_absence_page(settings=settings, token=token, employees=employees, 
+            from_date=from_date, to_date=to_date)
+        if _absences:
+            for absence in _absences:
+                absences.append(absence)
+        
+    return absences
+
+def get_absence_page(settings, token, employees, from_date, to_date):
+    absences_raw = None
     while True:
         url = "{0}/TS.DAS.REST/api/v1/Absence/Search".format(settings.host)
         api_call_header = {
@@ -108,12 +125,14 @@ def get_absences():
             'Content-Type': 'application/json'
         }
         payload = {
-            'dateFrom': datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"), # "2023-04-01T00:00:00.000Z", #
-            'dateTo': (datetime.now() + relativedelta(months=6)).strftime("%Y-%m-%dT%H:%M:%SZ"), # "2023-05-30T00:00:00.000Z", #
+            'dateFrom': from_date.strftime("%Y-%m-%dT00:00:00.000Z"), 
+            'dateTo': to_date.strftime("%Y-%m-%dT23:59:00.000Z"), 
             'allEmployees': False,
             'employeeIds': employees,
             'suppressBookingDetails': False
         }
+        
+        print("{0}".format(payload))
         
         api_call_response = requests.post(url, 
             headers=api_call_header, 
@@ -130,7 +149,6 @@ def get_absences():
     if not absences_raw:
         return None
     
-    print("{0}".format(absences_raw))
     # process absences:   
     if 'absencesEmployee' in absences_raw:
         absences = []
@@ -141,9 +159,7 @@ def get_absences():
                 'last_name': absence['employee']['lastName'],
                 'email': absence['employee']['email']
             }
-            print("Employee: {0}".format(employee['first_name']))
             for day in absence['absences']:
-                #print("{0}".format(day['booking']))
                 if len(day['booking']) > 0:
                     absences.append({
                         'date': day['date'],
@@ -156,10 +172,7 @@ def get_absences():
                         'last_name': employee['last_name'],
                         'email': employee['email']            
                     })
-        print("{0}".format(absences))
         return absences
         
     else:
         return None
-    
-    return
