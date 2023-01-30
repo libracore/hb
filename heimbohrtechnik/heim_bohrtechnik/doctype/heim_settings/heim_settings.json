@@ -7,12 +7,17 @@
   "section_object",
   "address_template",
   "section_bohrplaner",
+  "int_crane_activity",
   "crane_activity",
+  "carrymax_activity",
   "mud_disposer_activity",
   "column_bohrplaner",
   "drilling_item",
   "thermozement_item",
   "staged_cementation_item",
+  "internal_crane_item",
+  "external_crane_item",
+  "carrymax_item",
   "section_pricing",
   "buying_price_list_chf",
   "buying_price_list_eur",
@@ -51,7 +56,7 @@
    "fieldname": "crane_activity",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Crane Activity",
+   "label": "External Crane Activity",
    "options": "Checklist Activity",
    "reqd": 1
   },
@@ -166,10 +171,43 @@
    "fieldname": "cloud_password",
    "fieldtype": "Password",
    "label": "NextCloud Password"
+  },
+  {
+   "description": "It this item is in a sales order, project checklist internal crane is enabled",
+   "fieldname": "internal_crane_item",
+   "fieldtype": "Link",
+   "label": "Internal crane item",
+   "options": "Item"
+  },
+  {
+   "description": "It this item is in a sales order, project checklist external crane is enabled",
+   "fieldname": "external_crane_item",
+   "fieldtype": "Link",
+   "label": "External crane item",
+   "options": "Item"
+  },
+  {
+   "description": "It this item is in a sales order, project checklist carrymax is enabled",
+   "fieldname": "carrymax_item",
+   "fieldtype": "Link",
+   "label": "Carrymax item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "int_crane_activity",
+   "fieldtype": "Link",
+   "label": "Internal Crane Activity",
+   "options": "Checklist Activity"
+  },
+  {
+   "fieldname": "carrymax_activity",
+   "fieldtype": "Link",
+   "label": "Carrymax Activity",
+   "options": "Checklist Activity"
   }
  ],
  "issingle": 1,
- "modified": "2022-12-22 08:38:33.399364",
+ "modified": "2023-01-30 21:56:35.847075",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",

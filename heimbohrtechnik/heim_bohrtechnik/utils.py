@@ -396,22 +396,65 @@ def update_project(project):
         o = frappe.get_doc("Object", p.object)
     else:
         o = None
-    # find sales order data (Thermozement)
-    thermo_item = frappe.get_value("Heim Settings", "Heim Settings", "thermozement_item")
-    staged_cementation_item = frappe.get_value("Heim Settings", "Heim Settings", "staged_cementation_item")
+    # find sales order data
+    items = {
+        'thermo' :frappe.get_value("Heim Settings", "Heim Settings", "thermozement_item"),
+        'staged_cementation': frappe.get_value("Heim Settings", "Heim Settings", "staged_cementation_item"),
+        'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "internal_crane_item"),
+        'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "external_crane_item"),
+        'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_item")
+    }
+    activities = {
+        'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "internal_crane_activity"),
+        'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "external_crane_activity"),
+        'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_activity")
+    }
+    
     if p.sales_order and frappe.db.exists("Sales Order", p.sales_order):
         so = frappe.get_doc("Sales Order", p.sales_order)
         p.thermozement = 0
+        has_internal_crane = False
+        has_external_crane = False
+        has_carrymax = False
         for i in so.items:
-            if i.item_code == thermo_item:
+            if i.item_code == items['thermo']:
                 p.thermozement = 1
-            elif o and i.item_code == staged_cementation_item:
+            elif o and i.item_code == items['staged_cementation']:
                 o.staged_cementation = 1
+            elif i.item_code == items['internal_crane']:
+                has_internal_crane = True
+            elif i.item_code == items['external_crane']:
+                has_external_crane = True
+            elif i.item_code == items['carrymax']:
+                has_carrymax = True
+                
+        if has_internal_crane:
+            p = set_checklist_activity(p, activities['internal_crane'])
+        if has_external_crane:
+            p = set_checklist_activity(p, activities['external_crane'])
+        if has_carrymax:
+            p = set_checklist_activity(p, activities['carrymax'])
+            
         p.save()
         if o:
             o.save()
     return
 
+"""
+Check if a project has an activity if not add it
+"""
+def set_checklist_activity(project_doc, activity):
+    occurs = False
+    for a in project_doc.checklist:
+        if a.activity == activity:
+            occures = True
+            break
+    if not occurs:
+        project_doc.append("Checklist", {
+            'activity': activity
+        })
+    return project_doc
+    
 """
 Get warranty accrual from sales order
 """
