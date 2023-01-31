@@ -180,11 +180,10 @@
    "options": "Item"
   },
   {
-   "description": "It this item is in a sales order, project checklist external crane is enabled",
+   "description": "It this item is in a sales order, project checklist external crane is enabled (item code pattern, use item_code as starts_width)",
    "fieldname": "external_crane_item",
-   "fieldtype": "Link",
-   "label": "External crane item",
-   "options": "Item"
+   "fieldtype": "Data",
+   "label": "External crane item"
   },
   {
    "description": "It this item is in a sales order, project checklist carrymax is enabled",
@@ -207,7 +206,7 @@
   }
  ],
  "issingle": 1,
- "modified": "2023-01-30 21:56:35.847075",
+ "modified": "2023-01-31 15:08:10.062787",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",

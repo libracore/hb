@@ -423,7 +423,7 @@ def update_project(project):
                 o.staged_cementation = 1
             elif i.item_code == items['internal_crane']:
                 has_internal_crane = True
-            elif i.item_code == items['external_crane']:
+            elif i.item_code.startswith(items['external_crane']):
                 has_external_crane = True
             elif i.item_code == items['carrymax']:
                 has_carrymax = True

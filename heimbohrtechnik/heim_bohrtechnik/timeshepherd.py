@@ -58,6 +58,22 @@ def get_new_token():
         tokens = json.loads(token_response.text)
         return tokens['access_token']
         
+"""
+Fetch employees from timeshepherd
+
+Structure:
+    {
+        'id': <id>,
+        'isActive': True/False,
+        'firstName': <first_name>,
+        'lastName': <last_name>,
+        'eMail': <email>,
+        'workingHours': <hours>,
+        'holidayEntitlement': <days>,
+        'balances': None
+    }
+    
+"""
 def get_employees(only_active_ids=False):
     token = get_new_token()
     settings = get_settings()
@@ -162,7 +178,7 @@ def get_absence_page(settings, token, employees, from_date, to_date):
             for day in absence['absences']:
                 if len(day['booking']) > 0:
                     absences.append({
-                        'date': day['date'],
+                        'date': day['date'][0:10],
                         'absence_short': day['booking'][0]['bookingAccountShort'],              # FG
                         'absence_description': day['booking'][0]['bookingAccountDescription'],  # Ferien ganztags
                         'status': day['booking'][0]['workFlowAction'],                          # Approved
@@ -172,7 +188,88 @@ def get_absence_page(settings, token, employees, from_date, to_date):
                         'last_name': employee['last_name'],
                         'email': employee['email']            
                     })
+        
+        # consolidate to blocks rather than single days
+        absences = consolidate_absences(absences)
+        
         return absences
         
     else:
         return None
+
+"""
+This function will combine the individual days into absence blocks
+"""
+def consolidate_absences(absences):
+    consolidated = []
+    last_date = None
+    current_absence = None
+    for absence in absences:
+        date = datetime.strptime(absence['date'], "%Y-%m-%d")
+        # start a new block
+        if not current_absence:
+            # first run, initialise
+            last_date = date
+            current_absence = {
+                'from_date': date,
+                'employee': absence['employee'],
+                'to_date': date,
+                'absence_description': absence['absence_description'],
+                'status': absence['status']
+            }
+        else:
+            # check if this was the previous day
+            if (date - last_date).days == 1 and absence['employee'] == current_absence['employee']:
+                # this is the following day
+                last_date = date
+                current_absence['to_date'] = date
+            else:
+                # more than one day or different employee: store current and start new
+                consolidated.append(current_absence)
+                last_date = date
+                current_absence = {
+                    'from_date': date,
+                    'employee': absence['employee'],
+                    'to_date': date,
+                    'absence_description': absence['absence_description'],
+                    'status': absence['status']
+                }
+    # finalise: add last record
+    consolidated.append(current_absence)
+    return consolidated
+
+"""
+Read absences and transform to leave applications
+"""
+def sync_leave_applications():
+    absences = get_absences()
+
+"""
+Read timesheet user ids and match to employees
+"""
+def sync_timeshepherd_ids():
+    employees = get_employees()
+    
+    for employee in employees:
+        first_name = (employee['firstName'] or "").strip()
+        last_name = (employee['lastName'] or "").strip()
+        employee_matches = frappe.get_all("Employee", 
+            filters={
+                'first_name': first_name,
+                'last_name': last_name,
+                'status': 'Active'
+            },
+            fields=['name']
+        )
+        
+        if len(employee_matches) == 1:
+            employee_doc = frappe.get_doc("Employee", employee_matches[0]['name'])
+            employee_doc.timeshepherd_id = employee['id']
+            employee_doc.save()
+            frappe.db.commit()
+        elif len(employee_matches) == 0:
+            print("No matches for {0} ({1} {2})".format(employee['id'], first_name, last_name))
+        else:
+            print("Multiple matches for {0} ({1} {2})".format(employee['id'], first_name, last_name))
+    
+    return
