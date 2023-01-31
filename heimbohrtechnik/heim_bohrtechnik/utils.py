@@ -405,8 +405,8 @@ def update_project(project):
         'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_item")
     }
     activities = {
-        'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "internal_crane_activity"),
-        'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "external_crane_activity"),
+        'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "int_crane_activity"),
+        'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "crane_activity"),
         'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_activity")
     }
     
@@ -450,7 +450,7 @@ def set_checklist_activity(project_doc, activity):
             occures = True
             break
     if not occurs:
-        project_doc.append("Checklist", {
+        project_doc.append("checklist", {
             'activity': activity
         })
     return project_doc
