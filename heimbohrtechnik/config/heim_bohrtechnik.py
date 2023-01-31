@@ -393,6 +393,12 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Timeshepherd Settings",
+                   "label": _("Timeshepherd Settings"),
+                   "description": _("Timeshepherd Settings")
+                },
+                {
+                   "type": "doctype",
                    "name": "Email Footer Template",
                    "label": _("Email Footer Template"),
                    "description": _("Email Footer Template")
