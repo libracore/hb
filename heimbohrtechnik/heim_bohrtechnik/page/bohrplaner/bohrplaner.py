@@ -102,28 +102,38 @@ def get_project_data(p, dauer):
     mud = None
     pneukran = ''
     pneukran_details = {}
+    activities = {
+        'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "int_crane_activity"),
+        'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "crane_activity"),
+        'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_activity"),
+        'mud': frappe.get_value("Heim Settings", "Heim Settings", "mud_disposer_activity"),
+        'trough': frappe.get_value("Heim Settings", "Heim Settings", "trough_activity"),
+    }
     flag_ext_crane = False
     flag_int_crane = False
+    flag_carrymax = False
     flag_override_mud = False
     for cl_entry in project.checklist:
-        if cl_entry.activity == 'Schlammentsorgung':
+        if cl_entry.activity == activities['mud']:
             saugauftrag = cl_entry.supplier_short_display or cl_entry.supplier_name
             if cl_entry.supplier == "K-03749":
                 flag_override_mud = True
-        elif cl_entry.activity == 'Kran extern':
+        elif cl_entry.activity == activities['external_crane']:
             pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name or "ext. Kran"
             pneukran_details = cl_entry.as_dict()
             flag_ext_crane = True
-        elif cl_entry.activity == 'Kran intern':
+        elif cl_entry.activity == activities['internal_crane']:
             pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name or "int. Kran"
             pneukran_details = cl_entry.as_dict()
             flag_int_crane = True
-        elif cl_entry.activity == 'Mulde':
+        elif cl_entry.activity == activities['trough']:
             mud = cl_entry.supplier_short_display or cl_entry.supplier_name
+        elif cl_entry.activity == activities['carrymax']:
+            flag_carrymax = True
     # carrymax from construction site
     if len(construction_sites) > 0:
         if not pneukran or pneukran in ("ext. Kran", "int. Kran"):
-            if construction_sites[0].get('carrymax') == 1:
+            if flag_carrymax or construction_sites[0].get('carrymax') == 1:
                 pneukran = "Carrymax"
             elif construction_sites[0].get('internal_crane_required') == 1:
                 pneukran = "int. Kran"
