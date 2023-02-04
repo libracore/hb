@@ -731,7 +731,7 @@ def reassign_project(purchase_order, old_project, new_project):
         UPDATE `tabPurchase Order Item`
         SET `project` = "{project}"
         WHERE `parent` = "{purchase_order}"
-          AND `project` = "{old_project}";
+          /* AND `project` = "{old_project}" */;
     """.format(purchase_order=purchase_order, project=new_project, old_project=old_project))
     if "P-" in new_project:
         frappe.db.sql("""
