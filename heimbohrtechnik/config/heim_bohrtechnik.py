@@ -402,6 +402,12 @@ def get_data():
                    "name": "Email Footer Template",
                    "label": _("Email Footer Template"),
                    "description": _("Email Footer Template")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Regional Holidays",
+                   "label": _("Regional Holidays"),
+                   "description": _("Regional Holidays")
                 }
             ]
         },

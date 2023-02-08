@@ -744,3 +744,4 @@ def reassign_project(purchase_order, old_project, new_project):
     doc.add_comment("Info", _("Umbuchen von {0} auf {1}").format(old_project, new_project))
     
     return
+
