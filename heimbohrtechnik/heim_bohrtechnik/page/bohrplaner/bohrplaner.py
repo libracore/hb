@@ -95,9 +95,11 @@ def get_project_data(p, dauer):
         fields=['name', 'internal_crane_required', 'external_crane_Required', 'carrymax'])
     manager_short = frappe.db.get_value("User", project.manager, "username") if project.manager else ''
     drilling_equipment = []
-    for de in (project.drilling_equipment or []):
-        drilling_equipment.append(de.drilling_equipment)
-    drilling_equipment = ", ".join(drilling_equipment)
+    if len(constructon_sites) > 0:
+        construction_site = frappe.get_doc("Construction Site Description", construction_sites[0].get('name'))
+        for de in (construction_site.drilling_equipment or []):
+            drilling_equipment.append(de.drilling_equipment)
+        drilling_equipment = ", ".join(drilling_equipment)
     saugauftrag = 'Schlamm fremd'
     mud = None
     pneukran = ''
