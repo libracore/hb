@@ -30,7 +30,8 @@
   "col_details",
   "remarks",
   "col_options",
-  "no_parking",
+  "no_parking_blue",
+  "no_parking_white",
   "inform_residents",
   "comply_min_width",
   "sec_installation",
@@ -126,12 +127,6 @@
   },
   {
    "default": "0",
-   "fieldname": "no_parking",
-   "fieldtype": "Check",
-   "label": "No Parking"
-  },
-  {
-   "default": "0",
    "fieldname": "inform_residents",
    "fieldtype": "Check",
    "label": "Inform Residents"
@@ -213,9 +208,21 @@
    "fieldtype": "Link",
    "label": "Print Format",
    "options": "Print Format"
+  },
+  {
+   "default": "0",
+   "fieldname": "no_parking_blue",
+   "fieldtype": "Check",
+   "label": "No Parking Blue"
+  },
+  {
+   "default": "0",
+   "fieldname": "no_parking_white",
+   "fieldtype": "Check",
+   "label": "No Parking White"
   }
  ],
- "modified": "2022-12-02 11:51:05.833888",
+ "modified": "2023-02-17 14:12:23.526626",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Request for Public Area Use",
