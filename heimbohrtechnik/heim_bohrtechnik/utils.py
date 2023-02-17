@@ -423,7 +423,7 @@ def update_project(project):
                 o.staged_cementation = 1
             elif i.item_code == items['internal_crane']:
                 has_internal_crane = True
-            elif i.item_code == items['external_crane']:
+            elif i.item_code.startswith(items['external_crane']):
                 has_external_crane = True
             elif i.item_code == items['carrymax']:
                 has_carrymax = True
@@ -731,7 +731,7 @@ def reassign_project(purchase_order, old_project, new_project):
         UPDATE `tabPurchase Order Item`
         SET `project` = "{project}"
         WHERE `parent` = "{purchase_order}"
-          AND `project` = "{old_project}";
+          /* AND `project` = "{old_project}" */;
     """.format(purchase_order=purchase_order, project=new_project, old_project=old_project))
     if "P-" in new_project:
         frappe.db.sql("""
@@ -744,3 +744,4 @@ def reassign_project(purchase_order, old_project, new_project):
     doc.add_comment("Info", _("Umbuchen von {0} auf {1}").format(old_project, new_project))
     
     return
+

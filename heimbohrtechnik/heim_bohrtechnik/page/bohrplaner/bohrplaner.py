@@ -13,6 +13,7 @@ BG_GREEN = '#81d41a;'
 BG_ORANGE = '#ffbf00;'
 BG_RED = '#ffa6a6;'
 BG_LIGHT_GREEN = '#eefdec;'
+BG_DARK_GREEN = '#006400;'
 BG_GREY = '#c4c7ca;'
 BG_BLUE = '#9dc7f0;'
 BG_WHITE = '#ffffff;'
@@ -94,35 +95,47 @@ def get_project_data(p, dauer):
         fields=['name', 'internal_crane_required', 'external_crane_Required', 'carrymax'])
     manager_short = frappe.db.get_value("User", project.manager, "username") if project.manager else ''
     drilling_equipment = []
-    for de in (project.drilling_equipment or []):
-        drilling_equipment.append(de.drilling_equipment)
-    drilling_equipment = ", ".join(drilling_equipment)
+    if len(constructon_sites) > 0:
+        construction_site = frappe.get_doc("Construction Site Description", construction_sites[0].get('name'))
+        for de in (construction_site.drilling_equipment or []):
+            drilling_equipment.append(de.drilling_equipment)
+        drilling_equipment = ", ".join(drilling_equipment)
     saugauftrag = 'Schlamm fremd'
     mud = None
     pneukran = ''
     pneukran_details = {}
+    activities = {
+        'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "int_crane_activity"),
+        'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "crane_activity"),
+        'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_activity"),
+        'mud': frappe.get_value("Heim Settings", "Heim Settings", "mud_disposer_activity"),
+        'trough': frappe.get_value("Heim Settings", "Heim Settings", "trough_activity"),
+    }
     flag_ext_crane = False
     flag_int_crane = False
+    flag_carrymax = False
     flag_override_mud = False
     for cl_entry in project.checklist:
-        if cl_entry.activity == 'Schlammentsorgung':
+        if cl_entry.activity == activities['mud']:
             saugauftrag = cl_entry.supplier_short_display or cl_entry.supplier_name
             if cl_entry.supplier == "K-03749":
                 flag_override_mud = True
-        elif cl_entry.activity == 'Kran extern':
+        elif cl_entry.activity == activities['external_crane']:
             pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name or "ext. Kran"
             pneukran_details = cl_entry.as_dict()
             flag_ext_crane = True
-        elif cl_entry.activity == 'Kran intern':
+        elif cl_entry.activity == activities['internal_crane']:
             pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name or "int. Kran"
             pneukran_details = cl_entry.as_dict()
             flag_int_crane = True
-        elif cl_entry.activity == 'Mulde':
+        elif cl_entry.activity == activities['trough']:
             mud = cl_entry.supplier_short_display or cl_entry.supplier_name
+        elif cl_entry.activity == activities['carrymax']:
+            flag_carrymax = True
     # carrymax from construction site
     if len(construction_sites) > 0:
         if not pneukran or pneukran in ("ext. Kran", "int. Kran"):
-            if construction_sites[0].get('carrymax') == 1:
+            if flag_carrymax or construction_sites[0].get('carrymax') == 1:
                 pneukran = "Carrymax"
             elif construction_sites[0].get('internal_crane_required') == 1:
                 pneukran = "int. Kran"
@@ -422,7 +435,7 @@ def get_traffic_lights_indicator(project):
         if 'Lärmschutzbewilligung' in permit.permit:
             objekt_plz_ort_font_color = 'red;'
             if permit.file:
-                objekt_plz_ort_font_color = BG_GREEN            # green
+                objekt_plz_ort_font_color = BG_DARK_GREEN            # dark green
         #elif 'Strassensperrung' in permit.permit:              # removed by change request RB/2022-10-05
         #    if not permit.file:
         #        objekt_plz_ort_border_color = 'border: 1px solid red;'

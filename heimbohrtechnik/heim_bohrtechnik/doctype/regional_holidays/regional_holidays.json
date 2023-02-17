@@ -1,0 +1,79 @@
+{
+ "allow_rename": 1,
+ "autoname": "field:region",
+ "creation": "2023-02-08 14:08:51.424217",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "region",
+  "sec_holidays",
+  "holidays"
+ ],
+ "fields": [
+  {
+   "description": "Canton, e.g. SG",
+   "fieldname": "region",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Region",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "sec_holidays",
+   "fieldtype": "Section Break",
+   "label": "Holidays"
+  },
+  {
+   "fieldname": "holidays",
+   "fieldtype": "Table",
+   "label": "Holiday",
+   "options": "Holiday",
+   "reqd": 1
+  }
+ ],
+ "modified": "2023-02-08 14:09:22.328788",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Regional Holidays",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "region",
+ "track_changes": 1
+}
