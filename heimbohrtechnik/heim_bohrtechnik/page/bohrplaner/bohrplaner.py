@@ -72,10 +72,10 @@ def get_overlay_datas(from_date, to_date, customer=None):
             dauer -= weekend_day_correction
         # compensate for duration exceeding to_date
         if p.expected_end_date > getdate(to_date):
-            weekend_day_correction = get_weekend_day_correction(p.expected_end_date, getdate(to_date))
+            weekend_day_correction = get_weekend_day_correction(getdate(to_date), p.expected_end_date)
             duration_correction = (date_diff(p.expected_end_date, getdate(to_date)) - 1) * 2
-            dauer -= duration_correction
-            dauer -= weekend_day_correction
+            dauer -= duration_correction                # subtract days that exceed to_date
+            dauer += weekend_day_correction             # compensate for weekends in the exceeding periods
         if p.start_half_day.lower() == 'nm':
             dauer -= 1
         if p.end_half_day.lower() == 'vm':

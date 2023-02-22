@@ -209,11 +209,12 @@ frappe.bohrplaner = {
            }
         });
     },
-    add_overlay: function(page, data) {
+    add_overlay: function(page, data, as_print=false) {
         var place = $('[data-bohrteam="' + data.bohrteam + '"][data-date="' + data.start + '"][data-vmnm="' + data.vmnm + '"]');
         $(place).css("position", "relative");
         var qty = data.dauer
         var width = 42 * qty;
+        if (locals.print_view) { width = 51 * qty; }             // compensate for block with
         $(frappe.render_template('booking_overlay', {
             'width': width, 
             'project': data.project, 
@@ -304,8 +305,8 @@ frappe.bohrplaner = {
         // render calendar grid
         $(frappe.render_template('calendar_grid', data)).appendTo(page.body);
         // set saved dates
-        document.getElementById("from").value = from;
-        document.getElementById("to").value = to;
+        document.getElementById("from").value = view_from;
+        document.getElementById("to").value = view_to;
         // set scroll-positions
         $("#bohrplan_wrapper").scrollTop(top_position);
         $("#bohrplan_wrapper").scrollLeft(lef_position);
