@@ -72,10 +72,10 @@ def get_overlay_datas(from_date, to_date, customer=None):
             dauer -= weekend_day_correction
         # compensate for duration exceeding to_date
         if p.expected_end_date > getdate(to_date):
-            weekend_day_correction = get_weekend_day_correction(p.expected_end_date, getdate(to_date))
+            weekend_day_correction = get_weekend_day_correction(getdate(to_date), p.expected_end_date)
             duration_correction = (date_diff(p.expected_end_date, getdate(to_date)) - 1) * 2
-            dauer -= duration_correction
-            dauer -= weekend_day_correction
+            dauer -= duration_correction                # subtract days that exceed to_date
+            dauer += weekend_day_correction             # compensate for weekends in the exceeding periods
         if p.start_half_day.lower() == 'nm':
             dauer -= 1
         if p.end_half_day.lower() == 'vm':
@@ -95,7 +95,7 @@ def get_project_data(p, dauer):
         fields=['name', 'internal_crane_required', 'external_crane_Required', 'carrymax'])
     manager_short = frappe.db.get_value("User", project.manager, "username") if project.manager else ''
     drilling_equipment = []
-    if len(constructon_sites) > 0:
+    if len(construction_sites) > 0:
         construction_site = frappe.get_doc("Construction Site Description", construction_sites[0].get('name'))
         for de in (construction_site.drilling_equipment or []):
             drilling_equipment.append(de.drilling_equipment)
