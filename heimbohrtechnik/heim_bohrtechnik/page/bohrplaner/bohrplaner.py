@@ -149,10 +149,10 @@ def get_project_data(p, dauer):
                     pneukran = "(!)" + pneukran
         else:
             # extend crane details
-            if pneukran_details['appointment']:
+            if 'appointment' in pneukran_details and pneukran_details['appointment']:
                 
                 pneukran += ", {0}".format(get_short_time(pneukran_details['appointment']))
-            if pneukran_details['appointment_end']:
+            if 'appointment_end' in pneukran_details and pneukran_details['appointment_end']:
                 pneukran += " / {0}".format(get_short_time(pneukran_details['appointment_end']))
         
     # override mud for special case
