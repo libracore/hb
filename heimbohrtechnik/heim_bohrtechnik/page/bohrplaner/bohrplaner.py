@@ -782,3 +782,78 @@ def print_bohrplaner(html):
     _file.save(ignore_permissions=True)
     
     return _file.file_url
+
+"""
+In open projects, find conflicts with regional holidays.
+"""
+def find_holiday_conflicts():
+    # get regions
+    regions = frappe.get_all("Regional Holidays", fields=['region'])
+    
+    conflicted_projects = []
+    for region in regions:
+        # fetch holidays
+        holidays_raw = frappe.db.sql("""
+                SELECT `holiday_date` AS `date`
+                FROM `tabHoliday`
+                WHERE `parent` = "{region}"
+                  AND `parenttype` = "Regional Holidays"
+                  AND `holiday_date` >= CURDATE();
+            """, as_dict=True)
+            
+        holidays = []
+        for h in holidays_raw:
+            holidays.append(h['date'])
+        
+        # get all open projects in this region
+        projects = frappe.get_all("Project",
+            filters=[
+                ['status', '=', 'Open'],
+                ['object_location', 'LIKE', '%{0}'.format(region['region'])]
+            ],
+            fields=['name', 'expected_start_date', 'expected_end_date']
+        )
+        
+        for project in projects:
+            contained = False
+            # check if any holiday is in this planned period
+            for h in holidays:
+                if (h >= project['expected_start_date']) and (h <= project['expected_end_date']):
+                    contained = h
+                    continue
+            
+            if contained:
+                conflicted_projects.append(
+                    {project['name']: contained}
+                )
+            
+    return conflicted_projects
+
+"""
+In open projects, per drilling team, find overlaps
+"""
+def find_project_conflicts():
+    # get drilling teams
+    drilling_teams = frappe.get_all("Drilling Team", filters={'drilling_team_type': 'Bohrteam'}, fields=['name'])
+    
+    conflicted_projects = []
+    # get all open projects in drilling team
+    for drilling_team in drilling_teams:
+        # get all open projects in this region
+        projects = frappe.get_all("Project",
+            filters=[
+                ['status', '=', 'Open'],
+                ['drilling_team', '=', '{0}'.format(drilling_team['name'])]
+            ],
+            fields=['name', 'expected_start_date', 'expected_end_date'],
+            order_by='expected_start_date'
+        )
+        
+        if len(projects) > 1:
+            for p in range(0, (len(projects) - 1)):
+                if projects[p]['expected_end_date'] > projects[p+1]['expected_start_date']:
+                    conflicted_projects.append(
+                        {projects[p]['name']: projects[p+1]['name']}
+                    )
+            
+    return conflicted_projects
