@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2017-2022, libracore and contributors
+# Copyright (c) 2017-2023, libracore and contributors
 
 from __future__ import unicode_literals
 import frappe
