@@ -93,7 +93,7 @@ def get_project_data(p, dauer):
     construction_sites = frappe.get_all("Construction Site Description", 
         filters={'project': p.name}, 
         fields=['name', 'internal_crane_required', 'external_crane_Required', 'carrymax'])
-    manager_short = frappe.db.get_value("User", project.manager, "username") if project.manager else ''
+    manager_short = frappe.get_cached_value("User", project.manager, "username") if project.manager else ''
     drilling_equipment = []
     if len(construction_sites) > 0:
         construction_site = frappe.get_doc("Construction Site Description", construction_sites[0].get('name'))
@@ -105,54 +105,63 @@ def get_project_data(p, dauer):
     pneukran = ''
     pneukran_details = {}
     activities = {
-        'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "int_crane_activity"),
-        'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "crane_activity"),
-        'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_activity"),
-        'mud': frappe.get_value("Heim Settings", "Heim Settings", "mud_disposer_activity"),
-        'trough': frappe.get_value("Heim Settings", "Heim Settings", "trough_activity"),
+        'internal_crane': frappe.get_cached_value("Heim Settings", "Heim Settings", "int_crane_activity"),
+        'external_crane': frappe.get_cached_value("Heim Settings", "Heim Settings", "crane_activity"),
+        'carrymax': frappe.get_cached_value("Heim Settings", "Heim Settings", "carrymax_activity"),
+        'mud': frappe.get_cached_value("Heim Settings", "Heim Settings", "mud_disposer_activity"),
+        'trough': frappe.get_cached_value("Heim Settings", "Heim Settings", "trough_activity"),
     }
     flag_ext_crane = False
     flag_int_crane = False
     flag_carrymax = False
     flag_override_mud = False
+    # read project checklist
     for cl_entry in project.checklist:
         if cl_entry.activity == activities['mud']:
             saugauftrag = cl_entry.supplier_short_display or cl_entry.supplier_name
             if cl_entry.supplier == "K-03749":
                 flag_override_mud = True
         elif cl_entry.activity == activities['external_crane']:
-            pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name or "ext. Kran"
             pneukran_details = cl_entry.as_dict()
             flag_ext_crane = True
         elif cl_entry.activity == activities['internal_crane']:
-            pneukran = cl_entry.supplier_short_display or cl_entry.supplier_name or "int. Kran"
             pneukran_details = cl_entry.as_dict()
             flag_int_crane = True
         elif cl_entry.activity == activities['trough']:
             mud = cl_entry.supplier_short_display or cl_entry.supplier_name
         elif cl_entry.activity == activities['carrymax']:
             flag_carrymax = True
-    # carrymax from construction site
-    if len(construction_sites) > 0:
-        if not pneukran or pneukran in ("ext. Kran", "int. Kran"):
-            if flag_carrymax or construction_sites[0].get('carrymax') == 1:
-                pneukran = "Carrymax"
-            elif construction_sites[0].get('internal_crane_required') == 1:
-                pneukran = "int. Kran"
-                if flag_ext_crane:
-                    pneukran = "(!)" + pneukran
-            elif construction_sites[0].get('external_crane_required') == 1:
-                pneukran = "ext. Kran"
-                if flag_int_crane:
-                    pneukran = "(!)" + pneukran
-        else:
-            # extend crane details
-            if pneukran_details['appointment']:
-                
-                pneukran += ", {0}".format(get_short_time(pneukran_details['appointment']))
-            if pneukran_details['appointment_end']:
-                pneukran += " / {0}".format(get_short_time(pneukran_details['appointment_end']))
     
+    # read construction site
+    if len(construction_sites) > 0:
+        if construction_sites[0].get('carrymax') == 1:
+            flag_carrymax = True
+        elif construction_sites[0].get('internal_crane_required') == 1:
+            flag_int_crane = True
+        elif construction_sites[0].get('external_crane_required') == 1:
+            flag_ext_crane = True
+            
+    # set crane base
+    if flag_ext_crane:
+        pneukran = pneukran_details.get('supplier_short_display') or pneukran_details.get('supplier_name') or "ext. Kran"
+    if flag_int_crane:
+        pneukran = pneukran_details.get('supplier_short_display') or pneukran_details.get('supplier_name') or "int. Kran"
+    if flag_ext_crane and flag_int_crane:
+        # conflict
+        pneukran = "(!)" + pneukran
+    if flag_carrymax:
+        if pneukran:
+            pneukran += ", Carrymax"
+        else:
+            pneukran = "Carrymax"
+            
+    # extend crane details
+    if 'appointment' in pneukran_details and pneukran_details['appointment']:
+        
+        pneukran += ", {0}".format(get_short_time(pneukran_details['appointment']))
+    if 'appointment_end' in pneukran_details and pneukran_details['appointment_end']:
+        pneukran += " / {0}".format(get_short_time(pneukran_details['appointment_end']))
+        
     # override mud for special case
     if flag_override_mud:
         saugauftrag = mud
