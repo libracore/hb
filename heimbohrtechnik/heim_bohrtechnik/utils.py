@@ -12,6 +12,7 @@ from erpnextswiss.erpnextswiss.utils import get_numeric_part
 from erpnextswiss.erpnextswiss.attach_pdf import execute
 from frappe.desk.form.load import get_attachments
 from frappe.utils.file_manager import remove_file
+from frappe.core.doctype.communication.email import make as make_email
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_project_file_from_local_file
 
 @frappe.whitelist()
@@ -745,3 +746,48 @@ def reassign_project(purchase_order, old_project, new_project):
     
     return
 
+"""
+Create an email to request a Google Review
+"""
+@frappe.whitelist()
+def request_google_review(project):
+    p_doc = frappe.get_doc("Project", project)
+    default_sender = frappe.get_all("Email Account", 
+        filters={'enable_outgoing': 1, 'default_outgoing': 1}, 
+        fields=['name', 'email_id'])
+        
+    if not p_doc.review_email or len(default_sender) == 0:
+        frappe.throw("Kann Mail nicht senden")
+        return
+    
+    # mark sending date stamp
+    p_doc.review_date = datetime.now().strftime("%Y-%m-%d") 
+    p_doc.save()
+    frappe.db.commit()
+    
+    # send mail
+    make_email(
+        recipients=p_doc.review_email,
+        sender=default_sender[0]['email_id'],
+        subject="Projektabschluss {0}".format(project),
+        content="""
+        <p>Sehr geehrte Damen und Herren,</p>
+        <p>Wir danken Ihnen von ganzem Herzen für Ihren Auftrag und hoffen, dass Sie mit unserer Arbeit zufrieden sind.</p>
+        <p>Abschliessend möchten wir Sie bitten, eine konstruktive Bewertung für mögliche Neukunden zu hinterlassen, 
+        damit diese sich ein Bild von unserem Unternehmen aus Kundensicht machen können. 
+        Bitte nehmen Sie sich dafür ein paar Minuten Zeit und nutzen Sie einfach den untenstehenden Link.</p>
+        <p><br></p>
+        <p><a href="https://g.page/r/CSV3lLBR34VnEBM/review">https://g.page/r/CSV3lLBR34VnEBM/review</a></p>
+        <p><br></p>
+        <p>Wir danken Ihnen schon jetzt sehr und wünschen Ihnen im Namen der ganzen Firma besinnliche Weihnachtstage sowie einen guten Rutsch in ein gesundes neues Jahr.</p>
+        <p>Freundliche Grüsse</p>
+        <p><br></p>
+        <p>Heim Bohrtechnik AG</p>
+        """,
+        doctype="Project",
+        name=project,
+        attachments=[],
+        send_email=True
+    )
+    
+    return

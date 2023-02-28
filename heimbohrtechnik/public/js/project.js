@@ -113,6 +113,12 @@ frappe.ui.form.on('Project', {
                     window.open(frm.doc.cloud_url, '_blank').focus();
                 });
             }
+            // request google review
+            if ((frm.doc.review_email) && (!frm.doc.review_date)) {
+                frm.add_custom_button(__("Google Rezension anfragen"), function() {
+                    request_review(frm);
+                });
+            }
         } else {
             // new project: switch to internal and assign name/title
             frappe.call({
@@ -181,5 +187,18 @@ function create_pdf(frm) {
         },
         'freeze': true,
         'freeze_message': __("Bohrauftrag (pdf) erstellen, bitte warten...")
+    });
+}
+
+function request_review(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.request_google_review',
+        'args': {'project': frm.doc.name},
+        'callback': function(response) {
+            frappe.show_alert("Mail versendet...");
+            cur_frm.reload_doc();
+        },
+        'freeze': true,
+        'freeze_message': __("Google Rezension anfragen...")
     });
 }
