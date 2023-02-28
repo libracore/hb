@@ -35,7 +35,11 @@
   "inform_residents",
   "comply_min_width",
   "sec_installation",
-  "installation_plan"
+  "installation_plan",
+  "col_installation",
+  "different_installation_address",
+  "installation_street",
+  "installation_location"
  ],
  "fields": [
   {
@@ -220,9 +224,31 @@
    "fieldname": "no_parking_white",
    "fieldtype": "Check",
    "label": "No Parking White"
+  },
+  {
+   "fieldname": "col_installation",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "different_installation_address",
+   "fieldtype": "Check",
+   "label": "Different Installation Address"
+  },
+  {
+   "depends_on": "eval:doc.different_instllation_address == 1",
+   "fieldname": "installation_street",
+   "fieldtype": "Data",
+   "label": "Installation Street"
+  },
+  {
+   "depends_on": "eval:doc.different_instllation_address == 1",
+   "fieldname": "installation_location",
+   "fieldtype": "Data",
+   "label": "Installation Location"
   }
  ],
- "modified": "2023-02-17 14:12:23.526626",
+ "modified": "2023-02-28 17:13:01.839663",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Request for Public Area Use",
