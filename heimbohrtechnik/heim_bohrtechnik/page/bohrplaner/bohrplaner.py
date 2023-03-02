@@ -100,6 +100,8 @@ def get_project_data(p, dauer):
         for de in (construction_site.drilling_equipment or []):
             drilling_equipment.append(de.drilling_equipment)
         drilling_equipment = ", ".join(drilling_equipment)
+    if drilling_equipment == []:            # no construction site description, rewrite to empty string
+        drilling_equipment = ""
     saugauftrag = 'Schlamm fremd'
     mud = None
     pneukran = ''
