@@ -273,9 +273,9 @@ def order_ews(object):
                     
     if len(items) == 0:
         return {'error': "No suitable EWS found", 'po': None}
-    # schedule date: Friday before start (weekday: Monday = 0
+    # schedule date: Thursday before start (weekday: Monday = 0
     start_date = frappe.get_value("Project", object, "expected_start_date") or datetime.today()
-    schedule_date = start_date - timedelta(days = 3 + start_date.weekday())
+    schedule_date = start_date - timedelta(days = 4 + start_date.weekday())
     # create purchase order
     po = frappe.get_doc({
         'doctype': "Purchase Order",
