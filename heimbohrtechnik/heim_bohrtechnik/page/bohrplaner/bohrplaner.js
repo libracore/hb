@@ -34,6 +34,10 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
         frappe.bohrplaner.search(page);
     });
     
+    page.add_menu_item( __('Find conflicts'), () => {
+        frappe.bohrplaner.find_conflicts(page);
+    });
+    
     // check routes and if there is a route, navigate to this
     frappe.bohrplaner.load_route(page);
 }
@@ -508,6 +512,9 @@ frappe.bohrplaner = {
             __('Search project'),
             __('OK')
         );
+    },
+    find_conflicts: function(page) {
+        /* todo: launch conflict finder */
     }
 }
 
