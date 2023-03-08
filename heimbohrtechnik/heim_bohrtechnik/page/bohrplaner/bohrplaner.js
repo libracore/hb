@@ -416,27 +416,29 @@ frappe.bohrplaner = {
                                         {'fieldname': 'drilling_team', 'label': __("Drilling Team"), 'fieldtype': 'Link', 'options': 'Drilling Team', 'default': project.drilling_team, 'reqd': 1},
                                         {'fieldname': 'cb_1', 'fieldtype': 'Column Break'},
                                         {'fieldname': 'end', 'label': __('End'), 'fieldtype': 'Date', 'default': project.expected_end_date, 'reqd': 1},
-                                        {'fieldname': 'end_hd', 'label': __('End Half-Day'), 'fieldtype': 'Select', 'options': 'VM\nNM', 'default': project.end_half_day}
+                                        {'fieldname': 'end_hd', 'label': __('End Half-Day'), 'fieldtype': 'Select', 'options': 'VM\nNM', 'default': project.end_half_day},
+                                        {'fieldname': 'visit_date', 'label': __('Visit date'), 'fieldtype': 'Date', 'default': project.visit_date},
                                     ],
                                     primary_action: function(){
                                         d.hide();
                                         var reshedule_data = d.get_values();
                                         // reschedule_project
                                         frappe.call({
-                                           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.reschedule_project",
-                                           args: {
+                                            'method': "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.reschedule_project",
+                                            'args': {
                                                 "popup": 1,
                                                 "project": project.name,
                                                 'new_project_start': reshedule_data.start,
                                                 "start_half_day": reshedule_data.start_hd,
                                                 'new_project_end_date': reshedule_data.end,
                                                 'end_half_day': reshedule_data.end_hd,
-                                                'team': reshedule_data.drilling_team
-                                           },
-                                           async: false,
-                                           callback: function(response) {
+                                                'team': reshedule_data.drilling_team,
+                                                'visit_date': reshedule_data.visit_date
+                                            },
+                                            'async': false,
+                                            'callback': function(response) {
                                                 frappe.bohrplaner.reset_dates(frappe.bohrplaner.page);
-                                           }
+                                            }
                                         });
                                     },
                                     primary_action_label: __('Reshedule'),

@@ -493,6 +493,8 @@ def get_traffic_lights_indicator(project):
     kuerzel_pl_color = BG_RED                       # red
     if is_construction_site_inspected(project.name) == 1:
         kuerzel_pl_color = BG_GREEN                 # green
+    elif project.visit_date:
+        kuerzel_pl_color = BG_ORANGE                # green
     colors.append(kuerzel_pl_color)
     
     # strassensperrung [12]
@@ -539,8 +541,10 @@ def has_infomail(project):
     return True if len(infomails) > 0 else False
         
 @frappe.whitelist()
-def reschedule_project(project=None, team=None, day=None, start_half_day=None, popup=False, new_project_start=None, new_project_end_date=None, end_half_day=None):
+def reschedule_project(project=None, team=None, day=None, start_half_day=None, popup=False, 
+    new_project_start=None, new_project_end_date=None, end_half_day=None, visit_date=None):
     project = frappe.get_doc("Project", project)
+    project.visit_date = visit_date
     
     if not popup:
         start_date = project.expected_start_date
