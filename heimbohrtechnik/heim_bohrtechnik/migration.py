@@ -485,3 +485,31 @@ def update_object_meter_rates():
             o_doc.save()
             frappe.db.commit()
     return
+
+"""
+Bulk-update item price structures
+
+Use with the console: 
+ from heimbohrtechnik.heim_bohrtechnik.migration import update_item_price
+ item_prices = frappe.get_all("Item Price", filters=[['item_code', 'LIKE', '1.02.01.%']], fields=['name'])
+ for p in item_prices:
+    print("Updating {0}...".format(p['name']))
+    try:
+        update_item_price(p['name'], -59, 25, 0)
+    except Exception as err:
+        print(err)
+ frappe.db.commit()
+ 
+"""
+def update_item_price(item_price, discount, markup, skonto):
+    doc = frappe.get_doc("Item Price", item_price)
+    doc.discount = discount
+    doc.cost_markup = markup
+    doc.skonto_discount = skonto
+    rate = (((doc.base_rate * (((doc.discount or 0) + 100) / 100))
+            * (((doc.cost_markup or 0) + 100) / 100))
+            * (((doc.skonto_discount or 0) + 100) / 100))
+    doc.price_list_rate = rate
+    doc.save()
+    return
+    
