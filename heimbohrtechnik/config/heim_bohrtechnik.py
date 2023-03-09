@@ -192,6 +192,12 @@ def get_data():
                    "name": "Subcontracting Order",
                    "label": _("Subcontracting Order"),
                    "description": _("Subcontracting Order")
+                },
+                {
+                   "type": "doctype",
+                   "name": "MFK",
+                   "label": _("MFK"),
+                   "description": _("MFK")
                 }
             ]
         },
