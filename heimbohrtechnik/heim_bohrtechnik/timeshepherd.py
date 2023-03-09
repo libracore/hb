@@ -121,19 +121,31 @@ def get_absences():
     
     absences = []
     
+    absences = get_absence_page(settings=settings, token=token, employees=employees, 
+        from_date=datetime.now(), to_date=(datetime.now() + relativedelta(months=6)))
+    
+    """
+    Pagination
+    """
+    """
     # use pagination because otherwise the API overloads
     from_date = datetime.now()
     to_date = from_date
     
-    for i in range(1, 7):
-        from_date = to_date
-        to_date = (from_date + relativedelta(months=1))
-        _absences = get_absence_page(settings=settings, token=token, employees=employees, 
-            from_date=from_date, to_date=to_date)
-        if _absences:
-            for absence in _absences:
-                absences.append(absence)
-        
+    for employee in employees:
+        for i in range(1, 7):
+            from_date = to_date
+            to_date = (from_date + relativedelta(months=1))
+            _absences = get_absence_page(settings=settings, token=token, employees=[employee], 
+                from_date=from_date, to_date=to_date)
+            if _absences:
+                for absence in _absences:
+                    absences.append(absence)
+    """
+    
+    # consolidate to blocks rather than single days
+    absences = consolidate_absences(absences)
+    
     return absences
 
 def get_absence_page(settings, token, employees, from_date, to_date):
@@ -185,16 +197,13 @@ def get_absence_page(settings, token, employees, from_date, to_date):
                         'date': day['date'][0:10],
                         'absence_short': day['booking'][0]['bookingAccountShort'],              # FG
                         'absence_description': day['booking'][0]['bookingAccountDescription'],  # Ferien ganztags
-                        'status': day['booking'][0]['workFlowAction'],                          # Approved
+                        'status': day['booking'][0]['workFlowStatus'],                          # Approved
                         'absence_type': day['booking'][0]['type'],                              # Absent   
                         'employee': employee['id'],
                         'first_name': employee['first_name'],
                         'last_name': employee['last_name'],
                         'email': employee['email']            
                     })
-        
-        # consolidate to blocks rather than single days
-        absences = consolidate_absences(absences)
         
         return absences
         
@@ -204,12 +213,15 @@ def get_absence_page(settings, token, employees, from_date, to_date):
 """
 This function will combine the individual days into absence blocks
 """
-def consolidate_absences(absences):
+def consolidate_absences(absences, debug=False):
     consolidated = []
     last_date = None
     current_absence = None
     for absence in absences:
         date = datetime.strptime(absence['date'], "%Y-%m-%d")
+        if debug:
+            print("next entry: employee {0}: date {1} (previous: {2}, {3})".format(
+                absence['employee'], date, current_absence['employee'] if current_absence else "-", last_date))
         # start a new block
         if not current_absence:
             # first run, initialise
@@ -228,9 +240,11 @@ def consolidate_absences(absences):
                 last_date = date
                 current_absence['to_date'] = date
             else:
-                # more than one day or different employee: store current and start new
+                # more than one day apart or different employee: store current and start new
                 if current_absence:
                     consolidated.append(current_absence)
+                    if debug:
+                        print("Store {0}".format(current_absence))
                 last_date = date
                 current_absence = {
                     'from_date': date,
@@ -251,52 +265,53 @@ def sync_leave_applications():
     absences = get_absences()
 
     for absence in absences:
-        # find employee
-        employee_matches = frappe.get_all("Employee", 
-            filters={'timeshepherd_id': absence['employee'], 'status': 'Active'},
-            fields=['name']
-        )
-        if len(employee_matches) > 0:
-            # verify if this leave is already recorded
-            leave_matches = frappe.get_all("Leave Application",
-                filters=[
-                    ['employee', '=', employee_matches[0]['name']],
-                    ['from_date', '=', absence['from_date']],
-                    ['to_date', '=', absence['to_date']],
-                    ['docstatus', '<', 2]
-                ],
+        if absence['status'] == "Approved":                 # only take approved absences
+            # find employee
+            employee_matches = frappe.get_all("Employee", 
+                filters={'timeshepherd_id': absence['employee'], 'status': 'Active'},
                 fields=['name']
             )
-            
-            if len(leave_matches) > 0:
-                # existing leave
-                leave = frappe.get_doc("Leave Application", leave_matches[0]['name'])
+            if len(employee_matches) > 0:
+                # verify if this leave is already recorded
+                leave_matches = frappe.get_all("Leave Application",
+                    filters=[
+                        ['employee', '=', employee_matches[0]['name']],
+                        ['from_date', '=', absence['from_date']],
+                        ['to_date', '=', absence['to_date']],
+                        ['docstatus', '<', 2]
+                    ],
+                    fields=['name']
+                )
                 
-            else:
-                # make sure leave type exists
-                if not frappe.db.exists("Leave Type", absence['absence_description']):
-                    leave_type = frappe.get_doc({
-                        'doctype': "Leave Type",
-                        'leave_type_name': absence['absence_description'],
-                        'allow_negative': 1,            # allow negative balance to circumvent leave allocation
-                        'include_holiday': 0
+                if len(leave_matches) > 0:
+                    # existing leave
+                    leave = frappe.get_doc("Leave Application", leave_matches[0]['name'])
+                    
+                else:
+                    # make sure leave type exists
+                    if not frappe.db.exists("Leave Type", absence['absence_description']):
+                        leave_type = frappe.get_doc({
+                            'doctype': "Leave Type",
+                            'leave_type_name': absence['absence_description'],
+                            'allow_negative': 1,            # allow negative balance to circumvent leave allocation
+                            'include_holiday': 0
+                        })
+                        leave_type.insert()
+                        frappe.db.commit()
+                            
+                    # create leave
+                    new_leave = frappe.get_doc({
+                        'doctype': "Leave Application",
+                        'employee': employee_matches[0]['name'],
+                        'from_date': absence['from_date'],
+                        'to_date': absence['to_date'],
+                        'leave_type': absence['absence_description']
                     })
-                    leave_type.insert()
+                    try:
+                        new_leave.insert()
+                    except Exception as err:
+                        frappe.log_error("Unable to insert: {0}: {1}".format(new_leave.as_dict(), err), "Timeshepherd leave sync")
                     frappe.db.commit()
-                        
-                # create leave
-                new_leave = frappe.get_doc({
-                    'doctype': "Leave Application",
-                    'employee': employee_matches[0]['name'],
-                    'from_date': absence['from_date'],
-                    'to_date': absence['to_date'],
-                    'leave_type': absence['absence_description']
-                })
-                try:
-                    new_leave.insert()
-                except Exception as err:
-                    frappe.log_error("Unable to insert: {0}: {1}".format(new_leave.as_dict(), err), "Timeshepherd leave sync")
-                frappe.db.commit()
         
     return
     

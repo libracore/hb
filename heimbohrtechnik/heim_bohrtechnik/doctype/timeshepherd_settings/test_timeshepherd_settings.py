@@ -8,7 +8,7 @@ import unittest
 from heimbohrtechnik.heim_bohrtechnik.timeshepherd import get_absences, get_employees
 
 class TestTimeshepherdSettings(unittest.TestCase):
-	pass
+    pass
 
 def test_employees():
     employees = get_employees()
