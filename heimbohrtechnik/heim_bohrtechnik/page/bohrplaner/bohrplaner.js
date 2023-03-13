@@ -514,7 +514,27 @@ frappe.bohrplaner = {
         );
     },
     find_conflicts: function(page) {
-        /* todo: launch conflict finder */
+        /* launch conflict finder */
+        frappe.call({
+            'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_conflicts',
+            'callback': function(r) {
+                if (r.message) {
+                    // html = frappe.render_template("conflict_dialog", r.message);
+                    var d = new frappe.ui.Dialog({
+                        'fields': [
+                            {'fieldname': 'ht', 'fieldtype': 'HTML'}
+                        ],
+                        primary_action: function(){
+                            d.hide();
+                        },
+                        primary_action_label: __('OK'),
+                        title: __("Conflicts")
+                    });
+                    d.fields_dict.ht.$wrapper.html(r.message);
+                    d.show();
+                }
+            }
+        });
     }
 }
 

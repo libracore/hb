@@ -1,0 +1,31 @@
+<h3>{{ _("Holidays") }}</h3>
+<table class="table">
+    <tr>
+        <th>{{ _("Project") }}</th>
+        <th>{{ _("Details") }}</th>
+    </tr>
+    {% for c in holiday_conflicts %}
+        {% for k, v in c.items() %}
+            <tr>
+                <td>{{ k }}</td>
+                <td>{{ v }}</td>
+            </tr>
+        {% endfor %}
+    {% endfor %}
+</table>
+
+<h3>{{ _("Projects") }}</h3>
+<table class="table">
+    <tr>
+        <th>{{ _("Project") }}</th>
+        <th>{{ _("Conflict") }}</th>
+    </tr>
+    {% for c in project_conflicts %}
+        {% for k, v in c.items() %}
+            <tr>
+                <td>{{ k }}</td>
+                <td>{{ v }}</td>
+            </tr>
+        {% endfor %}
+    {% endfor %}
+</table>

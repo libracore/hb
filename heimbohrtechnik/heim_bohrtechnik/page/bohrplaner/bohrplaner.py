@@ -863,3 +863,15 @@ def find_project_conflicts():
                     )
             
     return conflicted_projects
+
+"""
+Find and prerender conflicts
+"""
+@frappe.whitelist()
+def get_conflicts():
+    conflicts = {
+        'project_conflicts': find_project_conflicts(),
+        'holiday_conflicts': find_holiday_conflicts()
+    }
+    html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/conflict_dialog.html", conflicts)
+    return html
