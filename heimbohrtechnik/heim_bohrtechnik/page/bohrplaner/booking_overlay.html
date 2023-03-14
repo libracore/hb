@@ -1,7 +1,7 @@
 <div class="booking_overlay" id="{{ project.name }}"
     style="width: {{ width }}px; "
     data-lanetype="Project"
-    draggable="true"
+    draggable="{{ dragable }}"
     ondragstart="drag(event)">
     <div class="object-div" style="font-size: 7pt;" onclick="frappe.bohrplaner.show_detail_popup(this);" data-popupvalue="{{ project.name }}">
         <div style="background-color: {{ ampeln[0] }} min-width:35px; ">{{ project.name }}</div>

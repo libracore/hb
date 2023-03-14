@@ -226,7 +226,8 @@ frappe.bohrplaner = {
             'pneukran': data.pneukran, 
             'manager_short': data.manager_short, 
             'drilling_equipment': data.drilling_equipment, 
-            'ampeln': data.ampeln
+            'ampeln': data.ampeln,
+            'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false'
         })).appendTo(place);
         return
     },
@@ -262,7 +263,8 @@ frappe.bohrplaner = {
             'object_street': data.object_street,
             'object_location': data.object_location,
             'parent_project': data.project,
-            'subcontracting_order': data.subcontracting_order
+            'subcontracting_order': data.subcontracting_order,
+            'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false'
         })).appendTo(place);
         return
     },
