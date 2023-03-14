@@ -855,16 +855,18 @@ def find_project_conflicts(drilling_team=None):
     conflicted_projects = []
     # get all open projects in drilling team
     for drilling_team in drilling_teams:
-        # get all open projects in this region
-        projects = frappe.get_all("Project",
-            filters=[
-                ['status', '=', 'Open'],
-                ['drilling_team', '=', '{0}'.format(drilling_team['name'])]
-            ],
-            fields=['name', 'expected_start_date', 'expected_end_date'],
-            order_by='expected_start_date'
-        )
-        
+        # get all open projects in this drilling team
+        projects = frappe.db.sql("""
+            SELECT `name`, `expected_start_date`, `expected_end_date`
+            FROM `tabProject`
+            WHERE
+                `status` = "Open"
+                AND `drilling_team` = "{0}"
+                AND `expected_start_date` IS NOT NULL
+                AND `expected_end_date` IS NOT NULL
+            ORDER BY `expected_start_date` ASC, `name` ASC
+            """.format(drilling_team['name']), as_dict=True)
+            
         if len(projects) > 1:
             for p in range(0, (len(projects) - 1)):
                 if projects[p]['expected_end_date'] > projects[p+1]['expected_start_date']:
