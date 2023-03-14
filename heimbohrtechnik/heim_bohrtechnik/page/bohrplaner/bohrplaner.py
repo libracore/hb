@@ -7,7 +7,7 @@ from frappe import _
 from frappe.utils.data import getdate, date_diff, add_days, get_datetime
 from datetime import date, timedelta
 from frappe.desk.form.load import get_attachments
-from frappe.utils import cint
+from frappe.utils import cint, get_url_to_form
 
 BG_GREEN = '#81d41a;'
 BG_ORANGE = '#ffbf00;'
@@ -805,20 +805,22 @@ def find_holiday_conflicts():
                 WHERE `parent` = "{region}"
                   AND `parenttype` = "Regional Holidays"
                   AND `holiday_date` >= CURDATE();
-            """, as_dict=True)
+            """.format(region=region['region']), as_dict=True)
             
         holidays = []
         for h in holidays_raw:
             holidays.append(h['date'])
         
         # get all open projects in this region
-        projects = frappe.get_all("Project",
-            filters=[
-                ['status', '=', 'Open'],
-                ['object_location', 'LIKE', '%{0}'.format(region['region'])]
-            ],
-            fields=['name', 'expected_start_date', 'expected_end_date']
-        )
+        projects = frappe.db.sql("""
+            SELECT `name`, `expected_start_date`, `expected_end_date`
+            FROM `tabProject`
+            WHERE
+                `status` = "Open"
+                AND `object_location` LIKE "%{region}"
+                AND `expected_start_date` IS NOT NULL
+                AND `expected_end_date` IS NOT NULL
+            """.format(region=region['region']), as_dict=True)
         
         for project in projects:
             contained = False
@@ -830,7 +832,13 @@ def find_holiday_conflicts():
             
             if contained:
                 conflicted_projects.append(
-                    {project['name']: contained}
+                    {
+                        project['name']: {
+                            'date': contained,
+                            'region': region['region'],
+                            'url': get_url_to_form("Project", project['name'])
+                        }
+                    }
                 )
             
     return conflicted_projects
@@ -859,7 +867,14 @@ def find_project_conflicts():
             for p in range(0, (len(projects) - 1)):
                 if projects[p]['expected_end_date'] > projects[p+1]['expected_start_date']:
                     conflicted_projects.append(
-                        {projects[p]['name']: projects[p+1]['name']}
+                        {
+                            projects[p]['name']: {
+                                'conflict': projects[p+1]['name'],
+                                'drilling_team': drilling_team['name'],
+                                'details': "{0} > {1}".format(projects[p]['expected_end_date'], projects[p+1]['expected_start_date']),
+                                'url': get_url_to_form("Project", projects[p]['name'])
+                            }
+                        }
                     )
             
     return conflicted_projects
