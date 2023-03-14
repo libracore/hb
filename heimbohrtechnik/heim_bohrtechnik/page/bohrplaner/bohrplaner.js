@@ -264,7 +264,7 @@ frappe.bohrplaner = {
             'object_location': data.object_location,
             'parent_project': data.project,
             'subcontracting_order': data.subcontracting_order,
-            'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false'
+            'dragable': (frappe.user.has_role("Dispo") ? 'true' : 'false'
         })).appendTo(place);
         return
     },
@@ -517,7 +517,7 @@ frappe.bohrplaner = {
     },
     find_conflicts: function(page) {
         /* launch conflict finder */
-        frappe.call({
+        /*frappe.call({
             'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_conflicts',
             'callback': function(r) {
                 if (r.message) {
@@ -528,15 +528,25 @@ frappe.bohrplaner = {
                         ],
                         primary_action: function(){
                             d.hide();
+                            /* frappe.prompt([
+                                {'fieldname': 'drilling_team', 'fieldtype': 'Link', 'label': __('Drilling Team'), 'options': 'Drilling Team', 'reqd': 1}  
+                            ],
+                            function(values){
+                                show_alert(values, 5);
+                            },
+                            'Age verification',
+                            'Subscribe me'
+                            )
+
                         },
-                        primary_action_label: __('OK'),
+                        primary_action_label: __('Resolve'),
                         title: __("Conflicts")
                     });
                     d.fields_dict.ht.$wrapper.html(r.message);
                     d.show();
                 }
             }
-        });
+        });*/ 
     }
 }
 
