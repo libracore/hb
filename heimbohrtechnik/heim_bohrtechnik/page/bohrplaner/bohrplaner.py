@@ -7,8 +7,12 @@ from frappe import _
 from frappe.utils.data import getdate, date_diff, add_days, get_datetime
 from datetime import date, timedelta
 from frappe.desk.form.load import get_attachments
+<<<<<<< HEAD
 from frappe.utils import cint
 from frappe.utils import get_url_to_form
+=======
+from frappe.utils import cint, get_url_to_form
+>>>>>>> recovery
 
 BG_GREEN = '#81d41a;'
 BG_ORANGE = '#ffbf00;'
