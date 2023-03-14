@@ -264,7 +264,7 @@ frappe.bohrplaner = {
             'object_location': data.object_location,
             'parent_project': data.project,
             'subcontracting_order': data.subcontracting_order,
-            'dragable': (frappe.user.has_role("Dispo") ? 'true' : 'false'
+            'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false'
         })).appendTo(place);
         return
     },
@@ -517,7 +517,7 @@ frappe.bohrplaner = {
     },
     find_conflicts: function(page) {
         /* launch conflict finder */
-        /*frappe.call({
+        frappe.call({
             'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_conflicts',
             'callback': function(r) {
                 if (r.message) {
@@ -536,7 +536,7 @@ frappe.bohrplaner = {
                             },
                             'Age verification',
                             'Subscribe me'
-                            )
+                            ) */
 
                         },
                         primary_action_label: __('Resolve'),
@@ -546,7 +546,7 @@ frappe.bohrplaner = {
                     d.show();
                 }
             }
-        });*/ 
+        });
     }
 }
 
