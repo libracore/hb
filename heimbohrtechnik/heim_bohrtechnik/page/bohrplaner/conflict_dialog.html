@@ -5,12 +5,10 @@
         <th>{{ _("Details") }}</th>
     </tr>
     {% for c in holiday_conflicts %}
-        {% for k, v in c.items() %}
-            <tr>
-                <td><a href="{{ v.url }}">{{ k }}</a></td>
-                <td>{{ v.date }} ({{ v.region }})</td>
-            </tr>
-        {% endfor %}
+        <tr>
+            <td><a href="{{ c.url }}">{{ c.project }}</a></td>
+            <td>{{ c.date }} ({{ c.region }})</td>
+        </tr>
     {% endfor %}
 </table>
 
@@ -23,13 +21,11 @@
         <th>{{ _("Details") }}</th>
     </tr>
     {% for c in project_conflicts %}
-        {% for k, v in c.items() %}
-            <tr>
-                <td><a href="{{ v.url }}">{{ k }}</a></td>
-                <td>{{ v.drilling_team }}</td>
-                <td>{{ v.conflict }}</td>
-                <td>{{ v.details }}</td>
-            </tr>
-        {% endfor %}
+        <tr>
+            <td><a href="{{ c.url }}">{{ c.project }}</a></td>
+            <td>{{ c.drilling_team }}</td>
+            <td>{{ c.conflict }}</td>
+            <td>{{ c.details }}</td>
+        </tr>
     {% endfor %}
 </table>

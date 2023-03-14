@@ -833,11 +833,10 @@ def find_holiday_conflicts():
             if contained:
                 conflicted_projects.append(
                     {
-                        project['name']: {
-                            'date': contained,
-                            'region': region['region'],
-                            'url': get_url_to_form("Project", project['name'])
-                        }
+                        'project': project['name'],
+                        'date': contained,
+                        'region': region['region'],
+                        'url': get_url_to_form("Project", project['name'])
                     }
                 )
             
@@ -846,9 +845,12 @@ def find_holiday_conflicts():
 """
 In open projects, per drilling team, find overlaps
 """
-def find_project_conflicts():
+def find_project_conflicts(drilling_team=None):
     # get drilling teams
-    drilling_teams = frappe.get_all("Drilling Team", filters={'drilling_team_type': 'Bohrteam'}, fields=['name'])
+    if drilling_team:
+        drilling_teams = [{'name': drilling_team}]
+    else:
+        drilling_teams = frappe.get_all("Drilling Team", filters={'drilling_team_type': 'Bohrteam'}, fields=['name'])
     
     conflicted_projects = []
     # get all open projects in drilling team
@@ -868,15 +870,14 @@ def find_project_conflicts():
                 if projects[p]['expected_end_date'] > projects[p+1]['expected_start_date']:
                     conflicted_projects.append(
                         {
-                            projects[p]['name']: {
-                                'conflict': projects[p+1]['name'],
-                                'drilling_team': drilling_team['name'],
-                                'details': "{0} > {1}".format(projects[p]['expected_end_date'], projects[p+1]['expected_start_date']),
-                                'url': get_url_to_form("Project", projects[p]['name'])
-                            }
+                            'project': projects[p]['name'],
+                            'conflict': projects[p+1]['name'],
+                            'drilling_team': drilling_team['name'],
+                            'details': "{0} > {1}".format(projects[p]['expected_end_date'], projects[p+1]['expected_start_date']),
+                            'url': get_url_to_form("Project", projects[p]['name'])
                         }
                     )
-            
+    
     return conflicted_projects
 
 """
@@ -890,3 +891,45 @@ def get_conflicts():
     }
     html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/conflict_dialog.html", conflicts)
     return html
+
+"""
+Resolve conflicts of a drilling team
+"""
+@frappe.whitelist()
+def resolve_conflicts(drilling_team, debug=True):
+    # prepare trace
+    resolution_trace = ""
+    # get all conflicts
+    conflicts = find_project_conflicts(drilling_team)
+    # iterate to resolve conflicts
+    while (len(conflicts) > 0):
+        # find the later project
+        later_project = frappe.get_doc("Project", conflicts[0]['conflict'])
+        # determine duration
+        start_date = later_project.expected_start_date
+        end_date = later_project.expected_end_date
+        project_duration = date_diff(end_date, start_date)
+        duration = timedelta(days=project_duration)
+        # move later project to the end of the earlier project
+        later_project.expected_start_date = frappe.get_value("Project", conflicts[0]['project'], 'expected_end_date') + timedelta(days=1)
+        # check weekends
+        weekday = later_project.expected_start_date.weekday()
+        if weekday > 4:         # Sat = 5, Sun = 6
+            later_project.expected_start_date = later_project.expected_start_date + timedelta(days=(7 - weekday))
+        # move end according to duration
+        later_project.expected_end_date = later_project.expected_start_date + duration
+        # save
+        later_project.save()
+        frappe.db.commit()
+        # store trace
+        resolution_trace += "Moved {p} from {s1}..{e1} to {s2}..{e2} ({p_prev})\n".format(
+            p=later_project.name, s1=start_date, e1=end_date, 
+            s2=later_project.expected_start_date, e2=later_project.expected_end_date,
+            p_prev=conflicts[0]['project'])
+        # iterate to find next conflict
+        conflicts = find_project_conflicts(drilling_team)
+    
+    if debug:
+        frappe.log_error( resolution_trace, "Resolve conflicts for {0}".format(drilling_team) )
+        
+    return

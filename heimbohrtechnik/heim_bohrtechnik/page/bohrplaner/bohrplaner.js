@@ -528,15 +528,30 @@ frappe.bohrplaner = {
                         ],
                         primary_action: function(){
                             d.hide();
-                            /* frappe.prompt([
-                                {'fieldname': 'drilling_team', 'fieldtype': 'Link', 'label': __('Drilling Team'), 'options': 'Drilling Team', 'reqd': 1}  
-                            ],
-                            function(values){
-                                show_alert(values, 5);
-                            },
-                            'Age verification',
-                            'Subscribe me'
-                            ) */
+                            frappe.prompt([
+                                    {
+                                        'fieldname': 'drilling_team', 
+                                        'fieldtype': 'Link', 
+                                        'label': __('Drilling Team'), 
+                                        'options': 'Drilling Team', 
+                                        'reqd': 1
+                                    }
+                                ],
+                                function(values){
+                                    frappe.call({
+                                        'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.resolve_conflicts',
+                                        'args': {
+                                            'drilling_team': values.drilling_team
+                                        },
+                                        'callback': function(r) {
+                                            frappe.show_alert( __("Updated") );
+                                            frappe.bohrplaner.reset_dates(page);
+                                        }
+                                    });
+                                },
+                                __('Resolve conflicts'),
+                                __('resolve')
+                            )
 
                         },
                         primary_action_label: __('Resolve'),
