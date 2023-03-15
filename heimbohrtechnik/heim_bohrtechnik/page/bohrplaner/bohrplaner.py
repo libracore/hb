@@ -935,3 +935,47 @@ def resolve_conflicts(drilling_team, debug=True):
         frappe.log_error( resolution_trace, "Resolve conflicts for {0}".format(drilling_team) )
         
     return
+
+"""
+Get Subproject Overview for Project Search Dialog
+"""
+@frappe.whitelist()
+def get_subproject_overview(project):
+    subprojects = frappe.db.sql("""
+                                    SELECT
+                                        `subcontracting_order` AS `subproject`,
+                                        `start`,
+                                        `end`,
+                                        `team`,
+                                        `description`
+                                    FROM `tabProject Subproject`
+                                    WHERE `parent` = '{project}'
+                                """.format(project=project), as_dict=True)
+    if len(subprojects) > 0:
+        table = """<p>Mit dem Projekt verknüpfte Unterprojekte:</p>
+                    <table style="width:100%;" class="project-search-modal-table">
+                        <thead>
+                            <tr>
+                                <th>Start</th>
+                                <th>Ende</th>
+                                <th>Team</th>
+                                <th>Beschreibung</th>
+                            </tr>
+                        </thead>
+                        <tbody>"""
+        for sub_p in subprojects:
+            table += """
+                        <tr onclick="route_to_subproject(this);" data-subproject="{4}" data-start="{5}">
+                            <td>{0}</td>
+                            <td>{1}</td>
+                            <td>{2}</td>
+                            <td>{3}</td>
+                        </tr>
+                    """.format(frappe.utils.get_datetime(sub_p.start).strftime('%d.%m.%Y'), \
+                    frappe.utils.get_datetime(sub_p.end).strftime('%d.%m.%Y'), \
+                    sub_p.team, sub_p.description, sub_p.subproject, sub_p.start)
+        
+        table += """</tbody></table>""".format(subprojects[0].start, subprojects[0].subproject)
+        return table
+    else:
+        return """<p>Keine Unterprojekte vorhanden.</p>"""

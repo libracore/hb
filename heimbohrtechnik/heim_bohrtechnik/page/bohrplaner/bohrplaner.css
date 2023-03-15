@@ -274,3 +274,12 @@ td {
     zoom: 45%;
   }
 }
+
+.project-search-modal-table th,td {
+    padding-right: 3px;
+}
+
+.project-search-modal-table tbody tr:hover {
+    background-color: #F5F5F5;
+    cursor: pointer;
+}
