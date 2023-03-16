@@ -76,9 +76,7 @@ def get_overlay_datas(from_date, to_date, customer=None):
             duration_correction = (date_diff(p.expected_end_date, getdate(to_date)) - 1) * 2
             dauer -= duration_correction                # subtract days that exceed to_date
             dauer += weekend_day_correction             # compensate for weekends in the exceeding periods
-        if p.start_half_day.lower() == 'nm':
-            dauer -= 1
-        if p.end_half_day.lower() == 'vm':
+        if p.start_half_day.lower() == 'nm' or p.end_half_day.lower() == 'vm':
             dauer -= 1
         
         p_data = get_project_data(p, dauer)
@@ -358,6 +356,11 @@ def calc_duration(start, end, from_date, to_date):
         start = getdate(from_date)
     else:
         dauer = ((date_diff(end, start) - correction) + 1) * 2
+        
+    # weekend correction
+    weekend_day_correction = get_weekend_day_correction(start, end)
+    dauer -= weekend_day_correction
+    
     return {
         'dauer': dauer,
         'start': start
