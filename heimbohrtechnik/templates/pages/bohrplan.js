@@ -17,13 +17,13 @@ function make() {
     //~ var data = get_grid(locals.from_date, locals.to_date);
     
     frappe.call({
-       method: "heimbohrtechnik.templates.pages.bohrplan.get_grid",
-       args: {
-            "from_date": locals.from_date,
-            "to_date": locals.to_date
+       'method': "heimbohrtechnik.templates.pages.bohrplan.get_grid",
+       'args': {
+            'from_date': locals.from_date,
+            'to_date': locals.to_date
        },
-       async: false,
-       callback: function(response) {
+       'async': false,
+       'callback': function(response) {
             var content = response.message;
             data = {
                 drilling_teams: content.drilling_teams,
@@ -169,7 +169,8 @@ function add_overlay(data) {
         'pneukran': data.pneukran, 
         'manager_short': data.manager_short, 
         'drilling_equipment': data.drilling_equipment, 
-        'ampeln': data.ampeln
+        'ampeln': data.ampeln,
+        'dragable': 'false'
     })).appendTo(place);
     return
 }

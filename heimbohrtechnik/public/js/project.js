@@ -171,9 +171,6 @@ frappe.ui.form.on('Project', {
                             'end_date': frm.doc.subprojects[s].end,
                             'drilling_team': frm.doc.subprojects[s].team,
                             'description': frm.doc.subprojects[s].description
-                        },
-                        'callback': function(response) {
-                            cur_frm.reload_doc();
                         }
                     });
                 }
