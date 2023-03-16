@@ -157,6 +157,28 @@ frappe.ui.form.on('Project', {
             cur_frm.set_df_property('customer_details', 'hidden', 1);
             cur_frm.set_df_property('section_subprojects', 'hidden', 1);
         }  
+    },
+    before_save(frm) {
+        // hook to update subcontracting orders in case of changes
+        if ((frm.doc.subprojects) && (frm.doc.subprojects.length)) {
+            for (var s = 0; s < frm.doc.subprojects.length; s++) {
+                if (frm.doc.subprojects[s].subcontracting_order) {
+                    frappe.call({
+                        'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.subcontracting_order.subcontracting_order.update_from_project',
+                        'args': {
+                            'subcontracting_order': frm.doc.subprojects[s].subcontracting_order,
+                            'start_date': frm.doc.subprojects[s].start,
+                            'end_date': frm.doc.subprojects[s].end,
+                            'drilling_team': frm.doc.subprojects[s].team,
+                            'description': frm.doc.subprojects[s].description
+                        },
+                        'callback': function(response) {
+                            cur_frm.reload_doc();
+                        }
+                    });
+                }
+            }
+        }
     }
 });
 

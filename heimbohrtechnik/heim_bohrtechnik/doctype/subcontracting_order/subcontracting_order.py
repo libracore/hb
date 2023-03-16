@@ -53,3 +53,21 @@ class SubcontractingOrder(Document):
                 frappe.db.commit()
         return
         
+@frappe.whitelist()
+def update_from_project(subcontracting_order, start_date, end_date, drilling_team, description):
+    doc = frappe.get_doc("Subcontracting Order", subcontracting_order)
+    if start_date != doc.from_date or end_date != doc.to_date:
+        # update directly in the database to prevent loop
+        frappe.db.sql("""
+            UPDATE `tabSubcontracting Order`
+            SET 
+                `from_date` = "{from_date}", 
+                `to_date` = "{to_date}",
+                `drilling_team` = "{drilling_team}",
+                `order_description` = "{description}"
+            WHERE `name` = "{name}";
+        """.format(name=subcontracting_order, from_date=start_date, to_date=end_date,
+            description=description, drilling_team=drilling_team))
+        
+        frappe.db.commit()
+    return
