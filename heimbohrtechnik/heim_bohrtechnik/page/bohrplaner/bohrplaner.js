@@ -492,28 +492,49 @@ frappe.bohrplaner = {
         }
     },
     search: function(page) {
-        frappe.prompt([
-                {'fieldname': 'project', 'fieldtype': 'Link', 'label': __('Project'), 'options': 'Project', 'reqd': 1}  
+        var d = new frappe.ui.Dialog({
+            'fields': [   
+                {'fieldname': 'project', 'fieldtype': 'Link', 'label': __('Project'), 'options': 'Project', 'reqd': 1, 'change': function() {
+                        if (d.get_value('project')) {
+                            frappe.call({
+                                'method':"heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_subproject_overview",
+                                'args':{
+                                    'project': d.get_value('project')
+                                 },
+                                'callback': function(r) {
+                                    var options_html = r.message;
+                                    d.set_df_property('subproject_view', 'options', options_html);
+                                }
+                            });
+                        } else {
+                            var options_html = '<p>Bitte ein Projekt auswählen</p>';
+                            d.set_df_property('subproject_view', 'options', options_html);
+                        }
+                    }
+                },
+                {'fieldname': 'subproject_view', 'fieldtype': 'HTML', 'label': __('Subproject Overview'), 'options': '<p>Bitte ein Projekt auswählen</p>'}
             ],
-            function(values){
+            'primary_action': function() {
+                d.hide();
                 frappe.call({
                     'method': 'frappe.client.get',
                     'args': {
                         'doctype': 'Project',
-                        'name': values.project
+                        'name': d.get_value('project')
                     },
                     'callback': function(r) {
                         if (r.message) {
                             frappe.route_options.from = r.message.expected_start_date;
-                            frappe.route_options.project_name = values.project;
+                            frappe.route_options.project_name = d.get_value('project');
                             frappe.bohrplaner.load_route(page);
                         }
                     }
                 });
             },
-            __('Search project'),
-            __('OK')
-        );
+            'primary_action_label': __('OK'),
+            'title': __('Search project')
+        });
+        d.show();
     },
     find_conflicts: function(page) {
         /* launch conflict finder */
@@ -677,6 +698,13 @@ function print_content(page, from, to) {
             frappe.dom.unfreeze();
         }
     });
-        
+}
+
+function route_to_subproject(elmnt) {
+    trigger = $(elmnt);
+    frappe.route_options.from = trigger.attr('data-start');
+    frappe.route_options.project_name = trigger.attr('data-subproject');
+    cur_dialog.hide();
+    frappe.bohrplaner.load_route(frappe.bohrplaner.page);
     
 }
