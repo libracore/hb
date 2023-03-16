@@ -5,12 +5,12 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "truck",
   "start_time",
   "column_break_3",
   "drilling_team",
-  "end_time",
-  "naming_series"
+  "end_time"
  ],
  "fields": [
   {
@@ -46,17 +46,19 @@
    "label": "End"
   },
   {
+   "default": "MFK-.#####",
    "fieldname": "naming_series",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Naming Series",
    "no_copy": 1,
-   "options": "MFK-.####",
+   "options": "MFK-.#####",
    "print_hide": 1,
    "reqd": 1,
    "set_only_once": 1
   }
  ],
- "modified": "2023-03-09 15:50:10.145941",
+ "modified": "2023-03-16 16:43:31.296794",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "MFK",
@@ -95,7 +97,6 @@
    "share": 1
   }
  ],
- "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "title_field": "truck",
