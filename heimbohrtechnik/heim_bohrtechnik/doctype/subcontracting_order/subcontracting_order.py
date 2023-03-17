@@ -20,10 +20,11 @@ class SubcontractingOrder(Document):
             # load referenced project
             p = frappe.get_doc("Project", self.project)
             # check if this order is already linked
-            updated = False
+            occured = False
             for s in p.subprojects:
                 if s.subcontracting_order == self.name:
                     modified = False
+                    occured = True
                     if s.start != self.from_date:
                         s.start = self.from_date
                         modified = True
@@ -38,10 +39,9 @@ class SubcontractingOrder(Document):
                         modified = True
                     if modified:
                         p.save()
-                        updated = True
                         frappe.db.commit()
             # this order was not yet linked, create entry
-            if not updated:
+            if not occured:
                 p.append('subprojects', {
                     'start': self.from_date,
                     'end': self.to_date,
