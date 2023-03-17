@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2022, libracore and contributors
+# Copyright (c) 2022-2023, libracore and contributors
 # License: AGPL v3. See LICENCE
 
 from __future__ import unicode_literals
@@ -29,3 +29,26 @@ def get_data(customer, key, from_date, to_date):
     data = get_overlay_datas(from_date[1:11], to_date[1:11], customer)
     
     return data
+
+"""
+Compute the last planned date (for visible range)
+"""
+@frappe.whitelist(allow_guest=True)
+def get_last_date(customer, key):
+    if not frappe.db.exists("Customer", customer):
+        return None
+    if frappe.get_value("Customer", customer, "key") != key:
+        return None
+    
+    last_date = frappe.db.sql("""
+        SELECT MAX(`expected_end_date`) AS `expected_end_date`
+        FROM `tabProject`
+        WHERE `tabProject`.`customer` = "{customer}"
+          AND `tabProject`.`status` = "Open"
+          ;
+    """.format(customer=customer), as_dict=True)
+    
+    if len(last_date) > 0:
+        return last_date[0]['expected_end_date']
+    else:
+        return None
