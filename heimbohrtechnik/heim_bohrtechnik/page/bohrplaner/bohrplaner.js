@@ -424,7 +424,7 @@ frappe.bohrplaner = {
                                         {'fieldname': 'cb_1', 'fieldtype': 'Column Break'},
                                         {'fieldname': 'end', 'label': __('End'), 'fieldtype': 'Date', 'default': project.expected_end_date, 'reqd': 1},
                                         {'fieldname': 'end_hd', 'label': __('End Half-Day'), 'fieldtype': 'Select', 'options': 'VM\nNM', 'default': project.end_half_day},
-                                        {'fieldname': 'visit_date', 'label': __('Visit date'), 'fieldtype': 'Date', 'default': project.visit_date},
+                                        {'fieldname': 'visit_date', 'label': __('Visit date'), 'fieldtype': 'Link', 'options': 'Event', 'default': project.visit_date},
                                     ],
                                     primary_action: function(){
                                         d.hide();
