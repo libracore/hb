@@ -166,9 +166,18 @@ td {
     background-color: #ffffe0; 
     border: 1px solid #f0e68c;
 }
-.subproject_booking_overlay:hover {
+/* .subproject_booking_overlay:hover {
     z-index: 3;
     cursor: pointer;
+} */
+
+.single_day {
+    margin-top: 3px;
+    border-top: solid 3px gold;
+}
+
+.multi_day {
+    border-top: solid 3px orange;
 }
 
 .absence_booking_overlay {

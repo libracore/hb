@@ -249,7 +249,7 @@ frappe.bohrplaner = {
         }
         
         $(place).css("position", "relative");
-        var qty = data.dauer
+        var qty = data.dauer;                               // duration is in half-days, i.e. 2 = 1 day
         
         $(frappe.render_template('subproject_overlay', {
             'width': (42 * data.dauer), 
@@ -264,7 +264,8 @@ frappe.bohrplaner = {
             'object_location': data.object_location,
             'parent_project': data.project,
             'subcontracting_order': data.subcontracting_order,
-            'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false'
+            'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false',
+            'multi_day': (data.dauer > 2) ? 'multi_day' : 'single_day'
         })).appendTo(place);
         return
     },
