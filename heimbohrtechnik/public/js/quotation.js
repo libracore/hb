@@ -44,6 +44,20 @@ frappe.ui.form.on('Quotation', {
         if (frm.doc.party_name) {
             get_tax_id(frm);
         }
+    },
+    on_submit: function(frm) {
+        // create and attach PDF
+        frappe.call({
+            'method': 'erpnextswiss.erpnextswiss.attach_pdf.attach_pdf',
+            'args': {
+                'doctype': frm.doc.doctype,
+                'docname': frm.doc.name,
+                'print_format': "Offerte"
+            },
+            'callback': function(response) {
+                cur_frm.reload_doc();
+            }
+        });
     }
 });
 

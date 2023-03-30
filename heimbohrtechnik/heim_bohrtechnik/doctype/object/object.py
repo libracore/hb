@@ -12,7 +12,7 @@ import requests
 import json
 from heimbohrtechnik.heim_bohrtechnik.doctype.construction_site_description.construction_site_description import check_object_checklist
 from frappe.utils import get_url_to_form
-from heimbohrtechnik.heim_bohrtechnik.nextcloud import create_project_folder, get_cloud_url
+from heimbohrtechnik.heim_bohrtechnik.nextcloud import create_project_folder, get_cloud_url, upload_attachments
 
 class Object(Document):
     def before_save(self):
@@ -67,6 +67,7 @@ class Object(Document):
                   'file': p.file
                 })
             # check sales order positions to extend checklist
+            so_doc = None
             if sales_order and frappe.db.exists("Sales Order", sales_order):
                 so_doc = frappe.get_doc("Sales Order", sales_order)
                 needs_int_crane = False
@@ -92,6 +93,12 @@ class Object(Document):
             frappe.db.commit()
             # create nextcloud folder
             create_project_folder(project.name)
+            # upload attachments from sales order and quotation
+            if so_doc:
+                upload_attachments("Sales Order", sales_order, self.name)
+                if so_doc.items[0].prevdoc_docname:
+                    upload_attachments("Quotation", so_doc.items[0].prevdoc_docname, self.name)
+            
         return
         
     def convert_ch_to_gps(self):

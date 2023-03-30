@@ -869,6 +869,7 @@ def find_project_conflicts(drilling_team=None):
                 AND `drilling_team` = "{0}"
                 AND `expected_start_date` IS NOT NULL
                 AND `expected_end_date` IS NOT NULL
+                AND `name` NOT LIKE "P-INT-%"
             ORDER BY `expected_start_date` ASC, `name` ASC
             """.format(drilling_team['name']), as_dict=True)
             

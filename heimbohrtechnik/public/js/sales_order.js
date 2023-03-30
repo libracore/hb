@@ -93,6 +93,20 @@ frappe.ui.form.on('Sales Order', {
         if (frm.doc.__islocal) {
             select_naming_series(frm);
         }
+    },
+    on_submit: function(frm) {
+        // create and attach PDF
+        frappe.call({
+            'method': 'erpnextswiss.erpnextswiss.attach_pdf.attach_pdf',
+            'args': {
+                'doctype': frm.doc.doctype,
+                'docname': frm.doc.name,
+                'print_format': "Auftragsbestätigung"
+            },
+            'callback': function(response) {
+                cur_frm.reload_doc();
+            }
+        });
     }
 });
 
