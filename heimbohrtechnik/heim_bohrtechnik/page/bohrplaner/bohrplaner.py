@@ -47,7 +47,7 @@ def get_overlay_datas(from_date, to_date, customer=None):
             `object`
         FROM `tabProject`
         WHERE `project_type` = "External"
-          AND `status` = "Open"
+          AND `status` IN ("Open", "Completed")
           AND 
             ((`expected_start_date` BETWEEN '{from_date}' AND '{to_date}')
              OR (`expected_end_date` BETWEEN '{from_date}' AND '{to_date}')
