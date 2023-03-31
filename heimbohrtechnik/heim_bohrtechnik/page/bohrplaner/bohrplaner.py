@@ -865,7 +865,7 @@ def find_project_conflicts(drilling_team=None):
             SELECT `name`, `expected_start_date`, `expected_end_date`
             FROM `tabProject`
             WHERE
-                `status` = "Open"
+                `status` IN ("Open", "Completed")
                 AND `drilling_team` = "{0}"
                 AND `expected_start_date` IS NOT NULL
                 AND `expected_end_date` IS NOT NULL
