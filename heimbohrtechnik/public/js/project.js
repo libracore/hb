@@ -156,7 +156,11 @@ frappe.ui.form.on('Project', {
             cur_frm.set_df_property('section_checklist', 'hidden', 1);
             cur_frm.set_df_property('customer_details', 'hidden', 1);
             cur_frm.set_df_property('section_subprojects', 'hidden', 1);
-        }  
+        }
+        // fetch visit information
+        if (frm.doc.visit_date) {
+            fetch_visit_date(frm);
+        }
     },
     before_save(frm) {
         // hook to update subcontracting orders in case of changes
@@ -219,5 +223,27 @@ function request_review(frm) {
         },
         'freeze': true,
         'freeze_message': __("Google Rezension anfragen...")
+    });
+}
+
+function fetch_visit_date(frm) {
+    frappe.call({
+        'method': "frappe.client.get",
+        'args': {
+            'doctype': "Event",
+            'name': frm.doc.visit_date
+        },
+        'callback': function(response) {
+            var visit_event = response.message;
+
+            if (visit_event) {
+                var info = "<p>" 
+                    + (visit_event.starts_on ? (new Date(visit_event.starts_on)).toLocaleString() : "??") 
+                    + " - " 
+                    + (visit_event.ends_on ? (new Date(visit_event.starts_on)).toLocaleString() : "??") 
+                    + "</p>";
+                cur_frm.set_df_property('visit_info_html', 'options', info);
+            }
+        }
     });
 }

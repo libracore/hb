@@ -149,7 +149,7 @@ class Object(Document):
             return (data[0]['weight_kg'])
         else:
             return 0
-                        
+            
 @frappe.whitelist()
 def get_key():
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(32))
