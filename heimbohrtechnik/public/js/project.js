@@ -162,7 +162,7 @@ frappe.ui.form.on('Project', {
         // hook to update subcontracting orders in case of changes
         if ((frm.doc.subprojects) && (frm.doc.subprojects.length)) {
             for (var s = 0; s < frm.doc.subprojects.length; s++) {
-                if (frm.doc.subprojects[s].subcontracting_order) {
+                if ((frm.doc.subprojects[s].subcontracting_order) && (frm.doc.subprojects[s].team)) {
                     frappe.call({
                         'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.subcontracting_order.subcontracting_order.update_from_project',
                         'args': {
