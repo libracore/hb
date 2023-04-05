@@ -239,6 +239,11 @@ def consolidate_absences(absences, debug=False):
                 # this is the following day
                 last_date = date
                 current_absence['to_date'] = date
+                # override status and absence type in case of holidays
+                if absence['status'] != "None" and absence['status'] != current_absence['status']:
+                    current_absence['status'] = absence['status']
+                if absence['absence_description'] != "Feiertag" and absence['absence_description'] != current_absence['absence_description']:
+                    current_absence['absence_description'] = absence['absence_description']
             else:
                 # more than one day apart or different employee: store current and start new
                 if current_absence:
