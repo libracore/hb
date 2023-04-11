@@ -117,8 +117,17 @@ def get_result(filters, account_details):
     # enrich additional fields
     for r in result:
         if 'voucher_type' in r:
-            if r['voucher_type'] == "Payment Entry":
-                r['ref_no'] = frappe.get_value(r['voucher_type'], r['voucher_no'], 'reference_no', 'project')
+            if r['party_type'] == "Supplier":
+                # supplier
+                r['party_name'] = frappe.get_cached_value("Supplier", r['party'], 'supplier_name')
+                r['against'] = frappe.get_cached_value("Company", filters.get('company'), 'default_payable_account')
+            if r['party_type'] == "Customer":
+                # customer
+                r['party_name'] = frappe.get_cached_value("Customer", r['party'], 'customer_name')
+                r['against'] = frappe.get_cached_value("Company", filters.get('company'), 'default_receivable_account')
+                
+            #if r['voucher_type'] == "Payment Entry":
+            #    r['ref_no'] = frappe.get_value(r['voucher_type'], r['voucher_no'], 'reference_no', 'project')
             #elif r['voucher_type'] == "Purchase Invoice":
                 #r['subproject'] = frappe.db.sql(
                 #    """SELECT MAX(`subproject`) AS `subproject`
@@ -408,6 +417,11 @@ def get_columns(filters):
             "width": 130,
             "precision": 2
         },
+        {
+            "label": _("Remarks"),
+            "fieldname": "remarks",
+            "width": 400
+        },
         #{
         #    "label": _("Voucher Type"),
         #    "fieldname": "voucher_type",
@@ -425,39 +439,46 @@ def get_columns(filters):
             "fieldname": "against",
             "width": 120
         },
-        {
-            "label": _("Cheque/Reference No"),
-            "fieldtype": "Data",
-            "fieldname": "ref_no",
-            "width": 100
-        },
-        {
-            "label": _("Party Type"),
-            "fieldname": "party_type",
-            "width": 100
-        },
+        #{
+        #    "label": _("Cheque/Reference No"),
+        #    "fieldtype": "Data",
+        #    "fieldname": "ref_no",
+        #    "width": 100
+        #},
+        #{
+        #    "label": _("Party Type"),
+        #    "fieldname": "party_type",
+        #    "width": 100
+        #},
         {
             "label": _("Party"),
             "fieldname": "party",
+            "fieldtype": "Dynamic Link",
+            "options": "party_type",
             "width": 100
         },
         {
-            "label": _("Project"),
-            "options": "Project",
-            "fieldname": "project",
+            "label": _("Party Name"),
+            "fieldname": "party_name",
             "width": 100
         },
-        {
-            "label": _("Cost Center"),
-            "options": "Cost Center",
-            "fieldname": "cost_center",
-            "width": 100
-        },
-        {
-            "label": _("Against Voucher Type"),
-            "fieldname": "against_voucher_type",
-            "width": 100
-        },
+        #{
+        #    "label": _("Project"),
+        #    "options": "Project",
+        #    "fieldname": "project",
+        #    "width": 100
+        #},
+        #{
+        #    "label": _("Cost Center"),
+        #    "options": "Cost Center",
+        #    "fieldname": "cost_center",
+        #    "width": 100
+        #},
+        #{
+        #    "label": _("Against Voucher Type"),
+        #    "fieldname": "against_voucher_type",
+        #    "width": 100
+        #},
         {
             "label": _("Against Voucher"),
             "fieldname": "against_voucher",
@@ -470,11 +491,6 @@ def get_columns(filters):
             "fieldname": "bill_no",
             "fieldtype": "Data",
             "width": 100
-        },
-        {
-            "label": _("Remarks"),
-            "fieldname": "remarks",
-            "width": 400
         }
     ]
 
