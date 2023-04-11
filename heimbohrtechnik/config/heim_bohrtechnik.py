@@ -249,7 +249,7 @@ def get_data():
                 },
                 {
                     "type": "report",
-                    "name": "Account Sheets",
+                    "name": "Account Sheets HBAG",
                     "doctype": "GL Entry",
                     "is_query_report": True,
                 }
