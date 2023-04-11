@@ -74,15 +74,24 @@ frappe.ui.form.on('Project', {
             show_insurance_information(frm.doc.name);
             // split project button
             frm.add_custom_button(__("Projekt teilen"), function() {
-                frappe.call({
-                    'method': "heimbohrtechnik.heim_bohrtechnik.project.split_project",
-                    'args': {
-                        'project': frm.doc.name
+                frappe.confirm(
+                    __('Soll das Projekt wirklich aufgeteilt werden?'),
+                    function(){
+                        // on yes
+                        frappe.call({
+                            'method': "heimbohrtechnik.heim_bohrtechnik.project.split_project",
+                            'args': {
+                                'project': frm.doc.name
+                            },
+                            'callback': function(response) {
+                                window.location.href=response.message.uri;
+                            }
+                        });
                     },
-                    'callback': function(response) {
-                        window.location.href=response.message.uri;
+                    function(){
+                        // on no
                     }
-                });
+                )
             }, __("More") );
             // create full project file
             frm.add_custom_button(__("Dossier erstellen"), function() {
