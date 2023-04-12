@@ -47,6 +47,7 @@ def get_overlay_datas(from_date, to_date, customer=None):
             `object`
         FROM `tabProject`
         WHERE `project_type` = "External"
+          AND `status` IN ("Open", "Completed")
           AND 
             ((`expected_start_date` BETWEEN '{from_date}' AND '{to_date}')
              OR (`expected_end_date` BETWEEN '{from_date}' AND '{to_date}')
@@ -320,8 +321,9 @@ def get_subproject_overlay_datas(from_date, to_date):
         LEFT JOIN `tabProject` ON `tabProject`.`name` = `tabProject Subproject`.`parent`
         LEFT JOIN `tabSubcontracting Order` ON `tabSubcontracting Order`.`name` = `tabProject Subproject`.`subcontracting_order`
         WHERE 
-            `tabProject Subproject`.`start` BETWEEN "{from_date}" AND "{to_date}"
-            OR `tabProject Subproject`.`end` BETWEEN "{from_date}" AND "{to_date}"
+            (`tabProject Subproject`.`start` BETWEEN "{from_date}" AND "{to_date}"
+            OR `tabProject Subproject`.`end` BETWEEN "{from_date}" AND "{to_date}")
+            AND `tabProject`.`status` = "Open"
         ORDER BY 
             `tabProject Subproject`.`team` ASC, `tabSubcontracting Order`.`prio` ASC;""".format(
             from_date=from_date, to_date=to_date), as_dict=True)
@@ -863,10 +865,11 @@ def find_project_conflicts(drilling_team=None):
             SELECT `name`, `expected_start_date`, `expected_end_date`
             FROM `tabProject`
             WHERE
-                `status` = "Open"
+                `status` IN ("Open", "Completed")
                 AND `drilling_team` = "{0}"
                 AND `expected_start_date` IS NOT NULL
                 AND `expected_end_date` IS NOT NULL
+                AND `name` NOT LIKE "P-INT-%"
             ORDER BY `expected_start_date` ASC, `name` ASC
             """.format(drilling_team['name']), as_dict=True)
             

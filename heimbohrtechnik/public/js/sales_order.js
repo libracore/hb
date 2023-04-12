@@ -60,6 +60,14 @@ frappe.ui.form.on('Sales Order', {
             });
         }
         if (frm.doc.docstatus === 1) {
+            // add create blank invoice
+            frm.add_custom_button(__("Teilrechnung"), function() {
+                create_part_invoice(frm);
+            }, __("Create"));
+            // add create blank invoice
+            frm.add_custom_button(__("Schlussrechnung"), function() {
+                create_final_invoice(frm);
+            }, __("Create"));
             // add create akonto function
             frm.add_custom_button(__("Akonto Invoice"),  function() { 
                 create_akonto(frm);
@@ -85,6 +93,20 @@ frappe.ui.form.on('Sales Order', {
         if (frm.doc.__islocal) {
             select_naming_series(frm);
         }
+    },
+    on_submit: function(frm) {
+        // create and attach PDF
+        frappe.call({
+            'method': 'erpnextswiss.erpnextswiss.attach_pdf.attach_pdf',
+            'args': {
+                'doctype': frm.doc.doctype,
+                'docname': frm.doc.name,
+                'print_format': "Auftragsbestätigung"
+            },
+            'callback': function(response) {
+                cur_frm.reload_doc();
+            }
+        });
     }
 });
 
@@ -122,6 +144,20 @@ function create_akonto(frm) {
 function create_blank_invoice(frm) {
     frappe.model.open_mapped_doc({
         'method': 'heimbohrtechnik.heim_bohrtechnik.utils.create_empty_invoice_from_order',
+        'frm': frm
+    });
+}
+
+function create_part_invoice(frm) {
+    frappe.model.open_mapped_doc({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.create_part_invoice',
+        'frm': frm
+    });
+}
+
+function create_final_invoice(frm) {
+    frappe.model.open_mapped_doc({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.create_final_invoice',
         'frm': frm
     });
 }

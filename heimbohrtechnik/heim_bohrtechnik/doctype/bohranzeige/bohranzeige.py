@@ -29,12 +29,6 @@ class Bohranzeige(Document):
             'object': object_doc.as_dict(),
             'construction_site_description': construction_site_description
         }
-
-    def before_save(self):
-        # create pdf
-        if frappe.db.exists("Bohranzeige", self.name):
-            self.attach_pdf()
-        return
     
     def after_insert(self):
         # initial pdf
@@ -49,4 +43,5 @@ class Bohranzeige(Document):
                 remove_file(a.name, "Bohranzeige", self.name)
         # create and attach
         execute("Bohranzeige", self.name, title=self.name, print_format=self.print_format)
+        frappe.db.commit()
         return

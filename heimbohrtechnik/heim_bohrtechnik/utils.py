@@ -14,6 +14,7 @@ from frappe.desk.form.load import get_attachments
 from frappe.utils.file_manager import remove_file
 from frappe.core.doctype.communication.email import make as make_email
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_project_file_from_local_file
+from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -116,6 +117,18 @@ def create_akonto(sales_order):
     akonto.set_missing_values()
     return akonto
 
+@frappe.whitelist()
+def create_part_invoice(sales_order):
+    sinv = make_sales_invoice(sales_order)
+    sinv.title = "Teilrechnung"
+    return sinv
+    
+@frappe.whitelist()
+def create_final_invoice(sales_order):
+    sinv = make_sales_invoice(sales_order)
+    sinv.title = "Schlussrechnung"
+    return sinv
+    
 """
 This function find applicable akonto invoices
 """

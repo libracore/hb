@@ -110,7 +110,10 @@ jenv = {
 
 doc_events = {
     "Project": {
-         "before_save": "heimbohrtechnik.heim_bohrtechnik.project.before_save"
+        "before_save": "heimbohrtechnik.heim_bohrtechnik.project.before_save"
+    },
+    "File": {
+        "after_insert": "heimbohrtechnik.heim_bohrtechnik.nextcloud.upload_file"
     }
  }
 

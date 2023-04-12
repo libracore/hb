@@ -15,9 +15,6 @@ frappe.ui.form.on('Quotation', {
             select_naming_series(frm);
         }
     },
-    button_plattmachen: function(frm) {
-        plattmachen(frm);
-    },
     refresh: function(frm) {
         if (frm.doc.object) {
             show_pincode_information(frm.doc.object);
@@ -44,6 +41,20 @@ frappe.ui.form.on('Quotation', {
         if (frm.doc.party_name) {
             get_tax_id(frm);
         }
+    },
+    on_submit: function(frm) {
+        // create and attach PDF
+        frappe.call({
+            'method': 'erpnextswiss.erpnextswiss.attach_pdf.attach_pdf',
+            'args': {
+                'doctype': frm.doc.doctype,
+                'docname': frm.doc.name,
+                'print_format': "Offerte"
+            },
+            'callback': function(response) {
+                cur_frm.reload_doc();
+            }
+        });
     }
 });
 
@@ -70,31 +81,6 @@ frappe.ui.form.on('Markup Position', {
         set_conditional_net_total(frm);
     }
 });
-
-function plattmachen(frm) {
-    if (frm.doc.docstatus === 0) {
-        frappe.prompt([
-                {
-                    'fieldname': 'target', 
-                    'fieldtype': 'Currency', 
-                    'label': 'Endbetrag brutto plattmachen auf', 
-                    'reqd': 1,
-                    'default': (frm.doc.rounded_total || frm.doc.grand_total)
-                }  
-            ],
-            function(values){
-                var factor = values.target / (frm.doc.rounded_total || frm.doc.grand_total);
-                console.log("f= " + factor);
-                var difference = frm.doc.net_total - (factor * frm.doc.net_total);
-                console.log("d= " + difference);
-                add_discount_amount("Spezialrabatt", difference);
-                recalculate_markups_discounts(frm);
-            },
-            'Plattmachen',
-            'OK'
-        )
-    }
-}
 
 function add_discount_amount(text, amount) {
     var child = cur_frm.add_child('discount_positions');

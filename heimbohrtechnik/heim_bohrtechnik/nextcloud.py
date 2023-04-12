@@ -6,6 +6,8 @@ import frappe
 import os
 from webdav3.client import Client
 from frappe.utils.password import get_decrypted_password
+from frappe.desk.form.load import get_attachments
+import time
 
 PATHS = {
     'images': "01_Fotos",
@@ -75,11 +77,11 @@ def write_file(project, f):
 """
 Write the project file (local file path) to nextcloud
 """
-def write_project_file_from_local_file (project, file_name):
+def write_project_file_from_local_file (project, file_name, target=PATHS['drilling']):
     client = get_client()
     project_path = get_project_path(project)
-    if client.check(os.path.join(project_path, PATHS['drilling'])):
-        client.upload_sync(os.path.join(project_path, PATHS['drilling'], file_name.split("/")[-1]), file_name)
+    if client.check(os.path.join(project_path, target)):
+        client.upload_sync(os.path.join(project_path, target, file_name.split("/")[-1]), file_name)
     else:
         # fallback to root (for migration projects)
         client.upload_sync(os.path.join(project_path, file_name.split("/")[-1]), file_name)
@@ -104,3 +106,35 @@ def get_physical_path(file_name):
     
     return "{0}{1}".format(base_path, file_url)
     
+"""
+Hook from File: upload specific files to nextcloud
+"""
+def upload_file(self, event):
+    if self.attached_to_doctype == "Bohranzeige":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
+        physical_file_name = get_physical_path(self.name)
+        write_project_file_from_local_file (project, physical_file_name, PATHS['drilling'])
+    
+    elif self.attached_to_doctype == "Purchase Order":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            write_project_file_from_local_file (project, physical_file_name, PATHS['supplier'])
+    
+    elif self.attached_to_doctype == "Sales Invoice":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            write_project_file_from_local_file (project, physical_file_name, PATHS['admin'])
+    
+    return
+
+"""
+Write all attachments to nextcloud
+"""
+def upload_attachments(dt, dn, project):
+    attachments = get_attachments(dt, dn)
+    for a in attachments:
+        physical_file_name = get_physical_path(a.get('file_name'))
+        write_project_file_from_local_file (project, physical_file_name, PATHS['admin'])
+    return
