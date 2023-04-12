@@ -1,8 +1,71 @@
-// Copyright (c) 2022, libracore AG and contributors
+// Copyright (c) 2022-2023, libracore AG and contributors
 // For license information, please see license.txt
 
 frappe.ui.form.on('Layer Directory', {
-	// refresh: function(frm) {
-
-	// }
+    refresh: function(frm) {
+        
+    },
+    project: function(frm) {
+        autocomplete_object(frm);
+    },
 });
+
+function autocomplete_object(frm) {
+    if (frm.doc.project) {
+        frappe.call({
+            'method': "get_autocomplete_data",
+            'doc': frm.doc,
+            'args': {
+                'project': frm.doc.project
+            },
+            'callback': function(response) {
+                var data = response.message;
+
+                cur_frm.set_value("object_name", data.object.object_name);
+                cur_frm.set_value("object_street", data.object.object_street);
+                cur_frm.set_value("object_location", data.object.object_location);
+                cur_frm.set_value("drilling_team", data.project.drilling_team);
+                cur_frm.set_value("drilling_tool", data.drilling_team.drt);
+                
+                // find permits
+                for (var i = 0; i < data.project.permits.length; i++) {
+                    if (data.project.permits[i].permit.includes("Bohrbewilligung kantonal")) {
+                        cur_frm.set_value("permit_no", 
+                            (data.project.permits[i].permit_number || ""));
+                        cur_frm.set_value("permit_date", 
+                            (data.project.permits[i].permit_date));
+                    }
+                }
+                
+                // find addresses
+                for (var i = 0; i < data.object.addresses.length; i++) {
+                    if (data.object.addresses[i].address_type === "Geologe") {
+                        if (data.object.addresses[i].is_simple === 1) {
+                            cur_frm.set_value("geologist", 
+                                (data.object.addresses[i].simple_name || "") + ", " 
+                                    + (data.object.addresses[i].simple_address || ""));
+                        } else {
+                            cur_frm.set_value("geologist", (data.object.addresses[i].party_name || ""));
+                        }
+                    } else if (data.object.addresses[i].address_type === "Mulde") {
+                        if (data.object.addresses[i].is_simple === 1) {
+                            cur_frm.set_value("forwarder", 
+                                (data.object.addresses[i].simple_name || "") + ", " 
+                                    + (data.object.addresses[i].simple_address || ""));
+                        } else {
+                            cur_frm.set_value("forwarder", (data.object.addresses[i].party_name || ""));
+                        }
+                    } else if (data.object.addresses[i].address_type === "Schlammentsorgung") {
+                        if (data.object.addresses[i].is_simple === 1) {
+                            cur_frm.set_value("disposer", 
+                                (data.object.addresses[i].simple_name || "") + ", " 
+                                    + (data.object.addresses[i].simple_address || ""));
+                        } else {
+                            cur_frm.set_value("disposer", (data.object.addresses[i].party_name || ""));
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
