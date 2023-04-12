@@ -14,18 +14,40 @@
   "object_name",
   "object_street",
   "object_location",
+  "coordinates",
   "sec_drilling",
-  "permit",
-  "permit_date",
-  "drilling_master",
+  "permit_no",
+  "start_date",
+  "drilling_team",
   "ews_details",
   "col_drilling",
-  "start_date",
+  "permit_date",
   "end_date",
   "drilling_number",
-  "coordinates",
+  "drilling_master",
   "sec_layers",
-  "layers"
+  "layers",
+  "drilling_details_section",
+  "drilling_instrument",
+  "drilling_tool",
+  "drilling_tool_diameter",
+  "drilling_quote",
+  "column_break_26",
+  "piping",
+  "to_depth",
+  "direction",
+  "angle",
+  "angled_drill",
+  "samples_disposal_section",
+  "sampling_distance",
+  "samples_location",
+  "geologist",
+  "column_break_36",
+  "amount_disposed",
+  "forwarder",
+  "disposer",
+  "date_signature",
+  "date"
  ],
  "fields": [
   {
@@ -91,38 +113,41 @@
    "label": "Drilling Details"
   },
   {
-   "fieldname": "permit",
-   "fieldtype": "Data",
-   "label": "Permit"
-  },
-  {
    "fieldname": "permit_date",
    "fieldtype": "Date",
    "label": "Permit Date"
   },
   {
+   "fetch_from": "drilling_team.drilling_master",
    "fieldname": "drilling_master",
    "fieldtype": "Data",
-   "label": "Drilling Master"
+   "label": "Drilling Master",
+   "read_only": 1
   },
   {
+   "fetch_from": "object.ews_details",
    "fieldname": "ews_details",
    "fieldtype": "Data",
-   "label": "EWS Details"
+   "label": "EWS Details",
+   "read_only": 1
   },
   {
    "fieldname": "col_drilling",
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "project.expected_start_date",
    "fieldname": "start_date",
    "fieldtype": "Date",
-   "label": "Start date"
+   "label": "Start date",
+   "read_only": 1
   },
   {
+   "fetch_from": "project.expected_end_date",
    "fieldname": "end_date",
    "fieldtype": "Date",
-   "label": "End date"
+   "label": "End date",
+   "read_only": 1
   },
   {
    "fieldname": "drilling_number",
@@ -146,10 +171,134 @@
    "fieldtype": "Table",
    "label": "Layers",
    "options": "Layer Directory Layer"
+  },
+  {
+   "fetch_from": "drilling_team.drt",
+   "fieldname": "drilling_instrument",
+   "fieldtype": "Data",
+   "label": "Drilling instrument",
+   "read_only": 1
+  },
+  {
+   "fieldname": "drilling_tool",
+   "fieldtype": "Data",
+   "label": "Drilling tool"
+  },
+  {
+   "fieldname": "drilling_tool_diameter",
+   "fieldtype": "Data",
+   "label": "Drilling tool diameter"
+  },
+  {
+   "fieldname": "drilling_quote",
+   "fieldtype": "Data",
+   "label": "Drilling quote"
+  },
+  {
+   "fieldname": "column_break_26",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "piping",
+   "fieldtype": "Int",
+   "label": "Piping (mm)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "to_depth",
+   "fieldtype": "Int",
+   "label": "To depth (m)",
+   "precision": "2"
+  },
+  {
+   "default": "0",
+   "fieldname": "angled_drill",
+   "fieldtype": "Check",
+   "label": "Angled drill"
+  },
+  {
+   "depends_on": "eval:doc.angled_drill",
+   "fieldname": "direction",
+   "fieldtype": "Data",
+   "label": "Direction"
+  },
+  {
+   "depends_on": "eval:doc.angled_drill",
+   "fieldname": "angle",
+   "fieldtype": "Data",
+   "label": "Angle"
+  },
+  {
+   "fieldname": "samples_disposal_section",
+   "fieldtype": "Section Break",
+   "label": "Samples / Disposal"
+  },
+  {
+   "fieldname": "sampling_distance",
+   "fieldtype": "Int",
+   "label": "Sampling distance (m)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "samples_location",
+   "fieldtype": "Data",
+   "label": "Samples location"
+  },
+  {
+   "fieldname": "geologist",
+   "fieldtype": "Data",
+   "label": "Geologist"
+  },
+  {
+   "fieldname": "column_break_36",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "amount_disposed",
+   "fieldtype": "Float",
+   "label": "Amount disposed (m3)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "forwarder",
+   "fieldtype": "Data",
+   "label": "Forwarder"
+  },
+  {
+   "fieldname": "disposer",
+   "fieldtype": "Data",
+   "label": "Disposer"
+  },
+  {
+   "fieldname": "date_signature",
+   "fieldtype": "Section Break",
+   "label": "Date / Signature"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "permit_no",
+   "fieldtype": "Data",
+   "label": "Permit No."
+  },
+  {
+   "fieldname": "drilling_details_section",
+   "fieldtype": "Section Break",
+   "label": "Drilling Details"
+  },
+  {
+   "fetch_from": "drilling_team.drilling_master",
+   "fieldname": "drilling_team",
+   "fieldtype": "Link",
+   "label": "Drilling team",
+   "options": "Drilling Team"
   }
  ],
  "is_submittable": 1,
- "modified": "2022-11-25 20:32:09.953326",
+ "modified": "2023-04-11 08:29:08.054005",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory",
