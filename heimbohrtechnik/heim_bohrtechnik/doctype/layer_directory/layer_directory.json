@@ -74,11 +74,11 @@
    "read_only": 1
   },
   {
-   "default": "SV-.YY.-#####",
+   "default": "SV-.YY.-.#####",
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Naming Series",
-   "options": "SV-.YY.-#####"
+   "options": "SV-.YY.-.#####"
   },
   {
    "fieldname": "amended_from",
@@ -298,7 +298,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2023-04-11 08:29:08.054005",
+ "modified": "2023-04-13 21:29:30.247660",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory",
