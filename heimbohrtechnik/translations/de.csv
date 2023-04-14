@@ -231,6 +231,7 @@
 "DocType: Construction Site Description","Use public area remarks","Anmerkungen Benutzung öffentlicher Grund"
 "DocType: Construction Site Description","Distance to drill site","Entfernung bis zum Bohrplatz"
 "DocType: Construction Site Description","Road block remarks","Bemerkungen Absperrung"
+"DocType: Construction Site Description","Parking Area","Abstellparkplatz"
 "DocType: Item","Packaging","Verpackung"
 "DocType: Item","Wall Strength","Wandstärke"
 "DocType: Item","Material","Material"
@@ -324,12 +325,37 @@
 "DocType: Request for Public Area Use","Different Installation Address","Abweichende Installationsadresse"
 "DocType: Request for Public Area Use","Installation Street","Strasse (Installation)"
 "DocType: Request for Public Area Use","Installation Location","Ort der Installation"
-"DocType: Layer Directory","Layer Directory","Schichtenverzeichnis"
-"DocType: Layer Directory","Drilling number","Bohrungsnummer"
-"DocType: Layer Directory","Layers","Schichten"
-"DocType: Layer Directory","Water protection","Gewässerschutzrechtliche Vorkomnisse"
-"DocType: Layer Directory","Water ingress","Wassereintritt"
-"DocType: Layer Directory","Flushing losses","Spühlungsverluste"
-"DocType: Layer Directory","Injection losses","Injektionsverluste"
-"DocType: Layer Directory","Caverns","Kavernen"
-"DocType: Layer Directory","Suspected gas","Gasverdacht"
+"Report: General Ledger HBAG","General Ledger HBAG","Hauptbuch HBAG"
+"Report: Account Sheets HBAG","Account Sheets HBAG","Kontenblätter HBAG"
+DocType: Layer Directory,Layer Directory,Schichtenverzeichnis
+DocType: Layer Directory,Drilling number,Bohrungsnummer
+DocType: Layer Directory,Layers,Schichten
+DocType: Layer Directory,Water protection,Gewässerschutzrechtliche Vorkomnisse
+DocType: Layer Directory,Water ingress,Wassereintritt
+DocType: Layer Directory,Flushing losses,Spühlungsverluste
+DocType: Layer Directory,Injection losses,Injektionsverluste
+DocType: Layer Directory,Caverns,Kavernen
+DocType: Layer Directory,Suspected gas,Gasverdacht
+DocType: Layer Directory,Permit No.,Bewilligungs-Nr.
+DocType: Layer Directory,Permit Date,Bewilligungs Datum
+DocType: Layer Directory,Drilling instrument,Bohrgerät
+DocType: Layer Directory,Piping (mm),Verrohrung (mm)
+DocType: Layer Directory,Drilling tool,Bohrwerkzeug
+DocType: Layer Directory,Drilling tool diameter,Bohrwerkzeug Durchmesser
+DocType: Layer Directory,Drilling quote,Bohrkote
+DocType: Layer Directory,To depth (m),bis Tiefe (m)
+DocType: Layer Directory,Direction,Richtung
+DocType: Layer Directory,Angle,Winkel
+DocType: Layer Directory,Angled drill,Schrägbohrung
+DocType: Layer Directory,Samples / Disposal,Proben / Entsorgung
+DocType: Layer Directory,Sampling distance (m),Probenabstand (m)
+DocType: Layer Directory,Samples location,Proben Lagerort
+DocType: Layer Directory,Amount disposed (m3),Entsorgte Menge (m3)
+DocType: Layer Directory,Forwarder,Spediteur
+DocType: Layer Directory,Disposer,Entsorger
+DocType: Layer Directory,Date / Signature,Datum / Unterschrift
+DocType: Layer Directory Layer,Water content,Wassergehalt
+DocType: Layer Directory Layer,Wet,Nass
+DocType: Layer Directory Layer,Humid,Feucht
+DocType: Layer Directory Layer,Dry,Trocken
+DocType: Layer Directory Layer,Observations,Beobachtungen

@@ -23,6 +23,15 @@ frappe.ui.form.on('Bohranzeige', {
     },
     project: function(frm) {
         autocomplete_object(frm);
+    },
+    after_save: function(frm) {
+        frappe.call({
+            'method': 'attach_pdf',
+            'doc': frm.doc,
+            'callback': function (response) {
+                cur_frm.reload_doc();
+            }
+        });
     }
 });
 

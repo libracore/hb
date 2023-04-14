@@ -35,6 +35,8 @@ def get_company_sales_items(doctype, txt, searchfield, start, page_len, filters)
         """SELECT `tabItem`.`item_code`, `tabItem`.`item_name`, `tabItem`.`item_group`
            FROM `tabItem`
            WHERE `tabItem`.`is_sales_item` = 1 
+             AND `tabItem`.`disabled` = 0 
+             AND `tabItem`.`phase_out` = 0 
              AND `tabItem`.`item_group` LIKE "{c}" 
              AND (`tabItem`.`item_code` LIKE "%{s}%" 
                   OR `tabItem`.`item_name` LIKE "%{s}%"

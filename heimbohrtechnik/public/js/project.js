@@ -74,15 +74,24 @@ frappe.ui.form.on('Project', {
             show_insurance_information(frm.doc.name);
             // split project button
             frm.add_custom_button(__("Projekt teilen"), function() {
-                frappe.call({
-                    'method': "heimbohrtechnik.heim_bohrtechnik.project.split_project",
-                    'args': {
-                        'project': frm.doc.name
+                frappe.confirm(
+                    __('Soll das Projekt wirklich aufgeteilt werden?'),
+                    function(){
+                        // on yes
+                        frappe.call({
+                            'method': "heimbohrtechnik.heim_bohrtechnik.project.split_project",
+                            'args': {
+                                'project': frm.doc.name
+                            },
+                            'callback': function(response) {
+                                window.location.href=response.message.uri;
+                            }
+                        });
                     },
-                    'callback': function(response) {
-                        window.location.href=response.message.uri;
+                    function(){
+                        // on no
                     }
-                });
+                )
             }, __("More") );
             // create full project file
             frm.add_custom_button(__("Dossier erstellen"), function() {
@@ -156,13 +165,17 @@ frappe.ui.form.on('Project', {
             cur_frm.set_df_property('section_checklist', 'hidden', 1);
             cur_frm.set_df_property('customer_details', 'hidden', 1);
             cur_frm.set_df_property('section_subprojects', 'hidden', 1);
-        }  
+        }
+        // fetch visit information
+        if (frm.doc.visit_date) {
+            fetch_visit_date(frm);
+        }
     },
     before_save(frm) {
         // hook to update subcontracting orders in case of changes
         if ((frm.doc.subprojects) && (frm.doc.subprojects.length)) {
             for (var s = 0; s < frm.doc.subprojects.length; s++) {
-                if (frm.doc.subprojects[s].subcontracting_order) {
+                if ((frm.doc.subprojects[s].subcontracting_order) && (frm.doc.subprojects[s].team)) {
                     frappe.call({
                         'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.subcontracting_order.subcontracting_order.update_from_project',
                         'args': {
@@ -219,5 +232,27 @@ function request_review(frm) {
         },
         'freeze': true,
         'freeze_message': __("Google Rezension anfragen...")
+    });
+}
+
+function fetch_visit_date(frm) {
+    frappe.call({
+        'method': "frappe.client.get",
+        'args': {
+            'doctype': "Event",
+            'name': frm.doc.visit_date
+        },
+        'callback': function(response) {
+            var visit_event = response.message;
+
+            if (visit_event) {
+                var info = "<p>" 
+                    + (visit_event.starts_on ? (new Date(visit_event.starts_on)).toLocaleString() : "??") 
+                    + " - " 
+                    + (visit_event.ends_on ? (new Date(visit_event.starts_on)).toLocaleString() : "??") 
+                    + "</p>";
+                cur_frm.set_df_property('visit_info_html', 'options', info);
+            }
+        }
     });
 }

@@ -249,7 +249,7 @@ frappe.bohrplaner = {
         }
         
         $(place).css("position", "relative");
-        var qty = data.dauer
+        var qty = data.dauer;                               // duration is in half-days, i.e. 2 = 1 day
         
         $(frappe.render_template('subproject_overlay', {
             'width': (42 * data.dauer), 
@@ -264,7 +264,8 @@ frappe.bohrplaner = {
             'object_location': data.object_location,
             'parent_project': data.project,
             'subcontracting_order': data.subcontracting_order,
-            'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false'
+            'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false',
+            'multi_day': (data.dauer > 2) ? 'multi_day' : 'single_day'
         })).appendTo(place);
         return
     },
@@ -415,15 +416,66 @@ frappe.bohrplaner = {
                                 html = frappe.render_template("detail_dialog", data );
                                 var d = new frappe.ui.Dialog({
                                     'fields': [
-                                        {'fieldname': 'ht', 'fieldtype': 'HTML'},
-                                        {'fieldname': 'section_1', 'fieldtype': 'Section Break'},
-                                        {'fieldname': 'start', 'label': __('Start'), 'fieldtype': 'Date', 'default': project.expected_start_date, 'reqd': 1},
-                                        {'fieldname': 'start_hd', 'label': __('Start Half-Day'), 'fieldtype': 'Select', 'options': 'VM\nNM', 'default': project.start_half_day},
-                                        {'fieldname': 'drilling_team', 'label': __("Drilling Team"), 'fieldtype': 'Link', 'options': 'Drilling Team', 'default': project.drilling_team, 'reqd': 1},
-                                        {'fieldname': 'cb_1', 'fieldtype': 'Column Break'},
-                                        {'fieldname': 'end', 'label': __('End'), 'fieldtype': 'Date', 'default': project.expected_end_date, 'reqd': 1},
-                                        {'fieldname': 'end_hd', 'label': __('End Half-Day'), 'fieldtype': 'Select', 'options': 'VM\nNM', 'default': project.end_half_day},
-                                        {'fieldname': 'visit_date', 'label': __('Visit date'), 'fieldtype': 'Date', 'default': project.visit_date},
+                                        {
+                                            'fieldname': 'ht', 
+                                            'fieldtype': 'HTML'
+                                        },
+                                        {
+                                            'fieldname': 'section_1', 
+                                            'fieldtype': 'Section Break'
+                                        },
+                                        {
+                                            'fieldname': 'start', 
+                                            'label': __('Start'), 
+                                            'fieldtype': 'Date', 
+                                            'default': project.expected_start_date, 
+                                            'reqd': 1,
+                                            'read_only': (frappe.user.has_role("Dispo")) ? 0 : 1
+                                        },
+                                        {
+                                            'fieldname': 'start_hd', 
+                                            'label': __('Start Half-Day'),
+                                            'fieldtype': 'Select',
+                                            'options': 'VM\nNM', 
+                                            'default': project.start_half_day,
+                                            'read_only': (frappe.user.has_role("Dispo")) ? 0 : 1
+                                        },
+                                        {
+                                            'fieldname': 'drilling_team', 
+                                            'label': __("Drilling Team"), 
+                                            'fieldtype': 'Link', 
+                                            'options': 'Drilling Team', 
+                                            'default': project.drilling_team, 
+                                            'reqd': 1,
+                                            'read_only': (frappe.user.has_role("Dispo")) ? 0 : 1
+                                        },
+                                        {
+                                            'fieldname': 'cb_1', 
+                                            'fieldtype': 'Column Break'
+                                        },
+                                        {
+                                            'fieldname': 'end', 
+                                            'label': __('End'),
+                                            'fieldtype': 'Date', 
+                                            'default': project.expected_end_date, 
+                                            'reqd': 1,
+                                            'read_only': (frappe.user.has_role("Dispo")) ? 0 : 1
+                                        },
+                                        {
+                                            'fieldname': 'end_hd', 
+                                            'label': __('End Half-Day'), 
+                                            'fieldtype': 'Select', 
+                                            'options': 'VM\nNM', 
+                                            'default': project.end_half_day,
+                                            'read_only': (frappe.user.has_role("Dispo")) ? 0 : 1
+                                        },
+                                        {
+                                            'fieldname': 'visit_date', 
+                                            'label': __('Visit date'), 
+                                            'fieldtype': 'Link', 
+                                            'options': 'Event', 
+                                            'default': project.visit_date
+                                        },
                                     ],
                                     primary_action: function(){
                                         d.hide();

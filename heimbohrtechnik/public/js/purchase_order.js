@@ -11,6 +11,20 @@ frappe.ui.form.on('Purchase Order', {
                 reassign(frm);
             });
         }
+    },
+    on_submit: function(frm) {
+        // create and attach PDF
+        frappe.call({
+            'method': 'erpnextswiss.erpnextswiss.attach_pdf.attach_pdf',
+            'args': {
+                'doctype': frm.doc.doctype,
+                'docname': frm.doc.name,
+                'print_format': "Bestellung"
+            },
+            'callback': function(response) {
+                cur_frm.reload_doc();
+            }
+        });
     }
 });
 

@@ -57,6 +57,19 @@ frappe.ui.form.on('Sales Invoice', {
     },
     on_submit: function(frm) {
         check_create_akonto_booking(frm);
+        
+        // create and attach PDF
+        frappe.call({
+            'method': 'erpnextswiss.erpnextswiss.attach_pdf.attach_pdf',
+            'args': {
+                'doctype': frm.doc.doctype,
+                'docname': frm.doc.name,
+                'print_format': "Ausgangsrechnung"
+            },
+            'callback': function(response) {
+                cur_frm.reload_doc();
+            }
+        });
     }
 });
 
