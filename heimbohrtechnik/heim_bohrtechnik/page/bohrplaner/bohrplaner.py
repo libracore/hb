@@ -529,10 +529,18 @@ def is_construction_site_inspected(project):
     return inspected[0]['is_inspected'] if len(inspected) > 0 else 0
     
 def has_public_area_request(project):
-    public_area_requests = frappe.get_all("Request for Public Area Use",
-        filters={'project': project},
-        fields=['name', 'sent']
-    )
+    public_area_requests = frappe.db.sql("""
+        SELECT 
+            `tabRequest for Public Area Use`.`name`,
+            `tabRequest for Public Area Use`.`sent` 
+        FROM `tabRequest for Public Area Use` 
+        JOIN `tabRelated Project` ON `tabRelated Project`.`parent` = `tabRequest for Public Area Use`.`name` 
+        WHERE 
+            `tabRequest for Public Area Use`.`project` = "{project}" 
+            OR (`tabRelated Project`.`parenttype` = "Request for Public Area Use"  
+                AND `tabRelated Project`.`project` = "{project}");
+        """.format(project=project), as_dict=True)
+        
     if len(public_area_requests) > 0 and public_area_requests[0]['sent'] == 1:
         return True
     else:

@@ -187,6 +187,7 @@
 "DocType: Permit Type","Permit","Bewilligung"
 "DocType: Project","Permit number","Bewilligungsnummer"
 "DocType: Project","Permit date","Bewilligungsdatum"
+"DocType: Project","Other Projects","Andere Projekte"
 "DocType: Permit Type","Is Mandatory","Ist zwingend erforderlich"
 "DocType: Checklist Activity","Checklist Activity","Aktivität"
 "DocType: Drilling Type","Drilling Type","Bohrart"

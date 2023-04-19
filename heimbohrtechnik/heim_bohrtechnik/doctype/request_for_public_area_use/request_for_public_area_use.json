@@ -7,6 +7,7 @@
  "field_order": [
   "naming_series",
   "project",
+  "other_projects",
   "from_date",
   "to_date",
   "print_format",
@@ -246,9 +247,15 @@
    "fieldname": "installation_location",
    "fieldtype": "Data",
    "label": "Installation Location"
+  },
+  {
+   "fieldname": "other_projects",
+   "fieldtype": "Table MultiSelect",
+   "label": "Other Projects",
+   "options": "Related Project"
   }
  ],
- "modified": "2023-03-08 17:05:29.029033",
+ "modified": "2023-04-19 09:59:59.787221",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Request for Public Area Use",
