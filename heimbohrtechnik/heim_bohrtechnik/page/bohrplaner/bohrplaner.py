@@ -713,30 +713,36 @@ def get_absences_overlay_datas(from_date, to_date):
     from_date = getdate(from_date)
     to_date = getdate(to_date)
     absences = []
-    shift = -20
-    emp = ''
-    absences_raw = frappe.db.sql("""SELECT
-                                    `name`,
-                                    `employee`,
-                                    `employee_name`,
-                                    `from_date`,
-                                    `to_date`
-                                FROM `tabLeave Application`
-                                WHERE `status` = 'Approved'
-                                AND `docstatus` = 1
-                                AND 
-                                    (`from_date` BETWEEN '{from_date}' AND '{to_date}')
-                                OR
-                                    (`to_date` BETWEEN '{from_date}' AND '{to_date}')
-                                OR
-                                    (`from_date` < '{from_date}' AND `to_date` > '{to_date}')
-                                ORDER BY `employee_name` ASC""".format(from_date=from_date, to_date=to_date), as_dict=True)
+    shift = 0
+    last_date = None
+    
+    absences_raw = frappe.db.sql("""
+        SELECT
+            `name`,
+            `employee`,
+            `employee_name`,
+            `from_date`,
+            `to_date`
+        FROM `tabLeave Application`
+        WHERE `status` = 'Approved'
+        AND `docstatus` = 1
+        AND 
+            (`from_date` BETWEEN '{from_date}' AND '{to_date}')
+        OR
+            (`to_date` BETWEEN '{from_date}' AND '{to_date}')
+        OR
+            (`from_date` < '{from_date}' AND `to_date` > '{to_date}')
+        ORDER BY `from_date` ASC, `employee_name` ASC""".format(from_date=from_date, to_date=to_date), as_dict=True)
+    
     for absence in absences_raw:
         duration = calc_duration(absence.from_date, absence.to_date, from_date, to_date)
-        if absence.employee != emp:
+        if not last_date or absence.from_date > last_date:
+            shift = 0
+        else:
             shift += 20
-            emp = absence.employee
-        
+        if not last_date or absence.to_date > last_date:
+            last_date = absence.to_date
+            
         _absence = {
             'start': get_datetime(duration['start']).strftime('%d.%m.%Y'),
             'dauer': duration['dauer'],
