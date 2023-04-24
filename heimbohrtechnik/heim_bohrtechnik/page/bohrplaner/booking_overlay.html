@@ -4,17 +4,17 @@
     draggable="{{ dragable }}"
     ondragstart="drag(event)">
     <div class="object-div" style="font-size: 7pt;" onclick="frappe.bohrplaner.show_detail_popup(this);" data-popupvalue="{{ project.name }}">
-        <div style="background-color: {{ ampeln[0] }} min-width:35px; ">{{ project.name }}</div>
-        <div style="background-color: {{ ampeln[1] }} min-width:35px; max-width: 70px;">{% if project.customer_name %}{{ project.customer_name }}{% else %}&nbsp;{% endif %}</div>
-        <div style="background-color: {{ ampeln[2] }} min-width:35px; max-width: 70px;">{% if project.object_name %}{{ project.object_name }}{% else %}&nbsp;{% endif %}</div>
-        <div style="background-color: {{ ampeln[3] }} min-width:35px; max-width: 70px;">{% if project.object_street %}{{ project.object_street }}{% else %}&nbsp;{% endif %}</div>
-        <div style="background-color: {{ ampeln[4] }} color: {{ ampeln[5] }}  {{ ampeln[6] }} min-width:35px; max-width: 70px;">{% if project.object_location %}{{ project.object_location }}{% else %}&nbsp;{% endif %}</div>
-        <div style="background-color: {{ ampeln[7] }} min-width:35px; max-width: 70px;" class="ews-details">{% if project.ews_details %}{{ project.ews_details.replace("PN20", "<b>PN20</b>").replace("PN35", "<b>PN35</b>") }}{% else %}&nbsp;{% endif %}</div>
-        <div style="background-color: {{ ampeln[8] }} min-width:35px; max-width: 70px;">{% if saugauftrag %}{{ saugauftrag }}{% else %}&nbsp;{% endif %}</div>
-        <div style="background-color: {{ ampeln[9] }} min-width:35px; max-width: 70px;">{% if pneukran %}{{ pneukran }}{% else %}&nbsp;{% endif %}</div>
-        <div style="background-color: {{ ampeln[10] }} min-width:35px; max-width: 70px;">{% if drilling_equipment %}{{ drilling_equipment }}{% else %}&nbsp;{% endif %}</div>
-        <div style="float:left; min-width:35px; max-width:35px; background-color: {{ ampeln[11] }} color: {{ ampeln[13] }} overflow: hidden;">{% if manager_short %}{{ manager_short }}{% else %}&nbsp;{% endif %}</div>
-        <div style="float:left; min-width:35px; max-width:35px; background-color: {{ ampeln[12] }}">&nbsp;</div>
+        <div style="background-color: {{ ampeln[0] }} min-width:35px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{{ project.name }}</div>
+        <div style="background-color: {{ ampeln[1] }} min-width:35px; max-width: 70px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if project.customer_name %}{{ project.customer_name }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[2] }} min-width:35px; max-width: 70px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if project.object_name %}{{ project.object_name }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[3] }} min-width:35px; max-width: 70px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if project.object_street %}{{ project.object_street }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[4] }} color: {{ ampeln[5] }}  {{ ampeln[6] }} min-width:35px; max-width: 70px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if project.object_location %}{{ project.object_location }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[7] }} min-width:35px; max-width: 70px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;" class="ews-details">{% if project.ews_details %}{{ project.ews_details.replace("PN20", "<b>PN20</b>").replace("PN35", "<b>PN35</b>") }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[8] }} min-width:35px; max-width: 70px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if saugauftrag %}{{ saugauftrag }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[9] }} min-width:35px; max-width: 70px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if pneukran %}{{ pneukran }}{% else %}&nbsp;{% endif %}</div>
+        <div style="background-color: {{ ampeln[10] }} min-width:35px; max-width: 70px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if drilling_equipment %}{{ drilling_equipment }}{% else %}&nbsp;{% endif %}</div>
+        <div style="float:left; min-width:35px; max-width:35px; background-color: {{ ampeln[11] }} color: {{ ampeln[13] }} overflow: hidden; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if manager_short %}{{ manager_short }}{% else %}&nbsp;{% endif %}</div>
+        <div style="float:left; min-width:35px; max-width:35px; background-color: {{ ampeln[12] }} height: {{ box_height }}px; padding-top: {{ padding }}px !important;">&nbsp;</div>
         <div style="clear: both;"></div>
     </div>
 </div>

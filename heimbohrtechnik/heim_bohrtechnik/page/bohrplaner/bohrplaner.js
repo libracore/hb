@@ -218,9 +218,17 @@ frappe.bohrplaner = {
         $(place).css("position", "relative");
         var qty = data.dauer
         var width = 42 * qty;
-        if (locals.print_view) { width = 51 * qty; }             // compensate for block with
+        var box_height = 13;
+        var padding = 0;
+        if (locals.print_view) { 
+			width = 51 * qty; // compensate for block with
+			box_height = 22;
+			padding = 2;
+		}
         $(frappe.render_template('booking_overlay', {
             'width': width, 
+            'box_height': box_height,
+            'padding': padding,
             'project': data.project, 
             'saugauftrag': data.saugauftrag, 
             'pneukran': data.pneukran, 
@@ -236,6 +244,7 @@ frappe.bohrplaner = {
         $(place).css("position", "relative");
         var qty = data.dauer
         var width = 42 * qty;
+        data.project.object_name = data.project.object_name + qty;
         $(frappe.render_template('internal_overlay', {'width': width, 'project': data.project})).appendTo(place);
         return
     },
@@ -735,7 +744,8 @@ function print_content(page, from, to) {
     frappe.bohrplaner.reset_dates(page);
     
     var bp_html = $("#bohrplan_wrapper").html();
-                
+    console.log(bp_html)  
+        bp_html = bp_html+"<style>*{ font-size: 18px !important; } table{ height: 2988px !important; }</style>"
     frappe.call({
         'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.print_bohrplaner',
         'args': {
