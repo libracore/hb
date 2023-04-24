@@ -244,7 +244,6 @@ frappe.bohrplaner = {
         $(place).css("position", "relative");
         var qty = data.dauer
         var width = 42 * qty;
-        data.project.object_name = data.project.object_name + qty;
         $(frappe.render_template('internal_overlay', {'width': width, 'project': data.project})).appendTo(place);
         return
     },
@@ -744,8 +743,7 @@ function print_content(page, from, to) {
     frappe.bohrplaner.reset_dates(page);
     
     var bp_html = $("#bohrplan_wrapper").html();
-    console.log(bp_html)  
-        bp_html = bp_html+"<style>*{ font-size: 18px !important; } table{ height: 2988px !important; }</style>"
+    bp_html = bp_html + "<style>*{ font-size: 18px !important; } table{ height: 2988px !important; }</style>";
     frappe.call({
         'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.print_bohrplaner',
         'args': {
