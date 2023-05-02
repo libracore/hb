@@ -360,3 +360,32 @@ DocType: Layer Directory Layer,Wet,Nass
 DocType: Layer Directory Layer,Humid,Feucht
 DocType: Layer Directory Layer,Dry,Trocken
 DocType: Layer Directory Layer,Observations,Beobachtungen
+DocType: Injection report,Injection report,Injektionsbericht
+DocType: Injection report,Project,Projekt
+DocType: Injection report,Mortar,Mörtel
+DocType: Injection report,Date,Datum
+DocType: Injection report,Object,Objekt
+DocType: Injection report,Object name,Objektname
+DocType: Injection report,Object street,Objektstrasse
+DocType: Injection report,Object location,Objektort
+DocType: Injection report,Drilling team,Bohrteam
+DocType: Injection report,Geologist,Geologe
+DocType: Injection report,Piped to(m),Verrohrt bis(m)
+DocType: Injection report,∅ Piping(mm),∅ Verrohrung(mm)
+DocType: Injection report,Sonde length(m),Sondenlänge(m)
+DocType: Injection report,Need,Bedarf
+DocType: Injection report,Needed water,Benötigtes Wasser
+DocType: Injection report,Needed EWM,Benötigtes EWM
+DocType: Injection report,Needed Sacks,Benötigte Säcke
+DocType: Injection report,Needed Zement,Benötigter Zement
+DocType: Injection report,Needed sacks Zement,Benötigte Zementsäcke
+DocType: Injection report,Needed Bentonit,Benötigtes Bentonit
+DocType: Injection report,Needed sacks Bentonit,Benötigte Bentonitsäcke
+DocType: Injection report,Water (L / m3),Wasser (L / m3)
+DocType: Injection report,Sack weight (kg),Sackgewicht (kg)
+DocType: Injection report,Actual grouting consumption,Tatsächliche Verpressmenge
+DocType: Injection report,Actual consumption,Tatsächlicher Verbrauch
+DocType: Injection report,Drilling details,Bohrdetails
+DocType: Injection report,Base Zement-Bentonit,Basis Zement-Bentonit
+DocType: Injection report,Actual Consumption,Tatsächlicher Verbrauch
+DocType: Injection report,Base Schwenk Füllbinder GTM-hs,Basis Schwenk Füllbinder GTM-hs

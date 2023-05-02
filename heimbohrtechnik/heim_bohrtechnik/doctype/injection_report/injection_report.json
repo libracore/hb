@@ -1,0 +1,340 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2023-04-25 14:31:08.686403",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "project",
+  "mortar",
+  "date",
+  "column_break_3",
+  "amended_from",
+  "object",
+  "object_name",
+  "object_street",
+  "object_location",
+  "drilling_team",
+  "geologist",
+  "drilling_details_section",
+  "sonde",
+  "drilling",
+  "piped_to",
+  "piping",
+  "sonde_length",
+  "column_break_19",
+  "need",
+  "needed_water",
+  "needed_ewm",
+  "needed_sacks_gtm",
+  "needed_zement",
+  "needed_sacks_zement",
+  "needed_bentonit",
+  "needed_sacks_bentonit",
+  "base_section",
+  "zm_water",
+  "zement",
+  "bentonit",
+  "zm_suspension",
+  "column_break_23",
+  "zm_sack_weight",
+  "sbase_section",
+  "gtm_water",
+  "gtm_hs",
+  "gtm_suspension",
+  "column_break_29",
+  "gtm_sack_weight",
+  "actual_consumption_section",
+  "ac_grouting",
+  "ac_tot"
+ ],
+ "fields": [
+  {
+   "default": "SV-.YY.-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "SV-.YY.-.#####"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "object.object_name",
+   "fieldname": "object_name",
+   "fieldtype": "Data",
+   "label": "Object name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "object.object_street",
+   "fieldname": "object_street",
+   "fieldtype": "Data",
+   "label": "Object street",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "object.object_location",
+   "fieldname": "object_location",
+   "fieldtype": "Data",
+   "label": "Object location",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Injection report",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fetch_from": "project.object",
+   "fieldname": "object",
+   "fieldtype": "Link",
+   "label": "Object",
+   "options": "Object",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "project.drilling_team",
+   "fieldname": "drilling_team",
+   "fieldtype": "Data",
+   "label": "Drilling team",
+   "read_only": 1
+  },
+  {
+   "fieldname": "mortar",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Mortar",
+   "options": "\nZement-Bentonit\nSchwenk F\u00fcllbinder GTM-hs",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sonde",
+   "fieldtype": "Int",
+   "label": "\u2205 Sonde 2Kreis(mm)"
+  },
+  {
+   "fieldname": "drilling",
+   "fieldtype": "Int",
+   "label": "\u2205 Bohrung(mm)"
+  },
+  {
+   "fieldname": "piped_to",
+   "fieldtype": "Int",
+   "label": "Piped to(m)"
+  },
+  {
+   "fieldname": "piping",
+   "fieldtype": "Int",
+   "label": "\u2205 Piping(mm)"
+  },
+  {
+   "fieldname": "sonde_length",
+   "fieldtype": "Int",
+   "label": "Sonde length(m)"
+  },
+  {
+   "collapsible": 1,
+   "depends_on": "eval:doc.mortar == \"Zement-Bentonit\"",
+   "fieldname": "base_section",
+   "fieldtype": "Section Break",
+   "label": "Base Zement-Bentonit"
+  },
+  {
+   "default": "now",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "default": "880",
+   "fieldname": "zm_water",
+   "fieldtype": "Int",
+   "label": "Water (L / m3 )"
+  },
+  {
+   "default": "200",
+   "fieldname": "zement",
+   "fieldtype": "Int",
+   "label": "Zement (kg / m3)"
+  },
+  {
+   "default": "100",
+   "fieldname": "bentonit",
+   "fieldtype": "Int",
+   "label": "Bentonit (kg / m3)"
+  },
+  {
+   "default": "1000",
+   "fieldname": "zm_suspension",
+   "fieldtype": "Int",
+   "label": "Suspension (L)"
+  },
+  {
+   "fieldname": "column_break_23",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "25",
+   "fieldname": "zm_sack_weight",
+   "fieldtype": "Int",
+   "label": "Sack weight (kg)"
+  },
+  {
+   "collapsible": 1,
+   "depends_on": "eval:doc.mortar == \"Schwenk F\u00fcllbinder GTM-hs\"",
+   "fieldname": "sbase_section",
+   "fieldtype": "Section Break",
+   "label": "Base Schwenk F\u00fcllbinder GTM-hs"
+  },
+  {
+   "default": "680",
+   "fieldname": "gtm_water",
+   "fieldtype": "Int",
+   "label": "Water (L / m3)"
+  },
+  {
+   "default": "850",
+   "fieldname": "gtm_hs",
+   "fieldtype": "Int",
+   "label": "GTM-hs (kg / m3)"
+  },
+  {
+   "default": "1000",
+   "fieldname": "gtm_suspension",
+   "fieldtype": "Int",
+   "label": "Suspension (L)"
+  },
+  {
+   "fieldname": "column_break_29",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "25",
+   "fieldname": "gtm_sack_weight",
+   "fieldtype": "Int",
+   "label": "Sack weight (kg)"
+  },
+  {
+   "fieldname": "actual_consumption_section",
+   "fieldtype": "Section Break",
+   "label": "Actual Consumption"
+  },
+  {
+   "fieldname": "geologist",
+   "fieldtype": "Data",
+   "label": "Geologist"
+  },
+  {
+   "fieldname": "drilling_details_section",
+   "fieldtype": "Section Break",
+   "label": "Drilling details"
+  },
+  {
+   "fieldname": "need",
+   "fieldtype": "Int",
+   "label": "Need",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_19",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "needed_water",
+   "fieldtype": "Int",
+   "label": "Needed water",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.mortar == \"Schwenk F\u00fcllbinder GTM-hs\"",
+   "fieldname": "needed_ewm",
+   "fieldtype": "Int",
+   "label": "Needed EWM",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.mortar == \"Schwenk F\u00fcllbinder GTM-hs\"",
+   "fieldname": "needed_sacks_gtm",
+   "fieldtype": "Int",
+   "label": "Needed Sacks",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.mortar == \"Zement-Bentonit\"",
+   "fieldname": "needed_zement",
+   "fieldtype": "Int",
+   "label": "Needed Zement",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.mortar == \"Zement-Bentonit\"",
+   "fieldname": "needed_sacks_zement",
+   "fieldtype": "Int",
+   "label": "Needed sacks Zement",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.mortar == \"Zement-Bentonit\"",
+   "fieldname": "needed_bentonit",
+   "fieldtype": "Int",
+   "label": "Needed Bentonit",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.mortar == \"Zement-Bentonit\"",
+   "fieldname": "needed_sacks_bentonit",
+   "fieldtype": "Int",
+   "label": "Needed sacks Bentonit",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ac_grouting",
+   "fieldtype": "Int",
+   "label": "Actual grouting consumption"
+  },
+  {
+   "fieldname": "ac_tot",
+   "fieldtype": "Int",
+   "label": "Actual consumption"
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2023-05-02 13:22:22.749137",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Injection report",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
