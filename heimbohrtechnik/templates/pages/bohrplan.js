@@ -160,7 +160,9 @@ function add_overlay(data) {
         'manager_short': data.manager_short, 
         'drilling_equipment': data.drilling_equipment, 
         'ampeln': data.ampeln,
-        'dragable': 'false'
+        'dragable': 'false',
+        'box_height': 13,
+        'padding': 0
     })).appendTo(place);
     return
 }
