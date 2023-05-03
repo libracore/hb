@@ -534,7 +534,7 @@ def has_public_area_request(project):
             `tabRequest for Public Area Use`.`name`,
             `tabRequest for Public Area Use`.`sent` 
         FROM `tabRequest for Public Area Use` 
-        JOIN `tabRelated Project` ON `tabRelated Project`.`parent` = `tabRequest for Public Area Use`.`name` 
+        LEFT JOIN `tabRelated Project` ON `tabRelated Project`.`parent` = `tabRequest for Public Area Use`.`name` 
         WHERE 
             `tabRequest for Public Area Use`.`project` = "{project}" 
             OR (`tabRelated Project`.`parenttype` = "Request for Public Area Use"  
