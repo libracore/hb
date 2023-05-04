@@ -13,6 +13,7 @@ import json
 from heimbohrtechnik.heim_bohrtechnik.doctype.construction_site_description.construction_site_description import check_object_checklist
 from frappe.utils import get_url_to_form
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import create_project_folder, get_cloud_url, upload_attachments
+from heimbohrtechnik.heim_bohrtechnik.utils import clone_attachments
 
 class Object(Document):
     def before_save(self):
@@ -273,5 +274,7 @@ def split_object(object_name):
     frappe.rename_doc("Object", new_object.name, target_name)
     
     frappe.db.commit()
+    
+    clone_attachments("Object", object_name, "Object", target_namee)
     
     return {'object': target_name, 'uri': get_url_to_form("Object", target_name)}
