@@ -16,7 +16,10 @@
   "object_street",
   "object_location",
   "drilling_team",
+  "geologist_section",
   "geologist",
+  "geologist_phone",
+  "geologist_email",
   "drilling_details_section",
   "sonde",
   "drilling",
@@ -71,21 +74,18 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "object.object_name",
    "fieldname": "object_name",
    "fieldtype": "Data",
    "label": "Object name",
    "read_only": 1
   },
   {
-   "fetch_from": "object.object_street",
    "fieldname": "object_street",
    "fieldtype": "Data",
    "label": "Object street",
    "read_only": 1
   },
   {
-   "fetch_from": "object.object_location",
    "fieldname": "object_location",
    "fieldtype": "Data",
    "label": "Object location",
@@ -101,7 +101,6 @@
    "read_only": 1
   },
   {
-   "fetch_from": "project.object",
    "fieldname": "object",
    "fieldtype": "Link",
    "label": "Object",
@@ -109,7 +108,6 @@
    "read_only": 1
   },
   {
-   "fetch_from": "project.drilling_team",
    "fieldname": "drilling_team",
    "fieldtype": "Data",
    "label": "Drilling team",
@@ -238,7 +236,8 @@
   {
    "fieldname": "geologist",
    "fieldtype": "Data",
-   "label": "Geologist"
+   "label": "Geologist",
+   "read_only": 1
   },
   {
    "fieldname": "drilling_details_section",
@@ -312,10 +311,26 @@
    "fieldname": "ac_tot",
    "fieldtype": "Int",
    "label": "Actual consumption"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "geologist_section",
+   "fieldtype": "Section Break",
+   "label": "Geologist"
+  },
+  {
+   "fieldname": "geologist_phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "geologist_email",
+   "fieldtype": "Data",
+   "label": "E-Mail"
   }
  ],
  "is_submittable": 1,
- "modified": "2023-05-02 13:22:22.749137",
+ "modified": "2023-05-05 17:03:32.592619",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Injection report",
