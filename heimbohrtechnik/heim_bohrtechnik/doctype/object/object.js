@@ -593,19 +593,34 @@ function update_ews_details(frm, cdt, cdn) {
     }
     var v = frm.doc.ews_specification[0];
     if (frm.doc.ews_specification) {
-        if (frm.doc.ews_specification.length === 1) {
-            var details = (v.ews_count || "?") + "x "
-                + (v.ews_depth || "?") + "m, "
+        if (frm.doc.ews_specification.ews_diameter_unit === "Zoll") {
+            // for springs
+            var details = "";
+            details = (v.ews_count || "?") + "x "
+                + (v.ews_depth || "?") + "m "
                 + (v.ews_diameter || "?") + (v.ews_diameter_unit || "");
-            if (v.pressure_level) {
-                details += ", " + (v.pressure_level || "");
-            }
-            if (frm.doc.drilling_type === "Brunnen") {
-                details = "Brunnen " + details;
+            if (frm.doc.ews_specification.length > 1) {
+                v = frm.doc.ews_specification[1];
+                details += ", " + (v.ews_count || "?") + "x "
+                    + (v.ews_depth || "?") + "m "
+                    + (v.ews_diameter || "?") + (v.ews_diameter_unit || "");
             }
             cur_frm.set_value("ews_details", details);
         } else {
-            cur_frm.set_value("ews_details", "divers");
+            if (frm.doc.ews_specification.length === 1) {
+                var details = (v.ews_count || "?") + "x "
+                    + (v.ews_depth || "?") + "m, "
+                    + (v.ews_diameter || "?") + (v.ews_diameter_unit || "");
+                if (v.pressure_level) {
+                    details += ", " + (v.pressure_level || "");
+                }
+                if (frm.doc.drilling_type === "Brunnen") {
+                    details = "Brunnen " + details;
+                }
+                cur_frm.set_value("ews_details", details);
+            } else {
+                cur_frm.set_value("ews_details", "divers");
+            }
         }
     }
     // set wall strength
