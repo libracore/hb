@@ -312,8 +312,8 @@ frappe.bohrplaner = {
         var view_from = from;
         var view_to = to;
         if (locals.print_view) {            // for print view, use 3 weeks from now
-            view_from = frappe.datetime.add_days(new Date(), 0);
-            view_to = frappe.datetime.add_days(new Date(), 21);
+            //view_from = frappe.datetime.add_days(new Date(), 0);
+            view_to = frappe.datetime.add_days(view_from, 21);
         }
         var data = frappe.bohrplaner.get_content(page, view_from, view_to);
         data['print_view'] = locals.print_view;
