@@ -804,3 +804,20 @@ def request_google_review(project):
     )
     
     return
+
+def clone_attachments(source_dt, source_name, target_dt, target_name):
+    attachments = frappe.get_all("File", 
+        filters={'attached_to_doctype': source_dt, 'attached_to_name': source_name},
+        fields=['name']
+    )
+    for a in attachments:
+        source = frappe.get_doc("File", a['name']).as_dict()            # pull original file
+        clone = frappe.get_doc(source)                                  # create new record
+        clone.attached_to_doctype = target_dt                           # map to target
+        clone.attached_to_name = target_name
+        clone.insert()                                                  # insert
+        
+    frappe.db.commit()
+    
+    return
+    

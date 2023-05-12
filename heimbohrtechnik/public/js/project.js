@@ -35,10 +35,12 @@ frappe.ui.form.on('Project', {
                 };
         };
         // filter for drilling teams
-        cur_frm.fields_dict['drilling_team'].get_query = function(doc) {
-            return {
-                filters: {
-                    "drilling_team_type": "Bohrteam"
+        if (frm.doc.project_type !== "Internal") {
+            cur_frm.fields_dict['drilling_team'].get_query = function(doc) {
+                return {
+                    filters: {
+                        "drilling_team_type": "Bohrteam"
+                    }
                 }
             }
         }
@@ -152,7 +154,7 @@ frappe.ui.form.on('Project', {
                     }  
                 ],
                 function(values){
-                    cur_frm.set_value("object_name", values.descripton);
+                    cur_frm.set_value("object_name", values.description);
                 },
                 'Beschreibung ändern',
                 'OK'
