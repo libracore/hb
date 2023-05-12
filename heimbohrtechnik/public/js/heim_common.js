@@ -120,7 +120,7 @@ function recalculate_markups_discounts(frm) {
     var amount = frm.doc.markup_discount_base;
     var total_discount = 0;
     // calculate markups
-    if (frm.doc.markup_positions) {
+    if ((frm.doc.markup_positions) && (frm.doc.markup_positions.length > 0)) {
         frm.doc.markup_positions.forEach(function (markup) {
             if (markup.percent != 0) {
                 var markup_amount = amount * (markup.percent / 100);
@@ -132,7 +132,7 @@ function recalculate_markups_discounts(frm) {
         });
     }
     // calculate discounts
-    if (frm.doc.discount_positions) {
+    if ((frm.doc.discount_positions) && (frm.doc.discount_positions.length > 0)) {
         frm.doc.discount_positions.forEach(function (discount) {
             if (discount.percent != 0) {
                 var discount_amount = amount * (discount.percent / 100);
