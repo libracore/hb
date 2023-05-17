@@ -35,8 +35,9 @@ frappe.ui.form.on('Project', {
                 };
         };
         // filter for drilling teams
-        if (frm.doc.project_type !== "Internal") {
-            cur_frm.fields_dict['drilling_team'].get_query = function(doc) {
+        
+        cur_frm.fields_dict['drilling_team'].get_query = function(doc) {
+            if (frm.doc.project_type !== "Internal") {
                 return {
                     filters: {
                         "drilling_team_type": "Bohrteam"
