@@ -15,6 +15,7 @@ from frappe.utils.file_manager import remove_file
 from frappe.core.doctype.communication.email import make as make_email
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_project_file_from_local_file
 from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
+import re
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -684,20 +685,45 @@ def check_infomails():
     """, as_dict=True)
     for c in new_communications:
         # this communication has not been linked yet - create infomal record
-        infomail = frappe.get_doc({
-            'doctype': 'Infomail',
-            'project': c['project'],
-            'date': c['communication_date'],
-            'sender': c['sender'],
-            'recipients': c['recipients'],
-            'cc': c['cc'],
-            'content': c['content'],
-            'communication': c['name']
-        })
-        infomail.insert(ignore_permissions=True)
+        create_infomail(
+            project=c['project'],
+            communication_date=c['communication_date'],
+            sender=c['sender'],
+            recipients=c['recipients'],
+            cc=c['cc'],
+            content=c['content'],
+            communication=c['name']
+        )
+        # check if there are additional projects
+        projects = re.findall(r"P-[0-9]{6}", c['subject'])
+        for p in projects:
+            if p != c['project'] and frappe.db.exists("Project", p):
+                create_infomail(
+                    project=p,
+                    communication_date=c['communication_date'],
+                    sender=c['sender'],
+                    recipients=c['recipients'],
+                    cc=c['cc'],
+                    content=c['content'],
+                    communication=c['name']
+                )
     frappe.db.commit()
     return
 
+def create_infomail(project, communication_date, sender, recipients, cc, content, communication):
+    infomail = frappe.get_doc({
+        'doctype': 'Infomail',
+        'project': project,
+        'date': communication_date,
+        'sender': sender,
+        'recipients': recipients,
+        'cc': cc,
+        'content': content,
+        'communication': communication
+    })
+    infomail.insert(ignore_permissions=True)
+    return
+        
 """
 Check that public access requests that have been mailed are marked as sent
 """
