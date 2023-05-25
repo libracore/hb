@@ -7,16 +7,19 @@ from frappe import _
 from frappe.model.mapper import get_mapped_doc
 from datetime import datetime, timedelta
 import json
-from frappe.utils import cint
+from frappe.utils import cint, get_bench_path, get_files_path
+from frappe.utils.file_manager import save_file
 from erpnextswiss.erpnextswiss.utils import get_numeric_part
-from erpnextswiss.erpnextswiss.attach_pdf import execute
+from erpnextswiss.erpnextswiss.attach_pdf import execute, create_folder
 from frappe.desk.form.load import get_attachments
 from frappe.utils.file_manager import remove_file
 from frappe.core.doctype.communication.email import make as make_email
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_project_file_from_local_file
 from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
 import re
-
+import uuid
+from PyPDF2 import PdfFileMerger
+    
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
     permits = frappe.get_all("Permit Type", filters={'is_standard': 1}, fields=['name'])
@@ -565,16 +568,10 @@ def update_attached_project_pdf(project):
 Create a full project file
 """
 @frappe.whitelist()
-def create_full_project_file(project):
-    import uuid
-    from frappe.utils import get_bench_path, get_files_path
-    from PyPDF2 import PdfFileMerger
-    from frappe.utils.file_manager import save_file
-    from erpnextswiss.erpnextswiss.attach_pdf import create_folder
-    
+def create_full_project_file(project):   
     # first part: order
     html = frappe.get_print("Project", project, print_format="Bohrauftrag")
-    pdf = frappe.utils.pdf.get_pdf(html)
+    pdf = frappe.utils.pdf.get_pdf(html, print_format="Bohrauftrag")
     pdf_file = "/tmp/{0}.pdf".format(uuid.uuid4().hex)
     with open(pdf_file, mode='wb') as file:
         file.write(pdf)
@@ -630,6 +627,52 @@ def create_full_project_file(project):
         
     return
 
+"""
+Create a print version and include the construction plans from the project
+"""
+@frappe.whitelist()
+def create_subcontracting_order_pdf(subcontracting_order):  
+    # first part: print format
+    html = frappe.get_print("Subcontracting Order", subcontracting_order, print_format="Verlängerungsauftrag")
+    pdf = frappe.utils.pdf.get_pdf(html, print_format="Verlängerungsauftrag")
+    pdf_file = "/tmp/{0}.pdf".format(uuid.uuid4().hex)
+    with open(pdf_file, mode='wb') as file:
+        file.write(pdf)
+    # create merger
+    merger = PdfFileMerger(strict=False)                    # accept technically incorrect PDFs
+    merger.append(pdf_file)
+    # other pages from construction plans
+    p_doc = frappe.get_doc("Project", frappe.get_value("Subcontracting Order", subcontracting_order, "project"))
+    if p_doc.plans:
+        for plan in p_doc.plans:
+            merger.append("{0}/sites/{1}{2}".format(
+                get_bench_path(), 
+                get_files_path().split("/")[1],
+                plan.file))
+    
+    tmp_name = "/tmp/project-dossier-{0}.pdf".format(uuid.uuid4().hex)
+    merger.write(tmp_name)
+    merger.close()
+    cleanup(pdf_file)
+    
+    # attach
+    # check if this is already attached
+    target_name = "{name}.pdf".format(name=subcontracting_order.replace(" ", "-").replace("/", "-"))
+    attachments = get_attachments("Subcontracting Order", subcontracting_order)
+    for a in attachments:
+        if a.file_name == target_name:
+            remove_file(a.name, "Subcontracting Order", subcontracting_order)
+    
+    with open(tmp_name, mode='rb') as file:
+        combined_pdf = file.read()
+    cleanup(tmp_name)
+    
+    # create and attach
+    folder = create_folder("Subcontracting Order", "Home")
+    save_file(target_name, combined_pdf, "Subcontracting Order", subcontracting_order, folder, is_private=True)
+        
+    return
+    
 def cleanup(fname):
     import os
     if os.path.exists(fname):
