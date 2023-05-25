@@ -748,7 +748,7 @@ def get_absences_overlay_datas(from_date, to_date):
         _absence = {
             'start': get_datetime(duration['start']).strftime('%d.%m.%Y'),
             'dauer': duration['dauer'],
-            'employee_name': "{0} {1} {2}".format(absence.employee_name, duration['dauer'], last_date),
+            'employee_name': absence.employee_name,
             'absence': absence.name,
             'shift': shift
         }
