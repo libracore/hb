@@ -724,29 +724,31 @@ def get_absences_overlay_datas(from_date, to_date):
             `from_date`,
             `to_date`
         FROM `tabLeave Application`
-        WHERE `status` = 'Approved'
-        AND `docstatus` = 1
-        AND 
+        WHERE 
             (`from_date` BETWEEN '{from_date}' AND '{to_date}')
         OR
             (`to_date` BETWEEN '{from_date}' AND '{to_date}')
         OR
             (`from_date` < '{from_date}' AND `to_date` > '{to_date}')
-        ORDER BY `from_date` ASC, `employee_name` ASC""".format(from_date=from_date, to_date=to_date), as_dict=True)
+        ORDER BY `from_date` ASC, `employee_name` ASC;""".format(from_date=from_date, to_date=to_date), as_dict=True)
     
     for absence in absences_raw:
-        duration = calc_duration(absence.from_date, absence.to_date, from_date, to_date)
+        duration = calc_duration(absence.from_date, absence.to_date, from_date, to_date)     # in ['dauer'] segments
         if not last_date or absence.from_date > last_date:
             shift = 0
         else:
             shift += 20
         if not last_date or absence.to_date > last_date:
-            last_date = absence.to_date
+            # add max. 2 weeks threshold to prevent stacking on long absences (military, ...)
+            if last_date and duration['dauer'] > 22:
+                last_date = last_date + timedelta(days=14)
+            else:
+                last_date = absence.to_date
             
         _absence = {
             'start': get_datetime(duration['start']).strftime('%d.%m.%Y'),
             'dauer': duration['dauer'],
-            'employee_name': absence.employee_name,
+            'employee_name': "{0} {1} {2}".format(absence.employee_name, duration['dauer'], last_date),
             'absence': absence.name,
             'shift': shift
         }
