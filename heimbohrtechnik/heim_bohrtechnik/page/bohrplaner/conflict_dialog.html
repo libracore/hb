@@ -20,10 +20,10 @@
                 <p><b>Verlängerungsaufträge:</b><br>
                 {% for s in c.subprojects %}
                     {% if s.start %}
-                        {{ frappe.utils.get_datetime(s.start).strftime('%d.%m.%Y')  }}
+                        {{ frappe.utils.get_datetime(s.start).strftime("%d.%m.%Y")  }}
                     {%- endif -%}-
                     {%- if s.end -%}
-                        {{ frappe.utils.get_datetime(s.end).strftime('%d.%m.%Y')  }}
+                        {{ frappe.utils.get_datetime(s.end).strftime("%d.%m.%Y")  }}
                     {%- endif %}
                     : {{ s.team }}: {{ s.description }}
                 {% endfor %}
@@ -32,10 +32,10 @@
                 {% if c.crane %}
                 <p><b>Kran:</b> 
                     {% if c.crane.appointment %}
-                        {{ frappe.utils.get_datetime(c.crane.appointment).strftime('%d.%m.%Y %H:%M')  }}
+                        {{ frappe.utils.get_datetime(c.crane.appointment).strftime("%d.%m.%Y %H:%M")  }}
                     {%- endif -%}-
                     {%- if c.crane.appointment -%}
-                        {{ frappe.utils.get_datetime(c.crane.appointment_end).strftime('%d.%m.%Y %H:%M')  }}
+                        {{ frappe.utils.get_datetime(c.crane.appointment_end).strftime("%d.%m.%Y %H:%M")  }}
                     {%- endif %}
                     {{ c.crane.supplier_name or "?" }}</p>
                 {% endif %}
@@ -43,10 +43,10 @@
                 <p><b>Strassensperrung:</b><br>
                 {% for rb in c.road_blocks %}
                     {% if rb.from_date %}
-                        {{ frappe.utils.get_datetime(rb.from_date).strftime('%d.%m.%Y')  }}
+                        {{ frappe.utils.get_datetime(rb.from_date).strftime("%d.%m.%Y")  }}
                     {%- endif -%}-
                     {%- if rb.to_date -%}
-                        {{ frappe.utils.get_datetime(rb.to_date).strftime('%d.%m.%Y')  }}
+                        {{ frappe.utils.get_datetime(rb.to_date).strftime("%d.%m.%Y")  }}
                     {%- endif %}
                     : {{ rb.name }}
                 {% endfor %}
