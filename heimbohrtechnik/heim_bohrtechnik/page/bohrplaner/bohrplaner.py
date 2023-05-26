@@ -446,11 +446,13 @@ def get_traffic_lights_indicator(project):
     if int(project.thermozement) == 1:
         objekt_plz_ort_color = BG_BLUE          # blue
     colors.append(objekt_plz_ort_color)         # 4
-    objekt_plz_ort_font_color = 'black;'
+    objekt_plz_ort_font_color = BG_BLACK
     objekt_plz_ort_border_color = ''
     for permit in project.permits:
         if 'Lärmschutzbewilligung' in permit.permit:
-            objekt_plz_ort_font_color = 'red;'
+            objekt_plz_ort_font_color = BG_RED
+            if project.noise_permit_requested:
+                objekt_plz_ort_font_color = BG_ORANGE
             if permit.file:
                 objekt_plz_ort_font_color = BG_DARK_GREEN            # dark green
         #elif 'Strassensperrung' in permit.permit:              # removed by change request RB/2022-10-05
