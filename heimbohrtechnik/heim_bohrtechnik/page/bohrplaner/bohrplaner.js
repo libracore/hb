@@ -102,16 +102,9 @@ frappe.bohrplaner = {
         if (frappe.route_options.from && frappe.route_options.project_name) {
             document.getElementById("from").value = frappe.datetime.add_days(frappe.route_options.from, (-1) * locals.planning_past_days);
             document.getElementById("to").value = frappe.datetime.add_days(frappe.route_options.from, locals.planning_days);
-            let date_reset = new Promise(function(ok, nok) {
-                frappe.bohrplaner.reset_dates(page);
-                ok();
-            });
-            date_reset.then(
-                function(value) {
-                    frappe.bohrplaner.mark_project(frappe.route_options.project_name);
-                },
-                function(error) { /* code if some error */ }
-            );
+            
+            frappe.bohrplaner.reset_dates(page);
+            
         }
     },
     get_content: function(page, from_date, to_date) {
@@ -216,6 +209,10 @@ frappe.bohrplaner = {
                 for (var i = 0; i < contents.length; i++) {
                     var data = contents[i];
                     frappe.bohrplaner.add_absences_overlay(page, data);
+                }
+                // in case of search, mark project
+                if (frappe.route_options.project_name) {
+                    frappe.bohrplaner.mark_project(frappe.route_options.project_name);
                 }
                 // stop waiting indicator
                 frappe.bohrplaner.stop_wait(page);
