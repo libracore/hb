@@ -170,6 +170,15 @@ frappe.ui.form.on('Project', {
         }
         // fetch visit information
         fetch_visit_date(frm);
+        // show noise permit checkbox if applicable
+        if (frm.doc.permits) {
+            for (var i = 0; i < frm.doc.permits.length; i++) {
+                if (frm.doc.permits[i].permit === "Lärmschutzbewilligung") {
+                    cur_frm.set_df_property("noise_permit_requested", "hidden", 0);
+                    break;
+                }
+            }
+        }
     },
     before_save(frm) {
         // hook to update subcontracting orders in case of changes
