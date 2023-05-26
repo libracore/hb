@@ -103,6 +103,7 @@ def get_project_data(p, dauer):
         drilling_equipment = ""
     saugauftrag = 'Schlamm fremd'
     mud = None
+    mud_supplier = None
     pneukran = ''
     pneukran_details = {}
     activities = {
@@ -120,7 +121,7 @@ def get_project_data(p, dauer):
     for cl_entry in project.checklist:
         if cl_entry.activity == activities['mud']:
             saugauftrag = cl_entry.supplier_short_display or cl_entry.supplier_name
-            if cl_entry.supplier == "K-03749":
+            if cl_entry.supplier == "L-03749":
                 flag_override_mud = True
         elif cl_entry.activity == activities['external_crane']:
             pneukran_details = cl_entry.as_dict()
