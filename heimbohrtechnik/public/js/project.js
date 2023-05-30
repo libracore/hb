@@ -7,7 +7,7 @@ try {
         },
         {
             'label': 'Drilling',
-            'items': ['Construction Site Delivery', 'Subcontracting Order', 'Request for Public Area Use', 'Layer Directory']
+            'items': ['Construction Site Delivery', 'Subcontracting Order', 'Request for Public Area Use', 'Layer Directory', 'Injection report']
 
         }
     ]);
