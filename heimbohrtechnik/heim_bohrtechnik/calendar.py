@@ -37,7 +37,7 @@ def get_calendar(secret, user=None):
             SELECT * 
             FROM `tabEvent` 
             WHERE 
-                `event_type` = 'Private'
+                `event_type` = 'Public'
                 AND `project_manager` = "{user}";
         """.format(user=user)
     events = frappe.db.sql(sql_query, as_dict=True)

@@ -1,6 +1,8 @@
 frappe.ui.form.on('Event', {
     refresh(frm) {
         if (frm.doc.__islocal) {
+            // set public
+            cur_frm.set_value("event_type", "Public");
             // fresh document, check if routed from project
             if (localStorage.getItem("project")) {
                 cur_frm.set_value("project", localStorage.getItem("project"));
