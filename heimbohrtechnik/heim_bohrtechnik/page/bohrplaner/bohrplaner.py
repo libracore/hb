@@ -1068,3 +1068,30 @@ def get_subproject_overview(project):
         return table
     else:
         return """<p>Keine Unterprojekte vorhanden.</p>"""
+
+@frappe.whitelist()
+def get_mfk_overlay_datas(from_date, to_date):
+    sql_query = """
+                    SELECT 
+                    `truck`, 
+                    `drilling_team`, 
+                    `start_time`, 
+                    `end_time`
+                    FROM `tabMFK`
+                    WHERE `start_time` BETWEEN '{from_date}' AND '{to_date}'
+                    OR `end_time` BETWEEN '{from_date}' AND '{to_date}'
+                """.format(from_date=from_date, to_date=to_date)
+                
+    data = frappe.db.sql(sql_query, as_dict=True)
+    mfk_data = []
+    for entry in data:
+        mfk_data.append({
+            'truck': entry.truck,
+            'drilling_team': entry.drilling_team,
+            'start_date': frappe.utils.get_datetime(entry.start_time).strftime('%d.%m.%Y'),
+            'start_time': frappe.utils.get_datetime(entry.start_time).strftime('%H:%M:%S'),
+            'end_date': frappe.utils.get_datetime(entry.end_time).strftime('%d.%m.%Y'),
+            'end_time': frappe.utils.get_datetime(entry.end_time).strftime('%H:%M:%S')
+        })
+    
+    return mfk_data

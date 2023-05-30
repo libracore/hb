@@ -172,7 +172,7 @@ frappe.bohrplaner = {
                     }
                }
             });
-        }, 10);
+        }, 100);
     },
     get_subproject_overlay_data: function(page) {
         var from = $("#from").val();
@@ -214,6 +214,9 @@ frappe.bohrplaner = {
                 if (frappe.route_options.project_name) {
                     frappe.bohrplaner.mark_project(frappe.route_options.project_name);
                 }
+                
+                frappe.bohrplaner.add_mfk_overlay(page);
+                
                 // stop waiting indicator
                 frappe.bohrplaner.stop_wait(page);
            }
@@ -296,6 +299,37 @@ frappe.bohrplaner = {
             'shift': data.shift
         })).appendTo(place);
         return
+    },
+    add_mfk_overlay: function(page, data) {
+        var from = $("#from").val();
+        var to = $("#to").val();
+        frappe.call({
+           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_mfk_overlay_datas",
+           args: {
+                "from_date": from,
+                "to_date": to
+           },
+           async: false,
+           callback: function(response) {
+                var contents = response.message;
+                for (var i = 0; i < contents.length; i++) {
+                    var data = contents[i];
+                    
+                    var place = $('[data-bohrteam="' + data.drilling_team + '"][data-date="' + data.start_date + '"][data-vmnm="nm"]');
+                    $(place).css("position", "relative");
+                    var width = 42
+                    
+                    $(frappe.render_template('mfk_overlay', {
+                        'truck': data.truck,
+                        'start_date': data.start_date,
+                        'start_time': data.start_time,
+                        'end_date': data.end_date,
+                        'end_time': data.end_time
+                    })).appendTo(place);
+                }
+                return
+           }
+        });
     },
     reset_dates: function(page) {
         // pre safe scroll-positions
