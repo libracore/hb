@@ -3,7 +3,10 @@
 
 frappe.ui.form.on('Injection report', {
     refresh: function(frm) {
-        
+        if (cur_frm.doc.manual_needs_entry) {
+            cur_frm.set_df_property('needed_zement', 'read_only', 0);
+            cur_frm.set_df_property('needed_bentonit', 'read_only', 0);
+        }
     },
     project: function(frm) {
         autocomplete_object(frm);
@@ -65,21 +68,44 @@ frappe.ui.form.on('Injection report', {
     zm_sack_weight: function(frm) {
         autocomplete_needs(frm);
     },
+        ac_grouting: function(frm) {
+        autocomplete_needs(frm);
+    },
+        suspension_lt: function(frm) {
+        autocomplete_needs(frm);
+    },
+    manual_entry: function(frm) {
+        if (!cur_frm.doc.manual_entry) {
+            cur_frm.set_df_property('ac_tot', 'read_only', 1); //doc field property(Eigenschaft)
+            autocomplete_needs(frm);
+        } else {
+            cur_frm.set_df_property('ac_tot', 'read_only', 0);
+        }
+    }
 });
 
 function autocomplete_needs() {
     var need = ((((Math.pow(cur_frm.doc.piping/2,2)*Math.PI/1000)*(cur_frm.doc.piped_to))+((((Math.pow(cur_frm.doc.drilling/2,2)*Math.PI/1000)*(cur_frm.doc.sonde_length-cur_frm.doc.piped_to)-(((((Math.pow(cur_frm.doc.sonde/2,2)*Math.PI/1000)*(cur_frm.doc.sonde_length)*4)))))))));
     cur_frm.set_value('need', Math.round(need));
+    //cur_frm.set_value('ac_tot', Math.round(cur_frm.doc.ac_grouting / 847));
     if (cur_frm.doc.mortar == "Schwenk Füllbinder GTM-hs" ) {
         cur_frm.set_value('needed_water', Math.round((cur_frm.doc.gtm_water / cur_frm.doc.gtm_suspension)*cur_frm.doc.need));
         cur_frm.set_value('needed_ewm', Math.round((cur_frm.doc.gtm_hs / cur_frm.doc.gtm_suspension)*cur_frm.doc.need));
         cur_frm.set_value('needed_sacks_gtm', Math.round(cur_frm.doc.needed_ewm / cur_frm.doc.gtm_sack_weight));
+        cur_frm.set_value('ac_tot', Math.round((cur_frm.doc.ac_grouting / 1180)*1000));
     } else if (cur_frm.doc.mortar == "Zement-Bentonit" ) {
         cur_frm.set_value('needed_water', Math.round((cur_frm.doc.zm_water / cur_frm.doc.zm_suspension)*cur_frm.doc.need));
         cur_frm.set_value('needed_zement', Math.round((cur_frm.doc.zement / cur_frm.doc.zm_suspension)*cur_frm.doc.need));
         cur_frm.set_value('needed_sacks_zement', Math.round(cur_frm.doc.needed_zement / cur_frm.doc.zm_sack_weight));
         cur_frm.set_value('needed_bentonit', Math.round((cur_frm.doc.bentonit / cur_frm.doc.zm_suspension)*cur_frm.doc.need));
         cur_frm.set_value('needed_sacks_bentonit', Math.round(cur_frm.doc.needed_bentonit / cur_frm.doc.zm_sack_weight));
+        cur_frm.set_value('suspension_lt', Math.round(cur_frm.doc.zm_suspension / (cur_frm.doc.zm_water + cur_frm.doc.zement + cur_frm.doc.bentonit)*cur_frm.doc.zm_suspension));
+        if (!cur_frm.doc.manual_entry){
+            cur_frm.set_value('ac_water', Math.round(cur_frm.doc.ac_grouting * (cur_frm.doc.needed_water / cur_frm.doc.need)));
+            cur_frm.set_value('ac_zement', Math.round(cur_frm.doc.ac_grouting * (cur_frm.doc.needed_zement / cur_frm.doc.need)));
+            cur_frm.set_value('ac_bentonit', Math.round(cur_frm.doc.ac_grouting * (cur_frm.doc.needed_bentonit / cur_frm.doc.need)));
+            cur_frm.set_value('ac_tot', Math.round((cur_frm.doc.ac_grouting / cur_frm.doc.suspension_lt)*1000));
+        }
     }
 }
 

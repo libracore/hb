@@ -40,6 +40,7 @@
   "zement",
   "bentonit",
   "zm_suspension",
+  "suspension_lt",
   "column_break_23",
   "zm_sack_weight",
   "sbase_section",
@@ -50,15 +51,22 @@
   "gtm_sack_weight",
   "actual_consumption_section",
   "ac_grouting",
-  "ac_tot"
+  "ac_tot",
+  "column_break_47",
+  "arteser",
+  "ac_water",
+  "ac_zement",
+  "ac_bentonit",
+  "arteser_check",
+  "manual_entry"
  ],
  "fields": [
   {
-   "default": "SV-.YY.-.#####",
+   "default": "IB-.YY.-.#####",
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Naming Series",
-   "options": "SV-.YY.-.#####"
+   "options": "IB-.YY.-.#####"
   },
   {
    "fieldname": "project",
@@ -305,12 +313,13 @@
   {
    "fieldname": "ac_grouting",
    "fieldtype": "Int",
-   "label": "Actual grouting consumption"
+   "label": "Actual grouting consumption (L)"
   },
   {
    "fieldname": "ac_tot",
    "fieldtype": "Int",
-   "label": "Actual consumption"
+   "label": "Actual consumption (kg)",
+   "read_only": 1
   },
   {
    "collapsible": 1,
@@ -327,10 +336,56 @@
    "fieldname": "geologist_email",
    "fieldtype": "Data",
    "label": "E-Mail"
+  },
+  {
+   "fieldname": "column_break_47",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "arteser_check",
+   "fieldtype": "Check",
+   "label": "Arteserzement"
+  },
+  {
+   "depends_on": "eval:doc.arteser_check == 1",
+   "fieldname": "arteser",
+   "fieldtype": "Data",
+   "label": "Arteserzement(kg)"
+  },
+  {
+   "fieldname": "suspension_lt",
+   "fieldtype": "Data",
+   "label": "Suspension (l/t)"
+  },
+  {
+   "depends_on": "eval:doc.manual_entry == 1",
+   "fieldname": "ac_water",
+   "fieldtype": "Int",
+   "label": "Actual consumption Water (L)"
+  },
+  {
+   "depends_on": "eval:doc.manual_entry == 1",
+   "fieldname": "ac_zement",
+   "fieldtype": "Int",
+   "label": "Actual consumption Zement (kg)"
+  },
+  {
+   "depends_on": "eval:doc.manual_entry == 1",
+   "fieldname": "ac_bentonit",
+   "fieldtype": "Int",
+   "label": "Actual consumption Bentonit (kg)"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.mortar == \"Zement-Bentonit\"",
+   "fieldname": "manual_entry",
+   "fieldtype": "Check",
+   "label": "Manual consumption entry"
   }
  ],
  "is_submittable": 1,
- "modified": "2023-05-05 17:03:32.592619",
+ "modified": "2023-05-30 13:53:04.163689",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Injection report",

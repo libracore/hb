@@ -1,333 +1,333 @@
-"Page: Drill Planner","Drill Planner","Bohrplaner"
-"Page: Drill Planner","To","Bis"
-"Page: Drill Planner","Mon","Mo"
-"Page: Drill Planner","Tue","Di"
-"Page: Drill Planner","Wed","Mi"
-"Page: Drill Planner","Thu","Do"
-"Page: Drill Planner","Fri","Fr"
-"Page: Drill Planner","Sat","Sa"
-"Page: Drill Planner","Sun","So"
-"Page: Drill Planner","The construction site was visited","Die Baustelle wurde besucht"
-"Page: Drill Planner","The construction site was <b>not</b> visited","Die Baustelle wurde <b>nicht</b> besucht"
-"Page: Drill Planner","All permits are missing","Alle Bweilligungen fehlen"
-"Page: Drill Planner","Following permits are missing:","Folgende Bewilligungen fehlen:"
-"Page: Drill Planner","All permits available","Alle Bewilligungen vorhanden"
-"Page: Drill Planner","No sales order available","Kein Kundenauftrag vorhanden"
-"Page: Drill Planner","The sales order is submitted","Der Kundenauftrag ist gebucht"
-"Page: Drill Planner","The sales order is <b>not</b> submitted","Der Kundenauftrag ist <b>nicht</b> gebucht"
-"Page: Drill Planner","The sales order is cancelled","Der Kundenauftrag ist abgebrochen"
-"Page: Drill Planner","<b>not</b> submitted","<b>nicht</b> gebucht"
-"Page: Drill Planner","Purchase Order delivered","Lieferantenauftrag geliefert"
-"Page: Drill Planner","No Purchase Order available","Kein Lieferantenauftrag vorhanden"
-"Page: Drill Planner","No crane is needed","Kein Kran benötigt"
-"Page: Drill Planner","The crane was organized","Der Kran wurde organisiert"
-"Page: Drill Planner","The crane has not yet been organized","Der Kran wurde noch nicht organisiert"
-"Page: Drill Planner","The Mud Disposer has not yet been organized","Der Schlammentsorger wurde nocht nicht organisiert"
-"Page: Drill Planner","The Mud Disposer was organized","Der Schlammentsorger wurde organisiert"
-"Page: Drill Planner","Drill notice sent","Die Bohranzeige wurde versendet"
-"Page: Drill Planner","Drill notice <b>not</b> sent","Die Bohranzeige wurde <b>noch nicht</b> versendet"
-"Page: Drill Planner","Soft Reload","Aktualisieren"
-"Page: Drill Planner","Reshedule","Umplanen"
-"Page: Drill Planner","Absences","Abwesenheiten"
-"Page: Drill Planner","Auto Update","Autom. aktualisieren"
-"Page: Drill Planner","Disable Auto Update","Automatisch aktualisieren ausschalten"
-"Page: Drill Planner","Find conflicts","Probleme finden"
-"DocType: Object","Object","Objekt"
-"DocType: Object","Object name","Objektname"
-"DocType: Object","Object Name","Objektname"
-"DocType: Object","Object street","Objektstrasse"
-"DocType: Object","Object location","Objektort"
-"DocType: Object","Object Mode","Objektart"
-"DocType: Object","Object Type","Objekttyp"
-"DocType: Object","Street","Strasse"
-"DocType: Object","Drilling Details","Bohrdetails"
-"DocType: Object","Owner","Eigentümer"
-"DocType: Object","Owner address","Adresse Eigentümer"
-"DocType: Object","Owner contact","Kontakt Eigentümer"
-"DocType: Object","Owner contact name","Kontaktname Eigentümer"
-"DocType: Object","Owner contact email","Email Eigentümer"
-"DocType: Object","Owner contact phone","Telefon Eigentümer"
-"DocType: Object","Architect","Architekt"
-"DocType: Object","Architect address","Adresse Architekt"
-"DocType: Object","Architect contact","Kontakt Architekt"
-"DocType: Object","Architect contact name","Kontaktname Architekt"
-"DocType: Object","Architect contact email","Email Architekt"
-"DocType: Object","Architect contact phone","Telefon Architekt"
-"DocType: Object","Construction Manager","Bauleiter"
-"DocType: Object","Construction Manager address","Adresse Bauleiter"
-"DocType: Object","Construction Manager contact","Kontakt Bauleiter"
-"DocType: Object","Construction Manager contact name","Kontaktname Bauleiter"
-"DocType: Object","Construction Manager contact email","Email Bauleiter"
-"DocType: Object","Construction Manager contact phone","Telefon Bauleiter"
-"DocType: Object","Plumber","Installateur"
-"DocType: Object","Plumber address","Adresse Installateur"
-"DocType: Object","Plumber contact","Kontakt Installateur"
-"DocType: Object","Plumber contact name","Kontaktname Installateur"
-"DocType: Object","Plumber contact email","Email Installateur"
-"DocType: Object","Plumber contact phone","Telefon Installateur"
-"DocType: Object","TGA Planer","TGA-Planer"
-"DocType: Object","TGA Planer address","Adresse TGA-Planer"
-"DocType: Object","TGA Planer contact","Kontakt TGA-Planer"
-"DocType: Object","TGA Planer contact name","Kontaktname TGA-Planer"
-"DocType: Object","TGA Planer contact email","Email TGA-Planer"
-"DocType: Object","TGA Planer contact phone","Telefon TGA-Planer"
-"DocType: Object","Trough","Mulde"
-"DocType: Object","Trough address","Adresse Mulde"
-"DocType: Object","Trough contact","Kontakt Mulde"
-"DocType: Object","Trough contact name","Kontaktname Mulde"
-"DocType: Object","Trough contact email","Email Mulde"
-"DocType: Object","Trough contact phone","Telefon Mulde"
-"DocType: Object","Mud","Schlamm"
-"DocType: Object","Mud address","Adresse Schlamm"
-"DocType: Object","Mud contact","Kontakt Schlamm"
-"DocType: Object","Mud contact name","Kontaktname Schlamm"
-"DocType: Object","Mud contact email","Email Schlamm"
-"DocType: Object","Mud contact phone","Telefon Schlamm"
-"DocType: Object","Crane","Kran"
-"DocType: Object","Crane address","Adresse Kran"
-"DocType: Object","Crane contact","Kontakt Kran"
-"DocType: Object","Crane contact name","Kontaktname Kran"
-"DocType: Object","Crane contact email","Email Kran"
-"DocType: Object","Crane contact phone","Telefon Kran"
-"DocType: Object","Authority","Behörde"
-"DocType: Object","Authority address","Adresse Behörde"
-"DocType: Object","Authority contact","Kontakt Behörde"
-"DocType: Object","Authority contact name","Kontaktname Behörde"
-"DocType: Object","Authority contact email","Email Behörde"
-"DocType: Object","Authority contact phone","Telefon Behörde"
-"DocType: Object","Community","Gemeinde"
-"DocType: Object","Community address","Adresse Gemeinde"
-"DocType: Object","Community contact","Kontakt Gemeinde"
-"DocType: Object","Community contact name","Kontaktname Gemeinde"
-"DocType: Object","Community contact email","Email Gemeinde"
-"DocType: Object","Community contact phone","Telefon Gemeinde"
-"DocType: Object","Geologist","Geologe"
-"DocType: Object","Geologist address","Adresse Geologe"
-"DocType: Object","Geologist contact","Kontakt Geologe"
-"DocType: Object","Geologist contact name","Kontaktname Geologe"
-"DocType: Object","Geologist contact email","Email Geologe"
-"DocType: Object","Geologist contact phone","Telefon Geologe"
-"DocType: Object","Geometer","Geometer"
-"DocType: Object","Geometer address","Adresse Geometer"
-"DocType: Object","Geometer contact","Kontakt Geometer"
-"DocType: Object","Geometer contact name","Kontaktname Geometer"
-"DocType: Object","Geometer contact email","Email Geometer"
-"DocType: Object","Geometer contact phone","Telefon Geometer"
-"DocType: Object","Parcel","Parzelle"
-"DocType: Object","Search PLZ","Postleitzahl suchen"
-"DocType: Object","CH Coordinates","Schweizer Koordindaten"
-"DocType: Object","GPS Coordinates","GPS-Koordinaten"
-"DocType: Object","Open Map","Karte öffnen"
-"DocType: Object","Drilling Details","Bohrdetails"
-"DocType: Object","Construction site inspected","Baustelle besichtigt"
-"DocType: Object","Depth","Tiefe"
-"DocType: Object","Object Specification","Objekt-Spezifikation"
-"DocType: Object","Object Details","Objekt-Details"
-"DocType: Object","Are there really no required permits?","Braucht es wirklich keine Bewilligungen?"
-"DocType: Object","Permit {0} is mandatory but missing","Bewilligung {0} ist zwingend erforderlich aber fehlt"
-"DocType: Object","Heat capacity","Heizleistung (kW)"
-"DocType: Object","Cooling capacity","Kälteleistung (kW)"
-"DocType: Object","Withdrawal capacity","Entzugsleistung (W/m)"
-"DocType: Object","Drilling meter","Bohrmeter"
-"DocType: Object","Project EWS","Projektierung Wärmepumpe"
-"DocType: Object","Expected Mud","Erwarteter Schlamm"
-"DocType: Object","Delivered Mud","Angelieferter Schlamm"
-"DocType: Object","End Customer","Endkunde"
-"DocType: Object","Geology","Geologie"
-"DocType: Object","Accompaniment","Begleitung"
-"DocType: Object","Drilling Samples","Bohrproben"
-"DocType: Object","Assessment","Einschätzung"
-"DocType: Object","Project Owner","Eigentümer"
-"DocType: Object","Planned Project","Geplantes Projekt"
-"DocType: Object","Classification","Klassifizierung"
-"DocType: Object","Print Owner","Eigentümer andrucken"
-"DocType: Object","Name (simple)","Name (einfach)"
-"DocType: Object","Simple","Einfach"
-"DocType: Object","Create project","Projekt erstellen"
-"DocType: Object","Permits","Bewilligungen"
-"DocType: Object","Coordinates","Koordinaten"
-"DocType: Object","Send Mail","Mail senden"
-"DocType: Object","Checklist and Permits","Checkliste und Bewilligungen"
-"DocType: Object","Governmental restrictions","Behördliche Auflagen"
-"DocType: Object","Organisational measures","Betriebliche Massnamhen"
-"DocType: Object","Progress measurement","Verlaufsmessung"
-"DocType: Object","Has drilling samples","Mit Bohrproben"
-"DocType: Object","Drilling sample storage","Lagerort Bohrproben"
-"DocType: Object","Party","Kunde/Lieferant"
-"DocType: Object","Staged cementation","Stufenzementation"
-"DocType: Object","Staged cementation depth","Stufenzementation bei"
-"DocType: Object","Capabilities","Fähigkeiten"
-"DocType: Object","Object Address","Objektadresse"
-"DocType: Object","Information to","Informationen an"
-"DocType: Object","GPS checked","GPS-Daten kontrolliert"
-"DocType: Project","Mud Disposer","Schlammentsorger"
-"DocType: Project","Mud disposer","Schlammentsorger"
-"DocType: Project","Drilling Equipment","Bohrequipment"
-"DocType: Project","Start Half-Day","Halbtag Anfang"
-"DocType: Project","End Half-Day","Halbtag Ende"
-"DocType: Project","Supplier name","Lieferantenname"
-"DocType: Project","Checklist","Checkliste"
-"DocType: Project","Drilling Team","Bohrteam"
-"DocType: Project","Invoice to","Rechnung an"
-"DocType: Project","Invoice to name","Rechnung an (Name)"
-"DocType: Project","Order date","Bestelldatum"
-"DocType: Project","Appointment","Termin"
-"DocType: Project","Appointment End","Endtermin"
-"DocType: Project","Subprojects","Unterprojekte"
-"DocType: Project","Trough ordered","Mulden bestellt"
-"DocType: Project","Ask for a Google Review at project end","Bei Projektabschluss um eine Google-Rezension anfragen"
-"DocType: Project","Google Review","Google Rezension"
-"DocType: Project","Review Email","Review-Email"
-"DocType: Project","Project File created","Dossier erstellt"
-"DocType: Project","Drilling","Bohren"
-"DocType: Project","Drill order created","Bohrauftrag vorbereitet"
-"DocType: Project","This document has siblings","Dieses Dokument hat andere Teil-Dokumente"
-"DocType: Project","Visit date","Besuchstermin"
-"DocType: Permit Type","Permit Type","Bewilligungsart"
-"DocType: Permit Type","Permit","Bewilligung"
-"DocType: Project","Permit number","Bewilligungsnummer"
-"DocType: Project","Permit date","Bewilligungsdatum"
-"DocType: Project","Other Projects","Andere Projekte"
-"DocType: Permit Type","Is Mandatory","Ist zwingend erforderlich"
-"DocType: Checklist Activity","Checklist Activity","Aktivität"
-"DocType: Drilling Type","Drilling Type","Bohrart"
-"DocType: Pressure Level","Pressure Level","Druckstufe"
-"DocType: Heim Settings","Core Data","Kerndaten"
-"DocType: Heim Settings","Heim Settings","Heim-Einstellungen"
-"DocType: Heim Settings","Address Template","Adressvorlage"
-"DocType: Heim Settings","Is Standard","Ist Standard"
-"DocType: Heim Settings","Mud Disposer Activity","Schlammentsorger Aktivität"
-"DocType: Heim Settings","Crane Activity","Kran Aktivität"
-"DocType: Construction Site Description","Construction Site Description","Baustellenbeschreibung"
-"DocType: Construction Site Description","Construction Plan","Werkleitungspläne"
-"DocType: Construction Site Description","Construction Plan checked","Werkleitungspläne geprüft"
-"DocType: Construction Site Description","Construction Plan File","Werkleitungsplan-Datei"
-"DocType: Construction Site Description","Checks","Prüfungen"
-"DocType: Construction Site Description","Pipes checked","Werkleitung sondiert"
-"DocType: Construction Site Description","Drilling Points marked","Bohrpunkte markiert"
-"DocType: Construction Site Description","Road","Strasse"
-"DocType: Construction Site Description","Use public area","Benutzung öffentlicher Grund erforderlich"
-"DocType: Construction Site Description","Road block required","Absperrung erforderlich"
-"DocType: Construction Site Description","Road block meters","Laufmeter/Absperrung"
-"DocType: Construction Site Description","Requires Traffic Tech","Verkehrstechnik erforderlich"
-"DocType: Construction Site Description","Requires Traffic Light","Lichtsignal aufstellen"
-"DocType: Construction Site Description","Requires Traffic Control","Verkehrsregelung erforderlich"
-"DocType: Construction Site Description","Equipment","Ausrüstung"
-"DocType: Construction Site Description","Internal Crane required","Pneukran Heim erforderlich"
-"DocType: Construction Site Description","External Crane required","Pneukran extern erforderlich"
-"DocType: Construction Site Description","Crane Length","Kran-Auslegung"
-"DocType: Construction Site Description","Crane organized","Kran organisiert"
-"DocType: Construction Site Description","Site Access","Zufahrt"
-"DocType: Construction Site Description","Site Access Remarks","Bemerkungen Zufahrt"
-"DocType: Construction Site Description","Electricity","Stromanschluss"
-"DocType: Construction Site Description","Water supply","Wasserbezug"
-"DocType: Construction Site Description","Hydrant number","Hydrantennummer"
-"DocType: Construction Site Description","Hydrant contact","Hydrantenkontakt"
-"DocType: Construction Site Description","Additional measures","Zusätzliche Massnahmen"
-"DocType: Construction Site Description","Protect fassade","Fassade schützen"
-"DocType: Construction Site Description","Gras cover","Rasenmatte"
-"DocType: Construction Site Description","Hydrant action","Hydrantenvorgehen"
-"DocType: Construction Site Description","Plans","Pläne"
-"DocType: Construction Site Description","Drilling Point Remarks","Anmerkungen Bohrpunkte"
-"DocType: Construction Site Description","Use public area remarks","Anmerkungen Benutzung öffentlicher Grund"
-"DocType: Construction Site Description","Distance to drill site","Entfernung bis zum Bohrplatz"
-"DocType: Construction Site Description","Road block remarks","Bemerkungen Absperrung"
-"DocType: Construction Site Description","Parking Area","Abstellparkplatz"
-"DocType: Item","Packaging","Verpackung"
-"DocType: Item","Wall Strength","Wandstärke"
-"DocType: Item","Material","Material"
-"DocType: Item","Related Items","Verwandte Artikel"
-"DocType: Item Price","Base Rate","Grundpreis"
-"DocType: Item Price","Discount","Rabatt"
-"DocType: Item Price","Cost Markup","Teuerungszuschlag"
-"DocType: Item Price","Skonto Discount","Skonto-Rabatt"
-"DocType: Raw Material","Raw Material","Werkstoff"
-"DocType: Quotation","Discount Positions","Abschlagspositonen"
-"DocType: Quotation","Add Discount","Rabatt hinzufügen"
-"DocType: Quotation","Object description","Objekttext"
-"DocType: Purchase Order","We are hereby placing the following order:","Hiermit bestellen wir folgende Positionen:"
-"DocType: Supplier","Required Activity","Erforderliche Tätigkeit"
-"DocType: Supplier","Short Display","Kürzel"
-"DocType: Drilling Team","Drilling rig manufacturer","Hersteller Bohrausrüsting"
-"DocType: Drilling Team","Drilling rig type","Typenbezeichnung der Bohrausrüstung"
-"DocType: Drilling Team","Truck and Weight","LKW und Gewicht"
-"DocType: Drilling Team","Trough Details","Muldendetails"
-"DocType: Drilling Team","Crane Details","Krandetails"
-"DocType: Drilling Team","Drilling Master","Bohrmeister"
-"DocType: Drilling Team","Drilling team type","Bohrteamart"
-"DocType: Probe Type","Probe Type","Sondenart"
-"DocType: Probe Type","Diameters","Durchmesser"
-"DocType: Signature","Signature","Unterschrift"
-"DocType: Signature","Signature type","Unterschriftenregelung"
-"DocType: Quotation","Created by","Erstellt durch"
-"DocType: Quotation","Our contact","Unser Ansprechpartner"
-"DocType: Quotation","of","von"
-"DocType: Quotation","Discount Positions","Abzüge"
-"DocType: Quotation","Markup Positions","Zuschläge"
-"DocType: Quotation","Base for Markup and Discount","Basis für Zuschläge und Abschläge"
-"DocType: Quotation","Exclude from Markup and Discount","Bei Zu-/Abschlägen ausschliessen"
-"DocType: Quotation","Manual depth","Tiefe händisch eingeben (ohne autom. Berechnung)"
-"DocType: Truck Scale","Truck Scale","Lastwagenwaage"
-"DocType: Truck","Truck","Fahrzeug"
-"DocType: Truck","Registration Number","Fahrzeugkennzeichen"
-"DocType: Truck","Truck owner","LKW-Besitzer"
-"DocType: Truck","Truck customer","LKW-Kunde"
-"DocType: Truck","Truck customer name","LKW-Kundenname"
-"DocType: Truck","Object address","Objektadresse"
-"DocType: Truck Load Type","Truck Load Type","Ladungsart"
-"DocType: Truck Load Type","Load Type","Ladungsart"
-"DocType: Truck Delivery","Truck Delivery","Schlammanlieferung"
-"DocType: Truck Delivery","Full Weight","Vollgewicht"
-"DocType: Truck Delivery","Empty Weight","Leergewicht"
-"DocType: Truck Delivery","Net Weight","Nettogewicht"
-"Report: Mud to invoice","Mud to invoice","Verrechenbarer Schlamm"
-"Report: Mud to invoice","Last Delivery Date","Letztes Anlieferdatum"
-"Page: Schlammanlieferung","Message","Nachricht"
-"Page: Schlammanlieferung","There is no valid weight recorded","Es wurde kein gültiges Gewicht erfasst."
-"Page: Schlammanlieferung","Please provide an object","Bitte ein Objekt angeben"
-"Page: Schlammanlieferung","No weight","Kein Gewicht"
-"Page: Schlammanlieferung","Object missing","Objekt fehlt"
-"DocType: Drilling Method","Drilling Method","Bohrverfahren"
-"DocType: Customer","Post","Post"
-"Report: Drilling Rate Evaluation","Drilling Rate Evaluation","Auswertung Bohrpreise"
-"DocType: Heim Settings","Drilling Item","Bohrartikel"
-"DocType: Heim Settings","Evaluations","Auswertungen"
-"DocType: Heim Settings","Projects Folder","Projektordner"
-"DocType: Drilling Request","Drilling Request","Bohranfrage"
-"Report Pricing Analysis","Pricing Analysis","Preisfindung"
-"DocType: Truck Planning","Truck Planning","LKW-Planung"
-"DocType: Akonto Invoice","Akonto Invoice","Akonto-Rechnung"
-"DocType: Akonto Invoice","Without Items","Ohne Artikel"
-"DocType: Akonto Invoice","No Item Net Amount","Betrag ohne Artikel"
-"DocType: Object Overview","Object Overview","Objektübersicht"
-"DocType: Purchase Order","No EWS Details","Keine Erdwärmesonden-Details im Objekt definiert"
-"DocType: Purchase Order","No suitable EWS found","Keine passende Erdwärmesonden gefunden"
-"DocType: Purchase Order","Reqd By Date","Benötigt bis"
-"DocType: Construction Site Delivery","Construction Site Delivery","Baustellenlieferung"
-"DocType: Subcontracting Order","Subcontracting Order","Verlängerungsauftrag"
-"DocType: Subcontracting Order","Subcontracting Team","Verlängerungsteam"
-"DocType: Subcontracting Order","Order Description","Auftragsbeschreibung"
-"DocType: Request for Public Area Use","Request for Public Area Use","Gesuch Benutzung öffentlicher Grund"
-"DocType: Request for Public Area Use","No Parking Blue","Aufhebung blaue Parkzone"
-"DocType: Request for Public Area Use","No Parking White","Aufhebung weisse Parkzone"
-"DocType: Request for Public Area Use","Inform Residents","Anwohner werden informiert"
-"DocType: Request for Public Area Use","Comply with Minimum Width of 3.5m","Durchfahrtsbreite von 3.5m wird gewährleistet"
-"DocType: Request for Public Area Use","From Date","Von Datum"
-"DocType: Request for Public Area Use","To Date","Bis Datum"
-"DocType: Request for Public Area Use","Invoice Address","Rechnungsadresse"
-"DocType: Request for Public Area Use","Same as Requestor","Gleich wie Gesuchsteller"
-"DocType: Request for Public Area Use","Address Name","Adressname"
-"DocType: Request for Public Area Use","Address Street","Strasse"
-"DocType: Request for Public Area Use","Address Location","PLZ, Ort"
-"DocType: Request for Public Area Use","Area in m2","Fläche in m2"
-"DocType: Request for Public Area Use","Installation Plan","Installationsplan"
-"DocType: Request for Public Area Use","From Customer","Vom Auftraggeber"
-"DocType: Request for Public Area Use","From Owner","Vom Eigentümer"
-"DocType: Request for Public Area Use","Different Installation Address","Abweichende Installationsadresse"
-"DocType: Request for Public Area Use","Installation Street","Strasse (Installation)"
-"DocType: Request for Public Area Use","Installation Location","Ort der Installation"
-"Report: General Ledger HBAG","General Ledger HBAG","Hauptbuch HBAG"
-"Report: Account Sheets HBAG","Account Sheets HBAG","Kontenblätter HBAG"
+Page: Drill Planner,Drill Planner,Bohrplaner
+Page: Drill Planner,To,Bis
+Page: Drill Planner,Mon,Mo
+Page: Drill Planner,Tue,Di
+Page: Drill Planner,Wed,Mi
+Page: Drill Planner,Thu,Do
+Page: Drill Planner,Fri,Fr
+Page: Drill Planner,Sat,Sa
+Page: Drill Planner,Sun,So
+Page: Drill Planner,The construction site was visited,Die Baustelle wurde besucht
+Page: Drill Planner,The construction site was <b>not</b> visited,Die Baustelle wurde <b>nicht</b> besucht
+Page: Drill Planner,All permits are missing,Alle Bweilligungen fehlen
+Page: Drill Planner,Following permits are missing:,Folgende Bewilligungen fehlen:
+Page: Drill Planner,All permits available,Alle Bewilligungen vorhanden
+Page: Drill Planner,No sales order available,Kein Kundenauftrag vorhanden
+Page: Drill Planner,The sales order is submitted,Der Kundenauftrag ist gebucht
+Page: Drill Planner,The sales order is <b>not</b> submitted,Der Kundenauftrag ist <b>nicht</b> gebucht
+Page: Drill Planner,The sales order is cancelled,Der Kundenauftrag ist abgebrochen
+Page: Drill Planner,<b>not</b> submitted,<b>nicht</b> gebucht
+Page: Drill Planner,Purchase Order delivered,Lieferantenauftrag geliefert
+Page: Drill Planner,No Purchase Order available,Kein Lieferantenauftrag vorhanden
+Page: Drill Planner,No crane is needed,Kein Kran benötigt
+Page: Drill Planner,The crane was organized,Der Kran wurde organisiert
+Page: Drill Planner,The crane has not yet been organized,Der Kran wurde noch nicht organisiert
+Page: Drill Planner,The Mud Disposer has not yet been organized,Der Schlammentsorger wurde nocht nicht organisiert
+Page: Drill Planner,The Mud Disposer was organized,Der Schlammentsorger wurde organisiert
+Page: Drill Planner,Drill notice sent,Die Bohranzeige wurde versendet
+Page: Drill Planner,Drill notice <b>not</b> sent,Die Bohranzeige wurde <b>noch nicht</b> versendet
+Page: Drill Planner,Soft Reload,Aktualisieren
+Page: Drill Planner,Reshedule,Umplanen
+Page: Drill Planner,Absences,Abwesenheiten
+Page: Drill Planner,Auto Update,Autom. aktualisieren
+Page: Drill Planner,Disable Auto Update,Automatisch aktualisieren ausschalten
+Page: Drill Planner,Find conflicts,Probleme finden
+DocType: Object,Object,Objekt
+DocType: Object,Object name,Objektname
+DocType: Object,Object Name,Objektname
+DocType: Object,Object street,Objektstrasse
+DocType: Object,Object location,Objektort
+DocType: Object,Object Mode,Objektart
+DocType: Object,Object Type,Objekttyp
+DocType: Object,Street,Strasse
+DocType: Object,Drilling Details,Bohrdetails
+DocType: Object,Owner,Eigentümer
+DocType: Object,Owner address,Adresse Eigentümer
+DocType: Object,Owner contact,Kontakt Eigentümer
+DocType: Object,Owner contact name,Kontaktname Eigentümer
+DocType: Object,Owner contact email,Email Eigentümer
+DocType: Object,Owner contact phone,Telefon Eigentümer
+DocType: Object,Architect,Architekt
+DocType: Object,Architect address,Adresse Architekt
+DocType: Object,Architect contact,Kontakt Architekt
+DocType: Object,Architect contact name,Kontaktname Architekt
+DocType: Object,Architect contact email,Email Architekt
+DocType: Object,Architect contact phone,Telefon Architekt
+DocType: Object,Construction Manager,Bauleiter
+DocType: Object,Construction Manager address,Adresse Bauleiter
+DocType: Object,Construction Manager contact,Kontakt Bauleiter
+DocType: Object,Construction Manager contact name,Kontaktname Bauleiter
+DocType: Object,Construction Manager contact email,Email Bauleiter
+DocType: Object,Construction Manager contact phone,Telefon Bauleiter
+DocType: Object,Plumber,Installateur
+DocType: Object,Plumber address,Adresse Installateur
+DocType: Object,Plumber contact,Kontakt Installateur
+DocType: Object,Plumber contact name,Kontaktname Installateur
+DocType: Object,Plumber contact email,Email Installateur
+DocType: Object,Plumber contact phone,Telefon Installateur
+DocType: Object,TGA Planer,TGA-Planer
+DocType: Object,TGA Planer address,Adresse TGA-Planer
+DocType: Object,TGA Planer contact,Kontakt TGA-Planer
+DocType: Object,TGA Planer contact name,Kontaktname TGA-Planer
+DocType: Object,TGA Planer contact email,Email TGA-Planer
+DocType: Object,TGA Planer contact phone,Telefon TGA-Planer
+DocType: Object,Trough,Mulde
+DocType: Object,Trough address,Adresse Mulde
+DocType: Object,Trough contact,Kontakt Mulde
+DocType: Object,Trough contact name,Kontaktname Mulde
+DocType: Object,Trough contact email,Email Mulde
+DocType: Object,Trough contact phone,Telefon Mulde
+DocType: Object,Mud,Schlamm
+DocType: Object,Mud address,Adresse Schlamm
+DocType: Object,Mud contact,Kontakt Schlamm
+DocType: Object,Mud contact name,Kontaktname Schlamm
+DocType: Object,Mud contact email,Email Schlamm
+DocType: Object,Mud contact phone,Telefon Schlamm
+DocType: Object,Crane,Kran
+DocType: Object,Crane address,Adresse Kran
+DocType: Object,Crane contact,Kontakt Kran
+DocType: Object,Crane contact name,Kontaktname Kran
+DocType: Object,Crane contact email,Email Kran
+DocType: Object,Crane contact phone,Telefon Kran
+DocType: Object,Authority,Behörde
+DocType: Object,Authority address,Adresse Behörde
+DocType: Object,Authority contact,Kontakt Behörde
+DocType: Object,Authority contact name,Kontaktname Behörde
+DocType: Object,Authority contact email,Email Behörde
+DocType: Object,Authority contact phone,Telefon Behörde
+DocType: Object,Community,Gemeinde
+DocType: Object,Community address,Adresse Gemeinde
+DocType: Object,Community contact,Kontakt Gemeinde
+DocType: Object,Community contact name,Kontaktname Gemeinde
+DocType: Object,Community contact email,Email Gemeinde
+DocType: Object,Community contact phone,Telefon Gemeinde
+DocType: Object,Geologist,Geologe
+DocType: Object,Geologist address,Adresse Geologe
+DocType: Object,Geologist contact,Kontakt Geologe
+DocType: Object,Geologist contact name,Kontaktname Geologe
+DocType: Object,Geologist contact email,Email Geologe
+DocType: Object,Geologist contact phone,Telefon Geologe
+DocType: Object,Geometer,Geometer
+DocType: Object,Geometer address,Adresse Geometer
+DocType: Object,Geometer contact,Kontakt Geometer
+DocType: Object,Geometer contact name,Kontaktname Geometer
+DocType: Object,Geometer contact email,Email Geometer
+DocType: Object,Geometer contact phone,Telefon Geometer
+DocType: Object,Parcel,Parzelle
+DocType: Object,Search PLZ,Postleitzahl suchen
+DocType: Object,CH Coordinates,Schweizer Koordindaten
+DocType: Object,GPS Coordinates,GPS-Koordinaten
+DocType: Object,Open Map,Karte öffnen
+DocType: Object,Drilling Details,Bohrdetails
+DocType: Object,Construction site inspected,Baustelle besichtigt
+DocType: Object,Depth,Tiefe
+DocType: Object,Object Specification,Objekt-Spezifikation
+DocType: Object,Object Details,Objekt-Details
+DocType: Object,Are there really no required permits?,Braucht es wirklich keine Bewilligungen?
+DocType: Object,Permit {0} is mandatory but missing,Bewilligung {0} ist zwingend erforderlich aber fehlt
+DocType: Object,Heat capacity,Heizleistung (kW)
+DocType: Object,Cooling capacity,Kälteleistung (kW)
+DocType: Object,Withdrawal capacity,Entzugsleistung (W/m)
+DocType: Object,Drilling meter,Bohrmeter
+DocType: Object,Project EWS,Projektierung Wärmepumpe
+DocType: Object,Expected Mud,Erwarteter Schlamm
+DocType: Object,Delivered Mud,Angelieferter Schlamm
+DocType: Object,End Customer,Endkunde
+DocType: Object,Geology,Geologie
+DocType: Object,Accompaniment,Begleitung
+DocType: Object,Drilling Samples,Bohrproben
+DocType: Object,Assessment,Einschätzung
+DocType: Object,Project Owner,Eigentümer
+DocType: Object,Planned Project,Geplantes Projekt
+DocType: Object,Classification,Klassifizierung
+DocType: Object,Print Owner,Eigentümer andrucken
+DocType: Object,Name (simple),Name (einfach)
+DocType: Object,Simple,Einfach
+DocType: Object,Create project,Projekt erstellen
+DocType: Object,Permits,Bewilligungen
+DocType: Object,Coordinates,Koordinaten
+DocType: Object,Send Mail,Mail senden
+DocType: Object,Checklist and Permits,Checkliste und Bewilligungen
+DocType: Object,Governmental restrictions,Behördliche Auflagen
+DocType: Object,Organisational measures,Betriebliche Massnamhen
+DocType: Object,Progress measurement,Verlaufsmessung
+DocType: Object,Has drilling samples,Mit Bohrproben
+DocType: Object,Drilling sample storage,Lagerort Bohrproben
+DocType: Object,Party,Kunde/Lieferant
+DocType: Object,Staged cementation,Stufenzementation
+DocType: Object,Staged cementation depth,Stufenzementation bei
+DocType: Object,Capabilities,Fähigkeiten
+DocType: Object,Object Address,Objektadresse
+DocType: Object,Information to,Informationen an
+DocType: Object,GPS checked,GPS-Daten kontrolliert
+DocType: Project,Mud Disposer,Schlammentsorger
+DocType: Project,Mud disposer,Schlammentsorger
+DocType: Project,Drilling Equipment,Bohrequipment
+DocType: Project,Start Half-Day,Halbtag Anfang
+DocType: Project,End Half-Day,Halbtag Ende
+DocType: Project,Supplier name,Lieferantenname
+DocType: Project,Checklist,Checkliste
+DocType: Project,Drilling Team,Bohrteam
+DocType: Project,Invoice to,Rechnung an
+DocType: Project,Invoice to name,Rechnung an (Name)
+DocType: Project,Order date,Bestelldatum
+DocType: Project,Appointment,Termin
+DocType: Project,Appointment End,Endtermin
+DocType: Project,Subprojects,Unterprojekte
+DocType: Project,Trough ordered,Mulden bestellt
+DocType: Project,Ask for a Google Review at project end,Bei Projektabschluss um eine Google-Rezension anfragen
+DocType: Project,Google Review,Google Rezension
+DocType: Project,Review Email,Review-Email
+DocType: Project,Project File created,Dossier erstellt
+DocType: Project,Drilling,Bohren
+DocType: Project,Drill order created,Bohrauftrag vorbereitet
+DocType: Project,This document has siblings,Dieses Dokument hat andere Teil-Dokumente
+DocType: Project,Visit date,Besuchstermin
+DocType: Permit Type,Permit Type,Bewilligungsart
+DocType: Permit Type,Permit,Bewilligung
+DocType: Project,Permit number,Bewilligungsnummer
+DocType: Project,Permit date,Bewilligungsdatum
+DocType: Project,Other Projects,Andere Projekte
+DocType: Permit Type,Is Mandatory,Ist zwingend erforderlich
+DocType: Checklist Activity,Checklist Activity,Aktivität
+DocType: Drilling Type,Drilling Type,Bohrart
+DocType: Pressure Level,Pressure Level,Druckstufe
+DocType: Heim Settings,Core Data,Kerndaten
+DocType: Heim Settings,Heim Settings,Heim-Einstellungen
+DocType: Heim Settings,Address Template,Adressvorlage
+DocType: Heim Settings,Is Standard,Ist Standard
+DocType: Heim Settings,Mud Disposer Activity,Schlammentsorger Aktivität
+DocType: Heim Settings,Crane Activity,Kran Aktivität
+DocType: Construction Site Description,Construction Site Description,Baustellenbeschreibung
+DocType: Construction Site Description,Construction Plan,Werkleitungspläne
+DocType: Construction Site Description,Construction Plan checked,Werkleitungspläne geprüft
+DocType: Construction Site Description,Construction Plan File,Werkleitungsplan-Datei
+DocType: Construction Site Description,Checks,Prüfungen
+DocType: Construction Site Description,Pipes checked,Werkleitung sondiert
+DocType: Construction Site Description,Drilling Points marked,Bohrpunkte markiert
+DocType: Construction Site Description,Road,Strasse
+DocType: Construction Site Description,Use public area,Benutzung öffentlicher Grund erforderlich
+DocType: Construction Site Description,Road block required,Absperrung erforderlich
+DocType: Construction Site Description,Road block meters,Laufmeter/Absperrung
+DocType: Construction Site Description,Requires Traffic Tech,Verkehrstechnik erforderlich
+DocType: Construction Site Description,Requires Traffic Light,Lichtsignal aufstellen
+DocType: Construction Site Description,Requires Traffic Control,Verkehrsregelung erforderlich
+DocType: Construction Site Description,Equipment,Ausrüstung
+DocType: Construction Site Description,Internal Crane required,Pneukran Heim erforderlich
+DocType: Construction Site Description,External Crane required,Pneukran extern erforderlich
+DocType: Construction Site Description,Crane Length,Kran-Auslegung
+DocType: Construction Site Description,Crane organized,Kran organisiert
+DocType: Construction Site Description,Site Access,Zufahrt
+DocType: Construction Site Description,Site Access Remarks,Bemerkungen Zufahrt
+DocType: Construction Site Description,Electricity,Stromanschluss
+DocType: Construction Site Description,Water supply,Wasserbezug
+DocType: Construction Site Description,Hydrant number,Hydrantennummer
+DocType: Construction Site Description,Hydrant contact,Hydrantenkontakt
+DocType: Construction Site Description,Additional measures,Zusätzliche Massnahmen
+DocType: Construction Site Description,Protect fassade,Fassade schützen
+DocType: Construction Site Description,Gras cover,Rasenmatte
+DocType: Construction Site Description,Hydrant action,Hydrantenvorgehen
+DocType: Construction Site Description,Plans,Pläne
+DocType: Construction Site Description,Drilling Point Remarks,Anmerkungen Bohrpunkte
+DocType: Construction Site Description,Use public area remarks,Anmerkungen Benutzung öffentlicher Grund
+DocType: Construction Site Description,Distance to drill site,Entfernung bis zum Bohrplatz
+DocType: Construction Site Description,Road block remarks,Bemerkungen Absperrung
+DocType: Construction Site Description,Parking Area,Abstellparkplatz
+DocType: Item,Packaging,Verpackung
+DocType: Item,Wall Strength,Wandstärke
+DocType: Item,Material,Material
+DocType: Item,Related Items,Verwandte Artikel
+DocType: Item Price,Base Rate,Grundpreis
+DocType: Item Price,Discount,Rabatt
+DocType: Item Price,Cost Markup,Teuerungszuschlag
+DocType: Item Price,Skonto Discount,Skonto-Rabatt
+DocType: Raw Material,Raw Material,Werkstoff
+DocType: Quotation,Discount Positions,Abschlagspositonen
+DocType: Quotation,Add Discount,Rabatt hinzufügen
+DocType: Quotation,Object description,Objekttext
+DocType: Purchase Order,We are hereby placing the following order:,Hiermit bestellen wir folgende Positionen:
+DocType: Supplier,Required Activity,Erforderliche Tätigkeit
+DocType: Supplier,Short Display,Kürzel
+DocType: Drilling Team,Drilling rig manufacturer,Hersteller Bohrausrüsting
+DocType: Drilling Team,Drilling rig type,Typenbezeichnung der Bohrausrüstung
+DocType: Drilling Team,Truck and Weight,LKW und Gewicht
+DocType: Drilling Team,Trough Details,Muldendetails
+DocType: Drilling Team,Crane Details,Krandetails
+DocType: Drilling Team,Drilling Master,Bohrmeister
+DocType: Drilling Team,Drilling team type,Bohrteamart
+DocType: Probe Type,Probe Type,Sondenart
+DocType: Probe Type,Diameters,Durchmesser
+DocType: Signature,Signature,Unterschrift
+DocType: Signature,Signature type,Unterschriftenregelung
+DocType: Quotation,Created by,Erstellt durch
+DocType: Quotation,Our contact,Unser Ansprechpartner
+DocType: Quotation,of,von
+DocType: Quotation,Discount Positions,Abzüge
+DocType: Quotation,Markup Positions,Zuschläge
+DocType: Quotation,Base for Markup and Discount,Basis für Zuschläge und Abschläge
+DocType: Quotation,Exclude from Markup and Discount,Bei Zu-/Abschlägen ausschliessen
+DocType: Quotation,Manual depth,Tiefe händisch eingeben (ohne autom. Berechnung)
+DocType: Truck Scale,Truck Scale,Lastwagenwaage
+DocType: Truck,Truck,Fahrzeug
+DocType: Truck,Registration Number,Fahrzeugkennzeichen
+DocType: Truck,Truck owner,LKW-Besitzer
+DocType: Truck,Truck customer,LKW-Kunde
+DocType: Truck,Truck customer name,LKW-Kundenname
+DocType: Truck,Object address,Objektadresse
+DocType: Truck Load Type,Truck Load Type,Ladungsart
+DocType: Truck Load Type,Load Type,Ladungsart
+DocType: Truck Delivery,Truck Delivery,Schlammanlieferung
+DocType: Truck Delivery,Full Weight,Vollgewicht
+DocType: Truck Delivery,Empty Weight,Leergewicht
+DocType: Truck Delivery,Net Weight,Nettogewicht
+Report: Mud to invoice,Mud to invoice,Verrechenbarer Schlamm
+Report: Mud to invoice,Last Delivery Date,Letztes Anlieferdatum
+Page: Schlammanlieferung,Message,Nachricht
+Page: Schlammanlieferung,There is no valid weight recorded,Es wurde kein gültiges Gewicht erfasst.
+Page: Schlammanlieferung,Please provide an object,Bitte ein Objekt angeben
+Page: Schlammanlieferung,No weight,Kein Gewicht
+Page: Schlammanlieferung,Object missing,Objekt fehlt
+DocType: Drilling Method,Drilling Method,Bohrverfahren
+DocType: Customer,Post,Post
+Report: Drilling Rate Evaluation,Drilling Rate Evaluation,Auswertung Bohrpreise
+DocType: Heim Settings,Drilling Item,Bohrartikel
+DocType: Heim Settings,Evaluations,Auswertungen
+DocType: Heim Settings,Projects Folder,Projektordner
+DocType: Drilling Request,Drilling Request,Bohranfrage
+Report Pricing Analysis,Pricing Analysis,Preisfindung
+DocType: Truck Planning,Truck Planning,LKW-Planung
+DocType: Akonto Invoice,Akonto Invoice,Akonto-Rechnung
+DocType: Akonto Invoice,Without Items,Ohne Artikel
+DocType: Akonto Invoice,No Item Net Amount,Betrag ohne Artikel
+DocType: Object Overview,Object Overview,Objektübersicht
+DocType: Purchase Order,No EWS Details,Keine Erdwärmesonden-Details im Objekt definiert
+DocType: Purchase Order,No suitable EWS found,Keine passende Erdwärmesonden gefunden
+DocType: Purchase Order,Reqd By Date,Benötigt bis
+DocType: Construction Site Delivery,Construction Site Delivery,Baustellenlieferung
+DocType: Subcontracting Order,Subcontracting Order,Verlängerungsauftrag
+DocType: Subcontracting Order,Subcontracting Team,Verlängerungsteam
+DocType: Subcontracting Order,Order Description,Auftragsbeschreibung
+DocType: Request for Public Area Use,Request for Public Area Use,Gesuch Benutzung öffentlicher Grund
+DocType: Request for Public Area Use,No Parking Blue,Aufhebung blaue Parkzone
+DocType: Request for Public Area Use,No Parking White,Aufhebung weisse Parkzone
+DocType: Request for Public Area Use,Inform Residents,Anwohner werden informiert
+DocType: Request for Public Area Use,Comply with Minimum Width of 3.5m,Durchfahrtsbreite von 3.5m wird gewährleistet
+DocType: Request for Public Area Use,From Date,Von Datum
+DocType: Request for Public Area Use,To Date,Bis Datum
+DocType: Request for Public Area Use,Invoice Address,Rechnungsadresse
+DocType: Request for Public Area Use,Same as Requestor,Gleich wie Gesuchsteller
+DocType: Request for Public Area Use,Address Name,Adressname
+DocType: Request for Public Area Use,Address Street,Strasse
+DocType: Request for Public Area Use,Address Location,"PLZ, Ort"
+DocType: Request for Public Area Use,Area in m2,Fläche in m2
+DocType: Request for Public Area Use,Installation Plan,Installationsplan
+DocType: Request for Public Area Use,From Customer,Vom Auftraggeber
+DocType: Request for Public Area Use,From Owner,Vom Eigentümer
+DocType: Request for Public Area Use,Different Installation Address,Abweichende Installationsadresse
+DocType: Request for Public Area Use,Installation Street,Strasse (Installation)
+DocType: Request for Public Area Use,Installation Location,Ort der Installation
+Report: General Ledger HBAG,General Ledger HBAG,Hauptbuch HBAG
+Report: Account Sheets HBAG,Account Sheets HBAG,Kontenblätter HBAG
 DocType: Layer Directory,Layer Directory,Schichtenverzeichnis
 DocType: Layer Directory,Drilling number,Bohrungsnummer
 DocType: Layer Directory,Layers,Schichten
@@ -383,9 +383,13 @@ DocType: Injection report,Needed Bentonit,Benötigtes Bentonit
 DocType: Injection report,Needed sacks Bentonit,Benötigte Bentonitsäcke
 DocType: Injection report,Water (L / m3),Wasser (L / m3)
 DocType: Injection report,Sack weight (kg),Sackgewicht (kg)
-DocType: Injection report,Actual grouting consumption,Tatsächliche Verpressmenge
-DocType: Injection report,Actual consumption,Tatsächlicher Verbrauch
+DocType: Injection report,Actual grouting consumption (L),Tatsächliche Verpressmenge (L)
+DocType: Injection report,Actual consumption (kg),Tatsächlicher Verbrauch (kg)
 DocType: Injection report,Drilling details,Bohrdetails
 DocType: Injection report,Base Zement-Bentonit,Basis Zement-Bentonit
 DocType: Injection report,Actual Consumption,Tatsächlicher Verbrauch
 DocType: Injection report,Base Schwenk Füllbinder GTM-hs,Basis Schwenk Füllbinder GTM-hs
+DocType: Injection report,Manual consumption entry,Verbrauch manuell eingeben
+DocType: Injection report,Actual consumption Water (L),Tatsächlicher Verbrauch Wasser (L)
+DocType: Injection report,Actual consumption Zement (kg),Tatsächlicher Verbrauch Zement (kg)
+DocType: Injection report,Actual consumption Bentonit (kg),Tatsächlicher Verbrauch Bentonit (kg)
