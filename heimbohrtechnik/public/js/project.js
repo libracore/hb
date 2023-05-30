@@ -51,7 +51,14 @@ frappe.ui.form.on('Project', {
                 }
             };
         };
-        
+        // filter for events
+        cur_frm.fields_dict['visit_date'].get_query = function(doc) {
+            return {
+                filters: {
+                    "project": frm.doc.name
+                }
+            }
+        }
         // check if mud can be invoiced
         if (!frm.doc.__islocal) {
             frappe.call({

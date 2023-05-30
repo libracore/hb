@@ -1,2 +1,3 @@
 frappe
 webdavclient3
+icalendar
