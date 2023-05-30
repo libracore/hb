@@ -130,6 +130,9 @@ frappe.ui.form.on('Project', {
                     request_review(frm);
                 });
             }
+            // prepare localStorage
+            localStorage.setItem("project", frm.doc.name);
+            localStorage.setItem("project_manager", frm.doc.manager);
         } else {
             // new project: switch to internal and assign name/title
             frappe.call({
