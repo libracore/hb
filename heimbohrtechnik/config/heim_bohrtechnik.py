@@ -102,6 +102,12 @@ def get_data():
                     "name": "Offene Akonto-Rechnungen",
                     "doctype": "Sales Invoice",
                     "is_query_report": True,
+                },
+                {
+                    "type": "report",
+                    "name": "Sales Pipeline",
+                    "doctype": "Customer",
+                    "is_query_report": True,
                 }
             ]
         },

@@ -103,6 +103,7 @@ def get_project_data(p, dauer):
         drilling_equipment = ""
     saugauftrag = 'Schlamm fremd'
     mud = None
+    mud_supplier = None
     pneukran = ''
     pneukran_details = {}
     activities = {
@@ -120,7 +121,7 @@ def get_project_data(p, dauer):
     for cl_entry in project.checklist:
         if cl_entry.activity == activities['mud']:
             saugauftrag = cl_entry.supplier_short_display or cl_entry.supplier_name
-            if cl_entry.supplier == "K-03749":
+            if cl_entry.supplier == "L-03749":
                 flag_override_mud = True
         elif cl_entry.activity == activities['external_crane']:
             pneukran_details = cl_entry.as_dict()
@@ -445,11 +446,13 @@ def get_traffic_lights_indicator(project):
     if int(project.thermozement) == 1:
         objekt_plz_ort_color = BG_BLUE          # blue
     colors.append(objekt_plz_ort_color)         # 4
-    objekt_plz_ort_font_color = 'black;'
+    objekt_plz_ort_font_color = BG_BLACK
     objekt_plz_ort_border_color = ''
     for permit in project.permits:
         if 'Lärmschutzbewilligung' in permit.permit:
-            objekt_plz_ort_font_color = 'red;'
+            objekt_plz_ort_font_color = BG_RED
+            if project.noise_permit_requested:
+                objekt_plz_ort_font_color = BG_ORANGE
             if permit.file:
                 objekt_plz_ort_font_color = BG_DARK_GREEN            # dark green
         #elif 'Strassensperrung' in permit.permit:              # removed by change request RB/2022-10-05
@@ -534,7 +537,7 @@ def has_public_area_request(project):
             `tabRequest for Public Area Use`.`name`,
             `tabRequest for Public Area Use`.`sent` 
         FROM `tabRequest for Public Area Use` 
-        JOIN `tabRelated Project` ON `tabRelated Project`.`parent` = `tabRequest for Public Area Use`.`name` 
+        LEFT JOIN `tabRelated Project` ON `tabRelated Project`.`parent` = `tabRequest for Public Area Use`.`name` 
         WHERE 
             `tabRequest for Public Area Use`.`project` = "{project}" 
             OR (`tabRelated Project`.`parenttype` = "Request for Public Area Use"  
@@ -724,24 +727,26 @@ def get_absences_overlay_datas(from_date, to_date):
             `from_date`,
             `to_date`
         FROM `tabLeave Application`
-        WHERE `status` = 'Approved'
-        AND `docstatus` = 1
-        AND 
+        WHERE 
             (`from_date` BETWEEN '{from_date}' AND '{to_date}')
         OR
             (`to_date` BETWEEN '{from_date}' AND '{to_date}')
         OR
             (`from_date` < '{from_date}' AND `to_date` > '{to_date}')
-        ORDER BY `from_date` ASC, `employee_name` ASC""".format(from_date=from_date, to_date=to_date), as_dict=True)
+        ORDER BY `from_date` ASC, `employee_name` ASC;""".format(from_date=from_date, to_date=to_date), as_dict=True)
     
     for absence in absences_raw:
-        duration = calc_duration(absence.from_date, absence.to_date, from_date, to_date)
+        duration = calc_duration(absence.from_date, absence.to_date, from_date, to_date)     # in ['dauer'] segments
         if not last_date or absence.from_date > last_date:
             shift = 0
         else:
             shift += 20
         if not last_date or absence.to_date > last_date:
-            last_date = absence.to_date
+            # add max. 2 weeks threshold to prevent stacking on long absences (military, ...)
+            if last_date and duration['dauer'] > 22:                    # 22 segments = typically 2 weeks
+                last_date = last_date + timedelta(days=14)
+            else:
+                last_date = absence.to_date
             
         _absence = {
             'start': get_datetime(duration['start']).strftime('%d.%m.%Y'),
@@ -876,32 +881,96 @@ def find_project_conflicts(drilling_team=None):
     for drilling_team in drilling_teams:
         # get all open projects in this drilling team
         projects = frappe.db.sql("""
-            SELECT `name`, `expected_start_date`, `expected_end_date`
+            SELECT `name`, `expected_start_date`, `expected_end_date`, `start_half_day`, `end_half_day`
             FROM `tabProject`
             WHERE
                 `status` IN ("Open", "Completed")
                 AND `drilling_team` = "{0}"
                 AND `expected_start_date` IS NOT NULL
-                AND `expected_end_date` IS NOT NULL
+                AND `expected_end_date` >= CURDATE()
                 AND `name` NOT LIKE "P-INT-%"
             ORDER BY `expected_start_date` ASC, `name` ASC
             """.format(drilling_team['name']), as_dict=True)
             
         if len(projects) > 1:
             for p in range(0, (len(projects) - 1)):
-                if projects[p]['expected_end_date'] > projects[p+1]['expected_start_date']:
+                if projects[p]['expected_end_date'] > projects[p+1]['expected_start_date'] \
+                    or (projects[p]['expected_end_date'] == projects[p+1]['expected_start_date'] and (projects[p]['end_half_day'] == "NM" or projects[p+1]['start_half_day'] == "VM")):
+                    # find by conflict affected subcontracting orders, public area uses, cranes and infomails
                     conflicted_projects.append(
-                        {
-                            'project': projects[p]['name'],
-                            'conflict': projects[p+1]['name'],
-                            'drilling_team': drilling_team['name'],
-                            'details': "{0} > {1}".format(projects[p]['expected_end_date'], projects[p+1]['expected_start_date']),
-                            'url': get_url_to_form("Project", projects[p]['name'])
-                        }
+                        get_conflict_details(p1=projects[p]['name'], p2=projects[p+1]['name'])
                     )
     
     return conflicted_projects
 
+"""
+p1 is the first and p2 the second project
+"""
+def get_conflict_details(p1, p2):
+    p1_doc = frappe.get_doc("Project", p1)
+    p2_doc = frappe.get_doc("Project", p2)
+    ext_crane_activity = frappe.get_cached_value("Heim Settings", "Heim Settings", "crane_activity")
+    
+    # find by conflict affected subcontracting orders, public area uses, cranes and infomails
+    road_blocks = frappe.db.sql("""
+        SELECT 
+            `tabRequest for Public Area Use`.`name`,
+            `tabRequest for Public Area Use`.`from_date`,
+            `tabRequest for Public Area Use`.`to_date`
+        FROM `tabRequest for Public Area Use`
+        LEFT JOIN `tabRelated Project` ON `tabRelated Project`.`parent` = `tabRequest for Public Area Use`.`name`
+        WHERE 
+            `tabRequest for Public Area Use`.`project` = "{project}"
+            OR `tabRelated Project`.`project` = "{project}"
+    """.format(project=p2), as_dict=True)
+    
+    infomails = frappe.db.sql("""
+        SELECT 
+            `tabInfomail`.`name`
+        FROM `tabInfomail`
+        WHERE 
+            `tabInfomail`.`project` = "{project}"
+    """.format(project=p2), as_dict=True)
+    
+    crane = None
+    for c in p2_doc.checklist:
+        if c.activity == ext_crane_activity:
+            crane = {
+                'crane': c.activity,
+                'supplier': c.supplier,
+                'supplier_name': c.supplier_name,
+                'appointment': c.appointment,
+                'appointment_end': c.appointment_end
+            }
+            
+    # find hte next project (adjacent), as this would have a conflict if this conflict is resolved
+    adjacent_project = frappe.db.sql("""
+        SELECT `name`
+        FROM `tabProject`
+        WHERE `drilling_team` = "{drilling_team}"
+          AND (`expected_start_date` = "{same_day}"
+               OR `expected_start_date` = "{next_day}");
+    """.format(drilling_team=p2_doc.drilling_team, same_day=p2_doc.expected_end_date,
+        next_day=(p2_doc.expected_end_date + timedelta(days=1))), as_dict=True)
+    if len(adjacent_project) > 0:
+        adjacent_project = adjacent_project[0]['name']
+    else:
+        adjacent_project = None
+        
+    return {
+        'project': p1,
+        'conflict': p2,
+        'drilling_team': p2_doc.drilling_team,
+        'details': "{0} ({2}) > {1} ({3})".format(p1_doc.expected_end_date, 
+            p2_doc.expected_start_date, p1_doc.end_half_day, p2_doc.start_half_day),
+        'subprojects': p2_doc.subprojects,
+        'road_blocks': road_blocks,
+        'crane': crane,
+        'infomails': infomails,
+        'url': get_url_to_form("Project", p1),
+        'adjacent_project': adjacent_project
+    }
+                    
 """
 Find and prerender conflicts
 """
@@ -999,3 +1068,30 @@ def get_subproject_overview(project):
         return table
     else:
         return """<p>Keine Unterprojekte vorhanden.</p>"""
+
+@frappe.whitelist()
+def get_mfk_overlay_datas(from_date, to_date):
+    sql_query = """
+                    SELECT 
+                    `truck`, 
+                    `drilling_team`, 
+                    `start_time`, 
+                    `end_time`
+                    FROM `tabMFK`
+                    WHERE `start_time` BETWEEN '{from_date}' AND '{to_date}'
+                    OR `end_time` BETWEEN '{from_date}' AND '{to_date}'
+                """.format(from_date=from_date, to_date=to_date)
+                
+    data = frappe.db.sql(sql_query, as_dict=True)
+    mfk_data = []
+    for entry in data:
+        mfk_data.append({
+            'truck': entry.truck,
+            'drilling_team': entry.drilling_team,
+            'start_date': frappe.utils.get_datetime(entry.start_time).strftime('%d.%m.%Y'),
+            'start_time': frappe.utils.get_datetime(entry.start_time).strftime('%H:%M:%S'),
+            'end_date': frappe.utils.get_datetime(entry.end_time).strftime('%d.%m.%Y'),
+            'end_time': frappe.utils.get_datetime(entry.end_time).strftime('%H:%M:%S')
+        })
+    
+    return mfk_data

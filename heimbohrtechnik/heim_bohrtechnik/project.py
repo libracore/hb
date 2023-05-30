@@ -4,6 +4,7 @@
 import frappe
 from frappe import _
 from frappe.utils import get_url_to_form
+from heimbohrtechnik.heim_bohrtechnik.utils import clone_attachments
 
 def before_save(self, method):
     # perform checklist controls
@@ -30,6 +31,7 @@ def split_project(project):
         new_project.project_name += "-1"
     new_project.save()
     frappe.db.commit()
+    clone_attachments("Project", project, "Project", new_project.name)
     return {'project': new_project.name, 'uri': get_url_to_form("Project", new_project.name)}
 
 @frappe.whitelist()

@@ -36,9 +36,11 @@ frappe.ui.form.on('Project', {
         };
         // filter for drilling teams
         cur_frm.fields_dict['drilling_team'].get_query = function(doc) {
-            return {
-                filters: {
-                    "drilling_team_type": "Bohrteam"
+            if (frm.doc.project_type !== "Internal") {
+                return {
+                    filters: {
+                        "drilling_team_type": "Bohrteam"
+                    }
                 }
             }
         }
@@ -152,7 +154,7 @@ frappe.ui.form.on('Project', {
                     }  
                 ],
                 function(values){
-                    cur_frm.set_value("object_name", values.descripton);
+                    cur_frm.set_value("object_name", values.description);
                 },
                 'Beschreibung ändern',
                 'OK'
@@ -168,6 +170,15 @@ frappe.ui.form.on('Project', {
         }
         // fetch visit information
         fetch_visit_date(frm);
+        // show noise permit checkbox if applicable
+        if (frm.doc.permits) {
+            for (var i = 0; i < frm.doc.permits.length; i++) {
+                if (frm.doc.permits[i].permit === "Lärmschutzbewilligung") {
+                    cur_frm.set_df_property("noise_permit_requested", "hidden", 0);
+                    break;
+                }
+            }
+        }
     },
     before_save(frm) {
         // hook to update subcontracting orders in case of changes

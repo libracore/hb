@@ -7,6 +7,9 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
         single_column: true
     });
     
+    // add waiting area
+    frappe.bohrplaner.add_wait(page);
+    
     // set full-width if not
     if (document.getElementsByTagName("body")[0].className != 'full-width') {
         frappe.ui.toolbar.toggle_full_width();
@@ -99,16 +102,9 @@ frappe.bohrplaner = {
         if (frappe.route_options.from && frappe.route_options.project_name) {
             document.getElementById("from").value = frappe.datetime.add_days(frappe.route_options.from, (-1) * locals.planning_past_days);
             document.getElementById("to").value = frappe.datetime.add_days(frappe.route_options.from, locals.planning_days);
-            let date_reset = new Promise(function(ok, nok) {
-                frappe.bohrplaner.reset_dates(page);
-                ok();
-            });
-            date_reset.then(
-                function(value) {
-                    frappe.bohrplaner.mark_project(frappe.route_options.project_name);
-                },
-                function(error) { /* code if some error */ }
-            );
+            
+            frappe.bohrplaner.reset_dates(page);
+            
         }
     },
     get_content: function(page, from_date, to_date) {
@@ -138,41 +134,45 @@ frappe.bohrplaner = {
         return data
     },
     get_overlay_data: function(page) {
-        var from = $("#from").val();
-        var to = $("#to").val();
-        frappe.call({
-           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_overlay_datas",
-           args: {
-                "from_date": from,
-                "to_date": to
-           },
-           async: false,
-           callback: function(response) {
-                var contents = response.message;
-                for (var i = 0; i < contents.length; i++) {
-                    var data = contents[i];
-                    frappe.bohrplaner.add_overlay(page, data);
-                }
-                if (locals.print_view !== 1) {
-                    frappe.bohrplaner.get_subproject_overlay_data(page);
-                }
-           }
-        });
-        frappe.call({
-           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_internal_overlay_datas",
-           args: {
-                "from_date": from,
-                "to_date": to
-           },
-           async: false,
-           callback: function(response) {
-                var contents = response.message;
-                for (var i = 0; i < contents.length; i++) {
-                    var data = contents[i];
-                    frappe.bohrplaner.add_internal_overlay(page, data);
-                }
-           }
-        });
+        // start waiting indicator
+        frappe.bohrplaner.start_wait(page);
+        setTimeout(function(){
+            var from = $("#from").val();
+            var to = $("#to").val();
+            frappe.call({
+               method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_overlay_datas",
+               args: {
+                    "from_date": from,
+                    "to_date": to
+               },
+               async: false,
+               callback: function(response) {
+                    var contents = response.message;
+                    for (var i = 0; i < contents.length; i++) {
+                        var data = contents[i];
+                        frappe.bohrplaner.add_overlay(page, data);
+                    }
+                    if (locals.print_view !== 1) {
+                        frappe.bohrplaner.get_subproject_overlay_data(page);
+                    }
+               }
+            });
+            frappe.call({
+               method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_internal_overlay_datas",
+               args: {
+                    "from_date": from,
+                    "to_date": to
+               },
+               async: false,
+               callback: function(response) {
+                    var contents = response.message;
+                    for (var i = 0; i < contents.length; i++) {
+                        var data = contents[i];
+                        frappe.bohrplaner.add_internal_overlay(page, data);
+                    }
+               }
+            });
+        }, 100);
     },
     get_subproject_overlay_data: function(page) {
         var from = $("#from").val();
@@ -210,6 +210,15 @@ frappe.bohrplaner = {
                     var data = contents[i];
                     frappe.bohrplaner.add_absences_overlay(page, data);
                 }
+                // in case of search, mark project
+                if (frappe.route_options.project_name) {
+                    frappe.bohrplaner.mark_project(frappe.route_options.project_name);
+                }
+                
+                frappe.bohrplaner.add_mfk_overlay(page);
+                
+                // stop waiting indicator
+                frappe.bohrplaner.stop_wait(page);
            }
         });
     },
@@ -221,10 +230,10 @@ frappe.bohrplaner = {
         var box_height = 13;
         var padding = 0;
         if (locals.print_view) { 
-			width = 51 * qty; // compensate for block with
-			box_height = 22;
-			padding = 2;
-		}
+            width = 51 * qty; // compensate for block with
+            box_height = 22;
+            padding = 2;
+        }
         $(frappe.render_template('booking_overlay', {
             'width': width, 
             'box_height': box_height,
@@ -291,6 +300,37 @@ frappe.bohrplaner = {
         })).appendTo(place);
         return
     },
+    add_mfk_overlay: function(page, data) {
+        var from = $("#from").val();
+        var to = $("#to").val();
+        frappe.call({
+           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_mfk_overlay_datas",
+           args: {
+                "from_date": from,
+                "to_date": to
+           },
+           async: false,
+           callback: function(response) {
+                var contents = response.message;
+                for (var i = 0; i < contents.length; i++) {
+                    var data = contents[i];
+                    
+                    var place = $('[data-bohrteam="' + data.drilling_team + '"][data-date="' + data.start_date + '"][data-vmnm="nm"]');
+                    $(place).css("position", "relative");
+                    var width = 42
+                    
+                    $(frappe.render_template('mfk_overlay', {
+                        'truck': data.truck,
+                        'start_date': data.start_date,
+                        'start_time': data.start_time,
+                        'end_date': data.end_date,
+                        'end_time': data.end_time
+                    })).appendTo(place);
+                }
+                return
+           }
+        });
+    },
     reset_dates: function(page) {
         // pre safe scroll-positions
         var top_position = 0;
@@ -312,8 +352,8 @@ frappe.bohrplaner = {
         var view_from = from;
         var view_to = to;
         if (locals.print_view) {            // for print view, use 3 weeks from now
-            view_from = frappe.datetime.add_days(new Date(), 0);
-            view_to = frappe.datetime.add_days(new Date(), 21);
+            //view_from = frappe.datetime.add_days(new Date(), 0);
+            view_to = frappe.datetime.add_days(view_from, 21);
         }
         var data = frappe.bohrplaner.get_content(page, view_from, view_to);
         data['print_view'] = locals.print_view;
@@ -643,6 +683,18 @@ frappe.bohrplaner = {
                 }
             }
         });
+    },
+    add_wait: function(page) {
+        var indicator_area = $(".indicator.whitespace-nowrap.hide");
+        indicator_area.attr('id', 'wait_area');
+        indicator_area.append('<i class="fa fa-spinner fa-spin" style="color: #274b82;"></i>');
+        
+    },
+    start_wait: function(page) {
+        $("#wait_area").removeClass("hide");
+    },
+    stop_wait: function(page) {
+        $("#wait_area").addClass("hide");
     }
 }
 

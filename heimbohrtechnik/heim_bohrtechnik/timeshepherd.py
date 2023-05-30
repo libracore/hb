@@ -122,7 +122,7 @@ def get_absences():
     absences = []
     
     absences = get_absence_page(settings=settings, token=token, employees=employees, 
-        from_date=datetime.now(), to_date=(datetime.now() + relativedelta(months=6)))
+        from_date=datetime.now(), to_date=(datetime.now() + relativedelta(months=(settings.fetch_months or 12))))
     
     """
     Pagination

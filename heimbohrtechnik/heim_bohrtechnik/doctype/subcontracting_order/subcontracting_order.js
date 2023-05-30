@@ -1,4 +1,4 @@
-// Copyright (c) 2022, libracore AG and contributors
+// Copyright (c) 2022-2023, libracore AG and contributors
 // For license information, please see license.txt
 
 frappe.ui.form.on('Subcontracting Order', {
@@ -16,6 +16,11 @@ frappe.ui.form.on('Subcontracting Order', {
         if ((frm.doc.object) && (!frm.doc.project)) {
             cur_frm.set_value("project", frm.doc.object);
         }
+        
+        // create pdf with plans
+        frm.add_custom_button(__("PDF mit Werkleitungen"), function() {
+            create_full_pdf(frm);
+        });
     },
     before_save: function(frm) {
         if (!frm.doc.object_name) {
@@ -70,5 +75,17 @@ function autocomplete_object(frm) {
                 cur_frm.set_value("object", object.name);
             }
         }
+    });
+}
+
+function create_full_pdf(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.create_subcontracting_order_pdf',
+        'args': {'subcontracting_order': frm.doc.name},
+        'callback': function(response) {
+            cur_frm.reload_doc();
+        },
+        'freeze': true,
+        'freeze_message': __("PDF mit Werkplänen erstellen, bitte warten...")
     });
 }

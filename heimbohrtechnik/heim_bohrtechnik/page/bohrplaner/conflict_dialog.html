@@ -13,6 +13,55 @@
             <td>{{ c.conflict }}</td>
             <td>{{ c.details }}</td>
         </tr>
+        {% if c.subprojects or c.crane or c.road_blocks or c.infomails %}
+        <tr>
+            <td colspan=4>
+                {% if c.subprojects %}
+                <p><b>Verlängerungsaufträge:</b><br>
+                {% for s in c.subprojects %}
+                    {% if s.start %}
+                        {{ frappe.utils.get_datetime(s.start).strftime("%d.%m.%Y")  }}
+                    {%- endif -%}-
+                    {%- if s.end -%}
+                        {{ frappe.utils.get_datetime(s.end).strftime("%d.%m.%Y")  }}
+                    {%- endif %}
+                    : {{ s.team }}: {{ s.description }}
+                {% endfor %}
+                </p>
+                {% endif %}
+                {% if c.crane %}
+                <p><b>Kran:</b> 
+                    {% if c.crane.appointment %}
+                        {{ frappe.utils.get_datetime(c.crane.appointment).strftime("%d.%m.%Y %H:%M")  }}
+                    {%- endif -%}-
+                    {%- if c.crane.appointment -%}
+                        {{ frappe.utils.get_datetime(c.crane.appointment_end).strftime("%d.%m.%Y %H:%M")  }}
+                    {%- endif %}
+                    {{ c.crane.supplier_name or "?" }}</p>
+                {% endif %}
+                {% if c.road_blocks %}
+                <p><b>Strassensperrung:</b><br>
+                {% for rb in c.road_blocks %}
+                    {% if rb.from_date %}
+                        {{ frappe.utils.get_datetime(rb.from_date).strftime("%d.%m.%Y")  }}
+                    {%- endif -%}-
+                    {%- if rb.to_date -%}
+                        {{ frappe.utils.get_datetime(rb.to_date).strftime("%d.%m.%Y")  }}
+                    {%- endif %}
+                    : {{ rb.name }}
+                {% endfor %}
+                </p>
+                {% endif %}
+                {% if c.infomails %}
+                <p><b>Infomails:</b><br>
+                {% for i in c.infomails %}
+                    {{ i.name }}
+                {% endfor %}
+                </p>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
     {% endfor %}
 </table>
 
