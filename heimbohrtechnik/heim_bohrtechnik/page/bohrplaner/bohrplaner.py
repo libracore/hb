@@ -324,7 +324,7 @@ def get_subproject_overlay_datas(from_date, to_date):
         WHERE 
             (`tabProject Subproject`.`start` BETWEEN "{from_date}" AND "{to_date}"
             OR `tabProject Subproject`.`end` BETWEEN "{from_date}" AND "{to_date}")
-            AND `tabProject`.`status` = "Open"
+            AND `tabProject`.`status` IN ("Open", "Completed")
         ORDER BY 
             `tabProject Subproject`.`team` ASC, `tabSubcontracting Order`.`prio` ASC;""".format(
             from_date=from_date, to_date=to_date), as_dict=True)
