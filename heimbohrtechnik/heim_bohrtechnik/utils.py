@@ -641,7 +641,7 @@ def create_subcontracting_order_pdf(subcontracting_order):
     # create merger
     merger = PdfFileMerger(strict=False)                    # accept technically incorrect PDFs
     merger.append(pdf_file)
-    # other pages from construction plans
+    # other pages from construction plans (project)
     p_doc = frappe.get_doc("Project", frappe.get_value("Subcontracting Order", subcontracting_order, "project"))
     if p_doc.plans:
         for plan in p_doc.plans:
@@ -649,7 +649,15 @@ def create_subcontracting_order_pdf(subcontracting_order):
                 get_bench_path(), 
                 get_files_path().split("/")[1],
                 plan.file))
-    
+    # other pages from construction plans (subcontracting order)
+    s_doc = frappe.get_doc("Subcontracting Order", subcontracting_order)
+    if s_doc.plans:
+        for plan in s_doc.plans:
+            merger.append("{0}/sites/{1}{2}".format(
+                get_bench_path(), 
+                get_files_path().split("/")[1],
+                plan.file))
+                
     tmp_name = "/tmp/project-dossier-{0}.pdf".format(uuid.uuid4().hex)
     merger.write(tmp_name)
     merger.close()

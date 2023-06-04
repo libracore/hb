@@ -22,7 +22,9 @@
   "section_remarks",
   "remarks",
   "section_images",
-  "images"
+  "images",
+  "sec_plan",
+  "plans"
  ],
  "fields": [
   {
@@ -135,9 +137,20 @@
    "fieldtype": "Select",
    "label": "Prio",
    "options": "1\n2\n3\n4\n5\n6\n7\n8\n9"
+  },
+  {
+   "fieldname": "sec_plan",
+   "fieldtype": "Section Break",
+   "label": "Plans"
+  },
+  {
+   "fieldname": "plans",
+   "fieldtype": "Table",
+   "label": "Plans",
+   "options": "Construction Site Description Plan"
   }
  ],
- "modified": "2022-11-08 15:02:48.246386",
+ "modified": "2023-06-04 21:29:17.758588",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order",

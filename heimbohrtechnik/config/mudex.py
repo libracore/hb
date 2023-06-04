@@ -30,6 +30,12 @@ def get_data():
                     "name": "Mud to invoice",
                     "doctype": "Truck Delivery",
                     "is_query_report": True,
+                },
+                {
+                    "type": "report",
+                    "name": "Mud per Week",
+                    "doctype": "Truck Delivery",
+                    "is_query_report": True,
                 }
             ]
         },
