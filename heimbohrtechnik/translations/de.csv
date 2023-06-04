@@ -396,3 +396,5 @@ DocType: Injection report,Actual consumption Water (L),Tatsächlicher Verbrauch 
 DocType: Injection report,Actual consumption Zement (kg),Tatsächlicher Verbrauch Zement (kg)
 DocType: Injection report,Actual consumption Bentonit (kg),Tatsächlicher Verbrauch Bentonit (kg)
 Report: Mud per Week,Mud per Week,Schlamm pro Woche
+DocType: Expense Claim,Expense Claim,Spesen
+DocType: Expense Claim,VAT included,VSt inkl.
