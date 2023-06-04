@@ -42,7 +42,8 @@ doctype_js = {
     "Item": "public/js/item.js",
     "Item Price": "public/js/item_price.js",
     "Payment Reminder": "public/js/payment_reminder.js",
-    "Event": "public/js/event.js"
+    "Event": "public/js/event.js",
+    "Expense Claim": "public/js/expense_claim.js"
 }
 doctype_list_js = {
     "Item Price" : "public/js/item_price_list.js"
@@ -115,6 +116,10 @@ doc_events = {
     },
     "File": {
         "after_insert": "heimbohrtechnik.heim_bohrtechnik.nextcloud.upload_file"
+    },
+    "Expense Claim": {
+        "on_submit": "heimbohrtechnik.heim_bohrtechnik.expense_claim.submit",
+        "on_cancel": "heimbohrtechnik.heim_bohrtechnik.expense_claim.cancel"
     }
  }
 
