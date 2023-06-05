@@ -879,12 +879,12 @@ def find_project_conflicts(drilling_team=None):
     conflicted_projects = []
     # get all open projects in drilling team
     for drilling_team in drilling_teams:
-        # get all open projects in this drilling team
+        # get all open projects in this drilling team           # 2023-06-05 removed , "Completed" OVe
         projects = frappe.db.sql("""
             SELECT `name`, `expected_start_date`, `expected_end_date`, `start_half_day`, `end_half_day`
             FROM `tabProject`
             WHERE
-                `status` IN ("Open", "Completed")
+                `status` IN ("Open")
                 AND `drilling_team` = "{0}"
                 AND `expected_start_date` IS NOT NULL
                 AND `expected_end_date` >= CURDATE()
