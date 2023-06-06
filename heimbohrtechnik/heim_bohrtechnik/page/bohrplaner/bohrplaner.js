@@ -134,45 +134,52 @@ frappe.bohrplaner = {
         return data
     },
     get_overlay_data: function(page) {
-        // start waiting indicator
-        frappe.bohrplaner.start_wait(page);
-        setTimeout(function(){
-            var from = $("#from").val();
-            var to = $("#to").val();
-            frappe.call({
-               method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_overlay_datas",
-               args: {
-                    "from_date": from,
-                    "to_date": to
-               },
-               async: false,
-               callback: function(response) {
-                    var contents = response.message;
-                    for (var i = 0; i < contents.length; i++) {
-                        var data = contents[i];
-                        frappe.bohrplaner.add_overlay(page, data);
-                    }
-                    if (locals.print_view !== 1) {
-                        frappe.bohrplaner.get_subproject_overlay_data(page);
-                    }
-               }
-            });
-            frappe.call({
-               method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_internal_overlay_datas",
-               args: {
-                    "from_date": from,
-                    "to_date": to
-               },
-               async: false,
-               callback: function(response) {
-                    var contents = response.message;
-                    for (var i = 0; i < contents.length; i++) {
-                        var data = contents[i];
-                        frappe.bohrplaner.add_internal_overlay(page, data);
-                    }
-               }
-            });
-        }, 100);
+        if (locals.print_view) {
+            frappe.bohrplaner._get_overlay_data(page);
+        } else {
+             // start waiting indicator
+            frappe.bohrplaner.start_wait(page);
+            setTimeout(function(){
+                frappe.bohrplaner._get_overlay_data(page);
+            }, 100);
+        }
+    },
+    _get_overlay_data: function(page) {
+        var from = $("#from").val();
+        var to = $("#to").val();
+        frappe.call({
+           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_overlay_datas",
+           args: {
+                "from_date": from,
+                "to_date": to
+           },
+           async: false,
+           callback: function(response) {
+                var contents = response.message;
+                for (var i = 0; i < contents.length; i++) {
+                    var data = contents[i];
+                    frappe.bohrplaner.add_overlay(page, data);
+                }
+                if (locals.print_view !== 1) {
+                    frappe.bohrplaner.get_subproject_overlay_data(page);
+                }
+           }
+        });
+        frappe.call({
+           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_internal_overlay_datas",
+           args: {
+                "from_date": from,
+                "to_date": to
+           },
+           async: false,
+           callback: function(response) {
+                var contents = response.message;
+                for (var i = 0; i < contents.length; i++) {
+                    var data = contents[i];
+                    frappe.bohrplaner.add_internal_overlay(page, data);
+                }
+           }
+        });
     },
     get_subproject_overlay_data: function(page) {
         var from = $("#from").val();
