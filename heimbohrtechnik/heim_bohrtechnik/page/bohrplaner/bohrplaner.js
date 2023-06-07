@@ -148,13 +148,13 @@ frappe.bohrplaner = {
         var from = $("#from").val();
         var to = $("#to").val();
         frappe.call({
-           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_overlay_datas",
-           args: {
+           'method': "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_overlay_datas",
+           'args': {
                 "from_date": from,
                 "to_date": to
            },
-           async: false,
-           callback: function(response) {
+           'async': false,
+           'callback': function(response) {
                 var contents = response.message;
                 for (var i = 0; i < contents.length; i++) {
                     var data = contents[i];
@@ -166,13 +166,13 @@ frappe.bohrplaner = {
            }
         });
         frappe.call({
-           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_internal_overlay_datas",
-           args: {
+           'method': "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_internal_overlay_datas",
+           'args': {
                 "from_date": from,
                 "to_date": to
            },
-           async: false,
-           callback: function(response) {
+           'async': false,
+           'callback': function(response) {
                 var contents = response.message;
                 for (var i = 0; i < contents.length; i++) {
                     var data = contents[i];
@@ -185,13 +185,13 @@ frappe.bohrplaner = {
         var from = $("#from").val();
         var to = $("#to").val();
         frappe.call({
-           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_subproject_overlay_datas",
-           args: {
+           'method': "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_subproject_overlay_datas",
+           'args': {
                 "from_date": from,
                 "to_date": to
            },
-           async: false,
-           callback: function(response) {
+           'async': false,
+           'callback': function(response) {
                 var contents = response.message;
                 for (var i = 0; i < contents.length; i++) {
                     var data = contents[i];
@@ -205,13 +205,13 @@ frappe.bohrplaner = {
         var from = $("#from").val();
         var to = $("#to").val();
         frappe.call({
-           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_absences_overlay_datas",
-           args: {
+           'method': "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_absences_overlay_datas",
+           'args': {
                 "from_date": from,
                 "to_date": to
            },
-           async: false,
-           callback: function(response) {
+           'async': false,
+           'callback': function(response) {
                 var contents = response.message;
                 for (var i = 0; i < contents.length; i++) {
                     var data = contents[i];
@@ -311,13 +311,13 @@ frappe.bohrplaner = {
         var from = $("#from").val();
         var to = $("#to").val();
         frappe.call({
-           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_mfk_overlay_datas",
-           args: {
+           'method': "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_mfk_overlay_datas",
+           'args': {
                 "from_date": from,
                 "to_date": to
            },
-           async: false,
-           callback: function(response) {
+           'async': false,
+           'callback': function(response) {
                 var contents = response.message;
                 for (var i = 0; i < contents.length; i++) {
                     var data = contents[i];
@@ -408,14 +408,18 @@ frappe.bohrplaner = {
     show_detail_popup: function(elemnt) {
         var _project = $(elemnt).attr("data-popupvalue");
         frappe.call({
-            "method": "frappe.client.get",
-            "args": {
-                "doctype": "Project",
-                "name": _project
+            'method': "frappe.client.get",
+            'args': {
+                'doctype': "Project",
+                'name': _project
             },
-            "callback": function(response) {
+            'callback': function(response) {
                 var project = response.message;
 
+                // prepare localStorage
+                localStorage.setItem("project", project.name);
+                localStorage.setItem("project_manager", project.manager);
+            
                 if (project) {
                     frappe.call({
                         "method": "frappe.client.get",
@@ -432,6 +436,7 @@ frappe.bohrplaner = {
                                     'project': project.name,
                                     'sales_order': project.sales_order,
                                     'object_location': object.object_location,
+                                    'object_street': object.object_street,
                                     'cloud_url': project.cloud_url
                                 };
                                 
@@ -529,10 +534,17 @@ frappe.bohrplaner = {
                                             'label': __('Visit date'), 
                                             'fieldtype': 'Link', 
                                             'options': 'Event', 
-                                            'default': project.visit_date
+                                            'default': project.visit_date,
+                                            'get_query': function(doc) {
+                                                return {
+                                                    filters: {
+                                                        "project": project.name
+                                                    }
+                                                }
+                                            }
                                         },
                                     ],
-                                    primary_action: function(){
+                                    'primary_action': function(){
                                         d.hide();
                                         var reshedule_data = d.get_values();
                                         // reschedule_project
@@ -554,8 +566,8 @@ frappe.bohrplaner = {
                                             }
                                         });
                                     },
-                                    primary_action_label: __('Reshedule'),
-                                    title: __("Details")
+                                    'primary_action_label': __('Reshedule'),
+                                    'title': __("Details")
                                 });
                                 d.fields_dict.ht.$wrapper.html(html);
                                 d.show();
@@ -654,7 +666,7 @@ frappe.bohrplaner = {
                         'fields': [
                             {'fieldname': 'ht', 'fieldtype': 'HTML'}
                         ],
-                        primary_action: function(){
+                        'primary_action': function(){
                             d.hide();
                             frappe.prompt([
                                     {
@@ -682,8 +694,8 @@ frappe.bohrplaner = {
                             )
 
                         },
-                        primary_action_label: __('Resolve'),
-                        title: __("Conflicts")
+                        'primary_action_label': __('Resolve'),
+                        'title': __("Conflicts")
                     });
                     d.fields_dict.ht.$wrapper.html(r.message);
                     d.show();
@@ -768,26 +780,26 @@ function drop(ev) {
 function reshedule(ref_id, team, day, start_half_day, lanetype) {
     if (lanetype == 'Project') {
         frappe.call({
-           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.reschedule_project",
-           args: {
+           'method': "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.reschedule_project",
+           'args': {
                 "project": ref_id,
                 "team": team,
                 "day": day,
                 "start_half_day": start_half_day
            },
-           callback: function(response) {
+           'callback': function(response) {
                 
            }
         });
     } else {
         frappe.call({
-           method: "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.reschedule_subcontracting",
-           args: {
+           'method': "heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.reschedule_subcontracting",
+           'args': {
                 "subcontracting": ref_id,
                 "team": team,
                 "day": day
            },
-           callback: function(response) {
+           'callback': function(response) {
                 
            }
         });
@@ -808,7 +820,7 @@ function print_content(page, from, to) {
         'args': {
             'html': bp_html
         },
-        callback: function(r) {
+        'callback': function(r) {
             window.open(r.message, '_blank');
             
             // reset from print
