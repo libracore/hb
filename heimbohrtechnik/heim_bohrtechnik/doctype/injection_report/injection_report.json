@@ -62,11 +62,11 @@
  ],
  "fields": [
   {
-   "default": "IB-.YY.-.#####",
+   "default": "IB-.YY.#####",
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Naming Series",
-   "options": "IB-.YY.-.#####"
+   "options": "IB-.YY.#####"
   },
   {
    "fieldname": "project",
@@ -385,7 +385,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2023-06-07 19:56:39.388807",
+ "modified": "2023-06-07 19:58:13.583960",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Injection report",
@@ -435,5 +435,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+ "title_field": "object_name",
  "track_changes": 1
 }
