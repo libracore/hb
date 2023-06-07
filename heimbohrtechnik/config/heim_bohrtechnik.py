@@ -262,6 +262,24 @@ def get_data():
             ]
         },
         {
+            "label": _("Expense Claims"),
+            "icon": "fa fa-money",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "Expense Claim",
+                   "label": _("Expense Claim"),
+                   "description": _("Expense Claim")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Gas Receipt",
+                   "label": _("Gas Receipt"),
+                   "description": _("Gas Receipt")
+                }
+            ]
+        },
+        {
             "label": _("Human Resources"),
             "icon": "fa fa-money",
             "items": [

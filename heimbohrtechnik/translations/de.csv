@@ -398,3 +398,4 @@ DocType: Injection report,Actual consumption Bentonit (kg),Tatsächlicher Verbra
 Report: Mud per Week,Mud per Week,Schlamm pro Woche
 DocType: Expense Claim,Expense Claim,Spesenabrechnung
 DocType: Expense Claim,VAT included,VSt inkl.
+DocType: Gas Receipt,Gas Receipt,Tankbeleg
