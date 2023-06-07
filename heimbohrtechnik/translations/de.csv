@@ -185,6 +185,7 @@ DocType: Project,Drill order created,Bohrauftrag vorbereitet
 DocType: Project,This document has siblings,Dieses Dokument hat andere Teil-Dokumente
 DocType: Project,Visit date,Besuchstermin
 DocType: Project,Noise permit required,Lärmschutzbewilligung erforderlich
+DocType: Project,Noise permit requested,Lärmschutzbewilligung beantragt
 DocType: Permit Type,Permit Type,Bewilligungsart
 DocType: Permit Type,Permit,Bewilligung
 DocType: Project,Permit number,Bewilligungsnummer

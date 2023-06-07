@@ -18,6 +18,8 @@ BG_GREY = '#c4c7ca;'
 BG_BLUE = '#9dc7f0;'
 BG_WHITE = '#ffffff;'
 BG_BLACK = '#000000;'
+BG_DARK_RED = '#8b0000;' # '#7b241c'
+BG_DARK_ORANGE = '#d76400;'
 
 WEEKDAYS = {
     0: "So",
@@ -385,9 +387,9 @@ def get_traffic_lights_indicator(project):
     objekt_plz_ort_border_color = ''
     for permit in project.permits:
         if 'Lärmschutzbewilligung' in permit.permit:
-            objekt_plz_ort_font_color = BG_RED
-            if project.noise_permit_requested:
-                objekt_plz_ort_font_color = BG_ORANGE
+            objekt_plz_ort_font_color = BG_DARK_RED
+            if cint(project.noise_permit_requested):
+                objekt_plz_ort_font_color = BG_DARK_ORANGE
             if permit.file:
                 objekt_plz_ort_font_color = BG_DARK_GREEN            # dark green
         #elif 'Strassensperrung' in permit.permit:              # removed by change request RB/2022-10-05
