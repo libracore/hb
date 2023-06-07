@@ -529,16 +529,8 @@ frappe.bohrplaner = {
                                         {
                                             'fieldname': 'visit_date', 
                                             'label': __('Visit date'), 
-                                            'fieldtype': 'Link', 
-                                            'options': 'Event', 
-                                            'default': project.visit_date,
-                                            'get_query': function(doc) {
-                                                return {
-                                                    filters: {
-                                                        "project": project.name
-                                                    }
-                                                }
-                                            }
+                                            'fieldtype': 'Date', 
+                                            'default': project.visit_date
                                         },
                                     ],
                                     'primary_action': function(){
