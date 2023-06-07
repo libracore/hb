@@ -29,27 +29,30 @@ def get_calendar(secret, user=None):
     if not user:
         sql_query = """
             SELECT * 
-            FROM `tabEvent` 
-            WHERE `event_type` = 'Public';
+            FROM `tabProject` 
+            WHERE `visit_date` IS NOT NULL;
         """
     else:
         sql_query = """
             SELECT * 
-            FROM `tabEvent` 
+            FROM `tabProject` 
             WHERE 
-                `event_type` = 'Public'
+                `visit_date` IS NOT NULL
                 AND `project_manager` = "{user}";
         """.format(user=user)
-    events = frappe.db.sql(sql_query, as_dict=True)
-    # add events
-    for erp_event in events:
+    visits = frappe.db.sql(sql_query, as_dict=True)
+    # add visits
+    for erp_visit in visits:
         event = Event()
-        event.add('summary', erp_event['subject'])
-        event.add('dtstart', erp_event['starts_on'])
-        if erp_event['ends_on']:
-            event.add('dtend', erp_event['ends_on'])
+        event.add('summary', erp_event['name'])
+        event.add('dtstart', erp_event['visit_date'])
+        #if erp_event['ends_on']:
+        #    event.add('dtend', erp_event['ends_on'])
         event.add('dtstamp', erp_event['modified'])
-        event.add('description', erp_event['description'])
+        event.add('description', "{0}\n\r{1}\n\r{2}".format(
+            erp_event['object_name'], 
+            erp_event['object_street'], 
+            erp_event['object_location']))
         # add to calendar
         cal.add_component(event)
     

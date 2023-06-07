@@ -51,14 +51,6 @@ frappe.ui.form.on('Project', {
                 }
             };
         };
-        // filter for events
-        cur_frm.fields_dict['visit_date'].get_query = function(doc) {
-            return {
-                filters: {
-                    "project": frm.doc.name
-                }
-            }
-        }
         // check if mud can be invoiced
         if (!frm.doc.__islocal) {
             frappe.call({
@@ -137,9 +129,6 @@ frappe.ui.form.on('Project', {
                     request_review(frm);
                 });
             }
-            // prepare localStorage
-            localStorage.setItem("project", frm.doc.name);
-            localStorage.setItem("project_manager", frm.doc.manager);
         } else {
             // new project: switch to internal and assign name/title
             frappe.call({
@@ -178,8 +167,6 @@ frappe.ui.form.on('Project', {
             cur_frm.set_df_property('customer_details', 'hidden', 1);
             cur_frm.set_df_property('section_subprojects', 'hidden', 1);
         }
-        // fetch visit information
-        fetch_visit_date(frm);
         // show noise permit checkbox if applicable
         if (frm.doc.permits) {
             for (var i = 0; i < frm.doc.permits.length; i++) {
@@ -252,32 +239,4 @@ function request_review(frm) {
         'freeze': true,
         'freeze_message': __("Google Rezension anfragen...")
     });
-}
-
-function fetch_visit_date(frm) {
-    if (frm.doc.visit_date) {
-        frappe.call({
-            'method': "frappe.client.get",
-            'args': {
-                'doctype': "Event",
-                'name': frm.doc.visit_date
-            },
-            'callback': function(response) {
-                var visit_event = response.message;
-
-                if (visit_event) {
-                    var info = "<p>" 
-                        + (visit_event.starts_on ? (new Date(visit_event.starts_on)).toLocaleString() : "??") 
-                        + " - " 
-                        + (visit_event.ends_on ? (new Date(visit_event.starts_on)).toLocaleString() : "??") 
-                        + "</p>";
-                    cur_frm.set_df_property('visit_info_html', 'options', info);
-                }
-            }
-        });
-    } else {
-        // clear
-        console.log("clear");
-        cur_frm.set_df_property('visit_info_html', 'options', "<div></div>");
-    }
 }

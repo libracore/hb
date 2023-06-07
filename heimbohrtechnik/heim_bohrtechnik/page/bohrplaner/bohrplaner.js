@@ -416,10 +416,6 @@ frappe.bohrplaner = {
             },
             'callback': function(response) {
                 var project = response.message;
-
-                // prepare localStorage
-                localStorage.setItem("project", project.name);
-                localStorage.setItem("project_manager", project.manager);
             
                 if (project) {
                     frappe.call({
