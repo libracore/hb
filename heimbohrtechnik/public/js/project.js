@@ -102,6 +102,10 @@ frappe.ui.form.on('Project', {
             frm.add_custom_button(__("Bohrauftrag"), function() {
                 create_pdf(frm);
             }, __("PDFs"));
+            // create and attach for combined SV+IB pdf
+            frm.add_custom_button(__("SV+IB"), function() {
+                create_sv_ib(frm);
+            }, __("PDFs"));
             
             // for external projects
             if (frm.doc.project_type === "External") {
@@ -225,6 +229,18 @@ function create_pdf(frm) {
         },
         'freeze': true,
         'freeze_message': __("Bohrauftrag (pdf) erstellen, bitte warten...")
+    });
+}
+
+function create_sv_ib(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.update_attached_sv_ib_pdf',
+        'args': {'project': frm.doc.name},
+        'callback': function(response) {
+            cur_frm.reload_doc();
+        },
+        'freeze': true,
+        'freeze_message': __("SV+IB(pdf) erstellen, bitte warten...")
     });
 }
 

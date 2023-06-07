@@ -564,6 +564,21 @@ def update_attached_project_pdf(project):
     execute("Project", project, title=project, print_format="Bohrauftrag")
     return
 
+"""
+Update attached drilling instruction pdf
+"""
+@frappe.whitelist()
+def update_attached_sv_ib_pdf(project):
+    # check if this is already attached
+    attachments = get_attachments("Project", project)
+    title = "SV-IB-{0}.pdf".format(project)
+    for a in attachments:
+        if a.file_name == title:
+            remove_file(a.name, "Project", project)
+    # create and attach
+    execute("Project", project, title=title, print_format="SV+IB", file_name=title)
+    return
+
 """ 
 Create a full project file
 """
