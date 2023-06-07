@@ -699,12 +699,14 @@ def get_user_planning_days(user):
     if frappe.db.exists("Signature", user):
         return {
             'planning_days': frappe.get_value("Signature", user, "planning_days") or 30,
-            'planning_past_days': frappe.get_value("Signature", user, "planning_past_days") or 0
+            'planning_past_days': frappe.get_value("Signature", user, "planning_past_days") or 0,
+            'print_block_length_factor': frappe.get_value("Heim Settings", "Heim Settings", "block_length_factor") or 51
         }
     else:
         return {
             'planning_days': 30,
-            'planning_past_Days': 0
+            'planning_past_Days': 0,
+            'print_block_length_factor': frappe.get_value("Heim Settings", "Heim Settings", "block_length_factor") or 51
         }
     
 @frappe.whitelist()

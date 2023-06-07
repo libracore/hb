@@ -63,9 +63,10 @@ frappe.bohrplaner = {
             'args': {
                 'user': frappe.session.user
             },
-            callback: function(response) {
+            'callback': function(response) {
                 locals.planning_days = response.message.planning_days;
                 locals.planning_past_days = response.message.planning_past_days;
+                locals.print_block_length_factor = response.message.print_block_length_factor;
             }
         });
         
@@ -237,7 +238,7 @@ frappe.bohrplaner = {
         var box_height = 13;
         var padding = 0;
         if (locals.print_view) { 
-            width = 51 * qty; // compensate for block with
+            width = locals.print_block_length_factor * qty; // compensate for block with
             box_height = 22;
             padding = 2;
         }
