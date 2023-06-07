@@ -898,3 +898,41 @@ def clone_attachments(source_dt, source_name, target_dt, target_name):
     
     return
     
+@frappe.whitelist()
+def quick_entry_purchase_invoice(company, supplier, date, bill_no, item, 
+    amount, cost_center, taxes_and_charges, project=None, remarks=None):
+    
+    pinv = frappe.get_doc({
+        'doctype': 'Purchase Invoice',
+        'company': company,
+        'supplier': supplier,
+        'posting_date': date, 
+        'project': project, 
+        'bill_no': bill_no, 
+        'cost_center': cost_center, 
+        'taxes_and_charges': taxes_and_charges, 
+        'terms': remarks,
+        'title': frappe.get_value("Supplier", supplier, "supplier_name")
+    })
+    
+    pinv.append("items", {
+        'item_code': item,
+        'qty': 1,
+        'rate': amount,
+        'amount': amount
+    })
+    
+    if project:
+        p_doc = frappe.get_doc("Project", project)
+        pinv.object = p_doc.object
+    
+    taxes = frappe.get_doc("Purchase Taxes and Charges Template", taxes_and_charges)
+    for t in taxes.taxes:
+        pinv.append("taxes", t)
+        
+    pinv.set_missing_values()
+    pinv.calculate_taxes_and_totals()
+    pinv.flags.ignore_validate = True
+    pinv.save()
+    
+    return pinv.name

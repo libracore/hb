@@ -29,7 +29,7 @@ function mutate_prices(selected) {
                 }
         });
     },
-    __('Presimutation'),
+    __('Preismutation'),
     __('Anwenden')
     )
 }
