@@ -951,3 +951,29 @@ def quick_entry_purchase_invoice(company, supplier, date, bill_no, item,
     pinv.save()
     
     return pinv.name
+
+"""
+Identify the header information from the last "Bohranzeige" sent for a project
+"""
+@frappe.whitelist()
+def find_bohranzeige_mail_header(project):
+    # first, find drilling notices for this project
+    dns = frappe.get_all("Bohranzeige", filters={'project': project}, fields=['name'])
+    header = {
+        'date': None,
+        'recipients': None,
+        'cc': None
+    }
+    if len(dns) > 0:
+        for dn in dns:
+            # find communication
+            comms = frappe.get_all("Communication", 
+                filters={'reference_name': dn['name'], 'reference_doctype': 'Bohranzeige'}, 
+                fields=['name', 'communication_date', 'recipients', 'cc'])
+            if len(comms) > 0:
+                if not header['date'] or comms[0]['communication_date'] > header['date']:
+                    header['date'] = comms[0]['communication_date']
+                    header['recipients'] = comms[0]['recipients']
+                    header['cc'] = comms[0]['cc']
+                    
+    return header

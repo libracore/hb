@@ -127,6 +127,10 @@ def upload_file(self, event):
             physical_file_name = get_physical_path(self.name)
             write_project_file_from_local_file (project, physical_file_name, PATHS['admin'])
     
+    elif self.attached_to_doctype == "Project":
+        physical_file_name = get_physical_path(self.name)
+        write_project_file_from_local_file (self.attached_to_name, physical_file_name, PATHS['drilling'])
+        
     return
 
 """
