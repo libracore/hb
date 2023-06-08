@@ -1,13 +1,12 @@
 // Copyright (c) 2022-2023, libracore and contributors
 // For license information, please see license.txt
 
-frappe.listview_settings['Purchase Invoice'] = {
-    onload: function(listview) {
-        listview.page.add_menu_item(__("Quick Entry"), function() {
-            quick_entry();
-        });
-    }
-};
+frappe.listview_settings['Purchase Invoice']['onload'] = function(listview) {   // note: extend the exiting settings
+    listview.page.add_menu_item(__("Quick Entry"), function() {
+        quick_entry();
+    });
+}
+
 
 function quick_entry() {
     var d = new frappe.ui.Dialog({
