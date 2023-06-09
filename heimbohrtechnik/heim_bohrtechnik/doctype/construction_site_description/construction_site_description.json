@@ -199,7 +199,7 @@
    "fieldname": "crane_length",
    "fieldtype": "Select",
    "label": "Crane Length",
-   "options": "\n10m\n15m\n20m\n30m"
+   "options": "\n10m\n15m\n20m\n25m\n30m\n35m\n40m"
   },
   {
    "fieldname": "sec_access",
@@ -336,7 +336,7 @@
    "label": "Parking Area"
   }
  ],
- "modified": "2023-04-04 19:10:16.009832",
+ "modified": "2023-06-02 09:05:25.125043",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",

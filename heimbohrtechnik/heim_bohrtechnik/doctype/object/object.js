@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2022, libracore AG and contributors
+// Copyright (c) 2021-2023, libracore AG and contributors
 // For license information, please see license.txt
 
 // child table filter sets
@@ -73,9 +73,9 @@ frappe.ui.form.on('Object', {
         if (!frm.doc.__islocal) {
             // check if project exists
             frappe.call({
-                method: 'has_project',
-                doc: frm.doc,
-                callback: function(response) {
+                'method': 'has_project',
+                'doc': frm.doc,
+                'callback': function(response) {
                     if (response.message === 1) {
                         // has a project
                         frm.add_custom_button( frm.doc.name, function() {
@@ -88,6 +88,23 @@ frappe.ui.form.on('Object', {
                                 checklists[i].parentElement.parentElement.parentElement.parentElement.style.display = "None";
                             }
                         } catch { /* do nothing */ }
+                        
+                        // try to add cloud button
+                        frappe.call({
+                            'method': "frappe.client.get",
+                            'args': {
+                                'doctype': "Project",
+                                'name': frm.doc
+                            },
+                            'callback': function(response) {
+                                var project = response.message;
+                                if (response.cloud_url) {
+                                    frm.add_custom_button(__("Cloud"), function() {
+                                        window.open(frm.doc.cloud_url, '_blank').focus();
+                                    });
+                                }
+                            } 
+                        });
                     } else {
                         // has no project
                         frm.add_custom_button(__('Create project'), function() {
