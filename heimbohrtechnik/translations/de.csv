@@ -27,12 +27,14 @@ Page: Drill Planner,The Mud Disposer was organized,Der Schlammentsorger wurde or
 Page: Drill Planner,Drill notice sent,Die Bohranzeige wurde versendet
 Page: Drill Planner,Drill notice <b>not</b> sent,Die Bohranzeige wurde <b>noch nicht</b> versendet
 Page: Drill Planner,Soft Reload,Aktualisieren
-Page: Drill Planner,Reshedule,Umplanen
+Page: Drill Planner,Reschedule,Umplanen
 Page: Drill Planner,Absences,Abwesenheiten
 Page: Drill Planner,Auto Update,Autom. aktualisieren
 Page: Drill Planner,Disable Auto Update,Automatisch aktualisieren ausschalten
 Page: Drill Planner,Find conflicts,Probleme finden
 Page: Drill Planner,Search project,Projekt finden
+Page: Drill Planner,Resolve conflicts,Probleme lösen
+Page: Drill Planner,Resolve,Lösen
 DocType: Object,Object,Objekt
 DocType: Object,Object name,Objektname
 DocType: Object,Object Name,Objektname

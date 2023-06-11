@@ -509,10 +509,11 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
         project_duration = date_diff(end_date, start_date)
         delta = timedelta(days=project_duration)
         
-        new_project_start_day = day.split(".")[0]
-        new_project_start_month = day.split(".")[1]
-        new_project_start_year = day.split(".")[2]
-        new_project_start = getdate(new_project_start_year + "-" + new_project_start_month + "-" + new_project_start_day)
+        if day:
+            new_project_start_day = day.split(".")[0]
+            new_project_start_month = day.split(".")[1]
+            new_project_start_year = day.split(".")[2]
+            new_project_start = getdate(new_project_start_year + "-" + new_project_start_month + "-" + new_project_start_day)
         
         new_project_end_date = new_project_start + delta
         
@@ -540,6 +541,12 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
             correction = floor(project_duration_workdays - new_working_days)
             if correction != 0:
                 new_project_end_date = new_project_end_date + timedelta(days=correction)
+        
+        # if this ends in a weekend, shorten to before weekend
+        end_workdays = get_working_days(new_project_end_date, project.end_half_day, new_project_end_date, project.end_half_day)
+        while end_workdays <= 0:            # get working days will yield -0.5 on a weekend
+            new_project_end_date = new_project_end_date + timedelta(days=-1)
+            end_workdays = get_working_days(new_project_end_date, project.end_half_day, new_project_end_date, project.end_half_day)
         
         project.expected_start_date = new_project_start
         project.expected_end_date = new_project_end_date
@@ -853,7 +860,7 @@ def find_project_conflicts(drilling_team=None):
                 AND `expected_start_date` IS NOT NULL
                 AND `expected_end_date` >= CURDATE()
                 AND `name` NOT LIKE "P-INT-%"
-            ORDER BY `expected_start_date` ASC, `name` ASC
+            ORDER BY `expected_start_date` ASC, `modified` DESC
             """.format(drilling_team['name']), as_dict=True)
             
         if len(projects) > 1:
@@ -952,40 +959,34 @@ Resolve conflicts of a drilling team
 """
 @frappe.whitelist()
 def resolve_conflicts(drilling_team, debug=True):
-    # prepare trace
-    resolution_trace = ""
     # get all conflicts
     conflicts = find_project_conflicts(drilling_team)
     # iterate to resolve conflicts
     while (len(conflicts) > 0):
-        # find the later project
-        later_project = frappe.get_doc("Project", conflicts[0]['conflict'])
-        # determine duration
-        start_date = later_project.expected_start_date
-        end_date = later_project.expected_end_date
-        project_duration = date_diff(end_date, start_date)
-        duration = timedelta(days=project_duration)
-        # move later project to the end of the earlier project
-        later_project.expected_start_date = frappe.get_value("Project", conflicts[0]['project'], 'expected_end_date') + timedelta(days=1)
-        # check weekends
-        weekday = later_project.expected_start_date.weekday()
-        if weekday > 4:         # Sat = 5, Sun = 6
-            later_project.expected_start_date = later_project.expected_start_date + timedelta(days=(7 - weekday))
-        # move end according to duration
-        later_project.expected_end_date = later_project.expected_start_date + duration
-        # save
-        later_project.save()
-        frappe.db.commit()
-        # store trace
-        resolution_trace += "Moved {p} from {s1}..{e1} to {s2}..{e2} ({p_prev})\n".format(
-            p=later_project.name, s1=start_date, e1=end_date, 
-            s2=later_project.expected_start_date, e2=later_project.expected_end_date,
-            p_prev=conflicts[0]['project'])
+        # find next start
+        if frappe.get_value("Project", conflicts[0]['project'], 'end_half_day') == "VM":       # ends on VM/morning
+            next_half_day = "NM"
+            next_date = frappe.get_value("Project", conflicts[0]['project'], 'expected_end_date')
+        else:                               # ends on NM / afternoon: next day
+            next_half_day = "VM"
+            next_date = frappe.get_value("Project", conflicts[0]['project'], 'expected_end_date') + timedelta(days=1)
+        # make sure new start is not on a holiday
+        workdays = get_working_days(next_date, next_half_day, next_date, next_half_day)
+        while workdays <= 0:            # get working days will yield -0.5 on a weekend
+            next_date = next_date + timedelta(days=1)
+            workdays = get_working_days(next_date, next_half_day, next_date, next_half_day)
+            
+        # move later project to next available date
+        reschedule_project(
+            project=conflicts[0]['conflict'], 
+            team=drilling_team,
+            new_project_start=next_date,
+            start_half_day=next_half_day,
+            popup=False
+        )
+        
         # iterate to find next conflict
         conflicts = find_project_conflicts(drilling_team)
-    
-    if debug:
-        frappe.log_error( resolution_trace, "Resolve conflicts for {0}".format(drilling_team) )
         
     return
 

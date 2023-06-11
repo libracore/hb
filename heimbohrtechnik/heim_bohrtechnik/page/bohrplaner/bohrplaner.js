@@ -555,7 +555,7 @@ frappe.bohrplaner = {
                                             }
                                         });
                                     },
-                                    'primary_action_label': __('Reshedule'),
+                                    'primary_action_label': __('Reschedule'),
                                     'title': __("Details")
                                 });
                                 d.fields_dict.ht.$wrapper.html(html);
@@ -679,7 +679,7 @@ frappe.bohrplaner = {
                                     });
                                 },
                                 __('Resolve conflicts'),
-                                __('resolve')
+                                __('Resolve')
                             )
 
                         },
