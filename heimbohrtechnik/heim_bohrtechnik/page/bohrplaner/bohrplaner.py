@@ -8,6 +8,7 @@ from frappe.utils.data import getdate, date_diff, add_days, get_datetime
 from datetime import date, timedelta
 from frappe.desk.form.load import get_attachments
 from frappe.utils import cint, get_url_to_form
+from math import floor
 
 BG_GREEN = '#81d41a;'
 BG_ORANGE = '#ffbf00;'
@@ -502,6 +503,9 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
     if not popup:
         start_date = project.expected_start_date
         end_date = project.expected_end_date
+        # find duration in workdays
+        project_duration_workdays = get_working_days(project.expected_start_date, project.start_half_day, project.expected_end_date, project.end_half_day)
+        
         project_duration = date_diff(end_date, start_date)
         delta = timedelta(days=project_duration)
         
@@ -510,25 +514,35 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
         new_project_start_year = day.split(".")[2]
         new_project_start = getdate(new_project_start_year + "-" + new_project_start_month + "-" + new_project_start_day)
         
-        new_project_end_date = new_project_start
-        new_project_end_date += delta
+        new_project_end_date = new_project_start + delta
         
-        project.expected_start_date = new_project_start
-        project.expected_end_date = new_project_end_date
-        
+        # half day correction
         if project.start_half_day != start_half_day.upper():
             old_start_hd = project.start_half_day
             project.start_half_day = start_half_day.upper()
-            if old_start_hd == 'NM':
+            if old_start_hd == 'NM':                # start from NM to VM (earlier)
                 if project.end_half_day == 'NM':
                     project.end_half_day = 'VM'
                 else:
                     project.end_half_day = 'NM'
-            else:
+                    new_project_end_date = new_project_end_date + timedelta(days=-1)     # move to prior day
+            else:                                   # start from VM to NM (later)
                 if project.end_half_day == 'VM':
                     project.end_half_day = 'NM'
                 else:
                     project.end_half_day = 'VM'
+                    new_project_end_date = new_project_end_date + timedelta(days=1)     # move to next day
+                    
+        # verify working days
+        correction = 1
+        while correction != 0:
+            new_working_days = get_working_days(new_project_start, project.start_half_day, new_project_end_date, project.end_half_day)
+            correction = floor(project_duration_workdays - new_working_days)
+            if correction != 0:
+                new_project_end_date = new_project_end_date + timedelta(days=correction)
+        
+        project.expected_start_date = new_project_start
+        project.expected_end_date = new_project_end_date
         
         project.drilling_team = team
         project.crane_organized = '0'
@@ -541,6 +555,7 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
         project.drilling_team = team
         project.crane_organized = '0'
         project.save()
+    return
 
 @frappe.whitelist()
 def reschedule_subcontracting(subcontracting=None, team=None, day=None):
@@ -611,6 +626,16 @@ def get_days(from_date, to_date):
     
     return date_list, weekend_list, kw_list, day_list, today
 
+# find the number of full/half working days
+def get_working_days(start_date, start_half_day, end_date, end_half_day):
+    date_list, weekend_list, kw_list, day_list, today = get_days(start_date, end_date)
+    project_duration_workdays = len(date_list) - len(weekend_list)
+    if start_half_day == "NM":
+        project_duration_workdays -= 0.5
+    if end_half_day == "VM":
+        project_duration_workdays -= 0.5
+    return project_duration_workdays
+    
 def get_weekend_day_correction(from_date, to_date):
     start_date = getdate(from_date)
     end_date = getdate(to_date)
