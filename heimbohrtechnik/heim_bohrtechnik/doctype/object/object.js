@@ -94,13 +94,13 @@ frappe.ui.form.on('Object', {
                             'method': "frappe.client.get",
                             'args': {
                                 'doctype': "Project",
-                                'name': frm.doc
+                                'name': frm.doc.name
                             },
                             'callback': function(response) {
                                 var project = response.message;
-                                if (response.cloud_url) {
+                                if (project.cloud_url) {
                                     frm.add_custom_button(__("Cloud"), function() {
-                                        window.open(frm.doc.cloud_url, '_blank').focus();
+                                        window.open(project.cloud_url, '_blank').focus();
                                     });
                                 }
                             } 
