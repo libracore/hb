@@ -958,11 +958,12 @@ Identify the header information from the last "Bohranzeige" sent for a project
 @frappe.whitelist()
 def find_bohranzeige_mail_header(project):
     # first, find drilling notices for this project
-    dns = frappe.get_all("Bohranzeige", filters={'project': project}, fields=['name'])
+    dns = frappe.get_all("Bohranzeige", filters={'project': project}, fields=['name', 'bewilligung'])
     header = {
         'date': None,
         'recipients': None,
-        'cc': None
+        'cc': None,
+        'permit': None
     }
     if len(dns) > 0:
         for dn in dns:
@@ -975,5 +976,7 @@ def find_bohranzeige_mail_header(project):
                     header['date'] = comms[0]['communication_date']
                     header['recipients'] = comms[0]['recipients']
                     header['cc'] = comms[0]['cc']
-                    
+            
+            header['permit'] = dn['bewilligung']
+            
     return header
