@@ -367,7 +367,7 @@ def check_resolve_overlaps(employee, from_date, to_date):
           AND `status` IN ("Open", "Approved")
           AND `to_date` >= "{from_date}"
           AND `from_date` <= "{to_date}";
-        """.format(employee=employee, from_date=from_date, to_date=to_date), as_dict=True)
+        """.format(employee=employee, from_date=from_date, to_date=to_date), as_dict=True):
         
         # push to cancelled stage
         frappe.db.sql("""

@@ -158,6 +158,12 @@ def get_data():
                     "is_query_report": True,
                 },
                 {
+                   "type": "doctype",
+                   "name": "ZUGFeRD Wizard",
+                   "label": _("ZUGFeRD Wizard"),
+                   "description": _("ZUGFeRD Wizard")
+                },
+                {
                    "type": "page",
                    "name": "approval-manager",
                    "label": _("Approval Manager"),
