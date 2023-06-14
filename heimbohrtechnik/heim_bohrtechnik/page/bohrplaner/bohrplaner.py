@@ -32,12 +32,15 @@ WEEKDAYS = {
     6: "Sa"
 }
 @frappe.whitelist()
-def get_overlay_datas(from_date, to_date, customer=None):
+def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
     projects = []
     
     customer_filter = ""
     if customer:
         customer_filter =  """ AND `tabProject`.`customer` = "{customer}" """.format(customer=customer)
+    drilling_team_filter = ""
+    if drilling_team:
+        drilling_team_filter = """ AND `tabProject`.`drilling_team` = '{drilling_team}'""".format(drilling_team=drilling_team)
         
     matching_projects = frappe.db.sql("""
         SELECT 
@@ -57,7 +60,10 @@ def get_overlay_datas(from_date, to_date, customer=None):
              OR (`expected_start_date` < '{from_date}' AND `expected_end_date` > '{to_date}')
             )
           {customer_filter}
-        """.format(from_date=from_date, to_date=to_date, customer_filter=customer_filter), as_dict=True)
+          {drilling_team_filter}
+        ORDER BY
+            `tabProject`.`expected_start_date` ASC;
+        """.format(from_date=from_date, to_date=to_date, customer_filter=customer_filter, drilling_team_filter=drilling_team_filter), as_dict=True)
 
     for p in matching_projects:
         if p.expected_start_date < getdate(from_date):
@@ -783,6 +789,50 @@ def print_bohrplaner(html):
     _file.save(ignore_permissions=True)
     
     return _file.file_url
+    
+def render_template(start_date):
+    end_date = frappe.utils.add_days(start_date, 21)
+    # ~ print(start_date, end_date)
+    data = {
+        'grid': get_content(start_date, end_date, only_teams=False),
+        'start_date': start_date
+        }
+    # ~ print(data)
+    html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
+    frappe.log_error(html, "Hoi Lars!")
+    
+def get_projects(start_date, drilling_team):
+    end_date = frappe.utils.add_days(start_date, 21)
+    projects = get_overlay_datas(start_date, end_date, drilling_team=drilling_team)
+    # ~ print("{0}".format(projects))
+    html = ''''''
+    colspan = 0
+    i = 0
+    for project in projects:
+        colspan = (projects[i]['dauer'])*2
+        html += '''
+        <td colspan="{0}">PROJEKT DU MASCHINE :-)</td>'''.format(colspan)
+        i += 1
+        # ~ print(colspan)
+         
+    return html
+    
+# ~ def get_projects(start_date, grid):
+    # ~ end_date = frappe.utils.add_days(start_date, 21)
+    # ~ grid = get_content(start_date, end_date, customer=None)
+    # ~ liste = ''''''
+    # ~ print("{0}".format(grid['days']))
+    # ~ for day in grid['days']:
+        # ~ if day == 'days':
+            # ~ liste.append("")
+            # ~ if day not in grid['weekend']:
+                # ~ liste += '''<td>Du Machine</td><td>Du Machine</td>'''
+            # ~ else:
+                # ~ if grid['day_list'][day] != 'Sun':
+                    # ~ liste += '''<td>Du Machine</td>'''
+         
+    # ~ return liste
+
 
 """
 In open projects, find conflicts with regional holidays.

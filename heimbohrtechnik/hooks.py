@@ -59,7 +59,8 @@ jenv = {
         "get_object_address:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_object_address",
         "get_object_addresses:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_object_addresses",
         "get_checklist_details:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_checklist_details",
-        "get_permit_details:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_permit_details"
+        "get_permit_details:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_permit_details",
+        "get_projects:heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_projects"
     ]
 }
 
