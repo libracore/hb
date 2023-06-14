@@ -927,6 +927,7 @@ def quick_entry_purchase_invoice(company, supplier, date, bill_no, item,
         'cost_center': cost_center, 
         'taxes_and_charges': taxes_and_charges, 
         'terms': remarks,
+        'remarks': remarks,
         'title': frappe.get_value("Supplier", supplier, "supplier_name")
     })
     
