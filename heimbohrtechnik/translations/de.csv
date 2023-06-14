@@ -403,3 +403,5 @@ DocType: Expense Claim,Expense Claim,Spesenabrechnung
 DocType: Expense Claim,VAT included,VSt inkl.
 DocType: Gas Receipt,Gas Receipt,Tankbeleg
 DocType: Purchase Invoice,Quick Entry,Schnellerfassung
+Page: Approval Manager,Approval Manager,Freigabe-Manager
+Page: Approval Manager,Decision,Entscheid
