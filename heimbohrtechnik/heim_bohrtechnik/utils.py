@@ -571,9 +571,9 @@ Update attached drilling instruction pdf
 def update_attached_sv_ib_pdf(project):
     # check if this is already attached
     attachments = get_attachments("Project", project)
-    title = "SV-IB-"
+    title = "SV-IB-{0}.pdf".format(project)
     for a in attachments:
-        if a.file_name.startswith(title):
+        if a.file_name.startswith("SV-IB-"):
             remove_file(a.name, "Project", project)
     # create and attach
     execute("Project", project, title=title, print_format="SV+IB", file_name=title)
