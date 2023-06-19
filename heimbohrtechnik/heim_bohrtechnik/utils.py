@@ -579,6 +579,21 @@ def update_attached_sv_ib_pdf(project):
     execute("Project", project, title=title, print_format="SV+IB", file_name=title)
     return
 
+"""
+Update attached construction site description pdf
+"""
+@frappe.whitelist()
+def update_attached_csd_pdf(construction_site_description):
+    # check if this is already attached
+    attachments = get_attachments("Construction Site Description", construction_site_description)
+    title = "{0}.pdf".format(construction_site_description)
+    for a in attachments:
+        if a.file_name.startswith(construction_site_description):
+            remove_file(a.name, "Construction Site Description", construction_site_description)
+    # create and attach
+    execute("Construction Site Description", construction_site_description, title=title, print_format="Baustellenbeschreibung", file_name=title)
+    return
+    
 """ 
 Create a full project file
 """

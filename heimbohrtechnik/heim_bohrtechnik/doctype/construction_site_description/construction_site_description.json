@@ -1,9 +1,11 @@
 {
+ "autoname": "naming_series:",
  "creation": "2021-05-11 20:27:15.911100",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "object",
   "project",
   "column_main",
@@ -334,9 +336,16 @@
    "fieldname": "parking_area",
    "fieldtype": "Data",
    "label": "Parking Area"
+  },
+  {
+   "default": "BBS-.YY.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "BBS-.YY.#####"
   }
  ],
- "modified": "2023-06-02 09:05:25.125043",
+ "modified": "2023-06-19 23:25:42.167102",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
