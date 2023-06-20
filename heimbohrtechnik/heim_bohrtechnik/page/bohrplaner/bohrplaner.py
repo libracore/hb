@@ -756,7 +756,7 @@ def print_bohrplaner(html):
     from frappe.utils.pdf import get_file_data_from_writer
     from erpnextswiss.erpnextswiss.attach_pdf import create_folder
     
-    bohrplaner_css = frappe.read_file("{0}{1}".format(frappe.utils.get_bench_path(), "/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css"))
+    bohrplaner_css = get_bohrplaner_css()
 
     html = html + """<body>
         <meta name="pdfkit-orientation" content="Portrait"/><style>
@@ -789,33 +789,121 @@ def print_bohrplaner(html):
     _file.save(ignore_permissions=True)
     
     return _file.file_url
-    
+
+def get_bohrplaner_css():
+    return frappe.read_file("{0}{1}".format(frappe.utils.get_bench_path(), "/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css"))
+
 def render_template(start_date):
-    end_date = frappe.utils.add_days(start_date, 21)
+    end_date = frappe.utils.add_days(start_date, 20)
+
     # ~ print(start_date, end_date)
     data = {
-        'grid': get_content(start_date, end_date, only_teams=False),
-        'start_date': start_date
-        }
+        'grid': get_content(start_date, end_date, only_teams=True),
+        'start_date': start_date,
+        'drilling_teams': {},
+        'css': get_bohrplaner_css()
+    }
     # ~ print(data)
+    for drilling_team in data['grid']['drilling_teams']:
+        projects = get_overlay_datas(start_date, end_date, drilling_team=drilling_team['team_id'])
+        # here, insert add placeholders for gaps
+        data['drilling_teams'][drilling_team['team_id']] = projects
+        
     html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
     frappe.log_error(html, "Hoi Lars!")
     
-def get_projects(start_date, drilling_team):
-    end_date = frappe.utils.add_days(start_date, 21)
-    projects = get_overlay_datas(start_date, end_date, drilling_team=drilling_team)
+    print(print_bohrplaner(html))
+    
+    
+    
+# ~ def get_projects(start_date, drilling_team):
+    # ~ end_date = frappe.utils.add_days(start_date, 20)
+    # ~ projects = get_overlay_datas(start_date, end_date, drilling_team=drilling_team)
     # ~ print("{0}".format(projects))
-    html = ''''''
-    colspan = 0
-    i = 0
-    for project in projects:
-        colspan = (projects[i]['dauer'])*2
-        html += '''
-        <td colspan="{0}">PROJEKT DU MASCHINE :-)</td>'''.format(colspan)
-        i += 1
+    # ~ html = ''''''
+    # ~ colspan = 0
+    # ~ for project in projects:
+        # ~ colspan = (project['dauer'])
+        
+        # ~ if project['project'].customer_name:
+            # ~ customer_name = project['project'].customer_name
+        # ~ else:
+            # ~ customer_name = '''&nbsp;'''
+        
+        # ~ if project['project'].object_name:
+            # ~ object_name = project['project'].object_name
+        # ~ else:
+            # ~ object_name = '''&nbsp;'''
+            
+        # ~ if project['project'].object_street:
+            # ~ object_street = project['project'].object_street
+        # ~ else:
+            # ~ object_street = '''&nbsp;'''
+            
+        # ~ if project['project'].object_location:
+            # ~ object_location = project['project'].object_location
+        # ~ else:
+            # ~ object_location = '''&nbsp;'''
+            
+        # ~ if project['project'].ews_details:
+            # ~ ews_details = project['project'].ews_details.replace("PN20", "<b>PN20</b>").replace("PN35", "<b>PN35</b>")
+        # ~ else:
+            # ~ ews_details = '''&nbsp;'''
+            
+        # ~ if project['saugauftrag']:
+            # ~ saugauftrag = project['saugauftrag']
+        # ~ else:
+            # ~ saugauftrag = '''&nbsp;'''
+            
+        # ~ if project['pneukran']:
+            # ~ pneukran = project['pneukran']
+        # ~ else:
+            # ~ pneukran = '''&nbsp;'''
+        
+        # ~ if project['drilling_equipment']:
+            # ~ drilling_equipment = project['drilling_equipment']
+        # ~ else:
+            # ~ drilling_equipment = '''&nbsp;'''
+            
+        # ~ if project['manager_short']:
+            # ~ manager_short = project['manager_short']
+        # ~ else:
+            # ~ manager_short = '''&nbsp;'''
+        
+        # ~ height = '''13'''        
+        # ~ padding = '''0'''
+        
+        # ~ html += '''
+        # ~ <td colspan="{0}">
+        # ~ <div style="background-color: {1} min-width:35px; height: {25}px; padding-top: {26}px !important;">{2}</div>
+        # ~ <div style="background-color: {3} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{4}</div>
+        # ~ <div style="background-color: {5} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{6}</div>
+        # ~ <div style="background-color: {7} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{8}</div>
+        # ~ <div style="background-color: {9} color: {10}  {11} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{12}</div>
+        # ~ <div style="background-color: {13} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;" class="ews-details">{14}</div>
+        # ~ <div style="background-color: {15} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{16}</div>
+        # ~ <div style="background-color: {17} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{18}</div>
+        # ~ <div style="background-color: {19} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{20}</div>
+        # ~ <div style="float:left; min-width:35px; max-width:35px; background-color: {21} color: {22} overflow: hidden; height: 13px; padding-top: 0px !important;">{23}</div>
+        # ~ <div style="float:left; min-width:35px; max-width:35px; background-color: {24} height: {25}px; padding-top: {26}px !important;">&nbsp;</div>
+        # ~ </td>'''.format(colspan, \
+                        # ~ project['ampeln'][0], project['project'].name, \
+                        # ~ project['ampeln'][1], customer_name, \
+                        # ~ project['ampeln'][2], object_name, \
+                        # ~ project['ampeln'][3], object_street, \
+                        # ~ project['ampeln'][4], project['ampeln'][5], project['ampeln'][6], object_location, \
+                        # ~ project['ampeln'][7], ews_details, \
+                        # ~ project['ampeln'][8], saugauftrag, \
+                        # ~ project['ampeln'][9], pneukran, \
+                        # ~ project['ampeln'][10], drilling_equipment, \
+                        # ~ project['ampeln'][11], project['ampeln'][11], manager_short, \
+                        # ~ project['ampeln'][12], \
+                        # ~ height, padding \
+                        # ~ )
         # ~ print(colspan)
+        
          
-    return html
+    # ~ return html
     
 # ~ def get_projects(start_date, grid):
     # ~ end_date = frappe.utils.add_days(start_date, 21)

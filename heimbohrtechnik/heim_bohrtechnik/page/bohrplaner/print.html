@@ -1,26 +1,37 @@
+<style>
+.booking_overlay {
+    width: auto !important;
+    position: relative !important;
+    min-height: 195px !important;
+    max-height: 195px !important;
+}
+
+.header_additional {
+    width: 120px;
+}
+
+table {
+    border-collapse: collapse !important;
+}
+
+
+{{ css }}
+</style>
 <table>
     <thead>
         <tr>
-            <th rowspan="2" class="calendar-grid-header">
-                <div class="form-group">
-                    <label for="from">{{ _("From") }}</label>
-                    <input type="date" class="form-control" id="from">
-                </div>
-                <div class="form-group">
-                    <label for="to">{{ _("To") }}</label>
-                    <input type="date" class="form-control" id="to">
-                </div> 
+            <th rowspan="2" class="sticky-corner calendar-grid-header">
             </th>
             {% for day in grid.days %}
                 {% if grid.day_list[day] != "Sun" %}
                     {% if grid.day_list[day] != "Sat" %}
-                        <th colspan="2" class="calendar-grid-header no-border-bottom
+                        <th colspan="2" class="sticky-top calendar-grid-header header_additional no-border-bottom
                             {% if day == today %}today{% endif %}
                             {% if day in grid.weekend %}weekend{% endif %}">
                             KW {{ grid.kw_list[day] }}<br>{{ day }}<br>({{ _(grid.day_list[day]) }})
                         </th>
                     {% else %}
-                        <th class="calendar-grid-header no-border-bottom
+                        <th class="sticky-top calendar-grid-header no-border-bottom
                             {% if day == today %}today{% endif %}
                             weekend">
                             KW {{ grid.kw_list[day] }}<br>WE
@@ -33,16 +44,16 @@
             {% for day in grid.days %}
                 {% if grid.day_list[day] != "Sun" %}
                     {% if grid.day_list[day] != "Sat" %}
-                        <th class="calendar-grid-header no-border-top-rigth-dotted
+                        <th class="sticky-top-small calendar-grid-header no-border-top-rigth-dotted
                             {% if day == today %}today{% endif %}
                             {% if day in grid.weekend %}weekend{% endif %}">
                             VM</th>
-                        <th class="calendar-grid-header no-border-top-left-dotted
+                        <th class="sticky-top-small calendar-grid-header no-border-top-left-dotted
                             {% if day == today %}today{% endif %}
                             {% if day in grid.weekend %}weekend{% endif %}">
                             NM</th>
                     {% else %}
-                        <th class="calendar-grid-header
+                        <th class="sticky-top-small calendar-grid-header
                             {% if day == today %}today{% endif %}
                             weekend" style="border-top: None;"></th>
                     {% endif %}
@@ -50,33 +61,36 @@
             {% endfor %}
         </tr>
     </thead>
-    <body>
+    <tbody>
     {% for drilling_team in grid.drilling_teams %}
-        {% if drilling_team.drilling_team_type == "Bohrteam" %}
-                <tr>
-                    <td class="">
-                        <b>{{ drilling_team.title }} - {{ drilling_team.drilling_team_type }}</b><br>
-                        {% if drilling_team.drm %}{{ drilling_team.drm }}, {% endif %}{% if drilling_team.drt %}{{ drilling_team.drt }}{% endif %}<br>
-                        {% if drilling_team.truck_and_weight %}{{ drilling_team.truck_and_weight }}<br>{% endif %}
-                        {% if drilling_team.has_trough == 1 %}
-                            <a class="drilling_team-tooltip" href="/desk#bohrplaner">
-                                <img src="/assets/heimbohrtechnik/images/trough.png" width="24">
-                            </a>
-                        {% endif %} {% if drilling_team.has_crane == 1 %}
-                            <a class="drilling_team-tooltip" href="/desk#bohrplaner">
-                                <img src="/assets/heimbohrtechnik/images/crane_hook.png" width="24">
-                            </a>
-                        {% endif %}
-                        {% if drilling_team.phone %}
-                            <a class="drilling_team-tooltip" href="tel:{{ drilling_team.phone }}">
-                                <img src="/assets/heimbohrtechnik/images/phone.png" width="24">
-                            </a>
-                        {% endif %}
-                    </td>
-                    {% set projects = get_projects(start_date, drilling_team.team_id) %}
-                    {{ projects }}
-                </tr>
-        {% endif %}
+        <tr>
+            <td class="sticky-left">
+                <b>{{ drilling_team.title }} - {{ drilling_team.drilling_team_type }}</b><br>
+                {% if drilling_team.drm %}{{ drilling_team.drm }}, {% endif %}{% if drilling_team.drt %}{{ drilling_team.drt }}{% endif %}<br>
+                {% if drilling_team.truck_and_weight %}{{ drilling_team.truck_and_weight }}<br>{% endif %}
+                {% if drilling_team.has_trough == 1 %}
+                    <a class="drilling_team-tooltip" href="/desk#bohrplaner">
+                        <img src="/assets/heimbohrtechnik/images/trough.png" width="24">
+                    </a>
+                {% endif %} {% if drilling_team.has_crane == 1 %}
+                    <a class="drilling_team-tooltip" href="/desk#bohrplaner">
+                        <img src="/assets/heimbohrtechnik/images/crane_hook.png" width="24">
+                    </a>
+                {% endif %}
+                {% if drilling_team.phone %}
+                    <a class="drilling_team-tooltip" href="tel:{{ drilling_team.phone }}">
+                        <img src="/assets/heimbohrtechnik/images/phone.png" width="24">
+                    </a>
+                {% endif %}
+            </td>
+            {% for project in drilling_teams[drilling_team.team_id] %}
+                {% if project.update({'box_height': 20 }) %}{% endif %}
+                {% if project.update({'padding': 5 }) %}{% endif %}
+                <td colspan="{{ project['dauer'] }}">
+                    {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/booking_overlay.html", project) }}
+                </td>
+            {% endfor %}
+        </tr>
     {% endfor %}
-    </body>
+    </tbody>
 </table>
