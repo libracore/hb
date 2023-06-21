@@ -150,7 +150,35 @@ class Object(Document):
             return (data[0]['weight_kg'])
         else:
             return 0
-            
+    
+    def get_ews_details(self):
+        if len(self.ews_specification) == 0:
+            return ""
+
+        v = self.ews_specification[0];
+        details = ""
+        if self.ews_specification:
+            if v.ews_diameter_unit == "Zoll":
+                # for springs
+                details = "{0}x {1}m {2} {3}".format((v.ews_count or "?"),
+                    (v.ews_depth or "?"), (v.ews_diameter or "?"), (v.ews_diameter_unit or ""))
+                if len(self.ews_specification) > 1:
+                    v = self.ews_specification[1]
+                    details += ", {0}x {1}m {2} {3}".format((v.ews_count or "?"),
+                        (v.ews_depth or "?"), (v.ews_diameter or "?"), (v.ews_diameter_unit or ""))
+            else:
+                detail_list = []
+                for s in self.ews_specification:
+                    _details = "{0}x{1}-{2}".format((s.ews_count or "?"),
+                        (s.ews_depth or "?"), (s.ews_diameter or "?"))
+                    if s.pressure_level and "PN16" not in s.pressure_level:
+                        _details += " {0}".format((s.pressure_level or "").split("/")[0])
+                    if self.drilling_type == "Brunnen":
+                        _details = "Brunnen " + _details
+                    detail_list.append(_details)
+                details = ", ".join(detail_list)
+        return details
+        
 @frappe.whitelist()
 def get_key():
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(32))

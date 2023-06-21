@@ -512,4 +512,35 @@ def update_item_price(item_price, discount, markup, skonto):
     doc.price_list_rate = rate
     doc.save()
     return
-    
+
+""" 
+Function to update the ews detail strings in objects and projects
+
+Run with
+ $ bench execute heimbohrtechnik.heim_bohrtechnik.migration.update_ews_details
+ 
+"""
+def update_ews_details():
+    print("Updating ews details in objects and projects...")
+    objects = frappe.get_all("Object", fields=['name'])
+    for o in objects:
+        print("Updating object {0}...".format(o['name']))
+        doc = frappe.get_doc("Object", o['name'])
+        doc.ews_details = doc.get_ews_details()
+        try:
+            doc.save()
+        except Exception as err:
+            print("Failed: {0}".format(err))
+    frappe.db.commit()
+    projects = frappe.get_all("Project", filters=[['name', 'LIKE', 'P-2%']], fields=['name'])
+    for p in projects:
+        print("Updating project {0}...".format(p['name']))
+        doc = frappe.get_doc("Project", p['name'])
+        if doc.object:
+            doc.ews_details = frappe.get_value("Object", doc.object, "ews_details")
+        try:
+            doc.save()
+        except Exception as err:
+            print("Failed: {0}".format(err))
+    print("done")
+    return
