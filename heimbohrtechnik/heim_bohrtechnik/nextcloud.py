@@ -57,6 +57,8 @@ def create_project_folder(project):
 
 def get_project_path(project):
     projects_folder = frappe.get_value("Heim Settings", "Heim Settings", "projects_folder")
+    # only use base project folder (for split projects the first one
+    project = project[:8] if len(project) >= 8 else project
     if not projects_folder:
         frappe.throw("Please configure the projects folder under Heim Settings", "Configuration missing")
         
@@ -94,6 +96,8 @@ This function gets the cloud link to a project
 @frappe.whitelist()
 def get_cloud_url(project):
     settings = frappe.get_doc("Heim Settings", "Heim Settings")
+    # only use base project folder (for split projects the first one
+    project = project[:8] if len(project) >= 8 else project
     return "{0}/index.php/apps/files/?dir=/{1}/{2}".format(settings.cloud_hostname, settings.projects_folder, project)
 
 """ 
