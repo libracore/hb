@@ -578,16 +578,16 @@ def update_attached_sv_ib_pdf(project):
     for a in attachments:
         if a.file_name.startswith("SV-P-") or a.file_name.startswith("IB-P-"):
             remove_file(a.name, "Project", project)
-            
+        
     # SV 
     title = "SV-{0} {1}, {2}.pdf".format(project, street, location)
     # create and attach
-    execute("Project", project, title=title, print_format="SV combined", file_name=title)
+    execute("Project", project, title=project, print_format="SV combined", file_name=title)
     
     # IB 
     title = "IB-{0} {1}, {2}.pdf".format(project, street, location)
     # create and attach
-    execute("Project", project, title=title, print_format="IB combined", file_name=title)
+    execute("Project", project, title=project, print_format="IB combined", file_name=title)
     return
 
 """
@@ -598,11 +598,12 @@ def update_attached_csd_pdf(construction_site_description):
     # check if this is already attached
     attachments = get_attachments("Construction Site Description", construction_site_description)
     title = "{0}.pdf".format(construction_site_description)
+    project = frappe.get_value("Construction Site Description", construction_site_description, "project")
     for a in attachments:
         if a.file_name.startswith(construction_site_description):
             remove_file(a.name, "Construction Site Description", construction_site_description)
     # create and attach
-    execute("Construction Site Description", construction_site_description, title=title, print_format="Baustellenbeschreibung", file_name=title)
+    execute("Construction Site Description", construction_site_description, title=project, print_format="Baustellenbeschreibung", file_name=title)
     return
     
 """ 
@@ -640,10 +641,7 @@ def create_full_project_file(project):
     merger.write(tmp_name)
     merger.close()
     cleanup(pdf_file)
-    
-    # send full file to nextcloud
-    write_project_file_from_local_file(project, tmp_name)
-    
+        
     # attach
     # check if this is already attached
     target_name = "Dossier_{name}.pdf".format(name=project.replace(" ", "-").replace("/", "-"))
