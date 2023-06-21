@@ -129,7 +129,6 @@ function recalculate_markups_discounts(frm) {
                     frappe.model.set_value(markup.doctype, markup.name, "basis", amount);
                 }
                 amount += markup.amount;
-                console.log(amount);
                 total_discount -= markup.amount;
             }
         });
@@ -143,7 +142,6 @@ function recalculate_markups_discounts(frm) {
                 frappe.model.set_value(discount.doctype, discount.name, "basis", amount);
             }
             amount -= discount.amount;
-            console.log(amount);
             total_discount += discount.amount;
         });
     }
@@ -157,7 +155,6 @@ function recalculate_markups_discounts(frm) {
                     frappe.model.set_value(markup.doctype, markup.name, "basis", amount);
                 }
                 amount += markup.amount;
-                console.log(amount);
                 total_discount -= markup.amount;
             }
         });
