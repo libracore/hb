@@ -571,12 +571,23 @@ Update attached drilling instruction pdf
 def update_attached_sv_ib_pdf(project):
     # check if this is already attached
     attachments = get_attachments("Project", project)
-    title = "SV-IB-{0}.pdf".format(project)
+    street = frappe.get_value("Project", project, "object_street")
+    location = frappe.get_value("Project", project, "object_location")
+    
+    # clean old files
     for a in attachments:
-        if a.file_name.startswith("SV-IB-"):
+        if a.file_name.startswith("SV-P-") or a.file_name.startswith("IB-P-"):
             remove_file(a.name, "Project", project)
+            
+    # SV 
+    title = "SV-{0} {1}, {2}.pdf".format(project, street, location)
     # create and attach
-    execute("Project", project, title=title, print_format="SV+IB", file_name=title)
+    execute("Project", project, title=title, print_format="SV combined", file_name=title)
+    
+    # IB 
+    title = "IB-{0} {1}, {2}.pdf".format(project, street, location)
+    # create and attach
+    execute("Project", project, title=title, print_format="IB combined", file_name=title)
     return
 
 """
