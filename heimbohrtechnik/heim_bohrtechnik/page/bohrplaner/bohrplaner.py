@@ -143,14 +143,14 @@ def get_project_data(p, dauer):
         pneukran = "(!)" + pneukran
     if flag_carrymax:
         if pneukran:
-            pneukran += ", Carrymax"
+            pneukran = "Carrymax, " + pneukran
         else:
             pneukran = "Carrymax"
             
     # extend crane details
     if 'appointment' in pneukran_details and pneukran_details['appointment']:
         
-        pneukran += ", {0}".format(get_short_time(pneukran_details['appointment']))
+        pneukran += " {0}".format(get_short_time(pneukran_details['appointment']))
     if 'appointment_end' in pneukran_details and pneukran_details['appointment_end']:
         pneukran += " / {0}".format(get_short_time(pneukran_details['appointment_end']))
         
