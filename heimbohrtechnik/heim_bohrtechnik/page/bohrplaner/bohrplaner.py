@@ -329,7 +329,8 @@ def get_traffic_lights_indicator(project):
             LEFT JOIN `tabSales Invoice` ON `tabSales Invoice`.`name` = `tabSales Invoice Item`.`parent`
             WHERE `tabSales Invoice Item`.`sales_order` = '{so}' 
               AND `tabSales Invoice`.`docstatus` = 1
-              AND `tabSales Invoice`.`title` = "Teilrechnung"; """.format(so=project.sales_order), as_dict=True)[0].qty)
+              AND (`tabSales Invoice`.`title` = "Teilrechnung"
+                OR `tabSales Invoice`.`title` LIKE  "%Akonto-Rechnung"; """.format(so=project.sales_order), as_dict=True)[0].qty)
         if akonto > 0:
             projeknummer_color = BG_LIGHT_GREEN         # light green
         sinv = int(frappe.db.sql("""
