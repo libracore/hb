@@ -266,7 +266,8 @@ def get_subproject_overlay_datas(from_date, to_date):
             'object_name': subproject.object_name,
             'object_street': subproject.object_street,
             'object_location': subproject.object_location,
-            'subcontracting_order': subproject.subcontracting_order
+            'subcontracting_order': subproject.subcontracting_order,
+            'background': get_project_billing_status_color(subproject.project) or "#ffffe0"
         }
         subproject_list.append(subproject_data)
     
@@ -315,14 +316,10 @@ def subproject_shift_controll(subproject, start, shift_controll):
         shift_controll[str(start) + str(subproject.team)] = 0
         return 0, shift_controll
 
-def get_traffic_lights_indicator(project):
-    colors = []
-    
-    # projeknummer [0]
-    projeknummer_color = BG_RED                     # red
-    if cint(project.termin_bestaetigt) == 1:
-        projeknummer_color = BG_ORANGE              # orange
-    if project.sales_order:
+def get_project_billing_status_color(project):
+    color = None
+    sales_order = frappe.get_value("Project", project, "sales_order")
+    if sales_order:
         akonto = int(frappe.db.sql("""
             SELECT COUNT(`tabSales Invoice`.`name`) AS `qty` 
             FROM `tabSales Invoice Item`
@@ -330,9 +327,9 @@ def get_traffic_lights_indicator(project):
             WHERE `tabSales Invoice Item`.`sales_order` = '{so}' 
               AND `tabSales Invoice`.`docstatus` = 1
               AND (`tabSales Invoice`.`title` = "Teilrechnung"
-                OR `tabSales Invoice`.`title` LIKE  "%Akonto-Rechnung"; """.format(so=project.sales_order), as_dict=True)[0].qty)
+                OR `tabSales Invoice`.`title` LIKE  "%Akonto-Rechnung"); """.format(so=sales_order), as_dict=True)[0].qty)
         if akonto > 0:
-            projeknummer_color = BG_LIGHT_GREEN         # light green
+            color = BG_LIGHT_GREEN         # light green
         sinv = int(frappe.db.sql("""
             SELECT COUNT(`tabSales Invoice`.`name`) AS `qty` 
             FROM `tabSales Invoice Item` 
@@ -341,9 +338,21 @@ def get_traffic_lights_indicator(project):
               AND `tabSales Invoice Item`.`sales_order` = '{so}' 
               AND `tabSales Invoice`.`docstatus` = 1 
               AND `tabSales Invoice`.`title` IN ("Schlussrechnung", "Rechnung"); 
-            """.format(so=project.sales_order), as_dict=True)[0].qty)
+            """.format(so=sales_order), as_dict=True)[0].qty)
         if sinv > 0:
-            projeknummer_color = BG_GREEN           # green
+            color = BG_GREEN           # green
+    return color
+    
+def get_traffic_lights_indicator(project):
+    colors = []
+    
+    # projeknummer [0]
+    projeknummer_color = BG_RED                     # red
+    if cint(project.termin_bestaetigt) == 1:
+        projeknummer_color = BG_ORANGE              # orange
+    billing_color = get_project_billing_status_color(project.name)
+    if billing_color:
+        projeknummer_color = billing_color
     colors.append(projeknummer_color)
     
     # auftraggeber [1]

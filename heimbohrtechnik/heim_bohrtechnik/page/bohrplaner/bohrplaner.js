@@ -290,7 +290,8 @@ frappe.bohrplaner = {
             'parent_project': data.project,
             'subcontracting_order': data.subcontracting_order,
             'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false',
-            'multi_day': (data.dauer > 2) ? 'multi_day' : 'single_day'
+            'multi_day': (data.dauer > 2) ? 'multi_day' : 'single_day',
+            'background': data.background
         })).appendTo(place);
         return
     },
