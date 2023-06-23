@@ -696,7 +696,7 @@ def get_absences_overlay_datas(from_date, to_date):
     to_date = getdate(to_date)
     absences = []
     shift = 0
-    last_date = None
+    last_date = []
     
     absences_raw = frappe.db.sql("""
         SELECT
@@ -704,7 +704,8 @@ def get_absences_overlay_datas(from_date, to_date):
             `employee`,
             `employee_name`,
             `from_date`,
-            `to_date`
+            `to_date`,
+            `leave_type`
         FROM `tabLeave Application`
         WHERE 
             (`from_date` BETWEEN '{from_date}' AND '{to_date}')
@@ -716,23 +717,28 @@ def get_absences_overlay_datas(from_date, to_date):
     
     for absence in absences_raw:
         duration = calc_duration(absence.from_date, absence.to_date, from_date, to_date)     # in ['dauer'] segments
-        if not last_date or absence.from_date > last_date:
+        shift = -1
+        if len(last_date) == 0:
+            last_date.append(absence.to_date)
             shift = 0
         else:
-            shift += 20
-        if not last_date or absence.to_date > last_date:
-            # add max. 2 weeks threshold to prevent stacking on long absences (military, ...)
-            if last_date and duration['dauer'] > 22:                    # 22 segments = typically 2 weeks
-                last_date = last_date + timedelta(days=14)
-            else:
-                last_date = absence.to_date
+            for l in range(0, len(last_date)):
+                if absence.from_date > last_date[l]:
+                    shift = l * 20
+                    last_date[l] = absence.to_date
+                    break
+                    
+        if shift < 0:
+            shift = len(last_date) * 20
+            last_date.append(absence.to_date)
             
         _absence = {
             'start': get_datetime(duration['start']).strftime('%d.%m.%Y'),
             'dauer': duration['dauer'],
             'employee_name': absence.employee_name,
             'absence': absence.name,
-            'shift': shift
+            'shift': shift,
+            'color': "#90ee90;" if absence.leave_type == "Militär" else "#ffffe0;"
         }
         absences.append(_absence)
     

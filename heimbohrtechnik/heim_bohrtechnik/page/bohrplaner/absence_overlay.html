@@ -1,5 +1,7 @@
 <div class="absence_booking_overlay" id="{{ absence }}"
-    style="width: {{ width }}px; height: 20px; top: {{ shift }}px;"
+    style="width: {{ width }}px; height: 20px; top: {{ shift }}px; background-color: {{ color }}; "
+    onclick="frappe.bohrplaner.open_absence(this);"
+    data-absence="{{ absence }}"
     draggable="false">
     <div class="object-div" style="font-size: 7pt;">
         {{ employee_name }}

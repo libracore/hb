@@ -305,7 +305,8 @@ frappe.bohrplaner = {
             'width': width, 
             'absence': data.absence,
             'employee_name': data.employee_name,
-            'shift': data.shift
+            'shift': data.shift,
+            'color': data.color
         })).appendTo(place);
         return
     },
@@ -589,6 +590,10 @@ frappe.bohrplaner = {
     open_subcontracting_order: function(element) {
         var parent_project = $(element).attr("data-subcontracting_order");
         url_to_form("Subcontracting Order", parent_project, function (r) { window.open(r.message, '_blank'); });
+    },
+    open_absence: function(element) {
+        var absence = $(element).attr("data-absence");
+        url_to_form("Leave Application", absence, function (r) { window.open(r.message, '_blank'); });
     },
     mark_project: function(project_name) {
         var project_element = document.getElementById(project_name);
