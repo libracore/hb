@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe import _
 from frappe.utils.data import getdate, date_diff, add_days, get_datetime
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from frappe.desk.form.load import get_attachments
 from frappe.utils import cint, get_url_to_form
 from math import floor
@@ -803,18 +803,47 @@ def render_template(start_date):
         'drilling_teams': {},
         'css': get_bohrplaner_css()
     }
+    projects_and_gaps = []
     # ~ print(data)
     for drilling_team in data['grid']['drilling_teams']:
         projects = get_overlay_datas(start_date, end_date, drilling_team=drilling_team['team_id'])
         # here, insert add placeholders for gaps
+        projects_and_gaps.append(projects[0])
+        for i in range(1, len(projects)):
+            gap = get_gap_duration(projects[i-1]['start'], projects[i-1]['vmnm'], projects[i]['start'], projects[i]['vmnm'])
+            print(gap)
+        # ~ print(projects_and_gaps)
+        # ~ print(projects)
         data['drilling_teams'][drilling_team['team_id']] = projects
+        
         
     html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
     frappe.log_error(html, "Hoi Lars!")
     
     print(print_bohrplaner(html))
     
-    
+def get_gap_duration(start_date, start_half_day, end_date, end_half_day):
+    date_list, weekend_list, kw_list, day_list, today = get_days(start_date, end_date)
+    gap_duration_workdays = len(date_list) - len(weekend_list)
+    # ~ print(weekend_list)
+    end_date_formatted = datetime.strptime(end_date, "%Y-%m-%d").strftime("%d.%m.%Y")
+    start_date_formatted = datetime.strptime(start_date, "%Y-%m-%d").strftime("%d.%m.%Y")
+    if start_half_day == "nm" and start_date_formatted not in weekend_list:
+        gap_duration_workdays -= 0.5
+    if end_half_day == "vm" and end_date_formatted not in weekend_list:
+        gap_duration_workdays -= 0.5
+    # ~ print(gap_duration_workdays)
+    gap_duration = gap_duration_workdays * 2
+    if len(weekend_list) != 0:
+        gap_duration += 1
+    for i in range(1, len(weekend_list)):
+        multiple_weekends = date_diff(datetime.strptime(weekend_list[i], "%d.%m.%Y"), datetime.strptime(weekend_list[i-1], "%d.%m.%Y"))
+        if multiple_weekends == 6:
+            gap_duration += 1
+    if start_date == end_date and start_half_day == end_half_day:
+        gap_duration = 0
+    print(gap_duration)
+    # ~ return gap_duration
     
 # ~ def get_projects(start_date, drilling_team):
     # ~ end_date = frappe.utils.add_days(start_date, 20)

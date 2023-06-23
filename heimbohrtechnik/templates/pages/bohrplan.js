@@ -162,7 +162,8 @@ function add_overlay(data) {
         'ampeln': data.ampeln,
         'dragable': 'false',
         'box_height': 13,
-        'padding': 0
+        'padding': 0,
+        'font_size': 7
     })).appendTo(place);
     return
 }

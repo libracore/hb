@@ -2,8 +2,8 @@
 .booking_overlay {
     width: auto !important;
     position: relative !important;
-    min-height: 195px !important;
-    max-height: 195px !important;
+    min-height: 200px !important;
+    max-height: 200px !important;
 }
 
 .header_additional {
@@ -12,6 +12,12 @@
 
 table {
     border-collapse: collapse !important;
+}
+
+.sticky-left {
+    height: 217px !important;
+    min-height: 217px !important;
+    max-height: 217px !important;
 }
 
 
@@ -84,9 +90,10 @@ table {
                 {% endif %}
             </td>
             {% for project in drilling_teams[drilling_team.team_id] %}
-                {% if project.update({'box_height': 20 }) %}{% endif %}
-                {% if project.update({'padding': 5 }) %}{% endif %}
-                <td colspan="{{ project['dauer'] }}">
+                {% if project.update({"box_height": 18 }) %}{% endif %}
+                {% if project.update({"padding": 3 }) %}{% endif %}
+                {% if project.update({"font_size": 13 }) %}{% endif %}
+                <td colspan={{ project["dauer"] }}>
                     {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/booking_overlay.html", project) }}
                 </td>
             {% endfor %}

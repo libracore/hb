@@ -3,7 +3,7 @@
     data-lanetype="Project"
     draggable="{{ dragable }}"
     ondragstart="drag(event)">
-    <div class="object-div" style="font-size: 7pt;" onclick="frappe.bohrplaner.show_detail_popup(this);" data-popupvalue="{{ project.name }}">
+    <div class="object-div" style="font-size: {{ font_size }}pt !important;" onclick="frappe.bohrplaner.show_detail_popup(this);" data-popupvalue="{{ project.name }}">
         <div style="background-color: {{ ampeln[0] }} min-width:35px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{{ project.name }}</div>
         <div style="background-color: {{ ampeln[1] }} min-width:35px; max-width: 70px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if project.customer_name %}{{ project.customer_name }}{% else %}&nbsp;{% endif %}</div>
         <div style="background-color: {{ ampeln[2] }} min-width:35px; max-width: 70px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if project.object_name %}{{ project.object_name }}{% else %}&nbsp;{% endif %}</div>
