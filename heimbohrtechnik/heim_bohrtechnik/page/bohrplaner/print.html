@@ -94,7 +94,9 @@ table {
                 {% if project.update({"padding": 3 }) %}{% endif %}
                 {% if project.update({"font_size": 13 }) %}{% endif %}
                 <td colspan={{ project["dauer"] }}>
-                    {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/booking_overlay.html", project) }}
+                    {% if "project" in project %}
+                        {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/booking_overlay.html", project) }}
+                    {% endif %}
                 </td>
             {% endfor %}
         </tr>

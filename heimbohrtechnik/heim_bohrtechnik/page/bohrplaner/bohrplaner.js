@@ -246,7 +246,7 @@ frappe.bohrplaner = {
             'width': width, 
             'box_height': box_height,
             'padding': padding,
-            'font_size': font_size,
+            'font_size': "7",
             'project': data.project, 
             'saugauftrag': data.saugauftrag, 
             'pneukran': data.pneukran, 
