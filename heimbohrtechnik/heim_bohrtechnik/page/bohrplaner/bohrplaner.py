@@ -796,7 +796,6 @@ def get_bohrplaner_css():
 def render_template(start_date):
     end_date = frappe.utils.add_days(start_date, 20)
 
-    # ~ print(start_date, end_date)
     data = {
         'grid': get_content(start_date, end_date, only_teams=True),
         'start_date': start_date,
