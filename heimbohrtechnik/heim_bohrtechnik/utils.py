@@ -1005,3 +1005,13 @@ def find_bohranzeige_mail_header(project):
             header['permit'] = dn['bewilligung']
             
     return header
+
+"""
+This is a hack because description could not have been formated (always dropped on save)
+"""
+def item_description_save(item, event):
+    if item.new_description:
+        item.description = item.new_description
+    else:
+        item.descritpion = item.item_name
+    return

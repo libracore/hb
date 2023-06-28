@@ -121,6 +121,9 @@ doc_events = {
     "Expense Claim": {
         "on_submit": "heimbohrtechnik.heim_bohrtechnik.expense_claim.submit",
         "on_cancel": "heimbohrtechnik.heim_bohrtechnik.expense_claim.cancel"
+    },
+    "Item": {
+        "before_save": "heimbohrtechnik.heim_bohrtechnik.utils.item_description_save"
     }
  }
 
