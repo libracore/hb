@@ -800,25 +800,44 @@ def render_template(start_date):
         'grid': get_content(start_date, end_date, only_teams=True),
         'start_date': start_date,
         'drilling_teams': {},
-        'css': get_bohrplaner_css()
+        'css': get_bohrplaner_css(),
+        'weekend_columns': []
     }
-    # ~ print(data)
+    
+    weekend_columns = []
+    columns_until_weekend = 0
+    
+    #get weekend columns for grid
+    for day in data['grid']['day_list'].values():
+        if day != 'Sun':
+            if day != 'Sat':
+                columns_until_weekend += 2
+            else:
+                columns_until_weekend += 1
+        if day == 'Sat':
+            break
+    weekend_columns.append(columns_until_weekend)
+    weekend_columns.append(columns_until_weekend+11)
+    weekend_columns.append(columns_until_weekend+22)
+    
+    print(weekend_columns)
+        
+    
     for drilling_team in data['grid']['drilling_teams']:
+        
         projects_and_gaps = []
         projects = get_overlay_datas(start_date, end_date, drilling_team=drilling_team['team_id'])
-        # here, insert add placeholders for gaps
         projects_and_gaps.append(projects[0])
         for i in range(1, len(projects)):
             gap = get_gap_duration(projects[i-1]['project'].expected_end_date, projects[i-1]['project'].end_half_day, projects[i]['project'].expected_start_date, projects[i]['project'].start_half_day)-2.0
-            # ~ print(gap)
             if gap == 0:
                 projects_and_gaps.append(projects[i])
             else:
                 projects_and_gaps.append({'dauer': gap})
                 projects_and_gaps.append(projects[i])
-        # ~ print(projects_and_gaps)
-        # ~ print(projects)
+                
         data['drilling_teams'][drilling_team['team_id']] = projects_and_gaps
+        data['weekend_columns'] = weekend_columns
         
     html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
     frappe.log_error(html, "Hoi Lars!")
@@ -826,19 +845,14 @@ def render_template(start_date):
     print(print_bohrplaner(html))
     
 def get_gap_duration(start_date, start_half_day, end_date, end_half_day):
-    # ~ print(start_date, start_half_day, end_date, end_half_day)
     date_list, weekend_list, kw_list, day_list, today = get_days(start_date, end_date)
     gap_duration_workdays = len(date_list) - len(weekend_list)
-    # ~ print(weekend_list)
-    # ~ end_date_formatted = datetime.strptime(end_date, "%Y-%m-%d").strftime("%d.%m.%Y")
-    # ~ start_date_formatted = datetime.strptime(start_date, "%Y-%m-%d").strftime("%d.%m.%Y")
-    end_date_formatted = end_date
-    start_date_formatted = start_date
-    if start_half_day == "NM" and start_date_formatted not in weekend_list:
+
+    if start_half_day == "NM" and start_date not in weekend_list:
         gap_duration_workdays -= 0.5
-    if end_half_day == "VM" and end_date_formatted not in weekend_list:
+    if end_half_day == "VM" and end_date not in weekend_list:
         gap_duration_workdays -= 0.5
-    # ~ print(gap_duration_workdays)
+
     gap_duration = gap_duration_workdays * 2
     if len(weekend_list) != 0:
         gap_duration += 1
@@ -846,10 +860,7 @@ def get_gap_duration(start_date, start_half_day, end_date, end_half_day):
         multiple_weekends = date_diff(datetime.strptime(weekend_list[i], "%d.%m.%Y"), datetime.strptime(weekend_list[i-1], "%d.%m.%Y"))
         if multiple_weekends == 6:
             gap_duration += 1
-    # ~ if start_date == end_date and start_half_day == end_half_day:
-        # ~ gap_duration = 0
-    # ~ print(type(gap_duration))
-    # ~ print(gap_duration)
+
     return gap_duration
     
 # ~ def get_projects(start_date, drilling_team):

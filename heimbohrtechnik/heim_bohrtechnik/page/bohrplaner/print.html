@@ -31,7 +31,6 @@ table {
 }
 
 
-
 {{ css }}
 </style>
 <table>
@@ -100,25 +99,28 @@ table {
                     </a>
                 {% endif %}
             </td>
+            {% set vars = {'counter': 0} %}
             {% for project in drilling_teams[drilling_team.team_id] %}
+                {% if vars.update({'counter': vars.counter + 1}) %}{% endif %} 
                 {% if project.update({"box_height": 18 }) %}{% endif %}
                 {% if project.update({"padding": 3 }) %}{% endif %}
                 {% if project.update({"font_size": 13 }) %}{% endif %}
                 {% if project.update({"width": project["dauer"]*70 }) %}{% endif %}
-                {% if project.update({"min_width": 65 }) %}{% endif %}
-                {% if project.update({"max_width": 130 }) %}{% endif %}
+                {% if project.update({"min_width": 60 }) %}{% endif %}
+                {% if project.update({"max_width": 120 }) %}{% endif %}
                 {% if "project" in project %}
-                    <td>
+                    <td style="z-index: -{{ vars.counter }} !important; {% if vars.counter in weekend_columns %}background-color: #9dc7f0;{% endif %}">
                         {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/booking_overlay.html", project) }}
                     </td>
                 {% else %}
-                    <td class="gap">&nbsp;</td>
+                    <td class="gap" {% if vars.counter in weekend_columns %}style="background-color: #9dc7f0;"{% endif %}>&nbsp;</td>
                 {% endif %}
                 {% for i in range(1, project["dauer"]|int) %}
+                    {% if vars.update({'counter': vars.counter + 1}) %}{% endif %}
                     {% if "project" in project %}
-                        <td></td>
+                        <td {% if vars.counter in weekend_columns %}style="background-color: #9dc7f0;"{% endif %}></td>
                     {% else %}
-                        <td class="gap"></td>
+                        <td class="gap" {% if vars.counter in weekend_columns %}style="background-color: #9dc7f0;"{% endif %}></td>
                     {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -126,3 +128,4 @@ table {
     {% endfor %}
     </tbody>
 </table>
+
