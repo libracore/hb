@@ -306,7 +306,8 @@ frappe.bohrplaner = {
             'absence': data.absence,
             'employee_name': data.employee_name,
             'shift': data.shift,
-            'color': data.color
+            'color': data.color,
+            'remarks': data.remarks
         })).appendTo(place);
         return
     },

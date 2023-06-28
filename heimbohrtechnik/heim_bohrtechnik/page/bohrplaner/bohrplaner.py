@@ -705,7 +705,8 @@ def get_absences_overlay_datas(from_date, to_date):
             `employee_name`,
             `from_date`,
             `to_date`,
-            `leave_type`
+            `leave_type`,
+            `remarks`
         FROM `tabLeave Application`
         WHERE 
             (`from_date` BETWEEN '{from_date}' AND '{to_date}')
@@ -738,7 +739,8 @@ def get_absences_overlay_datas(from_date, to_date):
             'employee_name': absence.employee_name,
             'absence': absence.name,
             'shift': shift,
-            'color': "#90ee90;" if absence.leave_type == "Militär" else "#ffffe0;"
+            'color': "#90ee90;" if absence.leave_type == "Militär" else "#ffffe0;",
+            'remarks': absence.remarks
         }
         absences.append(_absence)
     

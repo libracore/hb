@@ -4,6 +4,6 @@
     data-absence="{{ absence }}"
     draggable="false">
     <div class="object-div" style="font-size: 7pt;">
-        {{ employee_name }}
+        {{ employee_name }}{% if remarks %}: {{ remarks }}{% endif %}
     </div>
 </div>
