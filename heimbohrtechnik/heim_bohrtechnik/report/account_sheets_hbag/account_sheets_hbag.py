@@ -12,15 +12,15 @@ def execute(filters=None):
 
 def get_columns(filters):
     return [
-        {"label": _("Date"), "fieldname": "date", "fieldtype": "Link", "options": "Item", "width": 100},
-        {"label": _("Debit"), "fieldname": "debit", "fieldtype": "Currency", "width": 120},
-        {"label": _("Credit"), "fieldname": "credit", "fieldtype": "Currency", "width": 120},
-        {"label": _("Balance"), "fieldname": "balance", "fieldtype": "Currency", "width": 120},
-        {"label": _("Against"), "fieldname": "against", "fieldtype": "Data", "width": 100},
-        {"label": _("Group"), "fieldname": "group", "fieldtype": "Data", "width": 150},
-        {"label": _("Remarks"), "fieldname": "remarks", "fieldtype": "Data", "width": 200},
-        {"label": _("Voucher type"), "fieldname": "voucher_type", "fieldtype": "Data", "width": 100},
-        {"label": _("Voucher"), "fieldname": "voucher", "fieldtype": "Dynamic Link", "options": "voucher_type", "width": 120},
+        {"label": _("Datum"), "fieldname": "date", "fieldtype": "Link", "options": "Item", "width": 100},
+        {"label": _("Soll"), "fieldname": "debit", "fieldtype": "Currency", "width": 120},
+        {"label": _("Haben"), "fieldname": "credit", "fieldtype": "Currency", "width": 120},
+        {"label": _("Saldo"), "fieldname": "balance", "fieldtype": "Currency", "width": 120},
+        {"label": _("Gegenkonto"), "fieldname": "against", "fieldtype": "Data", "width": 100},
+        {"label": _("Gruppe"), "fieldname": "group", "fieldtype": "Data", "width": 150},
+        {"label": _("Bemerkungen"), "fieldname": "remarks", "fieldtype": "Data", "width": 200},
+        {"label": _("Dokument"), "fieldname": "voucher_type", "fieldtype": "Data", "width": 100},
+        {"label": _("Dokument"), "fieldname": "voucher", "fieldtype": "Dynamic Link", "options": "voucher_type", "width": 120},
         {"label": _(""), "fieldname": "blank", "fieldtype": "Data", "width": 20}
     ]
 
@@ -106,6 +106,12 @@ def get_data(filters):
                 group = frappe.get_cached_value("Supplier", position['against'], 'supplier_name')
             elif (position['against'] or "").startswith("K-") and frappe.db.exists("Customer", position['against']):
                 group = frappe.get_cached_value("Customer", position['against'], 'customer_name')
+            elif (position['voucher_type'] in ("Payment Entry")):
+                group = frappe.get_value(position['voucher_type'], position['voucher'], 'party_name')
+            elif (position['voucher_type'] in ("Purchase Invoice")):
+                group = frappe.get_value(position['voucher_type'], position['voucher'], 'supplier_name')
+            elif (position['voucher_type'] in ("Purchase Invoice")):
+                group = frappe.get_value(position['voucher_type'], position['voucher'], 'customer_name')
                 
             data.append({
                 'date': position['posting_date'], 

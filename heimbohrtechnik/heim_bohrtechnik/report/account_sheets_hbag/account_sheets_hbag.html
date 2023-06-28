@@ -11,16 +11,18 @@
             {%= frappe.datetime.str_to_user(filters.from_date) %}..{%= frappe.datetime.str_to_user(filters.to_date) %}</h4>
             
         <table style="width: 100%; font-size: 9px; ">
+          <thead>
             <tr>
-                <th style="padding: 1px !important; width: 10%; ">{%= __("Date") %}</th>
-                <th style="padding: 1px !important; width: 14%; text-align: right; ">{%= __("Debit") %}</th>
-                <th style="padding: 1px !important; width: 14%; text-align: right; ">{%= __("Credit") %}</th>
-                <th style="padding: 1px !important; width: 14%; text-align: right; ">{%= __("Balance") %}</th>
-                <th style="padding: 1px !important; width: 10%; ">{%= __("Against") %}</th>
-                <th style="padding: 1px !important; width: 25%; ">{%= __("Remarks") %}</th>
-                <th style="padding: 1px !important; width: 13%; ">{%= __("Document") %}</th>
+                <th style="padding: 1px !important; width: 10%; ">{%= __("Datum") %}</th>
+                <th style="padding: 1px !important; width: 14%; text-align: right; ">{%= __("Soll") %}</th>
+                <th style="padding: 1px !important; width: 14%; text-align: right; ">{%= __("Haben") %}</th>
+                <th style="padding: 1px !important; width: 14%; text-align: right; ">{%= __("Saldo") %}</th>
+                <th style="padding: 1px !important; padding-left: 10px !important; width: 10%; ">{%= __("Gegenkonto") %}</th>
+                <th style="padding: 1px !important; width: 25%; ">{%= __("Bemerkungen") %} ({%= (data[i].remarks || "").split(" ")[0] %})</th>
+                <th style="padding: 1px !important; width: 13%; ">{%= __("Dokument") %}</th>
             </tr>
-        
+          </thead>
+          <tbody>
     {% } else { %}
         <!-- this is an entry -->
         <tr>
@@ -34,4 +36,5 @@
         </tr>
     {% } %}
 {% } %}
+  </tbody>
 </table>
