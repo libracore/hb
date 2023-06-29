@@ -777,46 +777,6 @@ def print_bohrplaner(start_date):
     _file.save(ignore_permissions=True)
     
     return _file.file_url
-    
-# ~ def print_bohrplaner(html):
-    # ~ from frappe.utils.pdf import get_pdf
-    # ~ from PyPDF2 import PdfFileWriter
-    # ~ from frappe.utils.pdf import get_file_data_from_writer
-    # ~ from erpnextswiss.erpnextswiss.attach_pdf import create_folder
-    
-    # ~ bohrplaner_css = get_bohrplaner_css()
-
-    # ~ html = html + """<body>
-        # ~ <meta name="pdfkit-orientation" content="Portrait"/><style>
-        # ~ .print-format {
-         # ~ margin-top: 0mm;
-         # ~ margin-left: 0mm;
-         # ~ margin-right: 0mm;
-        # ~ }
-        
-        # ~ .object-div {
-            # ~ font-size: 9pt !important;
-        # ~ }
-        # ~ """ + bohrplaner_css + "</style></body>"
-    # ~ output = PdfFileWriter()
-    # ~ output = get_pdf(html, output=output)
-    
-    # ~ file_name = "{0}.pdf".format(frappe.generate_hash(length=14))
-    # ~ folder = create_folder("Bohrplaner-Prints", "Home")
-    
-    # ~ filedata = get_file_data_from_writer(output)
-    
-    # ~ _file = frappe.get_doc({
-        # ~ "doctype": "File",
-        # ~ "file_name": file_name,
-        # ~ "folder": folder,
-        # ~ "is_private": 1,
-        # ~ "content": filedata
-    # ~ })
-    
-    # ~ _file.save(ignore_permissions=True)
-    
-    # ~ return _file.file_url
 
 def get_bohrplaner_css():
     return frappe.read_file("{0}{1}".format(frappe.utils.get_bench_path(), "/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css"))
