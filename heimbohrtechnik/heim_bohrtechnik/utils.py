@@ -580,12 +580,12 @@ def update_attached_sv_ib_pdf(project):
             remove_file(a.name, "Project", project)
         
     # SV 
-    title = "SV-{0} {1}, {2}.pdf".format(project, street, location)
+    title = ("SV-{0} {1}, {2}.pdf".format(project, street, location)).replace("/", ",")
     # create and attach
     execute("Project", project, title=project, print_format="SV combined", file_name=title)
     
     # IB 
-    title = "IB-{0} {1}, {2}.pdf".format(project, street, location)
+    title = ("IB-{0} {1}, {2}.pdf".format(project, street, location)).replace("/", ",")
     # create and attach
     execute("Project", project, title=project, print_format="IB combined", file_name=title)
     return
