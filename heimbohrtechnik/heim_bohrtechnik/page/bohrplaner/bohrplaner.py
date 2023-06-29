@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe import _
 from frappe.utils.data import getdate, date_diff, add_days, get_datetime
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from frappe.desk.form.load import get_attachments
 from frappe.utils import cint, get_url_to_form
 from math import floor
@@ -32,12 +32,15 @@ WEEKDAYS = {
     6: "Sa"
 }
 @frappe.whitelist()
-def get_overlay_datas(from_date, to_date, customer=None):
+def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
     projects = []
     
     customer_filter = ""
     if customer:
         customer_filter =  """ AND `tabProject`.`customer` = "{customer}" """.format(customer=customer)
+    drilling_team_filter = ""
+    if drilling_team:
+        drilling_team_filter = """ AND `tabProject`.`drilling_team` = '{drilling_team}'""".format(drilling_team=drilling_team)
         
     matching_projects = frappe.db.sql("""
         SELECT 
@@ -57,7 +60,10 @@ def get_overlay_datas(from_date, to_date, customer=None):
              OR (`expected_start_date` < '{from_date}' AND `expected_end_date` > '{to_date}')
             )
           {customer_filter}
-        """.format(from_date=from_date, to_date=to_date, customer_filter=customer_filter), as_dict=True)
+          {drilling_team_filter}
+        ORDER BY
+            `tabProject`.`expected_start_date` ASC;
+        """.format(from_date=from_date, to_date=to_date, customer_filter=customer_filter, drilling_team_filter=drilling_team_filter), as_dict=True)
 
     for p in matching_projects:
         if p.expected_start_date < getdate(from_date):
@@ -762,26 +768,14 @@ def get_user_planning_days(user):
         }
     
 @frappe.whitelist()
-def print_bohrplaner(html):
+def print_bohrplaner(start_date):
     from frappe.utils.pdf import get_pdf
     from PyPDF2 import PdfFileWriter
     from frappe.utils.pdf import get_file_data_from_writer
     from erpnextswiss.erpnextswiss.attach_pdf import create_folder
-    
-    bohrplaner_css = frappe.read_file("{0}{1}".format(frappe.utils.get_bench_path(), "/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css"))
 
-    html = html + """<body>
-        <meta name="pdfkit-orientation" content="Portrait"/><style>
-        .print-format {
-         margin-top: 0mm;
-         margin-left: 0mm;
-         margin-right: 0mm;
-        }
-        
-        .object-div {
-            font-size: 9pt !important;
-        }
-        """ + bohrplaner_css + "</style></body>"
+    html = get_bohrplaner_html(start_date)
+    
     output = PdfFileWriter()
     output = get_pdf(html, output=output)
     
@@ -801,6 +795,77 @@ def print_bohrplaner(html):
     _file.save(ignore_permissions=True)
     
     return _file.file_url
+
+def get_bohrplaner_css():
+    return frappe.read_file("{0}{1}".format(frappe.utils.get_bench_path(), "/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css"))
+
+def get_bohrplaner_html(start_date):
+    end_date = frappe.utils.add_days(start_date, 20)
+
+    data = {
+        'grid': get_content(start_date, end_date, only_teams=True),
+        'start_date': start_date,
+        'drilling_teams': {},
+        'css': get_bohrplaner_css(),
+        'weekend_columns': []
+    }
+    
+    weekend_columns = []
+    columns_until_weekend = 0
+    
+    #get weekend columns for grid
+    for day in data['grid']['day_list'].values():
+        if day != 'Sun':
+            if day != 'Sat':
+                columns_until_weekend += 2
+            else:
+                columns_until_weekend += 1
+        if day == 'Sat':
+            break
+    weekend_columns.append(columns_until_weekend)
+    weekend_columns.append(columns_until_weekend+11)
+    weekend_columns.append(columns_until_weekend+22)
+        
+    for drilling_team in data['grid']['drilling_teams']:
+        
+        projects_and_gaps = []
+        projects = get_overlay_datas(start_date, end_date, drilling_team=drilling_team['team_id'])
+        projects_and_gaps.append(projects[0])
+        for i in range(1, len(projects)):
+            gap = get_gap_duration(projects[i-1]['project'].expected_end_date, projects[i-1]['project'].end_half_day, projects[i]['project'].expected_start_date, projects[i]['project'].start_half_day)-2.0
+            if gap == 0:
+                projects_and_gaps.append(projects[i])
+            else:
+                projects_and_gaps.append({'dauer': gap})
+                projects_and_gaps.append(projects[i])
+                
+        data['drilling_teams'][drilling_team['team_id']] = projects_and_gaps
+        data['weekend_columns'] = weekend_columns
+        
+    html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
+    # ~ frappe.log_error(html, "HTML")
+    
+    return html
+    
+def get_gap_duration(start_date, start_half_day, end_date, end_half_day):
+    date_list, weekend_list, kw_list, day_list, today = get_days(start_date, end_date)
+    gap_duration_workdays = len(date_list) - len(weekend_list)
+
+    if start_half_day == "NM" and start_date not in weekend_list:
+        gap_duration_workdays -= 0.5
+    if end_half_day == "VM" and end_date not in weekend_list:
+        gap_duration_workdays -= 0.5
+
+    gap_duration = gap_duration_workdays * 2
+    if len(weekend_list) != 0:
+        gap_duration += 1
+    for i in range(1, len(weekend_list)):
+        multiple_weekends = date_diff(datetime.strptime(weekend_list[i], "%d.%m.%Y"), datetime.strptime(weekend_list[i-1], "%d.%m.%Y"))
+        if multiple_weekends == 6:
+            gap_duration += 1
+
+    return gap_duration
+    
 
 """
 In open projects, find conflicts with regional holidays.
