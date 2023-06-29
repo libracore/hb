@@ -19,7 +19,7 @@ def get_columns(filters):
         {"label": _("Gegenkonto"), "fieldname": "against", "fieldtype": "Data", "width": 100},
         {"label": _("Gruppe"), "fieldname": "group", "fieldtype": "Data", "width": 150},
         {"label": _("Bemerkungen"), "fieldname": "remarks", "fieldtype": "Data", "width": 200},
-        {"label": _("Dokument"), "fieldname": "voucher_type", "fieldtype": "Data", "width": 100},
+        #{"label": _("Dokument"), "fieldname": "voucher_type", "fieldtype": "Data", "width": 100},
         {"label": _("Dokument"), "fieldname": "voucher", "fieldtype": "Dynamic Link", "options": "voucher_type", "width": 120},
         {"label": _(""), "fieldname": "blank", "fieldtype": "Data", "width": 20}
     ]
