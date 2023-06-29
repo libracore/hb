@@ -13,8 +13,10 @@
         <div style="background-color: {{ ampeln[8] }} min-width:{{ min_width }}px; max-width: {{ max_width }}px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if saugauftrag %}{{ saugauftrag }}{% else %}&nbsp;{% endif %}</div>
         <div style="background-color: {{ ampeln[9] }} min-width:{{ min_width }}px; max-width: {{ max_width }}px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if pneukran %}{{ pneukran }}{% else %}&nbsp;{% endif %}</div>
         <div style="background-color: {{ ampeln[10] }} min-width:{{ min_width }}px; max-width: {{ max_width }}px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if drilling_equipment %}{{ drilling_equipment }}{% else %}&nbsp;{% endif %}</div>
-        <div style="float:left; min-width:{{ min_width }}px; max-width:{{ min_width }}px; background-color: {{ ampeln[11] }} color: {{ ampeln[13] }} overflow: visible; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if manager_short %}{{ manager_short }}{% else %}&nbsp;{% endif %}</div>
-        <div style="float:left; min-width:{{ min_width }}px; max-width:{{ min_width }}px; background-color: {{ ampeln[12] }} height: {{ box_height }}px; padding-top: {{ padding }}px !important;">&nbsp;</div>
+        <div style="width: {{ max_width }}px;">
+            <div style="float:left; min-width:{{ min_width }}px; max-width:{{ min_width }}px; background-color: {{ ampeln[11] }} color: {{ ampeln[13] }} overflow: visible; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if manager_short %}{{ manager_short }}{% else %}&nbsp;{% endif %}</div>
+            <div style="float:left; min-width:{{ min_width }}px; max-width:{{ min_width }}px; background-color: {{ ampeln[12] }} height: {{ box_height }}px; padding-top: {{ padding }}px !important;">&nbsp;</div>
+        </div>
         <div style="clear: both;"></div>
     </div>
 </div>

@@ -750,26 +750,14 @@ def get_user_planning_days(user):
         }
     
 @frappe.whitelist()
-def print_bohrplaner(html):
+def print_bohrplaner(start_date):
     from frappe.utils.pdf import get_pdf
     from PyPDF2 import PdfFileWriter
     from frappe.utils.pdf import get_file_data_from_writer
     from erpnextswiss.erpnextswiss.attach_pdf import create_folder
-    
-    bohrplaner_css = get_bohrplaner_css()
 
-    html = html + """<body>
-        <meta name="pdfkit-orientation" content="Portrait"/><style>
-        .print-format {
-         margin-top: 0mm;
-         margin-left: 0mm;
-         margin-right: 0mm;
-        }
-        
-        .object-div {
-            font-size: 9pt !important;
-        }
-        """ + bohrplaner_css + "</style></body>"
+    html = get_bohrplaner_html(start_date)
+    
     output = PdfFileWriter()
     output = get_pdf(html, output=output)
     
@@ -789,11 +777,51 @@ def print_bohrplaner(html):
     _file.save(ignore_permissions=True)
     
     return _file.file_url
+    
+# ~ def print_bohrplaner(html):
+    # ~ from frappe.utils.pdf import get_pdf
+    # ~ from PyPDF2 import PdfFileWriter
+    # ~ from frappe.utils.pdf import get_file_data_from_writer
+    # ~ from erpnextswiss.erpnextswiss.attach_pdf import create_folder
+    
+    # ~ bohrplaner_css = get_bohrplaner_css()
+
+    # ~ html = html + """<body>
+        # ~ <meta name="pdfkit-orientation" content="Portrait"/><style>
+        # ~ .print-format {
+         # ~ margin-top: 0mm;
+         # ~ margin-left: 0mm;
+         # ~ margin-right: 0mm;
+        # ~ }
+        
+        # ~ .object-div {
+            # ~ font-size: 9pt !important;
+        # ~ }
+        # ~ """ + bohrplaner_css + "</style></body>"
+    # ~ output = PdfFileWriter()
+    # ~ output = get_pdf(html, output=output)
+    
+    # ~ file_name = "{0}.pdf".format(frappe.generate_hash(length=14))
+    # ~ folder = create_folder("Bohrplaner-Prints", "Home")
+    
+    # ~ filedata = get_file_data_from_writer(output)
+    
+    # ~ _file = frappe.get_doc({
+        # ~ "doctype": "File",
+        # ~ "file_name": file_name,
+        # ~ "folder": folder,
+        # ~ "is_private": 1,
+        # ~ "content": filedata
+    # ~ })
+    
+    # ~ _file.save(ignore_permissions=True)
+    
+    # ~ return _file.file_url
 
 def get_bohrplaner_css():
     return frappe.read_file("{0}{1}".format(frappe.utils.get_bench_path(), "/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css"))
 
-def render_template(start_date):
+def get_bohrplaner_html(start_date):
     end_date = frappe.utils.add_days(start_date, 20)
 
     data = {
@@ -819,10 +847,7 @@ def render_template(start_date):
     weekend_columns.append(columns_until_weekend)
     weekend_columns.append(columns_until_weekend+11)
     weekend_columns.append(columns_until_weekend+22)
-    
-    print(weekend_columns)
         
-    
     for drilling_team in data['grid']['drilling_teams']:
         
         projects_and_gaps = []
@@ -840,9 +865,9 @@ def render_template(start_date):
         data['weekend_columns'] = weekend_columns
         
     html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
-    frappe.log_error(html, "Hoi Lars!")
+    # ~ frappe.log_error(html, "HTML")
     
-    print(print_bohrplaner(html))
+    return html
     
 def get_gap_duration(start_date, start_half_day, end_date, end_half_day):
     date_list, weekend_list, kw_list, day_list, today = get_days(start_date, end_date)
@@ -863,111 +888,6 @@ def get_gap_duration(start_date, start_half_day, end_date, end_half_day):
 
     return gap_duration
     
-# ~ def get_projects(start_date, drilling_team):
-    # ~ end_date = frappe.utils.add_days(start_date, 20)
-    # ~ projects = get_overlay_datas(start_date, end_date, drilling_team=drilling_team)
-    # ~ print("{0}".format(projects))
-    # ~ html = ''''''
-    # ~ colspan = 0
-    # ~ for project in projects:
-        # ~ colspan = (project['dauer'])
-        
-        # ~ if project['project'].customer_name:
-            # ~ customer_name = project['project'].customer_name
-        # ~ else:
-            # ~ customer_name = '''&nbsp;'''
-        
-        # ~ if project['project'].object_name:
-            # ~ object_name = project['project'].object_name
-        # ~ else:
-            # ~ object_name = '''&nbsp;'''
-            
-        # ~ if project['project'].object_street:
-            # ~ object_street = project['project'].object_street
-        # ~ else:
-            # ~ object_street = '''&nbsp;'''
-            
-        # ~ if project['project'].object_location:
-            # ~ object_location = project['project'].object_location
-        # ~ else:
-            # ~ object_location = '''&nbsp;'''
-            
-        # ~ if project['project'].ews_details:
-            # ~ ews_details = project['project'].ews_details.replace("PN20", "<b>PN20</b>").replace("PN35", "<b>PN35</b>")
-        # ~ else:
-            # ~ ews_details = '''&nbsp;'''
-            
-        # ~ if project['saugauftrag']:
-            # ~ saugauftrag = project['saugauftrag']
-        # ~ else:
-            # ~ saugauftrag = '''&nbsp;'''
-            
-        # ~ if project['pneukran']:
-            # ~ pneukran = project['pneukran']
-        # ~ else:
-            # ~ pneukran = '''&nbsp;'''
-        
-        # ~ if project['drilling_equipment']:
-            # ~ drilling_equipment = project['drilling_equipment']
-        # ~ else:
-            # ~ drilling_equipment = '''&nbsp;'''
-            
-        # ~ if project['manager_short']:
-            # ~ manager_short = project['manager_short']
-        # ~ else:
-            # ~ manager_short = '''&nbsp;'''
-        
-        # ~ height = '''13'''        
-        # ~ padding = '''0'''
-        
-        # ~ html += '''
-        # ~ <td colspan="{0}">
-        # ~ <div style="background-color: {1} min-width:35px; height: {25}px; padding-top: {26}px !important;">{2}</div>
-        # ~ <div style="background-color: {3} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{4}</div>
-        # ~ <div style="background-color: {5} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{6}</div>
-        # ~ <div style="background-color: {7} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{8}</div>
-        # ~ <div style="background-color: {9} color: {10}  {11} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{12}</div>
-        # ~ <div style="background-color: {13} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;" class="ews-details">{14}</div>
-        # ~ <div style="background-color: {15} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{16}</div>
-        # ~ <div style="background-color: {17} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{18}</div>
-        # ~ <div style="background-color: {19} min-width:35px; max-width: 70px; height: {25}px; padding-top: {26}px !important;">{20}</div>
-        # ~ <div style="float:left; min-width:35px; max-width:35px; background-color: {21} color: {22} overflow: hidden; height: 13px; padding-top: 0px !important;">{23}</div>
-        # ~ <div style="float:left; min-width:35px; max-width:35px; background-color: {24} height: {25}px; padding-top: {26}px !important;">&nbsp;</div>
-        # ~ </td>'''.format(colspan, \
-                        # ~ project['ampeln'][0], project['project'].name, \
-                        # ~ project['ampeln'][1], customer_name, \
-                        # ~ project['ampeln'][2], object_name, \
-                        # ~ project['ampeln'][3], object_street, \
-                        # ~ project['ampeln'][4], project['ampeln'][5], project['ampeln'][6], object_location, \
-                        # ~ project['ampeln'][7], ews_details, \
-                        # ~ project['ampeln'][8], saugauftrag, \
-                        # ~ project['ampeln'][9], pneukran, \
-                        # ~ project['ampeln'][10], drilling_equipment, \
-                        # ~ project['ampeln'][11], project['ampeln'][11], manager_short, \
-                        # ~ project['ampeln'][12], \
-                        # ~ height, padding \
-                        # ~ )
-        # ~ print(colspan)
-        
-         
-    # ~ return html
-    
-# ~ def get_projects(start_date, grid):
-    # ~ end_date = frappe.utils.add_days(start_date, 21)
-    # ~ grid = get_content(start_date, end_date, customer=None)
-    # ~ liste = ''''''
-    # ~ print("{0}".format(grid['days']))
-    # ~ for day in grid['days']:
-        # ~ if day == 'days':
-            # ~ liste.append("")
-            # ~ if day not in grid['weekend']:
-                # ~ liste += '''<td>Du Machine</td><td>Du Machine</td>'''
-            # ~ else:
-                # ~ if grid['day_list'][day] != 'Sun':
-                    # ~ liste += '''<td>Du Machine</td>'''
-         
-    # ~ return liste
-
 
 """
 In open projects, find conflicts with regional holidays.
