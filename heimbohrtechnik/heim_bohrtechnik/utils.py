@@ -624,10 +624,11 @@ def create_full_project_file(project):
     p_doc = frappe.get_doc("Project", project)
     if p_doc.plans:
         for plan in p_doc.plans:
-            merger.append("{0}/sites/{1}{2}".format(
-                get_bench_path(), 
-                get_files_path().split("/")[1],
-                plan.file))
+            if plan.file and plan.file[-4:].lower() == ".pdf":
+                merger.append("{0}/sites/{1}{2}".format(
+                    get_bench_path(), 
+                    get_files_path().split("/")[1],
+                    plan.file))
     # ... and from permits
     if p_doc.permits:
         for permit in p_doc.permits:
