@@ -798,7 +798,7 @@ function print_content(page, from, to) {
             'start_date': document.getElementById("from").value
         },
         'callback': function(r) {
-            window.open(r.message, '_blank');
+            window.open(r.message.url, '_blank');
             
             frappe.dom.unfreeze();
         }

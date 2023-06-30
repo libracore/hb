@@ -63,6 +63,10 @@ def get_project_path(project):
         frappe.throw("Please configure the projects folder under Heim Settings", "Configuration missing")
         
     return os.path.join(projects_folder, project)
+
+def get_base_path():
+    projects_folder = frappe.get_value("Heim Settings", "Heim Settings", "projects_folder")
+    return projects_folder
     
 def create_path(client, path):
     # create project folder
@@ -89,7 +93,16 @@ def write_project_file_from_local_file (project, file_name, target=PATHS['drilli
         client.upload_sync(os.path.join(project_path, file_name.split("/")[-1]), file_name)
 
     return
-    
+
+"""
+Write the a local file (local file path) to the nextcloud base path (00_Projekte)
+"""
+def write_file_to_base_path(file_name):
+    client = get_client()
+    base_path = get_base_path()
+    client.upload_sync(os.path.join(base_path, file_name.split("/")[-1]), file_name)
+    return
+
 """
 This function gets the cloud link to a project
 """

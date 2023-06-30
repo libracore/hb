@@ -9,6 +9,7 @@ from datetime import date, timedelta, datetime
 from frappe.desk.form.load import get_attachments
 from frappe.utils import cint, get_url_to_form
 from math import floor
+from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_file_to_base_path, get_physical_path
 
 BG_GREEN = '#81d41a;'
 BG_ORANGE = '#ffbf00;'
@@ -774,19 +775,25 @@ def print_bohrplaner(start_date):
     from frappe.utils.pdf import get_file_data_from_writer
     from erpnextswiss.erpnextswiss.attach_pdf import create_folder
 
+    fname = "Bohrplaner.pdf"
+    # clean old "Bohrplaner.pdf" from files and file system
+    bp_files = frappe.get_all("File", filters={'file_name': fname})
+    for f in bp_files:
+        doc = frappe.get_doc("File", f['name'])
+        doc.delete()
+    
     html = get_bohrplaner_html(start_date)
     
     output = PdfFileWriter()
     output = get_pdf(html, output=output)
     
-    file_name = "{0}.pdf".format(frappe.generate_hash(length=14))
     folder = create_folder("Bohrplaner-Prints", "Home")
     
     filedata = get_file_data_from_writer(output)
     
     _file = frappe.get_doc({
         "doctype": "File",
-        "file_name": file_name,
+        "file_name": fname,
         "folder": folder,
         "is_private": 1,
         "content": filedata
@@ -794,8 +801,19 @@ def print_bohrplaner(start_date):
     
     _file.save(ignore_permissions=True)
     
-    return _file.file_url
+    return {'url': _file.file_url, 'name': _file.name}
 
+def backup():
+    # prepare date: start today for the backup (if you start on next Monday, the current week will not be visible)
+    today = date.today()
+    today_str = "{y:04d}-{m:02d}-{d:02d}".format(y=today.year, m=today.month, d=today.day)
+    # create the pdf as a local file
+    f = print_bohrplaner(today_str)
+    # upload to nextcloud
+    physical_file = get_physical_path(f['name'])
+    write_file_to_base_path(physical_file)
+    return
+    
 def get_bohrplaner_css():
     return frappe.read_file("{0}{1}".format(frappe.utils.get_bench_path(), "/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css"))
 
@@ -830,14 +848,15 @@ def get_bohrplaner_html(start_date):
         
         projects_and_gaps = []
         projects = get_overlay_datas(start_date, end_date, drilling_team=drilling_team['team_id'])
-        projects_and_gaps.append(projects[0])
-        for i in range(1, len(projects)):
-            gap = get_gap_duration(projects[i-1]['project'].expected_end_date, projects[i-1]['project'].end_half_day, projects[i]['project'].expected_start_date, projects[i]['project'].start_half_day)-2.0
-            if gap == 0:
-                projects_and_gaps.append(projects[i])
-            else:
-                projects_and_gaps.append({'dauer': gap})
-                projects_and_gaps.append(projects[i])
+        if len(projects) > 0:
+            projects_and_gaps.append(projects[0])
+            for i in range(1, len(projects)):
+                gap = get_gap_duration(projects[i-1]['project'].expected_end_date, projects[i-1]['project'].end_half_day, projects[i]['project'].expected_start_date, projects[i]['project'].start_half_day)-2.0
+                if gap == 0:
+                    projects_and_gaps.append(projects[i])
+                else:
+                    projects_and_gaps.append({'dauer': gap})
+                    projects_and_gaps.append(projects[i])
                 
         data['drilling_teams'][drilling_team['team_id']] = projects_and_gaps
         data['weekend_columns'] = weekend_columns
