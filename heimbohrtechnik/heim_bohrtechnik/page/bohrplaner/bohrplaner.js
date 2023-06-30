@@ -242,7 +242,8 @@ frappe.bohrplaner = {
             'manager_short': data.manager_short, 
             'drilling_equipment': data.drilling_equipment, 
             'ampeln': data.ampeln,
-            'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false'
+            'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false',
+            'ews_details': data.ews_details
         })).appendTo(place);
         return
     },

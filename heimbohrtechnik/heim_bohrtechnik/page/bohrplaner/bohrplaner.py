@@ -175,7 +175,8 @@ def get_project_data(p, dauer):
             'saugauftrag': saugauftrag,
             'pneukran': pneukran,
             'manager_short': manager_short,
-            'drilling_equipment': drilling_equipment
+            'drilling_equipment': drilling_equipment,
+            'ews_details': (project.ews_details or "").replace("PN20", "<b>PN20</b>").replace("PN35", "<b>PN35</b>")
         }
         
     return p_data
