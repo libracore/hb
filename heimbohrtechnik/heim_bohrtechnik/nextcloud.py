@@ -10,14 +10,20 @@ from frappe.desk.form.load import get_attachments
 import time
 
 PATHS = {
-    'images': "01_Fotos",
-    'plan': "02_Werkpläne",
-    'road': "03_Strassensperrung",
-    'drilling': "04_Bohren",
-    'subprojects': "05_Anbindung",
-    'supplier': "06_Lieferanten",
-    'incidents': "07_Schadenfälle",
-    'admin': "08_Administration"
+    'admin':            "1_Administration",
+    'quotation':        "1_Administration/Angebot",
+    'order':            "1_Administration/Auftrag",
+    'invoice':          "1_Administration/Rechnung",
+    'drilling':         "2_Bohren",
+    'plan':             "3_Pläne",
+    'road':             "4_Strassensperrung",
+    'subprojects':      "5_Anbindung",
+    'supplier':         "6_Lieferanten",
+    'supplier_ews':     "6_Lieferanten/EWS",
+    'supplier_mud':     "6_Lieferanten/Mulden_und_Saugwagen",
+    'supplier_other':   "6_Lieferanten/Diverses",
+    'incidents':        "7_Schadenfälle",
+    'memo':             "8_Memos_und_Notizen"
 }
 
 """
@@ -45,14 +51,20 @@ def create_project_folder(project):
     
     create_path(client, project_path)
     # create child folders
-    create_path(client, os.path.join(project_path, PATHS['images']))
+    create_path(client, os.path.join(project_path, PATHS['admin']))
+    create_path(client, os.path.join(project_path, PATHS['quotation']))
+    create_path(client, os.path.join(project_path, PATHS['order']))
+    create_path(client, os.path.join(project_path, PATHS['invoice']))
+    create_path(client, os.path.join(project_path, PATHS['drilling']))
     create_path(client, os.path.join(project_path, PATHS['plan']))
     create_path(client, os.path.join(project_path, PATHS['road']))
-    create_path(client, os.path.join(project_path, PATHS['drilling']))
     create_path(client, os.path.join(project_path, PATHS['subprojects']))
     create_path(client, os.path.join(project_path, PATHS['supplier']))
+    create_path(client, os.path.join(project_path, PATHS['supplier_ews']))
+    create_path(client, os.path.join(project_path, PATHS['supplier_mud']))
+    create_path(client, os.path.join(project_path, PATHS['supplier_other']))
     create_path(client, os.path.join(project_path, PATHS['incidents']))
-    create_path(client, os.path.join(project_path, PATHS['admin']))
+    create_path(client, os.path.join(project_path, PATHS['memo']))
     return
 
 def get_project_path(project):
