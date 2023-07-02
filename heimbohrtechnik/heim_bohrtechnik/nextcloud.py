@@ -148,17 +148,52 @@ def upload_file(self, event):
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
         if frappe.db.exists("Project", project):
             physical_file_name = get_physical_path(self.name)
-            write_project_file_from_local_file (project, physical_file_name, PATHS['supplier'])
+            if frappe.get_value("Purchase Order", self.atatched_to_name, "supplier") in ("L-80011", "L-80061"):
+                write_project_file_from_local_file (project, physical_file_name, PATHS['supplier_ews'])
+            else:
+                write_project_file_from_local_file (project, physical_file_name, PATHS['supplier_other'])
     
+    elif self.attached_to_doctype == "Quotation":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            write_project_file_from_local_file (project, physical_file_name, PATHS['quotation'])
+            
+    elif self.attached_to_doctype == "Sales Order":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            write_project_file_from_local_file (project, physical_file_name, PATHS['order'])
+            
     elif self.attached_to_doctype == "Sales Invoice":
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
         if frappe.db.exists("Project", project):
             physical_file_name = get_physical_path(self.name)
-            write_project_file_from_local_file (project, physical_file_name, PATHS['admin'])
+            write_project_file_from_local_file (project, physical_file_name, PATHS['invoice'])
     
     elif self.attached_to_doctype == "Project":
+        # check if this file is a plan
+        plans = frappe.db.sql("""
+            SELECT `name` 
+            FROM `tabConstruction Site Description Plan` 
+            WHERE `file` = "{0}";""".format(self.file_url), as_dict=True)
         physical_file_name = get_physical_path(self.name)
-        write_project_file_from_local_file (self.attached_to_name, physical_file_name, PATHS['drilling'])
+        if len(plans) > 0:
+            write_project_file_from_local_file (self.attached_to_name, physical_file_name, PATHS['plan'])
+        else:
+            write_project_file_from_local_file (self.attached_to_name, physical_file_name, PATHS['drilling'])
+    
+    elif self.attached_to_doctype == "Request for Public Area Use":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            write_project_file_from_local_file (project, physical_file_name, PATHS['road'])
+        
+    elif self.attached_to_doctype == "Subcontracting Order":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            write_project_file_from_local_file (project, physical_file_name, PATHS['subprojects'])
         
     return
 
