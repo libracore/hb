@@ -1,5 +1,5 @@
 <div class="subproject_booking_overlay {{ multi_day }}" id="{{ subcontracting_order }}"
-    style="width: {{ width }}px;{% if subproject_shift > 0 %} top: {{ subproject_shift }}px !important; left: {{ subproject_shift / 2 }}px !important;{% endif %}"
+    style="width: {{ width }}px; background-color: {{ background }}; {% if subproject_shift > 0 %} top: {{ subproject_shift }}px !important; left: {{ subproject_shift / 2 }}px !important;{% endif %}"
     draggable="{{ dragable }}"
     ondragstart="drag(event)"
     onclick="frappe.bohrplaner.open_subcontracting_order(this);" 

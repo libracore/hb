@@ -1,0 +1,43 @@
+<style>
+.btn-secondary {
+    background-color: silver;
+}
+
+.btn-secondary:hover {
+    background-color: grey;
+}
+</style>
+<div style="margin: 5px; margin-top: 0px; border-top: 1px solid white; ">
+    <div class="row">
+        <div class="form-column col-sm-6">
+            <p class="text-muted">{%= __("User") %}</p>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input type="text" id="user" name="user" class="form-control" placeholder="User" readonly>
+            </div>
+        </div>
+        <div class="form-column col-sm-6">
+            <p class="text-muted">{%= __("Level") %}</p>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-codepen"></i></span>
+                <input type="text" id="role" name="role" class="form-control" placeholder="Level" readonly>
+            </div>
+        </div>
+        
+    </div>
+  
+    
+    <div class="row">
+        <div class="form-column col-sm-6">
+          <p><br></p>
+          
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-column col-sm-12" id="approvals_view"></div>
+    </div>
+    
+</div>
+
+<input type="text" id="work_order_reference" name="work_order_reference" class="form-control" style="visibility: hidden; ">

@@ -73,6 +73,10 @@ frappe.ui.form.on('Project', {
             add_construction_site_description_button(frm, frm.doc.name);
             // show insurance information
             show_insurance_information(frm.doc.name);
+            // highlight notes if available
+            if (frm.doc.notes) {
+                cur_frm.dashboard.add_comment( "Hinweise beachten!", 'blue', true);
+            }
             // split project button
             frm.add_custom_button(__("Projekt teilen"), function() {
                 frappe.confirm(

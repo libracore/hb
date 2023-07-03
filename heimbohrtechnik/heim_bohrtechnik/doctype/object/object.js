@@ -605,7 +605,14 @@ function convert_gps_to_ch(frm) {
 }
 
 function update_ews_details(frm, cdt, cdn) {
-    if (frm.doc.ews_specification.length === 0) {
+    frappe.call({
+        'method': 'get_ews_details',
+        'doc': frm.doc,
+        'callback': function(response) {
+            cur_frm.set_value("ews_details", response.message);
+        }
+    });
+    /*if (frm.doc.ews_specification.length === 0) {
         return;
     }
     var v = frm.doc.ews_specification[0];
@@ -624,23 +631,24 @@ function update_ews_details(frm, cdt, cdn) {
             }
             cur_frm.set_value("ews_details", details);
         } else {
-            if (frm.doc.ews_specification.length === 1) {
-                var details = (v.ews_count || "?") + "x "
-                    + (v.ews_depth || "?") + "m, "
-                    + (v.ews_diameter || "?") + (v.ews_diameter_unit || "");
-                if (v.pressure_level) {
-                    details += ", " + (v.pressure_level || "");
+            var details = "";
+            for (var i = 0; i < frm.doc.ews_specification.length; i++) {
+                v = frm.doc.ews_specification[i];
+                details += (v.ews_count || "?") + "x"
+                    + (v.ews_depth || "?") + "-"
+                    + (v.ews_diameter || "?"); // + (v.ews_diameter_unit || "");
+                if ((v.pressure_level) && (!v.pressure_level.includes("PN16")) {
+                    details += " " + (v.pressure_level || "");
                 }
                 if (frm.doc.drilling_type === "Brunnen") {
                     details = "Brunnen " + details;
                 }
-                cur_frm.set_value("ews_details", details);
-            } else {
-                cur_frm.set_value("ews_details", "divers");
             }
+            cur_frm.set_value("ews_details", details);
         }
-    }
+    }*/
     // set wall strength
+    var v = frm.doc.ews_specification[0];
     if ((v.ews_diameter > 0) && (v.pressure_level)) {
         frappe.model.set_value(v.doctype, v.name, "ews_wall_strength", 
             get_wall_strength_from_diameter(v.ews_diameter, v.pressure_level));

@@ -303,7 +303,11 @@ def sync_leave_applications():
                         })
                         leave_type.insert()
                         frappe.db.commit()
-                            
+                    
+                    # check and cancel overlaps
+                    check_resolve_overlaps(employee=employee_matches[0]['name'], 
+                        from_date=absence['from_date'], to_date=absence['to_date'])
+                    
                     # create leave
                     new_leave = frappe.get_doc({
                         'doctype': "Leave Application",
@@ -347,5 +351,29 @@ def sync_timeshepherd_ids():
             print("No matches for {0} ({1} {2})".format(employee['id'], first_name, last_name))
         else:
             print("Multiple matches for {0} ({1} {2})".format(employee['id'], first_name, last_name))
+    
+    return
+
+"""
+Check if there is already a leave application and cancel this
+"""
+def check_resolve_overlaps(employee, from_date, to_date):
+    # find overlaps
+    for d in frappe.db.sql("""
+        SELECT `name`
+        FROM `tabLeave Application`
+        WHERE `employee` = "{employee}"
+          AND `docstatus` < 2
+          AND `status` IN ("Open", "Approved")
+          AND `to_date` >= "{from_date}"
+          AND `from_date` <= "{to_date}";
+        """.format(employee=employee, from_date=from_date, to_date=to_date), as_dict=True):
+        
+        # push to cancelled stage
+        frappe.db.sql("""
+            UPDATE `tabLeave Application`
+            SET `docstatus` = 2
+            WHERE `name` = "{name}";
+            """.format(name=d['name']))
     
     return
