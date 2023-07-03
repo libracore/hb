@@ -60,10 +60,9 @@ def submit(exp, event):
     
 def cancel(exp, event):
     # get journal entry
+    if not frappe.db.exists("Journal Entry", exp.journal_entry):
+        return None
     jv = frappe.get_doc("Journal Entry", exp.journal_entry)
-    # unlink
-    exp.pretax_record = ""
-    exp.save()
     # cancel
     jv.cancel()
     frappe.db.commit()

@@ -135,15 +135,11 @@ frappe.bohrplaner = {
         return data
     },
     get_overlay_data: function(page) {
-        if (locals.print_view) {
+         // start waiting indicator
+        frappe.bohrplaner.start_wait(page);
+        setTimeout(function(){
             frappe.bohrplaner._get_overlay_data(page);
-        } else {
-             // start waiting indicator
-            frappe.bohrplaner.start_wait(page);
-            setTimeout(function(){
-                frappe.bohrplaner._get_overlay_data(page);
-            }, 100);
-        }
+        }, 100);
     },
     _get_overlay_data: function(page) {
         var from = $("#from").val();
@@ -161,9 +157,7 @@ frappe.bohrplaner = {
                     var data = contents[i];
                     frappe.bohrplaner.add_overlay(page, data);
                 }
-                if (locals.print_view !== 1) {
                     frappe.bohrplaner.get_subproject_overlay_data(page);
-                }
            }
         });
         frappe.call({
@@ -233,26 +227,23 @@ frappe.bohrplaner = {
     add_overlay: function(page, data, as_print=false) {
         var place = $('[data-bohrteam="' + data.bohrteam + '"][data-date="' + data.start + '"][data-vmnm="' + data.vmnm + '"]');
         $(place).css("position", "relative");
-        var qty = data.dauer
-        var width = 42 * qty;
-        var box_height = 13;
-        var padding = 0;
-        if (locals.print_view) { 
-            width = locals.print_block_length_factor * qty; // compensate for block with
-            box_height = 22;
-            padding = 2;
-        }
+        var qty = data.dauer;
+        
         $(frappe.render_template('booking_overlay', {
-            'width': width, 
-            'box_height': box_height,
-            'padding': padding,
+            'width': 42 * qty, 
+            'box_height': 13,
+            'padding': 0,
+            'font_size': 7,
+            'min_width': 35,
+            'max_width': 70,
             'project': data.project, 
             'saugauftrag': data.saugauftrag, 
             'pneukran': data.pneukran, 
             'manager_short': data.manager_short, 
             'drilling_equipment': data.drilling_equipment, 
             'ampeln': data.ampeln,
-            'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false'
+            'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false',
+            'ews_details': data.ews_details
         })).appendTo(place);
         return
     },
@@ -290,7 +281,8 @@ frappe.bohrplaner = {
             'parent_project': data.project,
             'subcontracting_order': data.subcontracting_order,
             'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false',
-            'multi_day': (data.dauer > 2) ? 'multi_day' : 'single_day'
+            'multi_day': (data.dauer > 2) ? 'multi_day' : 'single_day',
+            'background': data.background
         })).appendTo(place);
         return
     },
@@ -304,7 +296,9 @@ frappe.bohrplaner = {
             'width': width, 
             'absence': data.absence,
             'employee_name': data.employee_name,
-            'shift': data.shift
+            'shift': data.shift,
+            'color': data.color,
+            'remarks': data.remarks
         })).appendTo(place);
         return
     },
@@ -359,12 +353,8 @@ frappe.bohrplaner = {
         //get template data
         var view_from = from;
         var view_to = to;
-        if (locals.print_view) {            // for print view, use 3 weeks from now
-            //view_from = frappe.datetime.add_days(new Date(), 0);
-            view_to = frappe.datetime.add_days(view_from, 21);
-        }
         var data = frappe.bohrplaner.get_content(page, view_from, view_to);
-        data['print_view'] = locals.print_view;
+        data['print_view'] = 0;
         // render calendar grid
         $(frappe.render_template('calendar_grid', data)).appendTo(page.body);
         // set saved dates
@@ -589,6 +579,10 @@ frappe.bohrplaner = {
         var parent_project = $(element).attr("data-subcontracting_order");
         url_to_form("Subcontracting Order", parent_project, function (r) { window.open(r.message, '_blank'); });
     },
+    open_absence: function(element) {
+        var absence = $(element).attr("data-absence");
+        url_to_form("Leave Application", absence, function (r) { window.open(r.message, '_blank'); });
+    },
     mark_project: function(project_name) {
         var project_element = document.getElementById(project_name);
         if (project_element) {
@@ -798,23 +792,15 @@ function reshedule(ref_id, team, day, start_half_day, lanetype) {
 function print_content(page, from, to) {
    
     frappe.dom.freeze('Bitte warten, das PDF wird erzeugt...');
-    // create html
-    locals.print_view = 1;
-    frappe.bohrplaner.reset_dates(page);
-    
-    var bp_html = $("#bohrplan_wrapper").html();
-    bp_html = bp_html + "<style>*{ font-size: 18px !important; } table{ height: 2988px !important; }</style>";
+
     frappe.call({
         'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.print_bohrplaner',
         'args': {
-            'html': bp_html
+            'start_date': document.getElementById("from").value
         },
         'callback': function(r) {
-            window.open(r.message, '_blank');
+            window.open(r.message.url, '_blank');
             
-            // reset from print
-            locals.print_view = 0;
-            frappe.bohrplaner.reset_dates(page);
             frappe.dom.unfreeze();
         }
     });

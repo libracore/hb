@@ -398,7 +398,7 @@ def check_create_project(sales_order):
         # reference customer and sales order
         p = frappe.get_doc("Project", sales_order['object'])
         p.customer = sales_order['customer']
-        if frappe.db.exists("Sales Order", sales_order['name']):
+        if frappe.db.exists("Sales Order", sales_order['name']) and not p.sales_order:
             p.sales_order = sales_order['name']
         p.save()
         # update project data
@@ -571,14 +571,41 @@ Update attached drilling instruction pdf
 def update_attached_sv_ib_pdf(project):
     # check if this is already attached
     attachments = get_attachments("Project", project)
-    title = "SV-IB-{0}.pdf".format(project)
+    street = frappe.get_value("Project", project, "object_street")
+    location = frappe.get_value("Project", project, "object_location")
+    
+    # clean old files
     for a in attachments:
-        if a.file_name == title:
+        if a.file_name.startswith("SV-P-") or a.file_name.startswith("IB-P-"):
             remove_file(a.name, "Project", project)
+        
+    # SV 
+    title = ("SV-{0} {1}, {2}.pdf".format(project, street, location)).replace("/", ",")
     # create and attach
-    execute("Project", project, title=title, print_format="SV+IB", file_name=title)
+    execute("Project", project, title=project, print_format="SV combined", file_name=title)
+    
+    # IB 
+    title = ("IB-{0} {1}, {2}.pdf".format(project, street, location)).replace("/", ",")
+    # create and attach
+    execute("Project", project, title=project, print_format="IB combined", file_name=title)
     return
 
+"""
+Update attached construction site description pdf
+"""
+@frappe.whitelist()
+def update_attached_csd_pdf(construction_site_description):
+    # check if this is already attached
+    attachments = get_attachments("Construction Site Description", construction_site_description)
+    title = "{0}.pdf".format(construction_site_description)
+    project = frappe.get_value("Construction Site Description", construction_site_description, "project")
+    for a in attachments:
+        if a.file_name.startswith(construction_site_description):
+            remove_file(a.name, "Construction Site Description", construction_site_description)
+    # create and attach
+    execute("Construction Site Description", construction_site_description, title=project, print_format="Baustellenbeschreibung", file_name=title)
+    return
+    
 """ 
 Create a full project file
 """
@@ -597,10 +624,11 @@ def create_full_project_file(project):
     p_doc = frappe.get_doc("Project", project)
     if p_doc.plans:
         for plan in p_doc.plans:
-            merger.append("{0}/sites/{1}{2}".format(
-                get_bench_path(), 
-                get_files_path().split("/")[1],
-                plan.file))
+            if plan.file and plan.file[-4:].lower() == ".pdf":
+                merger.append("{0}/sites/{1}{2}".format(
+                    get_bench_path(), 
+                    get_files_path().split("/")[1],
+                    plan.file))
     # ... and from permits
     if p_doc.permits:
         for permit in p_doc.permits:
@@ -614,10 +642,7 @@ def create_full_project_file(project):
     merger.write(tmp_name)
     merger.close()
     cleanup(pdf_file)
-    
-    # send full file to nextcloud
-    write_project_file_from_local_file(project, tmp_name)
-    
+        
     # attach
     # check if this is already attached
     target_name = "Dossier_{name}.pdf".format(name=project.replace(" ", "-").replace("/", "-"))
@@ -927,6 +952,7 @@ def quick_entry_purchase_invoice(company, supplier, date, bill_no, item,
         'cost_center': cost_center, 
         'taxes_and_charges': taxes_and_charges, 
         'terms': remarks,
+        'remarks': remarks,
         'title': frappe.get_value("Supplier", supplier, "supplier_name")
     })
     
@@ -958,11 +984,12 @@ Identify the header information from the last "Bohranzeige" sent for a project
 @frappe.whitelist()
 def find_bohranzeige_mail_header(project):
     # first, find drilling notices for this project
-    dns = frappe.get_all("Bohranzeige", filters={'project': project}, fields=['name'])
+    dns = frappe.get_all("Bohranzeige", filters={'project': project}, fields=['name', 'bewilligung'])
     header = {
         'date': None,
         'recipients': None,
-        'cc': None
+        'cc': None,
+        'permit': None
     }
     if len(dns) > 0:
         for dn in dns:
@@ -975,5 +1002,17 @@ def find_bohranzeige_mail_header(project):
                     header['date'] = comms[0]['communication_date']
                     header['recipients'] = comms[0]['recipients']
                     header['cc'] = comms[0]['cc']
-                    
+            
+            header['permit'] = dn['bewilligung']
+            
     return header
+
+"""
+This is a hack because description could not have been formated (always dropped on save)
+"""
+def item_description_save(item, event):
+    if item.new_description:
+        item.description = item.new_description
+    else:
+        item.descritpion = item.item_name
+    return

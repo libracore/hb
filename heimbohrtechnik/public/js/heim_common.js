@@ -122,13 +122,15 @@ function recalculate_markups_discounts(frm) {
     // calculate markups
     if ((frm.doc.markup_positions) && (frm.doc.markup_positions.length > 0)) {
         frm.doc.markup_positions.forEach(function (markup) {
-            if (markup.percent != 0) {
-                var markup_amount = amount * (markup.percent / 100);
-                frappe.model.set_value(markup.doctype, markup.name, "amount", markup_amount);
-                frappe.model.set_value(markup.doctype, markup.name, "basis", amount);
+            if (markup.after_discounts === 0) {
+                if (markup.percent !== 0) {
+                    var markup_amount = amount * (markup.percent / 100);
+                    frappe.model.set_value(markup.doctype, markup.name, "amount", markup_amount);
+                    frappe.model.set_value(markup.doctype, markup.name, "basis", amount);
+                }
+                amount += markup.amount;
+                total_discount -= markup.amount;
             }
-            amount += markup.amount;
-            total_discount -= markup.amount;
         });
     }
     // calculate discounts
@@ -141,6 +143,20 @@ function recalculate_markups_discounts(frm) {
             }
             amount -= discount.amount;
             total_discount += discount.amount;
+        });
+    }
+    // markups after discounts
+    if ((frm.doc.markup_positions) && (frm.doc.markup_positions.length > 0)) {
+        frm.doc.markup_positions.forEach(function (markup) {
+            if (markup.after_discounts === 1) {
+                if (markup.percent !== 0) {
+                    var markup_amount = amount * (markup.percent / 100);
+                    frappe.model.set_value(markup.doctype, markup.name, "amount", markup_amount);
+                    frappe.model.set_value(markup.doctype, markup.name, "basis", amount);
+                }
+                amount += markup.amount;
+                total_discount -= markup.amount;
+            }
         });
     }
     // apply to overall discount
@@ -570,6 +586,7 @@ function check_warranty(frm) {
                             var child = cur_frm.add_child('markup_positions');
                             frappe.model.set_value(child.doctype, child.name, 'description', "Garantierückbehalt");
                             frappe.model.set_value(child.doctype, child.name, 'amount', accrual);
+                            frappe.model.set_value(child.doctype, child.name, 'after_discounts', 1);
                         }
                     }
                 }

@@ -163,7 +163,6 @@ td {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    background-color: #ffffe0; 
     border: 1px solid #f0e68c;
 }
 /* .subproject_booking_overlay:hover {
@@ -187,12 +186,12 @@ td {
     right: 0px;
     bottom: 0px;
     border-radius: 20px;
-    padding: 5px;
+    padding: 2px 5px 5px 5px;
     text-overflow: ellipsis;
-    overflow: hidden;
+    /* overflow: hidden; */
     white-space: nowrap;
-    background-color: #ffffe0; 
     border: 1px solid #f0e68c;
+    cursor: pointer;
 }
 
 .mfk_booking_overlay {

@@ -10,14 +10,20 @@ from frappe.desk.form.load import get_attachments
 import time
 
 PATHS = {
-    'images': "01_Fotos",
-    'plan': "02_Werkpläne",
-    'road': "03_Strassensperrung",
-    'drilling': "04_Bohren",
-    'subprojects': "05_Anbindung",
-    'supplier': "06_Lieferanten",
-    'incidents': "07_Schadenfälle",
-    'admin': "08_Administration"
+    'admin':            "1_Administration",
+    'quotation':        "1_Administration/Angebot",
+    'order':            "1_Administration/Auftrag",
+    'invoice':          "1_Administration/Rechnung",
+    'drilling':         "2_Bohren",
+    'plan':             "3_Pläne",
+    'road':             "4_Strassensperrung",
+    'subprojects':      "5_Anbindung",
+    'supplier':         "6_Lieferanten",
+    'supplier_ews':     "6_Lieferanten/EWS",
+    'supplier_mud':     "6_Lieferanten/Mulden_und_Saugwagen",
+    'supplier_other':   "6_Lieferanten/Diverses",
+    'incidents':        "7_Schadenfälle",
+    'memo':             "8_Memos_und_Notizen"
 }
 
 """
@@ -45,22 +51,34 @@ def create_project_folder(project):
     
     create_path(client, project_path)
     # create child folders
-    create_path(client, os.path.join(project_path, PATHS['images']))
+    create_path(client, os.path.join(project_path, PATHS['admin']))
+    create_path(client, os.path.join(project_path, PATHS['quotation']))
+    create_path(client, os.path.join(project_path, PATHS['order']))
+    create_path(client, os.path.join(project_path, PATHS['invoice']))
+    create_path(client, os.path.join(project_path, PATHS['drilling']))
     create_path(client, os.path.join(project_path, PATHS['plan']))
     create_path(client, os.path.join(project_path, PATHS['road']))
-    create_path(client, os.path.join(project_path, PATHS['drilling']))
     create_path(client, os.path.join(project_path, PATHS['subprojects']))
     create_path(client, os.path.join(project_path, PATHS['supplier']))
+    create_path(client, os.path.join(project_path, PATHS['supplier_ews']))
+    create_path(client, os.path.join(project_path, PATHS['supplier_mud']))
+    create_path(client, os.path.join(project_path, PATHS['supplier_other']))
     create_path(client, os.path.join(project_path, PATHS['incidents']))
-    create_path(client, os.path.join(project_path, PATHS['admin']))
+    create_path(client, os.path.join(project_path, PATHS['memo']))
     return
 
 def get_project_path(project):
     projects_folder = frappe.get_value("Heim Settings", "Heim Settings", "projects_folder")
+    # only use base project folder (for split projects the first one
+    project = project[:8] if len(project) >= 8 else project
     if not projects_folder:
         frappe.throw("Please configure the projects folder under Heim Settings", "Configuration missing")
         
     return os.path.join(projects_folder, project)
+
+def get_base_path():
+    projects_folder = frappe.get_value("Heim Settings", "Heim Settings", "projects_folder")
+    return projects_folder
     
 def create_path(client, path):
     # create project folder
@@ -87,13 +105,24 @@ def write_project_file_from_local_file (project, file_name, target=PATHS['drilli
         client.upload_sync(os.path.join(project_path, file_name.split("/")[-1]), file_name)
 
     return
-    
+
+"""
+Write the a local file (local file path) to the nextcloud base path (00_Projekte)
+"""
+def write_file_to_base_path(file_name):
+    client = get_client()
+    base_path = get_base_path()
+    client.upload_sync(os.path.join(base_path, file_name.split("/")[-1]), file_name)
+    return
+
 """
 This function gets the cloud link to a project
 """
 @frappe.whitelist()
 def get_cloud_url(project):
     settings = frappe.get_doc("Heim Settings", "Heim Settings")
+    # only use base project folder (for split projects the first one
+    project = project[:8] if len(project) >= 8 else project
     return "{0}/index.php/apps/files/?dir=/{1}/{2}".format(settings.cloud_hostname, settings.projects_folder, project)
 
 """ 
@@ -119,17 +148,52 @@ def upload_file(self, event):
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
         if frappe.db.exists("Project", project):
             physical_file_name = get_physical_path(self.name)
-            write_project_file_from_local_file (project, physical_file_name, PATHS['supplier'])
+            if frappe.get_value("Purchase Order", self.atatched_to_name, "supplier") in ("L-80011", "L-80061"):
+                write_project_file_from_local_file (project, physical_file_name, PATHS['supplier_ews'])
+            else:
+                write_project_file_from_local_file (project, physical_file_name, PATHS['supplier_other'])
     
+    elif self.attached_to_doctype == "Quotation":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            write_project_file_from_local_file (project, physical_file_name, PATHS['quotation'])
+            
+    elif self.attached_to_doctype == "Sales Order":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            write_project_file_from_local_file (project, physical_file_name, PATHS['order'])
+            
     elif self.attached_to_doctype == "Sales Invoice":
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
         if frappe.db.exists("Project", project):
             physical_file_name = get_physical_path(self.name)
-            write_project_file_from_local_file (project, physical_file_name, PATHS['admin'])
+            write_project_file_from_local_file (project, physical_file_name, PATHS['invoice'])
     
     elif self.attached_to_doctype == "Project":
+        # check if this file is a plan
+        plans = frappe.db.sql("""
+            SELECT `name` 
+            FROM `tabConstruction Site Description Plan` 
+            WHERE `file` = "{0}";""".format(self.file_url), as_dict=True)
         physical_file_name = get_physical_path(self.name)
-        write_project_file_from_local_file (self.attached_to_name, physical_file_name, PATHS['drilling'])
+        if len(plans) > 0:
+            write_project_file_from_local_file (self.attached_to_name, physical_file_name, PATHS['plan'])
+        else:
+            write_project_file_from_local_file (self.attached_to_name, physical_file_name, PATHS['drilling'])
+    
+    elif self.attached_to_doctype == "Request for Public Area Use":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            write_project_file_from_local_file (project, physical_file_name, PATHS['road'])
+        
+    elif self.attached_to_doctype == "Subcontracting Order":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            write_project_file_from_local_file (project, physical_file_name, PATHS['subprojects'])
         
     return
 
