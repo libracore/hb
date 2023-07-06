@@ -148,7 +148,7 @@ def upload_file(self, event):
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
         if frappe.db.exists("Project", project):
             physical_file_name = get_physical_path(self.name)
-            if frappe.get_value("Purchase Order", self.atatched_to_name, "supplier") in ("L-80011", "L-80061"):
+            if frappe.get_value("Purchase Order", self.attached_to_name, "supplier") in ("L-80011", "L-80061"):
                 write_project_file_from_local_file (project, physical_file_name, PATHS['supplier_ews'])
             else:
                 write_project_file_from_local_file (project, physical_file_name, PATHS['supplier_other'])
