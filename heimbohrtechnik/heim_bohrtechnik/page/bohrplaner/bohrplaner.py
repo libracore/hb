@@ -717,11 +717,9 @@ def get_absences_overlay_datas(from_date, to_date):
             `remarks`
         FROM `tabLeave Application`
         WHERE 
-            (`from_date` BETWEEN '{from_date}' AND '{to_date}')
-        OR
-            (`to_date` BETWEEN '{from_date}' AND '{to_date}')
-        OR
-            (`from_date` < '{from_date}' AND `to_date` > '{to_date}')
+            ((`from_date` BETWEEN '{from_date}' AND '{to_date}')
+            OR (`to_date` BETWEEN '{from_date}' AND '{to_date}')
+            OR (`from_date` < '{from_date}' AND `to_date` > '{to_date}')) AND `docstatus` < 2
         ORDER BY `from_date` ASC, `employee_name` ASC;""".format(from_date=from_date, to_date=to_date), as_dict=True)
     
     for absence in absences_raw:
