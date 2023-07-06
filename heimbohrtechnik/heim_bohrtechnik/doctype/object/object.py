@@ -8,12 +8,11 @@ from frappe.model.document import Document
 from erpnextswiss.erpnextswiss.swisstopo import GPSConverter
 from frappe import _
 import string, random
-import requests
 import json
 from heimbohrtechnik.heim_bohrtechnik.doctype.construction_site_description.construction_site_description import check_object_checklist
 from frappe.utils import get_url_to_form
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import create_project_folder, get_cloud_url, upload_attachments
-from heimbohrtechnik.heim_bohrtechnik.utils import clone_attachments
+from heimbohrtechnik.heim_bohrtechnik.utils import clone_attachments, get_gps_coordinates
 
 class Object(Document):
     def before_save(self):
@@ -203,12 +202,10 @@ This function will find the GPS coordinates from OpenStreetMaps
 """
 @frappe.whitelist()
 def get_gps(street, location):
-    url = "https://nominatim.openstreetmap.org/search?q={street},{location}&format=json&polygon=1&addressdetails=0".format(street=street, location=location)
-    response = requests.get(url)
-    data = response.json()
+    data = get_gps_coordinates(street, location)
     gps_coordinates = None
     if len(data) > 0:
-        gps_coordinates = "{0}, {1}".format(data[0]['lat'], data[0]['lon'])
+        gps_coordinates = "{0}, {1}".format(data['lat'], data['lon'])
     return gps_coordinates
 
 """

@@ -4,13 +4,14 @@
 from __future__ import unicode_literals
 import frappe
 from heimbohrtechnik.heim_bohrtechnik.dataparser import get_projects
-from heimbohrtechnik.heim_bohrtechnik.utils import update_project
+from heimbohrtechnik.heim_bohrtechnik.utils import update_project, get_gps_coordinates
 from erpnextswiss.scripts.crm_tools import get_primary_supplier_address, get_primary_customer_address
 from datetime import datetime
 import cgi
 
 ROW_SEPARATOR = "\n"
 CELL_SEPARATOR = ";"
+HOTEL = "Hotel"
 
 """
 This function can bulk import supplier files
@@ -388,7 +389,7 @@ def set_supplier_first_address():
         if address:
             s.hauptadresse = "{0}, {1} {2}".format(address.address_line1 or "", address.pincode or "", address.city or "")
             s.save()
-            print("Updated {0}".format(s.name))
+            print("Updated primary address of {0}".format(s.name))
     return
     
 def set_customer_first_address():
@@ -399,7 +400,7 @@ def set_customer_first_address():
         if address:
             c.hauptadresse = "{0}, {1} {2}".format(address.address_line1 or "", address.pincode or "", address.city or "")
             c.save()
-            print("Updated {0}".format(c.name))
+            print("Updated primary address of {0}".format(c.name))
     return
 
 def update_object_lat_long():
@@ -544,3 +545,74 @@ def update_ews_details():
             print("Failed: {0}".format(err))
     print("done")
     return
+
+"""
+This function will find hotels (by activity), move them to the supplier group hotel and make sure it has gps coordinates
+
+Run with
+ $ bench execute heimbohrtechnik.heim_bohrtechnik.migration.update_hotels
+ 
+"""
+def update_hotels(skip_address_update=True):    
+    hotels = frappe.db.sql("""
+        SELECT `parent` AS `name` 
+        FROM `tabSupplier Activity` 
+        WHERE `parenttype` = "Supplier"
+          AND `activity` = "{0}";
+        """.format(HOTEL), as_dict=True)
+    
+    # update primary addresses
+    if not skip_address_update:
+        print("Set primary addresses...")
+        set_supplier_first_address()
+    
+    # make sure hotel supplier_group is available
+    if not frappe.db.exists("Supplier Group", "Hotel"):
+        # find root group
+        root_group = frappe.db.sql("""
+            SELECT `name` 
+            FROM `tabSupplier Group`
+            WHERE `is_group` = 1
+              AND (`parent_supplier_group` IS NULL OR `parent_supplier_group` = "");
+        """, as_dict=True)[0]['name']
+        hotel_group = frappe.get_doc({
+            'doctype': "Supplier Group",
+            'parent_supplier_group': root_group,
+            'supplier_group_name': HOTEL,
+            'is_group': 0
+        })
+        hotel_group.insert()
+        
+    for hotel in hotels:
+        if frappe.get_value("Supplier", hotel['name'], 'disabled'):
+            continue        # skip if it is disabled
+        
+        if update_hotel_coordinates(hotel['name']):
+            print("Updated {0}".format(hotel['name']))
+            
+        frappe.db.commit()
+        
+@frappe.whitelist()
+def update_hotel_coordinates(supplier):
+    hotel_doc = frappe.get_doc("Supplier", supplier)
+    # set supplier group
+    if hotel_doc.supplier_group != HOTEL:
+        hotel_doc.supplier_group = HOTEL
+        hotel_doc.save()
+    
+    # check coordinates
+    if not hotel_doc.gps_latitude:
+        if not hotel_doc.hauptadresse:
+            # no primary address - no chance of finding location - skip
+            print("{0} ({1}): no address - skipping".format(hotel_doc.supplier_name, hotel_doc.name))
+            return False
+        else:
+            # find coordinates
+            street_location = hotel_doc.hauptadresse.split(", ")
+            data = get_gps_coordinates(street_location[0], street_location[1])
+            if data:
+                hotel_doc.gps_latitude = data['lat']
+                hotel_doc.gps_longitude = data['lon']
+                hotel_doc.save()
+    
+    return True

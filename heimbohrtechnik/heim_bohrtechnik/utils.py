@@ -19,7 +19,8 @@ from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
 import re
 import uuid
 from PyPDF2 import PdfFileMerger
-    
+import requests
+
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
     permits = frappe.get_all("Permit Type", filters={'is_standard': 1}, fields=['name'])
@@ -1016,3 +1017,12 @@ def item_description_save(item, event):
     else:
         item.descritpion = item.item_name
     return
+
+def get_gps_coordinates(street, location):
+    url = "https://nominatim.openstreetmap.org/search?q={street},{location}&format=json&polygon=1&addressdetails=0".format(street=street, location=location)
+    response = requests.get(url)
+    data = response.json()
+    gps_coordinates = None
+    if len(data) > 0:
+        gps_coordinates = {'lat': data[0]['lat'], 'lon': data[0]['lon']}
+    return gps_coordinates
