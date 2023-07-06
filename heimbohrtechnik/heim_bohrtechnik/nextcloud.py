@@ -138,10 +138,7 @@ def get_physical_path(file_name):
 """
 Hook from File: upload specific files to nextcloud
 """
-def upload_file(self, event):
-    #### TEMPORARY SKIP
-    return
-    
+def upload_file(self, event):    
     if self.attached_to_doctype == "Bohranzeige":
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
         physical_file_name = get_physical_path(self.name)
