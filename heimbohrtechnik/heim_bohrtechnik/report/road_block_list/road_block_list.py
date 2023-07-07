@@ -18,10 +18,11 @@ def get_columns(filters):
         {"label": _("Strassensperrung"), "fieldname": "road_block", "fieldtype": "Link", "options": "Request for Public Area Use", "width": 90},
         {"label": _("Bohrteam"), "fieldname": "drilling_team", "fieldtype": "Link", "options": "Drilling Team", "width": 150},
         {"label": _("Objektname"), "fieldname": "object_name", "fieldtype": "Data", "width": 150},
+        {"label": _("Objektname"), "fieldname": "object_name", "fieldtype": "Data", "width": 150},
         {"label": _("Bohrdatum Start"), "fieldname": "drilling_from_date", "fieldtype": "Date", "width": 90},
         {"label": _("Bohrdatum Ende"), "fieldname": "drilling_to_date", "fieldtype": "Date", "width": 90},
-        {"label": _("Datum Strassensperrung"), "fieldname": "road_block_from_date", "fieldtype": "Date", "width": 90},
-        {"label": _("Datum Strassensperrung"), "fieldname": "road_block_to_date", "fieldtype": "Date", "width": 90},
+        {"label": _("Strassensperrung Start"), "fieldname": "road_block_from_date", "fieldtype": "Data", "width": 90},
+        {"label": _("Strassensperrung Ende"), "fieldname": "road_block_to_date", "fieldtype": "Data", "width": 90},
         {"label": _("Bewilligungsnr."), "fieldname": "permit_no", "fieldtype": "Data", "width": 90},
         {"label": _("Bewilligungsdatum"), "fieldname": "permit_date", "fieldtype": "Date", "width": 90}
     ]
@@ -38,7 +39,7 @@ def get_data(filters):
             `tabProject`.`expected_start_date` AS `drilling_from_date`,
             `tabProject`.`expected_end_date` AS `drilling_to_date`,
             `tabRequest for Public Area Use`.`from_date` AS `road_block_from_date`,
-            `tabRequest for Public Area Use`.`from_date` AS `road_block_to_date`
+            `tabRequest for Public Area Use`.`to_date` AS `road_block_to_date`
         FROM `tabProject Permit`
         LEFT JOIN `tabProject` ON `tabProject`.`name` = `tabProject Permit`.`parent`
         LEFT JOIN `tabRelated Project` ON 
@@ -56,4 +57,17 @@ def get_data(filters):
     ;""".format(from_date=filters.from_date)
     data = frappe.db.sql(sql_query, as_dict=True)
     
+    # color issues
+    for d in data:
+        # mark drilling before permit red
+        if d['drilling_from_date'] < d['road_block_from_date']:
+            d['road_block_from_date'] = "<span style='color: red; '>{0}</span>".format(d['road_block_from_date'].strftime("%d.%m.%Y"))
+        else:
+            d['road_block_from_date'] = "<span style='color: darkgreen; '>{0}</span>".format(d['road_block_from_date'].strftime("%d.%m.%Y"))
+        # mark drilling after permit
+        if d['drilling_to_date'] > d['road_block_to_date']:
+            d['road_block_to_date'] = "<span style='color: red; '>{0}</span>".format(d['road_block_to_date'].strftime("%d.%m.%Y"))
+        else:
+            d['road_block_to_date'] = "<span style='color: darkgreen; '>{0}</span>".format(d['road_block_to_date'].strftime("%d.%m.%Y"))
+            
     return data
