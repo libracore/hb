@@ -29,10 +29,10 @@ def get_data(filters):
             `raw`.`customer`,
             `raw`.`customer_name`,
             `raw`.`address`,
-            COUNT(`raw`.`quotation`) AS `qtns`,
-            SUM(`raw`.`qtn_base_net_total`) AS `qtn_volume`,
-            COUNT(`raw`.`sales_order`) AS `sos`,
-            SUM(`raw`.`so_base_net_total`) AS `so_volume`
+            `raw`.`qtns`,
+            `raw`.`qtn_volume`,
+            `raw`.`sos`,
+            `raw`.`so_volume`
         FROM (
             SELECT
                 `tabCustomer`.`name` AS `customer`,
@@ -46,21 +46,34 @@ def get_data(filters):
                 ORDER BY `tabAddress`.`is_primary_address` DESC
                 LIMIT 1
                 ) AS `address`,
-                `tabQuotation`.`name` AS `quotation`,
-                `tabQuotation`.`base_net_total` AS `qtn_base_net_total`,
-                `tabSales Order`.`name` AS `sales_order`,
-                `tabSales Order`.`base_net_total` AS `so_base_net_total`
+                (SELECT COUNT(`tQ1`.`name`) 
+                 FROM `tabQuotation` AS `tQ1`
+                 WHERE `tQ1`.`party_name` = `tabCustomer`.`name` 
+                   AND `tQ1`.`docstatus` = 1
+                   AND `tQ1`.`transaction_date` BETWEEN "{from_date}" AND "{to_date}") AS `qtns`,
+                (SELECT SUM(`tQ2`.`base_net_total`) 
+                 FROM `tabQuotation` AS `tQ2`
+                 WHERE `tQ2`.`party_name` = `tabCustomer`.`name` 
+                   AND `tQ2`.`docstatus` = 1
+                   AND `tQ2`.`transaction_date` BETWEEN "{from_date}" AND "{to_date}") AS `qtn_volume`,
+                (SELECT COUNT(`tS1`.`name`) 
+                 FROM `tabSales Order` AS `tS1`
+                 WHERE `tS1`.`customer` = `tabCustomer`.`name` 
+                   AND `tS1`.`docstatus` = 1
+                   AND `tS1`.`transaction_date` BETWEEN "{from_date}" AND "{to_date}") AS `sos`,
+                (SELECT SUM(`tS2`.`base_net_total`) 
+                 FROM `tabSales Order` AS `tS2`
+                 WHERE `tS2`.`customer` = `tabCustomer`.`name` 
+                   AND `tS2`.`docstatus` = 1
+                   AND `tS2`.`transaction_date` BETWEEN "{from_date}" AND "{to_date}") AS `so_volume`
             FROM `tabCustomer` 
-            LEFT JOIN `tabQuotation` ON (`tabQuotation`.`party_name` = `tabCustomer`.`name` 
-                AND `tabQuotation`.`docstatus` = 1)
-            LEFT JOIN `tabSales Order` ON (`tabSales Order`.`customer` = `tabCustomer`.`name` 
-                AND `tabSales Order`.`docstatus` = 1)
             WHERE 
                 `tabCustomer`.`disabled` = 0
+            GROUP BY `tabCustomer`.`name`
         ) AS `raw`
         GROUP BY `raw`.`customer`
         ORDER BY `so_volume` DESC;
-    """
+    """.format(from_date=filters.from_date, to_date=filters.to_date)
     
     data = frappe.db.sql(sql_query, as_dict=True)
     
