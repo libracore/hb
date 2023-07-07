@@ -406,3 +406,4 @@ DocType: Purchase Invoice,Quick Entry,Schnellerfassung
 Page: Approval Manager,Approval Manager,Freigabe-Manager
 Page: Approval Manager,Decision,Entscheid
 DocType: Amrkup Position,After discounts,Nach Abzügen
+Report: Road Block List,Road Block List,Liste der Strassensperrungen
