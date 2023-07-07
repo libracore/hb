@@ -19,6 +19,8 @@ class ConstructionSiteDescription(Document):
             check_object_checklist(self.project if has_project else self.object, "Kran intern", has_project)
         if cint(self.external_crane_required) == 1:
             check_object_checklist(self.project if has_project else self.object, "Kran extern", has_project)
+        if cint(self.requires_traffic_control) == 1:
+            check_object_checklist(self.project if has_project else self.object, "Verkehrsdienst", has_project)
         # public area
         if cint(self.use_public_area) == 1:
             check_object_permit(self.project if has_project else self.object, "Strassensperrung", has_project)

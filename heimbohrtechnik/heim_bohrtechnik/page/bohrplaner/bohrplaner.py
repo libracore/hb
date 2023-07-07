@@ -86,6 +86,8 @@ def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
 def get_project_data(p, dauer):
     project = frappe.get_doc("Project", p.name)
     p_object = frappe.get_doc("Object", p.object)
+    requires_traffic_control = False
+    traffic_light = 0
     construction_sites = frappe.get_all("Construction Site Description", 
         filters={'project': p.name}, 
         fields=['name', 'internal_crane_required', 'external_crane_Required', 'carrymax'])
@@ -96,6 +98,13 @@ def get_project_data(p, dauer):
         for de in (construction_site.drilling_equipment or []):
             drilling_equipment.append(de.drilling_equipment)
         drilling_equipment = ", ".join(drilling_equipment)
+        
+        if cint(construction_site.requires_traffic_control):
+            requires_traffic_control = True
+            
+        if cint(construction_site.requires_traffic_light):
+            traffic_light = 1
+            
     if drilling_equipment == []:            # no construction site description, rewrite to empty string
         drilling_equipment = ""
     saugauftrag = 'Schlamm fremd'
@@ -109,6 +118,7 @@ def get_project_data(p, dauer):
         'carrymax': frappe.get_cached_value("Heim Settings", "Heim Settings", "carrymax_activity"),
         'mud': frappe.get_cached_value("Heim Settings", "Heim Settings", "mud_disposer_activity"),
         'trough': frappe.get_cached_value("Heim Settings", "Heim Settings", "trough_activity"),
+        'traffic_control': frappe.get_cached_value("Heim Settings", "Heim Settings", "traffic_control_activity")
     }
     flag_ext_crane = False
     flag_int_crane = False
@@ -130,6 +140,8 @@ def get_project_data(p, dauer):
             mud = cl_entry.supplier_short_display or cl_entry.supplier_name
         elif cl_entry.activity == activities['carrymax']:
             flag_carrymax = True
+        elif cl_entry.activity == activities['traffic_control']:
+            requires_traffic_control = True
     
     # read construction site
     if len(construction_sites) > 0:
@@ -160,7 +172,11 @@ def get_project_data(p, dauer):
         pneukran += " {0}".format(get_short_time(pneukran_details['appointment']))
     if 'appointment_end' in pneukran_details and pneukran_details['appointment_end']:
         pneukran += " / {0}".format(get_short_time(pneukran_details['appointment_end']))
-        
+    
+    # extend crane with traffic control
+    if requires_traffic_control:
+        pneukran += " <b>VD</b>"
+    
     # override mud for special case
     if flag_override_mud:
         saugauftrag = mud
@@ -176,7 +192,8 @@ def get_project_data(p, dauer):
             'pneukran': pneukran,
             'manager_short': manager_short,
             'drilling_equipment': drilling_equipment,
-            'ews_details': (project.ews_details or "").replace("PN20", "<b>PN20</b>").replace("PN35", "<b>PN35</b>")
+            'ews_details': (project.ews_details or "").replace("PN20", "<b>PN20</b>").replace("PN35", "<b>PN35</b>"),
+            'traffic_light': traffic_light
         }
         
     return p_data
