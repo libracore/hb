@@ -216,6 +216,12 @@ def get_data():
                    "name": "MFK",
                    "label": _("MFK"),
                    "description": _("MFK")
+                },
+                {
+                    "type": "report",
+                    "name": "Road Block List",
+                    "doctype": "Request for Public Area Use",
+                    "is_query_report": True,
                 }
             ]
         },
