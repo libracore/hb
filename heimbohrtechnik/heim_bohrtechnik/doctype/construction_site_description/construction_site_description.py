@@ -16,11 +16,11 @@ class ConstructionSiteDescription(Document):
             has_project = True
         # create required fields
         if cint(self.internal_crane_required) == 1:
-            check_object_checklist(self.project if has_project else self.object, "Kran intern", has_project)
+            check_object_checklist(self.project if has_project else self.object, frappe.get_cached_value("Heim Settings", "Heim Settings", "int_crane_activity"), has_project)
         if cint(self.external_crane_required) == 1:
-            check_object_checklist(self.project if has_project else self.object, "Kran extern", has_project)
+            check_object_checklist(self.project if has_project else self.object, frappe.get_cached_value("Heim Settings", "Heim Settings", "crane_activity"), has_project)
         if cint(self.requires_traffic_control) == 1:
-            check_object_checklist(self.project if has_project else self.object, "Verkehrsdienst", has_project)
+            check_object_checklist(self.project if has_project else self.object, frappe.get_cached_value("Heim Settings", "Heim Settings", "traffic_control_activity"), has_project)
         # public area
         if cint(self.use_public_area) == 1:
             check_object_permit(self.project if has_project else self.object, "Strassensperrung", has_project)

@@ -109,7 +109,8 @@ function add_overlay(data) {
         'font_size': 7,
         'min_width': 35,
         'max_width': 70,
-        'ews_details': data.ews_details
+        'ews_details': data.ews_details,
+        'traffic_light': data.traffic_light
     })).appendTo(place);
     return
 }
