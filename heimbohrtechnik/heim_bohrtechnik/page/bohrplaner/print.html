@@ -1,8 +1,15 @@
 <style>
 .booking_overlay {
     position: relative !important;
-    min-height: 200px !important;
-    max-height: 200px !important;
+    min-height: 290px !important;
+    max-height: 290px !important;
+    overflow: visible !important;
+}
+
+.internal_overlay {
+    position: relative !important;
+    min-height: 285px !important;
+    max-height: 285px !important;
     overflow: visible !important;
 }
 
@@ -15,9 +22,9 @@ table {
 }
 
 .sticky-left {
-    height: 217px !important;
-    min-height: 217px !important;
-    max-height: 217px !important;
+    height: 310px !important;
+    min-height: 310px !important;
+    max-height: 310px !important;
 }
 
 .sticky-top-small {
@@ -28,6 +35,10 @@ table {
     background-color: white;
     position: relative !important;
     z-index: 200 !important;
+}
+
+.internal {
+    background-color: red;
 }
 
 .print-format {
@@ -107,18 +118,26 @@ table {
             {% set vars = {"counter": 0} %}
             {% for project in drilling_teams[drilling_team.team_id] %}
                 {% if vars.update({"counter": vars.counter + 1}) %}{% endif %} 
-                {% if project.update({"box_height": 18 }) %}{% endif %}
+                {% if project.update({"box_height": 27 }) %}{% endif %}
                 {% if project.update({"padding": 3 }) %}{% endif %}
-                {% if project.update({"font_size": 13 }) %}{% endif %}
+                {% if project.update({"font_size": 18 }) %}{% endif %}
                 {% if project.update({"width": project["dauer"]*70 }) %}{% endif %}
                 {% if project.update({"min_width": 60 }) %}{% endif %}
                 {% if project.update({"max_width": 120 }) %}{% endif %}
                 {% if "project" in project %}
-                    <div style="z-index: {{ vars.counter }} !important; {% if vars.counter in weekend_columns %}background-color: #9dc7f0;{% endif %}">
-                        <td>
-                            {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/booking_overlay.html", project) }}
-                        </td>
-                    </div>
+                    {% if project["project"].project_type == "External" %}
+                        <div style="z-index: {{ vars.counter }} !important; {% if vars.counter in weekend_columns %}background-color: #9dc7f0;{% endif %}">
+                            <td>
+                                {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/booking_overlay.html", project) }}
+                            </td>
+                        </div>
+                    {% elif  project["project"].project_type == "Internal" %}
+                        <div style="z-index: {{ vars.counter }} !important; {% if vars.counter in weekend_columns %}background-color: #9dc7f0;{% endif %}">
+                            <td>
+                                {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/internal_overlay.html", project) }}
+                            </td>
+                        </div>
+                    {% endif %}
                 {% else %}
                     <td class="gap" {% if vars.counter in weekend_columns %}style="background-color: #9dc7f0;"{% endif %}>&nbsp;</td>
                 {% endif %}

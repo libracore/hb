@@ -3,7 +3,7 @@
     draggable="true" ondragstart="drag(event)"
     onclick="frappe.bohrplaner.open_project(this);"
     data-project="{{ project.name }}">
-    <div class="object-div" style="font-size: 7pt;" data-popupvalue="{{ project.name }}">
+    <div class="object-div" style="font-size: {{ font_size }}pt;" data-popupvalue="{{ project.name }}">
         <div style="min-width:35px; ">{{ project.name }}</div>
         <div style="min-width:35px; "><b>{{ project.object_name }}</b></div>
         <div style="clear: both;"></div>

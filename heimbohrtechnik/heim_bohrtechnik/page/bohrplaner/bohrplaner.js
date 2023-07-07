@@ -252,7 +252,7 @@ frappe.bohrplaner = {
         $(place).css("position", "relative");
         var qty = data.dauer
         var width = 42 * qty;
-        $(frappe.render_template('internal_overlay', {'width': width, 'project': data.project})).appendTo(place);
+        $(frappe.render_template('internal_overlay', {'width': width, 'project': data.project, 'font_size': 7})).appendTo(place);
         return
     },
     add_subproject_overlay: function(page, data) {
