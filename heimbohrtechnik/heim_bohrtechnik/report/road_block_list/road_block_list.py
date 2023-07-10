@@ -60,12 +60,12 @@ def get_data(filters):
     # color issues
     for d in data:
         # mark drilling before permit red
-        if d['drilling_from_date'] < d['road_block_from_date']:
+        if d['drilling_from_date'] and d['drilling_from_date'] < d['road_block_from_date']:
             d['road_block_from_date'] = "<span style='color: red; '>{0}</span>".format(d['road_block_from_date'].strftime("%d.%m.%Y"))
         else:
             d['road_block_from_date'] = "<span style='color: darkgreen; '>{0}</span>".format(d['road_block_from_date'].strftime("%d.%m.%Y"))
         # mark drilling after permit
-        if d['drilling_to_date'] > d['road_block_to_date']:
+        if d['drilling_to_date'] and d['drilling_to_date'] > d['road_block_to_date']:
             d['road_block_to_date'] = "<span style='color: red; '>{0}</span>".format(d['road_block_to_date'].strftime("%d.%m.%Y"))
         else:
             d['road_block_to_date'] = "<span style='color: darkgreen; '>{0}</span>".format(d['road_block_to_date'].strftime("%d.%m.%Y"))
