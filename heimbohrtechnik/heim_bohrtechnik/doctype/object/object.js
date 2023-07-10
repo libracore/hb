@@ -63,6 +63,10 @@ cur_frm.fields_dict.checklist.grid.get_field('supplier').get_query =
     
 frappe.ui.form.on('Object', {
     refresh: function(frm) {
+        //Create button to find Hotels nearby
+        frm.add_custom_button(__("Find Hotel"), function() {
+            find_hotel(frm);
+        });
         // show permits & checklist (in case coming from another record where it was hidden)
         var checklists = document.querySelectorAll("[data-fieldname='checklist']");
         try {
@@ -768,3 +772,18 @@ function verify_diameter(frm, cdt, cdn) {
         });
     }
 }
+
+function find_hotel(frm) {
+    console.log("it worked :-D")
+    frappe.call({
+            method: "heimbohrtechnik.heim_bohrtechnik.locator.find_closest_hotels",
+            args: {
+                "object_name": frm.doc.name
+            },
+            callback: function (r) {
+            }
+        });
+    
+}
+
+
