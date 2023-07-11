@@ -844,22 +844,27 @@ def get_bohrplaner_html(start_date):
         'css': get_bohrplaner_css(),
         'weekend_columns': []
     }
-    
-    weekend_columns = []
-    columns_until_weekend = 0
-    
     #get weekend columns for grid
-    for day in data['grid']['day_list'].values():
-        if day != 'Sun':
-            if day != 'Sat':
-                columns_until_weekend += 2
+    weekend_columns = []
+    desired_values = ['Sat', 'Sun']
+    saturday_value = ['Sat']
+    real_weekends = [key for key, value in data['grid']['day_list'].items() if value in desired_values]
+    saturdays = [key for key, value in data['grid']['day_list'].items() if value in saturday_value]
+    i = 0
+    for day in data['grid']['day_list']:
+        i += 1
+        if not day in real_weekends:
+            if day in data['grid']['weekend']:
+                weekend_columns.append(i)
+                i += 1
+                weekend_columns.append(i)
             else:
-                columns_until_weekend += 1
-        if day == 'Sat':
-            break
-    weekend_columns.append(columns_until_weekend)
-    weekend_columns.append(columns_until_weekend+11)
-    weekend_columns.append(columns_until_weekend+22)
+                i += 1
+        else:
+            if day in saturdays:
+                weekend_columns.append(i)
+            else:
+                i -= 1
         
     for drilling_team in data['grid']['drilling_teams']:
         # get all projects
@@ -901,14 +906,16 @@ def get_bohrplaner_html(start_date):
     
 def get_gap_duration(start_date, start_half_day, end_date, end_half_day):
     date_list, weekend_list, kw_list, day_list, today = get_days(start_date, end_date)
-    gap_duration_workdays = len(date_list) - len(weekend_list)
-    if start_half_day == "NM" and start_date not in weekend_list:
+    desired_values = ['Sat', 'Sun']
+    real_weekends = [key for key, value in day_list.items() if value in desired_values]
+    gap_duration_workdays = len(date_list) - len(real_weekends)
+    if start_half_day == "NM" and start_date not in real_weekends:
         gap_duration_workdays -= 0.5
-    if end_half_day == "VM" and end_date not in weekend_list:
+    if end_half_day == "VM" and end_date not in real_weekends:
         gap_duration_workdays -= 0.5
 
     gap_duration = gap_duration_workdays * 2
-    if len(weekend_list) != 0:
+    if len(real_weekends) != 0:
         gap_duration += 1
     for i in range(1, len(weekend_list)):
         multiple_weekends = date_diff(datetime.strptime(weekend_list[i], "%d.%m.%Y"), datetime.strptime(weekend_list[i-1], "%d.%m.%Y"))
