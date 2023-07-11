@@ -64,7 +64,6 @@ function set_phone(frm) {
 }
 
 function set_gps_coordinates(frm) {
-    console.log("Du Maschine :-D")
     frappe.call({
         'method': 'heimbohrtechnik.heim_bohrtechnik.migration.update_hotel_coordinates',
         'args': {
