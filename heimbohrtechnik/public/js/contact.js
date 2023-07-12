@@ -1,20 +1,30 @@
 frappe.ui.form.on('Contact', {
-    //~ refresh(frm) {
-        //~ //
-        //~ if (frm.doc.phone_nos) {
-            //~ console.log("Hoi")
-            //~ cur_frm.set_value('contact_phone.is_primary_phone', 1);
-        //~ }
-    //~ },
     before_save(frm) {
         // compile full name
         cur_frm.set_value("full_name", (frm.doc.first_name || "") + " " + (frm.doc.last_name || ""));
         // if hotel, set phone as primary
         'async'
+        let primary = false;
         if (frm.doc.phone_nos.length > 0) {
-            console.log(frm.doc.phone_nos.length);
-            for (let i = 0; i < frm.doc.phone_nos.length; i++) {
-                console.log("Maschineliiiiii");
+            for (const number of frm.doc.phone_nos) {
+                if (number.is_primary_phone == 1) {
+                    primary = true;
+                }
+            }
+            if (primary == false) {
+                frappe.call({
+                    'method': 'heimbohrtechnik.heim_bohrtechnik.contact.get_supplier',
+                    'args': {
+                        'supplier': frm.doc.links[0].link_name
+                    },
+                    'callback': function(response) {
+                        var supplier_dict = response.message;
+                        var link = frm.doc.name;
+                        if (supplier_dict.supplier_group == "Hotel") {
+                            frappe.model.set_value(cur_frm.doc.phone_nos[0].doctype, cur_frm.doc.phone_nos[0].name, "is_primary_phone", 1);
+                        }
+                    }
+                });
             }
         }
     }
