@@ -774,7 +774,6 @@ function verify_diameter(frm, cdt, cdn) {
 }
 
 function find_hotel(frm) {
-    console.log("it worked :-D")
     frappe.call({
             method: "heimbohrtechnik.heim_bohrtechnik.locator.find_closest_hotels",
             args: {
