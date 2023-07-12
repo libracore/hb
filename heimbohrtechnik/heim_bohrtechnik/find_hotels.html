@@ -1,0 +1,38 @@
+<style>
+
+.td {
+    padding: 5px;
+}
+
+.tr {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.taright {
+    text-align: right;
+}
+
+</style>
+<h3>{{ _("Hotels") }}</h3>
+<table>
+    <thead>
+        <tr class="tr">
+            <th class="td">{{ _("Hotel") }}</th>
+            <th class="td">{{ _("Address") }}</th>
+            <th class="td">{{ _("Phone") }}</th>
+<!--            <th class="td">{{ _("Dist.") }}</th>
+            <th class="td">{{ _("Time") }}</th>-->
+        </tr>
+    </thead>
+    <tbody>
+        {% for hotel in hotels %}
+            <tr class="tr">
+                <td class="td">{{ hotel.supplier_name }}</td>
+                <td class="td">{{ hotel.hauptadresse }}</td>
+                <td class="td taright">{{ hotel.telefon }}</td>
+<!--                <td class="td taright">17km</td>
+                <td class="td taright">17min</td>-->
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
