@@ -785,7 +785,7 @@ def get_user_planning_days(user):
         }
     
 @frappe.whitelist()
-def print_bohrplaner(start_date):
+def print_bohrplaner(start_date, previous_week=False):
     from frappe.utils.pdf import get_pdf
     from PyPDF2 import PdfFileWriter
     from frappe.utils.pdf import get_file_data_from_writer
@@ -798,7 +798,7 @@ def print_bohrplaner(start_date):
         doc = frappe.get_doc("File", f['name'])
         doc.delete()
     
-    html = get_bohrplaner_html(start_date)
+    html = get_bohrplaner_html(start_date, previous_week)
     
     output = PdfFileWriter()
     output = get_pdf(html, output=output)
@@ -824,7 +824,7 @@ def backup():
     today = date.today()
     today_str = "{y:04d}-{m:02d}-{d:02d}".format(y=today.year, m=today.month, d=today.day)
     # create the pdf as a local file
-    f = print_bohrplaner(today_str)
+    f = print_bohrplaner(today_str, previous_week=True)
     # upload to nextcloud
     physical_file = get_physical_path(f['name'])
     write_file_to_base_path(physical_file)
@@ -833,9 +833,10 @@ def backup():
 def get_bohrplaner_css():
     return frappe.read_file("{0}{1}".format(frappe.utils.get_bench_path(), "/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css"))
 
-def get_bohrplaner_html(start_date):
+def get_bohrplaner_html(start_date, previous_week=False):
     end_date = frappe.utils.add_days(start_date, 20)
-    start_date = frappe.utils.add_days(start_date, -7)
+    if previous_week:
+        start_date = frappe.utils.add_days(start_date, -7)
 
     data = {
         'grid': get_content(start_date, end_date, only_teams=True),
