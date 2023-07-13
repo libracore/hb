@@ -14,7 +14,7 @@ frappe.ui.form.on('Contact', {
                 frappe.call({
                     'method': 'frappe.client.get',
                     'args': {
-                        'doctype': "Supplier"
+                        'doctype': "Supplier",
                         'name': frm.doc.links[0].link_name
                     },
                     'async': false,
