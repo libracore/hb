@@ -60,14 +60,16 @@ def get_data(filters):
     # color issues
     for d in data:
         # mark drilling before permit red
+        road_block_from_str = d['road_block_from_date'].strftime("%d.%m.%Y") if d['road_block_from_date'] else ""
         if d['drilling_from_date'] and d['road_block_from_date'] and d['drilling_from_date'] < d['road_block_from_date']:
-            d['road_block_from_date'] = "<span style='color: red; '>{0}</span>".format(d['road_block_from_date'].strftime("%d.%m.%Y"))
+            d['road_block_from_date'] = "<span style='color: red; '>{0}</span>".format(road_block_from_str)
         else:
-            d['road_block_from_date'] = "<span style='color: darkgreen; '>{0}</span>".format(d['road_block_from_date'].strftime("%d.%m.%Y"))
+            d['road_block_from_date'] = "<span style='color: darkgreen; '>{0}</span>".format(road_block_from_str)
         # mark drilling after permit
+        road_block_to_str = d['road_block_to_date'].strftime("%d.%m.%Y") if d['road_block_to_date'] else ""
         if d['drilling_to_date'] and d['road_block_to_date'] and d['drilling_to_date'] > d['road_block_to_date']:
-            d['road_block_to_date'] = "<span style='color: red; '>{0}</span>".format(d['road_block_to_date'].strftime("%d.%m.%Y"))
+            d['road_block_to_date'] = "<span style='color: red; '>{0}</span>".format(road_block_to_str)
         else:
-            d['road_block_to_date'] = "<span style='color: darkgreen; '>{0}</span>".format(d['road_block_to_date'].strftime("%d.%m.%Y"))
+            d['road_block_to_date'] = "<span style='color: darkgreen; '>{0}</span>".format(road_block_to_str)
             
     return data
