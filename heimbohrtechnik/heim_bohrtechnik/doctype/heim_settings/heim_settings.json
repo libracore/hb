@@ -13,6 +13,7 @@
   "mud_disposer_activity",
   "trough_activity",
   "traffic_control_activity",
+  "road_block_permit",
   "column_bohrplaner",
   "drilling_item",
   "thermozement_item",
@@ -241,10 +242,16 @@
    "fieldtype": "Link",
    "label": "Traffic Control Activity",
    "options": "Checklist Activity"
+  },
+  {
+   "fieldname": "road_block_permit",
+   "fieldtype": "Link",
+   "label": "Road Block Permit",
+   "options": "Permit Type"
   }
  ],
  "issingle": 1,
- "modified": "2023-07-07 17:59:41.406899",
+ "modified": "2023-07-17 16:18:43.717725",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",

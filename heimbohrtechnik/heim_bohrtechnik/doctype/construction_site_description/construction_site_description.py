@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021-2022, libracore AG and contributors
+# Copyright (c) 2021-2023, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
@@ -23,7 +23,7 @@ class ConstructionSiteDescription(Document):
             check_object_checklist(self.project if has_project else self.object, frappe.get_cached_value("Heim Settings", "Heim Settings", "traffic_control_activity"), has_project)
         # public area
         if cint(self.use_public_area) == 1:
-            check_object_permit(self.project if has_project else self.object, "Strassensperrung", has_project)
+            check_object_permit(self.project if has_project else self.object, frappe.get_cached_value("Heim Settings", "Heim Settings", "road_block_permit"), has_project)
         # water supply address
         if cint(self.hydrant) == 1:
             check_object_address(self.object, "Wasserversorger")
