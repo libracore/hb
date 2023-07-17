@@ -639,3 +639,11 @@ function check_display_siblings(dt, dn) {
         }
     });
 }
+
+function get_kw(date) {
+    var current_date = new Date(date);
+    var start_date =  new Date(current_date.getFullYear(), 0, 1);
+    var days =  Math.floor((current_date - start_date) / (24 * 60 * 60 * 1000));
+    var week = Math.ceil(( current_date.getDay() + 1 + days) / 7);
+    return week;
+}
