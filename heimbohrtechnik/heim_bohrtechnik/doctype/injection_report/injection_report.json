@@ -21,6 +21,7 @@
   "geologist_phone",
   "geologist_email",
   "drilling_details_section",
+  "layer_directory",
   "sonde",
   "drilling",
   "piped_to",
@@ -132,27 +133,27 @@
   {
    "fieldname": "sonde",
    "fieldtype": "Int",
-   "label": "\u2205 Sonde 2Kreis(mm)"
+   "label": "\u2205 Sonde 2Kreis (mm)"
   },
   {
    "fieldname": "drilling",
    "fieldtype": "Int",
-   "label": "\u2205 Bohrung(mm)"
+   "label": "\u2205 Bohrung (mm)"
   },
   {
    "fieldname": "piped_to",
    "fieldtype": "Int",
-   "label": "Piped to(m)"
+   "label": "Piped to (m)"
   },
   {
    "fieldname": "piping",
    "fieldtype": "Int",
-   "label": "\u2205 Piping(mm)"
+   "label": "\u2205 Piping (mm)"
   },
   {
    "fieldname": "sonde_length",
    "fieldtype": "Int",
-   "label": "Sonde length(m)"
+   "label": "Sonde length (m)"
   },
   {
    "collapsible": 1,
@@ -382,10 +383,16 @@
    "fieldname": "manual_entry",
    "fieldtype": "Check",
    "label": "Manual consumption entry"
+  },
+  {
+   "fieldname": "layer_directory",
+   "fieldtype": "Link",
+   "label": "Layer Directory",
+   "options": "Layer Directory"
   }
  ],
  "is_submittable": 1,
- "modified": "2023-07-19 10:28:11.918592",
+ "modified": "2023-07-19 11:25:36.898882",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Injection report",

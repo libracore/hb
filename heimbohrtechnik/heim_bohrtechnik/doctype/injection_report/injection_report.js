@@ -3,6 +3,15 @@
 
 frappe.ui.form.on('Injection report', {
     refresh: function(frm) {
+        // filter for layer directory based on project
+        cur_frm.fields_dict['layer_directory'].get_query = function(doc) {
+             return {
+                 filters: {
+                     "project": frm.doc.project
+                 }
+             }
+        }
+    
         if (cur_frm.doc.manual_needs_entry) {
             cur_frm.set_df_property('needed_zement', 'read_only', 0);
             cur_frm.set_df_property('needed_bentonit', 'read_only', 0);
@@ -12,19 +21,19 @@ frappe.ui.form.on('Injection report', {
         autocomplete_object(frm);
     },
     object_name: function(frm) {
-    autocomplete_ews(frm);
+        autocomplete_ews(frm);
     },
     sonde: function(frm) {
         autocomplete_needs(frm);
     },
     drilling: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     piped_to: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     piping: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     sonde_length: function(frm) {
     autocomplete_needs(frm);
@@ -33,31 +42,31 @@ frappe.ui.form.on('Injection report', {
     autocomplete_needs(frm);
     },
     needed_ewm: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     needed_zement: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     needed_bentonit: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     gtm_water: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     zm_water: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     gtm_hs: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     zement: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     bentonit: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     gtm_suspension: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     zm_suspension: function(frm) {
         autocomplete_needs(frm);
@@ -80,6 +89,11 @@ frappe.ui.form.on('Injection report', {
             autocomplete_needs(frm);
         } else {
             cur_frm.set_df_property('ac_tot', 'read_only', 0);
+        }
+    },
+    layer_directory: function(frm) {
+        if (frm.doc.layer_directory) {
+            fetch_layer_directory(frm.doc.layer_directory);
         }
     }
 });
@@ -179,5 +193,21 @@ function autocomplete_ews(frm) {
         );
     }
             }
+    });
+}
+
+function fetch_layer_directory(layer_directory) {
+    frappe.call({
+        'method': "frappe.client.get",
+        'args': {
+            'doctype': "Layer Directory",
+            'name': layer_directory
+        },
+        'callback': function(response) {
+            var layer_directory_doc = response.message;
+            cur_frm.set_value("drilling", layer_directory_doc.drilling_tool_diameter);
+            cur_frm.set_value("piping", layer_directory_doc.piping);
+            cur_frm.set_value("piped_to", layer_directory_doc.to_depth);
+        }
     });
 }
