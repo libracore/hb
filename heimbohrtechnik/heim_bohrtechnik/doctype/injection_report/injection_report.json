@@ -54,14 +54,10 @@
   "ac_tot",
   "column_break_47",
   "arteser",
-  "spezial",
-  "faser",
   "ac_water",
   "ac_zement",
   "ac_bentonit",
   "arteser_check",
-  "spezial_check",
-  "faser_check",
   "manual_entry"
  ],
  "fields": [
@@ -354,12 +350,12 @@
   {
    "depends_on": "eval:doc.arteser_check == 1",
    "fieldname": "arteser",
-   "fieldtype": "Int",
-   "label": "Arteserzement (kg)"
+   "fieldtype": "Data",
+   "label": "Arteserzement(kg)"
   },
   {
    "fieldname": "suspension_lt",
-   "fieldtype": "Int",
+   "fieldtype": "Data",
    "label": "Suspension (l/t)"
   },
   {
@@ -386,34 +382,10 @@
    "fieldname": "manual_entry",
    "fieldtype": "Check",
    "label": "Manual consumption entry"
-  },
-  {
-   "default": "0",
-   "fieldname": "spezial_check",
-   "fieldtype": "Check",
-   "label": "Spezialzement"
-  },
-  {
-   "default": "0",
-   "fieldname": "faser_check",
-   "fieldtype": "Check",
-   "label": "Faserzement"
-  },
-  {
-   "depends_on": "eval:doc.spezial_check == 1",
-   "fieldname": "spezial",
-   "fieldtype": "Int",
-   "label": "Spezialzement (kg)"
-  },
-  {
-   "depends_on": "eval:doc.faser_check == 1",
-   "fieldname": "faser",
-   "fieldtype": "Int",
-   "label": "Faserzement (kg)"
   }
  ],
  "is_submittable": 1,
- "modified": "2023-07-03 11:18:35.781975",
+ "modified": "2023-07-19 10:28:11.918592",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Injection report",
@@ -435,6 +407,8 @@
    "write": 1
   },
   {
+   "amend": 1,
+   "cancel": 1,
    "create": 1,
    "email": 1,
    "export": 1,
@@ -443,6 +417,7 @@
    "report": 1,
    "role": "Projects User",
    "share": 1,
+   "submit": 1,
    "write": 1
   },
   {
