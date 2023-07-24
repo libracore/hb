@@ -35,12 +35,12 @@ files = [f for f in listdir(FOLDER) if isfile(join(FOLDER, f))]
 print("{0}".format(files))
 
 # prepare variables
-statistics = {'count': 0, 'failures': 0, 'form_count': 0}
+statistics = {'count': 0, 'failures': 0, 'form_count': 0, 'strange_count': 0}
 svs = []
 
 # go through all files
 for f in files:
-    if len(f) >= 4 and f[-4:].lower() == ".pdf" and f[0:3].lower() !== "sv-":   # only use pdf and not SV-P-nnn (this are the digital files)
+    if len(f) >= 4 and f[-4:].lower() == ".pdf" and f[0:3].lower() != "sv-":   # only use pdf and not SV-P-nnn (this are the digital files)
         statistics['count'] += 1
         print("reading {0}".format(f))
         # prepare result dict
@@ -57,9 +57,9 @@ for f in files:
             #    if len("{0}".format(k)) > 2:
             #        print("{0}: {1}".format(k, v))
             _project['rotation'] = 0
-            _project['piping_depth'] = form['bis mTiefe'].get('/V')
-            _project['to_depth'] = form['bis mTiefe9'].get('/V')
-            _project['mud_amount'] = form['Entsorgte Menge ca m'].get('/V')
+            _project['to_depth'] = flt(form['bis mTiefe'].get('/V'))
+            _project['end_depth'] = flt(form['bis mTiefe9'].get('/V'))
+            _project['mud_amount'] = flt(form['Entsorgte Menge ca m'].get('/V'))
             _project['project'] = form['Projekt-Nr'].get('/V')
             _project['start_date'] = form['Bohrbeginn'].get('/V')
             _project['end_date'] = form['Bohrende'].get('/V')
@@ -77,61 +77,61 @@ for f in files:
             _project['drilling_number'] = form['Bohrung'].get('/V')
             _project['layers'] = [
                 {
-                    'depth': form['bis mTiefe0'].get('/V'),
+                    'depth': flt(form['bis mTiefe0'].get('/V')),
                     'remarks': form['BeobachtugenBemerkungen1'].get('/V'),
                     'description': form['Art-Eigenschaften'].get('/V'),
                     'color': form['Farbe'].get('/V')
                 },
                 {
-                    'depth': form['bis mTiefe1'].get('/V'),
+                    'depth': flt(form['bis mTiefe1'].get('/V')),
                     'remarks': form['BeobachtugenBemerkungen2'].get('/V'),
                     'description': form['Art-Eigenschaften0'].get('/V'),
                     'color': form['Farbe0'].get('/V')
                 },
                 {
-                    'depth': form['bis mTiefe2'].get('/V'),
+                    'depth': flt(form['bis mTiefe2'].get('/V')),
                     'remarks': form['BeobachtugenBemerkungen3'].get('/V'),
                     'description': form['Art-Eigenschaften1'].get('/V'),
                     'color': form['Farbe1'].get('/V')
                 },
                 {
-                    'depth': form['bis mTiefe3'].get('/V'),
+                    'depth': flt(form['bis mTiefe3'].get('/V')),
                     'remarks': form['BeobachtugenBemerkungen4'].get('/V'),
                     'description': form['Art-Eigenschaften2'].get('/V'),
                     'color': form['Farbe2'].get('/V')
                 },
                 {
-                    'depth': form['bis mTiefe4'].get('/V'),
+                    'depth': flt(form['bis mTiefe4'].get('/V')),
                     'remarks': form['BeobachtugenBemerkungen5'].get('/V'),
                     'description': form['Art-Eigenschaften3'].get('/V'),
                     'color': form['Farbe3'].get('/V')
                 },
                 {
-                    'depth': form['bis mTiefe5'].get('/V'),
+                    'depth': flt(form['bis mTiefe5'].get('/V')),
                     'remarks': form['BeobachtugenBemerkungen6'].get('/V'),
                     'description': form['Art-Eigenschaften4'].get('/V'),
                     'color': form['Farbe4'].get('/V')
                 },
                 {
-                    'depth': form['bis mTiefe6'].get('/V'),
+                    'depth': flt(form['bis mTiefe6'].get('/V')),
                     'remarks': form['BeobachtugenBemerkungen7'].get('/V'),
                     'description': form['Art-Eigenschaften5'].get('/V'),
                     'color': form['Farbe5'].get('/V')
                 },
                 {
-                    'depth': form['bis mTiefe7'].get('/V'),
+                    'depth': flt(form['bis mTiefe7'].get('/V')),
                     'remarks': form['BeobachtugenBemerkungen8'].get('/V'),
                     'description': form['Art-Eigenschaften6'].get('/V'),
                     'color': form['Farbe6'].get('/V')
                 },
                 {
-                    'depth': form['bis mTiefe8'].get('/V'),
+                    'depth': flt(form['bis mTiefe8'].get('/V')),
                     'remarks': form['BeobachtugenBemerkungen9'].get('/V'),
                     'description': form['Art-Eigenschaften7'].get('/V'),
                     'color': form['Farbe7'].get('/V')
                 },
                 {
-                    'depth': form['bis mTiefe9'].get('/V'),
+                    'depth': flt(form['bis mTiefe9'].get('/V')),
                     'remarks': form['BeobachtugenBemerkungen10'].get('/V'),
                     'description': form['Art-Eigenschaften8'].get('/V'),
                     'color': form['Farbe8'].get('/V')
@@ -174,10 +174,12 @@ for f in files:
                     _project['end_date'] = sorted_lines[i+4]
                     _project['permit'] = sorted_lines[i+1]
                 if sorted_lines[i] == ("mm"):
-                    _project['to_depth'] = sorted_lines[i+2]
+                    _project['to_depth'] = flt(sorted_lines[i+2])
                 if sorted_lines[i].startswith("Rotomax") or sorted_lines[i].startswith("Nordmeyer"):
                     _project['piping'] = sorted_lines[i+1]
-                    
+                if sorted_lines[i] == ("Tiefe"):
+                    _project['end_depth'] = flt(sorted_lines[i-1])
+                
             # find mud after line 15 in first float line
             mud = None
             mud_line = 14
@@ -192,23 +194,35 @@ for f in files:
             
             
             # append to list of results
-            if _project['project']:
+            if 'project' in _project and _project['project']:
                 svs.append(_project)
 
 print("=======RESULTS=====")
+
+for sv in svs:
+    # output only strage files (10 m depth ~ 1 m3 mud)
+    drilling_depth = sv.get('end_depth') or 0
+    mud_amount = sv.get('mud_amount') or 0
+    if (drilling_depth < (1 * mud_amount)) or (drilling_depth > (100 * mud_amount)):
+        statistics['strange_count'] += 1
+        print("{f}: {p} ({r}): {sd}..{ed} (Permit: {pe}) - Piping: {pp} mm - Piping depth: {td} m - Drilling depth: {d} m - {m} m3".format(
+            f=sv.get('file'),
+            p=sv.get('project'),
+            r=sv.get('rotation'),
+            sd=sv.get('start_date'),
+            ed=sv.get('end_date'),
+            pe=sv.get('permit'),
+            td=sv.get('to_depth'),
+            pp=sv.get('piping'),
+            m=sv.get('mud_amount'),
+            d=sv.get('end_depth')
+        ))
+        
+    # TODO: create SV record (frappe)
+    
+    
+print("=====SUMMARY====")
 print("Files: {0}".format(statistics['count']))
 print("Errors: {0} ({1}%)".format(statistics['failures'], round(100 * statistics['failures']/(statistics['count'] or 1))))
 print("Forms: {0} ({1}%)".format(statistics['form_count'], round(100 * statistics['form_count']/(statistics['count'] or 1))))
-for sv in svs:
-    print("{f}: {p} ({r}): {sd}..{ed} (Permit: {pe}) - Piping: {pp} - to depth: {td} - {m} m3".format(
-        f=sv.get('file'),
-        p=sv.get('project'),
-        r=sv.get('rotation'),
-        sd=sv.get('start_date'),
-        ed=sv.get('end_date'),
-        pe=sv.get('permit'),
-        td=sv.get('to_depth'),
-        pp=sv.get('piping'),
-        m=sv.get('mud_amount')
-    ))
-    
+print("Strange: {0} ({1}%)".format(statistics['strange_count'], round(100 * statistics['strange_count']/(statistics['count'] or 1))))
