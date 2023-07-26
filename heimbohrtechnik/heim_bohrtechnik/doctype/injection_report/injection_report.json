@@ -21,7 +21,6 @@
   "geologist_phone",
   "geologist_email",
   "drilling_details_section",
-  "layer_directory",
   "sonde",
   "drilling",
   "piped_to",
@@ -42,7 +41,11 @@
   "bentonit",
   "zm_suspension",
   "suspension_lt",
-  "column_break_23",
+  "column_break_37",
+  "water_density",
+  "zement_density",
+  "bentonit_density",
+  "schwerspat_density",
   "zm_sack_weight",
   "sbase_section",
   "gtm_water",
@@ -53,13 +56,28 @@
   "actual_consumption_section",
   "ac_grouting",
   "ac_tot",
+  "suspension_density",
   "column_break_47",
   "arteser",
+  "spezial",
+  "faser",
+  "schwerspat",
   "ac_water",
   "ac_zement",
   "ac_bentonit",
   "arteser_check",
-  "manual_entry"
+  "spezial_check",
+  "faser_check",
+  "schwerspat_check",
+  "manual_entry",
+  "calculation",
+  "water_dxc",
+  "zement_dxc",
+  "bentonit_dxc",
+  "schwerspat_dxc",
+  "column_break_70",
+  "sum_dxc",
+  "sum_c"
  ],
  "fields": [
   {
@@ -133,27 +151,27 @@
   {
    "fieldname": "sonde",
    "fieldtype": "Int",
-   "label": "\u2205 Sonde 2Kreis (mm)"
+   "label": "\u2205 Sonde 2Kreis(mm)"
   },
   {
    "fieldname": "drilling",
    "fieldtype": "Int",
-   "label": "\u2205 Bohrung (mm)"
+   "label": "\u2205 Bohrung(mm)"
   },
   {
    "fieldname": "piped_to",
    "fieldtype": "Int",
-   "label": "Piped to (m)"
+   "label": "Piped to(m)"
   },
   {
    "fieldname": "piping",
    "fieldtype": "Int",
-   "label": "\u2205 Piping (mm)"
+   "label": "\u2205 Piping(mm)"
   },
   {
    "fieldname": "sonde_length",
    "fieldtype": "Int",
-   "label": "Sonde length (m)"
+   "label": "Sonde length(m)"
   },
   {
    "collapsible": 1,
@@ -191,10 +209,6 @@
    "fieldname": "zm_suspension",
    "fieldtype": "Int",
    "label": "Suspension (L)"
-  },
-  {
-   "fieldname": "column_break_23",
-   "fieldtype": "Column Break"
   },
   {
    "default": "25",
@@ -351,12 +365,12 @@
   {
    "depends_on": "eval:doc.arteser_check == 1",
    "fieldname": "arteser",
-   "fieldtype": "Data",
-   "label": "Arteserzement(kg)"
+   "fieldtype": "Int",
+   "label": "Arteserzement (kg)"
   },
   {
    "fieldname": "suspension_lt",
-   "fieldtype": "Data",
+   "fieldtype": "Int",
    "label": "Suspension (l/t)"
   },
   {
@@ -385,14 +399,129 @@
    "label": "Manual consumption entry"
   },
   {
-   "fieldname": "layer_directory",
-   "fieldtype": "Link",
-   "label": "Layer Directory",
-   "options": "Layer Directory"
+   "default": "0.997",
+   "fieldname": "water_density",
+   "fieldtype": "Float",
+   "label": "Water density(g / cm3)",
+   "read_only": 1
+  },
+  {
+   "default": "1.440",
+   "fieldname": "zement_density",
+   "fieldtype": "Float",
+   "label": "Zement density (g / cm3)",
+   "read_only": 1
+  },
+  {
+   "default": "2.500",
+   "fieldname": "bentonit_density",
+   "fieldtype": "Float",
+   "label": "Bentonit density (g / cm3)",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.spezial_check == 1",
+   "fieldname": "spezial",
+   "fieldtype": "Int",
+   "label": "Spezialzement (kg)"
+  },
+  {
+   "depends_on": "eval:doc.faser_check == 1",
+   "fieldname": "faser",
+   "fieldtype": "Int",
+   "label": "Faserzement (kg)"
+  },
+  {
+   "default": "0",
+   "fieldname": "spezial_check",
+   "fieldtype": "Check",
+   "label": "Spezialzement"
+  },
+  {
+   "default": "0",
+   "fieldname": "faser_check",
+   "fieldtype": "Check",
+   "label": "Faserzement"
+  },
+  {
+   "default": "0",
+   "fieldname": "schwerspat_check",
+   "fieldtype": "Check",
+   "label": "Schwerspat"
+  },
+  {
+   "default": "4.500",
+   "depends_on": "eval:doc.schwerspat_check == 1",
+   "fieldname": "schwerspat_density",
+   "fieldtype": "Float",
+   "label": "Schwerspat density (g / cm3)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_37",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.schwerspat_check == 1",
+   "fieldname": "schwerspat",
+   "fieldtype": "Int",
+   "label": "Schwerspat (kg)"
+  },
+  {
+   "fieldname": "calculation",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Suspension density calculation"
+  },
+  {
+   "fieldname": "water_dxc",
+   "fieldtype": "Float",
+   "label": "Water (density x consumption)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "zement_dxc",
+   "fieldtype": "Float",
+   "label": "Zement (density x consumption)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "bentonit_dxc",
+   "fieldtype": "Float",
+   "label": "Bentonit (density x consumption)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "schwerspat_dxc",
+   "fieldtype": "Float",
+   "label": "Schwerspat (density x consumption)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_70",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sum_dxc",
+   "fieldtype": "Float",
+   "label": "Sum (density x consumption)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sum_c",
+   "fieldtype": "Float",
+   "label": "Sum (Consumption)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "suspension_density",
+   "fieldtype": "Float",
+   "label": "Suspension density",
+   "read_only": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2023-07-19 11:25:36.898882",
+ "modified": "2023-07-26 16:52:26.427309",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Injection report",
@@ -414,8 +543,6 @@
    "write": 1
   },
   {
-   "amend": 1,
-   "cancel": 1,
    "create": 1,
    "email": 1,
    "export": 1,
@@ -424,7 +551,6 @@
    "report": 1,
    "role": "Projects User",
    "share": 1,
-   "submit": 1,
    "write": 1
   },
   {

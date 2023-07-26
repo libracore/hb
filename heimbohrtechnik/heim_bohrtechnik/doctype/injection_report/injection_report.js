@@ -77,11 +77,35 @@ frappe.ui.form.on('Injection report', {
     zm_sack_weight: function(frm) {
         autocomplete_needs(frm);
     },
-        ac_grouting: function(frm) {
+    ac_grouting: function(frm) {
         autocomplete_needs(frm);
     },
-        suspension_lt: function(frm) {
+    suspension_lt: function(frm) {
         autocomplete_needs(frm);
+    },
+    water_density: function(frm) {
+        autocomplete_suspension_density(frm);
+    },
+    zement_density: function(frm) {
+        autocomplete_suspension_density(frm);
+    },
+    bentonit_density: function(frm) {
+        autocomplete_suspension_density(frm);
+    },
+    schwerspat_density: function(frm) {
+        autocomplete_suspension_density(frm);
+    },
+    ac_water: function(frm) {
+        autocomplete_suspension_density(frm);
+    },
+    ac_zement: function(frm) {
+        autocomplete_suspension_density(frm);
+    },
+    ac_bentonit: function(frm) {
+        autocomplete_suspension_density(frm);
+    },
+    schwerspat: function(frm) {
+        autocomplete_suspension_density(frm);
     },
     manual_entry: function(frm) {
         if (!cur_frm.doc.manual_entry) {
@@ -210,4 +234,16 @@ function fetch_layer_directory(layer_directory) {
             cur_frm.set_value("piped_to", layer_directory_doc.to_depth);
         }
     });
+}
+
+function autocomplete_suspension_density() {
+    if (cur_frm.doc.mortar == "Zement-Bentonit" ) {
+        cur_frm.set_value('water_dxc', cur_frm.doc.water_density * cur_frm.doc.ac_water);
+        cur_frm.set_value('zement_dxc', cur_frm.doc.zement_density * cur_frm.doc.ac_zement);
+        cur_frm.set_value('bentonit_dxc', cur_frm.doc.bentonit_density * cur_frm.doc.ac_bentonit);
+        cur_frm.set_value('schwerspat_dxc', cur_frm.doc.schwerspat_density * cur_frm.doc.schwerspat);
+        cur_frm.set_value('sum_dxc', cur_frm.doc.water_dxc + cur_frm.doc.zement_dxc + cur_frm.doc.bentonit_dxc + cur_frm.doc.schwerspat_dxc);
+        cur_frm.set_value('sum_c', cur_frm.doc.ac_water + cur_frm.doc.ac_zement + cur_frm.doc.ac_bentonit + cur_frm.doc.schwerspat);
+        cur_frm.set_value('suspension_density', cur_frm.doc.sum_dxc / cur_frm.doc.sum_c);
+    }
 }

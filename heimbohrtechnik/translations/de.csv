@@ -411,3 +411,16 @@ Page: Approval Manager,Approval Manager,Freigabe-Manager
 Page: Approval Manager,Decision,Entscheid
 DocType: Amrkup Position,After discounts,Nach Abzügen
 Report: Road Block List,Road Block List,Liste der Strassensperrungen
+DocType: Injection report,Water density(g / cm3),Dichte Wasser (g / cm3)
+DocType: Injection report,Water (L / m3 ),Wasser (L / m3 )
+DocType: Injection report,Zement density (g / cm3),Dichte Zement (g / cm3)
+DocType: Injection report,Bentonit density (g / cm3),Dichte Bentonit (g / cm3)
+DocType: Injection report,Schwerspat density (g / cm3),Dichte Schwerspat (g / cm3)
+DocType: Injection report,Suspension density,Suspensionsdichte
+DocType: Injection report,Suspension density calculation,Berechnung Suspensionsdichte
+DocType: Injection report,Water (density x consumption),Wasser (Dichte x Verbrauch)
+DocType: Injection report,Zement (density x consumption),Zement (Dichte x Verbrauch)
+DocType: Injection report,Bentonit (density x consumption),Bentonit (Dichte x Verbrauch)
+DocType: Injection report,Schwerspat (density x consumption),Schwerspat (Dichte x Verbrauch)
+DocType: Injection report,Sum (density x consumption),Summe (Dichte x Verbrauch)
+DocType: Injection report,Sum (Consumption),Summe (Verbrauch)
