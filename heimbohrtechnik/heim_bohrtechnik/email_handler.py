@@ -9,8 +9,8 @@ from email.policy import SMTP
 from email.mime.text import MIMEText
 import mimetypes
 from frappe.desk.form.load import get_attachments
-from os import path
-from heimbohrtechnik.heim_bohrtechnik.nextcloud import get_physical_path
+from os import path, remove
+from heimbohrtechnik.heim_bohrtechnik.nextcloud import get_physical_path, get_path, write_project_file_from_local_file
 import frappe
 import html2text
 
@@ -52,3 +52,43 @@ def save_message(communication, target_file):
         
     return
     
+def upload_communication_to_nextcloud(communication):
+    # create file
+    tmp_file = "/tmp/{0}.eml".format(communication)
+    save_message(communication, tmp_file)
+    
+    # select target
+    communication = frappe.get_doc("Communication", communication)
+    project = None
+    
+    if communication.reference_doctype == "Project":
+        project = communication.reference_name
+        if "Bohrstart" in communication.subject:
+            target = get_path('drilling')
+        elif "Fertigstellung" in communication.subject:
+            target = get_path('drilling')
+        elif "Mulden- & Saugwagenbestellung" in communication.subject:
+            target = get_path('supplier_mud')
+        else:
+            target = get_path('drilling')
+    elif communication.reference_doctype == "Sales Invoice":
+        project = frappe.get_value("Sales Invoice", communication.reference_name, "object")
+        target = get_path('invoice')
+    elif communication.reference_doctype == "Bohranzeige":
+        project = frappe.get_value("Bohranzeige", communication.reference_name, "project")
+        target = get_path('drilling')
+    elif communication.reference_doctype == "Request for Public Area Use":
+        project = frappe.get_value("Request for Public Area Use", communication.reference_name, "project")
+        target = get_path('road')
+    elif communication.reference_doctype == "Sales Order":
+        project = frappe.get_value("Sales Order", communication.reference_name, "object")
+        target = get_path('order')
+        
+    # upload to nextcloud
+    if project:
+        write_project_file_from_local_file(project, tmp_file, target)
+    
+    # clear file
+    remove(tmp_file)
+    
+    return

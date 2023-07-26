@@ -26,6 +26,9 @@ PATHS = {
     'memo':             "8_Memos_und_Notizen"
 }
 
+def get_path(target):
+    return PATHS[target]
+    
 """
 This is the authentication function
 """
