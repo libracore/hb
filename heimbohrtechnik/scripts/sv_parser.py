@@ -41,7 +41,7 @@ def import_sv(folder):
 	# get all files from folder (pure filename without path)
 	files = [f for f in listdir(folder) if isfile(join(folder, f))]
 
-	print("{0}".format(files))
+	# ~ print("{0}".format(files))
 
 	# prepare variables
 	statistics = {'count': 0, 'failures': 0, 'form_count': 0, 'strange_count': 0}
@@ -149,10 +149,12 @@ def import_sv(folder):
 				# append to list of results
 				if _project['project']:
 					svs.append(_project)
+				create_sv_record(_project, has_frappe)
 				continue
-			
+				
 			# read this file
 			doc = fitz.open(join(folder, f))
+			
 			# read pages of this pdf
 			for page in doc:
 				rot = doc[0].rotation
@@ -172,59 +174,70 @@ def import_sv(folder):
 
 				# create a list of lines from string
 				sorted_lines = sorted_text.split("\n")
+				if "Durchmesser:" in sorted_lines:
+					for i in range(0, len(sorted_lines) - 1):
+						if sorted_lines[i].startswith("Bohrart"):
+							# i is now at line "Bohrart"
+							_project['project'] = sorted_lines[i+2]
+							_project['permit'] = sorted_lines[i+1]
+						if sorted_lines[i].startswith("Imloch") or sorted_lines[i].startswith("Stufen") or sorted_lines[i].startswith("Rollen") or sorted_lines[i].startswith("Exzenter"):
+							_project['piping'] = sorted_lines[i+2]
+							_project['to_depth'] = flt(sorted_lines[i+3])
+						if sorted_lines[i] == ("Tiefe"):
+							_project['end_depth'] = flt(sorted_lines[i-1])
+						
+					# find mud after line 15 in first float line
+					mud = None
+					mud_line = 14
+					while not mud:
+						mud_line += 1
+						if mud_line >= (len(sorted_lines) - 1):
+							break
+						mud = flt(sorted_lines[mud_line])
+					_project['mud_amount'] = mud
+					
+					# add other readers
+					
+					
+					# append to list of results
+					if 'project' in _project and _project['project']:
+						svs.append(_project)
 				# find project number: look for "Bohrart" --> 2 lines later
 				# find "Bohrart"-line
-				for i in range(0, len(sorted_lines) - 1):
-					if sorted_lines[i].startswith("Bohrart"):
-						# i is now at line "Bohrart"
-						_project['project'] = sorted_lines[i+2]
-						_project['start_date'] = sorted_lines[i+3]
-						_project['end_date'] = sorted_lines[i+4]
-						_project['permit'] = sorted_lines[i+1]
-					if sorted_lines[i] == ("mm"):
-						_project['to_depth'] = flt(sorted_lines[i+2])
-					if sorted_lines[i].startswith("Rotomax") or sorted_lines[i].startswith("Nordmeyer"):
-						_project['piping'] = sorted_lines[i+1]
-					if sorted_lines[i] == ("Tiefe"):
-						_project['end_depth'] = flt(sorted_lines[i-1])
+				else:
+					for i in range(0, len(sorted_lines) - 1):
+						if sorted_lines[i].startswith("Bohrart"):
+							# i is now at line "Bohrart"
+							_project['project'] = sorted_lines[i+2]
+							_project['start_date'] = sorted_lines[i+3]
+							_project['end_date'] = sorted_lines[i+4]
+							_project['permit'] = sorted_lines[i+1]
+						if sorted_lines[i] == ("mm"):
+							_project['to_depth'] = flt(sorted_lines[i+2])
+						if sorted_lines[i].startswith("Rotomax") or sorted_lines[i].startswith("Nordmeyer"):
+							_project['piping'] = sorted_lines[i+1]
+						if sorted_lines[i] == ("Tiefe"):
+							_project['end_depth'] = flt(sorted_lines[i-1])
+						
+					# find mud after line 15 in first float line
+					mud = None
+					mud_line = 14
+					while not mud:
+						mud_line += 1
+						if mud_line >= (len(sorted_lines) - 1):
+							break
+						mud = flt(sorted_lines[mud_line])
+					_project['mud_amount'] = mud
 					
-				# find mud after line 15 in first float line
-				mud = None
-				mud_line = 14
-				while not mud:
-					mud_line += 1
-					if mud_line >= (len(sorted_lines) - 1):
-						break
-					mud = flt(sorted_lines[mud_line])
-				_project['mud_amount'] = mud
-				
-				# add other readers
-				
-				
-				# append to list of results
-				if 'project' in _project and _project['project']:
-					svs.append(_project)
-				
-			if has_frappe == True:
-				new_doc = frappe.get_doc({
-					"doctype": "Layer Directory",
-					"project": _project['project'],
-					"piping": _project['piping'],
-					"to_depth": _project['to_depth'],
-					"amount_disposed": _project['mud_amount']
-				})
-				# ~ new_depth = [
-					# ~ {
-						# ~ "doctype": "Layer Directory Layer",
-						# ~ "depth": _project['end_depth']
-					# ~ }
-				# ~ ]
-				# ~ new_doc.layers = new_depth
-				new_doc.insert()
-				frappe.db.commit()
-			else:
-				print("Missing frappe...")
-
+					# add other readers
+					
+					
+					# append to list of results
+					if 'project' in _project and _project['project']:
+						svs.append(_project)
+		
+		create_sv_record(_project, has_frappe)
+		
 	print("=======RESULTS=====")
 
 	for sv in svs:
@@ -258,3 +271,49 @@ def import_sv(folder):
 
 if has_frappe == False:
 	import_sv(FOLDER)
+
+@frappe.whitelist()
+def create_sv_record(_project, has_frappe):
+	if has_frappe == True:
+		#Check if Object is existing
+		existing_object = None
+		try:
+			get_object = frappe.get_doc("Object", "P-{0}".format(_project['project']))
+			existing_object = "P-{0}".format(_project['project'])
+		except frappe.exceptions.DoesNotExistError:
+			try:
+				get_object = frappe.get_doc("Object", _project['project'])
+				existing_object = _project['project']
+			except frappe.exceptions.DoesNotExistError:
+				existing_object = None
+		#Show missing objects
+		if existing_object == None:
+			print("Missing Object {0}".format(_project['project']))
+		#Create SV
+		else:
+			
+		# ~ if frappe.get_doc("Object", "P-{0}".format(_project['project'])):
+			# ~ existing_object = "P-{0}".format(_project['project']
+		# ~ elif frappe.get_doc("Object", _project['project']):
+			# ~ existing_object = _project['project']
+		# ~ else:
+			# ~ print("Object missing...")
+		# ~ print(get_object)
+		
+			#Prepare data
+			new_doc = frappe.get_doc({
+				"doctype": "Layer Directory",
+				"project": existing_object,
+				"piping": _project['piping'],
+				"to_depth": _project['to_depth'],
+				"amount_disposed": _project['mud_amount'],
+				#Prepare subtable data
+				"layers": [{
+					"reference_doctype": "Layer Directory Layer",
+					"depth": _project['end_depth']
+				}]
+			})
+			new_doc.insert()
+			frappe.db.commit()
+	else:
+		print("Missing frappe...")
