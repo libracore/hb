@@ -174,67 +174,36 @@ def import_sv(folder):
 
 				# create a list of lines from string
 				sorted_lines = sorted_text.split("\n")
-				if "Durchmesser:" in sorted_lines:
-					for i in range(0, len(sorted_lines) - 1):
-						if sorted_lines[i].startswith("Bohrart"):
-							# i is now at line "Bohrart"
-							_project['project'] = sorted_lines[i+2]
-							_project['permit'] = sorted_lines[i+1]
-						if sorted_lines[i].startswith("Imloch") or sorted_lines[i].startswith("Stufen") or sorted_lines[i].startswith("Rollen") or sorted_lines[i].startswith("Exzenter"):
-							_project['piping'] = sorted_lines[i+2]
-							_project['to_depth'] = flt(sorted_lines[i+3])
-						if sorted_lines[i] == ("Tiefe"):
-							_project['end_depth'] = flt(sorted_lines[i-1])
-						
-					# find mud after line 15 in first float line
-					mud = None
-					mud_line = 14
-					while not mud:
-						mud_line += 1
-						if mud_line >= (len(sorted_lines) - 1):
-							break
-						mud = flt(sorted_lines[mud_line])
-					_project['mud_amount'] = mud
+				for i in range(0, len(sorted_lines) - 1):
+					if sorted_lines[i].startswith("Bohrart"):
+						# i is now at line "Bohrart"
+						_project['project'] = sorted_lines[i+2]
+						_project['start_date'] = sorted_lines[i+3]
+						_project['end_date'] = sorted_lines[i+4]
+						_project['permit'] = sorted_lines[i+1]
+					# ~ if sorted_lines[i] == ("mm"):
+						# ~ _project['to_depth'] = flt(sorted_lines[i+2])
+					# ~ if sorted_lines[i].startswith("Rotomax") or sorted_lines[i].startswith("Nordmeyer"):
+						# ~ _project['piping'] = sorted_lines[i+1]
+					if sorted_lines[i] == ("Tiefe"):
+						_project['end_depth'] = flt(sorted_lines[i-1])
 					
-					# add other readers
-					
-					
-					# append to list of results
-					if 'project' in _project and _project['project']:
-						svs.append(_project)
-				# find project number: look for "Bohrart" --> 2 lines later
-				# find "Bohrart"-line
-				else:
-					for i in range(0, len(sorted_lines) - 1):
-						if sorted_lines[i].startswith("Bohrart"):
-							# i is now at line "Bohrart"
-							_project['project'] = sorted_lines[i+2]
-							_project['start_date'] = sorted_lines[i+3]
-							_project['end_date'] = sorted_lines[i+4]
-							_project['permit'] = sorted_lines[i+1]
-						if sorted_lines[i] == ("mm"):
-							_project['to_depth'] = flt(sorted_lines[i+2])
-						if sorted_lines[i].startswith("Rotomax") or sorted_lines[i].startswith("Nordmeyer"):
-							_project['piping'] = sorted_lines[i+1]
-						if sorted_lines[i] == ("Tiefe"):
-							_project['end_depth'] = flt(sorted_lines[i-1])
-						
-					# find mud after line 15 in first float line
-					mud = None
-					mud_line = 14
-					while not mud:
-						mud_line += 1
-						if mud_line >= (len(sorted_lines) - 1):
-							break
-						mud = flt(sorted_lines[mud_line])
-					_project['mud_amount'] = mud
-					
-					# add other readers
-					
-					
-					# append to list of results
-					if 'project' in _project and _project['project']:
-						svs.append(_project)
+				# find mud after line 15 in first float line
+				mud = None
+				mud_line = 14
+				while not mud:
+					mud_line += 1
+					if mud_line >= (len(sorted_lines) - 1):
+						break
+					mud = flt(sorted_lines[mud_line])
+				_project['mud_amount'] = mud
+				
+				# add other readers
+				
+				
+				# append to list of results
+				if 'project' in _project and _project['project']:
+					svs.append(_project)
 		
 		create_sv_record(_project, has_frappe)
 		
@@ -274,16 +243,28 @@ if has_frappe == False:
 
 @frappe.whitelist()
 def create_sv_record(_project, has_frappe):
-	if has_frappe == True:
+	if has_frappe == True and "project" in _project:
 		#Check if Object is existing
 		existing_object = None
 		try:
 			get_object = frappe.get_doc("Object", "P-{0}".format(_project['project']))
 			existing_object = "P-{0}".format(_project['project'])
+			if _project['end_depth'] == None:
+				try:
+					_project['end_depth'] = get_object.get("ews_specification")[0].ews_depth
+				except IndexError:
+					_project['end_depth'] = 0
+					print ("No Depth!")
 		except frappe.exceptions.DoesNotExistError:
 			try:
 				get_object = frappe.get_doc("Object", _project['project'])
 				existing_object = _project['project']
+				if _project['end_depth'] == None:
+					try:
+						_project['end_depth'] = get_object.get("ews_specification")[0].ews_depth
+					except IndexError:
+						_project['end_depth'] = 0
+						print ("No Depth!")
 			except frappe.exceptions.DoesNotExistError:
 				existing_object = None
 		#Show missing objects
@@ -291,26 +272,17 @@ def create_sv_record(_project, has_frappe):
 			print("Missing Object {0}".format(_project['project']))
 		#Create SV
 		else:
-			
-		# ~ if frappe.get_doc("Object", "P-{0}".format(_project['project'])):
-			# ~ existing_object = "P-{0}".format(_project['project']
-		# ~ elif frappe.get_doc("Object", _project['project']):
-			# ~ existing_object = _project['project']
-		# ~ else:
-			# ~ print("Object missing...")
-		# ~ print(get_object)
-		
 			#Prepare data
 			new_doc = frappe.get_doc({
 				"doctype": "Layer Directory",
 				"project": existing_object,
-				"piping": _project['piping'],
-				"to_depth": _project['to_depth'],
+				# ~ "piping": _project['piping'],
+				# ~ "to_depth": _project['to_depth'],
 				"amount_disposed": _project['mud_amount'],
 				#Prepare subtable data
 				"layers": [{
 					"reference_doctype": "Layer Directory Layer",
-					"depth": _project['end_depth']
+					"depth": _project['end_depth'] or 0
 				}]
 			})
 			new_doc.insert()
