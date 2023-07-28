@@ -33,7 +33,7 @@ def find_closest_hotels(object_name):
     # refine actual distance -> TBD
     
     #render hotels to dialog
-    html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/find_hotels.html", {'hotels': hotels})
+    html = frappe.render_template("heimbohrtechnik/templates/pages/find_hotels.html", {'hotels': hotels})
     
     frappe.msgprint(html)
     # ~ return hotels
