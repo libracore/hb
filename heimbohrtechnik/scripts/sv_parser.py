@@ -14,7 +14,6 @@ from os import listdir
 from os.path import isfile, join
 import sys
 import PyPDF2
-from PyPDF2 import PdfReader
 try:
 	import frappe
 	has_frappe = True
