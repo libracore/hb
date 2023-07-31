@@ -780,9 +780,24 @@ function find_hotel(frm) {
                 "object_name": frm.doc.name
             },
             callback: function (r) {
+				frappe.msgprint(r.message.html);
+				find_true_distance(cur_frm, r.message.hotels[0].gps_latitude, r.message.hotels[0].gps_longitude,"hotel_distance_1", null);
             }
         });
     
 }
-
+ function find_true_distance(frm, to_lat, to_long, target_distance_field, target_duration_field) {
+    frappe.call({
+            method: "heimbohrtechnik.heim_bohrtechnik.locator.get_true_distance",
+            args: {
+                "from_lat": frm.doc.gps_lat,
+                "from_long": frm.doc.gps_long,
+                "to_lat": to_lat,
+                "to_long": to_long
+            },
+            callback: function (r) {
+				document.getElementById(target_distance_field).innerHTML=r.message;
+            }
+        });
+ }
 

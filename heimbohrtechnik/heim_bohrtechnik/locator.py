@@ -9,6 +9,7 @@
 #
 
 import frappe
+import requests
 
 @frappe.whitelist()
 def find_closest_hotels(object_name):
@@ -22,7 +23,8 @@ def find_closest_hotels(object_name):
     # lat/long approximation
     hotels = frappe.db.sql("""
         SELECT `name`, `supplier_name`, `hauptadresse`, `telefon`,
-        (ABS(`gps_latitude` - {lat}) + ABS(`gps_longitude` - {lon})) AS `prox`
+        (ABS(`gps_latitude` - {lat}) + ABS(`gps_longitude` - {lon})) AS `prox`,
+        `gps_latitude`, `gps_longitude`
         FROM `tabSupplier`
         WHERE `disabled` = 0
         AND `supplier_group` = "Hotel"
@@ -35,6 +37,12 @@ def find_closest_hotels(object_name):
     #render hotels to dialog
     html = frappe.render_template("heimbohrtechnik/templates/pages/find_hotels.html", {'hotels': hotels})
     
-    frappe.msgprint(html)
-    # ~ return hotels
-    print(hotels)
+    # ~ frappe.msgprint(html)
+    return {'html': html,
+			'hotels': hotels }
+    # ~ print(hotels)
+    
+@frappe.whitelist()
+def get_true_distance(from_lat, from_long, to_lat, to_long):
+	return 42
+	
