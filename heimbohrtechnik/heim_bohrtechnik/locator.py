@@ -44,5 +44,13 @@ def find_closest_hotels(object_name):
     
 @frappe.whitelist()
 def get_true_distance(from_lat, from_long, to_lat, to_long):
-	return 42
+	host = frappe.get_doc("Heim Settings").routing_host
+	link = '{h}/routing/{fla}/{flo}/{tla}/{tlo}'.format(
+		h = host,
+		fla = from_lat,
+		flo = from_long,
+		tla = to_lat,
+		tlo = to_long)
+	response = requests.get(link)
+	return response.json()
 	

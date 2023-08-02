@@ -780,8 +780,10 @@ function find_hotel(frm) {
                 "object_name": frm.doc.name
             },
             callback: function (r) {
-				frappe.msgprint(r.message.html);
-				find_true_distance(cur_frm, r.message.hotels[0].gps_latitude, r.message.hotels[0].gps_longitude,"hotel_distance_1", null);
+				frappe.msgprint(r.message.html, "Hotels");
+				for (var i = 0; i < r.message.hotels.length; i++) {
+					find_true_distance(cur_frm, r.message.hotels[i].gps_latitude, r.message.hotels[i].gps_longitude,"hotel_distance_" + i, "hotel_time_" + i);
+				}
             }
         });
     
@@ -796,7 +798,8 @@ function find_hotel(frm) {
                 "to_long": to_long
             },
             callback: function (r) {
-				document.getElementById(target_distance_field).innerHTML=r.message;
+				document.getElementById(target_distance_field).innerHTML=r.message.data['distance_in_kilometers'].toFixed(1) + " km";
+				document.getElementById(target_duration_field).innerHTML=r.message.data['travel_time'].split(".")[0];
             }
         });
  }
