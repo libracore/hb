@@ -31,7 +31,7 @@ class Bohranzeige(Document):
         }
     
     def after_insert(self):
-        # initial pdf
+        # initial pdf (later will be controlled in js)
         self.attach_pdf()
         return
     

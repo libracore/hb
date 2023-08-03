@@ -124,6 +124,9 @@ doc_events = {
     },
     "Item": {
         "before_save": "heimbohrtechnik.heim_bohrtechnik.utils.item_description_save"
+    },
+    "Communication": {
+        "after_insert": "heimbohrtechnik.heim_bohrtechnik.email_handler.communication_on_insert"
     }
  }
 

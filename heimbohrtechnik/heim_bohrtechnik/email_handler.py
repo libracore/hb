@@ -24,10 +24,12 @@ def save_message(communication, target_file):
     msg = EmailMessage()
     msg['Subject'] = (doc.subject or "").replace("\n", "").replace("\r", "")
     msg['From'] = doc.sender
-    if doc.recipients:
-        msg['To'] = doc.recipients[:-2] if doc.recipients.endswith(", ") else doc.recipients
-    msg['Cc'] = doc.cc
-    msg['Bcc'] = doc.bcc
+    if doc.get("recipients"):
+        msg['To'] = cleanup_email_str(doc.recipients)
+    if doc.get("cc"):
+        msg['Cc'] = cleanup_email_str(doc.cc)
+    if doc.get("bcc"):
+        msg['Bcc'] = cleanup_email_str(doc.bcc)
     msg['Date'] = doc.communication_date
     msg.set_content(html2text.html2text(doc.content))
     msg.add_alternative(doc.content, subtype='html')
@@ -54,11 +56,11 @@ def save_message(communication, target_file):
     
 def upload_communication_to_nextcloud(communication):
     # create file
-    tmp_file = "/tmp/{0}.eml".format(communication)
-    save_message(communication, tmp_file)
+    communication = frappe.get_doc("Communication", communication)
+    tmp_file = "/tmp/" + ("{0}_{1}.eml".format(communication.subject, communication.name)).replace("/", "_").replace(":", "_")
+    save_message(communication.name, tmp_file)
     
     # select target
-    communication = frappe.get_doc("Communication", communication)
     project = None
     
     if communication.reference_doctype == "Project":
@@ -92,3 +94,20 @@ def upload_communication_to_nextcloud(communication):
     remove(tmp_file)
     
     return
+
+"""
+Hook from Communication: create file and upload to nextcloud
+"""
+def communication_on_insert(self, event):
+    try:
+        upload_communication_to_nextcloud(self.name)
+    except Exception as err:
+        frappe.log_error(error, "Commuincation hook failed")
+    return
+    
+def cleanup_email_str(email_str):
+    s = (email_str or "").strip()
+    if s.endswith(","):
+        s = s[:-1]
+    return s
+    
