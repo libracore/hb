@@ -21,6 +21,7 @@
   "geologist_phone",
   "geologist_email",
   "drilling_details_section",
+  "layer_directory",
   "sonde",
   "drilling",
   "piped_to",
@@ -518,10 +519,16 @@
    "fieldtype": "Float",
    "label": "Suspension density",
    "read_only": 1
+  },
+  {
+   "fieldname": "layer_directory",
+   "fieldtype": "Link",
+   "label": "Layer Directory",
+   "options": "Layer Directory"
   }
  ],
  "is_submittable": 1,
- "modified": "2023-07-26 16:52:26.427309",
+ "modified": "2023-08-03 20:37:46.351786",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Injection report",
@@ -543,6 +550,8 @@
    "write": 1
   },
   {
+   "amend": 1,
+   "cancel": 1,
    "create": 1,
    "email": 1,
    "export": 1,
@@ -551,6 +560,7 @@
    "report": 1,
    "role": "Projects User",
    "share": 1,
+   "submit": 1,
    "write": 1
   },
   {
