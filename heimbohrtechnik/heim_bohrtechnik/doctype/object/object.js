@@ -780,9 +780,27 @@ function find_hotel(frm) {
                 "object_name": frm.doc.name
             },
             callback: function (r) {
+				frappe.msgprint(r.message.html, "Hotels");
+				for (var i = 0; i < r.message.hotels.length; i++) {
+					find_true_distance(cur_frm, r.message.hotels[i].gps_latitude, r.message.hotels[i].gps_longitude,"hotel_distance_" + i, "hotel_time_" + i);
+				}
             }
         });
     
 }
-
+ function find_true_distance(frm, to_lat, to_long, target_distance_field, target_duration_field) {
+    frappe.call({
+            method: "heimbohrtechnik.heim_bohrtechnik.locator.get_true_distance",
+            args: {
+                "from_lat": frm.doc.gps_lat,
+                "from_long": frm.doc.gps_long,
+                "to_lat": to_lat,
+                "to_long": to_long
+            },
+            callback: function (r) {
+				document.getElementById(target_distance_field).innerHTML=r.message.data['distance_in_kilometers'].toFixed(1) + " km";
+				document.getElementById(target_duration_field).innerHTML=r.message.data['travel_time'].split(".")[0];
+            }
+        });
+ }
 

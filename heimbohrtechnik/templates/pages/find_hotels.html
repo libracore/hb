@@ -1,4 +1,7 @@
 <style>
+.modal-dialog {
+	width: 800px !important;
+}
 
 .td {
     padding: 5px;
@@ -12,16 +15,20 @@
     text-align: right;
 }
 
+.tacenter {
+    text-align: center;
+}
+
 </style>
-<h3>{{ _("Hotels") }}</h3>
-<table>
+
+<table style="width: 765px;">
     <thead>
         <tr class="tr">
             <th class="td">{{ _("Hotel") }}</th>
             <th class="td">{{ _("Address") }}</th>
-            <th class="td">{{ _("Phone") }}</th>
-<!--            <th class="td">{{ _("Dist.") }}</th>
-            <th class="td">{{ _("Time") }}</th>-->
+            <th class="td tacenter">{{ _("Phone") }}</th>
+            <th class="td tacenter">{{ _("Dist.") }}</th>
+            <th class="td tacenter">{{ _("Time") }}</th>
         </tr>
     </thead>
     <tbody>
@@ -29,9 +36,9 @@
             <tr class="tr">
                 <td class="td">{{ hotel.supplier_name }}</td>
                 <td class="td">{{ hotel.hauptadresse }}</td>
-                <td class="td taright">{{ hotel.telefon }}</td>
-<!--                <td class="td taright">17km</td>
-                <td class="td taright">17min</td>-->
+                <td class="td tacenter">{{ hotel.telefon or "-" }}</td>
+                <td class="td taright"><div id="hotel_distance_{{ loop.index0 }}"></div></td>
+                <td class="td taright"><div id="hotel_time_{{ loop.index0 }}"></div></td>
             </tr>
         {% endfor %}
     </tbody>
