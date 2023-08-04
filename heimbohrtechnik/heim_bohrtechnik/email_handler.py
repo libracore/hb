@@ -69,7 +69,7 @@ def upload_communication_to_nextcloud(communication):
             target = get_path('drilling')
         elif "Fertigstellung" in communication.subject:
             target = get_path('drilling')
-        elif "Mulden- & Saugwagenbestellung" in communication.subject:
+        elif "Saugwagenbestellung" in communication.subject or "Muldenbestellung" in communication.subject:
             target = get_path('supplier_mud')
         else:
             target = get_path('drilling')
