@@ -94,7 +94,7 @@ function add_overlay(data) {
     var place = $('[data-bohrteam="' + data.bohrteam + '"][data-date="' + data.start + '"][data-vmnm="' + data.vmnm + '"]');
     $(place).css("position", "relative");
     var qty = data.dauer
-    var width = 42 * qty;
+    var width = 46.77 * qty;
     $(frappe.render_template(frappe.templates.booking_overlay, {
         'width': width, 
         'project': data.project, 
