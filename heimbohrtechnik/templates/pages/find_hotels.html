@@ -37,7 +37,7 @@
                 <td class="td">{{ hotel.supplier_name }}</td>
                 <td class="td">{{ hotel.hauptadresse }}</td>
                 <td class="td tacenter">{{ hotel.telefon or "-" }}</td>
-                <td class="td taright"><div id="hotel_distance_{{ loop.index0 }}"></div></td>
+                <td class="td taright"><div id="hotel_distance_{{ loop.index0 }}"><i class="fa fa-spinner fa-spin" style="color: #274b82;"></i></div></td>
                 <td class="td taright"><div id="hotel_time_{{ loop.index0 }}"></div></td>
             </tr>
         {% endfor %}
