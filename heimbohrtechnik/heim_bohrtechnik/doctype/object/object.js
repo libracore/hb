@@ -774,19 +774,22 @@ function verify_diameter(frm, cdt, cdn) {
 }
 
 function find_hotel(frm) {
-    frappe.call({
-            method: "heimbohrtechnik.heim_bohrtechnik.locator.find_closest_hotels",
-            args: {
+    if (frm.doc.gps_coordinates) {
+        frappe.call({
+            'method': "heimbohrtechnik.heim_bohrtechnik.locator.find_closest_hotels",
+            'args': {
                 "object_name": frm.doc.name
             },
-            callback: function (r) {
-				frappe.msgprint(r.message.html, "Hotels");
-				for (var i = 0; i < r.message.hotels.length; i++) {
-					find_true_distance(cur_frm, r.message.hotels[i].gps_latitude, r.message.hotels[i].gps_longitude,"hotel_distance_" + i, "hotel_time_" + i);
-				}
+            'callback': function (r) {
+                frappe.msgprint(r.message.html, "Hotels");
+                for (var i = 0; i < r.message.hotels.length; i++) {
+                    find_true_distance(cur_frm, r.message.hotels[i].gps_latitude, r.message.hotels[i].gps_longitude,"hotel_distance_" + i, "hotel_time_" + i);
+                }
             }
         });
-    
+    } else {
+        frappe.msgprint(__("Keine Koordinaten"));
+    }
 }
  function find_true_distance(frm, to_lat, to_long, target_distance_field, target_duration_field) {
     frappe.call({
