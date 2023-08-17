@@ -8,6 +8,7 @@ from webdav3.client import Client
 from frappe.utils.password import get_decrypted_password
 from frappe.desk.form.load import get_attachments
 import time
+from frappe.model.document import Document
 
 PATHS = {
     'admin':            "1_Administration",
@@ -175,16 +176,14 @@ def upload_file(self, event):
             write_project_file_from_local_file (project, physical_file_name, PATHS['invoice'])
     
     elif self.attached_to_doctype == "Project":
-        # check if this file is a plan
-        plans = frappe.db.sql("""
-            SELECT `name` 
-            FROM `tabConstruction Site Description Plan` 
-            WHERE `file` = "{0}";""".format(self.file_url), as_dict=True)
-        physical_file_name = get_physical_path(self.name)
-        if len(plans) > 0:
-            write_project_file_from_local_file (self.attached_to_name, physical_file_name, PATHS['plan'])
-        else:
+        #check if this file is an Attachment and not coming from a Subtable (plans or permits)
+        if self.folder == "Home/Attachments":
+            physical_file_name = get_physical_path(self.name)
             write_project_file_from_local_file (self.attached_to_name, physical_file_name, PATHS['drilling'])
+        else:
+        #Because the File is not writen to the database yet, we are not able here to check if it is a plan or a permit(both are subtables)
+        #Therefore this check will follow later in (see hooks.py "on_update project" and function "upload_project_file" below)
+            pass
     
     elif self.attached_to_doctype == "Request for Public Area Use":
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
@@ -209,3 +208,30 @@ def upload_attachments(dt, dn, project):
         physical_file_name = get_physical_path(a.get('file_name'))
         write_project_file_from_local_file (project, physical_file_name, PATHS['admin'])
     return
+#check if the project subtable attachment is a plan or a permit and write it on the right place
+def upload_project_file(project, event):
+    project_old = project._doc_before_save
+    if len(project_old.plans) < len(project.plans):
+        subtable = "plans"
+        file_id = get_file_id(project, event, subtable)
+        physical_file_name = get_physical_path(file_id)
+        write_project_file_from_local_file (project.name, physical_file_name, PATHS['plan'])
+    elif len(project_old.permits) < len(project.permits):
+        subtable = "permits"
+        file_id = get_file_id(project, event, subtable)
+        physical_file_name = get_physical_path(file_id)
+        write_project_file_from_local_file (project.name, physical_file_name, PATHS['drilling'])
+    
+def get_file_id(project, event, subtable):
+    if subtable == "plans":
+        url = project.plans[-1].file
+    elif subtable == "permits":
+        url = project.permits[-1].file
+    sql_query = frappe.db.sql("""
+    SELECT `name`
+    FROM `tabFile`
+    WHERE `file_url` = '{0}'""".format(url), as_dict=True)
+    file_id = sql_query[0]['name']
+    return file_id
+    
+    
