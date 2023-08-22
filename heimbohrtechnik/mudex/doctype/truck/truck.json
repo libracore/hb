@@ -11,6 +11,7 @@
   "default_color",
   "column_main",
   "truck_owner",
+  "category",
   "column_main2",
   "customer",
   "customer_name",
@@ -92,9 +93,15 @@
    "fieldtype": "Float",
    "label": "Max. Weight",
    "precision": "1"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "label": "Category (Planning)",
+   "options": "\nMudex Calendar\nDiesel"
   }
  ],
- "modified": "2021-12-23 21:15:52.006337",
+ "modified": "2023-08-22 13:52:30.771060",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "Truck",
