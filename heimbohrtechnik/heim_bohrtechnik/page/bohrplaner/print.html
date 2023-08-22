@@ -1,15 +1,15 @@
 <style>
 .booking_overlay {
     position: relative !important;
-    min-height: 245px !important;
-    max-height: 245px !important;
+    min-height: 196px !important;
+    max-height: 196px !important;
     overflow: visible !important;
 }
 
 .internal_overlay {
     position: relative !important;
-    min-height: 240px !important;
-    max-height: 240px !important;
+    min-height: 192px !important;
+    max-height: 192px !important;
     overflow: visible !important;
 }
 
@@ -19,12 +19,14 @@
 
 table {
     border-collapse: collapse !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
 }
 
 .sticky-left {
-    height: 260px !important;
-    min-height: 260px !important;
-    max-height: 260px !important;
+    height: 213px !important;
+    min-height: 213px !important;
+    max-height: 213px !important;
 }
 
 .sticky-top-small {
@@ -118,9 +120,9 @@ table {
             {% set vars = {"counter": 0} %}
             {% for project in drilling_teams[drilling_team.team_id] %}
                 {% if vars.update({"counter": vars.counter + 1}) %}{% endif %} 
-                {% if project.update({"box_height": 23 }) %}{% endif %}
-                {% if project.update({"padding": 3 }) %}{% endif %}
-                {% if project.update({"font_size": 16 }) %}{% endif %}
+                {% if project.update({"box_height": 18 }) %}{% endif %}
+                {% if project.update({"padding": 1 }) %}{% endif %}
+                {% if project.update({"font_size": 14 }) %}{% endif %}
                 {% if project.update({"width": project["dauer"]*70 }) %}{% endif %}
                 {% if project.update({"min_width": 60 }) %}{% endif %}
                 {% if project.update({"max_width": 120 }) %}{% endif %}

@@ -425,8 +425,9 @@ DocType: Injection report,Schwerspat (density x consumption),Schwerspat (Dichte 
 DocType: Injection report,Sum (density x consumption),Summe (Dichte x Verbrauch)
 DocType: Injection report,Sum (Consumption),Summe (Verbrauch)
 DocType: Object,Address,Adresse
-DocType: Object,Phone,Telefon
+DocType: Object,Drilling tool diameter (mm),Durchmesser Bohrwerkzeug (mm)
 DocType: Object,Time,Zeit
 DocType: Truck,Category (Planning),Kategorie (Planung)
 DocType: Truck,Mudex Calendar,Mudex Kalender
 DocType: Truck Planning,Calendar,Kalender
+DocType: Layer Directory,Layers,Schichten
