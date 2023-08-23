@@ -331,8 +331,15 @@ frappe.ui.form.on('Object EWS', {
         update_ews_details(frm, cdt, cdn);
     },
     pressure_level: function(frm, cdt, cdn) {
+        // set wall strength (important: before updating detail string server-sided)
+        var v = locals[cdt][cdn];
+        if ((v.ews_diameter > 0) && (v.pressure_level)) {
+            var wall_strength = get_wall_strength_from_diameter(v.ews_diameter, v.pressure_level);
+            frappe.model.set_value(cdt, cdn, "ews_wall_strength", wall_strength);
+        }
+        
         update_ews_details(frm, cdt, cdn);
-    }  ,
+    },
     probe_type: function(frm, cdt, cdn) {
         verify_diameter(frm, cdt, cdn);
     },
@@ -616,47 +623,6 @@ function update_ews_details(frm, cdt, cdn) {
             cur_frm.set_value("ews_details", response.message);
         }
     });
-    /*if (frm.doc.ews_specification.length === 0) {
-        return;
-    }
-    var v = frm.doc.ews_specification[0];
-    if (frm.doc.ews_specification) {
-        if (frm.doc.ews_specification.ews_diameter_unit === "Zoll") {
-            // for springs
-            var details = "";
-            details = (v.ews_count || "?") + "x "
-                + (v.ews_depth || "?") + "m "
-                + (v.ews_diameter || "?") + (v.ews_diameter_unit || "");
-            if (frm.doc.ews_specification.length > 1) {
-                v = frm.doc.ews_specification[1];
-                details += ", " + (v.ews_count || "?") + "x "
-                    + (v.ews_depth || "?") + "m "
-                    + (v.ews_diameter || "?") + (v.ews_diameter_unit || "");
-            }
-            cur_frm.set_value("ews_details", details);
-        } else {
-            var details = "";
-            for (var i = 0; i < frm.doc.ews_specification.length; i++) {
-                v = frm.doc.ews_specification[i];
-                details += (v.ews_count || "?") + "x"
-                    + (v.ews_depth || "?") + "-"
-                    + (v.ews_diameter || "?"); // + (v.ews_diameter_unit || "");
-                if ((v.pressure_level) && (!v.pressure_level.includes("PN16")) {
-                    details += " " + (v.pressure_level || "");
-                }
-                if (frm.doc.drilling_type === "Brunnen") {
-                    details = "Brunnen " + details;
-                }
-            }
-            cur_frm.set_value("ews_details", details);
-        }
-    }*/
-    // set wall strength
-    var v = frm.doc.ews_specification[0];
-    if ((v.ews_diameter > 0) && (v.pressure_level)) {
-        frappe.model.set_value(v.doctype, v.name, "ews_wall_strength", 
-            get_wall_strength_from_diameter(v.ews_diameter, v.pressure_level));
-    }
 }
 
 function recalculate_drilling_meter(frm) {
