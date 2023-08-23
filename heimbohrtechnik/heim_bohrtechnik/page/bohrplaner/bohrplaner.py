@@ -77,9 +77,15 @@ def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
             dauer -= 1
         if p.end_half_day.lower() == 'vm' and (p.expected_end_date.weekday() < 5 and p.expected_end_date <= getdate(to_date)):
             dauer -= 1
+
+        if p.expected_start_date.weekday() > 5:
+            p.start_half_day = 'vm'
+            if p.expected_start_date.weekday() == 6:
+                p.expected_start_date = frappe.utils.add_days(p.expected_start_date, 1)
         
         p_data = get_project_data(p, dauer)
         projects.append(p_data)
+        
         
     return projects
     
