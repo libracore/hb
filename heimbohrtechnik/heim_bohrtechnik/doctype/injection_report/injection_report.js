@@ -130,7 +130,7 @@ function autocomplete_needs() {
         cur_frm.set_value('needed_water', Math.round((cur_frm.doc.gtm_water / cur_frm.doc.gtm_suspension)*cur_frm.doc.need));
         cur_frm.set_value('needed_ewm', Math.round((cur_frm.doc.gtm_hs / cur_frm.doc.gtm_suspension)*cur_frm.doc.need));
         cur_frm.set_value('needed_sacks_gtm', Math.round(cur_frm.doc.needed_ewm / cur_frm.doc.gtm_sack_weight));
-        cur_frm.set_value('ac_tot', Math.round((cur_frm.doc.ac_grouting / 1180)*1000));
+        cur_frm.set_value('ac_tot', Math.round((cur_frm.doc.ac_grouting / cur_frm.doc.gtm_suspension_lt)*1000));
     } else if (cur_frm.doc.mortar == "Zement-Bentonit" ) {
         cur_frm.set_value('needed_water', Math.round((cur_frm.doc.zm_water / cur_frm.doc.zm_suspension)*cur_frm.doc.need));
         cur_frm.set_value('needed_zement', Math.round((cur_frm.doc.zement / cur_frm.doc.zm_suspension)*cur_frm.doc.need));
@@ -144,6 +144,11 @@ function autocomplete_needs() {
             cur_frm.set_value('ac_bentonit', Math.round(cur_frm.doc.ac_grouting * (cur_frm.doc.needed_bentonit / cur_frm.doc.need)));
             cur_frm.set_value('ac_tot', Math.round((cur_frm.doc.ac_grouting / cur_frm.doc.suspension_lt)*1000));
         }
+    } else if (cur_frm.doc.mortar == "Schwenk Füllbinder H-hs plus" ) {
+        cur_frm.set_value('needed_water', Math.round((cur_frm.doc.hsplus_water / cur_frm.doc.hsplus_suspension)*cur_frm.doc.need));
+        cur_frm.set_value('needed_ewm', Math.round((cur_frm.doc.hs_plus / cur_frm.doc.hsplus_suspension)*cur_frm.doc.need));
+        cur_frm.set_value('needed_sacks_hsplus', Math.round(cur_frm.doc.needed_ewm / cur_frm.doc.hsplus_sack_weight));
+        cur_frm.set_value('ac_tot', Math.round((cur_frm.doc.ac_grouting / cur_frm.doc.hsplus_suspension_lt)*1000));
     }
 }
 
