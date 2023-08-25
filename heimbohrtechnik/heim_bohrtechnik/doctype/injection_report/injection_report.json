@@ -32,6 +32,7 @@
   "needed_water",
   "needed_ewm",
   "needed_sacks_gtm",
+  "needed_sacks_hsplus",
   "needed_zement",
   "needed_sacks_zement",
   "needed_bentonit",
@@ -52,8 +53,16 @@
   "gtm_water",
   "gtm_hs",
   "gtm_suspension",
+  "gtm_suspension_lt",
   "column_break_29",
   "gtm_sack_weight",
+  "hsplusbase_section",
+  "hsplus_water",
+  "hs_plus",
+  "hsplus_suspension",
+  "hsplus_suspension_lt",
+  "column_break_54",
+  "hsplus_sack_weight",
   "actual_consumption_section",
   "ac_grouting",
   "ac_tot",
@@ -146,7 +155,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Mortar",
-   "options": "\nZement-Bentonit\nSchwenk F\u00fcllbinder GTM-hs",
+   "options": "\nZement-Bentonit\nSchwenk F\u00fcllbinder GTM-hs\nSchwenk F\u00fcllbinder H-hs plus",
    "reqd": 1
   },
   {
@@ -285,7 +294,7 @@
    "read_only": 1
   },
   {
-   "depends_on": "eval:doc.mortar == \"Schwenk F\u00fcllbinder GTM-hs\"",
+   "depends_on": "eval:doc.mortar == \"Schwenk F\u00fcllbinder GTM-hs\" || \"Schwenk F\u00fcllbinder H-hs plus\"",
    "fieldname": "needed_ewm",
    "fieldtype": "Int",
    "label": "Needed EWM",
@@ -525,10 +534,64 @@
    "fieldtype": "Link",
    "label": "Layer Directory",
    "options": "Layer Directory"
+  },
+  {
+   "collapsible": 1,
+   "depends_on": "eval:doc.mortar == \"Schwenk F\u00fcllbinder H-hs plus\";",
+   "fieldname": "hsplusbase_section",
+   "fieldtype": "Section Break",
+   "label": "Base Schwenk F\u00fcllbinder H-hs plus"
+  },
+  {
+   "default": "650",
+   "fieldname": "hsplus_water",
+   "fieldtype": "Int",
+   "label": "Water (L / m3)"
+  },
+  {
+   "default": "930",
+   "fieldname": "hs_plus",
+   "fieldtype": "Int",
+   "label": "hs-plus (kg / m3)"
+  },
+  {
+   "default": "1000",
+   "fieldname": "hsplus_suspension",
+   "fieldtype": "Int",
+   "label": "Suspension (L)"
+  },
+  {
+   "fieldname": "column_break_54",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1180",
+   "fieldname": "gtm_suspension_lt",
+   "fieldtype": "Int",
+   "label": "Suspension (l/t)"
+  },
+  {
+   "default": "1070",
+   "fieldname": "hsplus_suspension_lt",
+   "fieldtype": "Int",
+   "label": "Suspension (l/t)"
+  },
+  {
+   "depends_on": "eval:doc.mortar == \"Schwenk F\u00fcllbinder H-hs plus\"",
+   "fieldname": "needed_sacks_hsplus",
+   "fieldtype": "Int",
+   "label": "Needed Sacks",
+   "read_only": 1
+  },
+  {
+   "default": "25",
+   "fieldname": "hsplus_sack_weight",
+   "fieldtype": "Int",
+   "label": "Sack weight (kg)"
   }
  ],
  "is_submittable": 1,
- "modified": "2023-08-14 09:41:40.513888",
+ "modified": "2023-08-25 09:22:57.005056",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Injection report",
