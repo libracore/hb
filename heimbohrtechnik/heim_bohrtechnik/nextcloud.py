@@ -216,13 +216,15 @@ def upload_project_file(project, event):
         if len(project_old.plans) < len(project.plans):
             subtable = "plans"
             file_id = get_file_id(project, event, subtable)
-            physical_file_name = get_physical_path(file_id)
-            write_project_file_from_local_file (project.name, physical_file_name, PATHS['plan'])
+            if file_id:
+                physical_file_name = get_physical_path(file_id)
+                write_project_file_from_local_file (project.name, physical_file_name, PATHS['plan'])
         elif len(project_old.permits) < len(project.permits):
             subtable = "permits"
             file_id = get_file_id(project, event, subtable)
-            physical_file_name = get_physical_path(file_id)
-            write_project_file_from_local_file (project.name, physical_file_name, PATHS['drilling'])
+            if file_id:
+                physical_file_name = get_physical_path(file_id)
+                write_project_file_from_local_file (project.name, physical_file_name, PATHS['drilling'])
     
 def get_file_id(project, event, subtable):
     if subtable == "plans":
