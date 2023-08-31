@@ -233,7 +233,7 @@ def get_file_id(project, event, subtable):
         SELECT `name`
         FROM `tabFile`
         WHERE `file_url` = '{0}'""".format(url), as_dict=True)
-    if len(sql_query) > 0
+    if len(sql_query) > 0:
         file_id = sql_query[0]['name']
         return file_id
     else:
