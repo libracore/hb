@@ -208,6 +208,7 @@ def upload_attachments(dt, dn, project):
         physical_file_name = get_physical_path(a.get('file_name'))
         write_project_file_from_local_file (project, physical_file_name, PATHS['admin'])
     return
+
 #check if the project subtable attachment is a plan or a permit and write it on the right place
 def upload_project_file(project, event):
     project_old = project._doc_before_save
@@ -229,10 +230,13 @@ def get_file_id(project, event, subtable):
     elif subtable == "permits":
         url = project.permits[-1].file
     sql_query = frappe.db.sql("""
-    SELECT `name`
-    FROM `tabFile`
-    WHERE `file_url` = '{0}'""".format(url), as_dict=True)
-    file_id = sql_query[0]['name']
-    return file_id
+        SELECT `name`
+        FROM `tabFile`
+        WHERE `file_url` = '{0}'""".format(url), as_dict=True)
+    if len(sql_query) > 0
+        file_id = sql_query[0]['name']
+        return file_id
+    else:
+        return None
     
     
