@@ -22,6 +22,7 @@ BG_WHITE = '#ffffff;'
 BG_BLACK = '#000000;'
 BG_DARK_RED = '#8b0000;' # '#7b241c'
 BG_DARK_ORANGE = '#d76400;'
+BG_YELLOW = '#FFEA00;'
 
 WEEKDAYS = {
     0: "So",
@@ -442,11 +443,13 @@ def get_traffic_lights_indicator(project):
     
     #ews_details [7]
     ews_details_color = BG_RED                      # red
-    po = frappe.db.sql("""SELECT `per_received` FROM `tabPurchase Order` WHERE `object` = '{0}' AND `docstatus` = 1""".format(project.object), as_dict=True)
+    po = frappe.db.sql("""SELECT `per_received`, `order_confirmation` FROM `tabPurchase Order` WHERE `object` = '{0}' AND `docstatus` = 1""".format(project.object), as_dict=True)
     if len(po) > 0:
-        ews_details_color = BG_ORANGE               # yellow: ordered
-        if cint(po[0].per_received) == 100:
-            ews_details_color = BG_GREEN            # green: available
+        ews_details_color = BG_YELLOW               # yellow: ordered
+        if po[0].order_confirmation:
+            ews_details_color = BG_ORANGE           # orange: confirmed
+            if cint(po[0].per_received) == 100:
+                ews_details_color = BG_GREEN        # green: available
     colors.append(ews_details_color)
     
     # saugauftrag [8]
