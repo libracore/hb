@@ -448,8 +448,8 @@ def get_traffic_lights_indicator(project):
         ews_details_color = BG_YELLOW               # yellow: ordered
         if po[0].order_confirmation:
             ews_details_color = BG_ORANGE           # orange: confirmed
-            if cint(po[0].per_received) == 100:
-                ews_details_color = BG_GREEN        # green: available
+        if cint(po[0].per_received) == 100:
+            ews_details_color = BG_GREEN            # green: available
     colors.append(ews_details_color)
     
     # saugauftrag [8]
