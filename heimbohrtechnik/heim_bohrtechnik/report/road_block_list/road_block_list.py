@@ -26,6 +26,7 @@ def get_columns(filters):
     ]
 
 def get_data(filters):
+    
     # get all projects that have a road block in their checklist
     sql_query = """SELECT
             `tabProject`.`name` AS `project`,
@@ -53,9 +54,12 @@ def get_data(filters):
             AND `tabProject`.`expected_start_date` >= "{from_date}"
         GROUP BY `tabProject`.`name`
         ORDER BY `tabProject`.`expected_start_date` ASC, `tabProject`.`start_half_day` DESC,`tabProject`.`drilling_team` ASC
-    ;""".format(from_date=filters.from_date)
+    ;""".format(from_date=filters.from_date, project=filters.project)
     data = frappe.db.sql(sql_query, as_dict=True)
-    
+
+    #remove projects without Request for Public Area Use
+    data = [d for d in data if not (d.get('road_block') == None)]
+
     # color issues
     for d in data:
         # mark drilling before permit red
