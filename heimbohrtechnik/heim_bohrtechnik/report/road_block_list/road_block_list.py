@@ -54,7 +54,7 @@ def get_data(filters):
             AND `tabProject`.`expected_start_date` >= "{from_date}"
         GROUP BY `tabProject`.`name`
         ORDER BY `tabProject`.`expected_start_date` ASC, `tabProject`.`start_half_day` DESC,`tabProject`.`drilling_team` ASC
-    ;""".format(from_date=filters.from_date, project=filters.project)
+    ;""".format(from_date=filters.from_date)
     data = frappe.db.sql(sql_query, as_dict=True)
 
     #remove projects without Request for Public Area Use
