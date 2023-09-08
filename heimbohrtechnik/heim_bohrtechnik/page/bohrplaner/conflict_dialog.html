@@ -65,16 +65,18 @@
     {% endfor %}
 </table>
 
-<h3>{{ _("Holidays") }}</h3>
+<h3>{{ _("Feiertage") }}</h3>
 <table class="table">
     <tr>
         <th>{{ _("Project") }}</th>
         <th>{{ _("Details") }}</th>
+        <th>{{ _("Drilling Team") }}</th>
     </tr>
     {% for c in holiday_conflicts %}
         <tr>
             <td><a href="{{ c.url }}">{{ c.project }}</a></td>
             <td>{{ c.date }} ({{ c.region }})</td>
+            <td>{{ c.drilling_team }}</td>
         </tr>
     {% endfor %}
 </table>

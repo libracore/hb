@@ -959,7 +959,7 @@ def find_holiday_conflicts():
         
         # get all open projects in this region
         projects = frappe.db.sql("""
-            SELECT `name`, `expected_start_date`, `expected_end_date`
+            SELECT `name`, `expected_start_date`, `expected_end_date`, `drilling_team`
             FROM `tabProject`
             WHERE
                 `status` = "Open"
@@ -982,7 +982,8 @@ def find_holiday_conflicts():
                         'project': project['name'],
                         'date': contained,
                         'region': region['region'],
-                        'url': get_url_to_form("Project", project['name'])
+                        'url': get_url_to_form("Project", project['name']),
+                        'drilling_team': project['drilling_team']
                     }
                 )
             
