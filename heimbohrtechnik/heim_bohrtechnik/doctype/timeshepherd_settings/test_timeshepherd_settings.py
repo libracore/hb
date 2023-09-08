@@ -19,7 +19,7 @@ def test_employees():
     return
     
 def test_absences():
-    absences = get_absences()
+    absences = get_absences(debug=True)
     
     for absence in absences:
         print("{0}".format(absence))

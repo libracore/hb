@@ -114,7 +114,7 @@ def get_employees(only_active_ids=False):
     else:
         return employees_raw
         
-def get_absences():
+def get_absences(debug=False):
     token = get_new_token()
     settings = get_settings()
     employees = get_employees(only_active_ids=True)
@@ -144,7 +144,7 @@ def get_absences():
     """
     
     # consolidate to blocks rather than single days
-    absences = consolidate_absences(absences)
+    absences = consolidate_absences(absences, debug)
     
     return absences
 
@@ -319,7 +319,8 @@ def sync_leave_applications():
                     try:
                         new_leave.insert()
                     except Exception as err:
-                        frappe.log_error("Unable to insert: {0}: {1}".format(new_leave.as_dict(), err), "Timeshepherd leave sync")
+                        if absence['from_date'] != datetime.today().strftime("%Y-%m-%d"):     # skip insert errors from today (ongoing leaves)
+                            frappe.log_error("Unable to insert: {0}: {1}".format(new_leave.as_dict(), err), "Timeshepherd leave sync")
                     frappe.db.commit()
         
     return
@@ -360,7 +361,7 @@ Check if there is already a leave application and cancel this
 def check_resolve_overlaps(employee, from_date, to_date):
     # find overlaps
     for d in frappe.db.sql("""
-        SELECT `name`
+        SELECT `name`, `from_date`, `to_date`
         FROM `tabLeave Application`
         WHERE `employee` = "{employee}"
           AND `docstatus` < 2
@@ -369,6 +370,10 @@ def check_resolve_overlaps(employee, from_date, to_date):
           AND `from_date` <= "{to_date}";
         """.format(employee=employee, from_date=from_date, to_date=to_date), as_dict=True):
         
+        # do not cancel started ongoing leave (otherwise it shortens every day)
+        if d['from_date'] <= datetime.today().date() and d['to_date'] >= datetime.today().date():
+            continue
+            
         # push to cancelled stage
         frappe.db.sql("""
             UPDATE `tabLeave Application`
