@@ -34,9 +34,9 @@
     <tbody>
         {% for hotel in hotels %}
             <tr class="tr">
-                <td class="td">{{ hotel.supplier_name }}</td>
-                <td class="td">{{ hotel.hauptadresse }}</td>
-                <td class="td tacenter">{{ hotel.telefon or "-" }}</td>
+                <td class="td">{% if hotel.website %}<a href="https://{{ hotel.website }}">{{ hotel.supplier_name }}</a>{% else %}{{ hotel.supplier_name }}{% endif %}</td>
+                <td class="td"><a href="geo:{{ hotel.gps_latitude }},{{ hotel.gps_longitude }}">{{ hotel.hauptadresse }}</a></td>
+                <td class="td tacenter"><a href="tel:{{ hotel.telefon }}">{{ hotel.telefon or "-" }}</a></td>
                 <td class="td taright"><div id="hotel_distance_{{ loop.index0 }}"><i class="fa fa-spinner fa-spin" style="color: #274b82;"></i></div></td>
                 <td class="td taright"><div id="hotel_time_{{ loop.index0 }}"></div></td>
             </tr>
