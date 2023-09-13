@@ -294,13 +294,16 @@ def order_ews(object):
     # schedule date: Thursday before start (weekday: Monday = 0
     start_date = frappe.get_value("Project", object, "expected_start_date") or datetime.today()
     schedule_date = start_date - timedelta(days = 4 + start_date.weekday())
+    supplier = get_default_supplier(items[0]['item_code'])
+    currency = frappe.get_value("Supplier", supplier, "default_currency") or frappe.defaults.get_global_default("currency")
     # create purchase order
     po = frappe.get_doc({
         'doctype': "Purchase Order",
         'items': items,
         'schedule_date': schedule_date,
-        'supplier': get_default_supplier(items[0]['item_code']),
-        'object': object        
+        'supplier': supplier,
+        'object': object,
+        'currency': currency
     })
     
     po.flags.ignore_mandatory = True
