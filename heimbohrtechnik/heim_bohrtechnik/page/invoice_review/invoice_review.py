@@ -7,10 +7,11 @@ import frappe
 from frappe import throw, _
 from frappe.desk.form.assign_to import add, clear
 from frappe.utils import cint
+from datetime import datetime
 
 @frappe.whitelist()
-def get_approvals(user):
-    # find assigned purchase invoices
+def get_invoices_for_review():
+    # find not reviewed purchase invoices
     pinvs = frappe.db.sql("""
         SELECT 
             `tabPurchase Invoice`.`name`,
@@ -21,16 +22,15 @@ def get_approvals(user):
             `tabPurchase Invoice`.`net_total`,
             `tabPurchase Invoice`.`grand_total`,
             `tabPurchase Invoice`.`currency`,
-            `tabPurchase Invoice`.`bill_no`
-        FROM `tabToDo`
-        LEFT JOIN `tabPurchase Invoice` ON `tabPurchase Invoice`.`name` = `tabToDo`.`reference_name`
+            `tabPurchase Invoice`.`bill_no`,
+            `tabPurchase Invoice`.`total_taxes_and_charges` AS `tax`
+        FROM `tabPurchase Invoice`
         WHERE
-            `tabToDo`.`owner` = "{user}"
-            AND `tabToDo`.`reference_type` = "Purchase Invoice"
-            AND `tabToDo`.`status` = "Open"
+            `tabPurchase Invoice`.`docstatus` = 0
+            AND `tabPurchase Invoice`.`reviewed_by` IS NULL
         ORDER BY `tabPurchase Invoice`.`due_date` ASC, `tabPurchase Invoice`.`name` ASC
         ;
-        """.format(user=user), as_dict=True)
+        """.format(), as_dict=True)
     
     # extend atatchments
     for pinv in pinvs:
@@ -46,39 +46,19 @@ def get_approvals(user):
         pinv['due_date'] = frappe.utils.get_datetime(pinv['due_date']).strftime("%d.%m.%Y")
         pinv['net_total'] = "{:,.2f}".format(pinv['net_total']).replace(",", "'")
         pinv['grand_total'] = "{:,.2f}".format(pinv['grand_total']).replace(",", "'")
+        pinv['tax'] = "{:,.2f}".format(pinv['tax']).replace(",", "'")
         
     return pinvs
     
 @frappe.whitelist()
-def approve(pinv, is_final, user):
-    add_comment(pinv, _("Approval"), _("Approved"), user)
-    # clear assignment
-    clear("Purchase Invoice", pinv)
-    # submit or re-assign
-    if cint(is_final):
-        # submit document, this is a final approval
-        pinv_doc = frappe.get_doc("Purchase Invoice", pinv)
-        pinv_doc.submit()
-        frappe.db.commit()
-    else:
-        # final approver
-        approvers = frappe.db.sql("""
-            SELECT `tabDepartment Approver`.`approver`
-            FROM `tabEmployee`
-            LEFT JOIN `tabDepartment` ON `tabDepartment`.`name` = `tabEmployee`.`department`
-            LEFT JOIN `tabDepartment Approver` ON `tabDepartment Approver`.`parent` = `tabDepartment`.`name`
-            WHERE 
-                `tabEmployee`.`user_id` = "{user}";
-            """.format(user=user), as_dict=True)
-        if len(approvers) > 0:
-            add({'doctype': 'Purchase Invoice', 'name': pinv, 'assign_to': approvers[0]['approver']})
-    return
-
-@frappe.whitelist()
-def reject(pinv, user):
-    add_comment(pinv, _("Reject"), _("Rejected"), user)
-    # clear assignment
-    clear("Purchase Invoice", pinv)
+def reviewed(pinv, user):
+    add_comment(pinv, _("Review"), _("Reviewed"), user)
+    # add review mark
+    pinv_doc = frappe.get_doc("Purchase Invoice", pinv)
+    pinv_doc.reviewed_by = user
+    pinv_doc.reviewed_on = datetime.today()
+    pinv_doc.save()
+    frappe.db.commit()
     return
 
 def add_comment(pinv, subject, comment, user):

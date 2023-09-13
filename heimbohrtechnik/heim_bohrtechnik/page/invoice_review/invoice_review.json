@@ -1,0 +1,35 @@
+{
+ "content": null,
+ "creation": "2023-09-13 17:40:48.048762",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2023-09-13 17:40:48.048762",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "invoice-review",
+ "owner": "Administrator",
+ "page_name": "invoice-review",
+ "roles": [
+  {
+   "role": "Purchase User"
+  },
+  {
+   "role": "Purchase Manager"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Invoice Review"
+}

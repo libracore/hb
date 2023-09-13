@@ -1,0 +1,31 @@
+<table class="table" id="row_{{ name }}">
+  <thead class="thead-light">
+    <tr>
+        <th scope="col" style="width: 10%; ">{{ __("Document") }}</th>
+        <th scope="col" style="width: 20%; ">{{ __("Supplier") }}</th>
+        <th scope="col" style="width: 10%; ">{{ __("Date") }}</th>
+        <th scope="col" style="width: 10%; ">{{ __("Due date") }}</th>
+        <th scope="col" style="width: 12%; ">{{ __("Amount") }}</th>
+        <th scope="col" style="width: 12%; ">{{ __("Tax") }}</th>
+        <th scope="col" style="width: 12%; ">{{ __("Attachments") }}</th>
+        <th scope="col">{{ __("Decision") }}</th>
+    </tr>
+  </thead>
+    <tr>
+        <td><a href="/desk#Form/Purchase Invoice/{{ name }}">{{ name }}</a></td>
+        <td><a href="/desk#Form/Supplier/{{ supplier }}">{{ supplier_name }}</a></td>
+        <td>{{ posting_date }}</td>
+        <td>{{ due_date }}</td>
+        <td>{{ currency }} {{ net_total }}</td>
+        <td>{{ currency }} {{ tax }}</td>
+        <td>
+            {% for a in attachments %}
+                <a href="{{ a.file_url }}" target="_blank"><i class="fa fa-file"></i></a>
+            {% endfor %}
+        </td>
+        <td>
+            <button type="submit" class="btn btn-sm btn-success" id="btn_reviewed_{{ name }}" data-pinv="{{ name }}">{{ __("Reviewed") }}</button>
+        </td>
+    </tr> 
+
+</table>

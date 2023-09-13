@@ -165,6 +165,12 @@ def get_data():
                 },
                 {
                    "type": "page",
+                   "name": "invoice-review",
+                   "label": _("Invoice Review"),
+                   "description": _("Invoice Review")
+                },
+                {
+                   "type": "page",
                    "name": "approval-manager",
                    "label": _("Approval Manager"),
                    "description": _("Approval Manager")
