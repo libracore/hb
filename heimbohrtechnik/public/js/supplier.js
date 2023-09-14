@@ -16,7 +16,9 @@ frappe.ui.form.on('Supplier', {
         });
     },
     refresh(frm) {
-        if ((frm.doc.capabilities[0].activity == "Hotel") && (!frm.doc.gps_latitude)) {
+        if ((frm.doc.capabilities[0].activity == "Hotel") && (!frm.doc.gps_latitude) && (!locals.gps_requested)) {
+            // prevent endless loop when gps cannot be found
+            locals.gps_requested = true;
             set_gps_coordinates(frm);
         }
     },
