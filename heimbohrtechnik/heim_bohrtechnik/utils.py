@@ -322,16 +322,17 @@ def get_default_supplier(item):
 def find_item_for_ews(depth, diameter, wall_strength, material=None):
     conditions = ""
     if material:
-        conditions = """AND `material` LIKE "%{material}%" """.format(material=material)
+        conditions = """AND `tabItem`.`material` LIKE "%{material}%" """.format(material=material)
     sql_query = """SELECT
-            `item_code`
+            `tabItem`.`item_code`
         FROM `tabItem`
+        LEFT JOIN `tabItem Default` ON `tabItem Default`.`parent` = `tabItem`.`name` AND `tabItem Default`.`parenttype` = "Item"
         WHERE 
-            `diameter` = {diameter}
-            AND `wall_strength` >= {wall_strength}
-            AND `length` >= {depth}
+            `tabItem`.`diameter` = {diameter}
+            AND `tabItem`.`wall_strength` >= {wall_strength}
+            AND `tabItem`.`length` >= {depth}
             {conditions}
-        ORDER BY `wall_strength` ASC, `length` ASC
+        ORDER BY `tabItem Default`.`default_supplier`, `tabItem`.`wall_strength` ASC, `tabItem`.`length` ASC
         LIMIT 1;""".format(depth=depth, diameter=diameter, wall_strength=wall_strength, conditions=conditions)
         
     hits = frappe.db.sql(sql_query, as_dict=True)
