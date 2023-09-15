@@ -255,6 +255,7 @@ DocType: Quotation,Discount Positions,Abschlagspositonen
 DocType: Quotation,Add Discount,Rabatt hinzufügen
 DocType: Quotation,Object description,Objekttext
 DocType: Purchase Order,We are hereby placing the following order:,Hiermit bestellen wir folgende Positionen:
+DocType: Purchase Order,Order confirmation,Auftragsbestätigung
 DocType: Supplier,Required Activity,Erforderliche Tätigkeit
 DocType: Supplier,Short Display,Kürzel
 DocType: Drilling Team,Drilling rig manufacturer,Hersteller Bohrausrüsting
