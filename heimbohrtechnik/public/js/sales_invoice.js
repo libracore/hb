@@ -54,6 +54,9 @@ frappe.ui.form.on('Sales Invoice', {
                 }
             });
         }
+        
+        // if there is an akonto booking, cancel
+        cancel_akonto_booking(frm);
     },
     on_submit: function(frm) {
         check_create_akonto_booking(frm);
@@ -200,4 +203,14 @@ function check_create_akonto_booking(frm) {
             }
         }
     }
+}
+
+// This function cancels akonto bookings (if present)
+function cancel_akonto_booking(frm) {
+    frappe.call({
+        "method": "heimbohrtechnik.heim_bohrtechnik.utils.cancel_akonto",
+        "args": {
+            "sales_invoice": frm.doc.name
+        }
+    });
 }

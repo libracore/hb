@@ -182,6 +182,23 @@ def book_akonto(sales_invoice, net_amount):
     jv.submit()
     frappe.db.commit()
     return jv.name
+
+@frappe.whitelist()
+def cancel_akonto(sales_invoice):
+    company = frappe.get_value("Sales Invoice", sales_invoice, "company")
+    jvs = frappe.get_all("Journal Entry", 
+        filters={'company': company, 'docstatus': 1, 'user_remark': "Akonto from {0}".format(sales_invoice)},
+        fields=['name']
+    )
+    
+    cancelled = []
+    for jv in jvs:
+        doc = frappe.get_doc("Journal Entry", jv['name'])
+        doc.cancel()
+        cancelled.append(jv['name'])
+        
+    frappe.db.commit()
+    return cancelled
     
 @frappe.whitelist()
 def get_object_reference_address(object, address_type):
