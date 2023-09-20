@@ -794,46 +794,54 @@ def get_user_planning_days(user):
         }
     
 @frappe.whitelist()
-def print_bohrplaner(start_date, previous_week=False):
+def print_bohrplaner(start_date, previous_week=False, target_file=None):
     from frappe.utils.pdf import get_pdf
     from PyPDF2 import PdfFileWriter
     from frappe.utils.pdf import get_file_data_from_writer
     from erpnextswiss.erpnextswiss.attach_pdf import create_folder
 
-    fname = "Bohrplaner.pdf"
-    # clean old "Bohrplaner.pdf" from files and file system
-    bp_files = frappe.get_all("File", filters={'file_name': fname})
-    for f in bp_files:
-        doc = frappe.get_doc("File", f['name'])
-        doc.delete()
+    if not target_file:
+        fname = "Bohrplaner.pdf"
+        # clean old "Bohrplaner.pdf" from files and file system
+        bp_files = frappe.get_all("File", filters={'file_name': fname})
+        for f in bp_files:
+            doc = frappe.get_doc("File", f['name'])
+            doc.delete()
     
     html = get_bohrplaner_html(start_date, previous_week)
     
     output = PdfFileWriter()
     output = get_pdf(html, output=output)
     
-    folder = create_folder("Bohrplaner-Prints", "Home")
-    
-    filedata = get_file_data_from_writer(output)
-    
-    _file = frappe.get_doc({
-        "doctype": "File",
-        "file_name": fname,
-        "folder": folder,
-        "is_private": 1,
-        "content": filedata
-    })
-    
-    _file.save(ignore_permissions=True)
-    
-    return {'url': _file.file_url, 'name': _file.name}
+    if not target_file:
+        folder = create_folder("Bohrplaner-Prints", "Home")
+        
+        filedata = get_file_data_from_writer(output)
+        
+        _file = frappe.get_doc({
+            "doctype": "File",
+            "file_name": fname,
+            "folder": folder,
+            "is_private": 1,
+            "content": filedata
+        })
+        
+        _file.save(ignore_permissions=True)
+        
+        return {'url': _file.file_url, 'name': _file.name}
+    else:
+        _file = open(target_file, "wb")
+        _file.write(output)
+        _file.close()
+        
+        return {'url': None, 'name': target_file}
 
 def backup():
     # prepare date: start today for the backup (if you start on next Monday, the current week will not be visible)
     today = date.today()
     today_str = "{y:04d}-{m:02d}-{d:02d}".format(y=today.year, m=today.month, d=today.day)
     # create the pdf as a local file
-    f = print_bohrplaner(today_str, previous_week=True)
+    f = print_bohrplaner(today_str, previous_week=True, target_file="/tmp/Bohrplaner.pdf")
     # upload to nextcloud
     physical_file = get_physical_path(f['name'])
     write_file_to_base_path(physical_file)

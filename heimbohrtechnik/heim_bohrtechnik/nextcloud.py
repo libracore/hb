@@ -9,6 +9,7 @@ from frappe.utils.password import get_decrypted_password
 from frappe.desk.form.load import get_attachments
 import time
 from frappe.model.document import Document
+from frappe.utils import cint
 
 PATHS = {
     'admin':            "1_Administration",
@@ -49,6 +50,9 @@ def get_client():
 This function will create a new project folder with the required structure
 """
 def create_project_folder(project):
+    if cint(frappe.get_value("Heim Settings", "Heim Settings", "nextcloud_enabled")) == 0:
+        return      # skip if nextcloud is disabled (develop environments)
+        
     client = get_client()
     
     project_path = get_project_path(project)
@@ -85,6 +89,9 @@ def get_base_path():
     return projects_folder
     
 def create_path(client, path):
+    if cint(frappe.get_value("Heim Settings", "Heim Settings", "nextcloud_enabled")) == 0:
+        return      # skip if nextcloud is disabled (develop environments)
+        
     # create project folder
     try:
         if not client.check(path):
@@ -100,6 +107,9 @@ def write_file(project, f):
 Write the project file (local file path) to nextcloud
 """
 def write_project_file_from_local_file (project, file_name, target=PATHS['drilling']):
+    if cint(frappe.get_value("Heim Settings", "Heim Settings", "nextcloud_enabled")) == 0:
+        return      # skip if nextcloud is disabled (develop environments)
+        
     client = get_client()
     project_path = get_project_path(project)
     if client.check(os.path.join(project_path, target)):
@@ -114,6 +124,9 @@ def write_project_file_from_local_file (project, file_name, target=PATHS['drilli
 Write the a local file (local file path) to the nextcloud base path (00_Projekte)
 """
 def write_file_to_base_path(file_name):
+    if cint(frappe.get_value("Heim Settings", "Heim Settings", "nextcloud_enabled")) == 0:
+        return      # skip if nextcloud is disabled (develop environments)
+        
     client = get_client()
     base_path = get_base_path()
     client.upload_sync(os.path.join(base_path, file_name.split("/")[-1]), file_name)
@@ -142,7 +155,10 @@ def get_physical_path(file_name):
 """
 Hook from File: upload specific files to nextcloud
 """
-def upload_file(self, event):    
+def upload_file(self, event):
+    if cint(frappe.get_value("Heim Settings", "Heim Settings", "nextcloud_enabled")) == 0:
+        return      # skip if nextcloud is disabled (develop environments)
+
     if self.attached_to_doctype == "Bohranzeige":
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
         physical_file_name = get_physical_path(self.name)
@@ -176,13 +192,15 @@ def upload_file(self, event):
             write_project_file_from_local_file (project, physical_file_name, PATHS['invoice'])
     
     elif self.attached_to_doctype == "Project":
-        #check if this file is an Attachment and not coming from a Subtable (plans or permits)
+        #check if this file is an Attachment and not coming from a Subtable (plans or permits, they are written to Home)
         if self.folder == "Home/Attachments":
             physical_file_name = get_physical_path(self.name)
             write_project_file_from_local_file (self.attached_to_name, physical_file_name, PATHS['drilling'])
         else:
-        #Because the File is not writen to the database yet, we are not able here to check if it is a plan or a permit(both are subtables)
-        #Therefore this check will follow later in (see hooks.py "on_update project" and function "upload_project_file" below)
+            # Because the project file is not writen to the database yet, 
+            # we are not able here to check if it is a plan or a permit (both are subtables)
+            # Therefore this check will follow later in (see hooks.py "on_update project" and 
+            # function "upload_project_file" below)
             pass
     
     elif self.attached_to_doctype == "Request for Public Area Use":
@@ -209,28 +227,39 @@ def upload_attachments(dt, dn, project):
         write_project_file_from_local_file (project, physical_file_name, PATHS['admin'])
     return
 
-#check if the project subtable attachment is a plan or a permit and write it on the right place
+# runs on a project update (hooks)
 def upload_project_file(project, event):
+    # check if the project subtable attachment plan or permit was added
     project_old = project._doc_before_save
     if project.plans and project_old.plans:
-        if len(project_old.plans) < len(project.plans):
-            subtable = "plans"
-            file_id = get_file_id(project, event, subtable)
-            if file_id:
-                physical_file_name = get_physical_path(file_id)
-                write_project_file_from_local_file (project.name, physical_file_name, PATHS['plan'])
-        elif len(project_old.permits) < len(project.permits):
-            subtable = "permits"
-            file_id = get_file_id(project, event, subtable)
-            if file_id:
-                physical_file_name = get_physical_path(file_id)
-                write_project_file_from_local_file (project.name, physical_file_name, PATHS['drilling'])
+        for p in range(0, len(project.plans)):
+            if (p >= len(project_old.plans) and project.plans[p].file)
+                or (project.plans[p].file and not project_old.plans[p].file):
+                # this file has been added to the plans
+                subtable = "plans"
+                file_id = get_file_id(project, event, subtable, url=project.plans[p].file)
+                if file_id:
+                    physical_file_name = get_physical_path(file_id)
+                    write_project_file_from_local_file (project.name, physical_file_name, PATHS['plan'])
+                    
+    if project.permits and project_old.permits:
+        for p in range(0, len(project.permits)):
+            if (p >= len(project_old.permits) and project.permits[p].file)
+                or (project.permits[p].file and not project_old.permits[p].file):
+                subtable = "permits"
+                file_id = get_file_id(project, event, subtable, url=project.permits[p].file)
+                if file_id:
+                    physical_file_name = get_physical_path(file_id)
+                    write_project_file_from_local_file (project.name, physical_file_name, PATHS['drilling'])
     
-def get_file_id(project, event, subtable):
-    if subtable == "plans":
-        url = project.plans[-1].file
-    elif subtable == "permits":
-        url = project.permits[-1].file
+    return
+    
+def get_file_id(project, event, subtable, url=None):
+    if not url:
+        if subtable == "plans":
+            url = project.plans[-1].file
+        elif subtable == "permits":
+            url = project.permits[-1].file
     sql_query = frappe.db.sql("""
         SELECT `name`
         FROM `tabFile`
