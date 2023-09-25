@@ -24,7 +24,7 @@ def find_closest_hotels(object_name):
     hotels = frappe.db.sql("""
         SELECT `name`, `supplier_name`, `hauptadresse`, `telefon`,
         (ABS(`gps_latitude` - {lat}) + ABS(`gps_longitude` - {lon})) AS `prox`,
-        `gps_latitude`, `gps_longitude`
+        `gps_latitude`, `gps_longitude`, `website`
         FROM `tabSupplier`
         WHERE `disabled` = 0
         AND `supplier_group` = "Hotel"
