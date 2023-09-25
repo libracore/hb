@@ -233,7 +233,7 @@ def upload_project_file(project, event):
     project_old = project._doc_before_save
     if project.plans and project_old.plans:
         for p in range(0, len(project.plans)):
-            if (p >= len(project_old.plans) and project.plans[p].file)
+            if (p >= len(project_old.plans) and project.plans[p].file) \
                 or (project.plans[p].file and not project_old.plans[p].file):
                 # this file has been added to the plans
                 subtable = "plans"
@@ -244,7 +244,7 @@ def upload_project_file(project, event):
                     
     if project.permits and project_old.permits:
         for p in range(0, len(project.permits)):
-            if (p >= len(project_old.permits) and project.permits[p].file)
+            if (p >= len(project_old.permits) and project.permits[p].file) \
                 or (project.permits[p].file and not project_old.permits[p].file):
                 subtable = "permits"
                 file_id = get_file_id(project, event, subtable, url=project.permits[p].file)
