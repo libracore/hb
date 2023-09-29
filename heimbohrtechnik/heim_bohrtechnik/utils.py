@@ -1049,7 +1049,7 @@ def get_gps_coordinates(street, location):
     return gps_coordinates
 
 @frappe.whitelist()
-def find_supplier_item(item_code, supplier):
+def find_supplier_item(item_code, supplier, idx=None):
     try:
         supplier_items = frappe.db.sql("""
             SELECT `supplier_part_no`
@@ -1059,9 +1059,9 @@ def find_supplier_item(item_code, supplier):
               AND `supplier` = "{supplier}";
         """.format(item_code=item_code, supplier=supplier), as_dict=True)
         if len(supplier_items) > 0:
-            return supplier_items[0]['supplier_part_no']
+            return {'supplier_part_no': supplier_items[0]['supplier_part_no'], idx=idx}
         else:
-            return None
+            return {'supplier_part_no': None, idx=idx}
     except:
-        return None
+        return {'supplier_part_no': None, idx=idx}
     
