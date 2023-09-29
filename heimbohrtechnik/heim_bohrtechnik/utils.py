@@ -1059,9 +1059,9 @@ def find_supplier_item(item_code, supplier, idx=None):
               AND `supplier` = "{supplier}";
         """.format(item_code=item_code, supplier=supplier), as_dict=True)
         if len(supplier_items) > 0:
-            return {'supplier_part_no': supplier_items[0]['supplier_part_no'], idx: idx}
+            return {'supplier_part_no': supplier_items[0]['supplier_part_no'], 'idx': idx}
         else:
-            return {'supplier_part_no': None, idx: idx}
+            return {'supplier_part_no': None, 'idx': idx}
     except:
-        return {'supplier_part_no': None, idx: idx}
+        return {'supplier_part_no': None, 'idx': idx}
     
