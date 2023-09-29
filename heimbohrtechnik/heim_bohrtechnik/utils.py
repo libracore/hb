@@ -1047,3 +1047,21 @@ def get_gps_coordinates(street, location):
     if len(data) > 0:
         gps_coordinates = {'lat': data[0]['lat'], 'lon': data[0]['lon']}
     return gps_coordinates
+
+@frappe.whitelist()
+def find_supplier_item(item_code, supplier):
+    try:
+        supplier_items = frappe.db.sql("""
+            SELECT `supplier_part_no`
+            FROM `tabItem Supplier`
+            WHERE `parenttype` = "Item"
+              AND `parent` = "{item_code}"
+              AND `supplier` = "{supplier}";
+        """.format(item_code=item_code, supplier=supplier), as_dict=True)
+        if len(supplier_items) > 0:
+            return supplier_items[0]['supplier_part_no']
+        else:
+            return None
+    except:
+        return None
+    
