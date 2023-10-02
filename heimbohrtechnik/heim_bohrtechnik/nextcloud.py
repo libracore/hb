@@ -231,6 +231,10 @@ def upload_attachments(dt, dn, project):
 def upload_project_file(project, event):
     # check if the project subtable attachment plan or permit was added
     project_old = project._doc_before_save
+    if not project_old:
+        # this is a creation: skip
+        return
+        
     if project.plans and project_old.plans:
         for p in range(0, len(project.plans)):
             if (p >= len(project_old.plans) and project.plans[p].file) \
