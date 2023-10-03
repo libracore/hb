@@ -435,3 +435,7 @@ DocType: Layer Directory,Layers,Schichten
 DocType: Injection report,Base Schwenk Füllbinder H-hs plus,Basis Schwenk Füllbinder H-hs plus
 DocType: Construction Site Description,Pipes / Drill Point externally probed,Werkleitungen / Bohrpunkt extern sondiert
 Page: Invoice Review,Invoice Review,Rechnungsprüfung
+DocType: Request for Public Area Use,Enclosures,Anhänge
+DocType: Request for Public Area Use,For control to (Name),Zur Kontrolle an (Name)
+DocType: Request for Public Area Use,For control to (Address),Zur Kontrolle an (Adresse)
+DocType: Request for Public Area Use,Miscellaneous,Diverses
