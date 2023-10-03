@@ -128,12 +128,9 @@ def write_file_to_base_path(file_name):
         return      # skip if nextcloud is disabled (develop environments)
         
     client = get_client()
-    if os.path.exists(file_name):
-        source = file_name
-    else:
-        base_path = get_base_path()
-        source = os.path.join(base_path, file_name.split("/")[-1])
-    client.upload_sync(source, file_name)
+    base_path = get_base_path()
+    target = os.path.join(base_path, file_name.split("/")[-1])
+    client.upload_sync(target, file_name)
     return
 
 """

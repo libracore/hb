@@ -838,13 +838,13 @@ def print_bohrplaner(start_date, previous_week=False, target_file=None):
 
 def backup():
     # prepare date: start today for the backup (if you start on next Monday, the current week will not be visible)
+    target_file="/tmp/Bohrplaner.pdf"
     today = date.today()
     today_str = "{y:04d}-{m:02d}-{d:02d}".format(y=today.year, m=today.month, d=today.day)
     # create the pdf as a local file
-    f = print_bohrplaner(today_str, previous_week=True, target_file="/tmp/Bohrplaner.pdf")
+    f = print_bohrplaner(today_str, previous_week=True, target_file=target_file)
     # upload to nextcloud
-    physical_file = get_physical_path(f['name'])
-    write_file_to_base_path(physical_file)
+    write_file_to_base_path(target_file)
     return
     
 def get_bohrplaner_css():
