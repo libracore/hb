@@ -830,9 +830,9 @@ def print_bohrplaner(start_date, previous_week=False, target_file=None):
         
         return {'url': _file.file_url, 'name': _file.name}
     else:
-        _file = open(target_file, "wb")
-        _file.write(output)
-        _file.close()
+        output_stream = open(target_file, "wb")
+        output.write(output_stream)
+        output_stream.close()
         
         return {'url': None, 'name': target_file}
 
