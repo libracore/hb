@@ -41,6 +41,10 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
         frappe.bohrplaner.find_conflicts(page);
     });
     
+    page.add_menu_item( __('Alle Projekte schieben...'), () => {
+        frappe.bohrplaner.move_projects(page);
+    });
+    
     // check routes and if there is a route, navigate to this
     frappe.bohrplaner.load_route(page);
 }
@@ -698,6 +702,64 @@ frappe.bohrplaner = {
     },
     stop_wait: function(page) {
         $("#wait_area").addClass("hide");
+    },
+    move_projects: function(page) {
+        var d = new frappe.ui.Dialog({
+            'fields': [
+                {
+                    'fieldname': 'project', 
+                    'fieldtype': 'Link', 
+                    'label': __("Project"), 
+                    'options': "Project", 
+                    'change': function() {
+                        if (d.get_value('project')) {
+                            frappe.call({
+                                'method':"frappe.client.get",
+                                'args':{
+                                    'doctype': "Project",
+                                    'name': d.get_value('project')
+                                 },
+                                'callback': function(r) {
+                                    d.set_value('drilling_team', r.message.drilling_team);
+                                }
+                            });
+                        } 
+                    }
+                },
+                {
+                    'fieldname': 'drilling_team', 
+                    'fieldtype': 'Data', 
+                    'label': __("Drilling Team"), 
+                    'read_only': 1
+                },
+                {
+                    'fieldname': 'days', 
+                    'fieldtype': 'Int', 'label': __("Days"), 'default': 1
+                }
+            ],
+            'primary_action': function(){
+                d.hide();
+                var values = d.get_values();
+                frappe.call({
+                    'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.move_projects',
+                    'args': {
+                        'from_project': values.project,
+                        'drilling_team': values.drilling_team,
+                        'days': values.days
+                    },
+                    'freeze': true,
+                    'freeze_message': __("Projekte schieben..."),
+                    'callback': function(r) {
+                        frappe.show_alert( __("Updated") );
+                        console.log(r.message);
+                        frappe.bohrplaner.reset_dates(page);
+                    }
+                });
+            },
+            'primary_action_label': __('Schieben'),
+            'title': __("Alle Projekte nach hinten schieben")
+        });
+        d.show();
     }
 }
 

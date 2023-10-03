@@ -1220,3 +1220,65 @@ def get_mfk_overlay_datas(from_date, to_date):
         })
     
     return mfk_data
+
+"""
+This function will move all projects, start with the provided project by (days) days
+"""
+@frappe.whitelist()
+def move_projects(from_project, drilling_team, days):
+    if not drilling_team:
+        return {'error': 'No drilling team'}
+    if type(days) != int:
+        days = cint(days)
+    if days < 1:
+        return {'error': 'Invalid number of days: {0}'.format(days)}
+    
+    start_date = frappe.get_value("Project", from_project, "expected_start_date")
+    if not start_date:
+        return {'error': 'No start date found'}
+    
+    projects = frappe.db.sql("""
+        SELECT `name`
+        FROM `tabProject`
+        WHERE 
+            `drilling_team` = "{drilling_team}"
+            AND `expected_start_date` >= "{start_date}"
+        ;
+    """.format(drilling_team=drilling_team, start_date=start_date), as_dict=True)
+    
+    moved_projects = []
+    for p in projects:
+        p_doc = frappe.get_doc("Project", p['name'])
+        p_doc.expected_start_date = holiday_safe_add_days(p_doc.expected_start_date, days)
+        p_doc.expected_end_date = holiday_safe_add_days(p_doc.expected_end_date, days)
+        p_doc.save()
+        moved_projects.append(p['name'])
+        
+    frappe.db.commit()
+    
+    return {'success': 1, 'moved_projects': moved_projects}
+    
+"""
+This function will add days until the date is no longer a holiday.
+
+Test: $ bench execute heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.holiday_safe_add_days --kwargs "{'source_date': '2023-07-31', 'days': 1}"
+"""
+def holiday_safe_add_days(source_date, days):
+    if type(source_date) == str:
+        source_date = datetime.strptime(source_date, "%Y-%m-%d")
+        
+    target_date = source_date + timedelta(days=days)
+    while (date_is_holiday(target_date)):
+        target_date = target_date + timedelta(days=1)
+    return target_date
+    
+def date_is_holiday(date):
+    is_holiday = frappe.db.sql("""
+        SELECT `parent`
+        FROM `tabHoliday`
+        WHERE `holiday_date` = "{date}";""".format(date=date), as_dict=True)
+    if len(is_holiday) > 0:
+        return True
+    else:
+        return False
+    
