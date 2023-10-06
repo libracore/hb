@@ -91,12 +91,12 @@ def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
     return projects
     
 def get_project_data(p, dauer):
-    project = frappe.get_doc("Project", p.name)
-    p_object = frappe.get_doc("Object", p.object)
+    project = frappe.get_doc("Project", p.get('name'))
+    p_object = frappe.get_doc("Object", project.object)
     requires_traffic_control = False
     traffic_light = 0
     construction_sites = frappe.get_all("Construction Site Description", 
-        filters={'project': p.name}, 
+        filters={'project': p.get('name')}, 
         fields=['name', 'internal_crane_required', 'external_crane_Required', 'carrymax'])
     manager_short = frappe.get_cached_value("User", project.manager, "username") if project.manager else ''
     drilling_equipment = []
@@ -189,9 +189,9 @@ def get_project_data(p, dauer):
         saugauftrag = mud
         
     p_data = {
-            'bohrteam': p.drilling_team,
-            'start': get_datetime(p.expected_start_date).strftime('%d.%m.%Y'),
-            'vmnm': p.start_half_day.lower(),
+            'bohrteam': project.drilling_team,
+            'start': get_datetime(project.expected_start_date).strftime('%d.%m.%Y'),
+            'vmnm': project.start_half_day.lower(),
             'dauer': dauer,
             'ampeln': get_traffic_lights_indicator(project),
             'project': project,
@@ -849,8 +849,112 @@ def backup():
     
 def get_bohrplaner_css():
     return frappe.read_file("{0}{1}".format(frappe.utils.get_bench_path(), "/apps/heimbohrtechnik/heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/bohrplaner.css"))
-
+    
 def get_bohrplaner_html(start_date, previous_week=False):
+    end_date = frappe.utils.add_days(start_date, 20)
+    if previous_week:
+        start_date = frappe.utils.add_days(start_date, -7)
+
+    timeline = []
+
+    data = {
+        'grid': get_content(start_date, end_date, only_teams=True),
+        'start_date': start_date,
+        'drilling_teams': {},
+        'css': get_bohrplaner_css(),
+        'weekend_columns': []
+    }
+    
+    
+    for key, value in data['grid']['day_list'].items():
+        if value == "Mon" or value == "Tue" or value == "Wed" or value == "Thu" or value == "Fri":
+            timeline.append({"date": key, "day": value, "vmnm": "VM"})
+            timeline.append({"date": key, "day": value, "vmnm": "NM"})
+        elif value == "Sat":
+            timeline.append({"date": key, "day": value, "vmnm": "VM"})
+    
+    #get weekend columns for grid
+    weekend_columns = []
+    desired_values = ['Sat', 'Sun']
+    saturday_value = ['Sat']
+    real_weekends = [key for key, value in data['grid']['day_list'].items() if value in desired_values]
+    saturdays = [key for key, value in data['grid']['day_list'].items() if value in saturday_value]
+    i = 0
+    for day in data['grid']['day_list']:
+        i += 1
+        if not day in real_weekends:
+            if day in data['grid']['weekend']:
+                weekend_columns.append(i)
+                i += 1
+                weekend_columns.append(i)
+            else:
+                i += 1
+        else:
+            if day in saturdays:
+                weekend_columns.append(i)
+            else:
+                i -= 1
+    
+    data['weekend_columns'] = weekend_columns
+    drilling_teams = {}
+        
+    for drilling_team in data['grid']['drilling_teams']:
+        # get all projects
+        for project in timeline:
+            print(project)
+            projects = frappe.db.sql("""SELECT `name` 
+                        FROM `tabProject` 
+                        WHERE CONCAT(`expected_start_date`, " ", IF(`start_half_day` = "VM", "06", "14")) <= '{date}' 
+                        AND CONCAT(`expected_end_date`, " ", IF(`end_half_day` = "VM", "06", "14")) >= '{date}'
+                        AND `drilling_team` = '{drillt}'
+                        ORDER BY `project_type` DESC, 
+                        `expected_start_date` DESC;""".format(
+                        date = "{0} {1}".format(datetime.strptime(project['date'], "%d.%m.%Y").strftime("%Y-%m-%d"), "06" if project['vmnm'] == "VM" else "14"),
+                        drillt = drilling_team['team_id']), as_dict=True)
+            
+            if len(projects) > 0:
+                project['project'] = projects[0]['name']
+            else:
+                project['project'] = None
+                
+        stacked_projects = []
+        
+        for i in range(0, len(timeline)):
+            last_project = None
+            if len(stacked_projects) > 0 and 'project' in stacked_projects[-1]:
+                last_project = stacked_projects[-1]['project'].get('name')
+            if len(stacked_projects) == 0 or last_project != timeline[i]['project']:
+                stacked_projects.append(
+                    get_project_data({'name': timeline[i]['project']}, 1) if timeline[i]['project'] else {'dauer': 1})
+            else:
+                #extend former project
+                stacked_projects[-1]['dauer'] += 1
+                
+        # ~ first_project = True
+        # ~ counter = 0
+        
+        # ~ for i in range(0, len(timeline)):
+            # ~ if timeline[i]['project'] != None:
+                # ~ if first_project == False:
+                    # ~ if timeline[i]['project'] == timeline[i-1]['project']:
+                        # ~ counter += 1
+                        # ~ stacked_projects[-1]['dauer'] += 1
+                    # ~ else:
+                        # ~ project_data = get_project_for_html(timeline[i]['project'])
+                        # ~ stacked_projects.append(project_data[0])
+                # ~ else:
+                    # ~ project_data = get_project_data(timeline[i]['project'], )
+                    # ~ stacked_projects.append(project_data[0])
+                    # ~ first_project = False
+            # ~ else:
+                # ~ stacked_projects.append({'dauer': 1})
+        
+        data['drilling_teams'][drilling_team['team_id']] = stacked_projects
+     
+    html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
+    return html
+
+def get_bohrplaner_htm(start_date, previous_week=False):
     end_date = frappe.utils.add_days(start_date, 20)
     if previous_week:
         start_date = frappe.utils.add_days(start_date, -7)
@@ -917,10 +1021,30 @@ def get_bohrplaner_html(start_date, previous_week=False):
                     
         data['drilling_teams'][drilling_team['team_id']] = projects_and_gaps
         data['weekend_columns'] = weekend_columns
-        
-    html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
+        print(data)
+    frappe.log_error(data, "data")    
+    # ~ html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
     # ~ frappe.log_error(html, "HTML")
-    return html
+    # ~ return html
+    
+def get_project_for_html(project):
+    project_html = frappe.db.sql("""
+            SELECT 
+                `name`, 
+                `drilling_team`, 
+                `expected_start_date`, 
+                `expected_end_date`, 
+                `start_half_day`, 
+                `end_half_day`, 
+                `object`
+            FROM `tabProject`
+            WHERE `name` = '{p}'
+            """.format(p=project), as_dict=True)
+    p_data = get_project_data(p, dauer)
+    project_html[0]['dauer'] = 1
+            
+    return project_html
+    
     
 def get_gap_duration(start_date, start_half_day, end_date, end_half_day):
     date_list, weekend_list, kw_list, day_list, today = get_days(start_date, end_date)
