@@ -194,7 +194,7 @@ def upload_file(self, event):
     
     elif self.attached_to_doctype == "Project":
         #check if this file is an Attachment and not coming from a Subtable (plans or permits, they are written to Home)
-        if self.folder == "Home/Attachments":
+        if self.folder.startswith("Home/"):     # can be "Home/Attachments", but also "Home/Projects/..." in case of SV, child table uploads are in "Home"
             physical_file_name = get_physical_path(self.name)
             write_project_file_from_local_file (self.attached_to_name, physical_file_name, PATHS['drilling'])
         else:

@@ -102,7 +102,8 @@ def communication_on_insert(self, event):
     try:
         upload_communication_to_nextcloud(self.name)
     except Exception as err:
-        frappe.log_error(err, "Commuincation hook failed")
+        if not "/P-MX-" in err:         # exclude upload errors from MudEX documents where there is no project folder
+            frappe.log_error(err, "Communication hook failed")
     return
     
 def cleanup_email_str(email_str):
