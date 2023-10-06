@@ -102,7 +102,7 @@ def communication_on_insert(self, event):
     try:
         upload_communication_to_nextcloud(self.name)
     except Exception as err:
-        frappe.log_error(error, "Commuincation hook failed")
+        frappe.log_error(err, "Commuincation hook failed")
     return
     
 def cleanup_email_str(email_str):
