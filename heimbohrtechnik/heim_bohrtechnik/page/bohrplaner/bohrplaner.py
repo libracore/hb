@@ -66,7 +66,7 @@ def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
         ORDER BY
             `tabProject`.`expected_start_date` ASC;
         """.format(from_date=from_date, to_date=to_date, customer_filter=customer_filter, drilling_team_filter=drilling_team_filter), as_dict=True)
-    
+
     for p in matching_projects:
         if p.expected_start_date < getdate(from_date):
             p.expected_start_date = getdate(from_date)
@@ -83,7 +83,6 @@ def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
             p.start_half_day = 'vm'
             if p.expected_start_date.weekday() == 6:
                 p.expected_start_date = frappe.utils.add_days(p.expected_start_date, 1)
-        # ~ if p.get('name') == "P-228106":
         p_data = get_project_data(p, dauer)
         projects.append(p_data)
         
