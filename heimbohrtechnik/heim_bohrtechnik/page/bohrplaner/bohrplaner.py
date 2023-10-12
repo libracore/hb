@@ -66,7 +66,7 @@ def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
         ORDER BY
             `tabProject`.`expected_start_date` ASC;
         """.format(from_date=from_date, to_date=to_date, customer_filter=customer_filter, drilling_team_filter=drilling_team_filter), as_dict=True)
-
+    
     for p in matching_projects:
         if p.expected_start_date < getdate(from_date):
             p.expected_start_date = getdate(from_date)
@@ -83,10 +83,9 @@ def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
             p.start_half_day = 'vm'
             if p.expected_start_date.weekday() == 6:
                 p.expected_start_date = frappe.utils.add_days(p.expected_start_date, 1)
-        
+        # ~ if p.get('name') == "P-228106":
         p_data = get_project_data(p, dauer)
         projects.append(p_data)
-        
         
     return projects
     
@@ -189,9 +188,9 @@ def get_project_data(p, dauer):
         saugauftrag = mud
         
     p_data = {
-            'bohrteam': project.drilling_team,
-            'start': get_datetime(project.expected_start_date).strftime('%d.%m.%Y'),
-            'vmnm': project.start_half_day.lower(),
+            'bohrteam': p.get('drilling_team'),
+            'start': get_datetime(p.get('expected_start_date')).strftime('%d.%m.%Y'),
+            'vmnm': p.get('start_half_day').lower(),
             'dauer': dauer,
             'ampeln': get_traffic_lights_indicator(project),
             'project': project,
@@ -924,126 +923,22 @@ def get_bohrplaner_html(start_date, previous_week=False):
             if len(stacked_projects) > 0 and 'project' in stacked_projects[-1]:
                 last_project = stacked_projects[-1]['project'].get('name')
             if len(stacked_projects) == 0 or last_project != timeline[i]['project']:
+                actual_project = {
+                    'name': timeline[i]['project'],
+                    'drilling_team': drilling_team['team_id'],
+                    'start_half_day': timeline[i]['vmnm'],
+                    'expected_start_date': timeline[i]['date']
+                }
                 stacked_projects.append(
-                    get_project_data({'name': timeline[i]['project']}, 1) if timeline[i]['project'] else {'dauer': 1})
+                    get_project_data(actual_project, 1) if timeline[i]['project'] else {'dauer': 1})
             else:
                 #extend former project
                 stacked_projects[-1]['dauer'] += 1
-                
-        # ~ first_project = True
-        # ~ counter = 0
-        
-        # ~ for i in range(0, len(timeline)):
-            # ~ if timeline[i]['project'] != None:
-                # ~ if first_project == False:
-                    # ~ if timeline[i]['project'] == timeline[i-1]['project']:
-                        # ~ counter += 1
-                        # ~ stacked_projects[-1]['dauer'] += 1
-                    # ~ else:
-                        # ~ project_data = get_project_for_html(timeline[i]['project'])
-                        # ~ stacked_projects.append(project_data[0])
-                # ~ else:
-                    # ~ project_data = get_project_data(timeline[i]['project'], )
-                    # ~ stacked_projects.append(project_data[0])
-                    # ~ first_project = False
-            # ~ else:
-                # ~ stacked_projects.append({'dauer': 1})
         
         data['drilling_teams'][drilling_team['team_id']] = stacked_projects
      
     html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
     return html
-
-def get_bohrplaner_htm(start_date, previous_week=False):
-    end_date = frappe.utils.add_days(start_date, 20)
-    if previous_week:
-        start_date = frappe.utils.add_days(start_date, -7)
-
-    data = {
-        'grid': get_content(start_date, end_date, only_teams=True),
-        'start_date': start_date,
-        'drilling_teams': {},
-        'css': get_bohrplaner_css(),
-        'weekend_columns': []
-    }
-    #get weekend columns for grid
-    weekend_columns = []
-    desired_values = ['Sat', 'Sun']
-    saturday_value = ['Sat']
-    real_weekends = [key for key, value in data['grid']['day_list'].items() if value in desired_values]
-    saturdays = [key for key, value in data['grid']['day_list'].items() if value in saturday_value]
-    i = 0
-    for day in data['grid']['day_list']:
-        i += 1
-        if not day in real_weekends:
-            if day in data['grid']['weekend']:
-                weekend_columns.append(i)
-                i += 1
-                weekend_columns.append(i)
-            else:
-                i += 1
-        else:
-            if day in saturdays:
-                weekend_columns.append(i)
-            else:
-                i -= 1
-        
-    for drilling_team in data['grid']['drilling_teams']:
-        # get all projects
-        projects_and_gaps = []
-        projects = get_overlay_datas(start_date, end_date, drilling_team=drilling_team['team_id'])
-        int_projects = get_internal_overlay_datas(start_date, end_date)
-        for p in int_projects:
-            if p['bohrteam'] == drilling_team['team_id']:
-                projects.append(p)
-        #sort projects
-        for project in projects:
-            if project['vmnm'] == "vm":
-                project['sorting_date'] = get_datetime(project['project'].expected_start_date.strftime("%Y-%m-%d") + " 00:00:00")
-            elif project['vmnm'] == "nm":
-                project['sorting_date'] = get_datetime(project['project'].expected_start_date.strftime("%Y-%m-%d") + " 12:00:00")
-        projects = sorted(projects, key=lambda s: s['sorting_date'])
-        #get gaps between projects
-        if len(projects) > 0:
-            if projects[0]['project'].expected_start_date > getdate(start_date) or projects[0]['project'].start_half_day == "nm":
-                gap = get_gap_duration(start_date, "vm", projects[0]['project'].expected_start_date, projects[0]['project'].start_half_day)-1
-                projects_and_gaps.append({'dauer': gap})
-                projects_and_gaps.append(projects[0])
-            else:
-                projects_and_gaps.append(projects[0])
-            for i in range(1, len(projects)):
-                gap = get_gap_duration(projects[i-1]['project'].expected_end_date, projects[i-1]['project'].end_half_day, projects[i]['project'].expected_start_date, projects[i]['project'].start_half_day)-2.0
-                if gap == 0:
-                    projects_and_gaps.append(projects[i])
-                else:
-                    projects_and_gaps.append({'dauer': gap})
-                    projects_and_gaps.append(projects[i])
-                    
-        data['drilling_teams'][drilling_team['team_id']] = projects_and_gaps
-        data['weekend_columns'] = weekend_columns
-        print(data)
-    frappe.log_error(data, "data")    
-    # ~ html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
-    # ~ frappe.log_error(html, "HTML")
-    # ~ return html
-    
-def get_project_for_html(project):
-    project_html = frappe.db.sql("""
-            SELECT 
-                `name`, 
-                `drilling_team`, 
-                `expected_start_date`, 
-                `expected_end_date`, 
-                `start_half_day`, 
-                `end_half_day`, 
-                `object`
-            FROM `tabProject`
-            WHERE `name` = '{p}'
-            """.format(p=project), as_dict=True)
-    p_data = get_project_data(p, dauer)
-    project_html[0]['dauer'] = 1
-            
-    return project_html
     
     
 def get_gap_duration(start_date, start_half_day, end_date, end_half_day):
