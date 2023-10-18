@@ -769,7 +769,7 @@ def get_absences_overlay_datas(from_date, to_date):
             'employee_name': absence.employee_name,
             'absence': absence.name,
             'shift': shift,
-            'color': "#90ee90;" if "Militär" in absence.leave_type else "#ffffe0;",
+            'color': "#90ee90;" if "Militär" in absence.leave_type else "#faa0a0" if "krank" in absence.leave_type.lower() else "#ffffe0;",
             'remarks': absence.remarks
         }
         absences.append(_absence)
