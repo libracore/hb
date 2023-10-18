@@ -1117,6 +1117,7 @@ def get_conflict_details(p1, p2):
         'crane': crane,
         'infomails': infomails,
         'url': get_url_to_form("Project", p1),
+        'conflict_url': get_url_to_form("Project", p2),
         'adjacent_project': adjacent_project
     }
                     
