@@ -23,6 +23,15 @@ frappe.ui.form.on('Request for Public Area Use', {
     },
     btn_from_owner(frm) {
         fetch_object_details(frm.doc.object, "Eigentümer");
+    },
+    after_save: function(frm) {
+        frappe.call({
+            'method': 'attach_pdf',
+            'doc': frm.doc,
+            'callback': function (response) {
+                cur_frm.reload_doc();
+            }
+        });
     }
 });
 
