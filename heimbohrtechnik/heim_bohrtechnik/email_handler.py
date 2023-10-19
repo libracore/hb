@@ -45,8 +45,8 @@ def save_message(communication, target_file):
         try:
             with open(full_name, 'rb') as fp:
                 msg.add_attachment(fp.read(), maintype=maintype, subtype=subtype, filename=file_name)
-        except:
-            pass    # skip file if it cannot be read
+        except Exception as err:
+            print("{0}: {1}".format(file_name, err))    # skip file if it cannot be read
             
     # store
     with open(target_file, 'wb') as fp:
