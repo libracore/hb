@@ -15,9 +15,9 @@ def submit(exp, event):
     total_pretax = 0.0
     # collect expense deductions from pretax
     for expense in exp.expenses:
-        if expense.vat_included > 0:
-            expense_accounts = get_expense_type_accounts(expense.expense_type, exp.company)
-            if expense_accounts:
+        expense_accounts = get_expense_type_accounts(expense.expense_type, exp.company)
+        if expense_accounts:
+            if expense.vat_included > 0:
                 # pretax account
                 accounts.append({
                     'account': expense_accounts['pretax_account'],
@@ -27,17 +27,17 @@ def submit(exp, event):
                     'account': expense_accounts['default_account'],
                     'credit_in_account_currency': expense.vat_included
                 })
-                if expense.payment != "Bar":
-                    # add expense
-                    accounts.append({
-                        'account': expense_accounts['default_account'],
-                        'debit_in_account_currency': expense.amount
-                    })
-                    accounts.append({
-                        'account': PAYMENT_ACCOUNTS[exp.company][expense.payment],
-                        'credit_in_account_currency': expense.amount
-                    })
-                    
+            if expense.payment != "Bar":
+                # add expense
+                accounts.append({
+                    'account': expense_accounts['default_account'],
+                    'debit_in_account_currency': expense.amount
+                })
+                accounts.append({
+                    'account': PAYMENT_ACCOUNTS[exp.company][expense.payment],
+                    'credit_in_account_currency': expense.amount
+                })
+                
 
     # create new journal entry
     jv = frappe.get_doc({
