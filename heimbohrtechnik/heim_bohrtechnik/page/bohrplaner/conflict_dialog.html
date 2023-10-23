@@ -10,7 +10,7 @@
         <tr>
             <td><a href="{{ c.url }}">{{ c.project }}</a></td>
             <td>{{ c.drilling_team }}</td>
-            <td>{{ c.conflict }}</td>
+            <td><a href="{{ c.conflict_url }}">{{ c.conflict }}</a></td>
             <td>{{ c.details }}</td>
         </tr>
         {% if c.subprojects or c.crane or c.road_blocks or c.infomails %}
