@@ -123,22 +123,30 @@ table {
                 {% if project.update({"box_height": 18 }) %}{% endif %}
                 {% if project.update({"padding": 1 }) %}{% endif %}
                 {% if project.update({"font_size": 14 }) %}{% endif %}
-                {% if project.update({"width": project["dauer"]*70 }) %}{% endif %}
+                {% if project.update({"width": project["dauer"]*56 }) %}{% endif %}
                 {% if project.update({"min_width": 60 }) %}{% endif %}
                 {% if project.update({"max_width": 120 }) %}{% endif %}
                 {% if "project" in project %}
-                    {% if project["project"].project_type == "External" %}
+                    {% if project.project_type == "extension" %}
                         <div style="z-index: {{ vars.counter }} !important; {% if vars.counter in weekend_columns %}background-color: #9dc7f0;{% endif %}">
                             <td>
-                                {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/booking_overlay.html", project) }}
+                                {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/extension_overlay.html", project) }}
                             </td>
                         </div>
-                    {% elif  project["project"].project_type == "Internal" %}
-                        <div style="z-index: {{ vars.counter }} !important; {% if vars.counter in weekend_columns %}background-color: #9dc7f0;{% endif %}">
-                            <td>
-                                {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/internal_overlay.html", project) }}
-                            </td>
-                        </div>
+                    {% else %}
+                        {% if project["project"].project_type == "External" %}
+                            <div style="z-index: {{ vars.counter }} !important; {% if vars.counter in weekend_columns %}background-color: #9dc7f0;{% endif %}">
+                                <td>
+                                    {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/booking_overlay.html", project) }}
+                                </td>
+                            </div>
+                        {% elif  project["project"].project_type == "Internal" %}
+                            <div style="z-index: {{ vars.counter }} !important; {% if vars.counter in weekend_columns %}background-color: #9dc7f0;{% endif %}">
+                                <td>
+                                    {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/internal_overlay.html", project) }}
+                                </td>
+                            </div>
+                        {% endif %}
                     {% endif %}
                 {% else %}
                     <td class="gap" {% if vars.counter in weekend_columns %}style="background-color: #9dc7f0;"{% endif %}>&nbsp;</td>
