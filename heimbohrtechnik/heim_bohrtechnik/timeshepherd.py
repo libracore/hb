@@ -382,3 +382,159 @@ def check_resolve_overlaps(employee, from_date, to_date):
             """.format(name=d['name']))
     
     return
+
+""" 
+This function will check if a customer exists and return its ID
+"""
+def check_customer(customer_name):
+    token = get_new_token()
+    settings = get_settings()
+    
+    customers_raw = None
+    
+    while True:
+        url = "{0}/TS.DAS.REST/api/v1/Customer/Search".format(settings.host)
+        api_call_header = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
+        payload = {
+            "searchTerm": customer_name,
+            "skip": 0,
+            "take": 30,
+            "sortBy": None,
+            "searchFilters": []
+        }
+
+        api_call_response = requests.get(
+            url,
+            json=payload, 
+            headers=api_call_header, 
+            verify=True if cint(settings.verify_ssl) else False
+        )
+        
+        if api_call_response.status_code == 401:
+            token = get_new_token()
+        else:
+            customers_raw = json.loads(api_call_response.text)
+            break
+            
+    if not customers_raw:
+        return []
+        
+    active_ids = []
+    for customer in customers_raw:
+        if customer.get('id'):
+            active_ids.append(customer.get('id'))
+                
+    return active_ids
+
+"""
+Create a new customer record and return its ID
+"""
+def create_customer(customer, customer_name):
+    if len(customer) < 5:
+        frappe.log_error("Invalid customer {0}".format(custoemr), "Timeshepherd create_customer")
+        return None
+        
+    token = get_new_token()
+    settings = get_settings()
+    
+    customers_raw = None
+    
+    while True:
+        url = "{0}/TS.DAS.REST/api/v1/Customer/Post".format(settings.host)
+        api_call_header = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
+        payload = {
+            "number": "{0}".format(customer[-5:0]),
+            "short": custoemr,
+            "description": customer_name
+        }
+
+        api_call_response = requests.get(
+            url,
+            json=payload, 
+            headers=api_call_header, 
+            verify=True if cint(settings.verify_ssl) else False
+        )
+        
+        if api_call_response.status_code == 401:
+            token = get_new_token()
+        else:
+            customers_raw = json.loads(api_call_response.text)
+            break
+            
+    if not customers_raw:
+        return None
+        
+    if customers_raw.get('id'):
+        return customers_raw.get('id')
+    else:
+        return None
+
+"""
+Create a new project in Timeshepherd
+"""
+def create_project(project):
+    if not frappe.db.exists("Project", project):
+        frappe.log_error("Project not found {0}".format(project), "Timeshepherd create_project")
+        return None
+    if not frappe.get_value("Project", project, "customer"):
+        frappe.log_error("Customer not found {0}".format(project), "Timeshepherd create_project")
+        return None
+    if len(project) < 6:
+        frappe.log_error("Invalid project {0}".format(custoemr), "Timeshepherd create_project")
+        return None
+        
+    token = get_new_token()
+    settings = get_settings()
+    
+    project_raw = None
+    
+    # find customer ID
+    customer = frappe.get_value("Project", project, "customer")
+    customer_name = frappe.get_value("Customer", customer, "customer_name")
+    
+    customer_id = check_customer(customer_name)
+    if customer_id:
+        customer_id = customer_id[0]
+    else:
+        customer_id = create_customer(customer, customer_name)
+        
+    while True:
+        url = "{0}/TS.DAS.REST/api/v1/Project/Post".format(settings.host)
+        api_call_header = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
+        payload = {
+            "number": "{0}".format(project[-6:]),
+            "short": project,
+            "description": frappe.get_value("Project", project, "object_name"),
+            "date": datetime.now().strftime("%Y-%m-%dT%H:%M%S"),
+            "customerId": customer_id,
+        }
+
+        api_call_response = requests.get(
+            url,
+            json=payload, 
+            headers=api_call_header, 
+            verify=True if cint(settings.verify_ssl) else False
+        )
+        
+        if api_call_response.status_code == 401:
+            token = get_new_token()
+        else:
+            project_raw = json.loads(api_call_response.text)
+            break
+            
+    if not project_raw:
+        return None
+        
+    if project_raw.get('id'):
+        return project_raw.get('id')
+    else:
+        return None
