@@ -29,7 +29,7 @@ frappe.ui.form.on('Customer', {
             cur_frm.save();
         }, __("Bohrplan") );
         if ((!frm.doc.__islocal) && (frappe.user.has_role("Sales Master Manager"))) {
-            frm.add_custom_button(__("Sales trend"), function() {
+            frm.add_custom_button(__("Umsatzentwicklung"), function() {
                 frappe.set_route("query-report", "Customer sales trend", {"customer": frm.doc.name});
             });
         }
