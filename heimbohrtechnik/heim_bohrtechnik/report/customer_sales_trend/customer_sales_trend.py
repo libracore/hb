@@ -66,6 +66,6 @@ def get_chart(filters, data):
             'labels': labels,
             'datasets': datasets,
         },
-        'type': "bar"
+        'type': "line"
     }
     return chart
