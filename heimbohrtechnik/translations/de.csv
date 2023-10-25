@@ -439,3 +439,10 @@ DocType: Request for Public Area Use,Enclosures,Anhänge
 DocType: Request for Public Area Use,For control to (Name),Zur Kontrolle an (Name)
 DocType: Request for Public Area Use,For control to (Address),Zur Kontrolle an (Adresse)
 DocType: Request for Public Area Use,Miscellaneous,Diverses
+DocType: Customer,Sales trend,Umsatztrend
+DocType: Report,Customer sales trend,Kundenumsatztrend
+DocType: Report,Year,Jahr
+DocType: Report,Net amount,Nettosumme
+DocType: Report,Customer,Kunde
+DocType: Report,Customer Name,Kundenname
+DocType: Report,Comparison,Vergleich zum Vohrjahr
