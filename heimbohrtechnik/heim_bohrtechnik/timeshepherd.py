@@ -28,6 +28,10 @@ def get_password():
     return get_decrypted_password("Timeshepherd Settings", "Timeshepherd Settings", "password")
     
 def get_new_token():
+    if not cint(frappe.get_value("Timeshepherd Settings", "Timeshepherd Settings", "enabled"):
+        print("Timeshepherd disabled")
+        return
+        
     settings = get_settings()
     auth_server_url = "{0}/TS.DAS.Auth/connect/token".format(settings.host)
     scope = "openid profile offline_access timeshepherd"
@@ -79,6 +83,10 @@ Structure:
     
 """
 def get_employees(only_active_ids=False):
+    if not cint(frappe.get_value("Timeshepherd Settings", "Timeshepherd Settings", "enabled"):
+        print("Timeshepherd disabled")
+        return
+        
     token = get_new_token()
     settings = get_settings()
     
@@ -115,6 +123,10 @@ def get_employees(only_active_ids=False):
         return employees_raw
         
 def get_absences(debug=False):
+    if not cint(frappe.get_value("Timeshepherd Settings", "Timeshepherd Settings", "enabled"):
+        print("Timeshepherd disabled")
+        return
+        
     token = get_new_token()
     settings = get_settings()
     employees = get_employees(only_active_ids=True)
@@ -149,6 +161,10 @@ def get_absences(debug=False):
     return absences
 
 def get_absence_page(settings, token, employees, from_date, to_date):
+    if not cint(frappe.get_value("Timeshepherd Settings", "Timeshepherd Settings", "enabled"):
+        print("Timeshepherd disabled")
+        return
+        
     absences_raw = None
     while True:
         url = "{0}/TS.DAS.REST/api/v1/Absence/Search".format(settings.host)
@@ -387,6 +403,10 @@ def check_resolve_overlaps(employee, from_date, to_date):
 This function will check if a customer exists and return its ID
 """
 def check_customer(customer_name):
+    if not cint(frappe.get_value("Timeshepherd Settings", "Timeshepherd Settings", "enabled"):
+        print("Timeshepherd disabled")
+        return
+        
     token = get_new_token()
     settings = get_settings()
     
@@ -433,6 +453,10 @@ def check_customer(customer_name):
 Create a new customer record and return its ID
 """
 def create_customer(customer, customer_name):
+    if not cint(frappe.get_value("Timeshepherd Settings", "Timeshepherd Settings", "enabled"):
+        print("Timeshepherd disabled")
+        return
+        
     if len(customer) < 5:
         frappe.log_error("Invalid customer {0}".format(custoemr), "Timeshepherd create_customer")
         return None
@@ -479,6 +503,9 @@ def create_customer(customer, customer_name):
 Create a new project in Timeshepherd
 """
 def create_project(project):
+    if not cint(frappe.get_value("Timeshepherd Settings", "Timeshepherd Settings", "enabled"):
+        print("Timeshepherd disabled")
+        return
     if not frappe.db.exists("Project", project):
         frappe.log_error("Project not found {0}".format(project), "Timeshepherd create_project")
         return None

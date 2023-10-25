@@ -11,6 +11,7 @@
   "user_name",
   "password",
   "verify_ssl",
+  "enabled",
   "sec_params",
   "fetch_months"
  ],
@@ -60,10 +61,16 @@
    "fieldname": "fetch_months",
    "fieldtype": "Int",
    "label": "Fetch next n months"
+  },
+  {
+   "default": "0",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
   }
  ],
  "issingle": 1,
- "modified": "2023-05-25 16:25:28.363137",
+ "modified": "2023-10-25 11:51:49.717868",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Timeshepherd Settings",

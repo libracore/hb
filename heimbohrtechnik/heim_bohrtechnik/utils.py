@@ -15,6 +15,7 @@ from frappe.desk.form.load import get_attachments
 from frappe.utils.file_manager import remove_file
 from frappe.core.doctype.communication.email import make as make_email
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_project_file_from_local_file
+from heimbohrtechnik.heim_bohrtechnik.timeshepherd import create_project
 from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
 import re
 import uuid
@@ -425,6 +426,8 @@ def check_create_project(sales_order):
         p.save()
         # update project data
         update_project(p.name)
+        # trigger project creation in timeshepherd
+        create_project(p.name)
     return
 
 """
