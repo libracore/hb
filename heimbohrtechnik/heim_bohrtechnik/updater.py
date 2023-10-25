@@ -23,7 +23,7 @@ def assert_kg():
         kg.insert()
     return
 
-def diable_prepared_report():
+def disable_prepared_report():
     # this will disable prepared reports 
     print("Disabling prepared reports...")
     reports = frappe.get_all("Report", filters={'disabled': 0}, fields=['name'])
