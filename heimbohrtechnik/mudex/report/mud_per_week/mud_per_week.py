@@ -23,16 +23,20 @@ def execute(filters=None):
                 data.append(d)
         first_date = first_date + timedelta(days=7)
 
-    return columns, data
+    message = "Mud per week"
+    
+    chart = get_chart(data)
+    
+    return columns, data, message, chart
 
 def get_columns():
     return [
         {"label": _("KW"), "fieldname": "kw", "fieldtype": "Data", "width": 75},
-        {"label": _("Schlammmenge [kg]"), "fieldname": "weight", "fieldtype": "Int", "width": 120},
-        {"label": _("Date"), "fieldname": "date", "fieldtype": "Data", "width": 90},
+        {"label": _("Schlammmenge [kg]"), "fieldname": "formatted_weight", "fieldtype": "Data", "width": 150},
+        {"label": _("Date"), "fieldname": "date", "fieldtype": "Data", "width": 120},
         {"label": _("Objekt"), "fieldname": "object", "fieldtype": "Link", "options": "Object", "width": 75},
         {"label": _("Truck"), "fieldname": "truck", "fieldtype": "Link", "options": "Truck", "width": 120},
-
+        {"label": _("Document"), "fieldname": "document", "fieldtype": "Link", "options": "Truck Delivery", "width": 120},
     ]
 
 def find_first_kw_start_date(year):
@@ -46,6 +50,7 @@ def get_values(kw, start_date, end_date):
            'KW {kw}' AS `date`,
            SUM(`tabTruck Delivery`.`net_weight`) AS `weight`,
            '{start_date}' AS `date`,
+           NULL AS `document`,
            0 AS `indent`
         FROM `tabTruck Delivery`
         WHERE
@@ -55,6 +60,8 @@ def get_values(kw, start_date, end_date):
 
     data = frappe.db.sql(sql_query, as_dict=True)
 
+    data = format_data(data)
+    
     return data[0]
     
 def get_details(kw, start_date, end_date):
@@ -65,6 +72,7 @@ def get_details(kw, start_date, end_date):
            `tabTruck Delivery Object`.`object` AS `object`,
            `tabTruck Delivery`.`truck` AS `truck`,
            `tabTruck Delivery`.`date` AS `date`,
+           `tabTruck Delivery`.`name` AS `document`,
            1 AS `indent`
         FROM `tabTruck Delivery Object`
         LEFT JOIN `tabTruck Delivery` ON `tabTruck Delivery`.`name` = `tabTruck Delivery Object`.`parent`
@@ -76,4 +84,36 @@ def get_details(kw, start_date, end_date):
 
     data = frappe.db.sql(sql_query, as_dict=True)
 
+    data = format_data(data)
+    
     return data
+
+def format_data(data):
+    for d in data:
+        d['formatted_weight'] = "{:,.0f}".format(d.get('weight') or 0).replace(",", "'")      # hack to get a thousand separator
+        d['date'] = datetime.strptime("{0}".format(d.get('date'))[0:19], "%Y-%m-%d %H:%M:%S").strftime("%d.%m.%Y %H:%M")   # ( 
+        
+    return data
+
+def get_chart(data):
+    datasets = []
+    values = []
+    labels = []
+    for d in data:
+        if d['indent'] == 0:
+            labels.append("{0}".format(d['kw']))
+            values.append(d['weight'])
+        
+    datasets = [{
+        'name': [_("Mud per Week")],
+        'values': values
+    }]
+    
+    chart = {
+        'data': {
+            'labels': labels,
+            'datasets': datasets,
+        },
+        'type': "line"
+    }
+    return chart
