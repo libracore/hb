@@ -948,7 +948,6 @@ def get_bohrplaner_html(start_date, previous_week=False):
             else:
                 #extend former project
                 stacked_projects[-1]['dauer'] += 1
-        frappe.log_error(stacked_projects, "hoiiii")
         data['drilling_teams'][drilling_team['team_id']] = stacked_projects
     
     html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
