@@ -426,7 +426,7 @@ def check_customer(customer_name):
             "searchFilters": []
         }
 
-        api_call_response = requests.get(
+        api_call_response = requests.post(
             url,
             json=payload, 
             headers=api_call_header, 
@@ -478,7 +478,7 @@ def create_customer(customer, customer_name):
             "description": customer_name
         }
 
-        api_call_response = requests.get(
+        api_call_response = requests.post(
             url,
             json=payload, 
             headers=api_call_header, 
@@ -513,7 +513,7 @@ def create_project(project):
         frappe.log_error("Customer not found {0}".format(project), "Timeshepherd create_project")
         return None
     if len(project) < 6:
-        frappe.log_error("Invalid project {0}".format(custoemr), "Timeshepherd create_project")
+        frappe.log_error("Invalid project {0}".format(project), "Timeshepherd create_project")
         return None
         
     token = get_new_token()
@@ -547,7 +547,7 @@ def create_project(project):
             "customerId": customer_id,
         }
 
-        api_call_response = requests.get(
+        api_call_response = requests.post(
             url,
             json=payload, 
             headers=api_call_header, 
