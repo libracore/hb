@@ -10,7 +10,10 @@ def execute(filters=None):
     columns = get_columns()
     frappe.log_error(filters, "filters")
     data = get_data(filters)
-    return columns, data
+    message = "Based on Sales Orders"
+    chart = get_chart(filters, data)
+    frappe.log_error("{0}".format(chart), "chart")
+    return columns, data, message, chart
 
     
 def get_columns():
@@ -33,9 +36,10 @@ def get_data(filters):
         FROM `tabSales Order`
         WHERE `customer` = '{customer}'
             AND `docstatus` = 1
+            AND `company` = "{company}"
         GROUP BY `year`
         ORDER BY `year` DESC
-    """.format(customer=filters.customer)
+    """.format(customer=filters.customer, company=filters.company)
     
     data = frappe.db.sql(sql_query, as_dict=True)
     
@@ -43,3 +47,25 @@ def get_data(filters):
         data[i]['comparison'] = 100 * flt(data[i]['net_amount']) / flt(data[i+1]['net_amount'])
     
     return data
+
+def get_chart(filters, data):
+    datasets = []
+    values = []
+    labels = []
+    for i in range(len(data), 0, -1):
+        labels.append("{0}".format(data[i-1]['year']))
+        values.append(data[i-1]['net_amount'])
+        
+    datasets = [{
+        'name': [frappe.get_value("Customer", filters.customer, "customer_name")],
+        'values': values
+    }]
+    
+    chart = {
+        'data': {
+            'labels': labels,
+            'datasets': datasets,
+        },
+        'type': "bar"
+    }
+    return chart

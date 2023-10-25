@@ -3,7 +3,15 @@
 /* eslint-disable */
 
 frappe.query_reports["Customer sales trend"] = {
-	"filters": [
+    "filters": [
+        {
+            "fieldname":"company",
+            "label": __("Company"),
+            "fieldtype": "Link",
+            "options": "Company",
+            "reqd": 1,
+            "default": frappe.defaults.get_user_default("company") || frappe.defaults.get_global_default("company")
+        },    
         {
             "fieldname":"customer",
             "label": __("Customer"),
@@ -11,6 +19,6 @@ frappe.query_reports["Customer sales trend"] = {
             "options": "Customer",
             "reqd": 1
         }
-	]
+    ]
 };
 
