@@ -522,8 +522,10 @@ def create_project(project):
     project_raw = None
     
     # find customer ID
-    customer = frappe.get_value("Project", project, "customer")
+    project_doc = frappe.get_doc("Project", project)
+    customer = project_doc.customer
     customer_name = frappe.get_value("Customer", customer, "customer_name")
+    description = "{0} {1}".format(project_doc.object_street, project_doc.object_location)
     
     customer_id = check_customer(customer_name)
     if customer_id:
@@ -540,7 +542,7 @@ def create_project(project):
         payload = {
             "number": "{0}".format(project[-6:]),
             "short": project,
-            "description": frappe.get_value("Project", project, "object_name"),
+            "description": description,
             "date": datetime.now().strftime("%Y-%m-%dT%H:%M%S"),
             "customerId": customer_id,
         }
