@@ -1,4 +1,4 @@
-# Copyright (c) 2013, libracore AG and contributors
+# Copyright (c) 2023, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
@@ -28,19 +28,18 @@ def get_data(filters):
         SELECT
             YEAR(`transaction_date`) AS `year`,
             SUM(`base_net_total`) AS `net_amount`,
-            `customer`,
-            `customer_name`,
-            NULL AS `comparison`
+            `customer` AS `customer`,
+            `customer_name` AS `customer_name`
         FROM `tabSales Order`
-        WHERE `customer` = '{cust}'
+        WHERE `customer` = '{customer}'
             AND `docstatus` = 1
         GROUP BY `year`
         ORDER BY `year` DESC
-    """.format(cust=filters.customer)
+    """.format(customer=filters.customer)
     
     data = frappe.db.sql(sql_query, as_dict=True)
     
-    for i in range(0, len(data)-1):
-        data[i]['comparison'] = 100*flt(data[i]['net_amount'])/flt(data[i+1]['net_amount'])
+    for i in range(0, (len(data) - 1)):
+        data[i]['comparison'] = 100 * flt(data[i]['net_amount']) / flt(data[i+1]['net_amount'])
     
     return data
