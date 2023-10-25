@@ -458,7 +458,7 @@ def create_customer(customer, customer_name):
         return
         
     if len(customer) < 5:
-        frappe.log_error("Invalid customer {0}".format(custoemr), "Timeshepherd create_customer")
+        frappe.log_error("Invalid customer {0}".format(customer), "Timeshepherd create_customer")
         return None
         
     token = get_new_token()
@@ -474,7 +474,7 @@ def create_customer(customer, customer_name):
         }
         payload = {
             "number": "{0}".format(customer[-5:0]),
-            "short": custoemr,
+            "short": customer,
             "description": customer_name
         }
 
