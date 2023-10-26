@@ -900,7 +900,7 @@ def get_bohrplaner_html(start_date, previous_week=False):
         # get all projects
         for project in timeline:
             print(project)
-            projects = frappe.db.sql("""SELECT `name` 
+            projects = frappe.db.sql("""SELECT `name`, `project_type`, `object_name`
                         FROM `tabProject` 
                         WHERE CONCAT(`expected_start_date`, " ", IF(`start_half_day` = "VM", "06", "14")) <= '{date}' 
                         AND CONCAT(`expected_end_date`, " ", IF(`end_half_day` = "VM", "06", "14")) >= '{date}'
@@ -913,6 +913,8 @@ def get_bohrplaner_html(start_date, previous_week=False):
             
             if len(projects) > 0:
                 project['project'] = projects[0]['name']
+                project['project_type'] = projects[0]['project_type']
+                project['object_name'] = projects[0]['object_name']
             else:
                 project['project'] = None
                 
@@ -924,27 +926,40 @@ def get_bohrplaner_html(start_date, previous_week=False):
             if len(stacked_projects) > 0 and 'project' in stacked_projects[-1]:
                 last_project = stacked_projects[-1]['project'].get('name')
             if len(stacked_projects) == 0 or last_project != timeline[i]['project']:
-                if timeline[i]['project'] in same_project and timeline[i]['project'] != None:
-                    actual_project = {
-                        'name': timeline[i]['project'],
-                        'drilling_team': drilling_team['team_id'],
-                        'start_half_day': timeline[i]['vmnm'],
-                        'expected_start_date': timeline[i]['date']
-                    }
-                    project_data = get_project_data(actual_project, 1)
-                    project_data['project_type'] = 'extension'
-                    stacked_projects.append(project_data)
+                if timeline[i]['project_type'] == "External":
+                    if timeline[i]['project'] in same_project and timeline[i]['project'] != None:
+                        actual_project = {
+                            'name': timeline[i]['project'],
+                            'drilling_team': drilling_team['team_id'],
+                            'start_half_day': timeline[i]['vmnm'],
+                            'expected_start_date': timeline[i]['date']
+                        }
+                        project_data = get_project_data(actual_project, 1)
+                        project_data['project_type'] = 'extension'
+                        stacked_projects.append(project_data)
+                    else:
+                        actual_project = {
+                            'name': timeline[i]['project'],
+                            'drilling_team': drilling_team['team_id'],
+                            'start_half_day': timeline[i]['vmnm'],
+                            'expected_start_date': timeline[i]['date']
+                        }
+                        stacked_projects.append(
+                            get_project_data(actual_project, 1) if timeline[i]['project'] else {'dauer': 1})
+                        actual_value = timeline[i].get('project')
+                        same_project.add(actual_value)
                 else:
-                    actual_project = {
+                    int_p_data = {
                         'name': timeline[i]['project'],
                         'drilling_team': drilling_team['team_id'],
-                        'start_half_day': timeline[i]['vmnm'],
-                        'expected_start_date': timeline[i]['date']
+                        'dauer': 1,
+                        'project' : {
+                            'object_name': timeline[i]['object_name'],
+                            'name': timeline[i]['project']
+                        },
+                        'project_type': "internal"
                     }
-                    stacked_projects.append(
-                        get_project_data(actual_project, 1) if timeline[i]['project'] else {'dauer': 1})
-                    actual_value = timeline[i].get('project')
-                    same_project.add(actual_value)
+                    stacked_projects.append(int_p_data)
             else:
                 #extend former project
                 stacked_projects[-1]['dauer'] += 1

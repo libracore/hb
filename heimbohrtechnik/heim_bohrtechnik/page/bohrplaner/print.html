@@ -133,20 +133,18 @@ table {
                                 {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/extension_overlay.html", project) }}
                             </td>
                         </div>
+                    {% elif project.project_type == "internal" %}
+                        <div style="z-index: {{ vars.counter }} !important; {% if vars.counter in weekend_columns %}background-color: #9dc7f0;{% endif %}">
+                            <td>
+                                {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/internal_overlay.html", project) }}
+                            </td>
+                        </div>
                     {% else %}
-                        {% if project["project"].project_type == "External" %}
-                            <div style="z-index: {{ vars.counter }} !important; {% if vars.counter in weekend_columns %}background-color: #9dc7f0;{% endif %}">
-                                <td>
-                                    {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/booking_overlay.html", project) }}
-                                </td>
-                            </div>
-                        {% elif  project["project"].project_type == "Internal" %}
-                            <div style="z-index: {{ vars.counter }} !important; {% if vars.counter in weekend_columns %}background-color: #9dc7f0;{% endif %}">
-                                <td>
-                                    {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/internal_overlay.html", project) }}
-                                </td>
-                            </div>
-                        {% endif %}
+                        <div style="z-index: {{ vars.counter }} !important; {% if vars.counter in weekend_columns %}background-color: #9dc7f0;{% endif %}">
+                            <td>
+                                {{ frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/booking_overlay.html", project) }}
+                            </td>
+                        </div>
                     {% endif %}
                 {% else %}
                     <td class="gap" {% if vars.counter in weekend_columns %}style="background-color: #9dc7f0;"{% endif %}>&nbsp;</td>
