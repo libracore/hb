@@ -926,7 +926,7 @@ def get_bohrplaner_html(start_date, previous_week=False):
             if len(stacked_projects) > 0 and 'project' in stacked_projects[-1]:
                 last_project = stacked_projects[-1]['project'].get('name')
             if len(stacked_projects) == 0 or last_project != timeline[i]['project']:
-                if timeline[i]['project_type'] == "External":
+                if timeline[i].get("project_type") == "External":
                     if timeline[i]['project'] in same_project and timeline[i]['project'] != None:
                         actual_project = {
                             'name': timeline[i]['project'],
@@ -949,17 +949,20 @@ def get_bohrplaner_html(start_date, previous_week=False):
                         actual_value = timeline[i].get('project')
                         same_project.add(actual_value)
                 else:
-                    int_p_data = {
-                        'name': timeline[i]['project'],
-                        'drilling_team': drilling_team['team_id'],
-                        'dauer': 1,
-                        'project' : {
-                            'object_name': timeline[i]['object_name'],
-                            'name': timeline[i]['project']
-                        },
-                        'project_type': "internal"
-                    }
-                    stacked_projects.append(int_p_data)
+                    if timeline[i].get("project_type"):
+                        int_p_data = {
+                            'name': timeline[i]['project'],
+                            'drilling_team': drilling_team['team_id'],
+                            'dauer': 1,
+                            'project' : {
+                                'object_name': timeline[i].get('object_name'),
+                                'name': timeline[i]['project']
+                            },
+                            'project_type': "internal"
+                        }
+                        stacked_projects.append(int_p_data)
+                    else:
+                        stacked_projects.append({'dauer': 1})
             else:
                 #extend former project
                 stacked_projects[-1]['dauer'] += 1
