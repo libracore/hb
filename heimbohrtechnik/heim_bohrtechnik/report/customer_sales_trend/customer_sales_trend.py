@@ -8,11 +8,12 @@ from frappe.utils import flt
 
 def execute(filters=None):
     columns = get_columns()
-    frappe.log_error(filters, "filters")
+    
     data = get_data(filters)
+    
     message = "Based on Sales Orders"
     chart = get_chart(filters, data)
-    frappe.log_error("{0}".format(chart), "chart")
+    
     return columns, data, message, chart
 
     
