@@ -33,11 +33,11 @@ def get_data():
             SUM(`tabTruck Delivery Object`.`weight`) AS `qty`,
             `tabProject`.`expected_end_date` AS `expected_end_date`,
             `tabObject`.`object_name` AS `object_name`,
-	    `tabObject`.`expected_mud` AS `expected_mud`,
-	    (SELECT MAX(DATE(`tTD`.`date`)) 
-		 FROM `tabTruck Delivery Object` AS `tTDO`
-		 LEFT JOIN `tabTruck Delivery` AS `tTD` ON `tTD`.`name` = `tTDO`.`parent`
-		 WHERE `tTDO`.`object` = `tabTruck Delivery Object`.`object`) AS `last_delivery_date`
+        `tabObject`.`expected_mud` AS `expected_mud`,
+        (SELECT MAX(DATE(`tTD`.`date`)) 
+         FROM `tabTruck Delivery Object` AS `tTDO`
+         LEFT JOIN `tabTruck Delivery` AS `tTD` ON `tTD`.`name` = `tTDO`.`parent`
+         WHERE `tTDO`.`object` = `tabTruck Delivery Object`.`object`) AS `last_delivery_date`
         FROM `tabTruck Delivery Object`
         LEFT JOIN `tabTruck Delivery` ON `tabTruck Delivery`.`name` = `tabTruck Delivery Object`.`parent`
         LEFT JOIN `tabSales Invoice Item` ON 

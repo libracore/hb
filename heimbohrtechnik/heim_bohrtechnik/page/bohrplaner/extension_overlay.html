@@ -1,0 +1,10 @@
+<div class="booking_overlay" id="ext_{{ project.name }}"
+    style="width: {{ width }}px; "
+    data-lanetype="Project"
+    draggable="{{ dragable }}"
+    ondragstart="drag(event)">
+    <div class="object-div" style="font-size: {{ font_size }}pt !important;" onclick="frappe.bohrplaner.show_detail_popup(this);" data-popupvalue="{{ project.name }}">
+        <div style="background-color: {{ ampeln[0] }} min-width:{{ min_width }}px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;"></div>
+        <div style="background-color: #ffffe0; min-width:17px; max-width: 17px; height: 176px; padding-top: {{ padding }}px !important;"></div>
+    </div>
+</div>

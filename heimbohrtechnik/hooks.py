@@ -59,7 +59,8 @@ jenv = {
         "get_object_address:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_object_address",
         "get_object_addresses:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_object_addresses",
         "get_checklist_details:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_checklist_details",
-        "get_permit_details:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_permit_details"
+        "get_permit_details:heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_permit_details",
+        "get_project_pressure:heimbohrtechnik.heim_bohrtechnik.jinja.get_project_pressure"
     ]
 }
 
@@ -178,6 +179,6 @@ scheduler_events = {
 after_migrate = [
     'heimbohrtechnik.heim_bohrtechnik.updater.cleanup_languages',
     'heimbohrtechnik.heim_bohrtechnik.updater.assert_kg',
-    'heimbohrtechnik.heim_bohrtechnik.updater.diable_prepared_report',
+    'heimbohrtechnik.heim_bohrtechnik.updater.disable_prepared_report',
     'heimbohrtechnik.heim_bohrtechnik.updater.create_folder'
 ]

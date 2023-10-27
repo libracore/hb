@@ -1,0 +1,15 @@
+{
+    "project": "{{ project }}",
+    "name": "{{ name }}",
+    "street": {{ street }}",
+    "location": "{{ location }}",
+    "gps_coordinates": "{{ gps_coordinates }}",
+    "probes": [
+    {% for p in probes %}{
+        "count": {{ p.count }},
+        "depth": {{ p.depth }},
+        "diameter": {{ p.diameter }},
+        "probe_type": "{{ p.probe_type }}",
+        "filling": "{{ p.filling }}"
+    }{% endfor %}
+}
