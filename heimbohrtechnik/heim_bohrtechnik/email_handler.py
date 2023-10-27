@@ -20,7 +20,7 @@ from frappe.utils import cint
 # this function will take a communication and store it as a local file
 #
 # params: communication ID and target file path
-def save_message(communication, target_file):
+def save_message(communication, target_file, debug=False):
     doc = frappe.get_doc("Communication", communication)
     
     # create base message
@@ -37,28 +37,15 @@ def save_message(communication, target_file):
     msg.set_content(html2text.html2text(doc.content))
     msg.add_alternative(doc.content, subtype='html')
     # add attachments
-    #attachments = get_attachments("Communication", communication)
-    #for a in attachments:
-    #    full_name = get_physical_path(a['name'])
-    #    file_name = a['file_name']
-    #    ctype, encoding = mimetypes.guess_type(full_name)
-    #    if ctype is None or encoding is not None:
-    #        ctype = "application/octet-stream"
-    #    maintype, subtype = ctype.split("/", 1)
-    #    try:
-    #        with open(full_name, 'rb') as fp:
-    #            msg.add_attachment(fp.read(), maintype=maintype, subtype=subtype, filename=file_name)
-    #    except Exception as err:
-    #        print("{0}: {1}".format(file_name, err))    # skip file if it cannot be read
-    
     email_queue = frappe.db.sql("""
         SELECT `attachments` 
         FROM `tabEmail Queue` 
         WHERE `communication` = "{communication}";""".format(communication=communication), as_dict=True)
         
     if len(email_queue) > 0:
-        attachments = json.loads(email_queue.get("attachments"))
-        print("{0}".format(attachments))
+        attachments = json.loads(email_queue[0].get("attachments"))
+        if debug:
+            print("{0}".format(attachments))
         for a in attachments:
             if cint(a.get("print_format_attachment")) == 1:
                 # document print
@@ -143,7 +130,9 @@ def upload_communication_to_nextcloud(communication):
     # upload to nextcloud
     if project:
         write_project_file_from_local_file(project, tmp_file, target)
-    
+    else:
+        print("No project found")
+        
     # clear file
     remove(tmp_file)
     
