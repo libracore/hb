@@ -949,7 +949,7 @@ def get_bohrplaner_html(start_date, previous_week=False):
                         actual_value = timeline[i].get('project')
                         same_project.add(actual_value)
                 else:
-                    if timeline[i].get("project_type"):
+                    if timeline[i].get('project'):
                         int_p_data = {
                             'name': timeline[i]['project'],
                             'drilling_team': drilling_team['team_id'],
