@@ -342,6 +342,7 @@ frappe.ui.form.on('Object EWS', {
     },
     probe_type: function(frm, cdt, cdn) {
         verify_diameter(frm, cdt, cdn);
+        update_ews_details(frm, cdt, cdn);
     },
     ews_specification_remove(frm, cdt, cdn) {
         console.log("remove");
