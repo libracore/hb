@@ -22,14 +22,22 @@ frappe.invoice_review = {
         var data = "";
         $(frappe.render_template('invoice_review', data)).appendTo(me.body);
     },
-    run: function() {         
-        frappe.invoice_review.get_invoices_for_review();
+    run: function() {
+        // check for url parameters
+        var url = location.href;
+        var payment_proposal = null;
+        if (url.indexOf("?payment_proposal=") >= 0) {
+            payment_proposal = url.split('=')[1].split('&')[0];
+        }
+        
+        frappe.invoice_review.get_invoices_for_review(payment_proposal);
     },
-    get_invoices_for_review: function() {
+    get_invoices_for_review: function(payment_proposal, show_all) {
         frappe.call({
             'method': 'heimbohrtechnik.heim_bohrtechnik.page.invoice_review.invoice_review.get_invoices_for_review',
             'args': {
-                'user': frappe.session.user
+                'user': frappe.session.user,
+                'payment_proposal': payment_proposal
             },
             'callback': function(r) {
                 var invoices = r.message;

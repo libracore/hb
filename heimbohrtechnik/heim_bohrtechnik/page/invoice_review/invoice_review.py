@@ -10,9 +10,22 @@ from frappe.utils import cint
 from datetime import datetime
 
 @frappe.whitelist()
-def get_invoices_for_review():
+def get_invoices_for_review(payment_proposal=None):
+    if payment_proposal:
+        # filter from payment proposal
+        purchase_invoices = []
+        for p in frappe.db.sql("""
+            SELECT `purchase_invoice`
+            FROM `tabPayment Proposal Purchase Invoice`
+            WHERE `parent` = "{payment_proposal}";""".format(payment_proposal=payment_proposal), as_dict=True):
+            purchase_invoices.append(p['purchase_invoice'])
+        
+        filter_str = """ `tabPurchase Invoice`.`name` IN ("{0}") """.format('", "'.join(purchase_invoices))
+    else:
+        # normal review filter
+        filter_str = "`tabPurchase Invoice`.`docstatus` = 0 AND `tabPurchase Invoice`.`reviewed_by` IS NULL "
     # find not reviewed purchase invoices
-    pinvs = frappe.db.sql("""
+    sql_query = """
         SELECT 
             `tabPurchase Invoice`.`name`,
             `tabPurchase Invoice`.`supplier`,
@@ -26,11 +39,12 @@ def get_invoices_for_review():
             `tabPurchase Invoice`.`total_taxes_and_charges` AS `tax`
         FROM `tabPurchase Invoice`
         WHERE
-            `tabPurchase Invoice`.`docstatus` = 0
-            AND `tabPurchase Invoice`.`reviewed_by` IS NULL
+            {filter_str}
         ORDER BY `tabPurchase Invoice`.`due_date` ASC, `tabPurchase Invoice`.`name` ASC
         ;
-        """.format(), as_dict=True)
+        """.format(filter_str=filter_str)
+    frappe.log_error(sql_query)
+    pinvs = frappe.db.sql(sql_query, as_dict=True)
     
     # extend atatchments
     for pinv in pinvs:

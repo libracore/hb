@@ -43,7 +43,8 @@ doctype_js = {
     "Item Price": "public/js/item_price.js",
     "Payment Reminder": "public/js/payment_reminder.js",
     "Event": "public/js/event.js",
-    "Expense Claim": "public/js/expense_claim.js"
+    "Expense Claim": "public/js/expense_claim.js",
+    "Payment Proposal": "public/js/payment_proposal.js"
 }
 doctype_list_js = {
     "Item Price" : "public/js/item_price_list.js",
