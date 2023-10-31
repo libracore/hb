@@ -445,6 +445,7 @@ def update_project(project):
         'staged_cementation': frappe.get_value("Heim Settings", "Heim Settings", "staged_cementation_item"),
         'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "internal_crane_item"),
         'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "external_crane_item"),
+        'self_crane': frappe.get_value("Heim Settings", "Heim Settings", "self_crane_item"),
         'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_item")
     }
     activities = {
@@ -458,6 +459,7 @@ def update_project(project):
         p.thermozement = 0
         has_internal_crane = False
         has_external_crane = False
+        has_self_crane = False
         has_carrymax = False
         for i in so.items:
             if i.item_code == items['thermo']:
@@ -466,6 +468,8 @@ def update_project(project):
                 o.staged_cementation = 1
             elif i.item_code == items['internal_crane']:
                 has_internal_crane = True
+            elif i.item_code == items['self_crane']:
+                has_self_crane = True
             elif i.item_code.startswith(items['external_crane']):
                 has_external_crane = True
             elif i.item_code == items['carrymax']:
@@ -477,6 +481,8 @@ def update_project(project):
             p = set_checklist_activity(p, activities['external_crane'])
         if has_carrymax:
             p = set_checklist_activity(p, activities['carrymax'])
+        if has_self_crane:
+            p = set_checklist_activity(p, activities['external_crane'])
             
         p.save()
         if o:
