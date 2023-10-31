@@ -128,8 +128,11 @@ def upload_communication_to_nextcloud(communication):
         target = get_path('supplier_ews')
         
     # upload to nextcloud
-    if project:
-        write_project_file_from_local_file(project, tmp_file, target)
+    if project and "P-MX" not in project:
+        try:
+            write_project_file_from_local_file(project, tmp_file, target)
+        except Exception as err:
+            frappe.log_error(err, "Communication upload failed")
     else:
         print("No project found")
         
@@ -145,8 +148,7 @@ def communication_on_insert(self, event):
     try:
         delayed_upload_communication_to_nextcloud(self.name)
     except Exception as err:
-        if not "/P-MX-" in err:         # exclude upload errors from MudEX documents where there is no project folder
-            frappe.log_error(err, "Communication hook failed")
+        frappe.log_error(err, "Communication hook failed")
     return
     
 def cleanup_email_str(email_str):
