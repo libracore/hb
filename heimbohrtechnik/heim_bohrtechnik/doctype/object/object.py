@@ -175,7 +175,7 @@ class Object(Document):
                     if self.drilling_type == "Brunnen":
                         _details = "Brunnen " + _details
                     if "Vario" in s.probe_type:
-                        _details += """ <span style="color: red;">Vario</span>"""
+                        _details += """ <span style="color: red;"><b>Vario</b></span>"""
                         
                     detail_list.append(_details)
                 details = ", ".join(detail_list)
