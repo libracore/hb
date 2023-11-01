@@ -27,16 +27,16 @@ def get_columns():
     return columns
 
 def get_data(filters): 
-    data = []  
+    data = []
+    date_matrix = {}
     
     content = get_content(filters.from_date, filters.to_date)
     
-    days = {}
-    for date in content['day_list']:
-        days[date] = 0
+    # ~ days = {}
+    # ~ for date in content['day_list']:
+        # ~ days[date] = 0
     
     for drilling_team in content['drilling_teams']:
-        date_matrix = {}
         sql_query = """
         SELECT
             `name` AS `project`,
@@ -59,11 +59,10 @@ def get_data(filters):
         
         projects = frappe.db.sql(sql_query, as_dict=True)
         
-        # ~ frappe.log_error(projects, "projects")
-        
         #initilize each day for drilling team
-        date_matrix['drilling_team'] = drilling_team['team_id']
-        date_matrix['days'] = days
+        date_matrix[drilling_team['team_id']] = {}
+        for key in content['day_list']:
+           date_matrix[drilling_team['team_id']][key] = 0
         
         for project in projects:
             if project['meters']:
@@ -73,34 +72,34 @@ def get_data(filters):
                 project['working_days'] = get_working_days(project['start_date'], project['start_half_day'], project['end_date'], project['end_half_day'])
                 project['m_per_halfday'] = None
             if project['start_date'] < datetime.strptime(filters.from_date, "%Y-%m-%d").date():
-                project['start_date'] = filters.from_date
+                project['start_date'] = datetime.strptime(filters.from_date, "%Y-%m-%d").date()
                 project['start_half_day'] = "VM"
             if project['end_date'] > datetime.strptime(filters.to_date, "%Y-%m-%d").date():
-                project['end_date'] = filters.to_date
-                project['start_half_day'] = "NM"
-                
+                project['end_date'] = datetime.strptime(filters.to_date, "%Y-%m-%d").date()
+                project['end_half_day'] = "NM"
+            frappe.log_error(project, "project")    
                 # get affected half days
-                affected_half_days = []
-                current_day = project['start_date']
-                while current_day <= datetime.strptime(project['end_date'], "%Y-%m-%d").date():
-                    if current_day.strftime("%d.%m.%Y") in content['weekend']:
+            affected_half_days = []
+            current_day = project['start_date']
+            while current_day <= project['end_date']:
+                if current_day.strftime("%d.%m.%Y") in content['weekend']:
+                    current_day += timedelta(days=1)
+                else:
+                    if (current_day == project['start_date'] and project['start_half_day'] == "NM") or (current_day == project['end_date'] and project['end_half_day'] == "VM"):
+                        affected_half_days.append(current_day.strftime("%d.%m.%Y"))
                         current_day += timedelta(days=1)
                     else:
-                        if current_day == project['start_date'] and project['start_half_day'] == "NM" or current_day == project['end_date'] and project['end_half_day'] == "VM":
-                            affected_half_days.append(current_day.strftime("%d.%m.%Y"))
-                            current_day += timedelta(days=1)
-                        else:
-                            affected_half_days.append(current_day.strftime("%d.%m.%Y"))
-                            affected_half_days.append(current_day.strftime("%d.%m.%Y"))
-                            current_day += timedelta(days=1)
-                frappe.log_error(affected_half_days, "affected_half_days")
-                frappe.log_error(project, "project")
-                for half_day in affected_half_days:
-                    if project['m_per_halfday'] is not None:
-                        date_matrix['days'][half_day] += project['m_per_halfday']
-                    else:
-                        date_matrix['days'][half_day] += 0
-        data.append(date_matrix)
+                        affected_half_days.append(current_day.strftime("%d.%m.%Y"))
+                        affected_half_days.append(current_day.strftime("%d.%m.%Y"))
+                        current_day += timedelta(days=1)
+            for half_day in affected_half_days:
+                if project['m_per_halfday'] is not None:
+                    # ~ frappe.log_error(drilling_team['team_id'], "drilling_team['team_id']")
+                    # ~ frappe.log_error(project, "project")
+                    # ~ frappe.log_error(half_day, "half_day")
+                    # ~ frappe.log_error(date_matrix, "date_matrix1")
+                    date_matrix[drilling_team['team_id']][half_day] += project['m_per_halfday']
+        # ~ frappe.log_error(date_matrix, "date_matrix")
             # ~ date_matrix[drilling_team][half_day] += project['project_type']
                     
         # ~ frappe.log_error(date_matrix, "date_matrix")
@@ -117,5 +116,5 @@ def get_data(filters):
     # ~ data = [
         # ~ [{'bohrteam': 0
     
-    frappe.log_error(data, "data")
+    frappe.log_error(date_matrix, "date_matrix")
     return projects
