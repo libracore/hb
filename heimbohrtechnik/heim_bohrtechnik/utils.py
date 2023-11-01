@@ -235,7 +235,8 @@ def cancel_mudex_invoice(reference):
     return None
 
 @frappe.whitelist()
-def get_object_geographic_environment(object_name=None, radius=0.1):
+def get_object_geographic_environment(object_name=None, radius=0.1, address=None):
+    data = None
     if frappe.db.exists("Object", object_name):
         obj = frappe.get_doc("Object", object_name)
         data = {
@@ -243,7 +244,18 @@ def get_object_geographic_environment(object_name=None, radius=0.1):
             'gps_lat': obj.gps_lat,
             'gps_long': obj.gps_long
         }
-    else:
+    elif address:
+        # find gps from address
+        gps = get_gps_coordinates(address, "")
+        if gps:
+            data = {
+                'object': address,
+                'gps_lat': gps['lat'],
+                'gps_long': gps['lon']
+            }
+    
+    # default of no center is defined
+    if not data:
         data = {
             'object': "HB-AG",
             'gps_lat': 47.37767,
@@ -256,7 +268,13 @@ def get_object_geographic_environment(object_name=None, radius=0.1):
             `tabObject`.`gps_lat` AS `gps_lat`, 
             `tabObject`.`gps_long` AS `gps_long`,
             `tabObject`.`qtn_meter_rate` AS `rate`,
-            `tabProject`.`sales_order` AS `sales_order`
+            `tabProject`.`sales_order` AS `sales_order`,
+            `tabProject`.`cloud_url` AS `cloud_url`,
+            (SELECT `tabLayer Directory`.`name`
+             FROM `tabLayer Directory`
+             WHERE `tabLayer Directory`.`object` = `tabObject`.`name`
+             ORDER BY `tabLayer Directory`.`object` DESC
+             LIMIT 1) AS `sv`
         FROM `tabObject`
         LEFT JOIN `tabProject` ON `tabProject`.`object` = `tabObject`.`name`
         WHERE 

@@ -39,6 +39,21 @@ frappe.object_overview = {
         
     },
     run: function() {
+        // add on enter listener to address box
+        document.getElementById("address").addEventListener("keyup", function(event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                var address = this.value;
+                if (address) {
+                    // find gps for address
+                    frappe.object_overview.render_map(address);
+                }
+            }
+        });
+        
+        frappe.object_overview.render_map();
+    },
+    render_map: function(address=null) {
         // fetch object
         var object_name = frappe.object_overview.get_arguments();
         var gps_lat = 47.37767;
@@ -46,7 +61,7 @@ frappe.object_overview = {
         var initial_zoom = 13;
         var geo = null;
         var radius = 0.1;
-        if (!object_name) {
+        if ((!object_name) && (!address)) {
             radius = 10;    // no object: load full map
         }
         
@@ -56,7 +71,8 @@ frappe.object_overview = {
         var grey_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-grey.png'});
         var blue_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon.png'});
         
-        // create map        
+        // create map     
+        document.getElementById('map-container').innerHTML = "<div id='map' style='width: 100%; height: 800px;'></div>";
         var map = L.map('map').setView([gps_lat, gps_long], initial_zoom);
         // create layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -71,7 +87,8 @@ frappe.object_overview = {
             'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_object_geographic_environment',
             'args': { 
                 'object_name': object_name,
-                'radius': radius
+                'radius': radius,
+                'address': address
             },
             'callback': function(r) {
                 if (r.message) {
@@ -102,7 +119,9 @@ frappe.object_overview = {
                             {'icon': icon}).addTo(map)
                             .bindPopup(get_popup_str(geo.environment[i].object, 
                                 rate=geo.environment[i].rate,
-                                sales_order=geo.environment[i].sales_order));
+                                sales_order=geo.environment[i].sales_order,
+                                cloud_url=geo.environment[i].cloud_url,
+                                sv=geo.environment[i].sv));
 
                     }
                 }
@@ -138,17 +157,24 @@ frappe.object_overview = {
     }
 }
 
-function get_popup_str(object_name, rate=null, sales_order=null) {
+function get_popup_str(object_name, rate=null, sales_order=null, cloud_url=null, sv=null) {
     html = "<b><a href=\"/desk#Form/Object/" 
-        + (object_name || "HB-AG") + "\">" 
+        + (object_name || "HB-AG") + "\" target=\"_blank\">" 
         + (object_name || "HB-AG") + "</a></b>";
     if (rate) {
         html += "<br>CHF " + parseFloat(rate).toFixed(2);
     }
     if (sales_order) {
         html += "<br><a href=\"/desk#Form/Sales Order/" 
-        + sales_order + "\">" 
+        + sales_order + "\" target=\"_blank\">" 
         + sales_order + "</a>";
+    }
+    if (cloud_url) {
+        html += "<br><a href=\"" + cloud_url + "\" target=\"_blank\"><i class=\"fa fa-cloud\"></i> Cloud</a>&nbsp;";
+    }
+    if (sv) {
+        html += "&nbsp;&middot;&nbsp;&nbsp;<a href=\"/desk#Form/Layer Directory/" 
+        + sv + "\" target=\"_blank\">SV</a>";
     }
     return html;
 }
