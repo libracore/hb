@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021-2022, libracore AG and contributors
+# Copyright (c) 2021-2023s, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals

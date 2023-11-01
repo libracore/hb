@@ -616,3 +616,84 @@ def update_hotel_coordinates(supplier):
                 hotel_doc.save()
     
     return True
+
+"""
+This function takes a parser output file to create projects and objects
+
+Run as
+ $ bench execute heimbohrtechnik.heim_bohrtechnik.migration.create_objects_and_projects_from_parser_file --kwargs "{'file_name': 'result.json'}"
+"""
+def create_objects_and_projects_from_parser_file(file_name):
+    cloud_root = "{0}/index.php/apps/files/?dir=/00_Projekte/".format(frappe.get_value("Heim Settings", "Heim Settings", "cloud_hostname"))
+    
+    import ast
+    
+    print("Reading {0}...".format(file_name))
+    f = open(file_name, "r")
+    content = f.read()
+    f.close()
+    projects = ast.literal_eval(content)
+    print("File read, {0} projects".format(len(projects)))
+    for p in projects:
+        print("Importing {0}...".format(p.get("project")))
+        
+        # force insert records in DB to get requested project numbers
+        frappe.db.sql("""
+            INSERT INTO `tabObject` (`name`) VALUES ("{name}");
+            """.format(name=p.get("project")))
+        frappe.db.sql("""
+            INSERT INTO `tabProject` (`name`) VALUES ("{name}");
+            """.format(name=p.get("project")))
+            
+            
+        new_object = frappe.get_doc("Object", p.get("project"))
+        new_object.object_name = p.get("file")[:-4]
+        new_object.object_street = "{0} {1}".format(p.get("street"), p.get("house"))
+        new_object.object_location = "{0} {1}".format(p.get("plz"), p.get("city"))
+        new_object.plz = p.get("plz")
+        new_object.city = p.get("city")
+        new_object.gps_coordinates = "{0}, {1}".format(p.get("gps").get("lat"), p.get("gps").get("lon"))
+        new_object.gps_lat = p.get("gps").get("lat")
+        new_object.gps_long = p.get("gps").get("lon")
+        new_object.ch_coordinates = new_object.convert_gps_to_ch()
+        new_object.save()
+        
+        new_project = frappe.get_doc("Project", p.get("project"))
+        new_project.project_type = "External"
+        new_project.project_name = p.get("project")
+        new_project.status = "Completed"
+        new_project.percent_complete_method = "Manual"
+        new_project.object = p.get("project")
+        new_project.cloud_url = "{0}{1}".format(cloud_root, p.get("project"))
+        new_project.save()
+        
+        frappe.db.commit()
+        
+    print("done")
+    return
+
+"""
+Extend cloud urls in existing projects
+
+Run as
+ $ bench execute heimbohrtechnik.heim_bohrtechnik.migration.fill_cloud_urls
+"""
+def fill_cloud_urls():
+    cloud_root = "{0}/index.php/apps/files/?dir=/00_Projekte/".format(
+        frappe.get_value("Heim Settings", "Heim Settings", "cloud_hostname"))
+    projects = frappe.db.sql("""
+        SELECT `name`
+        FROM `tabProject`
+        WHERE `project_type` = "External"
+          AND `cloud_url` IS NULL;""", as_dict=True)
+          
+    for p in projects:
+        doc = frappe.get_doc("Project", p.get("name"))
+        doc.cloud_url = "{0}{1}".format(cloud_root, p.get("name"))
+        try:
+            doc.save()
+        except Exception as err:
+            print("{0}: {1}".format(p.get("name"), err))
+        print("Updated {0}".format(p.get("name")))
+        
+    return
