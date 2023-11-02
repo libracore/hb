@@ -9,7 +9,7 @@
  "is_standard": "Yes",
  "json": "{}",
  "letter_head": "Commercial",
- "modified": "2023-11-02 17:12:07.317375",
+ "modified": "2023-11-02 20:53:34.172635",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Capacity Overview",
@@ -20,7 +20,13 @@
  "report_type": "Script Report",
  "roles": [
   {
-   "role": "All"
+   "role": "Sales User"
+  },
+  {
+   "role": "Projects User"
+  },
+  {
+   "role": "Projects Manager"
   }
  ]
 }

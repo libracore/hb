@@ -19,18 +19,20 @@ frappe.query_reports["Drilling Capacity Overview"] = {
             "reqd": 1
         }
     ],
-    	"formatter":function (value, row, column, data, default_formatter) {
-		if (value == 0) {
-            return `<div style="background-color: red;">${value}</div>`;
-		} else if (value > 0 && value < 150) {
-            return `<div style="background-color: orange;">${value}</div>`;
-        } else if (value > 149) {
-            return `<div style="background-color: green;">${value}</div>`;
-        } else if (value == -1) {
-            return `<div style="background-color: #f08080;">0</div>`;
-        } else if (value == -2) {
-            return `<div></div>`;
+    "formatter":function (value, row, column, data, default_formatter) {
+        if (column.colIndex > 2) {
+            if (value == 0) {
+                return `<div style="background-color: red;">${value}</div>`;
+            } else if (value > 0 && value < 150) {
+                return `<div style="background-color: orange;">${value}</div>`;
+            } else if (value > 149) {
+                return `<div style="background-color: #90ee90;">${value}</div>`;
+            } else if (value == -1) {
+                return `<div style="background-color: #fa8072;">0</div>`;
+            } else if (value == -2) {
+                return `<div></div>`;
+            }
         }
-		return default_formatter(value, row, column, data);
-	}
+        return default_formatter(value, row, column, data);
+    }
 };

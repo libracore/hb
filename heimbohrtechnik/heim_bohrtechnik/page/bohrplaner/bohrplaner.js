@@ -46,7 +46,7 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
     });
     
     page.add_menu_item( __('Bohrmeterübersicht'), () => {
-        frappe.set_route("query-report", "Drilling Capacity Overview");
+        frappe.set_route("query-report", "Drilling Capacity Overview", {'from_date': $("#from").val(), 'to_date': $("#to").val()});
     });
     
     // check routes and if there is a route, navigate to this

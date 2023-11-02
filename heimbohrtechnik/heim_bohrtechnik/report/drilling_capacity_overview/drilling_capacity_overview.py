@@ -106,9 +106,13 @@ def get_data(filters):
         
             dt_data = {}
             dt_data['Bohrteam'] = drilling_team['team_id']
+            dt_data['Capacity'] = 0
             for key, value in date_matrix[drilling_team['team_id']].items():
                 dt_data[key] = int(value)
+                if value == 0:
+                    dt_data['Capacity'] += 1
             data.append(dt_data)
             
     weekend = content['weekend']
+    
     return data, weekend

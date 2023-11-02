@@ -480,6 +480,12 @@ def get_data():
                     "name": "Artikelzusammenfassung",
                     "doctype": "Item",
                     "is_query_report": True
+                },
+                {
+                    "type": "report",
+                    "name": "Drilling Capacity Overview",
+                    "doctype": "Project",
+                    "is_query_report": True
                 }
             ]
         },
