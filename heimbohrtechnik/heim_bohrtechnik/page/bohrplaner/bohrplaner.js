@@ -45,10 +45,8 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
         frappe.bohrplaner.move_projects(page);
     });
     
-    page.add_menu_item( __('Kapazität'), () => {
-        var from = $("#from").val();
-        var to = $("#to").val();
-        frappe.bohrplaner.get_capacity(page, from, to);
+    page.add_menu_item( __('Bohrmeterübersicht'), () => {
+        frappe.set_route("query-report", "Drilling Capacity Overview");
     });
     
     // check routes and if there is a route, navigate to this
