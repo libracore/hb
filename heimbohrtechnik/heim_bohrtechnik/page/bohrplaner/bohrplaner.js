@@ -45,6 +45,10 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
         frappe.bohrplaner.move_projects(page);
     });
     
+    page.add_menu_item( __('Bohrmeterübersicht'), () => {
+        frappe.set_route("query-report", "Drilling Capacity Overview");
+    });
+    
     // check routes and if there is a route, navigate to this
     frappe.bohrplaner.load_route(page);
 }
@@ -760,6 +764,19 @@ frappe.bohrplaner = {
             'title': __("Alle Projekte nach hinten schieben")
         });
         d.show();
+    },
+    get_capacity: function(page, from, to) {
+        frappe.call({
+            'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_capacity',
+            'args': {
+                'from_date': document.getElementById("from").value,
+                'to_date': document.getElementById("to").value
+            },
+            'callback': function(r) {
+                console.log(r);
+                frappe.msgprint(r.message, "Freie Kapazität");
+            }
+        });
     }
 }
 

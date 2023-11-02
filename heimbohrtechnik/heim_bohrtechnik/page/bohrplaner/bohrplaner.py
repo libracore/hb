@@ -85,7 +85,7 @@ def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
                 p.expected_start_date = frappe.utils.add_days(p.expected_start_date, 1)
         p_data = get_project_data(p, dauer)
         projects.append(p_data)
-        
+    frappe.log_error(projects, "projects")
     return projects
     
 def get_project_data(p, dauer):
@@ -967,6 +967,7 @@ def get_bohrplaner_html(start_date, previous_week=False):
                 #extend former project
                 stacked_projects[-1]['dauer'] += 1
         data['drilling_teams'][drilling_team['team_id']] = stacked_projects
+        frappe.log_error(stacked_projects, "stacked_projects")
     
     html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/print.html", data)
     return html
@@ -1332,4 +1333,20 @@ def date_is_holiday(date):
         return True
     else:
         return False
+
+@frappe.whitelist()
+def get_capacity(from_date, to_date):
+    content = get_content(from_date, to_date, only_teams=True)
+    timeline = []
+    
+    for key, value in content['day_list'].items():
+        if value == "Mon" or value == "Tue" or value == "Wed" or value == "Thu" or value == "Fri":
+            timeline.append({"date": key, "day": value, "vmnm": "VM"})
+            timeline.append({"date": key, "day": value, "vmnm": "NM"})
+    
+    frappe.log_error(timeline, "tl")
+
+    
+    html = "<p>Du Maschine<p>"
+    return html
     
