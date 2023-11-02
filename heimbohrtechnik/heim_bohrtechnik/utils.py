@@ -235,7 +235,7 @@ def cancel_mudex_invoice(reference):
     return None
 
 @frappe.whitelist()
-def get_object_geographic_environment(object_name=None, radius=0.1, address=None):
+def get_object_geographic_environment(object_name=None, radius=0.1, address=None, quotations=False, only_projects=False):
     data = None
     if frappe.db.exists("Object", object_name):
         obj = frappe.get_doc("Object", object_name)
@@ -262,6 +262,18 @@ def get_object_geographic_environment(object_name=None, radius=0.1, address=None
             'gps_long': 9.56121
         }
     
+    qtn_column = ""
+    if cint(quotations):
+        qtn_column = """,
+            (SELECT `tabQuotation`.`name`
+             FROM `tabQuotation`
+             WHERE `tabQuotation`.`object` = `tabObject`.`name`
+               AND `docstatus` = 1 
+             ORDER BY `tabQuotation`.`modified` DESC
+             LIMIT 1) AS `quotation`"""
+    projects_filter = ""
+    if cint(only_projects):
+        projects_filter = " AND `tabProject`.`name` IS NOT NULL "
     data['environment'] = frappe.db.sql("""
         SELECT 
             `tabObject`.`name` AS `object`, 
@@ -275,6 +287,7 @@ def get_object_geographic_environment(object_name=None, radius=0.1, address=None
              WHERE `tabLayer Directory`.`object` = `tabObject`.`name`
              ORDER BY `tabLayer Directory`.`object` DESC
              LIMIT 1) AS `sv`
+            {quotations}
         FROM `tabObject`
         LEFT JOIN `tabProject` ON `tabProject`.`object` = `tabObject`.`name`
         WHERE 
@@ -282,9 +295,11 @@ def get_object_geographic_environment(object_name=None, radius=0.1, address=None
             AND `tabObject`.`gps_lat` <= ({gps_lat} + {lat_offset})
             AND `tabObject`.`gps_long` >= ({gps_long} - {long_offset})
             AND `tabObject`.`gps_long` <= ({gps_long} + {long_offset})
-            AND `tabObject`.`name` != "{reference}";
+            AND `tabObject`.`name` != "{reference}"
+            {projects_filter};
     """.format(reference=object_name, gps_lat=data['gps_lat'], lat_offset=float(radius),
-        gps_long=data['gps_long'], long_offset=(2 * float(radius))), as_dict=True)
+        gps_long=data['gps_long'], long_offset=(2 * float(radius)),
+        quotations=qtn_column, projects_filter=projects_filter), as_dict=True)
     
     return data
 

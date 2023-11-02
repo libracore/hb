@@ -39,13 +39,12 @@ frappe.object_overview = {
         
     },
     run: function() {
-        // add on enter listener to address box
+        // add on enter listener to filters
         document.getElementById("address").addEventListener("keyup", function(event) {
             event.preventDefault();
             if (event.keyCode === 13) {
                 var address = this.value;
                 if (address) {
-                    // find gps for address
                     frappe.object_overview.render_map(address);
                 }
             }
@@ -82,13 +81,18 @@ frappe.object_overview = {
         window.dispatchEvent(new Event('resize')); 
         
         document.getElementById("overlay-text").innerHTML = "<p>Objekte suchen...</p>";
-        
+        var show_quotations = 0;
+        if (document.getElementById("quotations").checked) { show_quotations = 1; }
+        var only_projects = 0;
+        if (document.getElementById("projects").checked) { only_projects = 1; }
         frappe.call({
             'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_object_geographic_environment',
             'args': { 
                 'object_name': object_name,
                 'radius': radius,
-                'address': address
+                'address': address,
+                'quotations': show_quotations,
+                'only_projects': only_projects
             },
             'callback': function(r) {
                 if (r.message) {
@@ -121,7 +125,8 @@ frappe.object_overview = {
                                 rate=geo.environment[i].rate,
                                 sales_order=geo.environment[i].sales_order,
                                 cloud_url=geo.environment[i].cloud_url,
-                                sv=geo.environment[i].sv));
+                                sv=geo.environment[i].sv,
+                                quotation=geo.environment[i].quotation));
 
                     }
                 }
@@ -157,12 +162,17 @@ frappe.object_overview = {
     }
 }
 
-function get_popup_str(object_name, rate=null, sales_order=null, cloud_url=null, sv=null) {
+function get_popup_str(object_name, rate=null, sales_order=null, cloud_url=null, sv=null, quotation=null) {
     html = "<b><a href=\"/desk#Form/Object/" 
         + (object_name || "HB-AG") + "\" target=\"_blank\">" 
         + (object_name || "HB-AG") + "</a></b>";
     if (rate) {
         html += "<br>CHF " + parseFloat(rate).toFixed(2);
+    }
+    if (quotation) {
+        html += "<br><a href=\"/desk#Form/Quotation/" 
+        + quotation + "\" target=\"_blank\">" 
+        + quotation + "</a>";
     }
     if (sales_order) {
         html += "<br><a href=\"/desk#Form/Sales Order/" 
