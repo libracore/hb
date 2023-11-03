@@ -26,6 +26,11 @@ frappe.ui.form.on('Sales Invoice', {
         if (frm.doc.__islocal) {
             find_akontos(frm);
         }
+        
+        //Validate prices with sales order
+        if (!frm.doc.__islocal) {
+            validate_prices(frm);
+        }
     },
     before_save: function(frm) {
         set_conditional_net_total(frm);
@@ -211,6 +216,24 @@ function cancel_akonto_booking(frm) {
         "method": "heimbohrtechnik.heim_bohrtechnik.utils.cancel_akonto",
         "args": {
             "sales_invoice": frm.doc.name
+        }
+    });
+}
+
+function validate_prices(frm) {
+    frappe.call({
+        'method': "heimbohrtechnik.heim_bohrtechnik.sales_invoice.validate_prices",
+        'args': {
+            'objekt': frm.doc.object
+        },
+        'callback': function(response) {
+            var details = response.message;
+            if ((details[0]) && (details[0].length > 0)) {
+                cur_frm.dashboard.add_comment( "Achtung, Preise für folgende Artikel unterschiedlich zu Sales Order " + details[1] + ":" +
+                for (let i = 0; i < details[0].length; i++) {
+                    "Hallo"
+                }), 'red', true);
+            }
         }
     });
 }
