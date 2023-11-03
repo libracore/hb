@@ -10,10 +10,12 @@ def validate_prices(objekt):
     #get all items of invoice
     invoice_query = """SELECT
         `sinvitem`.`item_code`,
+        `sinvitem`.`item_name`,
         `sinvitem`.`rate`
         FROM `tabSales Invoice Item` AS `sinvitem`
         LEFT JOIN `tabSales Invoice` AS `sinv` ON `sinvitem`.`parent` = `sinv`.`name`
-        WHERE `sinv`.`object` = '{objekt}';
+        WHERE `sinv`.`object` = '{objekt}'
+        AND `sinv`.`status` NOT IN ("Cancelled");
     """.format(objekt=objekt)
     invoice_data = frappe.db.sql(invoice_query, as_dict=True)
 
@@ -25,18 +27,21 @@ def validate_prices(objekt):
         FROM `tabSales Order Item` AS `sinvitem`
         LEFT JOIN `tabSales Order` AS `sinv` ON `sinvitem`.`parent` = `sinv`.`name`
         WHERE `sinv`.`object` = '{objekt}'
-        AND `sinv`.`status` NOT IN ("Cancelled")
+        AND `sinv`.`status` NOT IN ("Cancelled");
     """.format(objekt=objekt)
     sales_order_data = frappe.db.sql(sales_order_query, as_dict=True)
-    
+    frappe.log_error(sales_order_data, "sales_order_data")
     sales_order = sales_order_data[0]['name']
     
-    data = []
+    item_codes = []
+    item_names = []
     
     for invoice_item in invoice_data:
         for so_item in sales_order_data:
             if invoice_item['item_code'] == so_item['item_code'] and invoice_item['rate'] != so_item['rate']:
-                data.append(invoice_item['item_code'])
+                item_codes.append(invoice_item['item_code'])
+                item_names.append(invoice_item['item_name'])
     
-    frappe.log_error(data, "data")
-    return data, sales_order
+    frappe.log_error(item_codes, "item_codes")
+    frappe.log_error(item_names, "item_names")
+    return item_codes, item_names, sales_order
