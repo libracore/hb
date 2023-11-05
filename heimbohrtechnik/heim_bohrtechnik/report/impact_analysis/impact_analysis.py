@@ -24,7 +24,7 @@ def get_columns(filters):
 def get_data(filters):
     project_filter = ""
     if filters.project:
-        project_filter = """ AND `dmlp`.`project = "{0}" """.format(filters.project)
+        project_filter = """ AND `dmlp`.`project` = "{0}" """.format(filters.project)
         
     projects = frappe.db.sql("""
         SELECT
