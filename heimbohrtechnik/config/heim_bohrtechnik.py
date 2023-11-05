@@ -228,6 +228,12 @@ def get_data():
                     "name": "Road Block List",
                     "doctype": "Request for Public Area Use",
                     "is_query_report": True,
+                },
+                {
+                    "type": "report",
+                    "name": "Impact Analysis",
+                    "doctype": "Drilling Move Log",
+                    "is_query_report": True
                 }
             ]
         },
