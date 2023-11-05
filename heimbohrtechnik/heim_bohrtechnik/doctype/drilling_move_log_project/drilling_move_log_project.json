@@ -1,0 +1,139 @@
+{
+ "creation": "2023-11-05 20:19:23.499124",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "project",
+  "sec_drilling",
+  "from_drilling_team",
+  "col_drilling",
+  "to_drilling_team",
+  "sec_from",
+  "from_start_date",
+  "from_start_vmnm",
+  "col_start",
+  "to_start_date",
+  "to_start_vmnm",
+  "sec_end",
+  "from_end_date",
+  "from_end_vmnm",
+  "col_end",
+  "to_end_date",
+  "to_end_vmnm"
+ ],
+ "fields": [
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Project",
+   "options": "Project",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "sec_drilling",
+   "fieldtype": "Section Break",
+   "label": "Drilling Team"
+  },
+  {
+   "fieldname": "from_drilling_team",
+   "fieldtype": "Link",
+   "label": "From Drilling Team",
+   "options": "Drilling Team",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_drilling",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_drilling_team",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "To Drilling Team",
+   "options": "Drilling Team",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_from",
+   "fieldtype": "Section Break",
+   "label": "Start"
+  },
+  {
+   "fieldname": "from_start_date",
+   "fieldtype": "Date",
+   "label": "From Start Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "from_start_vmnm",
+   "fieldtype": "Data",
+   "label": "From Start VMNM",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_start",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "To Start Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "to_start_vmnm",
+   "fieldtype": "Data",
+   "label": "To Start VMNM",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_end",
+   "fieldtype": "Section Break",
+   "label": "End"
+  },
+  {
+   "fieldname": "from_end_date",
+   "fieldtype": "Date",
+   "label": "From End Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "from_end_vmnm",
+   "fieldtype": "Data",
+   "label": "From End VMNM",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_end",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_end_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "To End Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "to_end_vmnm",
+   "fieldtype": "Data",
+   "label": "To End VMNM",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "modified": "2023-11-05 21:02:18.875649",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Drilling Move Log Project",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

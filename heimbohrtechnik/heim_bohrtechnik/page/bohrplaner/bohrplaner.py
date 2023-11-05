@@ -537,9 +537,17 @@ def has_infomail(project):
         
 @frappe.whitelist()
 def reschedule_project(project=None, team=None, day=None, start_half_day=None, popup=False, 
-    new_project_start=None, new_project_end_date=None, end_half_day=None, visit_date=None):
+    new_project_start=None, new_project_end_date=None, end_half_day=None, visit_date=None, log=True):
     project = frappe.get_doc("Project", project)
     project.visit_date = visit_date
+    project_changes = [{
+        'project': project.name,
+        'from_start_date': project.expected_start_date,
+        'from_start_vmnm': project.start_half_day,
+        'from_end_date': project.expected_end_date,
+        'from_end_vmnm': project.end_half_day,
+        'from_drilling_team': project.drilling_team
+    }]
     
     if not popup:
         start_date = project.expected_start_date
@@ -603,7 +611,18 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
         project.drilling_team = team
         project.crane_organized = '0'
         project.save()
-    return
+    
+    # recap and log
+    project_changes[-1].update({
+        'to_start_date': project.expected_start_date,
+        'to_start_vmnm': project.start_half_day,
+        'to_end_date': project.expected_end_date,
+        'to_end_vmnm': project.end_half_day,
+        'to_drilling_team': project.drilling_team
+    })
+    if log:
+        log_drilling_move("Umplanung einzelnes Projekt im Bohrplaner", project_changes)
+    return project_changes[-1]
 
 @frappe.whitelist()
 def reschedule_subcontracting(subcontracting=None, team=None, day=None):
@@ -1171,6 +1190,7 @@ Resolve conflicts of a drilling team
 def resolve_conflicts(drilling_team, debug=True):
     # get all conflicts
     conflicts = find_project_conflicts(drilling_team)
+    project_changes = []
     # iterate to resolve conflicts
     while (len(conflicts) > 0):
         # find next start
@@ -1187,17 +1207,20 @@ def resolve_conflicts(drilling_team, debug=True):
             workdays = get_working_days(next_date, next_half_day, next_date, next_half_day)
             
         # move later project to next available date
-        reschedule_project(
+        project_changes.append(reschedule_project(
             project=conflicts[0]['conflict'], 
             team=drilling_team,
             new_project_start=next_date,
             start_half_day=next_half_day,
-            popup=False
-        )
+            popup=False,
+            log=False
+        ))
         
         # iterate to find next conflict
         conflicts = find_project_conflicts(drilling_team)
-        
+    
+    if len(project_changes) > 0:
+        log_drilling_move("Konflikte gelöst in {0}".format(drilling_team), project_changes)
     return
 
 """
@@ -1283,6 +1306,8 @@ def move_projects(from_project, drilling_team, days):
     if days < 1:
         return {'error': 'Invalid number of days: {0}'.format(days)}
     
+    
+    
     start_date = frappe.get_value("Project", from_project, "expected_start_date")
     if not start_date:
         return {'error': 'No start date found'}
@@ -1296,17 +1321,35 @@ def move_projects(from_project, drilling_team, days):
         ;
     """.format(drilling_team=drilling_team, start_date=start_date), as_dict=True)
     
-    moved_projects = []
+    project_changes = []
     for p in projects:
         p_doc = frappe.get_doc("Project", p['name'])
+        project_changes.append({
+            'project': p_doc.name,
+            'from_start_date': p_doc.expected_start_date,
+            'from_start_vmnm': p_doc.start_half_day,
+            'from_end_date': p_doc.expected_end_date,
+            'from_end_vmnm': p_doc.end_half_day,
+            'from_drilling_team': p_doc.drilling_team
+        })
         p_doc.expected_start_date = holiday_safe_add_days(p_doc.expected_start_date, days)
         p_doc.expected_end_date = holiday_safe_add_days(p_doc.expected_end_date, days)
         p_doc.save()
-        moved_projects.append(p['name'])
+        
+        # recap and log
+        project_changes[-1].update({
+            'to_start_date': p_doc.expected_start_date,
+            'to_start_vmnm': p_doc.start_half_day,
+            'to_end_date': p_doc.expected_end_date,
+            'to_end_vmnm': p_doc.end_half_day,
+            'to_drilling_team': p_doc.drilling_team
+        })
         
     frappe.db.commit()
     
-    return {'success': 1, 'moved_projects': moved_projects}
+    log_drilling_move("Projekte ab {0} schieben".format(from_project), project_changes)
+    
+    return {'success': 1, 'project_changes': project_changes}
     
 """
 This function will add days until the date is no longer a holiday.
@@ -1332,3 +1375,16 @@ def date_is_holiday(date):
     else:
         return False
    
+def log_drilling_move(title, project_changes):
+    log = frappe.get_doc({
+        'doctype': 'Drilling Move Log',
+        'title': title,
+        'date': datetime.now()
+    })
+    for c in project_changes:
+        log.append('projects', c)
+        
+    log.insert()
+    frappe.db.commit()
+    return log.name
+    
