@@ -174,7 +174,7 @@ class Object(Document):
                         _details += " {0}".format((s.pressure_level or "").split("/")[0])
                     if self.drilling_type == "Brunnen":
                         _details = "Brunnen " + _details
-                    if "Vario" in s.probe_type:
+                    if "Vario" in (s.probe_type or ""):
                         _details += """ <span style="color: red;"><b>Vario</b></span>"""
                         
                     detail_list.append(_details)
