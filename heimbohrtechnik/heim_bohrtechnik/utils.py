@@ -935,6 +935,30 @@ def reassign_project(purchase_order, old_project, new_project):
             WHERE `name` = "{purchase_order}";
         """.format(purchase_order=purchase_order, project=new_project))
     
+    # consider downstream documents
+    if "P-" in new_project:
+        # find purchase receipts
+        purchase_receipts = frappe.db.sql("""
+            SELECT `parent` 
+            FROM `tabPurchase Receipt Item`
+            WHERE `purchase_order` = "{purchase_order}"
+            ;
+        """.format(purchase_order=purchase_order), as_dict=True)
+        
+        for pr in purchase_receipts:
+            frappe.db.sql("""
+                UPDATE `tabPurchase Receipt`
+                SET `object` = "{project}"
+                WHERE `name` = "{purchase_receipt}";
+            """.format(purchase_receipt=pr['parent'], project=new_project))
+        
+            frappe.db.sql("""
+                UPDATE `tabPurchase Receipt Item`
+                SET `project` = "{project}"
+                WHERE `parent` = "{purchase_receipt}"
+                ;
+            """.format(purchase_receipt=pr['parent'], project=new_project))
+        
     doc = frappe.get_doc("Purchase Order", purchase_order)
     doc.add_comment("Info", _("Umbuchen von {0} auf {1}").format(old_project, new_project))
     
