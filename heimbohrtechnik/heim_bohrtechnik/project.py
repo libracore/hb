@@ -1,17 +1,19 @@
-# Copyright (c) 2019-2022, libracore and contributors
+# Copyright (c) 2019-2023, libracore and contributors
 # For license information, please see license.txt
 
 import frappe
 from frappe import _
-from frappe.utils import get_url_to_form
+from frappe.utils import get_url_to_form, cint
 from heimbohrtechnik.heim_bohrtechnik.utils import clone_attachments
+
+own_trough_supplier = "L-04052"
 
 def before_save(self, method):
     # perform checklist controls
     if self.checklist:
         for c in self.checklist:
             # define trough count/size in case of internal troughs
-            if c.activity == "Mulde" and c.supplier in ["L-04052", "L-81511"]:
+            if c.activity == "Mulde" and c.supplier in [own_trough_supplier, "L-81511"]:
                 c.trough_count = 1
                 c.trough_size = "±25m³"
             
@@ -19,6 +21,32 @@ def before_save(self, method):
             if c.activity in ["Mulde", "Schlammentsorgung"]:
                 c.appointment = self.expected_start_date
 
+    # check if the drilling team has an internal trough
+    if self.drilling_team and self.object:
+        if cint(frappe.get_value("Drilling Team", self.drilling_team, "has_trough")):
+            # drilling team has a trought: set internal
+            if self.checklist:
+                for c in self.checklist:
+                    if c.activity == "Mulde":
+                        c.supplier = own_trough_supplier
+                        c.supplier_name = frappe.get_value("Supplier", own_trough_supplier, "supplier_name")
+        else:
+            # if possible, revert to external trough supplier
+            supplier = None
+            object_trough_supplier = frappe.db.sql("""
+                SELECT `party`, `party_name`
+                FROM `tabObject Address`
+                WHERE `parent` = "{obj}"
+                  AND `address_type` = "Mulde"
+                  AND `party` IS NOT NULL
+                """.format(obj=self.object), as_dict=True)
+            if len(object_trough_supplier) > 0:
+                if self.checklist:
+                    for c in self.checklist:
+                        if c.activity == "Mulde":
+                            c.supplier = object_trough_supplier[0]['party']
+                            c.supplier_name = object_trough_supplier[0]['party_name']
+                
     return
     
 @frappe.whitelist()
