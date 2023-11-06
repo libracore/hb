@@ -30,7 +30,6 @@ def validate_prices(objekt):
         AND `sinv`.`status` NOT IN ("Cancelled");
     """.format(objekt=objekt)
     sales_order_data = frappe.db.sql(sales_order_query, as_dict=True)
-    frappe.log_error(sales_order_data, "sales_order_data")
     sales_order = sales_order_data[0]['name']
     
     item_codes = []
@@ -42,6 +41,4 @@ def validate_prices(objekt):
                 item_codes.append(invoice_item['item_code'])
                 item_names.append(invoice_item['item_name'])
     
-    frappe.log_error(item_codes, "item_codes")
-    frappe.log_error(item_names, "item_names")
     return item_codes, item_names, sales_order
