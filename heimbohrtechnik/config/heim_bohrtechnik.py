@@ -468,6 +468,12 @@ def get_data():
                    "name": "Regional Holidays",
                    "label": _("Regional Holidays"),
                    "description": _("Regional Holidays")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Subcontracting Order Template",
+                   "label": _("Subcontracting Order Template"),
+                   "description": _("Subcontracting Order Template")
                 }
             ]
         },
