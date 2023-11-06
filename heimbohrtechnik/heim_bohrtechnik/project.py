@@ -46,7 +46,17 @@ def before_save(self, method):
                         if c.activity == "Mulde":
                             c.supplier = object_trough_supplier[0]['party']
                             c.supplier_name = object_trough_supplier[0]['party_name']
-                
+    
+    # butgfix: prevent 0 to null conversions
+    if cint(self.actual_time) == 0:
+        self.actual_time = 0
+    if cint(self.total_costing_amount) == 0:
+        self.total_costing_amount = 0
+    if cint(self.total_expense_claim) == 0:
+        self.total_expense_claim = 0
+    if cint(self.total_billable_amount) == 0:
+        self.total_billable_amount = 0
+        
     return
     
 @frappe.whitelist()
