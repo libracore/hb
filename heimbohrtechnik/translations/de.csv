@@ -448,3 +448,10 @@ Report: Customer sales trend,Customer Name,Kundenname
 Report: Customer sales trend,Comparison,Vergleich zum Vohrjahr
 Report: Customer sales trend,Sales trend,Umsatzentwicklung
 Report: Customer sales trend,Drilling Capacity Overview,Bohrmeterübersicht
+Report: Impact Analysis,Impact Analysis,Auswirkungsanalyse (Projekte schieben)
+Report: Impact Analysis,Drilling Move Log,Projekte schieben Protokoll
+Report: Impact Analysis,Subproject,Verlängerungsauftrag
+DocType: Drilling Move Log,Drilling Move Log,Projekte schieben Protokoll
+DocType: Drilling Move Log,To Drilling Team,Zu Bohrteam
+DocType: Drilling Move Log,To Start Date,Auf Startdatum
+DocType: Drilling Move Log,To End Date,Auf Enddatum
