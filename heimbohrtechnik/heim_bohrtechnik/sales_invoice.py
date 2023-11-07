@@ -30,7 +30,7 @@ def validate_prices(objekt):
         AND `sinv`.`status` NOT IN ("Cancelled");
     """.format(objekt=objekt)
     sales_order_data = frappe.db.sql(sales_order_query, as_dict=True)
-    if len() == 0:
+    if len(sales_order_data) == 0:
         return None, None, None
         
     sales_order = sales_order_data[0]['name']
