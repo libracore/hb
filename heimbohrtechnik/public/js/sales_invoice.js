@@ -222,20 +222,22 @@ function cancel_akonto_booking(frm) {
 
 //This function validates prices from invoice with sales orders
 function validate_prices(frm) {
-    frappe.call({
-        'method': "heimbohrtechnik.heim_bohrtechnik.sales_invoice.validate_prices",
-        'args': {
-            'objekt': frm.doc.object
-        },
-        'callback': function(response) {
-            var details = response.message;
-            if ((details[0]) && (details[0].length > 0)) {
-                cur_frm.dashboard.clear_comment();
-                cur_frm.dashboard.add_comment( "Achtung, Preise für die folgenden Artikel sind unterschiedlich zu Sales Order " + details[2] + ":", 'red', true);
-                for (let i = 0; i < details[0].length; i++) {
-                    cur_frm.dashboard.add_comment("-" + details[0][i] + " " + details[1][i], 'red', true);
+    if (frm.doc.object) {
+        frappe.call({
+            'method': "heimbohrtechnik.heim_bohrtechnik.sales_invoice.validate_prices",
+            'args': {
+                'objekt': frm.doc.object
+            },
+            'callback': function(response) {
+                var details = response.message;
+                if ((details[0]) && (details[0].length > 0)) {
+                    cur_frm.dashboard.clear_comment();
+                    cur_frm.dashboard.add_comment( "Achtung, Preise für die folgenden Artikel sind unterschiedlich zu Sales Order " + details[2] + ":", 'red', true);
+                    for (let i = 0; i < details[0].length; i++) {
+                        cur_frm.dashboard.add_comment("-" + details[0][i] + " " + details[1][i], 'red', true);
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 }
