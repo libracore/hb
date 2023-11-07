@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2022, libracore and contributors
+# Copyright (c) 2019-2023, libracore and contributors
 # For license information, please see license.txt
 
 import frappe
@@ -30,6 +30,9 @@ def validate_prices(objekt):
         AND `sinv`.`status` NOT IN ("Cancelled");
     """.format(objekt=objekt)
     sales_order_data = frappe.db.sql(sales_order_query, as_dict=True)
+    if len() == 0:
+        return None, None, None
+        
     sales_order = sales_order_data[0]['name']
     
     item_codes = []
