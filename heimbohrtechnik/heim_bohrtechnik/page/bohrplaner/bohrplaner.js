@@ -738,7 +738,7 @@ frappe.bohrplaner = {
                 },
                 {
                     'fieldname': 'days', 
-                    'fieldtype': 'Int', 'label': __("Days"), 'default': 1
+                    'fieldtype': 'Float', 'label': __("Days"), 'default': 1
                 }
             ],
             'primary_action': function(){

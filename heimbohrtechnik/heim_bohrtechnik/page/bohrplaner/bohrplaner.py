@@ -1301,13 +1301,21 @@ This function will move all projects, start with the provided project by (days) 
 def move_projects(from_project, drilling_team, days):
     if not drilling_team:
         return {'error': 'No drilling team'}
+    
+    #check if we move full days or x.5 days
+    days_split = days.split(".")
+    if len(days_split) > 1:
+        if days_split[1] == '5':
+            days_type = "Half"
+        else:
+            return {'error': 'Invalid number of days: {0}'.format(days)}
+    else:
+        days_type = "Full"
+    
     if type(days) != int:
         days = cint(days)
-    if days < 1:
-        return {'error': 'Invalid number of days: {0}'.format(days)}
-    
-    
-    
+    frappe.log_error(days, "days")
+
     start_date = frappe.get_value("Project", from_project, "expected_start_date")
     if not start_date:
         return {'error': 'No start date found'}
@@ -1332,8 +1340,24 @@ def move_projects(from_project, drilling_team, days):
             'from_end_vmnm': p_doc.end_half_day,
             'from_drilling_team': p_doc.drilling_team
         })
-        p_doc.expected_start_date = holiday_safe_add_days(p_doc.expected_start_date, days)
-        p_doc.expected_end_date = holiday_safe_add_days(p_doc.expected_end_date, days)
+        
+        if days_type == "Full":
+            p_doc.expected_start_date = holiday_safe_add_days(p_doc.expected_start_date, days)
+            p_doc.expected_end_date = holiday_safe_add_days(p_doc.expected_end_date, days)
+        elif days_type == "Half":
+            if p_doc.start_half_day == "VM":
+                p_doc.start_half_day = "NM"
+                p_doc.expected_start_date = holiday_safe_add_days(p_doc.expected_start_date, days)
+            elif p_doc.start_half_day == "NM":
+                p_doc.expected_start_date = holiday_safe_add_days(p_doc.expected_start_date, days+1)
+                p_doc.start_half_day = "VM"
+            if p_doc.end_half_day == "VM":
+                p_doc.end_half_day = "NM"
+                p_doc.expected_end_date = holiday_safe_add_days(p_doc.expected_end_date, days)
+            elif p_doc.end_half_day == "NM":
+                p_doc.expected_end_date = holiday_safe_add_days(p_doc.expected_end_date, days+1)
+                p_doc.end_half_day = "VM"
+                
         p_doc.save()
         
         # recap and log
