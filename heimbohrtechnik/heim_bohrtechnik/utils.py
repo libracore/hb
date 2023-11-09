@@ -1131,3 +1131,25 @@ def find_supplier_item(item_code, supplier, idx=None):
     except:
         return {'supplier_part_no': None, 'idx': idx}
     
+@frappe.whitelist()
+def get_drilling_meters_per_day(project, objekt, start_date, start_hd, end_date, end_hd):
+    #get project duration in workdays
+    duration = get_duration_days(start_date, start_hd, end_date, end_hd)
+    
+    #get total drilling meter from object
+    sql_query = """
+        SELECT SUM(`ews_count` * `ews_depth`) AS `meters`
+        FROM `tabObject EWS`
+        WHERE `parent` = '{objekt}'
+        """.format(objekt=objekt)
+    meter = frappe.db.sql(sql_query, as_dict=True)
+    
+    #get drilling meter per day
+    meter_per_day = meter / duration
+    
+    #send information if drilling meter per day are below 150
+    if meter_per_day < 150:
+        frappe.msgprint("Achtung! Dieses Projekt hat nur '{mpd}' Meter pro Tag.".format(mpd=meter_per_day)
+    frappe.log_error(meter_per_day, "meter_per_day")
+    
+    return duration, meter_per_day
