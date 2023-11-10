@@ -25,7 +25,7 @@ def get_holidays():
             SELECT `holiday_date` AS `date`
             FROM `tabHoliday`
             WHERE `parenttype` = "Holiday List";
-        """), as_dict=True)
+        """, as_dict=True)
         
     holidays = []
     for h in holidays_raw:
@@ -98,6 +98,7 @@ def get_duration_days(start_date, start_hd, end_date, end_hd):
     start_ts = get_timestamp(start_date, start_hd)
     end_ts = get_timestamp(end_date, end_hd)
     holidays = get_holidays()
+    frappe.log_error(holidays, "holidays")
     duration = 0.5
     while start_ts < end_ts:
         start_ts += (60 * 60 * 12)      # iterate half day

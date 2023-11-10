@@ -21,6 +21,7 @@ import re
 import uuid
 from PyPDF2 import PdfFileMerger
 import requests
+from heimbohrtechnik.heim_bohrtechnik.date_controller import move_project, get_duration_days
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -1134,22 +1135,25 @@ def find_supplier_item(item_code, supplier, idx=None):
 @frappe.whitelist()
 def get_drilling_meters_per_day(project, objekt, start_date, start_hd, end_date, end_hd):
     #get project duration in workdays
+    frappe.log_error(start_date, "start_date")
+    frappe.log_error(start_hd, "start_hd")
+    frappe.log_error(end_date, "end_date")
+    frappe.log_error(end_hd, "end_hd")
     duration = get_duration_days(start_date, start_hd, end_date, end_hd)
-    
+    frappe.log_error(duration, "duration")
     #get total drilling meter from object
     sql_query = """
-        SELECT SUM(`ews_count` * `ews_depth`) AS `meters`
+        SELECT SUM(`ews_count` * `ews_depth`) AS `meter`
         FROM `tabObject EWS`
         WHERE `parent` = '{objekt}'
         """.format(objekt=objekt)
     meter = frappe.db.sql(sql_query, as_dict=True)
-    
+    frappe.log_error(meter, "meter")
     #get drilling meter per day
-    meter_per_day = meter / duration
-    
+    meter_per_day = meter[0]['meter'] / duration
+
     #send information if drilling meter per day are below 150
     if meter_per_day < 150:
-        frappe.msgprint("Achtung! Dieses Projekt hat nur '{mpd}' Meter pro Tag.".format(mpd=meter_per_day)
-    frappe.log_error(meter_per_day, "meter_per_day")
+        frappe.msgprint("Achtung! Das Projekt {proj} hat durchschnittlich nur {mpd} Bohrmeter pro Tag.".format(proj=project, mpd=int(meter_per_day)))
     
     return duration, meter_per_day
