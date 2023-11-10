@@ -16,6 +16,7 @@ import html2text
 import time
 import json
 from frappe.utils import cint
+from frappe.utils.background_jobs import enqueue
 
 # this function will take a communication and store it as a local file
 #
@@ -84,6 +85,17 @@ def save_message(communication, target_file, debug=False):
         
     return
 
+def async_upload_communication_to_nextcloud(communication):
+    kwargs={
+      'communication': communication
+    }
+    
+    enqueue("heimbohrtechnik.heim_bohrtechnik.email_handler.delayed_upload_communication_to_nextcloud",
+        queue='short',
+        timeout=15000,
+        **kwargs)
+    return
+    
 """
 This function will delay sending by 30 seconds to allow for file uploads to complete
 """
@@ -146,7 +158,7 @@ Hook from Communication: create file and upload to nextcloud
 """
 def communication_on_insert(self, event):
     try:
-        delayed_upload_communication_to_nextcloud(self.name)
+        async_upload_communication_to_nextcloud(self.name)
     except Exception as err:
         frappe.log_error(err, "Communication hook failed")
     return
