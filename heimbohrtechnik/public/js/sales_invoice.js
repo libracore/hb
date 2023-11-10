@@ -226,6 +226,7 @@ function validate_prices(frm) {
         frappe.call({
             'method': "heimbohrtechnik.heim_bohrtechnik.sales_invoice.validate_prices",
             'args': {
+                'invoice_name': frm.doc.name,
                 'objekt': frm.doc.object
             },
             'callback': function(response) {
