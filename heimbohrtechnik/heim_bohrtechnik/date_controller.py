@@ -29,7 +29,7 @@ def get_holidays():
         
     holidays = []
     for h in holidays_raw:
-        holidays.append(h['date'])
+        holidays.append(h['date'].strftime("%Y-%m-%d"))
     return holidays
     
 """
