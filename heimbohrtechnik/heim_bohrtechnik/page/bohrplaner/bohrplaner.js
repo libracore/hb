@@ -506,6 +506,13 @@ frappe.bohrplaner = {
                                             'read_only': (frappe.user.has_role("Dispo")) ? 0 : 1
                                         },
                                         {
+                                            'fieldname': 'duration', 
+                                            'label': __("Duration"), 
+                                            'fieldtype': 'Float', 
+                                            'default': project.duration, 
+                                            'read_only': 1
+                                        },
+                                        {
                                             'fieldname': 'cb_1', 
                                             'fieldtype': 'Column Break'
                                         },
@@ -530,6 +537,13 @@ frappe.bohrplaner = {
                                             'label': __('Visit date'), 
                                             'fieldtype': 'Date', 
                                             'default': project.visit_date
+                                        },
+                                        {
+                                            'fieldname': 'meter_per_day', 
+                                            'label': __('Meter per Day'), 
+                                            'fieldtype': 'Int', 
+                                            'default': project.drilling_meter_per_day,
+                                            'read_only': 1
                                         },
                                     ],
                                     'primary_action': function(){

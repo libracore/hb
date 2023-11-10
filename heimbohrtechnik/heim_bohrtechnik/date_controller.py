@@ -74,7 +74,7 @@ def get_timestamp(date, half_day):
     if type(date) == str:
         date = datetime.datetime.strptime(date, "%Y-%m-%d")
     if type(date) == datetime.date:
-        date = datetime.combine(date, 0)
+        date = datetime.datetime.combine(date, datetime.time(0))
         
     timestamp = datetime.datetime.timestamp(date)
     if half_day == "NM":
