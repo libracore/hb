@@ -539,10 +539,7 @@ def has_infomail(project):
 @frappe.whitelist()
 def reschedule_project(project=None, team=None, day=None, start_half_day=None, popup=False, 
     new_project_start=None, new_project_end_date=None, end_half_day=None, visit_date=None, log=True):
-    frappe.log_error("hoi", "hoi")
     project = frappe.get_doc("Project", project)
-    if not day:
-        new_duration, new_meter_per_day = get_drilling_meters_per_day(project.name, project.object, new_project_start, start_half_day, new_project_end_date, end_half_day)
     project.visit_date = visit_date
     project_changes = [{
         'project': project.name,
@@ -603,10 +600,6 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
         
         project.expected_start_date = new_project_start
         project.expected_end_date = new_project_end_date
-        if not day:
-            project.duration = new_duration
-            project.drilling_meter_per_day = new_meter_per_day
-        
         project.drilling_team = team
         project.crane_organized = '0'
         project.save()
@@ -615,9 +608,9 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
         project.expected_end_date = getdate(new_project_end_date)
         project.start_half_day = start_half_day
         project.end_half_day = end_half_day
-        if not day:
-            project.duration = new_duration
-            project.drilling_meter_per_day = new_meter_per_day
+        new_duration, new_meter_per_day = get_drilling_meters_per_day(project.name, project.object, new_project_start, start_half_day, new_project_end_date, end_half_day)
+        project.duration = new_duration
+        project.drilling_meter_per_day = new_meter_per_day
         project.drilling_team = team
         project.crane_organized = '0'
         project.save()

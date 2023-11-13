@@ -205,16 +205,24 @@ frappe.ui.form.on('Project', {
         }
     },
     expected_start_date: function(frm) {
-        get_drilling_meters_per_day(frm);
+        if (!frm.doc.__islocal && frm-doc.object) {
+            get_drilling_meters_per_day(frm);
+        }
     },
     expected_end_date: function(frm) {
-        get_drilling_meters_per_day(frm);
+        if (!frm.doc.__islocal && frm-doc.object) {
+            get_drilling_meters_per_day(frm);
+        }
     },
     start_half_day: function(frm) {
-        get_drilling_meters_per_day(frm);
+        if (!frm.doc.__islocal && frm-doc.object) {
+            get_drilling_meters_per_day(frm);
+        }
     },
     end_half_day: function(frm) {
-        get_drilling_meters_per_day(frm);
+        if (!frm.doc.__islocal && frm-doc.object) {
+            get_drilling_meters_per_day(frm);
+        }
     },
 });
 
