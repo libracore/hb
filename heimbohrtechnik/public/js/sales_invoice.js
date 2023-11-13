@@ -231,11 +231,10 @@ function validate_prices(frm) {
             'callback': function(response) {
                 var details = response.message;
                 if ((details) && (details.length > 0)) {
-                    console.log(details);
                     cur_frm.dashboard.clear_comment();
                     cur_frm.dashboard.add_comment( "Achtung, Preise für die folgenden Artikel sind unterschiedlich zur Sales Order:", 'red', true);
                     for (let i = 0; i < details.length; i++) {
-                        cur_frm.dashboard.add_comment("-" + details[i]['item_code'] + ": " + details[i]['item_name'] + " (" + details[i]['sales_order'] + ",  CHF" + details[i]['rate'] +")", 'red', true);
+                        cur_frm.dashboard.add_comment("-" + details[i]['item_code'] + ": " + details[i]['item_name'] + " (" + details[i]['sales_order'] + ",  " + frm.doc.currency + " " + details[i]['rate'].toFixed(2) +")", 'red', true);
                     }
                 }
             }

@@ -19,15 +19,4 @@ def validate_prices(invoice_name):
     AND `tabSales Order Item`.`rate` != `tabSales Invoice Item`.`rate`;
     """.format(sales_invoice=invoice_name), as_dict=True)
     
-    frappe.log_error(items, "items")
-    
-    # ~ #get Sales Order name to display
-    # ~ sales_order = frappe.db.sql("""SELECT
-    # ~ `tabSales Order Item`.`parent`
-    # ~ FROM `tabSales Invoice Item` 
-    # ~ LEFT JOIN `tabSales Order Item` ON `tabSales Order Item`.`name` = `tabSales Invoice Item`.`so_detail` 
-    # ~ WHERE `tabSales Invoice Item`.`parent` = '{sales_invoice}'
-    # ~ LIMIT 1;
-    # ~ """.format(sales_invoice=invoice_name), as_dict=True)
-    
     return items
