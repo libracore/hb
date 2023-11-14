@@ -21,6 +21,7 @@ import re
 import uuid
 from PyPDF2 import PdfFileMerger
 import requests
+from heimbohrtechnik.heim_bohrtechnik.date_controller import move_project, get_duration_days
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -1130,4 +1131,3 @@ def find_supplier_item(item_code, supplier, idx=None):
             return {'supplier_part_no': None, 'idx': idx}
     except:
         return {'supplier_part_no': None, 'idx': idx}
-    

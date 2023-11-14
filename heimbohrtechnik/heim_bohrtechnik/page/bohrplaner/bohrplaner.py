@@ -10,6 +10,7 @@ from frappe.desk.form.load import get_attachments
 from frappe.utils import cint, get_url_to_form
 from math import floor
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_file_to_base_path, get_physical_path
+from heimbohrtechnik.heim_bohrtechnik.date_controller import move_project, get_duration_days
 
 BG_GREEN = '#81d41a;'
 BG_ORANGE = '#ffbf00;'
@@ -1301,20 +1302,9 @@ This function will move all projects, start with the provided project by (days) 
 def move_projects(from_project, drilling_team, days):
     if not drilling_team:
         return {'error': 'No drilling team'}
-    
-    #check if we move full days or x.5 days
-    days_split = days.split(".")
-    if len(days_split) > 1:
-        if days_split[1] == '5':
-            days_type = "Half"
-        else:
-            return {'error': 'Invalid number of days: {0}'.format(days)}
-    else:
-        days_type = "Full"
-    
-    if type(days) != int:
-        days = cint(days)
-    frappe.log_error(days, "days")
+
+    if type(days) != float:
+        days = float(days)
 
     start_date = frappe.get_value("Project", from_project, "expected_start_date")
     if not start_date:
@@ -1341,22 +1331,12 @@ def move_projects(from_project, drilling_team, days):
             'from_drilling_team': p_doc.drilling_team
         })
         
-        if days_type == "Full":
-            p_doc.expected_start_date = holiday_safe_add_days(p_doc.expected_start_date, days)
-            p_doc.expected_end_date = holiday_safe_add_days(p_doc.expected_end_date, days)
-        elif days_type == "Half":
-            if p_doc.start_half_day == "VM":
-                p_doc.start_half_day = "NM"
-                p_doc.expected_start_date = holiday_safe_add_days(p_doc.expected_start_date, days)
-            elif p_doc.start_half_day == "NM":
-                p_doc.expected_start_date = holiday_safe_add_days(p_doc.expected_start_date, days+1)
-                p_doc.start_half_day = "VM"
-            if p_doc.end_half_day == "VM":
-                p_doc.end_half_day = "NM"
-                p_doc.expected_end_date = holiday_safe_add_days(p_doc.expected_end_date, days)
-            elif p_doc.end_half_day == "NM":
-                p_doc.expected_end_date = holiday_safe_add_days(p_doc.expected_end_date, days+1)
-                p_doc.end_half_day = "VM"
+        duration = get_duration_days(p_doc.expected_start_date, p_doc.start_half_day, p_doc.expected_end_date, p_doc.end_half_day)
+        new_project_dates = move_project(p_doc.expected_start_date, p_doc.start_half_day, duration, days)
+        p_doc.expected_start_date = new_project_dates['start_date']
+        p_doc.start_half_day = new_project_dates['start_hd']
+        p_doc.expected_end_date = new_project_dates['end_date']
+        p_doc.end_half_day = new_project_dates['end_hd']
                 
         p_doc.save()
         
