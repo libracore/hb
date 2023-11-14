@@ -510,7 +510,8 @@ frappe.bohrplaner = {
                                             'label': __("Duration"), 
                                             'fieldtype': 'Float', 
                                             'default': project.duration, 
-                                            'read_only': 1
+                                            'read_only': 1,
+                                            'hidden': 1
                                         },
                                         {
                                             'fieldname': 'cb_1', 
@@ -543,7 +544,8 @@ frappe.bohrplaner = {
                                             'label': __('Meter per Day'), 
                                             'fieldtype': 'Int', 
                                             'default': project.drilling_meter_per_day,
-                                            'read_only': 1
+                                            'read_only': 1,
+                                            'hidden': 1
                                         },
                                     ],
                                     'primary_action': function(){

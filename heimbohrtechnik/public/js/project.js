@@ -282,7 +282,6 @@ function request_review(frm) {
 }
 
 function get_drilling_meters_per_day(frm) {
-    console.log("Hallo")
     frappe.call({
         'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_drilling_meters_per_day',
         'args': {
