@@ -282,19 +282,21 @@ function request_review(frm) {
 }
 
 function get_drilling_meters_per_day(frm) {
-    frappe.call({
-        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_drilling_meters_per_day',
-        'args': {
-            'project': frm.doc.name,
-            'objekt': frm.doc.object,
-            'start_date': frm.doc.expected_start_date,
-            'start_hd': frm.doc.start_half_day,
-            'end_date': frm.doc.expected_end_date,
-            'end_hd': frm.doc.end_half_day
-        },
-        'callback': function(response) {
-            cur_frm.set_value('duration', response.message[0]);
-            cur_frm.set_value('drilling_meter_per_day', response.message[1]);
-        }
-    });
+    if ((frm.doc.name) && (frm.doc.object) && (frm.doc.expected_start_date) && (frm.doc.start_half_day) && (frm.doc.expected_end_date) && (frm.doc.end_half_day)) {
+        frappe.call({
+            'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_drilling_meters_per_day',
+            'args': {
+                'project': frm.doc.name,
+                'objekt': frm.doc.object,
+                'start_date': frm.doc.expected_start_date,
+                'start_hd': frm.doc.start_half_day,
+                'end_date': frm.doc.expected_end_date,
+                'end_hd': frm.doc.end_half_day
+            },
+            'callback': function(response) {
+                cur_frm.set_value('duration', response.message[0]);
+                cur_frm.set_value('drilling_meter_per_day', response.message[1]);
+            }
+        });
+    }
 }
