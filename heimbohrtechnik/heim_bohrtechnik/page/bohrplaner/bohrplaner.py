@@ -10,7 +10,9 @@ from frappe.desk.form.load import get_attachments
 from frappe.utils import cint, get_url_to_form
 from math import floor
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_file_to_base_path, get_physical_path
+from heimbohrtechnik.heim_bohrtechnik.date_controller import move_project, get_duration_days
 from heimbohrtechnik.heim_bohrtechnik.utils import get_drilling_meters_per_day
+
 
 BG_GREEN = '#81d41a;'
 BG_ORANGE = '#ffbf00;'
@@ -1304,13 +1306,10 @@ This function will move all projects, start with the provided project by (days) 
 def move_projects(from_project, drilling_team, days):
     if not drilling_team:
         return {'error': 'No drilling team'}
-    if type(days) != int:
-        days = cint(days)
-    if days < 1:
-        return {'error': 'Invalid number of days: {0}'.format(days)}
-    
-    
-    
+
+    if type(days) != float:
+        days = float(days)
+
     start_date = frappe.get_value("Project", from_project, "expected_start_date")
     if not start_date:
         return {'error': 'No start date found'}
@@ -1335,8 +1334,14 @@ def move_projects(from_project, drilling_team, days):
             'from_end_vmnm': p_doc.end_half_day,
             'from_drilling_team': p_doc.drilling_team
         })
-        p_doc.expected_start_date = holiday_safe_add_days(p_doc.expected_start_date, days)
-        p_doc.expected_end_date = holiday_safe_add_days(p_doc.expected_end_date, days)
+        
+        duration = get_duration_days(p_doc.expected_start_date, p_doc.start_half_day, p_doc.expected_end_date, p_doc.end_half_day)
+        new_project_dates = move_project(p_doc.expected_start_date, p_doc.start_half_day, duration, days)
+        p_doc.expected_start_date = new_project_dates['start_date']
+        p_doc.start_half_day = new_project_dates['start_hd']
+        p_doc.expected_end_date = new_project_dates['end_date']
+        p_doc.end_half_day = new_project_dates['end_hd']
+                
         p_doc.save()
         
         # recap and log
