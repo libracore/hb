@@ -203,7 +203,27 @@ frappe.ui.form.on('Project', {
                 }
             }
         }
-    }
+    },
+    expected_start_date: function(frm) {
+        if (!frm.doc.__islocal && frm.doc.object && frm.doc.project_type == "External") {
+            get_drilling_meters_per_day(frm);
+        }
+    },
+    expected_end_date: function(frm) {
+        if (!frm.doc.__islocal && frm.doc.object && frm.doc.project_type == "External") {
+            get_drilling_meters_per_day(frm);
+        }
+    },
+    start_half_day: function(frm) {
+        if (!frm.doc.__islocal && frm.doc.object && frm.doc.project_type == "External") {
+            get_drilling_meters_per_day(frm);
+        }
+    },
+    end_half_day: function(frm) {
+        if (!frm.doc.__islocal && frm.doc.object && frm.doc.project_type == "External") {
+            get_drilling_meters_per_day(frm);
+        }
+    },
 });
 
 frappe.ui.form.on('Project Checklist', {
@@ -258,5 +278,23 @@ function request_review(frm) {
         },
         'freeze': true,
         'freeze_message': __("Google Rezension anfragen...")
+    });
+}
+
+function get_drilling_meters_per_day(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_drilling_meters_per_day',
+        'args': {
+            'project': frm.doc.name,
+            'objekt': frm.doc.object,
+            'start_date': frm.doc.expected_start_date,
+            'start_hd': frm.doc.start_half_day,
+            'end_date': frm.doc.expected_end_date,
+            'end_hd': frm.doc.end_half_day
+        },
+        'callback': function(response) {
+            cur_frm.set_value('duration', response.message[0]);
+            cur_frm.set_value('drilling_meter_per_day', response.message[1]);
+        }
     });
 }
