@@ -7,6 +7,7 @@ from frappe import _
 from frappe.utils import flt
 from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_working_days, get_content
 from datetime import datetime, timedelta
+from frappe.utils.data import getdate
 
 def execute(filters=None):
     data, weekend = get_data(filters)
@@ -116,3 +117,34 @@ def get_data(filters):
     weekend = content['weekend']
     
     return data, weekend
+    
+def get_free_date(drilling_type):
+    
+    #get all possible drilling teams
+    drilling_teams = frappe.db.sql("""
+    SELECT `name`
+    FROM `tabDrilling Team`
+    WHERE '{dt}' = 1
+    """.format(dt=drilling_type), as_list=True)
+    
+    hit = False
+    date = getdate()
+    
+    while hit == False:
+        #check if there is a project on each possible drilling team
+        possible_hits = set()
+        possible_hits = frappe.db.sql("""
+        SELECT `drilling_team`
+        FROM `tabProject`
+        WHERE `expected_start_date` <= '{date}'
+        AND `expected_end_date` >= '{date}'
+        AND `drilling_team` IN '{drill}'
+        """.format(date=date, drill=drilling_teams), as_dict=True)   
+        #check if there are less hits than possible teams, what would mean that there is a team without project on that day
+        if len(possible_hits) < len(drilling_teams):
+            hit = True
+            frappe.log_error(possible_hits, "Hoi :-D")
+        else:
+            date = frappe.utils.add_days(date, 1)
+        
+    return date
