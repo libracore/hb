@@ -10,11 +10,9 @@ from frappe.desk.form.load import get_attachments
 from frappe.utils import cint, get_url_to_form
 from math import floor
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_file_to_base_path, get_physical_path
-<<<<<<< HEAD
 from heimbohrtechnik.heim_bohrtechnik.date_controller import move_project, get_duration_days
-=======
 from heimbohrtechnik.heim_bohrtechnik.utils import get_drilling_meters_per_day
->>>>>>> master
+
 
 BG_GREEN = '#81d41a;'
 BG_ORANGE = '#ffbf00;'

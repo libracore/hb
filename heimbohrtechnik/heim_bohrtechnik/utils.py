@@ -1131,8 +1131,6 @@ def find_supplier_item(item_code, supplier, idx=None):
             return {'supplier_part_no': None, 'idx': idx}
     except:
         return {'supplier_part_no': None, 'idx': idx}
-<<<<<<< HEAD
-=======
     
 @frappe.whitelist()
 def get_drilling_meters_per_day(project, objekt, start_date, start_hd, end_date, end_hd):
@@ -1155,4 +1153,3 @@ def get_drilling_meters_per_day(project, objekt, start_date, start_hd, end_date,
         frappe.msgprint("Achtung! Das Projekt {proj} hat durchschnittlich nur {mpd} Bohrmeter pro Tag.".format(proj=project, mpd=int(meter_per_day)))
     
     return duration, meter_per_day
->>>>>>> master
