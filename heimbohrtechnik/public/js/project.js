@@ -205,22 +205,22 @@ frappe.ui.form.on('Project', {
         }
     },
     expected_start_date: function(frm) {
-        if (!frm.doc.__islocal && frm-doc.object) {
+        if (!frm.doc.__islocal && frm.doc.object && frm.doc.project_type == "External") {
             get_drilling_meters_per_day(frm);
         }
     },
     expected_end_date: function(frm) {
-        if (!frm.doc.__islocal && frm-doc.object) {
+        if (!frm.doc.__islocal && frm.doc.object && frm.doc.project_type == "External") {
             get_drilling_meters_per_day(frm);
         }
     },
     start_half_day: function(frm) {
-        if (!frm.doc.__islocal && frm-doc.object) {
+        if (!frm.doc.__islocal && frm.doc.object && frm.doc.project_type == "External") {
             get_drilling_meters_per_day(frm);
         }
     },
     end_half_day: function(frm) {
-        if (!frm.doc.__islocal && frm-doc.object) {
+        if (!frm.doc.__islocal && frm.doc.object && frm.doc.project_type == "External") {
             get_drilling_meters_per_day(frm);
         }
     },
@@ -282,6 +282,7 @@ function request_review(frm) {
 }
 
 function get_drilling_meters_per_day(frm) {
+    console.log("Hallo")
     frappe.call({
         'method': 'heimbohrtechnik.heim_bohrtechnik.utils.get_drilling_meters_per_day',
         'args': {
