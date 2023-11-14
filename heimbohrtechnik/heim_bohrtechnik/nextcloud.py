@@ -20,6 +20,8 @@ PATHS = {
     'plan':             "3_Pläne",
     'road':             "4_Strassensperrung",
     'subprojects':      "5_Anbindung",
+    'subprojects_heim': "5_Anbindung/Team_Heim",
+    'subprojects_geomill':      "5_Anbindung/Team_Geomill",
     'supplier':         "6_Lieferanten",
     'supplier_ews':     "6_Lieferanten/EWS",
     'supplier_mud':     "6_Lieferanten/Mulden_und_Saugwagen",
@@ -67,6 +69,8 @@ def create_project_folder(project):
     create_path(client, os.path.join(project_path, PATHS['plan']))
     create_path(client, os.path.join(project_path, PATHS['road']))
     create_path(client, os.path.join(project_path, PATHS['subprojects']))
+    create_path(client, os.path.join(project_path, PATHS['subprojects_heim']))
+    create_path(client, os.path.join(project_path, PATHS['subprojects_geomill']))
     create_path(client, os.path.join(project_path, PATHS['supplier']))
     create_path(client, os.path.join(project_path, PATHS['supplier_ews']))
     create_path(client, os.path.join(project_path, PATHS['supplier_mud']))
