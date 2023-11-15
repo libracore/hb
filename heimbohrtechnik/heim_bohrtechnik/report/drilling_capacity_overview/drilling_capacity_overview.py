@@ -8,6 +8,7 @@ from frappe.utils import flt
 from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_working_days, get_content
 from datetime import datetime, timedelta
 from frappe.utils.data import getdate
+from heimbohrtechnik.heim_bohrtechnik.date_controller import get_holidays
 
 def execute(filters=None):
     data, weekend = get_data(filters)
@@ -117,34 +118,78 @@ def get_data(filters):
     weekend = content['weekend']
     
     return data, weekend
-    
+
+@frappe.whitelist()   
 def get_free_date(drilling_type):
+    #convert drilling type to field name
+    def get_convertet_dt(dt):
+        try:
+            mapper = {
+                'Spühlbohrung': 'flushing_drilling',
+                'Hammerbohrung': 'hammer_drilling',
+                'Brunnenbohrung': 'well_drilling',
+                'Kleinbohrgerät auf Bohrteam': 'small_drilling_rig'
+            }
+            return mapper[dt]
+        except Exception as err:
+            frappe.throw("{0} wurde nicht gefunden".format(err))
     
-    #get all possible drilling teams
+    # create table-rows for each hit
+    def get_table_rows(hits):
+        html = ''
+        for hit in hits:
+            html += '''<tr><td>{0}</td><td>{1}</td></tr>'''.format(\
+                hit['drilling_team'], \
+                hit['date'].strftime("%d.%m.%Y"))
+        return html
+    
+    #get non working days
+    holidays = get_holidays()
+
+    #get all drilling teams with needed ability
     drilling_teams = frappe.db.sql("""
     SELECT `name`
     FROM `tabDrilling Team`
-    WHERE '{dt}' = 1
-    """.format(dt=drilling_type), as_list=True)
+    WHERE `{dt}` = 1
+    """.format(dt=get_convertet_dt(drilling_type)), as_dict=True)
     
-    hit = False
+    #give feedback, if no team has the needed ability
+    if len(drilling_teams) < 1:
+        frappe.msgprint("Kein Bohrteam mit dieser Fähigkeit gefunden!")
+        return
+    
+    hits = []
     date = getdate()
     
-    while hit == False:
-        #check if there is a project on each possible drilling team
-        possible_hits = set()
-        possible_hits = frappe.db.sql("""
-        SELECT `drilling_team`
-        FROM `tabProject`
-        WHERE `expected_start_date` <= '{date}'
-        AND `expected_end_date` >= '{date}'
-        AND `drilling_team` IN '{drill}'
-        """.format(date=date, drill=drilling_teams), as_dict=True)   
-        #check if there are less hits than possible teams, what would mean that there is a team without project on that day
-        if len(possible_hits) < len(drilling_teams):
-            hit = True
-            frappe.log_error(possible_hits, "Hoi :-D")
-        else:
+    #check for the dates, where teams are free
+    while len(hits) <= 9:
+        date = frappe.utils.add_days(date, 1)
+        if date.strftime("%Y-%m-%d") in holidays:
             date = frappe.utils.add_days(date, 1)
-        
-    return date
+        else:
+            for team in drilling_teams:
+                possible_hit = None
+                possible_hit = frappe.db.sql("""
+                    SELECT `drilling_team`
+                    FROM `tabProject`
+                    WHERE `expected_start_date` <= '{date}'
+                    AND `expected_end_date` >= '{date}'
+                    AND `drilling_team` = '{team}'
+                    """.format(date=date, team=team['name']), as_dict=True)
+                if len(possible_hit) == 0:
+                    hits.append({
+                        'drilling_team': team.name,
+                        'date': date
+                    })
+                    
+    msg_html = '''
+        <table style="width: 70%">
+            <tr>
+                <th>Bohrteam</th>
+                <th>Datum</th>
+            </tr>
+            {0}
+        </table>'''.format(get_table_rows(hits))
+    frappe.msgprint(msg_html, title='Freie Tage für {0}'.format(drilling_type), indicator='green')
+                
+    return
