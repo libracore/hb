@@ -2,6 +2,13 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
+var drilling_types = [
+    {'fieldname': 'flushing_drilling', 'label': "Spühlbohrung"},
+    {'fieldname': 'hammer_drilling', 'label': "Hammerbohrung"},
+    {'fieldname': 'well_drilling', 'label': "Brunnenbohrung"},
+    {'fieldname': 'small_drilling_rig', 'label': "Kleinbohrgerät auf Bohrteam"}
+];
+
 frappe.query_reports["Drilling Capacity Overview"] = {
     "filters": [
         {
@@ -43,17 +50,26 @@ frappe.query_reports["Drilling Capacity Overview"] = {
 };
 
 function get_free_date() {
+    var dts = []
+    for (var i = 0; i < drilling_types.length; i++) {
+        dts.push(drilling_types[i].label);
+    }
     frappe.prompt([
         {
             'fieldname': 'drilling_type', 
             'label': __('Drilling type'),
             'fieldtype': 'Select',
-            'options': 'Spühlbohrung\nHammerbohrung\nBrunnenbohrung\nKleinbohrgerät auf Bohrteam'
+            'options': dts.join("\n")
         }
     ],
     function(values){
-        console.log(values.drilling_type);
-        var drilling_type = values.drilling_type;
+        var drilling_type = null;
+        for (var i = 0; i < drilling_types.length; i++) {
+            if (drilling_types[i].label === values.drilling_type) {
+                drilling_type = drilling_types[i].fieldname;
+                break;
+            }
+        }
         // reschedule_project
         frappe.call({
             'method': "heimbohrtechnik.heim_bohrtechnik.report.drilling_capacity_overview.drilling_capacity_overview.get_free_date",
