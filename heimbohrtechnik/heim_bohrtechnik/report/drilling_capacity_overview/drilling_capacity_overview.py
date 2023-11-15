@@ -134,15 +134,6 @@ def get_free_date(drilling_type):
         except Exception as err:
             frappe.throw("{0} wurde nicht gefunden".format(err))
     
-    # create table-rows for each hit
-    def get_table_rows(hits):
-        html = ''
-        for hit in hits:
-            html += '''<tr><td>{0}</td><td>{1}</td></tr>'''.format(\
-                hit['drilling_team'], \
-                hit['date'].strftime("%d.%m.%Y"))
-        return html
-    
     #get non working days
     holidays = get_holidays()
 
@@ -173,21 +164,16 @@ def get_free_date(drilling_type):
                     WHERE `expected_start_date` <= '{date}'
                     AND `expected_end_date` >= '{date}'
                     AND `drilling_team` = '{team}'
+                    AND `status` IN ("Open", "Completed")
                     """.format(date=date, team=team['name']), as_dict=True)
                 if len(possible_hit) == 0:
                     hits.append({
                         'drilling_team': team.name,
-                        'date': date
+                        'date': date.strftime("%d.%m.%Y")
                     })
                     
-    msg_html = '''
-        <table style="width: 70%">
-            <tr>
-                <th>Bohrteam</th>
-                <th>Datum</th>
-            </tr>
-            {0}
-        </table>'''.format(get_table_rows(hits))
-    frappe.msgprint(msg_html, title='Freie Tage für {0}'.format(drilling_type), indicator='green')
+    html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/report/drilling_capacity_overview/free_days.html", {'hits': hits})
+                    
+    frappe.msgprint(html, title='Freie Tage für {0}'.format(drilling_type), indicator='green')
                 
     return
