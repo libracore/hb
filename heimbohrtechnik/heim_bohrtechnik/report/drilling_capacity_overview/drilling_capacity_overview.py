@@ -120,20 +120,11 @@ def get_data(filters):
     return data, weekend
 
 @frappe.whitelist()   
-def get_free_date(drilling_type):
-    #convert drilling type to field name
-    def get_convertet_dt(dt):
-        try:
-            mapper = {
-                'Spühlbohrung': 'flushing_drilling',
-                'Hammerbohrung': 'hammer_drilling',
-                'Brunnenbohrung': 'well_drilling',
-                'Kleinbohrgerät auf Bohrteam': 'small_drilling_rig'
-            }
-            return mapper[dt]
-        except Exception as err:
-            frappe.throw("{0} wurde nicht gefunden".format(err))
-    
+"""
+Parameters:
+ drilling_type: should be the fieldname of the drilling team checkbox
+"""
+def get_free_date(drilling_type):    
     #get non working days
     holidays = get_holidays()
 
@@ -142,7 +133,7 @@ def get_free_date(drilling_type):
     SELECT `name`
     FROM `tabDrilling Team`
     WHERE `{dt}` = 1
-    """.format(dt=get_convertet_dt(drilling_type)), as_dict=True)
+    """.format(dt=drilling_type), as_dict=True)
     
     #give feedback, if no team has the needed ability
     if len(drilling_teams) == 0:
