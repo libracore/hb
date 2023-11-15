@@ -43,31 +43,6 @@ frappe.query_reports["Drilling Capacity Overview"] = {
 };
 
 function get_free_date() {
-    //~ html = frappe.render_template("detail_dialog", data );
-    //~ var d = new frappe.ui.Dialog({
-        //~ 'fields': [
-            //~ {
-                //~ 'fieldname': 'drilling_type', 
-                //~ 'label': __('Drilling type'),
-                //~ 'fieldtype': 'Select',
-                //~ 'options': 'Spühlbohrung\nHammerbohrung\nBrunnenbohrung\nKleinbohrgerät auf Bohrteam'
-            //~ },
-        //~ ],
-        //~ 'primary_action': function(){
-            //~ d.hide();
-            //~ var drilling_type = d.get_value('drilling_type');
-            //~ // reschedule_project
-            //~ frappe.call({
-                //~ 'method': "heimbohrtechnik.heim_bohrtechnik.report.drilling_capacity_overview.drilling_capacity_overview.get_free_date",
-                //~ 'args': {
-                    //~ "drilling_type": drilling_type
-                //~ },
-                //~ 'callback': function(response) {
-                    //~ console.log("Maschineeeeeeeee");
-                //~ }
-            //~ });
-        //~ },
-    //~ });
     frappe.prompt([
         {
             'fieldname': 'drilling_type', 

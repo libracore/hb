@@ -154,7 +154,7 @@ def get_free_date(drilling_type):
     """.format(dt=get_convertet_dt(drilling_type)), as_dict=True)
     
     #give feedback, if no team has the needed ability
-    if len(drilling_teams) < 1:
+    if len(drilling_teams) == 0:
         frappe.msgprint("Kein Bohrteam mit dieser Fähigkeit gefunden!")
         return
     
@@ -164,9 +164,7 @@ def get_free_date(drilling_type):
     #check for the dates, where teams are free
     while len(hits) <= 9:
         date = frappe.utils.add_days(date, 1)
-        if date.strftime("%Y-%m-%d") in holidays:
-            date = frappe.utils.add_days(date, 1)
-        else:
+        if not date.strftime("%Y-%m-%d") in holidays:
             for team in drilling_teams:
                 possible_hit = None
                 possible_hit = frappe.db.sql("""
