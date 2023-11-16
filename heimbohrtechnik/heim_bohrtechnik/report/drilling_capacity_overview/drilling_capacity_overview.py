@@ -120,11 +120,11 @@ def get_data(filters):
     return data, weekend
 
 @frappe.whitelist()   
-"""
-Parameters:
- drilling_type: should be the fieldname of the drilling team checkbox
-"""
-def get_free_date(drilling_type):    
+# ~ """
+# ~ Parameters:
+# ~ drilling_type: should be the fieldname of the drilling team checkbox
+# ~ """
+def get_free_date(drilling_type, label):    
     #get non working days
     holidays = get_holidays()
 
@@ -165,6 +165,6 @@ def get_free_date(drilling_type):
                     
     html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/report/drilling_capacity_overview/free_days.html", {'hits': hits})
                     
-    frappe.msgprint(html, title='Freie Tage für {0}'.format(drilling_type), indicator='green')
+    frappe.msgprint(html, title='Freie Tage für {0}'.format(label), indicator='green')
                 
     return

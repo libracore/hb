@@ -67,6 +67,7 @@ function get_free_date() {
         for (var i = 0; i < drilling_types.length; i++) {
             if (drilling_types[i].label === values.drilling_type) {
                 drilling_type = drilling_types[i].fieldname;
+                label = drilling_types[i].label;
                 break;
             }
         }
@@ -74,7 +75,8 @@ function get_free_date() {
         frappe.call({
             'method': "heimbohrtechnik.heim_bohrtechnik.report.drilling_capacity_overview.drilling_capacity_overview.get_free_date",
             'args': {
-                "drilling_type": drilling_type
+                "drilling_type": drilling_type,
+                "label": label
             }
         });
     },
