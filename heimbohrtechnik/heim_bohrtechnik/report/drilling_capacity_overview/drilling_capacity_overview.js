@@ -71,7 +71,6 @@ function get_free_date() {
                 break;
             }
         }
-        // reschedule_project
         frappe.call({
             'method': "heimbohrtechnik.heim_bohrtechnik.report.drilling_capacity_overview.drilling_capacity_overview.get_free_date",
             'args': {
