@@ -288,6 +288,12 @@ def get_data():
                     "name": "Account Sheets HBAG",
                     "doctype": "GL Entry",
                     "is_query_report": True,
+                },
+                {
+                    "type": "report",
+                    "name": "Mahnliste",
+                    "doctype": "Sales Invoice",
+                    "is_query_report": True,
                 }
             ]
         },
