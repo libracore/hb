@@ -42,6 +42,7 @@ def get_sales_invoices_for_order(sales_order_name):
         SELECT `tabSales Invoice Item`.`parent`
         FROM `tabSales Invoice Item`
         WHERE `tabSales Invoice Item`.`sales_order` = "{sales_order}"
+          AND `tabSales Invoice Item`.`docstatus` < 2
         GROUP BY `tabSales Invoice Item`.`parent`
         ORDER BY `tabSales Invoice Item`.`parent` ASC;
         """.format(sales_order=sales_order_name), as_dict=True)
