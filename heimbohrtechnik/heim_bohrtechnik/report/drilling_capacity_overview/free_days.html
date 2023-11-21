@@ -1,0 +1,20 @@
+<style>
+
+</style>
+
+<table style="width: 70%;">
+    <thead>
+        <tr>
+            <th class="td">Bohrteam</th>
+            <th class="td">Datum</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for hit in hits %}
+            <tr>
+                <td>{{ hit.drilling_team }}</td>
+                <td>{{ hit.date }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
