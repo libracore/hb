@@ -166,7 +166,7 @@ function pull_items(frm) {
                             'label': 'BKP', 
                             'options': bkps.join("\n"), 
                             'reqd': 1,
-                            'default': "17"
+                            'default': "06"
                         }  
                     ],
                     function(values){
