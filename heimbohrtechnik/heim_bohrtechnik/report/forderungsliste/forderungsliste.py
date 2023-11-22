@@ -14,15 +14,14 @@ def execute(filters=None):
 
 def get_columns(filters):
     return [
-        {'fieldname': "party_name", 'label': _("Customer"), 'fieldtype': "Link", 'options': "Customer", 'width': 80},
+        {'fieldname': "party", 'label': _("Customer"), 'fieldtype': "Link", 'options': "Customer", 'width': 80},
         {'fieldname': "customer_name", 'label': _("Customer Name"), 'fieldtype': "Data", 'width': 150},
-        {'fieldname': "document", 'label': _("Document"), 'fieldtype': "Data", 'width': 150},
-        {'fieldname': "amount", 'label': _("Amount"), 'fieldtype': "Float", 'precision': 2, 'width': 80},
+        {'fieldname': "voucher_no", 'label': _("Document"), 'fieldtype': "Dynamic Link", 'options': 'voucher_type', 'width': 150},
+        {'fieldname': "invoiced", 'label': _("Amount"), 'fieldtype': "Float", 'precision': 2, 'width': 80},
         {'fieldname': "outstanding", 'label': _("Outstanding Amount"), 'fieldtype': "Float", 'precision': 2, 'width': 80},
         {'fieldname': "currency", 'label': _("Currency"), 'fieldtype': "Data", 'width': 50},
         {'fieldname': "posting_date", 'label': _("Posting Date"), 'fieldtype': "Date", 'width': 80},
-        {'fieldname': "due_date", 'label': _("Due Date"), 'fieldtype': "Date", 'width': 80},
-        {'fieldname': "reminder_level", 'label': _("Reminder Level"), 'fieldtype': "Int", 'width': 50}
+        {'fieldname': "due_date", 'label': _("Due Date"), 'fieldtype': "Date", 'width': 80}
     ]
     
 def get_data(filters):
