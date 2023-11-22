@@ -77,8 +77,31 @@ def create_project_folder(project):
     create_path(client, os.path.join(project_path, PATHS['supplier_other']))
     create_path(client, os.path.join(project_path, PATHS['incidents']))
     create_path(client, os.path.join(project_path, PATHS['memo']))
+    
+    check_upload_quotation(project)
     return
 
+def check_upload_quotation(project):
+    obj = frappe.get_value("Project", project, 'object')
+    if not obj:
+        return
+    
+    # find quotations fr this object    
+    quotations = frappe.get_all("Quotation", filters={'docstatus': 1, 'object': obj}, fields=['name'])
+    
+    # find affected quotation pdfs (pdf on submit)
+    files = []
+    for q in (quotations or []):
+        file_matches = frappe.get_all("File", filters={'file_name': "{0}.pdf".format(q['name'])}, fields=['name'])
+        for f in (file_matches or []):
+            files.append(f['name'])
+            
+    # upload the pdfs
+    for f in files:
+        write_project_file_from_local_file(project, get_physical_path(f), target=PATHS['quotation'])
+    
+    return
+    
 def get_project_path(project):
     projects_folder = frappe.get_value("Heim Settings", "Heim Settings", "projects_folder")
     # only use base project folder (for split projects the first one
@@ -110,7 +133,7 @@ def write_file(project, f):
 """
 Write the project file (local file path) to nextcloud
 """
-def write_project_file_from_local_file (project, file_name, target=PATHS['drilling']):
+def write_project_file_from_local_file(project, file_name, target=PATHS['drilling']):
     if cint(frappe.get_value("Heim Settings", "Heim Settings", "nextcloud_enabled")) == 0:
         return      # skip if nextcloud is disabled (develop environments)
         
