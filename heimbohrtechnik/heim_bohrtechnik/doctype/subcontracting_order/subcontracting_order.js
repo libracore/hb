@@ -26,6 +26,11 @@ frappe.ui.form.on('Subcontracting Order', {
         frm.add_custom_button(__("Vorlage"), function() {
             from_template(frm);
         });
+        
+        // pull items
+        frm.add_custom_button(__("Artikel holen"), function() {
+            pull_items(frm);
+        });
     },
     before_save: function(frm) {
         if (!frm.doc.object_name) {
@@ -142,6 +147,55 @@ function from_template(frm) {
                 'title': __("Vorlage")
             });
             d.show();
+        }
+    });
+}
+
+function pull_items(frm) {
+    frappe.call({
+        'method': 'get_bkps',
+        'doc': frm.doc,
+        'callback': function(response) {
+            var bkps = response.message;
+            // show dialog to select bkp
+            if (bkps.length > 0) {
+                frappe.prompt([
+                        {
+                            'fieldname': 'bkp', 
+                            'fieldtype': 'Select', 
+                            'label': 'BKP', 
+                            'options': bkps.join("\n"), 
+                            'reqd': 1,
+                            'default': "17"
+                        }  
+                    ],
+                    function(values){
+                        // fetch items and insert
+                        frappe.call({
+                            'method': 'get_bkp_items',
+                            'doc': frm.doc,
+                            'args': {
+                                'bkp': values.bkp
+                            },
+                            'callback': function(response) {
+                                var items = response.message;
+                                for (var i = 0; i < items.length; i++) {
+                                    var child = cur_frm.add_child('sales_order_items');
+                                    frappe.model.set_value(child.doctype, child.name, 'item_code', items[i].item_code);
+                                    frappe.model.set_value(child.doctype, child.name, 'item_name', items[i].item_name);
+                                    frappe.model.set_value(child.doctype, child.name, 'qty', items[i].qty);
+                                    frappe.model.set_value(child.doctype, child.name, 'rate', items[i].base_rate);
+                                    frappe.model.set_value(child.doctype, child.name, 'amount', items[i].base_amount);
+                                    frappe.model.set_value(child.doctype, child.name, 'subcontracting_amount', items[i].base_amount * ((100 - cur_frm.doc.margin) / 100));
+                                }
+                                cur_frm.refresh_fields("sales_order_items");
+                            }
+                        });
+                    },
+                    __('Position aus AB importieren'),
+                    __('Importieren')
+                );
+            }
         }
     });
 }
