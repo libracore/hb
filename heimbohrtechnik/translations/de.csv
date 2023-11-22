@@ -317,6 +317,8 @@ DocType: Construction Site Delivery,Construction Site Delivery,Baustellenlieferu
 DocType: Subcontracting Order,Subcontracting Order,Verlängerungsauftrag
 DocType: Subcontracting Order,Subcontracting Team,Verlängerungsteam
 DocType: Subcontracting Order,Order Description,Auftragsbeschreibung
+DocType: Subcontracting Order,Sales Order Items,Auftragspositionen
+DocType: Subcontracting Order,Subcontracting Amount,Betrag Vergabe
 DocType: Subcontracting Order Template,Subcontracting Order Template,Vorlage Verlängerungsauftrag
 DocType: Request for Public Area Use,Request for Public Area Use,Gesuch Benutzung öffentlicher Grund
 DocType: Request for Public Area Use,No Parking Blue,Aufhebung blaue Parkzone
