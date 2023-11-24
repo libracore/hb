@@ -185,7 +185,7 @@ function pull_items(frm) {
                                     frappe.model.set_value(child.doctype, child.name, 'item_name', items[i].item_name);
                                     frappe.model.set_value(child.doctype, child.name, 'qty', items[i].qty);
                                     frappe.model.set_value(child.doctype, child.name, 'rate', items[i].base_net_rate);
-                                    frappe.model.set_value(child.doctype, child.name, 'amount', items[i].base_amount);
+                                    frappe.model.set_value(child.doctype, child.name, 'amount', items[i].base_net_amount);
                                     frappe.model.set_value(child.doctype, child.name, 'subcontracting_amount', items[i].base_net_amount * ((100 - cur_frm.doc.margin) / 100));
                                 }
                                 cur_frm.refresh_fields("sales_order_items");
