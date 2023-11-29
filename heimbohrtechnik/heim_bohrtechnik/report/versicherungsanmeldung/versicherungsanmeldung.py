@@ -63,6 +63,7 @@ def get_data(filters):
         WHERE 
             `tabProject`.`expected_start_date` >= "{from_date}"
             AND `tabProject`.`expected_start_date` <= "{to_date}"
+            AND `tabProject`.`status` != "Cancelled"
             AND `tabSales Order Item`.`alternativ` = 0
             AND `tabSales Order Item`.`eventual` = 0
         GROUP BY `tabProject`.`name`
