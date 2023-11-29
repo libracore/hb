@@ -231,6 +231,12 @@ def get_data():
                 },
                 {
                     "type": "report",
+                    "name": "Absperrmaterial",
+                    "doctype": "Construction Site Description",
+                    "is_query_report": True,
+                },
+                {
+                    "type": "report",
                     "name": "Impact Analysis",
                     "doctype": "Drilling Move Log",
                     "is_query_report": True
@@ -303,15 +309,21 @@ def get_data():
             "items": [
                 {
                    "type": "doctype",
-                   "name": "Expense Claim",
-                   "label": _("Expense Claim"),
-                   "description": _("Expense Claim")
+                   "name": "Expense Receipt",
+                   "label": _("Expense Receipt"),
+                   "description": _("Expense Receipt")
                 },
                 {
                    "type": "doctype",
                    "name": "Gas Receipt",
                    "label": _("Gas Receipt"),
                    "description": _("Gas Receipt")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Expense Claim",
+                   "label": _("Expense Claim"),
+                   "description": _("Expense Claim")
                 }
             ]
         },

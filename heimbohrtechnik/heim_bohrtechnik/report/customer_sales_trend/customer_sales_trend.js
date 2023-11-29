@@ -18,6 +18,14 @@ frappe.query_reports["Customer sales trend"] = {
             "fieldtype": "Link",
             "options": "Customer",
             "reqd": 1
+        },
+        {
+            "fieldname":"base",
+            "label": __("Base"),
+            "fieldtype": "Select",
+            "options": "Sales Order\nSales Invoice",
+            "default": "Sales Order",
+            "reqd": 1
         }
     ]
 };
