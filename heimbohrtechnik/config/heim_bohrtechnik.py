@@ -108,6 +108,12 @@ def get_data():
                     "name": "Sales Pipeline",
                     "doctype": "Customer",
                     "is_query_report": True,
+                },
+                {
+                    "type": "report",
+                    "name": "Follow-Up Overview",
+                    "doctype": "Quotation",
+                    "is_query_report": True,
                 }
             ]
         },

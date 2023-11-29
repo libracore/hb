@@ -465,3 +465,5 @@ DocType: Drilling Team,Well drilling,Brunnenbohrung
 DocType: Drilling Team,Small drilling rig on drilling team,Kleinbohrgerät auf Bohrteam
 DocType: Road Block Material Order,Road Block Material Order,Absperrmaterialauftrag
 DocType: Expense Receipt,Expense Receipt,Spesenbeleg
+DocType: Follow Up Note,Follow Up Note,Nachfassnotiz
+DocType: Follow Up Note,New Follow Up Note,Neue Nachfassnotiz
