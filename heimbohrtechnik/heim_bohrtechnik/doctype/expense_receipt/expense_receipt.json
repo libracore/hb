@@ -1,0 +1,191 @@
+{
+ "allow_import": 1,
+ "autoname": "naming_series:",
+ "creation": "2023-11-29 10:56:49.073813",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "image",
+  "date",
+  "employee",
+  "employee_name",
+  "col_main",
+  "amount",
+  "payment",
+  "currency",
+  "remarks",
+  "sec_accounting",
+  "vst",
+  "col_accounting",
+  "checked",
+  "sec_links",
+  "purchase_invoice",
+  "col_links",
+  "expense_claim"
+ ],
+ "fields": [
+  {
+   "default": "SB-.YY.######",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "SB-.YY.######",
+   "reqd": 1
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Image"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fieldname": "col_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Amount",
+   "options": "currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "payment",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Payment",
+   "options": "\nFirmenkreditkarte UBS\nPrivat",
+   "reqd": 1
+  },
+  {
+   "default": "CHF",
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sec_links",
+   "fieldtype": "Section Break",
+   "label": "Links"
+  },
+  {
+   "fieldname": "purchase_invoice",
+   "fieldtype": "Link",
+   "label": "Purchase Invoice",
+   "options": "Purchase Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_links",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "expense_claim",
+   "fieldtype": "Link",
+   "label": "Expense Claim",
+   "options": "Expense Claim",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sec_accounting",
+   "fieldtype": "Section Break",
+   "label": "Accounting"
+  },
+  {
+   "fieldname": "vst",
+   "fieldtype": "Currency",
+   "label": "VSt"
+  },
+  {
+   "fieldname": "col_accounting",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "checked",
+   "fieldtype": "Check",
+   "label": "Checked"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee name",
+   "read_only": 1
+  }
+ ],
+ "image_field": "image",
+ "modified": "2023-11-29 13:32:28.355205",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Expense Receipt",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
