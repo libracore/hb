@@ -51,7 +51,7 @@ def get_data(filters):
         WHERE
             `tabQuotation`.`status` = "Open"
             {conditions}
-            AND `tabQuotation`.`valid_till` >= CURDATE()
+            /* AND `tabQuotation`.`valid_till` >= CURDATE() */
         ORDER BY `tabQuotation`.`base_net_total` DESC;
     """.format(conditions=conditions),
         as_dict=True)
