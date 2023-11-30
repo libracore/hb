@@ -37,6 +37,34 @@ function autocomplete_object(frm) {
                     }
                 }
                 
+                //set probe type and ews depth (let user choose drill, if there are multiple)
+                if (data.ews_details.length < 1) {
+                    frappe.msgprint("Keine Bohrung in Objekt " + data.object.name + " gefunden", "Achtung");
+                } else if (data.ews_details.length > 1) {
+                    var options = '';
+                    for (var i = 0; i < data.ews_details.length; i++) {
+                        var list_entry = "\n"+(i+1) + "- Tiefe: " + data.ews_details[i].ews_depth + "m, Sonde: " + data.ews_details[i].probe_type;
+                        options += list_entry;
+                    }
+                    frappe.prompt([
+                        {
+                            'label': 'Wähle Bohrung',
+                            "fieldname": "bohrung",
+                            "fieldtype": "Select",
+                            "options": options,
+                            "reqd": 1
+                        } ],
+                        function(values) {
+                            var x = parseInt(values.bohrung.split("-")[0]);
+                            cur_frm.set_value("probe_length", data.ews_details[x-1].ews_depth);
+                            cur_frm.set_value("probe_type", data.ews_details[x-1].probe_type);
+                        }
+                    );
+                } else {
+                    cur_frm.set_value("probe_length", data.ews_details[0].ews_depth);
+                    cur_frm.set_value("probe_type", data.ews_details[0].probe_type);
+                }
+                
                 // find addresses
                 for (var i = 0; i < data.object.addresses.length; i++) {
                     if (data.object.addresses[i].address_type === "Geologe") {

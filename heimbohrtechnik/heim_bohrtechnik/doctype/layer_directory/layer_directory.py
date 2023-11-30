@@ -25,10 +25,21 @@ class LayerDirectory(Document):
                 "Construction Site Description", construction_site_descriptions[0]).as_dict()
         else:
             construction_site_description = None
+        
+        ews_details = []
+        
+        for ews in object_doc.ews_specification:
+            ews_details.append({
+                'ews_depth': ews.ews_depth,
+                'probe_type': ews.probe_type
+                })
+        
+        frappe.log_error(ews_details, "ews_details")
             
         return {
             'project': project_doc.as_dict(),
             'object': object_doc.as_dict(),
             'construction_site_description': construction_site_description,
-            'drilling_team': drilling_team
+            'drilling_team': drilling_team,
+            'ews_details': ews_details
         }
