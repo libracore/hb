@@ -374,7 +374,7 @@ def get_default_supplier(item):
 def find_item_for_ews(depth, diameter, wall_strength, material=None):
     conditions = ""
     if material:
-        conditions = """AND `tabItem`.`raw_material` LIKE "%{material}%" OR `tabItem`.`raw_material` IS NULL """.format(material=material)
+        conditions = """AND (`tabItem`.`raw_material` LIKE "%{material}%" OR `tabItem`.`raw_material` IS NULL) """.format(material=material)
     sql_query = """SELECT
             `tabItem`.`item_code`
         FROM `tabItem`
