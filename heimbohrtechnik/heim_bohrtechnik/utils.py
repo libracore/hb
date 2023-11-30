@@ -316,7 +316,7 @@ def order_ews(object):
     # find probe items
     items = []
     for p in obj.ews_specification:
-        item = find_item_for_ews(p.ews_depth, p.ews_diameter, p.ews_wall_strength)
+        item = find_item_for_ews(p.ews_depth, p.ews_diameter, p.ews_wall_strength, p.ews_material)
         if item:
             items.append({
                 'item_code': item,
@@ -374,7 +374,7 @@ def get_default_supplier(item):
 def find_item_for_ews(depth, diameter, wall_strength, material=None):
     conditions = ""
     if material:
-        conditions = """AND `tabItem`.`material` LIKE "%{material}%" """.format(material=material)
+        conditions = """AND `tabItem`.`raw_material` LIKE "%{material}%" OR `tabItem`.`raw_material` IS NULL """.format(material=material)
     sql_query = """SELECT
             `tabItem`.`item_code`
         FROM `tabItem`
