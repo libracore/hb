@@ -15,6 +15,10 @@
   "object_street",
   "object_location",
   "coordinates",
+  "drilling_section",
+  "drilling_type",
+  "column_break_12",
+  "drilling_length",
   "sec_drilling",
   "permit_no",
   "start_date",
@@ -29,6 +33,11 @@
   "probe_type",
   "sec_layers",
   "layers",
+  "backfill",
+  "steps",
+  "product",
+  "mixing_type",
+  "backfill_sample",
   "drilling_details_section",
   "drilling_instrument",
   "drilling_tool",
@@ -36,7 +45,9 @@
   "drilling_quote",
   "column_break_26",
   "piping",
+  "piping2",
   "to_depth",
+  "to_depth2",
   "direction",
   "angle",
   "angled_drill",
@@ -49,8 +60,7 @@
   "forwarder",
   "disposer",
   "date_signature",
-  "date",
-  "test"
+  "date"
  ],
  "fields": [
   {
@@ -305,12 +315,6 @@
    "label": "Drilling tool diameter (mm)"
   },
   {
-   "fieldname": "test",
-   "fieldtype": "Link",
-   "label": "Test",
-   "options": "Object EWS"
-  },
-  {
    "fieldname": "probe_length",
    "fieldtype": "Int",
    "label": "Probe length",
@@ -321,10 +325,68 @@
    "fieldtype": "Data",
    "label": "Probe type",
    "read_only": 1
+  },
+  {
+   "fieldname": "backfill",
+   "fieldtype": "Section Break",
+   "label": "Backfill"
+  },
+  {
+   "fieldname": "steps",
+   "fieldtype": "Int",
+   "label": "Steps"
+  },
+  {
+   "fieldname": "mixing_type",
+   "fieldtype": "Select",
+   "label": "Mixing type",
+   "options": "\nZement-Bentonit"
+  },
+  {
+   "fieldname": "backfill_sample",
+   "fieldtype": "Select",
+   "label": "Backfill sample",
+   "options": "\nGeologe\nBeh\u00f6rde\nMagazin"
+  },
+  {
+   "fieldname": "product",
+   "fieldtype": "Select",
+   "label": "Product",
+   "options": "\nSchwenk"
+  },
+  {
+   "fieldname": "piping2",
+   "fieldtype": "Int",
+   "label": "Piping2 (mm)"
+  },
+  {
+   "fieldname": "to_depth2",
+   "fieldtype": "Int",
+   "label": "To depth2 (mm)"
+  },
+  {
+   "fieldname": "drilling_section",
+   "fieldtype": "Section Break",
+   "label": "Drilling"
+  },
+  {
+   "fieldname": "drilling_type",
+   "fieldtype": "Select",
+   "label": "Drilling type",
+   "options": "\nStufenmeissel\nRollenmeissel\nImlochhammer\nExzenter\nPDC-Meissel"
+  },
+  {
+   "fieldname": "column_break_12",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "drilling_length",
+   "fieldtype": "Int",
+   "label": "Drilling Length (mm)"
   }
  ],
  "is_submittable": 1,
- "modified": "2023-11-30 10:10:20.543509",
+ "modified": "2023-12-01 13:52:08.290626",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory",
