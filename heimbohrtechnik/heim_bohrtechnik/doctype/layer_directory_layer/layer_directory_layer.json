@@ -44,7 +44,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Type",
-   "options": "\nDeckschicht\nTorf\nLockermaterial, lehmig - kiesig\nLockermaterial, sandif - kiesig\nLockermaterial, siltig - sandig\nLockermaterial, tonig - siltig\nKies, Steine\nKies, Steine mit Bl\u00f6cken\nKies, Sand\nKies, Sand, Ton\nSand\nTon - Sand\nTon - Silt\nTon\nTon, Kies\nMor\u00e4ne\nMergel\nSandstein\nSandstein, Mergel\nSandstein, Konglomerat\nKonglomerat (Brekzie)\nMergel, Sandstein, Konglomerat\nMergel, Sandstein, S\u00fcsswasserkalk\nMergel, Sandstein, Nagelfluh\nSiltstein\nKalkstein\nKalkstein hart, kompakt\nKalkmergel\nFlysch\nTonschiefer\nMergelschiefer\nMergelkalk\nKalkschiefer\nDolomit\nMarmor\nDiorit\nGlimmerschiefer\nGabbro\nGneis\nGranit\nSulfatgestein (Gips)\nQuarzit\nBunte Nagelfluh\nKalk-/Dolomitnagelfluh"
+   "options": "\nDeckschicht\nTorf\nLockermaterial, lehmig - kiesig\nLockermaterial, sandif - kiesig\nLockermaterial, siltig - sandig\nLockermaterial, tonig - siltig\nKies, Steine\nKies, Steine mit Bl\u00f6cken\nKies, Sand\nKies, Sand, Ton\nSand\nTon - Sand\nTon, Sand\nTon - Silt\nTon\nTon, Kies\nMor\u00e4ne\nMergel\nSandstein\nSandstein, Mergel\nSandstein, Konglomerat\nKonglomerat (Brekzie)\nMergel, Sandstein, Konglomerat\nMergel, Sandstein, S\u00fcsswasserkalk\nMergel, Sandstein, Nagelfluh\nSiltstein\nKalkstein\nKalkstein hart, kompakt\nKalkmergel\nFlysch\nTonschiefer\nMergelschiefer\nMergelkalk\nKalkschiefer\nKataklasit\nKakirit\nDolomit\nMarmor\nDiorit\nGlimmerschiefer\nGabbro\nGneis\nGranit\nSulfatgestein (Gips)\nQuarzit\nBunte Nagelfluh\nKalk-/Dolomitnagelfluh"
   },
   {
    "fieldname": "color",
@@ -185,7 +185,7 @@
   }
  ],
  "istable": 1,
- "modified": "2023-12-01 15:31:40.014424",
+ "modified": "2023-12-06 16:45:57.831409",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory Layer",
