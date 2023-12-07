@@ -28,19 +28,23 @@ def get_columns():
     return columns
     
 def get_data(filters):
+    if filters.base == "Sales Order":
+        date_field = "transaction_date"
+    else:
+        date_field = "posting_date"
     sql_query = """
         SELECT
-            YEAR(`transaction_date`) AS `year`,
+            YEAR(`{date_field}`) AS `year`,
             SUM(`base_net_total`) AS `net_amount`,
             `customer` AS `customer`,
             `customer_name` AS `customer_name`
-        FROM `tabSales Order`
+        FROM `tab{base}`
         WHERE `customer` = '{customer}'
             AND `docstatus` = 1
             AND `company` = "{company}"
         GROUP BY `year`
         ORDER BY `year` DESC
-    """.format(customer=filters.customer, company=filters.company)
+    """.format(customer=filters.customer, company=filters.company, base=filters.base, date_field=date_field)
     
     data = frappe.db.sql(sql_query, as_dict=True)
     

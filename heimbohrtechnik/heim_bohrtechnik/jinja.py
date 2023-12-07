@@ -3,6 +3,7 @@
 
 from __future__ import unicode_literals
 import frappe
+import json
 
 """
 Return the structured data for the pressure check QR
@@ -32,4 +33,39 @@ def get_project_pressure(project):
     content = "{0}".format(data)
     
     return content 
-    
+
+"""
+Return a list of sales invoices to a sales order
+"""
+def get_sales_invoices_for_order(sales_order_name):
+    invoice_dict = frappe.db.sql("""
+        SELECT `tabSales Invoice Item`.`parent`
+        FROM `tabSales Invoice Item`
+        WHERE `tabSales Invoice Item`.`sales_order` = "{sales_order}"
+          AND `tabSales Invoice Item`.`docstatus` < 2
+        GROUP BY `tabSales Invoice Item`.`parent`
+        ORDER BY `tabSales Invoice Item`.`parent` ASC;
+        """.format(sales_order=sales_order_name), as_dict=True)
+        
+    invoices = []
+    for i in invoice_dict:
+        invoices.append(i.get("parent"))
+        
+    return invoices
+
+"""
+Return a list of sales invoices items for a list of sales invoices
+"""
+def get_sales_invoice_positions(sales_invoices):
+    if type(sales_invoices) == str:
+        sales_invoices = json.loads(sales_invoices)
+        
+    invoice_positions = frappe.db.sql("""
+        SELECT *
+        FROM `tabSales Invoice Item`
+        WHERE `tabSales Invoice Item`.`parent` IN ("{invoices}")
+        ORDER BY `tabSales Invoice Item`.`parent` ASC, `tabSales Invoice Item`.`idx` ASC;
+        """.format(invoices="\",\"".join(sales_invoices)), as_dict=True)
+        
+        
+    return invoice_positions

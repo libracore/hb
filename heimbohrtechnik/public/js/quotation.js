@@ -1,5 +1,15 @@
-// Copyright (c) 2021-2022, libracore AG and contributors
+// Copyright (c) 2021-2023, libracore AG and contributors
 // For license information, please see license.txt
+
+// extend dashboard
+try {
+    cur_frm.dashboard.add_transactions([
+        {
+            'label': 'Sales',
+            'items': ['Follow Up Note']
+        }
+    ]);
+} catch { /* do nothing for older versions */ }
 
 frappe.ui.form.on('Quotation', {
     object: function(frm) {

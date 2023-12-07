@@ -19,6 +19,9 @@
   "prio",
   "section_items",
   "items",
+  "sec_sales_order",
+  "margin",
+  "sales_order_items",
   "section_remarks",
   "remarks",
   "section_images",
@@ -46,6 +49,7 @@
    "fetch_from": "object.object_name",
    "fieldname": "object_name",
    "fieldtype": "Data",
+   "in_standard_filter": 1,
    "label": "Object name",
    "read_only": 1
   },
@@ -53,6 +57,8 @@
    "fetch_from": "object.object_street",
    "fieldname": "object_street",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Object street",
    "read_only": 1
   },
@@ -60,6 +66,8 @@
    "fetch_from": "object.object_location",
    "fieldname": "object_location",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Object location",
    "read_only": 1
   },
@@ -116,6 +124,7 @@
    "default": "Today",
    "fieldname": "from_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "From Date"
   },
   {
@@ -148,9 +157,26 @@
    "fieldtype": "Table",
    "label": "Plans",
    "options": "Construction Site Description Plan"
+  },
+  {
+   "fieldname": "sec_sales_order",
+   "fieldtype": "Section Break",
+   "label": "Sales Order"
+  },
+  {
+   "fieldname": "sales_order_items",
+   "fieldtype": "Table",
+   "label": "Sales Order Items",
+   "options": "Subcontraction Order Order Item"
+  },
+  {
+   "default": "12",
+   "fieldname": "margin",
+   "fieldtype": "Percent",
+   "label": "Margin"
   }
  ],
- "modified": "2023-06-04 21:29:17.758588",
+ "modified": "2023-11-29 10:33:25.186699",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order",

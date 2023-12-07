@@ -52,13 +52,11 @@ def get_data(filters):
         WHERE 
             `tabProject Permit`.`permit` = "Strassensperrung"
             AND `tabProject`.`expected_start_date` >= "{from_date}"
+            AND `tabRequest for Public Area Use`.`name` IS NOT NULL
         GROUP BY `tabProject`.`name`
         ORDER BY `tabProject`.`expected_start_date` ASC, `tabProject`.`start_half_day` DESC,`tabProject`.`drilling_team` ASC
     ;""".format(from_date=filters.from_date)
     data = frappe.db.sql(sql_query, as_dict=True)
-
-    #remove projects without Request for Public Area Use
-    data = [d for d in data if not (d.get('road_block') == None)]
 
     # color issues
     for d in data:

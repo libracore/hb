@@ -1,0 +1,31 @@
+{
+ "add_total_row": 0,
+ "creation": "2023-11-21 16:04:37.603590",
+ "disable_prepared_report": 1,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Commercial",
+ "modified": "2023-11-24 10:55:08.723500",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Mahnliste",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Sales Invoice",
+ "report_name": "Mahnliste",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "Sales User"
+  }
+ ]
+}

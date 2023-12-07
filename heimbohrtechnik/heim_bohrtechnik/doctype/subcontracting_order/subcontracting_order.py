@@ -52,7 +52,38 @@ class SubcontractingOrder(Document):
                 p.save()
                 frappe.db.commit()
         return
+    
+    def get_bkps(self):
+        if not self.project:
+            return []
+        sales_order_name = frappe.get_value("Project", self.project, 'sales_order')
+        if not sales_order_name:
+            return []
         
+        sales_order = frappe.get_doc("Sales Order", sales_order_name)
+        bkps = []
+        for i in sales_order.items:
+            if i.bkp not in bkps:
+                bkps.append(i.bkp)
+                
+        return bkps
+        
+    def get_bkp_items(self, bkp):
+        if not self.project:
+            return []
+        sales_order_name = frappe.get_value("Project", self.project, 'sales_order')
+        if not sales_order_name:
+            return []
+        
+        sales_order = frappe.get_doc("Sales Order", sales_order_name)
+        items = []
+        for i in sales_order.items:
+            if i.bkp == bkp:
+                items.append(i)
+                
+        return items
+    
+
 @frappe.whitelist()
 def update_from_project(subcontracting_order, start_date, end_date, drilling_team, description):
     doc = frappe.get_doc("Subcontracting Order", subcontracting_order)

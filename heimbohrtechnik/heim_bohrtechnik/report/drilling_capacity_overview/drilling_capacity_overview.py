@@ -7,6 +7,8 @@ from frappe import _
 from frappe.utils import flt
 from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_working_days, get_content
 from datetime import datetime, timedelta
+from frappe.utils.data import getdate
+from heimbohrtechnik.heim_bohrtechnik.date_controller import get_holidays
 
 def execute(filters=None):
     data, weekend = get_data(filters)
@@ -116,3 +118,53 @@ def get_data(filters):
     weekend = content['weekend']
     
     return data, weekend
+
+@frappe.whitelist()   
+# ~ """
+# ~ Parameters:
+# ~ drilling_type: should be the fieldname of the drilling team checkbox
+# ~ """
+def get_free_date(drilling_type, label):    
+    #get non working days
+    holidays = get_holidays()
+
+    #get all drilling teams with needed ability
+    drilling_teams = frappe.db.sql("""
+    SELECT `name`
+    FROM `tabDrilling Team`
+    WHERE `{dt}` = 1
+    """.format(dt=drilling_type), as_dict=True)
+    
+    #give feedback, if no team has the needed ability
+    if len(drilling_teams) == 0:
+        frappe.msgprint("Kein Bohrteam mit dieser Fähigkeit gefunden!")
+        return
+    
+    hits = []
+    date = getdate()
+    
+    #check for the dates, where teams are free
+    while len(hits) <= 9:
+        date = frappe.utils.add_days(date, 1)
+        if not date.strftime("%Y-%m-%d") in holidays:
+            for team in drilling_teams:
+                possible_hit = None
+                possible_hit = frappe.db.sql("""
+                    SELECT `drilling_team`
+                    FROM `tabProject`
+                    WHERE `expected_start_date` <= '{date}'
+                    AND `expected_end_date` >= '{date}'
+                    AND `drilling_team` = '{team}'
+                    AND `status` IN ("Open", "Completed")
+                    """.format(date=date, team=team['name']), as_dict=True)
+                if len(possible_hit) == 0:
+                    hits.append({
+                        'drilling_team': team.name,
+                        'date': date.strftime("%d.%m.%Y")
+                    })
+                    
+    html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/report/drilling_capacity_overview/free_days.html", {'hits': hits})
+                    
+    frappe.msgprint(html, title='Freie Tage für {0}'.format(label), indicator='green')
+                
+    return

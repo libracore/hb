@@ -44,7 +44,8 @@ def save_message(communication, target_file, debug=False):
         WHERE `communication` = "{communication}";""".format(communication=communication), as_dict=True)
         
     if len(email_queue) > 0:
-        attachments = json.loads(email_queue[0].get("attachments"))
+        attachments_raw = email_queue[0].get("attachments")
+        attachments = json.loads(attachments_raw) if attachments_raw else []
         if debug:
             print("{0}".format(attachments))
         for a in attachments:

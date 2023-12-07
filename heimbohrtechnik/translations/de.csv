@@ -317,6 +317,8 @@ DocType: Construction Site Delivery,Construction Site Delivery,Baustellenlieferu
 DocType: Subcontracting Order,Subcontracting Order,Verlängerungsauftrag
 DocType: Subcontracting Order,Subcontracting Team,Verlängerungsteam
 DocType: Subcontracting Order,Order Description,Auftragsbeschreibung
+DocType: Subcontracting Order,Sales Order Items,Auftragspositionen
+DocType: Subcontracting Order,Subcontracting Amount,Betrag Vergabe
 DocType: Subcontracting Order Template,Subcontracting Order Template,Vorlage Verlängerungsauftrag
 DocType: Request for Public Area Use,Request for Public Area Use,Gesuch Benutzung öffentlicher Grund
 DocType: Request for Public Area Use,No Parking Blue,Aufhebung blaue Parkzone
@@ -471,5 +473,12 @@ DocType: Layer Directory,Piping2 (mm),Verrohrung2 (mm)
 DocType: Layer Directory,Drilling,Bohrung
 DocType: Layer Directory,Drilling type,Typ
 DocType: Layer Directory,Drilling Length (mm),Länge (mm)
-
-
+DocType: Drilling Team,Flushing drilling,Spühlbohrung
+DocType: Drilling Team,Hammer drilling,Spühlbohrung
+DocType: Drilling Team,Well drilling,Brunnenbohrung
+DocType: Drilling Team,Small drilling rig on drilling team,Kleinbohrgerät auf Bohrteam
+DocType: Road Block Material Order,Road Block Material Order,Absperrmaterialauftrag
+DocType: Expense Receipt,Expense Receipt,Spesenbeleg
+DocType: Follow Up Note,Follow Up Note,Nachfassnotiz
+DocType: Follow Up Note,New Follow Up Note,Neue Nachfassnotiz
+Report: Follow-Up Overview,Follow-Up Overview,Nachfass-Übersicht
