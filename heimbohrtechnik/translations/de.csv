@@ -459,6 +459,20 @@ DocType: Drilling Move Log,To Drilling Team,Zu Bohrteam
 DocType: Drilling Move Log,To Start Date,Auf Startdatum
 DocType: Drilling Move Log,To End Date,Auf Enddatum
 DocType: Project,Drilling Meter Per Day,Bohrmeter pro Tag
+DocType: Layer Directory Layer,Flushing medium,Spülmedium
+DocType: Layer Directory Layer,Spülzussatz,Flushing set
+DocType: Layer Directory,Probe length,Sondenlänge
+DocType: Layer Directory,Probe type,Sondentyp
+DocType: Layer Directory,Product,Produkt
+DocType: Layer Directory,Steps,Stufen
+DocType: Layer Directory,Backfill,Hinterfüllung
+DocType: Layer Directory,Mixing type,Mischart
+DocType: Layer Directory,Backfill sample,Hinterfüllungsprobe
+DocType: Layer Directory,To depth2 (mm),bis Tiefe2 (m)
+DocType: Layer Directory,Piping2 (mm),Verrohrung2 (mm)
+DocType: Layer Directory,Drilling,Bohrung
+DocType: Layer Directory,Drilling type,Typ
+DocType: Layer Directory,Drilling Length (mm),Länge (mm)
 DocType: Drilling Team,Flushing drilling,Spühlbohrung
 DocType: Drilling Team,Hammer drilling,Spühlbohrung
 DocType: Drilling Team,Well drilling,Brunnenbohrung
