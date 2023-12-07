@@ -27,6 +27,7 @@
   "gps_coordinates",
   "gps_lat",
   "gps_long",
+  "m_u_m",
   "button_open_map",
   "gps_checked",
   "section_drilling_details",
@@ -410,9 +411,14 @@
    "fieldtype": "Currency",
    "hidden": 1,
    "label": "Quotation Meter Rate"
+  },
+  {
+   "fieldname": "m_u_m",
+   "fieldtype": "Int",
+   "label": "M.\u00fc.M"
   }
  ],
- "modified": "2022-12-07 20:24:58.133360",
+ "modified": "2023-12-07 22:05:57.244180",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
