@@ -6,7 +6,8 @@ from frappe import _
 from frappe.utils import get_url_to_form, cint
 from heimbohrtechnik.heim_bohrtechnik.utils import clone_attachments
 
-own_trough_supplier = "L-04052"
+own_trough_supplier = "L-04052"         # when switching to an internal trough team, use this internal trough
+mud_from_trough = "L-03749"             # if this supplier is set for the mud, do not override trough
 
 def before_save(self, method):
     # perform checklist controls
@@ -26,10 +27,17 @@ def before_save(self, method):
         if cint(frappe.get_value("Drilling Team", self.drilling_team, "has_trough")):
             # drilling team has a trought: set internal
             if self.checklist:
-                for c in self.checklist:
-                    if c.activity == "Mulde":
-                        c.supplier = own_trough_supplier
-                        c.supplier_name = frappe.get_value("Supplier", own_trough_supplier, "supplier_name")
+                set_internal_trough = False
+                for c in range(0, len(self.checklist)):
+                    if self.checklist[c].activity == "Mulde":
+                        set_internal_trough = c
+                    elif self.checklist[c].activity == "Schlammentsorgung" and c.supplier == mud_from_trough:
+                        set_internal_trough = False
+                if set_internal_trough:
+                    self.checklist[set_internal_trough].supplier = own_trough_supplier
+                    self.checklist[set_internal_trough].supplier_name = frappe.get_value("Supplier", own_trough_supplier, "supplier_name")
+                    
+                        
         else:
             # if possible, revert to external trough supplier
             supplier = None
