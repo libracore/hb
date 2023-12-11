@@ -14,6 +14,7 @@ def execute(filters=None):
 def get_columns(filters):
     columns = [
         {"label": _("Quotation"), "fieldname": "quotation", "fieldtype": "Link", "options": "Quotation", "width": 100},
+        {"label": _("Date"), "fieldname": "date", "fieldtype": "Date", "width": 80},
         {"label": _("Customer"), "fieldname": "customer", "fieldtype": "Link", "options": "Customer", "width": 80},
         {"label": _("Customer name"), "fieldname": "customer_name", "fieldtype": "Data", "width": 150},
         {"label": _("Volume"), "fieldname": "volume", "fieldtype": "Currency", "width": 120},
@@ -31,10 +32,15 @@ def get_data(filters):
         conditions += """ AND `tabQuotation`.`base_net_total` >= {vol} """.format(vol=filters.volume_from)
     if filters.volume_to:
         conditions += """ AND `tabQuotation`.`base_net_total` <= {vol} """.format(vol=filters.volume_to)
+    if filters.from_date:
+        conditions += """ AND `tabQuotation`.`transaction_date` >= "{date}" """.format(date=filters.from_date)
+    if filters.to_date:
+        conditions += """ AND `tabQuotation`.`transaction_date` <= "{date} 23:59" """.format(date=filters.to_date)
         
     data = frappe.db.sql("""
         SELECT
             `tabQuotation`.`name` AS `quotation`,
+            `tabQuotation`.`transaction_date` AS `date`,
             `tabQuotation`.`party_name` AS `customer`,
             `tabQuotation`.`customer_name` AS `customer_name`,
             `tabQuotation`.`object` AS `object`,

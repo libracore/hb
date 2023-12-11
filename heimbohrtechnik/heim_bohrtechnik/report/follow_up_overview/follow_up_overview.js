@@ -14,6 +14,16 @@ frappe.query_reports["Follow-Up Overview"] = {
             "fieldname":"volume_to",
             "label": __("Volumen bis"),
             "fieldtype": "Int"
+        },
+        {
+            "fieldname":"from_date",
+            "label": __("Von Datum"),
+            "fieldtype": "Date"
+        },
+        {
+            "fieldname":"to_date",
+            "label": __("Bis Datum"),
+            "fieldtype": "Date"
         }
     ],
     "onload": (report) => {
