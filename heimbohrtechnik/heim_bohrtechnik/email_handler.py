@@ -17,6 +17,7 @@ import time
 import json
 from frappe.utils import cint
 from frappe.utils.background_jobs import enqueue
+import re
 
 # this function will take a communication and store it as a local file
 #
@@ -113,11 +114,14 @@ def upload_communication_to_nextcloud(communication):
     
     # select target
     project = None
+    projects = None
     
     if communication.reference_doctype == "Project":
         project = communication.reference_name
         if "Bohrstart" in communication.subject:
             target = get_path('drilling')
+            # additional projects from subject line
+            projects = re.findall("(P-\d{6})", )
         elif "Fertigstellung" in communication.subject:
             target = get_path('drilling')
         elif "Saugwagenbestellung" in communication.subject or "Muldenbestellung" in communication.subject:
@@ -143,7 +147,12 @@ def upload_communication_to_nextcloud(communication):
     # upload to nextcloud
     if project and "P-MX" not in project:
         try:
-            write_project_file_from_local_file(project, tmp_file, target)
+            if projects:
+                # in case of multi-project hits, upload to each
+                for p in projects:
+                    write_project_file_from_local_file(p, tmp_file, target)
+            else:
+                write_project_file_from_local_file(project, tmp_file, target)
         except Exception as err:
             frappe.log_error(err, "Communication upload failed")
     else:
