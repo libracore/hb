@@ -212,7 +212,7 @@ DocType: Construction Site Description,Pipes checked,Werkleitung sondiert
 DocType: Construction Site Description,Drilling Points marked,Bohrpunkte markiert
 DocType: Construction Site Description,Road,Strasse
 DocType: Construction Site Description,Use public area,Benutzung öffentlicher Grund erforderlich
-DocType: Construction Site Description,Road block required,Absperrung erforderlich
+DocType: Construction Site Description,Road block required / red-white,Absperrung erforderlich / rot-weisse Latten
 DocType: Construction Site Description,Road block meters,Laufmeter/Absperrung
 DocType: Construction Site Description,Requires Traffic Tech,Verkehrstechnik erforderlich
 DocType: Construction Site Description,Requires Traffic Light,Lichtsignal aufstellen
@@ -238,10 +238,12 @@ DocType: Construction Site Description,Use public area remarks,Anmerkungen Benut
 DocType: Construction Site Description,Distance to drill site,Entfernung bis zum Bohrplatz
 DocType: Construction Site Description,Road block remarks,Bemerkungen Absperrung
 DocType: Construction Site Description,Parking Area,Abstellparkplatz
-DocType: Construction Site Description,Redirect,Umleitung
-DocType: Construction Site Description,Construction Site,Baustelle
+DocType: Construction Site Description,Redirect,Fussgängerumleitung
+DocType: Construction Site Description,Construction Site,Baustellentafel
 DocType: Construction Site Description,No Driving,Fahrverbot
 DocType: Construction Site Description,Signalisation external,Signalisation wird gestellt
+DocType: Construction Site Description,Flashing lamp,Blinklampe
+DocType: Construction Site Description,Dead end,Sackgasse
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
 DocType: Item,Material,Material
@@ -482,3 +484,4 @@ DocType: Expense Receipt,Expense Receipt,Spesenbeleg
 DocType: Follow Up Note,Follow Up Note,Nachfassnotiz
 DocType: Follow Up Note,New Follow Up Note,Neue Nachfassnotiz
 Report: Follow-Up Overview,Follow-Up Overview,Nachfass-Übersicht
+
