@@ -31,7 +31,7 @@ def before_save(self, method):
                 for c in range(0, len(self.checklist)):
                     if self.checklist[c].activity == "Mulde":
                         set_internal_trough = c
-                    elif self.checklist[c].activity == "Schlammentsorgung" and c.supplier == mud_from_trough:
+                    elif self.checklist[c].activity == "Schlammentsorgung" and self.checklist[c].supplier == mud_from_trough:
                         set_internal_trough = False
                 if set_internal_trough:
                     self.checklist[set_internal_trough].supplier = own_trough_supplier
