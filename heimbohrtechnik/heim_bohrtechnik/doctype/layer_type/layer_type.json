@@ -26,7 +26,7 @@
    "unique": 1
   }
  ],
- "modified": "2023-12-07 10:05:40.183157",
+ "modified": "2023-12-12 09:11:46.293553",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Type",
@@ -55,6 +55,10 @@
    "role": "Administrator",
    "share": 1,
    "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Projects User"
   }
  ],
  "quick_entry": 1,
