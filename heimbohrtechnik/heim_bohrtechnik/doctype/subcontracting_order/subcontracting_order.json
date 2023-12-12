@@ -161,22 +161,25 @@
   {
    "fieldname": "sec_sales_order",
    "fieldtype": "Section Break",
-   "label": "Sales Order"
+   "label": "Sales Order",
+   "permlevel": 1
   },
   {
    "fieldname": "sales_order_items",
    "fieldtype": "Table",
    "label": "Sales Order Items",
-   "options": "Subcontraction Order Order Item"
+   "options": "Subcontraction Order Order Item",
+   "permlevel": 1
   },
   {
-   "default": "12",
+   "default": "20",
    "fieldname": "margin",
    "fieldtype": "Percent",
-   "label": "Margin"
+   "label": "Margin",
+   "permlevel": 1
   }
  ],
- "modified": "2023-11-29 10:33:25.186699",
+ "modified": "2023-12-12 14:27:59.619923",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order",
@@ -213,6 +216,39 @@
    "read": 1,
    "report": 1,
    "role": "Projects User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "permlevel": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
    "share": 1,
    "write": 1
   }
