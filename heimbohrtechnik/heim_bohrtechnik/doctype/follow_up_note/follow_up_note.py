@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 from datetime import datetime
+import html2text
 
 class FollowUpNote(Document):
     def before_save(self):
@@ -17,11 +18,17 @@ class FollowUpNote(Document):
         
 
 def create_note_from_communication(communication):
+    if not communication.reference_doctype == "Quotation":
+        return
+        
     note = frappe.get_doc({
         'doctype': "Follow Up Note",
-        'quotation': communication.name,
+        'quotation': communication.reference_name,
+        'prevdoc_name': communication.reference_name,
+        'object': frappe.get_value("Quotation", communication.reference_name, "object"),
+        'object_name': frappe.get_value("Quotation", communication.reference_name, "object_name"),
         'date': communication.communication_date,
-        'notes': communication.content
+        'notes': html2text.html2text(communication.content)
     })
     note.insert()
     frappe.db.commit()
