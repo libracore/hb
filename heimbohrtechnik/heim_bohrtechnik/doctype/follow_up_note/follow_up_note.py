@@ -19,6 +19,7 @@ class FollowUpNote(Document):
 def create_note_from_communication(communication):
     note = frappe.get_doc({
         'doctype': "Follow Up Note",
+        'quotation': self.name,
         'date': communication.communication_date,
         'notes': communication.content
     })
