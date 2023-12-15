@@ -280,9 +280,14 @@ def upload_project_file(project, event):
                 or (project.permits[p].file and not project_old.permits[p].file):
                 subtable = "permits"
                 file_id = get_file_id(project, event, subtable, url=project.permits[p].file)
+                # define altering target for road blocks
+                if project.permits[p].permit == "Strassensperrung":
+                    target = PATHS['road']
+                else:
+                    target = PATHS['drilling']
                 if file_id:
                     physical_file_name = get_physical_path(file_id)
-                    write_project_file_from_local_file (project.name, physical_file_name, PATHS['drilling'])
+                    write_project_file_from_local_file (project.name, physical_file_name, target)
     
     return
     
