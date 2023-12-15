@@ -15,3 +15,13 @@ class FollowUpNote(Document):
             
         return
         
+
+def create_note_from_communication(communication):
+    note = frappe.get_doc({
+        'doctype': "Follow Up Note",
+        'date': communication.communication_date,
+        'notes': communication.content
+    })
+    note.insert()
+    frappe.db.commit()
+    return

@@ -169,6 +169,12 @@ Hook from Communication: create file and upload to nextcloud
 def communication_on_insert(self, event):
     try:
         async_upload_communication_to_nextcloud(self.name)
+        
+        # hook to create follow up note
+        if self.reference_doctype == "Quotation":
+            from heimbohrtechnik.heim_bohrtechnik.doctype.follow_up_note.follow_up_note import create_note_from_communication
+            create_note_from_communication(self)
+            
     except Exception as err:
         frappe.log_error(err, "Communication hook failed")
     return
