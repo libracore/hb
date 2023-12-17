@@ -18,12 +18,16 @@
   "remarks",
   "sec_accounting",
   "vst",
+  "expense_account",
+  "vat_account",
   "col_accounting",
   "checked",
   "sec_links",
   "purchase_invoice",
+  "expense_claim",
   "col_links",
-  "expense_claim"
+  "journal_entry",
+  "amended_from"
  ],
  "fields": [
   {
@@ -71,10 +75,10 @@
   },
   {
    "fieldname": "payment",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Payment",
-   "options": "\nFirmenkreditkarte UBS\nPrivat",
+   "options": "Mode of Payment",
    "reqd": 1
   },
   {
@@ -92,6 +96,7 @@
    "label": "Links"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "purchase_invoice",
    "fieldtype": "Link",
    "label": "Purchase Invoice",
@@ -103,6 +108,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "expense_claim",
    "fieldtype": "Link",
    "label": "Expense Claim",
@@ -141,16 +147,49 @@
    "fieldtype": "Data",
    "label": "Employee name",
    "read_only": 1
+  },
+  {
+   "fieldname": "expense_account",
+   "fieldtype": "Link",
+   "label": "Expense Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "vat_account",
+   "fieldtype": "Link",
+   "label": "VAT Account",
+   "options": "Account"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Expense Receipt",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "journal_entry",
+   "fieldtype": "Link",
+   "label": "Journal Entry",
+   "options": "Journal Entry",
+   "read_only": 1
   }
  ],
  "image_field": "image",
- "modified": "2023-11-29 13:32:28.355205",
+ "is_submittable": 1,
+ "modified": "2023-12-17 20:52:44.759040",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Expense Receipt",
  "owner": "Administrator",
  "permissions": [
   {
+   "amend": 1,
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -160,9 +199,12 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   },
   {
+   "amend": 1,
+   "cancel": 1,
    "create": 1,
    "email": 1,
    "export": 1,
@@ -171,9 +213,12 @@
    "report": 1,
    "role": "Projects User",
    "share": 1,
+   "submit": 1,
    "write": 1
   },
   {
+   "amend": 1,
+   "cancel": 1,
    "create": 1,
    "email": 1,
    "export": 1,
@@ -182,6 +227,21 @@
    "report": 1,
    "role": "Projects Manager",
    "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],

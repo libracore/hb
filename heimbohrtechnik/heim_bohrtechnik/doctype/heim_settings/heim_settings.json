@@ -31,6 +31,9 @@
   "akonto_item",
   "sec_buying",
   "sondenparkplatz",
+  "sec_expenses",
+  "default_expense_account",
+  "vat_account",
   "sec_nextcloud",
   "cloud_hostname",
   "cloud_user",
@@ -276,10 +279,27 @@
    "fieldtype": "Link",
    "label": "Self Crane Item",
    "options": "Item"
+  },
+  {
+   "fieldname": "sec_expenses",
+   "fieldtype": "Section Break",
+   "label": "Expenses"
+  },
+  {
+   "fieldname": "default_expense_account",
+   "fieldtype": "Link",
+   "label": "Default Expense Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "vat_account",
+   "fieldtype": "Link",
+   "label": "VAT Account",
+   "options": "Account"
   }
  ],
  "issingle": 1,
- "modified": "2023-10-31 21:14:27.112009",
+ "modified": "2023-12-17 20:45:15.017100",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",
