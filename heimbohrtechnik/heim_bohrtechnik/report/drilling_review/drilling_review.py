@@ -16,8 +16,8 @@ def get_columns(data):
         {'fieldname': 'projects', 'label': _("Projects"), 'fieldtype': 'Int', 'width': '100px'},
         {'fieldname': 'drillings', 'label': _("Bohrungen"), 'fieldtype': 'Int', 'width': '100px'},
         {'fieldname': 'drilling_meters', 'label': _("Bohrmeter"), 'fieldtype': 'Data', 'width': '100px'},
-        {'fieldname': 'avg', 'label': _("Durchschn."), 'fieldtype': 'Int', 'width': '100px'},
-        {'fieldname': 'deepest', 'label': _("Tiefste"), 'fieldtype': 'Int', 'width': '100px'}
+        {'fieldname': 'avg', 'label': _("Durchschn."), 'fieldtype': 'Data', 'width': '100px'},
+        {'fieldname': 'deepest', 'label': _("Tiefste"), 'fieldtype': 'Data', 'width': '100px'}
     ]
     
     return columns
@@ -43,7 +43,8 @@ def get_data(filters):
     """.format(from_date=filters.from_date, to_date=filters.to_date), as_dict=True)
     
     for d in data:
-        d['avg'] = round(d['drilling_meters'] / d['drillings'])
-        d['drilling_meters'] = "{:,.0f}".format(d['drilling_meters']).replace(",", "'")
+        d['avg'] = "{0} m".format(round(d['drilling_meters'] / d['drillings']))
+        d['deepest'] = "{0} m".format(d['deepest'])
+        d['drilling_meters'] = "{:,.0f} m".format(d['drilling_meters']).replace(",", "'")
         
     return data
