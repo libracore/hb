@@ -522,6 +522,12 @@ def get_data():
                     "name": "Drilling Capacity Overview",
                     "doctype": "Project",
                     "is_query_report": True
+                },
+                {
+                    "type": "report",
+                    "name": "Drilling Review",
+                    "doctype": "Project",
+                    "is_query_report": True
                 }
             ]
         },

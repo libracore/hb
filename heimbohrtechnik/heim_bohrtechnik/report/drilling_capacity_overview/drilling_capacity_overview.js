@@ -24,7 +24,7 @@ frappe.query_reports["Drilling Capacity Overview"] = {
             "fieldtype": "Date",
             "default": frappe.datetime.add_days(frappe.datetime.get_today(), 21),
             "reqd": 1
-        },
+        }
     ],
     "formatter":function (value, row, column, data, default_formatter) {
         if (column.colIndex > 2) {
