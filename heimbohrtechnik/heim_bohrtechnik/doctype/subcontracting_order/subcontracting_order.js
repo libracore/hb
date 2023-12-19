@@ -158,7 +158,7 @@ function pull_items(frm) {
         'callback': function(response) {
             var bkps = response.message;
             // show dialog to select bkp
-            if (bkps.length > 0) {
+            if ((bkps) && (bkps.length > 0)) {
                 frappe.prompt([
                         {
                             'fieldname': 'bkp', 
@@ -195,6 +195,8 @@ function pull_items(frm) {
                     __('Position aus AB importieren'),
                     __('Importieren')
                 );
+            } else {
+                frappe.msgprint( __("Keine Auftragsdaten gefunden."), __("Information") );
             }
         }
     });
