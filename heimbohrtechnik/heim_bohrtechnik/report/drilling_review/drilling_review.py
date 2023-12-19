@@ -15,7 +15,9 @@ def get_columns(data):
         {'fieldname': 'drilling_team', 'label': _("Drilling Team"), 'fieldtype': 'Link', 'options': 'Drilling Team', 'width': '200px'},
         {'fieldname': 'projects', 'label': _("Projects"), 'fieldtype': 'Int', 'width': '100px'},
         {'fieldname': 'drillings', 'label': _("Bohrungen"), 'fieldtype': 'Int', 'width': '100px'},
-        {'fieldname': 'drilling_meters', 'label': _("Bohrmeter"), 'fieldtype': 'Data', 'width': '100px'}
+        {'fieldname': 'drilling_meters', 'label': _("Bohrmeter"), 'fieldtype': 'Data', 'width': '100px'},
+        {'fieldname': 'avg', 'label': _("Durchschn."), 'fieldtype': 'Int', 'width': '100px'},
+        {'fieldname': 'deepest', 'label': _("Tiefste"), 'fieldtype': 'Int', 'width': '100px'}
     ]
     
     return columns
@@ -26,10 +28,8 @@ def get_data(filters):
             IFNULL(`tabProject`.`drilling_team`, "?") AS `drilling_team`,
             COUNT(`tabProject`.`name`) AS `projects`,
             SUM(`tabObject EWS`.`ews_count`) AS `drillings`,
-            SUM(`tabObject EWS`.`ews_depth` * `tabObject EWS`.`ews_count`) AS `drilling_meters`
-            /*`tabProject`.`name` AS `projects`,
-            `tabObject EWS`.`ews_count` AS `drillings`,
-            (`tabObject EWS`.`ews_depth` * `tabObject EWS`.`ews_count`) AS `drilling_meters`*/
+            SUM(`tabObject EWS`.`ews_depth` * `tabObject EWS`.`ews_count`) AS `drilling_meters`,
+            MAX(`tabObject EWS`.`ews_depth`) As `deepest`
         FROM `tabProject`
         LEFT JOIN `tabObject EWS` ON `tabObject EWS`.`parent` = `tabProject`.`object`
         LEFT JOIN `tabDrilling Team` ON `tabDrilling Team`.`name` = `tabProject`.`drilling_team`
@@ -43,6 +43,7 @@ def get_data(filters):
     """.format(from_date=filters.from_date, to_date=filters.to_date), as_dict=True)
     
     for d in data:
+        d['avg'] = round(d['drilling_meters'] / d['drillings'])
         d['drilling_meters'] = "{:,.0f}".format(d['drilling_meters']).replace(",", "'")
         
     return data
