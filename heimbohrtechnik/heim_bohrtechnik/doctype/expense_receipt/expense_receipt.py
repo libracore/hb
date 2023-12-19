@@ -30,7 +30,7 @@ class ExpenseReceipt(Document):
         })
         if self.vst != 0:
             jv.append("accounts", {
-                'account': self.expense_account,
+                'account': self.vat_account,
                 'debit_in_account_currency': self.vst,
             })
         mode_of_payment = frappe.get_doc("Mode of Payment", self.payment)
