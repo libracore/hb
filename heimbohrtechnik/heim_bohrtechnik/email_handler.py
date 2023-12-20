@@ -121,7 +121,7 @@ def upload_communication_to_nextcloud(communication):
         if "Bohrstart" in communication.subject:
             target = get_path('drilling')
             # additional projects from subject line
-            projects = re.findall("(P-\d{6})", )
+            projects = re.findall("(P-\d{6})", communication.subject)
         elif "Fertigstellung" in communication.subject:
             target = get_path('drilling')
         elif "Saugwagenbestellung" in communication.subject or "Muldenbestellung" in communication.subject:
