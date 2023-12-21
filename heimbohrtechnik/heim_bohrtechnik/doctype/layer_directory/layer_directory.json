@@ -15,22 +15,30 @@
   "object_street",
   "object_location",
   "coordinates",
-  "drilling_section",
-  "drilling_type",
-  "column_break_12",
-  "drilling_length",
   "sec_drilling",
   "permit_no",
   "start_date",
   "drilling_team",
   "ews_details",
-  "probe_length",
+  "probe_type",
+  "drilling_tool",
+  "drilling_instrument",
+  "piping",
+  "piping2",
+  "to_depth",
+  "to_depth2",
+  "drilling_type",
   "col_drilling",
   "permit_date",
   "end_date",
-  "drilling_number",
   "drilling_master",
-  "probe_type",
+  "drilling_number",
+  "probe_length",
+  "drilling_tool_diameter",
+  "drilling_quote",
+  "direction",
+  "angle",
+  "angled_drill",
   "sec_layers",
   "layers",
   "backfill",
@@ -38,19 +46,6 @@
   "product",
   "mixing_type",
   "backfill_sample",
-  "drilling_details_section",
-  "drilling_instrument",
-  "drilling_tool",
-  "drilling_tool_diameter",
-  "drilling_quote",
-  "column_break_26",
-  "piping",
-  "piping2",
-  "to_depth",
-  "to_depth2",
-  "direction",
-  "angle",
-  "angled_drill",
   "samples_disposal_section",
   "sampling_distance",
   "samples_location",
@@ -199,17 +194,14 @@
   },
   {
    "fieldname": "drilling_tool",
-   "fieldtype": "Data",
-   "label": "Drilling tool"
+   "fieldtype": "Select",
+   "label": "Drilling tool",
+   "options": "\nStufenmeissel\nRollenmeissel\nImlochhammer\nExzenter\nPDC-Meissel"
   },
   {
    "fieldname": "drilling_quote",
    "fieldtype": "Data",
    "label": "Drilling quote"
-  },
-  {
-   "fieldname": "column_break_26",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "piping",
@@ -298,11 +290,6 @@
    "label": "Permit No."
   },
   {
-   "fieldname": "drilling_details_section",
-   "fieldtype": "Section Break",
-   "label": "Drilling Details"
-  },
-  {
    "fetch_from": "project.drilling_team",
    "fieldname": "drilling_team",
    "fieldtype": "Link",
@@ -340,7 +327,7 @@
    "fieldname": "mixing_type",
    "fieldtype": "Select",
    "label": "Mixing type",
-   "options": "\nZement-Bentonit"
+   "options": "\nZement-Bentonit\nSchwenk F\u00fcllbinder GTM-hs (verbesserte H.)\nSchwenk F\u00fcllbinder H-hs plus (dotiert)"
   },
   {
    "fieldname": "backfill_sample",
@@ -365,28 +352,15 @@
    "label": "To depth2 (mm)"
   },
   {
-   "fieldname": "drilling_section",
-   "fieldtype": "Section Break",
-   "label": "Drilling"
-  },
-  {
    "fieldname": "drilling_type",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Drilling type",
    "options": "\nStufenmeissel\nRollenmeissel\nImlochhammer\nExzenter\nPDC-Meissel"
-  },
-  {
-   "fieldname": "column_break_12",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "drilling_length",
-   "fieldtype": "Int",
-   "label": "Drilling Length (mm)"
   }
  ],
  "is_submittable": 1,
- "modified": "2023-12-07 09:24:10.309537",
+ "modified": "2023-12-21 08:57:39.960398",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory",

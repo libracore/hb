@@ -473,7 +473,7 @@ DocType: Layer Directory,Backfill sample,Hinterfüllungsprobe
 DocType: Layer Directory,To depth2 (mm),bis Tiefe2 (m)
 DocType: Layer Directory,Piping2 (mm),Verrohrung2 (mm)
 DocType: Layer Directory,Drilling,Bohrung
-DocType: Layer Directory,Drilling type,Typ
+DocType: Layer Directory,Drilling type,Bohrtyp
 DocType: Layer Directory,Drilling Length (mm),Länge (mm)
 DocType: Drilling Team,Flushing drilling,Spühlbohrung
 DocType: Drilling Team,Hammer drilling,Spühlbohrung
