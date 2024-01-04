@@ -10,10 +10,8 @@ import datetime
 
 @frappe.whitelist(allow_guest=True)
 def insert_feedback(drilling_team, drilling_meter, date, project, project2):
-    frappe.log_error(project2, "project2")
     # create new record
     if not project2:
-        frappe.log_error("if", "if")
         feedback = frappe.get_doc({
             'doctype': 'Feedback Drilling Meter',
             'drilling_team': drilling_team,
@@ -26,7 +24,6 @@ def insert_feedback(drilling_team, drilling_meter, date, project, project2):
                 }]
         })
     else:
-        frappe.log_error("else", "else")
         feedback = frappe.get_doc({
             'doctype': 'Feedback Drilling Meter',
             'drilling_team': drilling_team,
