@@ -9,88 +9,53 @@ import json
 import datetime
 
 @frappe.whitelist(allow_guest=True)
-def get_object_details(truck, customer, object_name, key):
-    if validate_credentials(truck, customer, object_name, key):
-        obj = frappe.get_doc("Object", object_name)
-        return {
-            'address': "{0}<br>{1}<br>{2}".format(obj.object_name, obj.object_street, obj.object_location)
-        }
-    else:
-        return {'error': 'Not allowed'}
-
-@frappe.whitelist(allow_guest=True)
-def get_truck_weight(truck):
-    try:
-        weight = frappe.get_value("Truck", truck, "net_weight")
-        return {'weight': weight}
-    except Exception as err:
-        return {'error': err}
-
-@frappe.whitelist(allow_guest=True)
-def get_default_scale():
-    scale = frappe.get_value("MudEx Settings", "MudEx Settings", "default_scale")
-    return scale
-        
-def validate_credentials(truck, customer, object_name, key):
-    truck = frappe.get_doc("Truck", truck)
-    if truck.customer == customer:
-        object_key = frappe.get_value("Object", object_name, "object_key")
-        if key == object_key:
-            return True
-        else:
-            return False
-    else:
-        return False
-
-@frappe.whitelist(allow_guest=True)
-def insert_delivery(truck, customer, object, full_weight, empty_weight, net_weight, traces, load_type):
-    # prepare values
-    allocation = None
-    if frappe.db.exists("Object", object):
-        o = frappe.get_doc("Object", object)
-        allocation = [{
-            'object': object,
-            'oject_name': o.object_name,
-            'object_street': o.object_street,
-            'object_location': o.object_location,
-            'weight': float(net_weight)
-        }]
-        if not load_type:
-            load_type = o.load_type
-    trace = json.loads(traces)
-    for t in trace:
-        t['weight'] = float(t['weight'])
-    truck_doc = frappe.get_doc("Truck", truck)
-    config = frappe.get_doc("MudEx Settings", "MudEx Settings")
-    customer_doc = frappe.get_doc("Customer", customer)
-    
+def insert_feedback(drilling_team, drilling_meter, date, project, project2):
+    frappe.log_error(project2, "project2")
     # create new record
-    delivery = frappe.get_doc({
-        'doctype': 'Truck Delivery',
-        'truck': truck,
-        'truck_description': truck_doc.title,
-        'truck_owner': truck_doc.truck_owner,
-        'truck_scale': config.default_scale,
-        'date': datetime.datetime.now(),
-        'customer': customer,
-        'customer_name': customer_doc.customer_name,
-        'full_weight': float(full_weight),
-        'empty_weight': float(empty_weight),
-        'net_weight': float(net_weight),
-        'load_type': load_type,
-        'objects': allocation,
-        'trace': trace
-    })
-    delivery = delivery.insert(ignore_permissions=True)
-    delivery.submit()
-    return {'delivery': delivery.name}
-    
-@frappe.whitelist(allow_guest=True)
-def get_load_types(object=None):
-    all_load_types = frappe.get_all("Truck Load Type", fields=['name'])
-    if object:
-        load_type = frappe.get_value("Object", object, 'load_type')
+    if not project2:
+        frappe.log_error("if", "if")
+        feedback = frappe.get_doc({
+            'doctype': 'Feedback Drilling Meter',
+            'drilling_team': drilling_team,
+            'drilling_meter': drilling_meter,
+            'date': date,
+            #Create subtable "layers"
+            "project": [{
+            "reference_doctype": "Feedback Drilling Meter Project",
+            "project_number": project
+                }]
+        })
     else:
-        load_type = None
-        
-    return {'types': all_load_types, 'object_load_type': load_type}
+        frappe.log_error("else", "else")
+        feedback = frappe.get_doc({
+            'doctype': 'Feedback Drilling Meter',
+            'drilling_team': drilling_team,
+            'drilling_meter': drilling_meter,
+            'date': date,
+            #Create subtable "layers"
+            "project": [{
+            "reference_doctype": "Feedback Drilling Meter Project",
+            "project_number": project
+                },
+                {
+                "reference_doctype": "Feedback Drilling Meter Project",
+                "project_number": project2
+                }]
+        })
+    feedback = feedback.insert(ignore_permissions=True)
+    feedback.submit()
+    return {'feedback': feedback.name}
+
+@frappe.whitelist(allow_guest=True)
+def check_key(link_key, team):
+    
+    #get Team Key
+    team_key = frappe.db.get_value("Drilling Team", team, "team_key")
+    
+    #validate key and prepare response
+    if link_key == team_key:
+        response = True
+    else:
+        response = False    
+    
+    return response
