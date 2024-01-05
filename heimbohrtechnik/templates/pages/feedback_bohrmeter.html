@@ -129,9 +129,18 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .input-group-addon:last-child {
   border-left: 0;
 }
+.title {
+    font-size: 25px;
+    font-weight: bold;
+    padding-bottom: 20px;
+}
+
 </style>
 
 <div style="margin: 5px; margin-top: 0px; border-top: 1px solid white;" id="form">
+    <div class="title">
+        <Span>Rückmeldung Bohrmeter</Span>
+    </div>
     <div class="section-body">
         <div class="row">
             <div class="form-column col-sm-4">
@@ -148,8 +157,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
             </div>
             <div class="form-column col-sm-4">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-cube"></i></span>
-                    <input type="link" class="form-control" placeholder="Projekt-Nr." id="project">
+                    <span class="input-group-addon" id="project_icon"><i class="fa fa-cube"></i></span>
+                    <input type="text" class="form-control" placeholder="Projekt-Nr." id="project">
                 </div>
                 <div style="margin: 10px; " id="object_text">
                 </div>
@@ -189,6 +198,4 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
         </div>
     </div>
 </div>
-
-<input type="text" class="form-control" id="key" style="visibility: hidden; ">
 

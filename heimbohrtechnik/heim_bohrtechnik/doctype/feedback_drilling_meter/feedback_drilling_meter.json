@@ -1,4 +1,5 @@
 {
+ "autoname": "date",
  "creation": "2023-12-22 13:52:24.769368",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -56,7 +57,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2023-12-22 14:09:02.807093",
+ "modified": "2024-01-05 13:44:25.521597",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Feedback Drilling Meter",
