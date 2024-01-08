@@ -8,53 +8,47 @@ function make() {
 }
 
 function run() {
-    //Create Document on submit
-    $(".btn-submit").on('click', function() {
-        var link_key = get_link_key()
-        frappe.call({
-            'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.insert_feedback',
-            'args': {
-                'drilling_team': document.getElementById('drilling_team').value, 
-                'drilling_meter': document.getElementById('drilling_meter').value, 
-                'date': document.getElementById('date').value, 
-                'project': document.getElementById('project').value, 
-                'project2': document.getElementById('project2').value,
-                'link_key': link_key
-            },
-            'callback': function(r) {
+    //get all arguments and safe it in the HTML File
+    var arguments = window.location.toString().split("?");
+    if (!arguments[arguments.length - 1].startsWith("http")) {
+        var args_raw = arguments[arguments.length - 1].split("&");
+        var args = {};
+        args_raw.forEach(function (arg) {
+            var kv = arg.split("=");
+            if (kv.length > 1) {
+                args[kv[0]] = kv[1];
             }
         });
-    });
-    // Autofill Drilling Team
-    var drilling_team_prep = window.location.toString().split("=");
-    var drilling_team_prep_2 = drilling_team_prep[1].split("&");
-    var drilling_team = drilling_team_prep_2[0].replace(/%20/g, " ").replace(/%C3%BC/g, "ü").replace(/%C3%B6/g, "ö").replace(/%C3%A4/g, "ä");
-    document.getElementById('drilling_team').value = drilling_team;
-    // Handle button visibillity
-    // Validate key
-    var link_key = get_link_key()
-    //~ var link_prep = window.location.toString().split("=");
-    //~ var link_key = link_prep[link_prep.length -1]
+        if (args['drilling_team']) {
+            document.getElementById('drilling_team').value = args['drilling_team'].replace(/%20/g, " ").replace(/%C3%BC/g, "ü").replace(/%C3%B6/g, "ö").replace(/%C3%A4/g, "ä");
+        }
+        if (args['key']) {
+            document.getElementById('key').value = args['key'];
+        }        
+    } else {
+        // no arguments provided
+        
+    }
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.check_key',
         'args': {
-            'link_key': link_key,
-            'team': drilling_team
+            'link_key': document.getElementById('key').value,
+            'team': document.getElementById('drilling_team').value
         },
         'callback': function(response) {
             if (response.message) {
                 console.log(response.message);
                 var check = response.message[0]
-                var projects = response.message[1]
+                var projects_html = response.message[1]
                 console.log(check);
-                console.log(projects);
+                console.log(projects_html);
             } else {
                 var check = false
             }
             //Set Projects as Options for Select Field
             var project_icon = document.getElementById('project_icon');
                 project_icon.addEventListener('click', function() {
-                    chose_project(projects);
+                    chose_project(projects_html);
                 });
             //Check if all mandatory fields are filled
             var input = document.getElementById('form')
@@ -72,16 +66,39 @@ function run() {
             });
         }
     });
+    $(".btn-submit").on('click', function() {
+        frappe.call({
+            'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.insert_feedback',
+            'args': {
+                'drilling_team': document.getElementById('drilling_team').value, 
+                'drilling_meter': document.getElementById('drilling_meter').value, 
+                'date': document.getElementById('date').value, 
+                'project': document.getElementById('project').value, 
+                'project2': document.getElementById('project2').value,
+                'link_key': document.getElementById('key').value = args['key']
+            },
+            'callback': function(r) {
+            }
+        });
+    });
 }
 
-function get_link_key() {
-    var link_prep = window.location.toString().split("=");
-    var link_key = link_prep[link_prep.length -1]
-    return link_key
-}
-
-function chose_project(projects) {
+function chose_project(projects_html) {
     console.log("hoi");
-    //~ html = document.getElementById('msgprint')
-    //~ frappe.msgprint(frappe.render_template('heimbohrtechnik/templates/pages/msgprint.html'), "Projekt wählen");
+    var message = frappe.msgprint(projects_html, "Projekt wählen");
+}
+
+function show_based_on_filter(self, choice) {
+    console.log(choice);
+    document.getElementById('project').value = choice;
+    var msgprintElement = message.wrapper[0];
+    if (msgprintElement) {
+        msgprintElement.style.display = 'none';
+    }
+    //var modal = document.getElementByClassName('modal')//.classList.remove("show");
+    //~ var modal_backdrop =  document.getElementsByClassName('modal-backdrop');
+    //~ console.log(modal_backdrop)
+    //~ if (modal_backdrop) {
+        //~ modal_backdrop.classList.remove("show");
+    //~ }
 }

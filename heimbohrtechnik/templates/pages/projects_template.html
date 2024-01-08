@@ -1,0 +1,4 @@
+<p>Vorgeschlagene Projekte</p>
+{% for choice in projects %}
+<p><button type="button" class="btn btn-secondary" onclick="show_based_on_filter(this, '{{ choice }}')">{{ choice }}</button></p>
+{% endfor %}

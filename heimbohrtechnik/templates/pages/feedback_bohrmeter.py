@@ -14,6 +14,7 @@ def insert_feedback(drilling_team, drilling_meter, date, project, project2, link
     #check key
     team_key = frappe.db.get_value("Drilling Team", drilling_team, "team_key")
     if link_key != team_key:
+        frappe.msgprint("Invalid or missing Key!")
         return
     else:
         # create new record
@@ -59,16 +60,19 @@ def check_key(link_key, team):
     if link_key == team_key:
         response = True
         projects = get_projects(team)
+        projects_html = frappe.render_template("heimbohrtechnik/templates/pages/projects_template.html", {'projects': projects})
     else:
         response = False  
-        projects = []  
+        frappe.msgprint("Invalid or missing Key!")
     
-    return response, projects
+    
+    return response, projects_html
 
 def get_projects(team):
     #get today and calculate start and end date of period
     today = getdate()
     period_start = frappe.utils.add_days(today, -5)
+    period_end = frappe.utils.add_days(today, 2)
     
     #get projects in period
     data = frappe.db.sql("""
@@ -79,7 +83,7 @@ def get_projects(team):
         OR (`expected_start_date` < '{ps}' AND `expected_end_date` > '{pe}'))
         AND `drilling_team` = '{team}'
         AND `status` IN ("Open", "Completed")
-        """.format(team=team, ps=period_start, pe=today), as_dict=True)
+        """.format(team=team, ps=period_start, pe=period_end), as_dict=True)
         
     #get a list with the projects as values
     projects = []
