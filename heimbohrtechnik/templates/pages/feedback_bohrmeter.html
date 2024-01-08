@@ -144,18 +144,14 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     <div class="section-body">
         <div class="row">
             <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Bohrteam</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i></span>
                     <input type="text" class="form-control" placeholder="Bohrteam" id="drilling_team" readonly>
                 </div>
             </div>
             <div class="form-column col-sm-4">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
-                    <input type="date" class="form-control" placeholder="Datum" id="date">
-                </div>
-            </div>
-            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Projekt</label>
                 <div class="input-group">
                     <span class="input-group-addon" id="project_icon"><i class="fa fa-cube"></i></span>
                     <input type="text" class="form-control" placeholder="Projekt-Nr." id="project">
@@ -163,8 +159,45 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
                 <div style="margin: 10px; " id="object_text">
                 </div>
             </div>
+            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Spülen</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-tint"></i></span>
+                    <select class="form-control" placeholder="spülen" id="flushing">
+                        <option value="Nein">Nein</option>
+                        <option value="Ja">Ja</option>
+                    </select>
+                </div>
+            </div>
         </div>
                 
+        <div class="row" style="margin-top: 20px; " id="action-row">
+            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Datum</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                    <input type="date" class="form-control" placeholder="Datum" id="date">
+                </div>
+            </div>
+            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Weiteres Projekt</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-cube"></i></span>
+                    <input type="text" class="form-control" placeholder="Weitere Projekt-Nr." id="project2">
+                </div>
+            </div>
+            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Hammerwechsel</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-tint"></i></span>
+                    <select class="form-control" placeholder="Hammerwechsel" id="hammer_change">
+                        <option value="Nein">Nein</option>
+                        <option value="Ja">Ja</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
         <div class="row" style="margin-top: 20px; " id="action-row">
             <div class="form-column col-sm-4">
                 <label class="control-label" style="padding-right: 0px;">Bohrmeter</label>
@@ -179,21 +212,14 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
                 <button type="button" class="btn btn-primary btn-submit" style="display: none;" id="submit">Senden</button>
             </div>
             <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Schlagteilwechsel</label>
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-cube"></i></span>
-                    <input type="text" class="form-control" placeholder="Weitere Projekt-Nr." id="project2">
+                    <span class="input-group-addon"><i class="fa fa-tint"></i></span>
+                    <select class="form-control" placeholder="impact_part_change" id="impact_part_change">
+                        <option value="Nein">Nein</option>
+                        <option value="Ja">Ja</option>
+                    </select>
                 </div>
-            </div>
-        </div>
-        
-        <div class="row" style="margin-top: 20px; visibility: hidden; " id="finalised-row">
-            <div class="form-column col-sm-4">
-                <table>
-                    <tr>
-                        <td><img src="/assets/heimbohrtechnik/images/tick.png"></td>
-                        <td><p>Der Prozess ist erfolgreich abgeschlossen. <span id="result-doc"></span></p></td>
-                    </tr>
-                </table>
             </div>
         </div>
     </div>
