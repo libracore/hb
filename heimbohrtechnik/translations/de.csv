@@ -485,3 +485,24 @@ DocType: Follow Up Note,Follow Up Note,Nachfassnotiz
 DocType: Follow Up Note,New Follow Up Note,Neue Nachfassnotiz
 Report: Follow-Up Overview,Follow-Up Overview,Nachfass-Übersicht
 Report: Drilling Review,Drilling Review,Bohrrückblick
+Report: Feedback Drilling Meter,Feedback Drilling Meter,Rückmeldung Bohrmeter
+Report: Feedback Drilling Meter,Month,Monat
+Report: Feedback Drilling Meter,Week,Woche
+Report: Feedback Drilling Meter,From,Von
+Report: Feedback Drilling Meter,To,bis
+Report: Feedback Drilling Meter,Monday,Montag
+Report: Feedback Drilling Meter,Tuesday,Dienstag
+Report: Feedback Drilling Meter,Wednesday,Mittwoch
+Report: Feedback Drilling Meter,Thursday,Donnerstag
+Report: Feedback Drilling Meter,Friday,Freitag
+Report: Feedback Drilling Meter,Remark,Bemerkung
+DocType: Feedback Drilling Meter,Feedback Drilling Meter,Rückmeldung Bohrmeter
+DocType: Feedback Drilling Meter,Drilling Meter,Bohrmeter
+DocType: Feedback Drilling Meter,Flushing,Spülung
+DocType: Feedback Drilling Meter,Hammer change,Hammerwechsel
+DocType: Feedback Drilling Meter,Impact part change,Schlagteilwechsel
+DocType: Feedback Drilling Meter,Drilling Team,Bohrteam
+DocType: Feedback Drilling Meter,Date,Datum
+DocType: Feedback Drilling Meter,Project,Projekt
+DocType: Feedback Drilling Meter,Number,Nummer
+

@@ -10,13 +10,26 @@ import datetime
 from frappe.utils.data import getdate
 
 @frappe.whitelist(allow_guest=True)
-def insert_feedback(drilling_team, drilling_meter, date, project, project2, link_key):
+def insert_feedback(drilling_team, drilling_meter, date, project, project2, flushing, hammer_change, impact_part_change, link_key):
     #check key
     team_key = frappe.db.get_value("Drilling Team", drilling_team, "team_key")
     if link_key != team_key:
         frappe.msgprint("Invalid or missing Key!")
         return
     else:
+        #Translate checkboxes
+        if flushing == "Ja":
+            flushing_check = 1
+        else:
+            flushing_check = 0
+        if hammer_change == "Ja":
+            hammer_change_check = 1
+        else:
+            hammer_change_check = 0
+        if impact_part_change == "Ja":
+            impact_part_change_check = 1
+        else:
+            impact_part_change_check = 0
         # create new record
         if not project2:
             feedback = frappe.get_doc({
@@ -24,6 +37,9 @@ def insert_feedback(drilling_team, drilling_meter, date, project, project2, link
                 'drilling_team': drilling_team,
                 'drilling_meter': drilling_meter,
                 'date': date,
+                'flushing': flushing_check,
+                'hammer_change': hammer_change_check,
+                'impact_part_change': impact_part_change_check,
                 #Create subtable "layers"
                 "project": [{
                 "reference_doctype": "Feedback Drilling Meter Project",
@@ -36,15 +52,18 @@ def insert_feedback(drilling_team, drilling_meter, date, project, project2, link
                 'drilling_team': drilling_team,
                 'drilling_meter': drilling_meter,
                 'date': date,
+                'flushing': flushing_check,
+                'hammer_change': hammer_change_check,
+                'impact_part_change': impact_part_change_check,
                 #Create subtable "layers"
                 "project": [{
                 "reference_doctype": "Feedback Drilling Meter Project",
                 "project_number": project
-                    },
-                    {
-                    "reference_doctype": "Feedback Drilling Meter Project",
-                    "project_number": project2
-                    }]
+                },
+                {
+                "reference_doctype": "Feedback Drilling Meter Project",
+                "project_number": project2
+                }]
             })
         feedback = feedback.insert(ignore_permissions=True)
         feedback.submit()

@@ -67,6 +67,7 @@ function run() {
         }
     });
     $(".btn-submit").on('click', function() {
+        console.log(document.getElementById('flushing').value)
         frappe.call({
             'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.insert_feedback',
             'args': {
@@ -75,6 +76,9 @@ function run() {
                 'date': document.getElementById('date').value, 
                 'project': document.getElementById('project').value, 
                 'project2': document.getElementById('project2').value,
+                'flushing': document.getElementById('flushing').value,
+                'hammer_change': document.getElementById('hammer_change').value,
+                'impact_part_change': document.getElementById('impact_part_change').value,
                 'link_key': document.getElementById('key').value = args['key']
             },
             'callback': function(r) {
