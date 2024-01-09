@@ -87,56 +87,13 @@ function run() {
     });
 }
 
-//~ function chose_project(projects_html) {
-    //~ var d = new frappe.ui.Dialog({
-        //~ 'fields': [
-            //~ {'fieldname': 'ht', 'fieldtype': 'HTML'}
-        //~ ],
-        //~ primary_action: function(){
-            //~ d.hide();
-            //~ show_alert(d.get_values());
-        //~ },
-        //~ primary_action_label: __('Import file')
-    //~ });
-    //~ d.fields_dict.ht.$wrapper.html('Hello World');
-    //~ d.show();
-//~ }
+function chose_project(projects_html) {
+    console.log("hoi");
+    var message = frappe.msgprint(projects_html, "Projekt wählen");
+}
 
-//~ function chose_project(projects_html) {
-    //~ var d = new frappe.ui.Dialog({
-        //~ title: 'Projekt wählen',
-        //~ fields: [
-            //~ {
-                //~ fieldtype: 'HTML',
-                //~ options: projects_html,
-            //~ },
-        //~ ],
-        //~ primary_action_label: 'OK',
-        //~ primary_action: function() {
-            //~ d.hide();
-        //~ },
-    //~ });
-//~ }
-
-//~ function chose_project(projects_html) {
-    //~ console.log("hoi");
-    //~ var message = frappe.msgprint(projects_html, "Projekt wählen");
-//~ }
-
-//~ function set_project(self, choice) {
-    //~ console.log(choice);
-    //~ document.getElementById('project').value = choice;
-    //~ self.close()
-    
-    //~ var msgprintElement = message.wrapper[0];
-    //~ if (msgprintElement) {
-        //~ msgprintElement.style.display = 'none';
-    //~ }
-    
-    //var modal = document.getElementByClassName('modal')//.classList.remove("show");
-    //~ var modal_backdrop =  document.getElementsByClassName('modal-backdrop');
-    //~ console.log(modal_backdrop)
-    //~ if (modal_backdrop) {
-        //~ modal_backdrop.classList.remove("show");
-    //~ }
-//~ }
+function set_project(self, choice) {
+    console.log(choice);
+    document.getElementById('project').value = choice;
+    frappe.ui.open_dialogs[0].hide();
+}
