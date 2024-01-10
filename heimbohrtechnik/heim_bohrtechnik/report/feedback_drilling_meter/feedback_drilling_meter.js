@@ -10,6 +10,17 @@ frappe.query_reports["Feedback Drilling Meter"] = {
             "fieldtype": "Link",
             "options": "Drilling Team",
             "reqd": 1
+        },
+        {
+            "fieldname":"year_filter",
+            "label": __("Year"),
+            "fieldtype": "Select",
+            "options": get_years(),
+            "reqd": 1
         }
 	]
 };
+
+function get_years() {
+   return "2024"; 
+}

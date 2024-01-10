@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 from frappe import _
+from datetime import datetime, timedelta
 
 def execute(filters=None):
     columns = get_columns()
@@ -12,7 +13,7 @@ def execute(filters=None):
 
 def get_columns():
     columns = [
-        {"label": _("Month"), "fieldname": "month", "fieldtype": "Data", "width": 100},
+        # ~ {"label": _("Month"), "fieldname": "month", "fieldtype": "Data", "width": 100},
         {"label": _("Week"), "fieldname": "cw", "fieldtype": "Int", "width": 60},
         {"label": _("From"), "fieldname": "from", "fieldtype": "Date", "width": 80},
         {"label": _("To"), "fieldname": "to", "fieldtype": "Date", "width": 80},
@@ -27,4 +28,52 @@ def get_columns():
     return columns
 
 def get_data(filters):
+    # ~ start = datetime(int(filters.year_filter), 1, 1).date()
+    # ~ end = datetime(int(filters.year_filter), 12, 31).date()
+    
+    data =
+    
+    for i in range(1, 53):
+        sql_query = """SELECT 
+            `date`,
+            `drilling_meter`,
+            `week`,
+            `day`,
+            `flushing`,
+            `hammer_change`,
+            `impact_part_change`
+            FROM `tabFeedback Drilling Meter`
+            WHERE `drilling_team` = '{team}'
+            AND `week` = '{i}'
+            """.format(i=i)
+            
+            entrys = frappe.db.sql(sql_query, as_dict=True)
+            
+            new_week = {
+                'cw' : i,
+                'from': xxx,
+                'to': xxx,
+                
+                
+
+    
+    # ~ sql_query = """SELECT 
+        # ~ `date`,
+        # ~ `drilling_meter`,
+        # ~ `week`,
+        # ~ `day`,
+        # ~ `flushing`,
+        # ~ `hammer_change`,
+        # ~ `impact_part_change`
+        # ~ FROM `tabFeedback Drilling Meter`
+        # ~ WHERE `drilling_team` = '{team}'
+        # ~ AND `date` BETWEEN '{start}' AND '{end}'
+        # ~ """.format(team=filters.drilling_team_filter, start=start, end=end)
+        
+    # ~ raw_data = frappe.db.sql(sql_query, as_dict=True)
+    
+    
+    
+    # ~ frappe.log_error(weeks_in_year, "weeks_in_year")
+        
     return

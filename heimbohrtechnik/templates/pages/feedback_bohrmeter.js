@@ -37,18 +37,21 @@ function run() {
         },
         'callback': function(response) {
             if (response.message) {
-                console.log(response.message);
                 var check = response.message[0]
                 var projects_html = response.message[1]
-                console.log(check);
-                console.log(projects_html);
             } else {
                 var check = false
             }
             //Set Projects as Options for Select Field
             var project_icon = document.getElementById('project_icon');
                 project_icon.addEventListener('click', function() {
-                    chose_project(projects_html);
+                    var field = 'project';
+                    chose_project(projects_html, field);
+                });
+            var project_icon2 = document.getElementById('project_icon2');
+                project_icon2.addEventListener('click', function() {
+                    var field = 'project2';
+                    chose_project(projects_html, field);
                 });
             //Check if all mandatory fields are filled
             var input = document.getElementById('form')
@@ -87,13 +90,15 @@ function run() {
     });
 }
 
-function chose_project(projects_html) {
-    console.log("hoi");
+function chose_project(projects_html, field) {
+    document.getElementById('field_memory').value = field;
     var message = frappe.msgprint(projects_html, "Projekt wählen");
 }
 
 function set_project(self, choice) {
+    var field = document.getElementById('field_memory').value;
+    console.log(field);
     console.log(choice);
-    document.getElementById('project').value = choice;
+    document.getElementById(field).value = choice;
     frappe.ui.open_dialogs[0].hide();
 }
