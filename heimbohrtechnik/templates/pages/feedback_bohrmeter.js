@@ -3,7 +3,6 @@ $(document).ready(function(){
     run();
 });
 
-
 function make() {
 }
 
@@ -29,6 +28,7 @@ function run() {
         // no arguments provided
         
     }
+    // Check if key in link is valid
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.check_key',
         'args': {
@@ -69,8 +69,8 @@ function run() {
             });
         }
     });
+    //create document in ERPNext, when submit button has been pushed
     $(".btn-submit").on('click', function() {
-        console.log(document.getElementById('flushing').value)
         frappe.call({
             'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.insert_feedback',
             'args': {
@@ -97,8 +97,6 @@ function chose_project(projects_html, field) {
 
 function set_project(self, choice) {
     var field = document.getElementById('field_memory').value;
-    console.log(field);
-    console.log(choice);
     document.getElementById(field).value = choice;
     frappe.ui.open_dialogs[0].hide();
 }

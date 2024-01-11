@@ -18,9 +18,18 @@ frappe.query_reports["Feedback Drilling Meter"] = {
             "options": get_years(),
             "reqd": 1
         }
-	]
+	],
+    //Mark flushing days in red
+    "formatter":function (value, row, column, data, default_formatter) {
+            if (data.flushing && data.flushing.includes(column.fieldname)) {
+                return `<div style="color: red; text-align: right;">${value}</div>`;
+            }
+        return default_formatter(value, row, column, data);
+    }
 };
 
 function get_years() {
-   return "2024"; 
+    var actual_year = new Date().getFullYear();
+    console.log(actual_year)
+   return String(actual_year) + "\n" + String(actual_year-1) + "\n" + String(actual_year-2) + "\n" + String(actual_year-3) + "\n" + String(actual_year-4); 
 }
