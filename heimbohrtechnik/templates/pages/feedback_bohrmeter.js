@@ -36,11 +36,10 @@ function run() {
             'team': document.getElementById('drilling_team').value
         },
         'callback': function(response) {
+            var check = false;
             if (response.message) {
-                var check = response.message[0]
-                var projects_html = response.message[1]
-            } else {
-                var check = false
+                check = response.message.is_valid;
+                var projects_html = response.message.projects_html;
             }
             //Set Projects as Options for Select Field
             var project_icon = document.getElementById('project_icon');
@@ -54,8 +53,8 @@ function run() {
                     chose_project(projects_html, field);
                 });
             //Check if all mandatory fields are filled
-            var input = document.getElementById('form')
-            var button = document.getElementById('submit')
+            var input = document.getElementById('form');
+            var button = document.getElementById('submit');
             input.addEventListener('input', function() {
                 var meter = document.getElementById('drilling_meter').value
                 var date = document.getElementById('date').value

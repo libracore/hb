@@ -14,8 +14,8 @@ frappe.query_reports["Feedback Drilling Meter"] = {
         {
             "fieldname":"year_filter",
             "label": __("Year"),
-            "fieldtype": "Select",
-            "options": get_years(),
+            "fieldtype": "Int",
+            "default": new Date().getFullYear(),
             "reqd": 1
         }
 	],
@@ -27,9 +27,3 @@ frappe.query_reports["Feedback Drilling Meter"] = {
         return default_formatter(value, row, column, data);
     }
 };
-
-function get_years() {
-    var actual_year = new Date().getFullYear();
-    console.log(actual_year)
-   return String(actual_year) + "\n" + String(actual_year-1) + "\n" + String(actual_year-2) + "\n" + String(actual_year-3) + "\n" + String(actual_year-4); 
-}

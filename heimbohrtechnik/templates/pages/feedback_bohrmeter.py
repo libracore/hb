@@ -76,16 +76,16 @@ def check_key(link_key, team):
     team_key = frappe.db.get_value("Drilling Team", team, "team_key")
     
     #validate key and prepare response
+    is_valid = False 
     if link_key == team_key:
-        response = True
+        is_valid = True
         projects = get_projects(team)
         projects_html = frappe.render_template("heimbohrtechnik/templates/pages/projects_template.html", {'projects': projects})
     else:
-        response = False  
         frappe.msgprint("Invalid or missing Key!")
     
     
-    return response, projects_html
+    return {'is_valid': is_valid, 'projects_html': projects_html}
 
 def get_projects(team):
     #get today and calculate start and end date of period
