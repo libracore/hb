@@ -528,6 +528,12 @@ def get_data():
                     "name": "Drilling Review",
                     "doctype": "Project",
                     "is_query_report": True
+                },
+                {
+                    "type": "report",
+                    "name": "Feedback Drilling Meter",
+                    "doctype": "Feedback Drilling Meter",
+                    "is_query_report": True
                 }
             ]
         },

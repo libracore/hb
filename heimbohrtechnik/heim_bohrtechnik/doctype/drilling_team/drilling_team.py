@@ -3,8 +3,18 @@
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
-# import frappe
+import frappe
 from frappe.model.document import Document
+from heimbohrtechnik.heim_bohrtechnik.doctype.object.object import get_key
+
 
 class DrillingTeam(Document):
-	pass
+    def before_save(self):
+        if not self.team_key:
+            self.set_key()
+            
+        return
+    
+    def set_key(self):
+        self.team_key = get_key()
+        return

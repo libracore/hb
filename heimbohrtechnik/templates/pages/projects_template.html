@@ -1,0 +1,5 @@
+<p>Vorgeschlagene Projekte</p>
+{% for choice in projects %}
+<p><button type="button" class="btn btn-secondary" onclick="set_project(this, '{{ choice }}')">{{ choice }}</button></p>
+{% endfor %}
+
