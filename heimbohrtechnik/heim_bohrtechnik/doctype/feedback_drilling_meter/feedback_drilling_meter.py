@@ -8,9 +8,8 @@ from frappe.model.document import Document
 
 class FeedbackDrillingMeter(Document):
     def validate(self):
-        self.get_week_and_weekday()
+        self.get_weekday()
         
-    def get_week_and_weekday(self):
+    def get_weekday(self):
         date = frappe.utils.data.getdate(self.date)
-        self.week = int(date.strftime('%U')) + 1
         self.day = date.strftime('%A')

@@ -84,6 +84,7 @@ function run() {
                 'link_key': document.getElementById('key').value = args['key']
             },
             'callback': function(r) {
+                frappe.msgprint("<b>Daten erfolgreich übermittelt!</b>", "Info");
             }
         });
     });
