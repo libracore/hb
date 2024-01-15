@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2022, libracore and Contributors
+# Copyright (c) 2021-2024, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 
 from __future__ import unicode_literals
@@ -7,7 +7,7 @@ import frappe
 # searches for supplier
 def supplier_by_capability(doctype, txt, searchfield, start, page_len, filters):
     return frappe.db.sql(
-        """SELECT `tabSupplier`.`name`, `tabSupplier`.`supplier_name`, `tabSupplier`.`remarks`
+        """SELECT `tabSupplier`.`name`, `tabSupplier`.`supplier_name`, `tabSupplier`.`remarks`, `tabSupplier`.`hauptadresse`
            FROM `tabSupplier`
            LEFT JOIN `tabSupplier Activity` ON `tabSupplier Activity`.`parent` = `tabSupplier`.`name`
            WHERE `tabSupplier Activity`.`activity` = "{c}" 
@@ -17,6 +17,17 @@ def supplier_by_capability(doctype, txt, searchfield, start, page_len, filters):
                   OR `tabSupplier`.`remarks` LIKE "%{s}%");
         """.format(c=filters['capability'], s=txt))
 
+# searches for customers
+def customers(doctype, txt, searchfield, start, page_len, filters):
+    return frappe.db.sql(
+        """SELECT `tabCustomer`.`name`, `tabCustomer`.`customer_name`, `tabCustomer`.`customer_details`, `tabCustomer`.`hauptadresse`
+           FROM `tabCustomer`
+           WHERE `tabCustomer`.`disabled` = 0
+             AND (`tabCustomer`.`customer_name` LIKE "%{s}%" 
+                  OR `tabCustomer`.`name` LIKE "%{s}%"
+                  OR `tabCustomer`.`customer_details` LIKE "%{s}%");
+        """.format(s=txt))
+        
 @frappe.whitelist()
 def get_required_activities(supplier, activity):
     sql_query = """SELECT `required_activity`

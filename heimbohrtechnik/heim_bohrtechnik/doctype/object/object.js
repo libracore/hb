@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2023, libracore AG and contributors
+// Copyright (c) 2021-2024, libracore AG and contributors
 // For license information, please see license.txt
 
 // child table filter sets
@@ -27,6 +27,7 @@ cur_frm.fields_dict.addresses.grid.get_field('party').get_query =
             }
         } else {
             filters = {
+                'query': 'heimbohrtechnik.heim_bohrtechnik.filters.customers',
                 'filters': {
                     "disabled": 0
                 }

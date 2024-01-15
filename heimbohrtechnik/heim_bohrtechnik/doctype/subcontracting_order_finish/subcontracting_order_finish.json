@@ -1,0 +1,53 @@
+{
+ "allow_rename": 1,
+ "autoname": "field:subcontracting_order",
+ "creation": "2024-01-10 13:34:20.091009",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "subcontracting_order",
+  "project"
+ ],
+ "fields": [
+  {
+   "fieldname": "subcontracting_order",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Subcontracting Order",
+   "options": "Subcontracting Order",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fetch_from": "subcontracting_order.project",
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "read_only": 1
+  }
+ ],
+ "modified": "2024-01-10 13:34:20.091009",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Subcontracting Order Finish",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
