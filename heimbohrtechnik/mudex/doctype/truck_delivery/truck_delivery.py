@@ -54,7 +54,14 @@ def create_invoice(object):
     if tax_templates and len(tax_templates) > 0:
         tax_template = tax_templates[0]['default_sales_taxes_and_charges']
     else:
-        tax_template = None
+        # fallback to default tax template
+        default_tax_template = frappe.get_all('Sales Taxes and Charges Template', 
+            filters={'is_default': 1, 'company': config.company},
+            fields=['name'])
+        if len(default_tax_template) > 0:
+            tax_template = default_tax_template[0]['name']
+        else:
+            tax_template = None
     # set default cost center from company
     cost_center = frappe.get_value("Company", config.company, "cost_center")
     # get project link
