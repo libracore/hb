@@ -31,6 +31,13 @@ frappe.ui.form.on('Subcontracting Order', {
         frm.add_custom_button(__("Artikel holen"), function() {
             pull_items(frm);
         });
+        
+        // create finish document
+        if (!frm.doc.__islocal) {
+            frm.add_custom_button(__("Abschluss"), function() {
+                open_create_finish(frm);
+            });
+        }
     },
     before_save: function(frm) {
         if (!frm.doc.object_name) {
@@ -197,6 +204,33 @@ function pull_items(frm) {
                 );
             } else {
                 frappe.msgprint( __("Keine Auftragsdaten gefunden."), __("Information") );
+            }
+        }
+    });
+}
+
+function open_create_finish(frm) {
+    // check if there are existing records
+    frappe.call({
+        'method': "frappe.client.get_list",
+        'args': {
+            'doctype': "Subcontracting Order Finish"
+        },
+        'callback': function(response) {
+            if (response.message.length > 0) {
+                // open existing record
+                frappe.set_route("Form", "Subcontracting Order Finish", response.message[0].name);
+            } else {
+                // create a new record
+                frappe.call({
+                    'method': "make_finish",
+                    'doc': cur_frm.doc,
+                    'callback': function(r)
+                    {
+                        console.log(r);
+                        frappe.set_route("Form", "Subcontracting Order Finish", r.message.name);
+                    }
+                });
             }
         }
     });

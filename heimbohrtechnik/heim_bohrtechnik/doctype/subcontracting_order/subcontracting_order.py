@@ -83,6 +83,19 @@ class SubcontractingOrder(Document):
                 
         return items
     
+    def make_finish(self):
+        finish = frappe.get_doc({
+            'doctype': "Subcontracting Order Finish",
+            'subcontracting_order': self.name,
+            'project': self.project,
+            'object': self.object,
+            'object_name': self.object_name,
+            'object_street': self.object_street,
+            'object_location': self.object_location,
+            'team': self.drilling_team
+        })
+        finish.insert()
+        return finish
 
 @frappe.whitelist()
 def update_from_project(subcontracting_order, start_date, end_date, drilling_team, description):

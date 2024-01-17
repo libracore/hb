@@ -7,7 +7,15 @@
  "engine": "InnoDB",
  "field_order": [
   "subcontracting_order",
-  "project"
+  "project",
+  "team",
+  "col_main",
+  "object",
+  "object_name",
+  "object_street",
+  "object_location",
+  "sec_remarks",
+  "remarks"
  ],
  "fields": [
   {
@@ -26,9 +34,65 @@
    "label": "Project",
    "options": "Project",
    "read_only": 1
+  },
+  {
+   "fieldname": "col_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "object",
+   "fieldtype": "Link",
+   "label": "Object",
+   "options": "Object",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "object.object_name",
+   "fieldname": "object_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Object Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "object.object_street",
+   "fieldname": "object_street",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Object Street",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "object.object_location",
+   "fieldname": "object_location",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Object Location",
+   "read_only": 1
+  },
+  {
+   "fieldname": "team",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Team",
+   "options": "Drilling Team"
+  },
+  {
+   "fieldname": "sec_remarks",
+   "fieldtype": "Section Break",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Text Editor",
+   "label": "Remarks"
   }
  ],
- "modified": "2024-01-10 13:34:20.091009",
+ "modified": "2024-01-17 19:37:58.762412",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order Finish",
@@ -45,9 +109,21 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1,
+   "write": 1
   }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+ "title_field": "object_name",
  "track_changes": 1
 }
