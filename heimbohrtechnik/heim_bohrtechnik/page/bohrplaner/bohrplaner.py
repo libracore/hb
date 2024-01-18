@@ -1317,14 +1317,37 @@ def move_projects(from_project, drilling_team, days):
     if not start_date:
         return {'error': 'No start date found'}
     
-    projects = frappe.db.sql("""
-        SELECT `name`
+    raw_projects = frappe.db.sql("""SELECT
+            `name`,
+            `expected_start_date`,
+            `expected_end_date`
         FROM `tabProject`
         WHERE 
             `drilling_team` = "{drilling_team}"
             AND `expected_start_date` >= "{start_date}"
+        ORDER BY `expected_start_date` ASC
         ;
     """.format(drilling_team=drilling_team, start_date=start_date), as_dict=True)
+    
+    projects = []
+    first_project = True
+    
+    for project in raw_projects:
+        if first_project == True:
+            projects.append({
+                'name': project.name
+            })
+            first_project = False
+            last_project = project
+        else:
+            gap = get_gap(last_project.expected_end_date, project.expected_start_date)
+            if gap >= days:
+                break
+            else:
+                projects.append({
+                    'name': project.name
+                })
+                last_project = project
     
     project_changes = []
     for p in projects:
@@ -1399,3 +1422,15 @@ def log_drilling_move(title, project_changes):
     frappe.db.commit()
     return log.name
     
+def get_gap(start, end):
+    date = frappe.utils.add_days(start, 1)
+    gap_length = 0
+    date_list, weekend_list, kw_list, day_list, today = get_days(start, end)
+    while date < end:
+        if date.strftime("%d.%m.%Y") in weekend_list:
+            date = frappe.utils.add_days(date, 1)
+        else:
+            gap_length += 1
+            date = frappe.utils.add_days(date, 1)
+    
+    return gap_length
