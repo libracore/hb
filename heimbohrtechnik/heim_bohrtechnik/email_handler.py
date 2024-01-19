@@ -165,6 +165,8 @@ def upload_communication_to_nextcloud(communication):
 
 """
 Hook from Communication: create file and upload to nextcloud
+
+Note: infomail has a scheduled handler in utils:check_infomails
 """
 def communication_on_insert(self, event):
     try:
@@ -174,7 +176,19 @@ def communication_on_insert(self, event):
         if self.reference_doctype == "Quotation":
             from heimbohrtechnik.heim_bohrtechnik.doctype.follow_up_note.follow_up_note import create_note_from_communication
             create_note_from_communication(self)
-            
+        elif self.reference_doctype == "Project":
+            if "Besichtigungstermin" in self.subject:
+                # check if there are additional projects
+                projects = re.findall(r"P-[0-9]{6}", self.subject)
+                if self.reference_name not in projects:
+                    projects.append(self.reference_name)
+                for p in projects:
+                    if frappe.db.exists("Project", p):
+                        frappe.db.sql("""UPDATE `tabProject` 
+                                         SET `visit_mail_sent` = 1 
+                                         WHERE `name` = "{project}";""".format(project=p))
+                frappe.db.commit()
+        
     except Exception as err:
         frappe.log_error(err, "Communication hook failed")
     return
