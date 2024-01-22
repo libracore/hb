@@ -161,6 +161,20 @@ def write_file_to_base_path(file_name):
     return
 
 """
+Delete a file from nextcloud
+"""
+def delete_project_file(project, file_name, target=PATHS['drilling']):
+    if cint(frappe.get_value("Heim Settings", "Heim Settings", "nextcloud_enabled")) == 0:
+        return      # skip if nextcloud is disabled (develop environments)
+        
+    client = get_client()
+    project_path = get_project_path(project)
+    if client.check(os.path.join(project_path, target)):
+        client.clean(os.path.join(project_path, target, file_name.split("/")[-1]))
+
+    return
+    
+"""
 This function gets the cloud link to a project
 """
 @frappe.whitelist()
@@ -220,16 +234,20 @@ def upload_file(self, event):
             write_project_file_from_local_file (project, physical_file_name, PATHS['invoice'])
     
     elif self.attached_to_doctype == "Project":
-        #check if this file is an Attachment and not coming from a Subtable (plans or permits, they are written to Home)
-        if self.folder.startswith("Home/"):     # can be "Home/Attachments", but also "Home/Projects/..." in case of SV, child table uploads are in "Home"
-            physical_file_name = get_physical_path(self.name)
-            write_project_file_from_local_file (self.attached_to_name, physical_file_name, PATHS['drilling'])
-        else:
-            # Because the project file is not writen to the database yet, 
-            # we are not able here to check if it is a plan or a permit (both are subtables)
-            # Therefore this check will follow later in (see hooks.py "on_update project" and 
-            # function "upload_project_file" below)
-            pass
+        project = self.attached_to_name
+        # mark file allocation
+        pending_file = frappe.get_doc({
+            'doctype': "Pending File Allocation",
+            'project': project,
+            'file_id': self.name,
+            'file_url': self.file_url
+        })
+        pending_file.insert(ignore_permissions=True)
+        frappe.db.commit()
+        
+        physical_file_name = get_physical_path(self.name)
+        write_project_file_from_local_file (project, physical_file_name, PATHS['drilling'])
+        frappe.log_error("upload as drilling: {0} ".format(self.as_dict()))
     
     elif self.attached_to_doctype == "Request for Public Area Use":
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
@@ -263,38 +281,53 @@ def upload_attachments(dt, dn, project):
 
 # runs on a project update (hooks)
 def upload_project_file(project, event):
-    # check if the project subtable attachment plan or permit was added
-    project_old = project._doc_before_save
-    if not project_old:
-        # this is a creation: skip
+    pending_uploads = frappe.db.sql("""
+        SELECT `name`, `project`, `file_id`, `file_url`
+        FROM `tabPending File Allocation`
+        WHERE `project` = "{project}"; """.format(project=project.name), as_dict=True)
+    
+    if len(pending_uploads) == 0:
         return
         
-    if project.plans and project_old.plans:
-        for p in range(0, len(project.plans)):
-            if (p >= len(project_old.plans) and project.plans[p].file) \
-                or (project.plans[p].file and not project_old.plans[p].file):
-                # this file has been added to the plans
-                subtable = "plans"
-                file_id = get_file_id(project, event, subtable, url=project.plans[p].file)
-                if file_id:
-                    physical_file_name = get_physical_path(file_id)
-                    write_project_file_from_local_file (project.name, physical_file_name, PATHS['plan'])
-                    
-    if project.permits and project_old.permits:
-        for p in range(0, len(project.permits)):
-            if (p >= len(project_old.permits) and project.permits[p].file) \
-                or (project.permits[p].file and not project_old.permits[p].file):
-                subtable = "permits"
-                file_id = get_file_id(project, event, subtable, url=project.permits[p].file)
+    for p in pending_uploads:
+        physical_file_name = get_physical_path(p.get("file_id"))
+        # check if this is a plan
+        plan_matches = frappe.db.sql("""
+            SELECT `parent`
+            FROM `tabConstruction Site Description Plan`
+            WHERE `parenttype` = "Project"
+              AND `parent` = "{project}"
+              AND `file` = "{file_url}";""".format(project=project.name, file_url=p.get("file_url")), 
+              as_dict=True)
+        if len(plan_matches) > 0:
+            # process as plan
+            write_project_file_from_local_file (project.name, physical_file_name, PATHS['plan'])
+            # remove from drilling
+            delete_project_file(project.name, physical_file_name, target=PATHS['drilling'])
+        else:
+            # check if it is a permit
+            permit_matches = frappe.db.sql("""
+                SELECT `parent`, `permit`
+                FROM `tabProject Permit`
+                WHERE `parenttype` = "Project"
+                  AND `parent` = "{project}"
+                  AND `file` = "{file_url}";""".format(project=project.name, file_url=p.get("file_url")), 
+                  as_dict=True)
+            if len(permit_matches) > 0:
+                # process as permit
                 # define altering target for road blocks
-                if project.permits[p].permit == "Strassensperrung":
+                if permit_matches[0].permit == "Strassensperrung":
                     target = PATHS['road']
-                else:
-                    target = PATHS['drilling']
-                if file_id:
-                    physical_file_name = get_physical_path(file_id)
                     write_project_file_from_local_file (project.name, physical_file_name, target)
+                    # remove from drilling
+                    delete_project_file(project.name, physical_file_name, target=PATHS['drilling'])
     
+    # clean up
+    pending_uploads = frappe.db.sql("""
+        DELETE
+        FROM `tabPending File Allocation`
+        WHERE `project` = "{project}"; """.format(project=project.name))
+        
     return
     
 def get_file_id(project, event, subtable, url=None):
