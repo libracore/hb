@@ -487,9 +487,9 @@ def get_traffic_lights_indicator(project):
     if is_construction_site_inspected(project.name) == 1:
         kuerzel_pl_color = BG_GREEN                 # green
     elif project.visit_date:
-        kuerzel_pl_color = BG_YELLOW                # yellow
-    elif cint(project.visit_mail_sent):
         kuerzel_pl_color = BG_ORANGE                # orange
+    elif cint(project.visit_mail_sent):
+        kuerzel_pl_color = BG_BLUE                  # blue
     colors.append(kuerzel_pl_color)
     
     # strassensperrung [12]
