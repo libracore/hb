@@ -244,6 +244,7 @@ DocType: Construction Site Description,No Driving,Fahrverbot
 DocType: Construction Site Description,Signalisation external,Signalisation wird gestellt
 DocType: Construction Site Description,Flashing lamp,Blinklampe
 DocType: Construction Site Description,Dead end,Sackgasse
+DocType: Construction Site Description,Needs tractor,Benötigt einen Traktor
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
 DocType: Item,Material,Material

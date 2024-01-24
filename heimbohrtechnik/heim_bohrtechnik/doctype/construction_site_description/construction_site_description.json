@@ -58,6 +58,7 @@
   "distance_to_drill_site",
   "sec_add_meas",
   "protect_fassade",
+  "needs_tractor",
   "col_add_meas",
   "gras_cover",
   "sec_remarks",
@@ -393,9 +394,15 @@
    "fieldname": "dead_end",
    "fieldtype": "Check",
    "label": "Dead end"
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_tractor",
+   "fieldtype": "Check",
+   "label": "Needs tractor"
   }
  ],
- "modified": "2023-12-08 10:35:37.102234",
+ "modified": "2024-01-24 19:46:58.790403",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
