@@ -245,6 +245,9 @@ DocType: Construction Site Description,Signalisation external,Signalisation wird
 DocType: Construction Site Description,Flashing lamp,Blinklampe
 DocType: Construction Site Description,Dead end,Sackgasse
 DocType: Construction Site Description,Needs tractor,Benötigt einen Traktor
+DocType: Construction Site Description,Tractor,Traktor
+DocType: Construction Site Description,Tractor name,Traktorname
+DocType: Construction Site Description,Tractor details,Traktor-Details
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
 DocType: Item,Material,Material
