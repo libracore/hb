@@ -105,7 +105,6 @@ function handle_button_visibillity(check) {
     var date = document.getElementById('date').value
     var project = document.getElementById('project').value
     //Display button
-    console.log(project);
     if (meter !== '' && date !== '' && project !== '' && check == true) {
         button.style.display = 'block';
     } else {
