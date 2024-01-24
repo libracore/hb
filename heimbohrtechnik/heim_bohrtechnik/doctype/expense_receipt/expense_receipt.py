@@ -8,6 +8,7 @@ from frappe.model.document import Document
 from erpnext import get_default_company
 from erpnextswiss.erpnextswiss.finance import get_exchange_rate
 from frappe.utils import flt, rounded
+import json
 
 class ExpenseReceipt(Document):
         
@@ -95,3 +96,48 @@ class ExpenseReceipt(Document):
         return
         
     
+@frappe.whitelist()
+def get_unallocated_expenses(payment_method):
+    unallocated_expenses = frappe.db.sql("""
+        SELECT `name`, `date`, `amount`, `currency`, `remarks`
+        FROM `tabExpense Receipt`
+        WHERE `docstatus` = 1
+          AND `payment` = "{payment_method}"
+          AND `purchase_invoice` IS NULL;
+    """.format(payment_method=payment_method), as_dict=True)
+    return unallocated_expenses
+
+@frappe.whitelist()
+def get_allocated_expenses(purchase_invoice):
+    allocated_expenses = frappe.db.sql("""
+        SELECT `name`, `date`, `amount`, `currency`, `remarks`
+        FROM `tabExpense Receipt`
+        WHERE `docstatus` = 1
+          AND `purchase_invoice` = "{purchase_invoice}";
+    """.format(purchase_invoice=purchase_invoice), as_dict=True)
+    return allocated_expenses
+    
+@frappe.whitelist()
+def attach_expenses(expenses, purchase_invoice):
+    if type(expenses) == str:
+        expenses = json.loads(expenses)
+    
+    for e in expenses:
+        expense_receipt = frappe.get_doc("Expense Receipt", e.get("name"))
+        expense_receipt.purchase_invoice = purchase_invoice
+        expense_receipt.save()
+        
+    frappe.db.commit()
+    return
+
+@frappe.whitelist()
+def unattach_expenses(purchase_invoice):
+    expenses = get_allocated_expenses(purchase_invoice)
+    
+    for e in expenses:
+        expense_receipt = frappe.get_doc("Expense Receipt", e.get("name"))
+        expense_receipt.purchase_invoice = None
+        expense_receipt.save()
+        
+    frappe.db.commit()
+    return
