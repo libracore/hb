@@ -7,6 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
+  "company",
   "image",
   "date",
   "employee",
@@ -17,10 +18,11 @@
   "currency",
   "remarks",
   "sec_accounting",
+  "tax_template",
   "vst",
-  "expense_account",
   "vat_account",
   "col_accounting",
+  "expense_account",
   "checked",
   "sec_links",
   "purchase_invoice",
@@ -177,11 +179,23 @@
    "label": "Journal Entry",
    "options": "Journal Entry",
    "read_only": 1
+  },
+  {
+   "fieldname": "tax_template",
+   "fieldtype": "Link",
+   "label": "Template",
+   "options": "Purchase Taxes and Charges Template"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
   }
  ],
  "image_field": "image",
  "is_submittable": 1,
- "modified": "2023-12-17 20:52:44.759040",
+ "modified": "2024-01-24 23:16:18.237832",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Expense Receipt",
