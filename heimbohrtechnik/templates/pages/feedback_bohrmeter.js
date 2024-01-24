@@ -4,6 +4,7 @@ $(document).ready(function(){
 });
 
 function make() {
+    
 }
 
 function run() {
@@ -37,8 +38,10 @@ function run() {
         },
         'callback': function(response) {
             var check = false;
+            document.getElementById('check_memory').value = check;
             if (response.message) {
                 check = response.message.is_valid;
+                document.getElementById('check_memory').value = check;
                 var projects_html = response.message.projects_html;
             }
             //Set Projects as Options for Select Field
@@ -54,17 +57,8 @@ function run() {
                 });
             //Check if all mandatory fields are filled
             var input = document.getElementById('form');
-            var button = document.getElementById('submit');
             input.addEventListener('input', function() {
-                var meter = document.getElementById('drilling_meter').value
-                var date = document.getElementById('date').value
-                var project = document.getElementById('project').value
-                //Display button
-                if (meter !== '' && date !== '' && project !== '' && check == true) {
-                    button.style.display = 'block';
-                } else {
-                    button.style.display = 'none';
-                }
+                handle_button_visibillity(check);
             });
         }
     });
@@ -97,6 +91,23 @@ function chose_project(projects_html, field) {
 
 function set_project(self, choice) {
     var field = document.getElementById('field_memory').value;
+    var check = document.getElementById('check_memory').value;
     document.getElementById(field).value = choice;
+    handle_button_visibillity(check);
     frappe.ui.open_dialogs[0].hide();
+}
+function handle_button_visibillity(check) {
+    if (check == "true") {
+        check = true;
+    }
+    var button = document.getElementById('submit');
+    var meter = document.getElementById('drilling_meter').value
+    var date = document.getElementById('date').value
+    var project = document.getElementById('project').value
+    //Display button
+    if (meter !== '' && date !== '' && project !== '' && check == true) {
+        button.style.display = 'block';
+    } else {
+        button.style.display = 'none';
+    }
 }
