@@ -4,6 +4,7 @@ $(document).ready(function(){
 });
 
 function make() {
+    
 }
 
 function run() {
@@ -55,7 +56,10 @@ function run() {
                     chose_project(projects_html, field);
                 });
             //Check if all mandatory fields are filled
-            handle_button_visibillity(check)
+            var input = document.getElementById('form');
+            input.addEventListener('input', function() {
+                handle_button_visibillity(check);
+            });
         }
     });
     //create document in ERPNext, when submit button has been pushed
@@ -92,32 +96,19 @@ function set_project(self, choice) {
     handle_button_visibillity(check);
     frappe.ui.open_dialogs[0].hide();
 }
-
 function handle_button_visibillity(check) {
-    console.log(check);
     if (check == "true") {
         check = true;
     }
-    console.log(check);
-    var input = document.getElementById('form');
     var button = document.getElementById('submit');
-    triggerInputEvent(input);
-    input.addEventListener('input', function() {
-        var meter = document.getElementById('drilling_meter').value
-        var date = document.getElementById('date').value
-        var project = document.getElementById('project').value
-        //Display button
-        console.log(project);
-        if (meter !== '' && date !== '' && project !== '' && check == true) {
-            button.style.display = 'block';
-        } else {
-            button.style.display = 'none';
-        }
-    });
+    var meter = document.getElementById('drilling_meter').value
+    var date = document.getElementById('date').value
+    var project = document.getElementById('project').value
+    //Display button
+    console.log(project);
+    if (meter !== '' && date !== '' && project !== '' && check == true) {
+        button.style.display = 'block';
+    } else {
+        button.style.display = 'none';
+    }
 }
-
-function triggerInputEvent(input) {
-    var event = new Event('input', { bubbles: true });
-    input.dispatchEvent(event);
-}
-
