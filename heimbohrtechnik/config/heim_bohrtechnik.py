@@ -243,6 +243,12 @@ def get_data():
                 },
                 {
                     "type": "report",
+                    "name": "Subcontracting Control",
+                    "doctype": "Subcontracting Order",
+                    "is_query_report": True
+                },
+                {
+                    "type": "report",
                     "name": "Impact Analysis",
                     "doctype": "Drilling Move Log",
                     "is_query_report": True
