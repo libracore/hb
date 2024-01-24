@@ -58,9 +58,13 @@
   "distance_to_drill_site",
   "sec_add_meas",
   "protect_fassade",
-  "needs_tractor",
   "col_add_meas",
   "gras_cover",
+  "col_add_meas2",
+  "needs_tractor",
+  "tractor",
+  "tractor_name",
+  "tractor_details",
   "sec_remarks",
   "remarks"
  ],
@@ -400,9 +404,34 @@
    "fieldname": "needs_tractor",
    "fieldtype": "Check",
    "label": "Needs tractor"
+  },
+  {
+   "fieldname": "col_add_meas2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.needs_tractor",
+   "fieldname": "tractor",
+   "fieldtype": "Link",
+   "label": "Tractor",
+   "options": "Supplier"
+  },
+  {
+   "depends_on": "eval:doc.needs_tractor",
+   "fetch_from": "tractor.supplier_name",
+   "fieldname": "tractor_name",
+   "fieldtype": "Data",
+   "label": "Tractor name",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.needs_tractor",
+   "fieldname": "tractor_details",
+   "fieldtype": "Data",
+   "label": "Tractor details"
   }
  ],
- "modified": "2024-01-24 19:46:58.790403",
+ "modified": "2024-01-24 19:53:40.267967",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",

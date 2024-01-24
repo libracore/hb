@@ -1,7 +1,18 @@
-// Copyright (c) 2021, libracore AG and contributors
+// Copyright (c) 2021-2024, libracore AG and contributors
 // For license information, please see license.txt
 
 frappe.ui.form.on('Construction Site Description', {
+    onload: function(frm) {
+        // filter for tractor suppliers
+        cur_frm.fields_dict['tractor'].get_query = function(doc) {
+             return {
+                'query': 'heimbohrtechnik.heim_bohrtechnik.filters.supplier_by_capability',
+                'filters': {
+                    'capability': "Traktor"
+                }
+            }
+        } 
+    },
     refresh: function(frm) {
         // from object: link project
         if ((frm.doc.object) && (!frm.doc.project)) {
