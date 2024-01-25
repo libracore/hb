@@ -58,7 +58,7 @@ def create_pinv_from_sinv(sales_invoice):
             })
     # insert
     new_pinv.insert()
-    new_pinv.submit()
+    # new_pinv.submit()     # only accounting will submit invoices
     frappe.db.commit()
     # create pdf attachments
     try:
