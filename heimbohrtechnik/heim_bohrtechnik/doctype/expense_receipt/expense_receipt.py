@@ -20,15 +20,18 @@ class ExpenseReceipt(Document):
         if self.currency != company_currency:
             multi_currency = 1
             exchange_rate = get_exchange_rate(from_currency=self.currency, company=self.company, date=self.date)
-            
+        
+        remark = "{0} ({1})".format(
+                self.remarks or "Spesen {0}".format(self.employee_name),
+                self.name)
         jv = frappe.get_doc({
             'doctype': 'Journal Entry',
             'multi_currency': multi_currency,
             'posting_date': self.date,
-            'user_remark': "{0} ({1})".format(
-                self.remarks or "Spesen {0}".format(self.employee_name),
-                self.name),
-            'company': self.company
+            'user_remark': remark,
+            'remark': remark,
+            'company': self.company,
+            'title': self.name
         })
         # expense allocation (company currency)
         net_base_amount = rounded((self.amount - self.vst) * exchange_rate, 2)
