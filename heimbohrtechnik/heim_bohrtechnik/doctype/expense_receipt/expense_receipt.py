@@ -21,9 +21,10 @@ class ExpenseReceipt(Document):
             multi_currency = 1
             exchange_rate = get_exchange_rate(from_currency=self.currency, company=self.company, date=self.date)
         
-        remark = "{0} ({1})".format(
+        remark = ("{0} ({1}, {2})".format(
                 self.remarks or "Spesen {0}".format(self.employee_name),
-                self.name)
+                self.name,
+                self.employee_name or "-"))[:140]
         jv = frappe.get_doc({
             'doctype': 'Journal Entry',
             'multi_currency': multi_currency,
