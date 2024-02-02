@@ -31,6 +31,7 @@ class LayerDirectory(Document):
         for ews in object_doc.ews_specification:
             ews_details.append({
                 'ews_depth': ews.ews_depth,
+                'ews_diameter': ews.ews_diameter,
                 'probe_type': ews.probe_type
                 })
         
