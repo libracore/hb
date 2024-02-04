@@ -253,15 +253,3 @@ function autocomplete_suspension_density() {
         cur_frm.set_value('suspension_density', cur_frm.doc.sum_dxc / cur_frm.doc.sum_c);
     }
 }
-
-//~ function get_mortar_from_sv(frm) {
-    //~ frappe.call({
-        //~ 'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.print_bohrplaner',
-        //~ 'args': {
-            //~ 'start_date': document.getElementById("from").value
-        //~ },
-        //~ 'ck': function(r) {
-            //~ window.open(r.message, '_blank');
-            //~ frappe.dom.unfreeze();
-        //~ }
-    //~ });
