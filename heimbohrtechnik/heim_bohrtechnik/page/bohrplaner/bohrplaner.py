@@ -258,9 +258,13 @@ def get_internal_overlay_datas(from_date, to_date):
     return projects
     
 @frappe.whitelist()
-def get_subproject_overlay_datas(from_date, to_date):
+def get_subproject_overlay_datas(from_date, to_date, drilling_team=None):
     subproject_list = []
     shift_controll = {}
+    condition = ""
+    if drilling_team:
+        condition = """ AND `tabSubcontracting Order`.`drilling_team` = "{drilling_team}" """.format(drilling_team=drilling_team)
+        
     subprojects = frappe.db.sql("""
         SELECT
             `tabProject Subproject`.`start`,
@@ -281,9 +285,10 @@ def get_subproject_overlay_datas(from_date, to_date):
             (`tabProject Subproject`.`start` BETWEEN "{from_date}" AND "{to_date}"
             OR `tabProject Subproject`.`end` BETWEEN "{from_date}" AND "{to_date}")
             AND `tabProject`.`status` IN ("Open", "Completed")
+            {condition}
         ORDER BY 
             `tabProject Subproject`.`team` ASC, `tabSubcontracting Order`.`prio` ASC;""".format(
-            from_date=from_date, to_date=to_date), as_dict=True)
+            from_date=from_date, to_date=to_date, condition=condition), as_dict=True)
     for subproject in subprojects:
         subproject_duration = calc_duration(subproject.start, subproject.end, from_date, to_date)
         subproject_shift, shift_controll = subproject_shift_controll(subproject, get_datetime(subproject_duration['start']).strftime('%d.%m.%Y'), shift_controll)

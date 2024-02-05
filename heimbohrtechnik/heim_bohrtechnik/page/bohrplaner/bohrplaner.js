@@ -88,6 +88,7 @@ frappe.bohrplaner = {
         
         // render calendar grid
         data['print_view'] = 0;
+        data['web_view'] = 0;
         $(frappe.render_template('calendar_grid', data)).appendTo(me.page.body);
     },
     run: function(page) {

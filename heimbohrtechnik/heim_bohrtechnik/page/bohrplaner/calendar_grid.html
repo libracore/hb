@@ -193,7 +193,7 @@
                 {% endif %}
             {% endfor %}
             <!-- Absences -->
-            {% if not print_view %}
+            {% if not print_view %}{% if not web_view %}
             <tr style="height: 300px; ">
                 <td class="sticky-left">
                     <b>{{ __("Absences") }}</b>
@@ -221,7 +221,7 @@
                     {% endif %}
                 {% endfor %}
             </tr>
-            {% endif %}
+            {% endif %}{% endif %}
         </tbody>
     </table>
 </div>

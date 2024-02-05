@@ -4,6 +4,7 @@
     ],
     "js/heim_templates.js": [
         "heim_bohrtechnik/page/bohrplaner/calendar_grid.html",
-        "heim_bohrtechnik/page/bohrplaner/booking_overlay.html"
+        "heim_bohrtechnik/page/bohrplaner/booking_overlay.html",
+        "heim_bohrtechnik/page/bohrplaner/subproject_overlay.html"
     ]
 }

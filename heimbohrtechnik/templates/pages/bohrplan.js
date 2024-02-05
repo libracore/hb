@@ -1,7 +1,5 @@
 $('document').ready(function(){
     make();
-    //~ run();
-    //~ console.log(frappe.render_template(frappe.templates.calendar_grid, {}))
 });
 
 
@@ -21,6 +19,7 @@ function make() {
        'method': "heimbohrtechnik.templates.pages.bohrplan.get_last_date",
        'args': {
             'customer': locals.customer,
+            'drilling_team': locals.drilling_team,
             'key': locals.key
        },
        'async': false,
@@ -33,7 +32,8 @@ function make() {
                'method': "heimbohrtechnik.templates.pages.bohrplan.get_grid",
                'args': {
                     'from_date': locals.from_date,
-                    'to_date': locals.to_date
+                    'to_date': locals.to_date,
+                    'drilling_team': locals.drilling_team
                },
                'async': false,
                'callback': function(response) {
@@ -45,7 +45,8 @@ function make() {
                         'kw_list': content.kw_list,
                         'day_list': content.day_list,
                         'today': content.today,
-                        'print_view': true
+                        'print_view': false,
+                        'web_view': true
                     };
                     
                     $(frappe.render_template(frappe.templates.calendar_grid, data)).appendTo($("#page-bohrplan"));
@@ -55,30 +56,29 @@ function make() {
             });
        }
     });
-    
-    //~ console.log(data);
-    // render calendar grid
-    //document.getElementById("grid").innerHTML = frappe.render_template('heimbohrtechnik/heim_bohrtechnik/page/bohrplaner/calendar_grid.html', data);
-    //~ console.log(frappe.render_template(frappe.templates.calendar_grid, data))
-    //console.log(frappe.render_template("/assets/heimbohrtechnik/calendar_grid.html", data))
 }
 
 function run(from_date, to_date) {
-    //~ var data = get_data(from_date, to_date, customer, key);
     frappe.call({
        method: "heimbohrtechnik.templates.pages.bohrplan.get_data",
        args: {
             "from_date": from_date,
             "to_date": to_date,
             "customer": locals.customer,
-            "key": locals.key
+            "key": locals.key,
+            "drilling_team": locals.drilling_team
        },
        async: false,
        callback: function(response) {
             var contents = response.message;
+            console.log(contents);
             for (var i = 0; i < contents.length; i++) {
                 var data = contents[i];
-                add_overlay(data);
+                if (locals.customer) {
+                    add_overlay(data);
+                } else {
+                    add_subproject_overlay(data);
+                }
             }
        }
     });
@@ -115,6 +115,38 @@ function add_overlay(data) {
     return
 }
 
+function add_subproject_overlay(data) {
+    var place = $('[data-bohrteam="' + data.bohrteam + '"][data-date="' + data.start + '"][data-vmnm="vm"]');
+    
+    if (data.subproject_shift === 1) {
+        place = $('[data-bohrteam="' + data.bohrteam + '-2"][data-date="' + data.start + '"][data-vmnm="vm"]');
+    } else if (data.subproject_shift > 1) {
+        place = $('[data-bohrteam="' + data.bohrteam + '-3"][data-date="' + data.start + '"][data-vmnm="vm"]');
+    }
+    
+    $(place).css("position", "relative");
+    var qty = data.dauer;                               // duration is in half-days, i.e. 2 = 1 day
+        
+    $(frappe.render_template('subproject_overlay', {
+        'width': (42 * data.dauer), 
+        'subproject': data.id, 
+        'description': data.description, 
+        'subproject_shift': data.subproject_shift,
+        'project': data.project,
+        'customer_name': data.customer_name,
+        'ews_details': data.ews_details,
+        'object_name': data.object_name,
+        'object_street': data.object_street,
+        'object_location': data.object_location,
+        'parent_project': data.project,
+        'subcontracting_order': data.subcontracting_order,
+        'dragable': "false",
+        'multi_day': (data.dauer > 2) ? "multi_day" : "single_day",
+        'background': data.background
+    })).appendTo(place);
+    return
+}
+    
 function get_command_line_arguments() {
     // get command line parameters
     var arguments = window.location.toString().split("?");
@@ -132,6 +164,9 @@ function get_command_line_arguments() {
         }
         if (args['key']) {
             locals.key = args['key'];
+        }
+        if (args['drilling_team']) {
+            locals.drilling_team = decodeURI(args['drilling_team']);
         }
         
     } else {
