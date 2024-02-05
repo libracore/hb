@@ -237,6 +237,7 @@ function fetch_layer_directory(layer_directory) {
             cur_frm.set_value("drilling", layer_directory_doc.drilling_tool_diameter);
             cur_frm.set_value("piping", layer_directory_doc.piping);
             cur_frm.set_value("piped_to", layer_directory_doc.to_depth);
+            cur_frm.set_value("mortar", layer_directory_doc.mixing_type);
         }
     });
 }

@@ -34,6 +34,7 @@
   "drilling_master",
   "drilling_number",
   "probe_length",
+  "probe_diameter",
   "drilling_tool_diameter",
   "drilling_quote",
   "direction",
@@ -281,6 +282,7 @@
    "label": "Date / Signature"
   },
   {
+   "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "Date"
@@ -357,10 +359,15 @@
    "hidden": 1,
    "label": "Drilling type",
    "options": "\nStufenmeissel\nRollenmeissel\nImlochhammer\nExzenter\nPDC-Meissel"
+  },
+  {
+   "fieldname": "probe_diameter",
+   "fieldtype": "Int",
+   "label": "Probe Diameter"
   }
  ],
  "is_submittable": 1,
- "modified": "2024-02-01 08:06:38.670986",
+ "modified": "2024-02-05 11:44:17.915460",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory",

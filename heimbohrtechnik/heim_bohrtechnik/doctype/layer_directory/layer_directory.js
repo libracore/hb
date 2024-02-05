@@ -43,7 +43,7 @@ function autocomplete_object(frm) {
                 } else if (data.ews_details.length > 1) {
                     var options = '';
                     for (var i = 0; i < data.ews_details.length; i++) {
-                        var list_entry = "\n"+(i+1) + "- Tiefe: " + data.ews_details[i].ews_depth + "m, Sonde: " + data.ews_details[i].probe_type;
+                        var list_entry = "\n"+(i+1) + "- Tiefe: " + data.ews_details[i].ews_depth + "m, Durchmesser: " + data.ews_details[i].ews_diameter + "mm, Sonde: " + data.ews_details[i].probe_type;
                         options += list_entry;
                     }
                     frappe.prompt([
@@ -57,11 +57,13 @@ function autocomplete_object(frm) {
                         function(values) {
                             var x = parseInt(values.bohrung.split("-")[0]);
                             cur_frm.set_value("probe_length", data.ews_details[x-1].ews_depth);
+                            cur_frm.set_value("probe_diameter", data.ews_details[x-1].ews_diameter);
                             cur_frm.set_value("probe_type", data.ews_details[x-1].probe_type);
                         }
                     );
                 } else {
                     cur_frm.set_value("probe_length", data.ews_details[0].ews_depth);
+                    cur_frm.set_value("probe_diameter", data.ews_details[0].ews_diameter);
                     cur_frm.set_value("probe_type", data.ews_details[0].probe_type);
                 }
                 
