@@ -365,6 +365,7 @@ frappe.bohrplaner = {
         var view_to = to;
         var data = frappe.bohrplaner.get_content(page, view_from, view_to);
         data['print_view'] = 0;
+        data['web_view'] = 0;
         // render calendar grid
         $(frappe.render_template('calendar_grid', data)).appendTo(page.body);
         // set saved dates
