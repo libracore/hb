@@ -60,27 +60,36 @@ function make() {
 
 function run(from_date, to_date) {
     frappe.call({
-       method: "heimbohrtechnik.templates.pages.bohrplan.get_data",
-       args: {
+        'method': "heimbohrtechnik.templates.pages.bohrplan.get_data",
+        'args': {
             "from_date": from_date,
             "to_date": to_date,
             "customer": locals.customer,
             "key": locals.key,
             "drilling_team": locals.drilling_team
-       },
-       async: false,
-       callback: function(response) {
+        },
+        'callback': function(response) {
             var contents = response.message;
-            console.log(contents);
-            for (var i = 0; i < contents.length; i++) {
-                var data = contents[i];
+            if (contents.error) {
+                console.log(contents.error);
+            } else {
+                console.log(contents);
                 if (locals.customer) {
-                    add_overlay(data);
+                    // customer-type view
+                    for (var i = 0; i < contents.projects.length; i++) {
+                        add_overlay(contents.projects[i]);
+                    }
+                    for (var i = 0; i < contents.internals.length; i++) {
+                        add_internal_overlay(contents.internals[i]);
+                    }
                 } else {
-                    add_subproject_overlay(data);
+                    // subproject view
+                    for (var i = 0; i < contents.subprojects.length; i++) {
+                        add_subproject_overlay(contents.subprojects[i]);
+                    }
                 }
             }
-       }
+        }
     });
 }
 
@@ -146,7 +155,16 @@ function add_subproject_overlay(data) {
     })).appendTo(place);
     return
 }
-    
+
+function add_internal_overlay(data) {
+    var place = $('[data-bohrteam="' + data.bohrteam + '"][data-date="' + data.start + '"][data-vmnm="' + data.vmnm + '"]');
+    $(place).css("position", "relative");
+    var qty = data.dauer
+    var width = 42 * qty;
+    $(frappe.render_template('internal_overlay', {'width': width, 'project': data.project, 'font_size': 7})).appendTo(place);
+    return
+}
+
 function get_command_line_arguments() {
     // get command line parameters
     var arguments = window.location.toString().split("?");

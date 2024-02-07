@@ -7,7 +7,7 @@ import frappe
 from frappe import _
 import json
 import datetime
-from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_content, get_overlay_datas, get_subproject_overlay_datas
+from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_content, get_overlay_datas, get_subproject_overlay_datas, get_internal_overlay_datas
 
 """
 This function checks the access and returns the restricted information
@@ -38,22 +38,27 @@ def get_grid(from_date, to_date, drilling_team=None):
 @frappe.whitelist(allow_guest=True)
 def get_data(key, from_date, to_date, customer=None, drilling_team=None):
     if not customer and not drilling_team:
-        return None
+        return {'error': 'No customer or drilling team'}
     
     if customer:
         if not frappe.db.exists("Customer", customer):
-            return []
+            return {'error': 'Ivvalid customer'}
         if frappe.get_value("Customer", customer, "key") != key:
-            return []
+            return {'error': 'Invalid key'}
         
-        data = get_overlay_datas(from_date[1:11], to_date[1:11], customer)
+        data = {
+            'projects': get_overlay_datas(from_date[1:11], to_date[1:11], customer),
+            'internals': get_internal_overlay_datas(from_date[1:11], to_date[1:11], customer)
+        }
     else:
         if not frappe.db.exists("Drilling Team", drilling_team):
-            return None
+            return {'error': 'Invalid drilling team'}
         if frappe.get_value("Drilling Team", drilling_team, "team_key") != key:
-            return None
+            return {'error': 'Invalid key'}
         
-        data = get_subproject_overlay_datas(from_date[1:11], to_date[1:11], drilling_team)
+        data = {
+            'subprojects': get_subproject_overlay_datas(from_date[1:11], to_date[1:11], drilling_team)
+        }
     
     return data
     
