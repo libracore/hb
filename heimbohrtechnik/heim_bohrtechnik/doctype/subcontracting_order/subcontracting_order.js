@@ -214,9 +214,13 @@ function open_create_finish(frm) {
     frappe.call({
         'method': "frappe.client.get_list",
         'args': {
-            'doctype': "Subcontracting Order Finish"
+            'doctype': "Subcontracting Order Finish",
+            'filters': {
+                'project': frm.doc.project
+            }
         },
         'callback': function(response) {
+            console.log(response.message);
             if (response.message.length > 0) {
                 // open existing record
                 frappe.set_route("Form", "Subcontracting Order Finish", response.message[0].name);
