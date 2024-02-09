@@ -85,9 +85,8 @@ class ExpenseReceipt(Document):
         jv.insert()
         jv.submit()
 
-
-        self.journal_entry = jv.name
-        self.save()
+        # load document to update in a separate instance to prevent update other fields issue
+        frappe.db.set_value("Expense Receipt", self.name, "journal_entry", jv.name)
         frappe.db.commit()
         return
         
