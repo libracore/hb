@@ -1,9 +1,9 @@
-// Copyright (c) 2023, libracore AG and contributors
+// Copyright (c) 2023-2024, libracore AG and contributors
 // For license information, please see license.txt
 /* eslint-disable */
 
 var drilling_types = [
-    {'fieldname': 'flushing_drilling', 'label': "Spühlbohrung"},
+    {'fieldname': 'flushing_drilling', 'label': "Spülbohrung"},
     {'fieldname': 'hammer_drilling', 'label': "Hammerbohrung"},
     {'fieldname': 'well_drilling', 'label': "Brunnenbohrung"},
     {'fieldname': 'small_drilling_rig', 'label': "Kleinbohrgerät auf Bohrteam"}

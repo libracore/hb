@@ -352,7 +352,7 @@ DocType: Layer Directory,Drilling number,Bohrungsnummer
 DocType: Layer Directory,Layers,Schichten
 DocType: Layer Directory,Water protection,Gewässerschutzrechtliche Vorkomnisse
 DocType: Layer Directory,Water ingress,Wassereintritt
-DocType: Layer Directory,Flushing losses,Spühlungsverluste
+DocType: Layer Directory,Flushing losses,Spülungsverluste
 DocType: Layer Directory,Injection losses,Injektionsverluste
 DocType: Layer Directory,Caverns,Kavernen
 DocType: Layer Directory,Suspected gas,Gasverdacht
@@ -466,7 +466,7 @@ DocType: Drilling Move Log,To Start Date,Auf Startdatum
 DocType: Drilling Move Log,To End Date,Auf Enddatum
 DocType: Project,Drilling Meter Per Day,Bohrmeter pro Tag
 DocType: Layer Directory Layer,Flushing medium,Spülmedium
-DocType: Layer Directory Layer,Spülzussatz,Flushing set
+DocType: Layer Directory Layer,Flushing set,Spülzussatz
 DocType: Layer Directory,Probe length,Sondenlänge
 DocType: Layer Directory,Probe type,Sondentyp
 DocType: Layer Directory,Product,Produkt
@@ -479,8 +479,8 @@ DocType: Layer Directory,Piping2 (mm),Verrohrung2 (mm)
 DocType: Layer Directory,Drilling,Bohrung
 DocType: Layer Directory,Drilling type,Bohrtyp
 DocType: Layer Directory,Drilling Length (mm),Länge (mm)
-DocType: Drilling Team,Flushing drilling,Spühlbohrung
-DocType: Drilling Team,Hammer drilling,Spühlbohrung
+DocType: Drilling Team,Flushing drilling,Spülbohrung
+DocType: Drilling Team,Hammer drilling,Spülbohrung
 DocType: Drilling Team,Well drilling,Brunnenbohrung
 DocType: Drilling Team,Small drilling rig on drilling team,Kleinbohrgerät auf Bohrteam
 DocType: Road Block Material Order,Road Block Material Order,Absperrmaterialauftrag

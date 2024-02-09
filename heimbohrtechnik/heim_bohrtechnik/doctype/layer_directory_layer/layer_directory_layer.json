@@ -85,7 +85,7 @@
    "fieldname": "drilling_type",
    "fieldtype": "Select",
    "label": "Drilling Type",
-   "options": "\nSp\u00fchlbohrung - nass\nHammerbohrung - nass\nHammerbohrung - trocken\nKernbohrung\nAndere Bohrart"
+   "options": "\nSp\u00fclbohrung - nass\nHammerbohrung - nass\nHammerbohrung - trocken\nKernbohrung\nAndere Bohrart"
   },
   {
    "fieldname": "sec_remarks",
@@ -168,7 +168,7 @@
    "fieldname": "flushing_medium",
    "fieldtype": "Select",
    "label": "Flushing medium",
-   "options": "\nLuftsp\u00fclung\nTonsp\u00fclung\nAndere Sp\u00fchlung"
+   "options": "\nLuftsp\u00fclung\nTonsp\u00fclung\nAndere Sp\u00fclung"
   },
   {
    "fieldname": "flushing_set",
