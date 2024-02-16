@@ -59,12 +59,14 @@ function autocomplete_object(frm) {
                             cur_frm.set_value("probe_length", data.ews_details[x-1].ews_depth);
                             cur_frm.set_value("probe_diameter", data.ews_details[x-1].ews_diameter);
                             cur_frm.set_value("probe_type", data.ews_details[x-1].probe_type);
+                            cur_frm.set_value("drilling_order", data.ews_details[x-1].count + "x" + data.ews_details[x-1].ews_depth + "-" + data.ews_details[x-1].ews_diameter);
                         }
                     );
                 } else {
                     cur_frm.set_value("probe_length", data.ews_details[0].ews_depth);
                     cur_frm.set_value("probe_diameter", data.ews_details[0].ews_diameter);
                     cur_frm.set_value("probe_type", data.ews_details[0].probe_type);
+                    cur_frm.set_value("drilling_order", data.object.ews_details);
                 }
                 
                 // find addresses
