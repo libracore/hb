@@ -170,6 +170,7 @@
   },
   {
    "fetch_from": "object.ch_coordinates",
+   "fetch_if_empty": 1,
    "fieldname": "coordinates",
    "fieldtype": "Data",
    "label": "Coordinates"
@@ -366,7 +367,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2024-02-16 14:41:20.334741",
+ "modified": "2024-02-16 14:45:28.789715",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory",
