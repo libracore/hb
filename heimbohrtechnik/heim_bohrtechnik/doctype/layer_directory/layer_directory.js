@@ -59,14 +59,14 @@ function autocomplete_object(frm) {
                             cur_frm.set_value("probe_length", data.ews_details[x-1].ews_depth);
                             cur_frm.set_value("probe_diameter", data.ews_details[x-1].ews_diameter);
                             cur_frm.set_value("probe_type", data.ews_details[x-1].probe_type);
-                            cur_frm.set_value("drilling_order", data.ews_details[x-1].count + "x" + data.ews_details[x-1].ews_depth + "-" + data.ews_details[x-1].ews_diameter);
+                            set_drilling_order(data.ews_details[x-1].count, data.ews_details[x-1].ews_depth);
                         }
                     );
                 } else {
                     cur_frm.set_value("probe_length", data.ews_details[0].ews_depth);
                     cur_frm.set_value("probe_diameter", data.ews_details[0].ews_diameter);
                     cur_frm.set_value("probe_type", data.ews_details[0].probe_type);
-                    cur_frm.set_value("drilling_order", data.object.ews_details);
+                    set_drilling_order(data.ews_details[0].count, data.ews_details[0].ews_depth);
                 }
                 
                 // find addresses
@@ -101,3 +101,9 @@ function autocomplete_object(frm) {
         });
     }
 }
+
+function set_drilling_order(count, depth) {
+    var drilling_order = count + "x " + depth +"m"
+    cur_frm.set_value("drilling_order", drilling_order);
+}
+    
