@@ -1,5 +1,5 @@
 <div class="booking_overlay" id="{{ project.name }}"
-    style="width: {{ width }}px; "
+    {% if project.fixed_date == 1 %} style="width: {{ width }}px; border: 1px solid red !important;" {% else %} style="width: {{ width }}px;" {% endif %}
     data-lanetype="Project"
     draggable="{{ dragable }}"
     ondragstart="drag(event)">

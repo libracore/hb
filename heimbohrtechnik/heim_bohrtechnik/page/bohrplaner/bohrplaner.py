@@ -1333,7 +1333,8 @@ def move_projects(from_project, drilling_team, days):
     raw_projects = frappe.db.sql("""SELECT
             `name`,
             `expected_start_date`,
-            `expected_end_date`
+            `expected_end_date`,
+            `fixed_date`
         FROM `tabProject`
         WHERE 
             `drilling_team` = "{drilling_team}"
@@ -1344,23 +1345,30 @@ def move_projects(from_project, drilling_team, days):
     
     projects = []
     first_project = True
+    fixed_project = None
     
     for project in raw_projects:
-        if first_project == True:
-            projects.append({
-                'name': project.name
-            })
-            first_project = False
-            last_project = project
+        if fixed_project:
+            frappe.msgprint('Fixiertes Projekt {0} betroffen - Schieben abgebrochen!'.format(fixed_project), title='Achtung', indicator='red')
+            return {'success': 0, 'project_changes': "None"}
         else:
-            gap = get_gap(last_project.expected_end_date, project.expected_start_date)
-            if gap >= days:
-                break
-            else:
+            if first_project == True:
                 projects.append({
                     'name': project.name
                 })
+                first_project = False
                 last_project = project
+            else:
+                gap = get_gap(last_project.expected_end_date, project.expected_start_date)
+                if gap >= days and days > 0:
+                    break
+                else:
+                    projects.append({
+                        'name': project.name
+                    })
+                    last_project = project
+        if project.fixed_date == 1:
+            fixed_project = project.name
     
     project_changes = []
     for p in projects:
