@@ -32,10 +32,9 @@ class LayerDirectory(Document):
             ews_details.append({
                 'ews_depth': ews.ews_depth,
                 'ews_diameter': ews.ews_diameter,
-                'probe_type': ews.probe_type
+                'probe_type': ews.probe_type,
+                'count': ews.ews_count
                 })
-        
-        frappe.log_error(ews_details, "ews_details")
             
         return {
             'project': project_doc.as_dict(),
