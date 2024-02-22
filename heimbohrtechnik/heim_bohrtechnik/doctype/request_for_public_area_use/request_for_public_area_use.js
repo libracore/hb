@@ -37,10 +37,9 @@ frappe.ui.form.on('Request for Public Area Use', {
 
 function fetch_object_details(obj, address_type) {
     frappe.call({
-        "method": "frappe.client.get",
+        "method": "heimbohrtechnik.heim_bohrtechnik.utils.get_object_with_addresses",
         "args": {
-            "doctype": "Object",
-            "name": obj
+            "obj": obj
         },
         "callback": function(response) {
             var object = response.message;
@@ -78,12 +77,10 @@ function fetch_address_from(object, address_type) {
                     cur_frm.set_value("address_location", address_parts[1]);
                 }
             } else {
-                var address_parts = object.addresses[a].address_display.split("<br>");
                 cur_frm.set_value("address_name", object.addresses[a].party_name);
-                if (address_parts.length > 2) {
-                    cur_frm.set_value("address_street", address_parts[1]);
-                    cur_frm.set_value("address_location", address_parts[2]);
-                }
+                cur_frm.set_value("address_street", object.addresses[a].address_doc.address_line1);
+                cur_frm.set_value("address_location", 
+                    object.addresses[a].address_doc.pincode + " " + object.addresses[a].address_doc.city);
             }
         }
     }

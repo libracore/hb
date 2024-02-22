@@ -1153,3 +1153,18 @@ def get_drilling_meters_per_day(project, objekt, start_date, start_hd, end_date,
         frappe.msgprint("Achtung! Das Projekt {proj} hat durchschnittlich nur {mpd} Bohrmeter pro Tag.".format(proj=project, mpd=int(meter_per_day)))
     
     return duration, meter_per_day
+
+"""
+Get an object with all addresses as full dicts
+"""
+@frappe.whitelist()
+def get_object_with_addresses(obj):
+    obj_dict = frappe.get_doc("Object", obj).as_dict()
+    
+    if "addresses" in obj_dict:
+        for a in obj_dict.addresses:
+            if a['address']:
+                a['address_doc'] = frappe.get_doc("Address", a['address']).as_dict()
+    
+    return obj_dict
+    

@@ -20,6 +20,7 @@
   "start_date",
   "drilling_team",
   "ews_details",
+  "drilling_order",
   "probe_type",
   "drilling_tool",
   "drilling_instrument",
@@ -364,10 +365,16 @@
    "fieldname": "probe_diameter",
    "fieldtype": "Int",
    "label": "Probe Diameter"
+  },
+  {
+   "fieldname": "drilling_order",
+   "fieldtype": "Data",
+   "label": "Drilling Order",
+   "read_only": 1
   }
  ],
  "is_submittable": 1,
- "modified": "2024-02-16 14:45:28.789715",
+ "modified": "2024-02-16 15:33:55.008195",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory",
