@@ -512,5 +512,5 @@ DocType: Feedback Drilling Meter,Number,Nummer
 DocType: Subcontracting Order Finish,Subcontracting Order Finish,Verlängerungs-Abschluss
 Report: Subcontracting Control,Subcontracting Control,Kontrolle Verlängerungsaufträge
 DocType: Layer Directory,Probe Diameter,Sondendurchmesser
+DocType: Project,Fixed date,Fixtermin
 DocType: Layer Directory,Drilling Order,Bohrauftrag
-
