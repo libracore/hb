@@ -46,6 +46,16 @@ frappe.ui.form.on('Quotation', {
                 window.open("/desk#object-overview?object=" + frm.doc.object, "_blank");
             });
         }
+        
+        // fill address and description if missing
+        if (frm.doc.object) {
+            if (!frm.doc.object_address_display) {
+                get_object_address(frm);
+            }
+            if (!frm.doc.object_description) {
+                get_object_description(frm);
+            }
+        }
     },
     party_name: function(frm) {
         if (frm.doc.party_name) {

@@ -1,26 +1,42 @@
 {
+ "autoname": "naming_series:",
  "creation": "2021-11-08 10:59:36.679897",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
+  "original_request",
+  "date",
+  "quotation_until",
+  "col_main",
+  "has_pricing_rule",
+  "is_hammer_drilling",
+  "is_flushing_drilling",
+  "needs_geocheck",
+  "sec_remarks",
+  "remarks",
+  "sec_details",
   "planned_project",
   "project_owner",
   "object_type",
   "classification",
+  "col_details",
   "object_street",
   "object_location",
   "project_manager",
-  "remarks"
+  "sec_links",
+  "customer",
+  "customer_name",
+  "col_links",
+  "object",
+  "quotation"
  ],
  "fields": [
   {
    "fieldname": "planned_project",
    "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Planned Project",
-   "reqd": 1
+   "label": "Planned Project"
   },
   {
    "fieldname": "project_owner",
@@ -28,18 +44,16 @@
    "label": "Project Owner"
   },
   {
-   "default": "EFH",
    "fieldname": "object_type",
    "fieldtype": "Select",
    "label": "Object Type",
-   "options": "EFH\nDEFH\nREFH\nMFH\nGewerbe\nSonstige"
+   "options": "\nEFH\nDEFH\nREFH\nMFH\nGewerbe\nSonstige"
   },
   {
-   "default": "Neubau",
    "fieldname": "classification",
    "fieldtype": "Select",
    "label": "Classification",
-   "options": "Neubau\nSanierung"
+   "options": "\nNeubau\nSanierung"
   },
   {
    "fieldname": "object_street",
@@ -51,8 +65,6 @@
   {
    "fieldname": "object_location",
    "fieldtype": "Data",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Location"
   },
   {
@@ -62,11 +74,118 @@
   },
   {
    "fieldname": "remarks",
-   "fieldtype": "Small Text",
+   "fieldtype": "Text Editor",
    "label": "Remarks"
+  },
+  {
+   "default": "ANF-.YY.####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "ANF-.YY.####"
+  },
+  {
+   "fieldname": "original_request",
+   "fieldtype": "Attach",
+   "label": "Original Request"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Date"
+  },
+  {
+   "fieldname": "quotation_until",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Quotation until"
+  },
+  {
+   "fieldname": "col_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "has_pricing_rule",
+   "fieldtype": "Check",
+   "label": "Pricing Rule"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_hammer_drilling",
+   "fieldtype": "Check",
+   "label": "Hammer drilling"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_flushing_drilling",
+   "fieldtype": "Check",
+   "label": "Flushing drilling"
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_geocheck",
+   "fieldtype": "Check",
+   "label": "Geocheck"
+  },
+  {
+   "fieldname": "sec_remarks",
+   "fieldtype": "Section Break",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "sec_details",
+   "fieldtype": "Section Break",
+   "label": "More Details"
+  },
+  {
+   "fieldname": "col_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sec_links",
+   "fieldtype": "Section Break",
+   "label": "Links"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fetch_from": "customer.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_links",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "quotation",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Quotation",
+   "options": "Quotation"
+  },
+  {
+   "fieldname": "object",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Object",
+   "options": "Object"
   }
  ],
- "modified": "2021-12-24 14:07:48.946384",
+ "modified": "2024-02-26 16:31:35.441245",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Request",

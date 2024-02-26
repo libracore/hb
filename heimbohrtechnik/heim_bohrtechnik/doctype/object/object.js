@@ -179,22 +179,23 @@ frappe.ui.form.on('Object', {
             }, __("More") );
             // show siblings
             check_display_siblings("Object", frm.doc.name);
-        } else {
-            if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
-                // fresh document, no addresses - load template
-                frappe.call({
-                    "method": "heimbohrtechnik.heim_bohrtechnik.doctype.heim_settings.heim_settings.get_address_template",
-                    "callback": function(response) {
-                        var address_types = response.message;
-                        for (var i = 0; i < address_types.length; i++) {
-                            var child = cur_frm.add_child('addresses');
-                            frappe.model.set_value(child.doctype, child.name, 'address_type', address_types[i].type);
-                            frappe.model.set_value(child.doctype, child.name, 'dt', address_types[i].dt);
-                        }
-                        cur_frm.refresh_field('addresses');
+        }
+        if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
+            // fresh document, no addresses - load template
+            frappe.call({
+                "method": "heimbohrtechnik.heim_bohrtechnik.doctype.heim_settings.heim_settings.get_address_template",
+                "callback": function(response) {
+                    var address_types = response.message;
+                    for (var i = 0; i < address_types.length; i++) {
+                        var child = cur_frm.add_child('addresses');
+                        frappe.model.set_value(child.doctype, child.name, 'address_type', address_types[i].type);
+                        frappe.model.set_value(child.doctype, child.name, 'dt', address_types[i].dt);
                     }
-                });
-            }
+                    cur_frm.refresh_field('addresses');
+                }
+            });
+        }
+        if ((!frm.doc.checklist) || (frm.doc.checklist.length === 0)) {
             prepare_checklist_and_permits(frm);
         }
     },

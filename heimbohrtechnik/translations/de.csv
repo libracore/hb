@@ -309,7 +309,10 @@ Report: Drilling Rate Evaluation,Drilling Rate Evaluation,Auswertung Bohrpreise
 DocType: Heim Settings,Drilling Item,Bohrartikel
 DocType: Heim Settings,Evaluations,Auswertungen
 DocType: Heim Settings,Projects Folder,Projektordner
-DocType: Drilling Request,Drilling Request,Bohranfrage
+DocType: Drilling Request,Drilling Request,Angebotspool
+DocType: Drilling Request,More Details,Mehr Informationen
+DocType: Drilling Request,Original Request,Ursprüngliche Anfrage
+DocType: Drilling Request,Quotation until,Angebot zu stellen bis
 Report Pricing Analysis,Pricing Analysis,Preisfindung
 DocType: Truck Planning,Truck Planning,LKW-Planung
 DocType: Akonto Invoice,Akonto Invoice,Akonto-Rechnung
@@ -480,7 +483,7 @@ DocType: Layer Directory,Drilling,Bohrung
 DocType: Layer Directory,Drilling type,Bohrtyp
 DocType: Layer Directory,Drilling Length (mm),Länge (mm)
 DocType: Drilling Team,Flushing drilling,Spülbohrung
-DocType: Drilling Team,Hammer drilling,Spülbohrung
+DocType: Drilling Team,Hammer drilling,Hammerbohrung
 DocType: Drilling Team,Well drilling,Brunnenbohrung
 DocType: Drilling Team,Small drilling rig on drilling team,Kleinbohrgerät auf Bohrteam
 DocType: Road Block Material Order,Road Block Material Order,Absperrmaterialauftrag
