@@ -17,6 +17,9 @@ frappe.ui.form.on('Injection report', {
             cur_frm.set_df_property('needed_bentonit', 'read_only', 0);
         }
     },
+    before_save: function(frm) {
+        autocomplete_needs(frm);
+    },
     project: function(frm) {
         autocomplete_object(frm);
     },
