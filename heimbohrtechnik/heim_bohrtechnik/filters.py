@@ -53,3 +53,14 @@ def get_company_sales_items(doctype, txt, searchfield, start, page_len, filters)
                   OR `tabItem`.`item_name` LIKE "%{s}%"
                   OR `tabItem`.`description` LIKE "%{s}%");
         """.format(c=filters['group_code'], s=txt))
+
+# searches for user
+def get_user(doctype, txt, searchfield, start, page_len, filters):
+    return frappe.db.sql(
+        """SELECT `tabUser`.`name`, `tabUser`.`full_name`
+           FROM `tabUser`
+           WHERE `tabUser`.`enabled` = 1 
+             AND `tabUser`.`name` IN ("{c}")
+             AND (`tabUser`.`name` LIKE "{s}" 
+                  OR `tabUser`.`full_name` LIKE "%{s}%");
+        """.format(c='", "'.join(filters['users']), s=txt))
