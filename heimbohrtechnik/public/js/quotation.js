@@ -75,6 +75,16 @@ frappe.ui.form.on('Quotation', {
                 cur_frm.reload_doc();
             }
         });
+        // if this came from a request, close it
+        frappe.call({
+            'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.drilling_request.drilling_request.close_request',
+            'args': {
+                'quotation': frm.doc.name,
+            },
+            'callback': function(response) {
+                frappe.show_alert(__("Angebotsanfrage geschlossen") );
+            }
+        });
     }
 });
 

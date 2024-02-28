@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2021-2024, libracore AG and contributors
 # For license information, please see license.txt
+#
+# Note: assignments are controlled by assignment rules
+#
 
 from __future__ import unicode_literals
 import frappe
@@ -49,6 +52,15 @@ class DrillingRequest(Document):
         qtn.insert(ignore_permissions=True)
         frappe.db.commit()
         frappe.db.set_value("Drilling Request", self.name, "quotation", qtn.name)
+        if self.status == "Offen":
+            frappe.db.set_value("Drilling Request", self.name, "status", "In Arbeit")
         return qtn.name
 
-    
+@frappe.whitelist()
+def close_request(quotation):
+    requests_by_quotation = frappe.get_all("Drilling Request", 
+        filters={'quotation': quotation},
+        fields=['name'])
+    for request in requests_by_quotation:
+        frappe.db.set_value("Drilling Request", request['name'], "status", "Abgeschlossen")
+    return
