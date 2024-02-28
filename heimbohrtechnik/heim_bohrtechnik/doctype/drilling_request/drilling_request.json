@@ -32,7 +32,9 @@
   "customer_name",
   "col_links",
   "object",
-  "quotation"
+  "quotation",
+  "sec_geocheck",
+  "geocheck"
  ],
  "fields": [
   {
@@ -198,9 +200,21 @@
    "fieldtype": "Link",
    "label": "Responsible",
    "options": "User"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "needs_geocheck",
+   "fieldname": "sec_geocheck",
+   "fieldtype": "Section Break",
+   "label": "Geocheck"
+  },
+  {
+   "fieldname": "geocheck",
+   "fieldtype": "Text Editor",
+   "label": "Geocheck"
   }
  ],
- "modified": "2024-02-28 08:29:57.778695",
+ "modified": "2024-02-28 09:42:08.148103",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Request",
