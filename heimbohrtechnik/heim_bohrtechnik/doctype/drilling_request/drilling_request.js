@@ -8,8 +8,8 @@ frappe.ui.form.on('Drilling Request', {
             cur_frm.set_value("date", frappe.datetime.get_today());
         }
         if (!frm.doc.quotation_until) {
-            // set in 5 days as default quotation date
-            cur_frm.set_value("quotation_until", frappe.datetime.add_days(frappe.datetime.get_today(), 5));
+            // set in 3 days as default quotation date
+            cur_frm.set_value("quotation_until", frappe.datetime.add_days(frappe.datetime.get_today(), 3));
         }
         
         if (!frm.doc.__islocal) {
