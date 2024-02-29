@@ -7,7 +7,7 @@ frappe.ui.form.on('Drilling Request', {
             // set today as default date
             cur_frm.set_value("date", frappe.datetime.get_today());
         }
-        if (!frm.doc.quotation_date) {
+        if (!frm.doc.quotation_until) {
             // set in 5 days as default quotation date
             cur_frm.set_value("quotation_until", frappe.datetime.add_days(frappe.datetime.get_today(), 5));
         }
