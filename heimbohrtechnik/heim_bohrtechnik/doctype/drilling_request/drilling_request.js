@@ -37,6 +37,8 @@ frappe.ui.form.on('Drilling Request', {
                 frm.add_custom_button(__("Customer"), function() {
                     frappe.set_route("Form", "Customer", frm.doc.customer);
                 }, __("Open"));
+            } else {
+                cur_frm.dashboard.add_comment(__('Bitte einen Kunden hinterlegen'), 'yellow', true);
             }
             
             // open quotation
