@@ -40,11 +40,7 @@ class DrillingRequest(Document):
         # add markups
         qtn.append("markup_positions", {
             'description': "LSVA",
-            'percent': 2.5
-        })
-        qtn.append("markup_positions", {
-            'description': "Teuerungszuschlag",
-            'percent': 15
+            'percent': 3
         })
         
         qtn.flags.ignore_validate = True
