@@ -98,7 +98,6 @@
    "fieldname": "date",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Date"
   },
   {
@@ -192,6 +191,8 @@
    "default": "Offen",
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Status",
    "options": "Offen\nIn Arbeit\nAbgeschlossen"
   },
@@ -214,7 +215,7 @@
    "label": "Geocheck"
   }
  ],
- "modified": "2024-02-28 09:42:08.148103",
+ "modified": "2024-02-29 11:40:23.378056",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Request",
