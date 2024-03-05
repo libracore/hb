@@ -12,10 +12,14 @@
   "col_main",
   "status",
   "responsible",
+  "col_main_2",
   "has_pricing_rule",
   "is_hammer_drilling",
   "is_flushing_drilling",
   "needs_geocheck",
+  "col_main_3",
+  "needs_subcontracting",
+  "needs_digging",
   "sec_remarks",
   "remarks",
   "sec_details",
@@ -213,9 +217,29 @@
    "fieldname": "geocheck",
    "fieldtype": "Text Editor",
    "label": "Geocheck"
+  },
+  {
+   "fieldname": "col_main_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "col_main_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_subcontracting",
+   "fieldtype": "Check",
+   "label": "Verl\u00e4ngerung"
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_digging",
+   "fieldtype": "Check",
+   "label": "Grabarbeiten"
   }
  ],
- "modified": "2024-02-29 11:40:23.378056",
+ "modified": "2024-03-05 08:54:23.946137",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Request",
