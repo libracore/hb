@@ -22,7 +22,7 @@ frappe.ui.form.on('Drilling Request', {
                 // open object
                 frm.add_custom_button(__("Object"), function() {
                     frappe.set_route("Form", "Object", frm.doc.object);
-                }, __("Open"));
+                }, __("Öffnen"));
             }
             
             if ((frm.doc.object) && (frm.doc.customer) && (!frm.doc.quotation)) {
@@ -36,7 +36,7 @@ frappe.ui.form.on('Drilling Request', {
             if (frm.doc.customer) {
                 frm.add_custom_button(__("Customer"), function() {
                     frappe.set_route("Form", "Customer", frm.doc.customer);
-                }, __("Open"));
+                }, __("Öffnen"));
             } else {
                 cur_frm.dashboard.add_comment(__('Bitte einen Kunden hinterlegen'), 'yellow', true);
             }
@@ -45,7 +45,7 @@ frappe.ui.form.on('Drilling Request', {
             if (frm.doc.quotation) {
                 frm.add_custom_button(__("Quotation"), function() {
                     frappe.set_route("Form", "Quotation", frm.doc.quotation);
-                }, __("Open"));
+                }, __("Öffnen"));
             }
             
             

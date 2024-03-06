@@ -32,6 +32,7 @@ class DrillingRequest(Document):
             'doctype': "Quotation",
             'party_name': self.customer,
             'customer_name': self.customer_name,
+            'title': self.customer_name,
             'object': self.object,
             'transaction_date': datetime.today(),
             'valid_till': (datetime.today() + timedelta(
