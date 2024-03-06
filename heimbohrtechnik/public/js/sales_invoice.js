@@ -27,9 +27,16 @@ frappe.ui.form.on('Sales Invoice', {
             find_akontos(frm);
         }
         
-        //Validate prices with sales order
+        // Validate prices with sales order
         if (!frm.doc.__islocal) {
             validate_prices(frm);
+        }
+        
+        // allow to fetch SV files
+        if ((!frm.doc.__islocal) && (frm.doc.docstatus < 2) && (frm.doc.object)) {
+            frm.add_custom_button( __("Attach SV"), function() {
+                attach_sv(frm);
+            });
         }
     },
     before_save: function(frm) {
@@ -157,11 +164,11 @@ function check_duplicate_discounts(frm) {
 function find_akontos(frm) {
     if ((frm.doc.items) && (frm.doc.items.length > 0)) {
         frappe.call({
-            "method": "heimbohrtechnik.heim_bohrtechnik.utils.get_available_akonto",
-            "args": {
-                "sales_order": frm.doc.items[0].sales_order
+            'method': "heimbohrtechnik.heim_bohrtechnik.utils.get_available_akonto",
+            'args': {
+                'sales_order': frm.doc.items[0].sales_order
             },
-            "callback": function(response) {
+            'callback': function(response) {
                 var akonto = response.message;
                 console.log(akonto);
                 if (akonto.length > 0) {
@@ -195,12 +202,12 @@ function check_create_akonto_booking(frm) {
         for (var a = 0; a < frm.doc.discount_positions.length; a++) {
             if (frm.doc.discount_positions[a].akonto_invoice_item) {
                 frappe.call({
-                    "method": "heimbohrtechnik.heim_bohrtechnik.utils.book_akonto",
-                    "args": {
-                        "sales_invoice": frm.doc.name,
-                        "net_amount": frm.doc.discount_positions[a].akonto_net_amount
+                    'method': "heimbohrtechnik.heim_bohrtechnik.utils.book_akonto",
+                    'args': {
+                        'sales_invoice': frm.doc.name,
+                        'net_amount': frm.doc.discount_positions[a].akonto_net_amount
                     },
-                    "callback": function(response) {
+                    'callback': function(response) {
                         console.log("Akonto booked: " + response.message);
 
                     }
@@ -213,14 +220,14 @@ function check_create_akonto_booking(frm) {
 // This function cancels akonto bookings (if present)
 function cancel_akonto_booking(frm) {
     frappe.call({
-        "method": "heimbohrtechnik.heim_bohrtechnik.utils.cancel_akonto",
-        "args": {
-            "sales_invoice": frm.doc.name
+        'method': "heimbohrtechnik.heim_bohrtechnik.utils.cancel_akonto",
+        'args': {
+            'sales_invoice': frm.doc.name
         }
     });
 }
 
-//This function validates prices from invoice with sales orders
+// This function validates prices from invoice with sales orders
 function validate_prices(frm) {
     if (frm.doc.object) {
         frappe.call({
@@ -240,4 +247,20 @@ function validate_prices(frm) {
             }
         });
     }
+}
+
+// Find SV files on the projects of this object and attach
+function attach_sv(frm) {
+    frappe.call({
+        'method': "heimbohrtechnik.heim_bohrtechnik.utils.find_and_attach_sv",
+        'args': {
+            'object_name': frm.doc.object,
+            'sales_invoice': frm.doc.name
+        },
+        'freeze': true,
+        'freeze_message': __("Schichtenverzeichnisse laden..."),
+        'callback': function(response) {
+            cur_frm.reload_doc();
+        }
+    });
 }

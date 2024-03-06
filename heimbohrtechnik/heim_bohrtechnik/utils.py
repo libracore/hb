@@ -1168,3 +1168,36 @@ def get_object_with_addresses(obj):
     
     return obj_dict
     
+"""
+Find SV for a project and attach to a sales invoice
+"""
+@frappe.whitelist()
+def find_and_attach_sv(object_name, sales_invoice):
+    # find SV attachments
+    projects = frappe.get_all("Project", filters={'object': object_name}, fields=['name'])
+    
+    for p in projects:
+        attached_sv_files = frappe.db.sql("""
+            SELECT `name`
+            FROM `tabFile`
+            WHERE `file_name` LIKE "SV-{project}%"
+              AND `attached_to_name` = "{project}"
+              AND `attached_to_doctype` = "Project";
+            """.format(project=p['name']), as_dict=True)
+        
+        for sv in attached_sv_files:
+            sv_file = frappe.get_doc("File", sv['name'])
+            new_attachment = frappe.get_doc(sv_file.as_dict())
+            new_attachment.update({
+                'name': None,
+                'attached_to_name': sales_invoice,
+                'attached_to_doctype': "Sales Invoice"
+            })
+            try:
+                new_attachment.insert()
+                frappe.db.commit()
+            except Exception as err:
+                frappe.log_error(err, "find_and_attach_sv error")
+                
+    return
+            
