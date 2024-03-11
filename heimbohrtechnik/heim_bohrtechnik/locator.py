@@ -22,8 +22,8 @@ def find_closest_hotels(object_name):
         
     # lat/long approximation
     hotels = frappe.db.sql("""
-        SELECT `name`, `supplier_name`, `hauptadresse`, `telefon`,
-        (ABS(`gps_latitude` - {lat}) + ABS(`gps_longitude` - {lon})) AS `prox`,
+        SELECT `name`, `supplier_name`, `hauptadresse`, `telefon`, `main_hotel`, `remarks`,
+        ((ABS(`gps_latitude` - {lat}) + ABS(`gps_longitude` - {lon})) / POW(5, `main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
         `gps_latitude`, `gps_longitude`
         FROM `tabSupplier`
         WHERE `disabled` = 0
@@ -36,6 +36,15 @@ def find_closest_hotels(object_name):
     
     #render hotels to dialog
     html = frappe.render_template("heimbohrtechnik/templates/pages/find_hotels.html", {'hotels': hotels})
+    
+    new_doc = frappe.get_doc({
+        'doctype': "Find Hotel Log",
+        'object': object_name,
+        'hotels': html
+    })
+    
+    new_doc.insert(ignore_permissions=True)
+    frappe.db.commit()
     
     return {
         'html': html,

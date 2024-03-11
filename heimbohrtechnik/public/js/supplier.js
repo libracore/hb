@@ -28,6 +28,7 @@ frappe.ui.form.on('Supplier', {
             set_phone(frm);
         }
         compile_remarks(frm);
+        set_supplier_group(frm);
     }
 });
 
@@ -87,4 +88,16 @@ function compile_remarks(frm) {
         }
         cur_frm.set_value("remarks", remarks.join(", "));
     }
+}
+
+function set_supplier_group(frm) {
+    var supplier_group = "Lieferant";
+    if (frm.doc.capabilities) {
+        for (var i = 0; i < frm.doc.capabilities.length; i++) {
+            if (frm.doc.capabilities[i].activity == "Hotel") {
+                supplier_group = "Hotel";
+            }
+        }
+    }
+    cur_frm.set_value("supplier_group", supplier_group);
 }
