@@ -503,7 +503,6 @@ Report: Feedback Drilling Meter,Tuesday,Dienstag
 Report: Feedback Drilling Meter,Wednesday,Mittwoch
 Report: Feedback Drilling Meter,Thursday,Donnerstag
 Report: Feedback Drilling Meter,Friday,Freitag
-Report: Feedback Drilling Meter,Remark,Bemerkung
 DocType: Feedback Drilling Meter,Feedback Drilling Meter,Rückmeldung Bohrmeter
 DocType: Feedback Drilling Meter,Drilling Meter,Bohrmeter
 DocType: Feedback Drilling Meter,Flushing,Spülung
@@ -520,4 +519,3 @@ DocType: Project,Fixed date,Fixtermin
 DocType: Layer Directory,Drilling Order,Bohrauftrag
 DocType: Quotation,Disable AI,KI deaktivieren
 DocType: Supplier,Main Hotel,Stammhotel
-DocType: Object,Remarks,Bemerkungen
