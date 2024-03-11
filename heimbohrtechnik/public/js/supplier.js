@@ -28,6 +28,7 @@ frappe.ui.form.on('Supplier', {
             set_phone(frm);
         }
         compile_remarks(frm);
+        set_supplier_group(frm);
     }
 });
 
@@ -86,5 +87,23 @@ function compile_remarks(frm) {
             }
         }
         cur_frm.set_value("remarks", remarks.join(", "));
+    }
+}
+
+function set_supplier_group(frm) {
+    if (frm.doc.capabilities) {
+        var supplier_group = "Lieferant";
+        for (var i = 0; i < frm.doc.capabilities.length; i++) {
+            if (frm.doc.capabilities[i].activity == "Hotel") {
+                supplier_group = "Hotel";
+            }
+        }
+        if (supplier_group == "Hotel") {
+            cur_frm.set_value("supplier_group", "Hotel");
+        } else {
+            cur_frm.set_value("supplier_group", "Lieferant");
+        }
+    } else {
+        cur_frm.set_value("supplier_group", "Lieferant");
     }
 }

@@ -24,21 +24,23 @@
 <table style="width: 765px;">
     <thead>
         <tr class="tr">
-            <th class="td">{{ _("Hotel") }}</th>
+            <th class="td" style="min-width: 100px;">{{ _("Hotel") }}</th>
             <th class="td">{{ _("Address") }}</th>
-            <th class="td tacenter">{{ _("Phone") }}</th>
+            <th class="td tacenter" style="min-width: 120px;">{{ _("Phone") }}</th>
             <th class="td tacenter">{{ _("Dist.") }}</th>
             <th class="td tacenter">{{ _("Time") }}</th>
+            <th class="td">{{ _("Remarks") }}</th>
         </tr>
     </thead>
     <tbody>
         {% for hotel in hotels %}
             <tr class="tr">
-                <td class="td">{% if hotel.website %}<a href="https://{{ hotel.website }}">{{ hotel.supplier_name }}</a>{% else %}{{ hotel.supplier_name }}{% endif %}</td>
+                <td class="td">{% if hotel.website %}<a href="https://{{ hotel.website }}">{{ hotel.supplier_name }}</a>{% else %}{{ hotel.supplier_name }}{% endif %}{% if hotel.main_hotel == 1 %}<i class="fa fa-star" aria-hidden="true"></i>{% endif %}</td>
                 <td class="td"><a href="geo:{{ hotel.gps_latitude }},{{ hotel.gps_longitude }}">{{ hotel.hauptadresse }}</a></td>
                 <td class="td tacenter"><a href="tel:{{ hotel.telefon }}">{{ hotel.telefon or "-" }}</a></td>
                 <td class="td taright"><div id="hotel_distance_{{ loop.index0 }}"><i class="fa fa-spinner fa-spin" style="color: #274b82;"></i></div></td>
                 <td class="td taright"><div id="hotel_time_{{ loop.index0 }}"></div></td>
+                <td class="td">{{ hotel.remarks }}</td>
             </tr>
         {% endfor %}
     </tbody>
