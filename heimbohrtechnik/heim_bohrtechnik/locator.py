@@ -43,7 +43,7 @@ def find_closest_hotels(object_name):
         'hotels': html
     })
     
-    new_doc.insert()
+    new_doc.insert(ignore_permissions=True)
     frappe.db.commit()
     
     return {
