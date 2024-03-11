@@ -91,19 +91,13 @@ function compile_remarks(frm) {
 }
 
 function set_supplier_group(frm) {
+    var supplier_group = "Lieferant";
     if (frm.doc.capabilities) {
-        var supplier_group = "Lieferant";
         for (var i = 0; i < frm.doc.capabilities.length; i++) {
             if (frm.doc.capabilities[i].activity == "Hotel") {
                 supplier_group = "Hotel";
             }
         }
-        if (supplier_group == "Hotel") {
-            cur_frm.set_value("supplier_group", "Hotel");
-        } else {
-            cur_frm.set_value("supplier_group", "Lieferant");
-        }
-    } else {
-        cur_frm.set_value("supplier_group", "Lieferant");
     }
+    cur_frm.set_value("supplier_group", supplier_group);
 }
