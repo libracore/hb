@@ -33,6 +33,11 @@ frappe.ui.form.on('Customer', {
                 frappe.set_route("query-report", "Customer sales trend", {"customer": frm.doc.name});
             });
         }
+        if (!frm.doc.__islocal) {
+            frm.add_custom_button(__("Drilling Statistics"), function() {
+                frappe.set_route("query-report", "Drilling Statistics", {"customer": frm.doc.name});
+            });
+        }
     }
 });
 
