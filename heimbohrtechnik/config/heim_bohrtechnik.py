@@ -544,7 +544,7 @@ def get_data():
                 {
                     "type": "report",
                     "name": "Drilling Statistics",
-                    "doctype": "Drilling Statistics",
+                    "doctype": "Project",
                     "is_query_report": True
                 }
             ]
