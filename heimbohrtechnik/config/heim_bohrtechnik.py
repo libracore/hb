@@ -540,6 +540,12 @@ def get_data():
                     "name": "Feedback Drilling Meter",
                     "doctype": "Feedback Drilling Meter",
                     "is_query_report": True
+                },
+                {
+                    "type": "report",
+                    "name": "Drilling Statistics",
+                    "doctype": "Drilling Statistics",
+                    "is_query_report": True
                 }
             ]
         },

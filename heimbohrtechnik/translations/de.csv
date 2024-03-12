@@ -519,3 +519,6 @@ DocType: Project,Fixed date,Fixtermin
 DocType: Layer Directory,Drilling Order,Bohrauftrag
 DocType: Quotation,Disable AI,KI deaktivieren
 DocType: Supplier,Main Hotel,Stammhotel
+Report: Drilling Statistics,Drilling Statistics,Bohrstatistik
+Report: Drilling Statistics,Invoiced Meter,Verrechnete Meter
+Report: Drilling Statistics,Actual Meter,Tatsächliche Meter

@@ -1,0 +1,31 @@
+{
+ "add_total_row": 1,
+ "creation": "2024-03-12 08:37:56.484776",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Commercial",
+ "modified": "2024-03-12 21:37:54.937338",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Drilling Statistics",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Project",
+ "report_name": "Drilling Statistics",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "Projects User"
+  },
+  {
+   "role": "Projects Manager"
+  },
+  {
+   "role": "LKW-Fahrer"
+  }
+ ]
+}
