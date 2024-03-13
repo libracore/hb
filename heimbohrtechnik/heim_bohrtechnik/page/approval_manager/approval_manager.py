@@ -21,13 +21,18 @@ def get_approvals(user):
             `tabPurchase Invoice`.`net_total`,
             `tabPurchase Invoice`.`grand_total`,
             `tabPurchase Invoice`.`currency`,
-            `tabPurchase Invoice`.`bill_no`
+            `tabPurchase Invoice`.`bill_no`,
+            `tabPurchase Invoice Item`.`expense_account`,
+            `tabPurchase Invoice Item`.`cost_center`,
+            `tabPurchase Invoice`.`remarks`
         FROM `tabToDo`
         LEFT JOIN `tabPurchase Invoice` ON `tabPurchase Invoice`.`name` = `tabToDo`.`reference_name`
+        LEFT JOIN `tabPurchase Invoice Item` ON `tabPurchase Invoice Item`.`parent` = `tabPurchase Invoice`.`name`
         WHERE
             `tabToDo`.`owner` = "{user}"
             AND `tabToDo`.`reference_type` = "Purchase Invoice"
             AND `tabToDo`.`status` = "Open"
+        GROUP BY `tabPurchase Invoice`.`name`
         ORDER BY `tabPurchase Invoice`.`due_date` ASC, `tabPurchase Invoice`.`name` ASC
         ;
         """.format(user=user), as_dict=True)
@@ -46,6 +51,9 @@ def get_approvals(user):
         pinv['due_date'] = frappe.utils.get_datetime(pinv['due_date']).strftime("%d.%m.%Y")
         pinv['net_total'] = "{:,.2f}".format(pinv['net_total']).replace(",", "'")
         pinv['grand_total'] = "{:,.2f}".format(pinv['grand_total']).replace(",", "'")
+        
+        # render html
+        pinv['html'] = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/approval_manager/document.html", pinv)
         
     return pinvs
     

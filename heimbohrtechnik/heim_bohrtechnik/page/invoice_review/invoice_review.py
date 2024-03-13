@@ -36,14 +36,18 @@ def get_invoices_for_review(payment_proposal=None):
             `tabPurchase Invoice`.`grand_total`,
             `tabPurchase Invoice`.`currency`,
             `tabPurchase Invoice`.`bill_no`,
-            `tabPurchase Invoice`.`total_taxes_and_charges` AS `tax`
+            `tabPurchase Invoice`.`total_taxes_and_charges` AS `tax`,
+            `tabPurchase Invoice Item`.`expense_account`,
+            `tabPurchase Invoice Item`.`cost_center`,
+            `tabPurchase Invoice`.`remarks`
         FROM `tabPurchase Invoice`
+        LEFT JOIN `tabPurchase Invoice Item` ON `tabPurchase Invoice Item`.`parent` = `tabPurchase Invoice`.`name`
         WHERE
             {filter_str}
+        GROUP BY `tabPurchase Invoice`.`name`
         ORDER BY `tabPurchase Invoice`.`due_date` ASC, `tabPurchase Invoice`.`name` ASC
         ;
         """.format(filter_str=filter_str)
-    frappe.log_error(sql_query)
     pinvs = frappe.db.sql(sql_query, as_dict=True)
     
     # extend atatchments
@@ -61,6 +65,9 @@ def get_invoices_for_review(payment_proposal=None):
         pinv['net_total'] = "{:,.2f}".format(pinv['net_total']).replace(",", "'")
         pinv['grand_total'] = "{:,.2f}".format(pinv['grand_total']).replace(",", "'")
         pinv['tax'] = "{:,.2f}".format(pinv['tax']).replace(",", "'")
+        
+        # render html
+        pinv['html'] = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/page/invoice_review/invoice.html", pinv)
         
     return pinvs
     

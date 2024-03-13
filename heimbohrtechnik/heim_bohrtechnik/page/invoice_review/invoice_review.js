@@ -50,7 +50,7 @@ frappe.invoice_review = {
         var html = "";
         document.getElementById("invoices_view").innerHTML = "";
         for (var i = 0; i < invoices.length; i++) {
-            html += frappe.render_template('invoice', invoices[i]); 
+            html += invoices[i].html;
         }
         
         // insert content

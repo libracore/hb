@@ -64,7 +64,7 @@ frappe.approval_manager = {
         var html = "";
         document.getElementById("approvals_view").innerHTML = "";
         for (var i = 0; i < approvals.length; i++) {
-            html += frappe.render_template('document', approvals[i]); 
+            html += approvals[i].html;
         }
         
         // insert content
