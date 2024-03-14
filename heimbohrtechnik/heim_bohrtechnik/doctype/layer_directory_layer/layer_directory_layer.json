@@ -85,7 +85,7 @@
    "fieldname": "drilling_type",
    "fieldtype": "Select",
    "label": "Drilling Type",
-   "options": "\nSp\u00fclbohrung - nass\nHammerbohrung - nass\nHammerbohrung - trocken\nKernbohrung\nAndere Bohrart"
+   "options": "\nSp\u00fclbohrung\nHammerbohrung - nass\nHammerbohrung - trocken\nKernbohrung\nAndere Bohrart"
   },
   {
    "fieldname": "sec_remarks",
@@ -168,7 +168,7 @@
    "fieldname": "flushing_medium",
    "fieldtype": "Select",
    "label": "Flushing medium",
-   "options": "\nLuftsp\u00fclung\nTonsp\u00fclung\nAndere Sp\u00fclung"
+   "options": "\nLuftsp\u00fclung\nTonsp\u00fclung\nAndere Sp\u00fchlung"
   },
   {
    "fieldname": "flushing_set",
@@ -185,7 +185,7 @@
   }
  ],
  "istable": 1,
- "modified": "2023-12-07 10:25:14.621718",
+ "modified": "2024-03-14 07:44:45.407667",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory Layer",
