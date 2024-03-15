@@ -522,3 +522,11 @@ DocType: Supplier,Main Hotel,Stammhotel
 Report: Drilling Statistics,Drilling Statistics,Bohrstatistik
 Report: Drilling Statistics,Invoiced Meter,Verrechnete Meter
 Report: Drilling Statistics,Actual Meter,Tatsächliche Meter
+DocType: Layer Directory,Depth Arteser,Tiefe Arteser 
+DocType: Layer Directory,Amount of water,Wassermenge
+DocType: Layer Directory,Fabric packer,Gewebepacker
+DocType: Layer Directory,Stocking built into depth,Strumpf eingebaut in Tiefe
+DocType: Layer Directory,From,Von
+DocType: Layer Directory,To,bis
+DocType: Layer Directory,Tense until (+/-),gespannt bis (+/-)
+DocType: Layer Directory,Measure type,Messart

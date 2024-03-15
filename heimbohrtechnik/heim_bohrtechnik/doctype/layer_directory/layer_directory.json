@@ -56,6 +56,16 @@
   "amount_disposed",
   "forwarder",
   "disposer",
+  "depth_arteser_section",
+  "depth_arteser",
+  "amount_water",
+  "fabric_packer",
+  "stocking_into_depth",
+  "fabric_from",
+  "fabric_to",
+  "column_break_56",
+  "tense_until",
+  "measure_type",
   "date_signature",
   "date"
  ],
@@ -371,10 +381,62 @@
    "fieldtype": "Data",
    "label": "Drilling Order",
    "read_only": 1
+  },
+  {
+   "fieldname": "depth_arteser_section",
+   "fieldtype": "Section Break",
+   "label": "Depth Arteser"
+  },
+  {
+   "fieldname": "depth_arteser",
+   "fieldtype": "Int",
+   "label": "Depth Arteser"
+  },
+  {
+   "fieldname": "amount_water",
+   "fieldtype": "Int",
+   "label": "Amount of water"
+  },
+  {
+   "default": "0",
+   "fieldname": "fabric_packer",
+   "fieldtype": "Check",
+   "label": "Fabric packer"
+  },
+  {
+   "default": "0",
+   "fieldname": "stocking_into_depth",
+   "fieldtype": "Check",
+   "label": "Stocking built into depth"
+  },
+  {
+   "fieldname": "column_break_56",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fabric_from",
+   "fieldtype": "Int",
+   "label": "From"
+  },
+  {
+   "fieldname": "fabric_to",
+   "fieldtype": "Int",
+   "label": "To"
+  },
+  {
+   "fieldname": "tense_until",
+   "fieldtype": "Int",
+   "label": "Tense until (+/-)"
+  },
+  {
+   "fieldname": "measure_type",
+   "fieldtype": "Select",
+   "label": "Measure type",
+   "options": "\nM (Manometer)\nZ (Zeit)"
   }
  ],
  "is_submittable": 1,
- "modified": "2024-02-16 15:33:55.008195",
+ "modified": "2024-03-15 14:50:57.905185",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory",
