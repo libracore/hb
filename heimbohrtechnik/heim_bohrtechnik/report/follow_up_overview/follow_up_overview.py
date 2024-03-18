@@ -1,10 +1,27 @@
-# Copyright (c) 2013, libracore AG and contributors
+# Copyright (c) 2023-2024, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
 import frappe
 from frappe import _
 from datetime import datetime, timedelta
+from frappe.utils import cint
+from frappe.core.doctype.communication.email import make as make_email
+import json
+from frappe.utils.background_jobs import enqueue
+
+follow_up_mail_content = """
+    <p>Sehr geehrte Damen und Herren</p>
+    <p><br></p>
+    <p>Wir wollten uns erkundigen, ob Sie bereits die Gelegenheit hatten, das Angebot zu prüfen, dass wir Ihnen vor einiger Zeit für das oben genannten Objekt geschickt haben.</p>
+    <p><br></p>
+    <p>Wenn Sie weitere Einzelheiten über unsere Dienstleistungen benötigen oder das Angebot weiter besprechen möchten, stehen wir Ihnen gerne jederzeit zur Verfügung.</p>
+    <p><br></p>
+    <p>Wir würden uns freuen, all Ihre Fragen zu beantworten.</p>
+    <p><br></p>
+    <p><br></p>
+    {{footer}}
+"""
 
 def execute(filters=None):
     columns = get_columns(filters)
@@ -28,15 +45,15 @@ def get_columns(filters):
     
 def get_data(filters):
     conditions = ""
-    if filters.volume_from:
-        conditions += """ AND `tabQuotation`.`base_net_total` >= {vol} """.format(vol=filters.volume_from)
-    if filters.volume_to:
-        conditions += """ AND `tabQuotation`.`base_net_total` <= {vol} """.format(vol=filters.volume_to)
-    if filters.from_date:
-        conditions += """ AND `tabQuotation`.`transaction_date` >= "{date}" """.format(date=filters.from_date)
-    if filters.to_date:
-        conditions += """ AND `tabQuotation`.`transaction_date` <= "{date} 23:59" """.format(date=filters.to_date)
-        
+    if filters.get("volume_from"):
+        conditions += """ AND `tabQuotation`.`base_net_total` >= {vol} """.format(vol=filters.get("volume_from"))
+    if filters.get("volume_to"):
+        conditions += """ AND `tabQuotation`.`base_net_total` <= {vol} """.format(vol=filters.get("volume_to"))
+    if filters.get("from_date"):
+        conditions += """ AND `tabQuotation`.`transaction_date` >= "{date}" """.format(date=filters.get("from_date"))
+    if filters.get("to_date"):
+        conditions += """ AND `tabQuotation`.`transaction_date` <= "{date} 23:59" """.format(date=filters.get("to_date"))
+    
     data = frappe.db.sql("""
         SELECT
             `tabQuotation`.`name` AS `quotation`,
@@ -69,4 +86,56 @@ def get_data(filters):
             d['notes'] = note.notes
             d['days_since_fup'] = (datetime.now().date() - note.date).days
             
+    # if only follow-ups: filter out by date:
+    if cint(filters.get("needs_follow_up")):
+        filtered_data = []
+        for d in data:
+            if d['days_since_quotation'] >= 30 and (d.get('days_since_fup') is None or d.get('days_since_fup') >= 30):
+                filtered_data.append(d)
+                
+        data = filtered_data
+
     return data
+
+@frappe.whitelist()
+def async_bulk_follow_up(filters):
+    if type(filters) == str:
+        filters = json.loads(filters)
+    
+    kwargs={
+      'filters': filters
+    }
+    
+    enqueue("heimbohrtechnik.heim_bohrtechnik.report.follow_up_overview.follow_up_overview.bulk_follow_up",
+        queue='short',
+        timeout=15000,
+        **kwargs)
+    return
+
+def bulk_follow_up(filters):
+    data = get_data(filters)
+    
+    for d in data:
+        send_follow_up(d.get("quotation"))
+    
+    return
+
+def send_follow_up(quotation):
+    doc = frappe.get_doc("Quotation", quotation)
+    footer = frappe.get_cached_value("Signature", frappe.session.user, "email_footer")
+    recipient = doc.get("email") or doc.get("email_id") or doc.get("contact_email")
+    message = follow_up_mail_content.replace("{{footer}}", footer)
+    
+    # send mail
+    make_email(
+        recipients=recipient,
+        sender=frappe.session.user,
+        subject="{0} - Erinnerung: Angebot {1} - {2}".format((doc.object or ""), doc.name, (doc.object_address_display or "").replace("<br>", ", ")),
+        content=message,
+        doctype="Quotation",
+        name=quotation,
+        print_format="Offerte",
+        attachments=[],
+        send_email=True
+    )
+    return
