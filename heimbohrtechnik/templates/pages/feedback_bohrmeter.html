@@ -14,12 +14,26 @@
                         </div>
                     </div>
                     <div class="form-column col-sm-12 col-xs-12" style="padding-top: 10px;">
+                        <label class="control-label" style="padding-right: 0px;">Vertretung</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-tint"></i></span>
+                            <select class="form-control" placeholder="deputy" id="deputy">
+                                <option value="Nein">Keine</option>
+                                <option value="Ja">Ja</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-column col-sm-12 col-xs-12" style="padding-top: 10px;">
                         <label class="control-label" style="padding-right: 0px;">Datum</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
                             <input type="date" class="form-control" placeholder="Datum" id="date">
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class ="form-column col-sm-4 col-xs-12">
+                <div class="row" style="margin-top: 20px; " id="action-row">
                     <div class="form-column col-sm-12 col-xs-12" style="padding-top: 10px;">
                         <label class="control-label" style="padding-right: 0px;">Bohrmeter</label>
                         <div class="input-group">
@@ -28,15 +42,16 @@
                             </select>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class ="form-column col-sm-4 col-xs-12">
-                <div class="row" style="margin-top: 20px; " id="action-row">
                     <div class="form-column col-sm-12 col-xs-12" style="padding-top: 10px;">
                         <label class="control-label" style="padding-right: 0px;">Projekt</label>
                         <div class="input-group">
                             <span class="input-group-addon" id="project_icon"><i class="fa fa-cube"></i></span>
                             <input type="text" class="form-control" placeholder="Projekt-Nr." id="project">
+                        </div>
+                        <label class="control-label" style="padding-right: 0px;">Meter</label>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="project_icon"><i class="fa fa-cube"></i></span>
+                            <input type="text" class="form-control" placeholder="Meter" id="project_meter">
                         </div>
                     </div>
                     <div class="form-column col-sm-12 col-xs-12" style="padding-top: 10px;">
@@ -45,10 +60,6 @@
                             <span class="input-group-addon" id="project_icon2"><i class="fa fa-cube"></i></span>
                             <input type="text" class="form-control" placeholder="Weitere Projekt-Nr." id="project2">
                         </div>
-                    </div>
-                    <div class="form-column col-sm-12 col-xs-12" style="padding-top: 10px;">
-                        <label class="control-label" style="padding-right: 0px;"></label>
-                        <button type="button" class="btn btn-primary btn-submit" style="display: none;" id="submit">Senden</button>
                     </div>
                 </div>
             </div>
