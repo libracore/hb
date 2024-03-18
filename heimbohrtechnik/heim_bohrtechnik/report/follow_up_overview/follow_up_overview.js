@@ -109,7 +109,7 @@ frappe.query_reports["Follow-Up Overview"] = {
                         'method': 'heimbohrtechnik.heim_bohrtechnik.report.follow_up_overview.follow_up_overview.async_bulk_follow_up',
                         'args': {
                             'filters': {
-                                'volume_from': frappe.query_report.get_filter_value('value_from'),
+                                'volume_from': frappe.query_report.get_filter_value('volume_from'),
                                 'volume_to': frappe.query_report.get_filter_value('volume_to'),
                                 'from_date': frappe.query_report.get_filter_value('from_date'),
                                 'to_date': frappe.query_report.get_filter_value('to_date')

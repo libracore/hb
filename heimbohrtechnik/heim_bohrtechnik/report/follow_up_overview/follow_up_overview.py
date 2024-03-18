@@ -117,7 +117,7 @@ def bulk_follow_up(filters):
     
     for d in data:
         send_follow_up(d.get("quotation"))
-    
+
     return
 
 def send_follow_up(quotation):
