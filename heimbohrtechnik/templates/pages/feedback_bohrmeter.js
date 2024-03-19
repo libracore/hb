@@ -4,7 +4,8 @@ $(document).ready(function(){
 });
 
 function make() {
-    
+    // get options for deputys
+    get_deputys();
 }
 
 function run() {
@@ -62,6 +63,16 @@ function run() {
             });
         }
     });
+    //calculate total drilling meters
+    var total_drilling_meter = document.getElementById('drilling_meter');
+    var project_meter = document.getElementById('project_meter');
+    var project_meter2 = document.getElementById('project_meter2');
+    project_meter.addEventListener('input', function() {
+        calculate_total_meter();
+    });
+    project_meter2.addEventListener('input', function() {
+        calculate_total_meter();
+    });
     //create document in ERPNext, when submit button has been pushed
     $(".btn-submit").on('click', function() {
         frappe.call({
@@ -110,4 +121,31 @@ function handle_button_visibillity(check) {
     } else {
         button.style.display = 'none';
     }
+}
+
+function get_deputys() {
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_deputy_list',
+        'callback': function(r) {
+            var deputys = r.message
+            var deputySelect = document.getElementById('deputy');
+            deputys.forEach(function(option) {
+                var deputyElement = document.createElement('option');
+                deputyElement.text = option;
+                deputySelect.add(deputyElement);
+            });
+        }
+    });
+}
+
+function calculate_total_meter() {
+    var meter = parseInt(document.getElementById('project_meter').value)
+    if (isNaN(meter)) {
+        meter = 0;
+    }
+    var meter2 = parseInt(document.getElementById('project_meter2').value)
+    if (isNaN(meter2)) {
+        meter2 = 0;
+    }
+    document.getElementById('drilling_meter').value = meter + meter2;
 }

@@ -110,3 +110,16 @@ def get_projects(team):
           projects.append(project['name'])
         
     return projects
+    
+@frappe.whitelist(allow_guest=True)
+def get_deputy_list():
+    deputys = frappe.db.sql("""
+        SELECT `name`
+        FROM `tabDrilling Team`
+        WHERE `drilling_team_type` = 'Bohrteam'""", as_dict=True)
+    
+    deputy_list = []
+    for deputy in deputys:
+        deputy_list.append(deputy.name)
+    
+    return deputy_list

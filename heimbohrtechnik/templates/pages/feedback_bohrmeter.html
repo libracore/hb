@@ -16,10 +16,9 @@
                     <div class="form-column col-sm-12 col-xs-12" style="padding-top: 10px;">
                         <label class="control-label" style="padding-right: 0px;">Vertretung</label>
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-tint"></i></span>
+                            <span class="input-group-addon"><i class="fa fa-handshake-o" aria-hidden="true"></i></span>
                             <select class="form-control" placeholder="deputy" id="deputy">
                                 <option value="Nein">Keine</option>
-                                <option value="Ja">Ja</option>
                             </select>
                         </div>
                     </div>
@@ -34,31 +33,41 @@
             </div>
             <div class ="form-column col-sm-4 col-xs-12">
                 <div class="row" style="margin-top: 20px; " id="action-row">
+                    <div class="form-column col-sm-12 col-xs-12 row" style="padding-top: 10px; margin: 0px;">
+                        <div class="form-column col-sm-8 col-xs-8" style="padding: 0px;">
+                            <label class="control-label" style="padding-right: 0px;">Projekt</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="project_icon"><i class="fa fa-cube"></i></span>
+                                <input type="text" class="form-control" placeholder="Projekt-Nr." id="project">
+                            </div>
+                        </div>
+                        <div class="form-column col-sm-4 col-xs-4" style="padding: 0px;">
+                            <label class="control-label" style="padding-right: 0px;">Meter</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Meter" id="project_meter">
+                            </div>
+                        </div>    
+                    </div>
+                    <div class="form-column col-sm-12 col-xs-12 row" style="padding-top: 10px; margin: 0px;">
+                        <div class="form-column col-sm-8 col-xs-8" style="padding: 0px;">
+                            <label class="control-label" style="padding-right: 0px;">Weiteres Projekt</label>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="project_icon2"><i class="fa fa-cube"></i></span>
+                                <input type="text" class="form-control" placeholder="Projekt-Nr." id="project2">
+                            </div>
+                        </div>
+                        <div class="form-column col-sm-4 col-xs-4" style="padding: 0px;">
+                            <label class="control-label" style="padding-right: 0px;">Meter</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Meter" id="project_meter2">
+                            </div>
+                        </div>    
+                    </div>
                     <div class="form-column col-sm-12 col-xs-12" style="padding-top: 10px;">
-                        <label class="control-label" style="padding-right: 0px;">Bohrmeter</label>
+                        <label class="control-label" style="padding-right: 0px;">Total Bohrmeter</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-long-arrow-down" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" placeholder="Bohrmeter" id="drilling_meter">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-column col-sm-12 col-xs-12" style="padding-top: 10px;">
-                        <label class="control-label" style="padding-right: 0px;">Projekt</label>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="project_icon"><i class="fa fa-cube"></i></span>
-                            <input type="text" class="form-control" placeholder="Projekt-Nr." id="project">
-                        </div>
-                        <label class="control-label" style="padding-right: 0px;">Meter</label>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="project_icon"><i class="fa fa-cube"></i></span>
-                            <input type="text" class="form-control" placeholder="Meter" id="project_meter">
-                        </div>
-                    </div>
-                    <div class="form-column col-sm-12 col-xs-12" style="padding-top: 10px;">
-                        <label class="control-label" style="padding-right: 0px;">Weiteres Projekt</label>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="project_icon2"><i class="fa fa-cube"></i></span>
-                            <input type="text" class="form-control" placeholder="Weitere Projekt-Nr." id="project2">
+                            <input type="text" class="form-control" placeholder="Total Bohrmeter" id="drilling_meter" readonly>
                         </div>
                     </div>
                 </div>
@@ -99,8 +108,57 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="form-column col-sm-8 col-xs-12" style="padding-top: 10px;">
+            <div class="row">
+                <div class="input-group form-column col-sm-4 col-xs-12">
+                    <label class="control-label" style="padding-right: 0px;">Von / bis</label>
+                </div>
+                <div class="input-group form-column col-sm-8 col-xs-12">
+                    <label class="control-label" style="padding-right: 0px;">Beschreibung der durchgeführten Arbeiten</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-column col-sm-8 col-xs-12" style="padding-top: 10px;">
+            <div class="row">
+                <div class="input-group form-column col-sm-4 col-xs-12">
+                    <input type="text" class="form-control" placeholder="07:00 - 08:00" readonly>
+                </div>
+                <div class="input-group form-column col-sm-8 col-xs-12">
+                    <input type="text" class="form-control" placeholder="Beschreibung" id="description_07_08">
+                </div>
+            </div>
+        </div>
+        <div class="form-column col-sm-4 col-xs-12" style="padding-top: 10px;">
+            <label class="control-label" style="padding-right: 0px;"></label>
+            <button type="button" class="btn btn-primary btn-submit" style="display: none;" id="submit">Senden</button>
+        </div>
+    </div>
+        <div class="row">
+        <div class="form-column col-sm-8 col-xs-12" style="padding-top: 10px;">
+            <div class="row">
+                <div class="input-group form-column col-sm-4 col-xs-12">
+                    <input type="text" class="form-control" placeholder="08:00 - 09:00" readonly>
+                </div>
+                <div class="input-group form-column col-sm-8 col-xs-12">
+                    <input type="text" class="form-control" placeholder="Beschreibung" id="description_07_08">
+                </div>
+            </div>
+        </div>
+        <div class="form-column col-sm-4 col-xs-12" style="padding-top: 10px;">
+            <label class="control-label" style="padding-right: 0px;"></label>
+            <button type="button" class="btn btn-primary btn-submit" style="display: none;" id="submit">Senden</button>
+        </div>
+    </div>
+    <div class="form-column col-sm-4 col-xs-12" style="padding-top: 10px;">
+        <label class="control-label" style="padding-right: 0px;"></label>
+        <button type="button" class="btn btn-primary btn-submit" style="display: none;" id="submit">Senden</button>
+    </div>
 </div>
 
+    
 <input type="text" class="form-control" id="key" style="visibility: hidden; ">
 <input type="text" class="form-control" id="field_memory" style="visibility: hidden; ">
 <input type="text" class="form-control" id="check_memory" style="visibility: hidden; ">
