@@ -39,8 +39,8 @@ def get_data(filters):
     for i in range(1, 53):
         #create a new dict for the actual week
         new_week = {
-            'from': first_day,
-            'to': frappe.utils.add_days(first_day, 6),
+            'from': first_day.date(),
+            'to': frappe.utils.add_days(first_day, 6).date(),
             'flushing': []
         }
         
