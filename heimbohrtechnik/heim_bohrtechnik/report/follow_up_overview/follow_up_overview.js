@@ -1,4 +1,4 @@
-// Copyright (c) 2023, libracore AG and contributors
+// Copyright (c) 2023-2024, libracore AG and contributors
 // For license information, please see license.txt
 /* eslint-disable */
 
@@ -24,6 +24,11 @@ frappe.query_reports["Follow-Up Overview"] = {
             "fieldname":"to_date",
             "label": __("Bis Datum"),
             "fieldtype": "Date"
+        },
+        {
+            "fieldname":"needs_follow_up",
+            "label": __("Zum Nachfassen"),
+            "fieldtype": "Check"
         }
     ],
     "onload": (report) => {
@@ -95,5 +100,30 @@ frappe.query_reports["Follow-Up Overview"] = {
             }
         });
         
+        report.page.add_inner_button( __("Alle automatisch nachfassen"), function() {
+            frappe.confirm(
+                __("Wirklich Nachfass-Mails automatisch an alle Angebote versenden?"),
+                function() {
+                    // yes                   
+                    frappe.call({
+                        'method': 'heimbohrtechnik.heim_bohrtechnik.report.follow_up_overview.follow_up_overview.async_bulk_follow_up',
+                        'args': {
+                            'filters': {
+                                'volume_from': frappe.query_report.get_filter_value('volume_from'),
+                                'volume_to': frappe.query_report.get_filter_value('volume_to'),
+                                'from_date': frappe.query_report.get_filter_value('from_date'),
+                                'to_date': frappe.query_report.get_filter_value('to_date')
+                            }
+                        },
+                        'callback': function(r) {
+                            frappe.show_alert( __("Nachfassen läuft...") );
+                        }
+                    });
+                },
+                function() {
+                    // no
+                }
+            );
+        });
     }
 };

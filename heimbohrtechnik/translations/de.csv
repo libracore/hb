@@ -535,3 +535,4 @@ DocType: Feedback Drilling Meter,Time,Zeitraum
 DocType: Feedback Drilling Meter,Description,Beschreibung
 DocType: Daily Feedback Description,Daily Feedback Description,Tagesrückmeldung Beschreibung
 DocType: Daily Feedback Description,Value,Wert
+DocType: Purchase Order,Rounding adjustment,Rundung
