@@ -49,11 +49,13 @@ def check_key(link_key, team):
         is_valid = True
         projects = get_projects(team)
         projects_html = frappe.render_template("heimbohrtechnik/templates/pages/projects_template.html", {'projects': projects})
+        descriptions = get_descriptions()
+        descriptions_html = frappe.render_template("heimbohrtechnik/templates/pages/descriptions_template.html", {'descriptions': descriptions})
     else:
         frappe.msgprint("Invalid or missing Key!")
     
     
-    return {'is_valid': is_valid, 'projects_html': projects_html}
+    return {'is_valid': is_valid, 'projects_html': projects_html, 'descriptions_html': descriptions_html}
 
 def get_projects(team):
     #get today and calculate start and end date of period
@@ -78,6 +80,19 @@ def get_projects(team):
           projects.append(project['name'])
         
     return projects
+    
+def get_descriptions():
+#get projects in period
+    data = frappe.db.sql("""
+        SELECT `value`
+        FROM `tabDaily Feedback Description`""", as_dict=True)
+    
+    #get a list with the descriptions as values
+    descriptions = []
+    for description in data:
+          descriptions.append(description['value'])
+
+    return descriptions
     
 @frappe.whitelist(allow_guest=True)
 def get_deputy_list():
@@ -173,6 +188,13 @@ def create_document(drilling_team, deputy, date, project, project_meter, project
     
     if deputy != "Nein":
         feedback.deputy = deputy
+
+    if project2:
+        project_entry = {
+        'project_number': project2,
+        'project_meter': project_meter2
+        }
+        feedback.append('project', project_entry)
         
     feedback = feedback.insert(ignore_permissions=True)
     feedback.submit()

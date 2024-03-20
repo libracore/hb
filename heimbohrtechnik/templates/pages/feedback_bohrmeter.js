@@ -44,6 +44,7 @@ function run() {
                 check = response.message.is_valid;
                 document.getElementById('check_memory').value = check;
                 var projects_html = response.message.projects_html;
+                var descriptions_html = response.message.descriptions_html;
             }
             //Set Projects as Options for Select Field
             var project_icon = document.getElementById('project_icon');
@@ -55,6 +56,67 @@ function run() {
                 project_icon2.addEventListener('click', function() {
                     var field = 'project2';
                     chose_project(projects_html, field);
+                });
+            //Set default descriptions as Options for all description fields
+            var description_07_08_icon = document.getElementById('description_07_08_icon');
+                description_07_08_icon.addEventListener('click', function() {
+                    var description_field = 'description_07_08';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_08_09_icon = document.getElementById('description_08_09_icon');
+                description_08_09_icon.addEventListener('click', function() {
+                    var description_field = 'description_08_09';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_09_10_icon = document.getElementById('description_09_10_icon');
+                description_09_10_icon.addEventListener('click', function() {
+                    var description_field = 'description_09_10';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_10_11_icon = document.getElementById('description_10_11_icon');
+                description_10_11_icon.addEventListener('click', function() {
+                    var description_field = 'description_10_11';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_11_12_icon = document.getElementById('description_11_12_icon');
+                description_11_12_icon.addEventListener('click', function() {
+                    var description_field = 'description_11_12';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_12_13_icon = document.getElementById('description_12_13_icon');
+                description_12_13_icon.addEventListener('click', function() {
+                    var description_field = 'description_12_13';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_13_14_icon = document.getElementById('description_13_14_icon');
+                description_13_14_icon.addEventListener('click', function() {
+                    var description_field = 'description_13_14';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_14_15_icon = document.getElementById('description_14_15_icon');
+                description_14_15_icon.addEventListener('click', function() {
+                    var description_field = 'description_14_15';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_15_16_icon = document.getElementById('description_15_16_icon');
+                description_15_16_icon.addEventListener('click', function() {
+                    var description_field = 'description_15_16';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_16_17_icon = document.getElementById('description_16_17_icon');
+                description_16_17_icon.addEventListener('click', function() {
+                    var description_field = 'description_16_17';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_17_18_icon = document.getElementById('description_17_18_icon');
+                description_17_18_icon.addEventListener('click', function() {
+                    var description_field = 'description_17_18';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_18_19_icon = document.getElementById('description_18_19_icon');
+                description_18_19_icon.addEventListener('click', function() {
+                    var description_field = 'description_18_19';
+                    chose_description(descriptions_html, description_field);
                 });
             //Check if all mandatory fields are filled
             var input = document.getElementById('form');
@@ -122,6 +184,19 @@ function set_project(self, choice) {
     handle_button_visibillity(check);
     frappe.ui.open_dialogs[0].hide();
 }
+
+function chose_description(descriptions_html, description_field) {
+    document.getElementById('description_field_memory').value = description_field;
+    var description_message = frappe.msgprint(descriptions_html, "Beschreibung wählen");
+}
+
+function set_description(self, description_choice) {
+    var description_field = document.getElementById('description_field_memory').value;
+    var check = document.getElementById('check_memory').value;
+    document.getElementById(description_field).value = description_choice;
+    frappe.ui.open_dialogs[0].hide();
+}
+
 function handle_button_visibillity(check) {
     if (check == "true") {
         check = true;

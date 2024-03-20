@@ -1,0 +1,4 @@
+<p>Vorgeschlagene Beschreibungen</p>
+{% for description_choice in descriptions %}
+<p><button type="button" class="btn btn-secondary" onclick="set_description(this, '{{ description_choice }}')">{{ description_choice }}</button></p>
+{% endfor %}
