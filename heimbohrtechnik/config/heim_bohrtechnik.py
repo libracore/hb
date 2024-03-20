@@ -504,6 +504,12 @@ def get_data():
                    "name": "Subcontracting Order Template",
                    "label": _("Subcontracting Order Template"),
                    "description": _("Subcontracting Order Template")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Daily Feedback Description",
+                   "label": _("Daily Feedback Description"),
+                   "description": _("Daily Feedback Description")
                 }
             ]
         },
