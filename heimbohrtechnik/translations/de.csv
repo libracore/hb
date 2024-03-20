@@ -530,4 +530,9 @@ DocType: Layer Directory,From,Von
 DocType: Layer Directory,To,bis
 DocType: Layer Directory,Tense until (+/-),gespannt bis (+/-)
 DocType: Layer Directory,Measure type,Messart
+DocType: Feedback Drilling Meter,Deputy,Vertretung
+DocType: Feedback Drilling Meter,Time,Zeitraum
+DocType: Feedback Drilling Meter,Description,Beschreibung
+DocType: Daily Feedback Description,Daily Feedback Description,Tagesrückmeldung Beschreibung
+DocType: Daily Feedback Description,Value,Wert
 DocType: Purchase Order,Rounding adjustment,Rundung
