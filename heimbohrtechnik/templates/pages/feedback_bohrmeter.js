@@ -202,7 +202,7 @@ function handle_button_visibillity(check) {
         check = true;
     }
     var button = document.getElementById('submit');
-    var meter = document.getElementById('drilling_meter').value
+    var meter = document.getElementById('project_meter').value
     var date = document.getElementById('date').value
     var project = document.getElementById('project').value
     //Display button
