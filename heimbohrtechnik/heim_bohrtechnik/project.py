@@ -27,35 +27,46 @@ def before_save(self, method):
         if cint(frappe.get_value("Drilling Team", self.drilling_team, "has_trough")):
             # drilling team has a trought: set internal
             if self.checklist:
-                set_internal_trough = False
+                set_internal_trough = -1
                 for c in range(0, len(self.checklist)):
                     if self.checklist[c].activity == "Mulde":
                         set_internal_trough = c
                     elif self.checklist[c].activity == "Schlammentsorgung" and self.checklist[c].supplier == mud_from_trough:
-                        set_internal_trough = False
-                if set_internal_trough:
+                        set_internal_trough = -1        # reset in case trough from mud supplier
+                if set_internal_trough >= 0:
+                    frappe.db.set_value("Object", self.object, "old_trough_supplier", self.checklist[set_internal_trough].supplier, update_modified = False)
                     self.checklist[set_internal_trough].supplier = own_trough_supplier
                     self.checklist[set_internal_trough].supplier_name = frappe.get_value("Supplier", own_trough_supplier, "supplier_name")
-                    
-                        
+                    frappe.db.commit()
         else:
-            # if possible, revert to external trough supplier
-            supplier = None
-            object_trough_supplier = frappe.db.sql("""
-                SELECT `party`, `party_name`
-                FROM `tabObject Address`
-                WHERE `parent` = "{obj}"
-                  AND `address_type` = "Mulde"
-                  AND `party` IS NOT NULL
-                """.format(obj=self.object), as_dict=True)
-            if len(object_trough_supplier) > 0:
-                if self.checklist:
-                    for c in self.checklist:
-                        if c.activity == "Mulde":
-                            c.supplier = object_trough_supplier[0]['party']
-                            c.supplier_name = object_trough_supplier[0]['party_name']
+            # verify if an external trough is used
+            reset_trough_supplier = False
+            if self.checklist:
+                for c in self.checklist:
+                    if c.activity == "Mulde":
+                        if c.supplier == own_trough_supplier:
+                            reset_trough_supplier = True
+            if reset_trough_supplier:
+                # if possible, revert to external trough supplier
+                supplier = frappe.get_value("Object", self.object, "old_trough_supplier")
+                if not supplier:
+                    object_trough_supplier = frappe.db.sql("""
+                        SELECT `party`, `party_name`
+                        FROM `tabObject Address`
+                        WHERE `parent` = "{obj}"
+                          AND `address_type` = "Mulde"
+                          AND `party` IS NOT NULL
+                        """.format(obj=self.object), as_dict=True)
+                    if len(object_trough_supplier) > 0:
+                        supplier = object_trough_supplier[0]['party']
+                if supplier:
+                    if self.checklist:
+                        for c in self.checklist:
+                            if c.activity == "Mulde":
+                                c.supplier = supplier
+                                c.supplier_name = frappe.get_value("Supplier", supplier, "supplier_name")
     
-    # butgfix: prevent 0 to null conversions
+    # bugfix: prevent 0 to null conversions
     if cint(self.actual_time) == 0:
         self.actual_time = 0
     if cint(self.total_costing_amount) == 0:
