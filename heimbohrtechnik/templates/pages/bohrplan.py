@@ -13,7 +13,7 @@ from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_cont
 This function checks the access and returns the restricted information
 """
 @frappe.whitelist(allow_guest=True)
-def get_grid(from_date, to_date, drilling_team=None):
+def get_grid(from_date, to_date, drilling_team=None, tv_mode=False):
     data = get_content(from_date[1:11], to_date[1:11], only_teams=True if not drilling_team else False)
 
     if drilling_team:
@@ -36,13 +36,13 @@ def get_grid(from_date, to_date, drilling_team=None):
     
     
 @frappe.whitelist(allow_guest=True)
-def get_data(key, from_date, to_date, customer=None, drilling_team=None):
-    if not customer and not drilling_team:
+def get_data(key, from_date, to_date, customer=None, drilling_team=None, tv_mode=False):
+    if not customer and not drilling_team and not tv_mode:
         return {'error': 'No customer or drilling team'}
     
     if customer:
         if not frappe.db.exists("Customer", customer):
-            return {'error': 'Ivvalid customer'}
+            return {'error': 'Invalid customer'}
         if frappe.get_value("Customer", customer, "key") != key:
             return {'error': 'Invalid key'}
         
@@ -50,7 +50,7 @@ def get_data(key, from_date, to_date, customer=None, drilling_team=None):
             'projects': get_overlay_datas(from_date[1:11], to_date[1:11], customer),
             'internals': get_internal_overlay_datas(from_date[1:11], to_date[1:11], customer)
         }
-    else:
+    elif drilling_team:
         if not frappe.db.exists("Drilling Team", drilling_team):
             return {'error': 'Invalid drilling team'}
         if frappe.get_value("Drilling Team", drilling_team, "team_key") != key:
@@ -59,9 +59,25 @@ def get_data(key, from_date, to_date, customer=None, drilling_team=None):
         data = {
             'subprojects': get_subproject_overlay_datas(from_date[1:11], to_date[1:11], drilling_team)
         }
+    else:
+        # TV mode
+        data = {
+            'projects': get_overlay_datas(from_date[1:11], to_date[1:11]),
+            'internals': get_internal_overlay_datas(from_date[1:11], to_date[1:11])
+        }
     
     return data
-    
+
+"""
+Check secret
+"""
+@frappe.whitelist(allow_guest=True)
+def verify_secret(key):
+    if frappe.get_value("Heim Settings", "Heim Settings", "tv_access_secret") == key:
+        return True
+    else:
+        return False
+
 """
 Compute the last planned date (for visible range)
 """

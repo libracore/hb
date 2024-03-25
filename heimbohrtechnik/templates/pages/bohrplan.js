@@ -14,46 +14,65 @@ function make() {
     locals.from_date = now;
     locals.to_date = add_days(now, planning_days);
 
-    // fetch date range from open projects
+    if (locals.tv_mode) {
+        // for tv mode: verify key
+        frappe.call({
+           'method': "heimbohrtechnik.templates.pages.bohrplan.verify_secret",
+           'args': {
+                'key': locals.key
+           },
+           'callback': function(response) {
+                if (response.message) {
+                    // get grid
+                    get_grid()
+                }
+           }
+        });
+    } else {
+        // fetch date range from open projects
+        frappe.call({
+           'method': "heimbohrtechnik.templates.pages.bohrplan.get_last_date",
+           'args': {
+                'customer': locals.customer,
+                'drilling_team': locals.drilling_team,
+                'key': locals.key
+           },
+           'callback': function(response) {
+                if (response.message) {
+                    locals.to_date = new Date(response.message);
+                    // get grid
+                    get_grid()
+                }
+           }
+        });
+    }
+}
+
+function get_grid() {
     frappe.call({
-       'method': "heimbohrtechnik.templates.pages.bohrplan.get_last_date",
+       'method': "heimbohrtechnik.templates.pages.bohrplan.get_grid",
        'args': {
-            'customer': locals.customer,
+            'from_date': locals.from_date,
+            'to_date': locals.to_date,
             'drilling_team': locals.drilling_team,
-            'key': locals.key
+            'tv_mode': locals.tv_mode
        },
-       'async': false,
        'callback': function(response) {
-            if (response.message) {
-                locals.to_date = new Date(response.message);
-            }
-            // get grid
-            frappe.call({
-               'method': "heimbohrtechnik.templates.pages.bohrplan.get_grid",
-               'args': {
-                    'from_date': locals.from_date,
-                    'to_date': locals.to_date,
-                    'drilling_team': locals.drilling_team
-               },
-               'async': false,
-               'callback': function(response) {
-                    var content = response.message;
-                    data = {
-                        'drilling_teams': content.drilling_teams,
-                        'days': content.days,
-                        'weekend': content.weekend,
-                        'kw_list': content.kw_list,
-                        'day_list': content.day_list,
-                        'today': content.today,
-                        'print_view': false,
-                        'web_view': true
-                    };
-                    
-                    $(frappe.render_template(frappe.templates.calendar_grid, data)).appendTo($("#page-bohrplan"));
-                    
-                    run(locals.from_date, locals.to_date);
-               }
-            });
+            var content = response.message;
+            data = {
+                'drilling_teams': content.drilling_teams,
+                'days': content.days,
+                'weekend': content.weekend,
+                'kw_list': content.kw_list,
+                'day_list': content.day_list,
+                'today': content.today,
+                'print_view': false,
+                'web_view': true
+            };
+            
+            $(frappe.render_template(frappe.templates.calendar_grid, data)).appendTo($("#page-bohrplan"));
+            
+            run(locals.from_date, locals.to_date);
        }
     });
 }
@@ -66,7 +85,8 @@ function run(from_date, to_date) {
             "to_date": to_date,
             "customer": locals.customer,
             "key": locals.key,
-            "drilling_team": locals.drilling_team
+            "drilling_team": locals.drilling_team,
+            'tv_mode': locals.tv_mode
         },
         'callback': function(response) {
             var contents = response.message;
@@ -82,10 +102,18 @@ function run(from_date, to_date) {
                     for (var i = 0; i < contents.internals.length; i++) {
                         add_internal_overlay(contents.internals[i]);
                     }
-                } else {
+                } else if (locals.drilling_team) {
                     // subproject view
                     for (var i = 0; i < contents.subprojects.length; i++) {
                         add_subproject_overlay(contents.subprojects[i]);
+                    }
+                } else if (locals.tv_mode) {
+                    // TV mode view
+                    for (var i = 0; i < contents.projects.length; i++) {
+                        add_overlay(contents.projects[i]);
+                    }
+                    for (var i = 0; i < contents.internals.length; i++) {
+                        add_internal_overlay(contents.internals[i]);
                     }
                 }
             }
@@ -185,6 +213,9 @@ function get_command_line_arguments() {
         }
         if (args['drilling_team']) {
             locals.drilling_team = decodeURI(args['drilling_team']);
+        }
+        if ((args['tv_mode']) && (args['tv_mode'] == "Active")) {
+            locals.tv_mode = true;
         }
         
     } else {
