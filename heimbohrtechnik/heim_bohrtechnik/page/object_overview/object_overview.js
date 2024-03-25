@@ -66,7 +66,7 @@ frappe.object_overview = {
         
         // prepare various icons
         var green_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-green.png'});
-        var red_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-red.png'});
+        var red_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/BG_blau_64x64.png'});
         var grey_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-grey.png'});
         var blue_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon.png'});
         
