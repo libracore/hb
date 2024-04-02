@@ -95,6 +95,9 @@ def get_project_data(p, dauer):
     p_object = frappe.get_doc("Object", project.object)
     requires_traffic_control = False
     traffic_light = 0
+    toitoi = 0
+    blue_drop = 0
+    red_drop = 0
     construction_sites = frappe.get_all("Construction Site Description", 
         filters={'project': p.get('name')}, 
         fields=['name', 'internal_crane_required', 'external_crane_Required', 'carrymax'])
@@ -187,7 +190,12 @@ def get_project_data(p, dauer):
     # override mud for special case
     if flag_override_mud:
         saugauftrag = mud
-        
+    
+    # check toitoi status
+    toitoi = cint(project.toitoi_ordered)
+    
+    # check water supply status
+    
     p_data = {
             'bohrteam': p.get('drilling_team'),
             'start': get_datetime(p.get('expected_start_date')).strftime('%d.%m.%Y'),
@@ -200,7 +208,10 @@ def get_project_data(p, dauer):
             'manager_short': manager_short,
             'drilling_equipment': drilling_equipment,
             'ews_details': (project.ews_details or "").replace("PN20", "<b>PN20</b>").replace("PN35", "<b>PN35</b>"),
-            'traffic_light': traffic_light
+            'traffic_light': traffic_light,
+            'toitoi': toitoi,
+            'red_drop': red_drop,
+            'blue_drop': blue_drop
         }
         
     return p_data

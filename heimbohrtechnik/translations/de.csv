@@ -188,6 +188,7 @@ DocType: Project,This document has siblings,Dieses Dokument hat andere Teil-Doku
 DocType: Project,Visit date,Besuchstermin
 DocType: Project,Noise permit required,Lärmschutzbewilligung erforderlich
 DocType: Project,Noise permit requested,Lärmschutzbewilligung beantragt
+DocType: Project,ToiToi ordered,ToiToi bestellt
 DocType: Permit Type,Permit Type,Bewilligungsart
 DocType: Permit Type,Permit,Bewilligung
 DocType: Project,Permit number,Bewilligungsnummer
