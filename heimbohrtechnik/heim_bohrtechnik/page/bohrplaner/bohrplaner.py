@@ -559,6 +559,7 @@ def reschedule_project(project=None, team=None, day=None, start_half_day=None, p
     new_project_start=None, new_project_end_date=None, end_half_day=None, visit_date=None, log=True):
     project = frappe.get_doc("Project", project)
     project.visit_date = visit_date
+        
     project_changes = [{
         'project': project.name,
         'from_start_date': project.expected_start_date,

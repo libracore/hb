@@ -223,7 +223,7 @@ frappe.ui.form.on('Project', {
         if (!frm.doc.__islocal && frm.doc.object && frm.doc.project_type == "External") {
             get_drilling_meters_per_day(frm);
         }
-    },
+    }
 });
 
 frappe.ui.form.on('Project Checklist', {
