@@ -13,6 +13,7 @@
   "mud_disposer_activity",
   "trough_activity",
   "traffic_control_activity",
+  "water_supply_activity",
   "road_block_permit",
   "tv_access_secret",
   "column_bohrplaner",
@@ -302,10 +303,16 @@
    "fieldname": "tv_access_secret",
    "fieldtype": "Data",
    "label": "TV Access Secret"
+  },
+  {
+   "fieldname": "water_supply_activity",
+   "fieldtype": "Link",
+   "label": "Water Supply Activity",
+   "options": "Checklist Activity"
   }
  ],
  "issingle": 1,
- "modified": "2024-03-25 13:09:29.701965",
+ "modified": "2024-04-02 21:33:18.506302",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",

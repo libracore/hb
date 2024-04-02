@@ -50,11 +50,29 @@ def get_mandatory_permits():
     return mandatory_permits
 
 @frappe.whitelist()
-def get_standard_activities():
+def get_standard_activities(pincode=None):
     activities = frappe.get_all("Checklist Activity", filters={'is_standard': 1}, fields=['name'], order_by='prio')
     standard_activities = []
+    if pincode:
+        pincode = cint(pincode)
     for a in activities:
-        standard_activities.append(a['name'])
+        append_activity = False
+        if pincode:
+            activity = frappe.get_doc("Checklist Activity", a['name'])
+            if activity.pincodes and len(activity.pincodes) > 0:
+                # only insert this if it is in range
+                for plz in activity.pincodes:
+                    if pincode >= plz.from_pincode and pincode <= plz.to_pincode:
+                        append_activity = True
+                        break
+            else:
+                append_activity = True
+        else:
+            append_activity = True
+            
+        if append_activity:
+            standard_activities.append(a['name'])
+        
     return standard_activities
 
 @frappe.whitelist()

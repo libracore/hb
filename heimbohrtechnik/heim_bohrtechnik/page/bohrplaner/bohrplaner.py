@@ -98,6 +98,7 @@ def get_project_data(p, dauer):
     toitoi = 0
     blue_drop = 0
     red_drop = 0
+    requires_water_supply = False
     construction_sites = frappe.get_all("Construction Site Description", 
         filters={'project': p.get('name')}, 
         fields=['name', 'internal_crane_required', 'external_crane_Required', 'carrymax'])
@@ -128,7 +129,8 @@ def get_project_data(p, dauer):
         'carrymax': frappe.get_cached_value("Heim Settings", "Heim Settings", "carrymax_activity"),
         'mud': frappe.get_cached_value("Heim Settings", "Heim Settings", "mud_disposer_activity"),
         'trough': frappe.get_cached_value("Heim Settings", "Heim Settings", "trough_activity"),
-        'traffic_control': frappe.get_cached_value("Heim Settings", "Heim Settings", "traffic_control_activity")
+        'traffic_control': frappe.get_cached_value("Heim Settings", "Heim Settings", "traffic_control_activity"),
+        'water_supply': frappe.get_cached_value("Heim Settings", "Heim Settings", "water_supply_activity")
     }
     flag_ext_crane = False
     flag_int_crane = False
@@ -152,6 +154,8 @@ def get_project_data(p, dauer):
             flag_carrymax = True
         elif cl_entry.activity == activities['traffic_control']:
             requires_traffic_control = True
+        elif cl_entry.activity == activities['water_supply']:
+            requires_water_supply = True
     
     # read construction site
     if len(construction_sites) > 0:
@@ -195,6 +199,12 @@ def get_project_data(p, dauer):
     toitoi = cint(project.toitoi_ordered)
     
     # check water supply status
+    if requires_water_supply:
+        water_supply_registrations = frappe.get_all("Water Supply Registration", filters={'project': project.name}, fields=['name'])
+        if len(water_supply_registrations) > 0:
+            blue_drop = 1
+        else:
+            red_drop = 1
     
     p_data = {
             'bohrteam': p.get('drilling_team'),

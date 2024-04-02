@@ -220,7 +220,7 @@ This function will find the GPS coordinates from OpenStreetMaps
 def get_gps(street, location):
     data = get_gps_coordinates(street, location)
     gps_coordinates = None
-    if len(data) > 0:
+    if data and len(data) > 0:
         gps_coordinates = "{0}, {1}".format(data['lat'], data['lon'])
     return gps_coordinates
 
