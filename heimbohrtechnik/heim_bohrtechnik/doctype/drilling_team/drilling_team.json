@@ -121,6 +121,7 @@
    "label": "Flushing drilling"
   },
   {
+   "default": "0",
    "fieldname": "hammer_drilling",
    "fieldtype": "Check",
    "label": "Hammer drilling"
@@ -132,6 +133,7 @@
    "label": "Well drilling"
   },
   {
+   "default": "0",
    "fieldname": "small_drilling_rig",
    "fieldtype": "Check",
    "label": "Small drilling rig on drilling team"
@@ -143,7 +145,7 @@
    "label": "Team Key"
   }
  ],
- "modified": "2024-04-09 10:43:57.168368",
+ "modified": "2024-04-09 10:54:32.442405",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Team",
