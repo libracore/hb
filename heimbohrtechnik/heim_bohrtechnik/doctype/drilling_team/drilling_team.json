@@ -122,7 +122,7 @@
   },
   {
    "fieldname": "hammer_drilling",
-   "fieldtype": "Data",
+   "fieldtype": "Check",
    "label": "Hammer drilling"
   },
   {
@@ -133,7 +133,7 @@
   },
   {
    "fieldname": "small_drilling_rig",
-   "fieldtype": "Data",
+   "fieldtype": "Check",
    "label": "Small drilling rig on drilling team"
   },
   {
@@ -143,7 +143,7 @@
    "label": "Team Key"
   }
  ],
- "modified": "2024-01-04 09:32:57.168368",
+ "modified": "2024-04-09 10:43:57.168368",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Team",
