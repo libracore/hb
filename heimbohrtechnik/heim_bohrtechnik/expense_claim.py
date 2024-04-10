@@ -54,7 +54,10 @@ def submit(exp, event):
     new_jv.submit()
     # link journal entry to expense claim
     exp.journal_entry = new_jv.name
-    exp.save()
+    try:
+        exp.save()
+    except Exception as err:
+        frappe.log_error( err, "submit expense claim: update expense claim failed")
     frappe.db.commit()
     return new_jv
     
