@@ -222,11 +222,7 @@ function prepare_checklist_and_permits(frm) {
             "method": "heimbohrtechnik.heim_bohrtechnik.utils.get_standard_activities",
             "callback": function(response) {
                 var standard_activities = response.message;
-                for (var i = 0; i < standard_activities.length; i++) {
-                    var child = cur_frm.add_child('checklist');
-                    frappe.model.set_value(child.doctype, child.name, 'activity', standard_activities[i]);
-                }
-                cur_frm.refresh_field('checklist');
+                fill_checklist(frm, standard_activities);
             }
         });
     }
@@ -238,6 +234,14 @@ function fill_permits(frm, permits) {
         frappe.model.set_value(child.doctype, child.name, 'permit', permits[i]);
     }
     cur_frm.refresh_field('permits');
+}
+
+function fill_checklist(frm, activities) {
+    for (var i = 0; i < activities.length; i++) {
+        var child = cur_frm.add_child('checklist');
+        frappe.model.set_value(child.doctype, child.name, 'activity', activities[i]);
+    }
+    cur_frm.refresh_field('checklist');
 }
 
 function get_mud_from_depth(depth) {

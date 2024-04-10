@@ -242,6 +242,7 @@ frappe.ui.form.on('Object', {
         update_location(frm);
         if ((frm.doc.__islocal) && (frm.doc.plz)) {
             update_permits_on_plz(frm);
+            update_checklist_on_plz(frm);
         }
     },
     city: function(frm) {
@@ -645,6 +646,20 @@ function update_permits_on_plz(frm) {
             var standard_permits = response.message;
             cur_frm.clear_table("permits");
             fill_permits(frm, standard_permits);
+        }
+    });
+}
+
+function update_checklist_on_plz(frm) {
+    frappe.call({
+        "method": "heimbohrtechnik.heim_bohrtechnik.utils.get_standard_activities",
+        "args": {
+            "pincode": frm.doc.plz
+        },
+        "callback": function(response) {
+            var standard_checklist = response.message;
+            cur_frm.clear_table("checklist");
+            fill_checklist(frm, standard_checklist);
         }
     });
 }

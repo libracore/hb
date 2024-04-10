@@ -7,6 +7,7 @@ import frappe
 from frappe import _
 import json
 import datetime
+from frappe.utils import cint, flt
 
 @frappe.whitelist(allow_guest=True)
 def get_object_details(truck, customer, object_name, key):
@@ -43,7 +44,7 @@ def validate_credentials(truck, customer, object_name, key):
         return False
 
 @frappe.whitelist(allow_guest=True)
-def insert_delivery(truck, customer, object, full_weight, empty_weight, net_weight, traces, load_type):
+def insert_delivery(truck, customer, object, full_weight, empty_weight, net_weight, traces, load_type, ph):
     # prepare values
     allocation = None
     if frappe.db.exists("Object", object):
@@ -78,6 +79,7 @@ def insert_delivery(truck, customer, object, full_weight, empty_weight, net_weig
         'empty_weight': float(empty_weight),
         'net_weight': float(net_weight),
         'load_type': load_type,
+        'ph': flt(ph),
         'objects': allocation,
         'trace': trace
     })

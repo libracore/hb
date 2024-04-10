@@ -253,7 +253,10 @@ frappe.bohrplaner = {
             'ampeln': data.ampeln,
             'dragable': (frappe.user.has_role("Dispo")) ? 'true' : 'false',
             'ews_details': data.ews_details,
-            'traffic_light': data.traffic_light
+            'traffic_light': data.traffic_light,
+            'toitoi': data.toitoi,
+            'red_drop': data.red_drop,
+            'blue_drop': data.blue_drop
         })).appendTo(place);
         return
     },

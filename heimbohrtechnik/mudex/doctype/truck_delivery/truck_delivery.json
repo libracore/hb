@@ -20,6 +20,7 @@
   "full_weight",
   "column_weight_1",
   "empty_weight",
+  "ph",
   "column_weight_2",
   "net_weight",
   "load_type",
@@ -198,11 +199,18 @@
    "hidden": 1,
    "label": "Object",
    "options": "Object"
+  },
+  {
+   "default": "7",
+   "fieldname": "ph",
+   "fieldtype": "Float",
+   "label": "pH",
+   "precision": "2"
   }
  ],
  "image_field": "image",
  "is_submittable": 1,
- "modified": "2021-12-23 21:53:37.201317",
+ "modified": "2024-04-10 08:56:05.329267",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "Truck Delivery",

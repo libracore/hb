@@ -63,7 +63,8 @@ function make() {
                     'weight': document.getElementById('empty_weight').value,
                     'process_id': document.getElementById('empty_process_id').value
                 }],
-                'load_type': document.getElementById('load_type').value
+                'load_type': document.getElementById('load_type').value,
+                'ph': document.getElementById('ph').value
             },
             'callback': function(r) {
                 if (typeof r.message !== 'undefined') {

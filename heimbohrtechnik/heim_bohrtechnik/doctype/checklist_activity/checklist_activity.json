@@ -10,7 +10,9 @@
   "party_type",
   "column_main",
   "is_standard",
-  "prio"
+  "prio",
+  "sec_pincodes",
+  "pincodes"
  ],
  "fields": [
   {
@@ -47,9 +49,20 @@
    "fieldtype": "Int",
    "in_list_view": 1,
    "label": "Prio"
+  },
+  {
+   "fieldname": "sec_pincodes",
+   "fieldtype": "Section Break",
+   "label": "Pincodes"
+  },
+  {
+   "fieldname": "pincodes",
+   "fieldtype": "Table",
+   "label": "Pincodes",
+   "options": "Permit Type Pincode"
   }
  ],
- "modified": "2022-07-11 11:45:42.256134",
+ "modified": "2024-04-02 20:41:04.637750",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Checklist Activity",

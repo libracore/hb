@@ -1,0 +1,217 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2024-04-02 17:39:45.483322",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "project",
+  "other_projects",
+  "from_date",
+  "to_date",
+  "print_format",
+  "sent",
+  "column_break_3",
+  "object",
+  "object_name",
+  "object_street",
+  "object_location",
+  "sec_invoice",
+  "same_as_requestor",
+  "btn_from_customer",
+  "btn_from_owner",
+  "col_invoice",
+  "address_name",
+  "address_street",
+  "address_location",
+  "sec_details",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "default": "WA-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "WA-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fieldname": "other_projects",
+   "fieldtype": "Table MultiSelect",
+   "label": "Other Projects",
+   "options": "Related Project"
+  },
+  {
+   "default": "Today",
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "print_format",
+   "fieldtype": "Link",
+   "label": "Print Format",
+   "options": "Print Format"
+  },
+  {
+   "default": "0",
+   "fieldname": "sent",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Sent"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "project.object",
+   "fieldname": "object",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Object",
+   "options": "Object",
+   "read_only": 1
+  },
+  {
+   "fieldname": "object_name",
+   "fieldtype": "Data",
+   "label": "Object name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "object_street",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Object street",
+   "read_only": 1
+  },
+  {
+   "fieldname": "object_location",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Object location",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_invoice",
+   "fieldtype": "Section Break",
+   "label": "Invoice Address"
+  },
+  {
+   "default": "0",
+   "fieldname": "same_as_requestor",
+   "fieldtype": "Check",
+   "label": "Same as Requestor"
+  },
+  {
+   "fieldname": "btn_from_customer",
+   "fieldtype": "Button",
+   "label": "From Customer"
+  },
+  {
+   "fieldname": "btn_from_owner",
+   "fieldtype": "Button",
+   "label": "From Owner"
+  },
+  {
+   "fieldname": "col_invoice",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.same_as_requestor == 0",
+   "fieldname": "address_name",
+   "fieldtype": "Data",
+   "label": "Address Name"
+  },
+  {
+   "depends_on": "eval:doc.same_as_requestor == 0",
+   "fieldname": "address_street",
+   "fieldtype": "Data",
+   "label": "Address Street"
+  },
+  {
+   "depends_on": "eval:doc.same_as_requestor == 0",
+   "fieldname": "address_location",
+   "fieldtype": "Data",
+   "label": "Address Location"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "sec_details",
+   "fieldtype": "Section Break",
+   "label": "Remarks"
+  }
+ ],
+ "modified": "2024-04-02 21:39:00.595675",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Water Supply Registration",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "object_name",
+ "track_changes": 1
+}

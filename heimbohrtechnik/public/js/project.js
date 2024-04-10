@@ -3,7 +3,7 @@ try {
     cur_frm.dashboard.add_transactions([
         {
             'label': 'Documents',
-            'items': ['Construction Site Description', 'Bohranzeige', 'Request for Public Area Use', 'Infomail']
+            'items': ['Construction Site Description', 'Bohranzeige', 'Request for Public Area Use', 'Water Supply Registration', 'Infomail']
         },
         {
             'label': 'Drilling',
