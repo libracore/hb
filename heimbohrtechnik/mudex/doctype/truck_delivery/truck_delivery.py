@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021, libracore AG and contributors
+# Copyright (c) 2021-2024, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
@@ -10,12 +10,25 @@ from datetime import datetime
 from erpnextswiss.erpnextswiss.attach_pdf import attach_pdf, execute
 from frappe.utils.file_manager import add_attachments
 
+PH_ITEMS = {
+    '11': '2.01.01.05',
+    '9': '2.01.01.04'
+}
+
 class TruckDelivery(Document):
     def on_submit(self): 
         if self.net_weight < 1:
             frappe.throw( _("There is no valid weight recorded."), _("No weight") )
         return
     
+    def before_save(self):
+        # assure value range of pH
+        if self.ph > 14:
+            self.ph = 14
+        elif self.ph < 0:
+            self.ph = 0
+        return
+        
     def validate(self):
         # compute unallocated weight
         unallocated_weight = self.net_weight
@@ -106,11 +119,22 @@ def create_invoice(object):
             new_sinv.append('items', {
                 'item_code': mud_type_map[i['load_type']],
                 'qty': i['weight'] / 1000,
-                'description': "{date}: {truck}".format(date=d.strftime("%d.%m.%Y, %H:%M"), truck=i['truck']),
+                'description': "{date}: {truck}, pH: {ph}".format(
+                    date=d.strftime("%d.%m.%Y, %H:%M"), truck=i['truck'], ph=i['ph']),
                 'truck_delivery': i['delivery'],
                 'truck_delivery_detail': i['detail'],
                 'cost_center': cost_center
             })
+            # add markups in case of increased pH
+            if i['ph'] >= 9:
+                new_sinv.append('items', {
+                    'item_code': PH_ITEMS['11'] if i['ph'] >= 11 else PH_ITEMS['9'],
+                    'qty': i['weight'] / 1000,
+                    'description': "pH-Zuschlag",
+                    'cost_center': cost_center
+                })
+            
+            
         # insert the new sales invoice
         new_sinv.insert()
         # submit directly internal/default customer
@@ -190,7 +214,8 @@ def get_deliveries(object):
             `tabTruck Delivery Object`.`weight` AS `weight`,
             `tabTruck Delivery`.`truck` AS `truck`,
             `tabTruck Delivery`.`date` AS `date`,
-            `tabTruck Delivery`.`load_type` AS `load_type`
+            `tabTruck Delivery`.`load_type` AS `load_type`,
+            `tabTruck Delivery`.`ph` AS `ph`
         FROM `tabTruck Delivery Object`
         LEFT JOIN `tabTruck Delivery` ON `tabTruck Delivery`.`name` = `tabTruck Delivery Object`.`parent`
         LEFT JOIN `tabSales Invoice Item` ON 
