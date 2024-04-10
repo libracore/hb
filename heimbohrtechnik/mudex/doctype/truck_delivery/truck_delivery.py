@@ -200,6 +200,21 @@ def create_invoice(object):
                 add_attachments("Purchase Invoice", new_pinv.name, [attached_file[0]['name']])
             except Exception as err:
                 frappe.log_error("Unable to attach pdf: {0}".format(err), "Truck delivery document creation {0}".format(object))
+        elif customer == "K-19985":
+            # special conditions
+            if frappe.db.exists("Pricing Rule", "Toni Transport"):
+                special_rate = frappe.get_value("Pricing Rule", "Toni Transport", "rate")
+            else:
+                special_rate = 45
+            new_sinv.ignore_pricing_rule = 1
+            for i in new_sinv.items:
+                if i.truck_delivery:
+                    if "MudEX" in frappe.db.get_value("Truck Delivery", i.truck_delivery, "truck_owner"):
+                        i.rate = 0
+                    else:
+                        i.rate = special_rate
+            new_sinv.save()
+            
         return new_sinv.name
     else:
         frappe.throw( _("Nothing to invoice") )
