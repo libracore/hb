@@ -1325,14 +1325,25 @@ def get_mfk_overlay_datas(from_date, to_date):
                 
     data = frappe.db.sql(sql_query, as_dict=True)
     mfk_data = []
+    shifts = {}
     for entry in data:
+        # build a key map to see duplicate services
+        key = "{0}:{1}".format(entry.drilling_team, entry.start_time)
+        if key not in shifts:
+            shifts[key] = 1
+            _shift = 0
+        else:
+            _shift = 12 * shifts[key]
+            shifts[key] += 1
+            
         mfk_data.append({
             'truck': entry.truck,
             'drilling_team': entry.drilling_team,
             'start_date': frappe.utils.get_datetime(entry.start_time).strftime('%d.%m.%Y'),
             'start_time': frappe.utils.get_datetime(entry.start_time).strftime('%H:%M:%S'),
             'end_date': frappe.utils.get_datetime(entry.end_time).strftime('%d.%m.%Y'),
-            'end_time': frappe.utils.get_datetime(entry.end_time).strftime('%H:%M:%S')
+            'end_time': frappe.utils.get_datetime(entry.end_time).strftime('%H:%M:%S'),
+            'shift': _shift
         })
     
     return mfk_data

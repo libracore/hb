@@ -339,7 +339,8 @@ frappe.bohrplaner = {
                         'start_date': data.start_date,
                         'start_time': data.start_time,
                         'end_date': data.end_date,
-                        'end_time': data.end_time
+                        'end_time': data.end_time,
+                        'shift': data.shift
                     })).appendTo(place);
                 }
                 return
