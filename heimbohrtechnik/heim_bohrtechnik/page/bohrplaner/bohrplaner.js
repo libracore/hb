@@ -301,6 +301,13 @@ frappe.bohrplaner = {
     },
     add_absences_overlay: function(page, data) {
         var place = $('[data-bohrteam="absences"][data-date="' + data.start + '"][data-vmnm="vm"]');
+        if (place.length === 0) {
+            // in case this cannot be place because of the weekend at the start, move to the right
+            var start_date_parts = data.start.split(".");
+            var new_start = frappe.datetime.add_days(start_date_parts[2] + "-" + start_date_parts[1] + "-" + start_date_parts[0], 1);
+            var new_start_parts = new_start.split("-");
+            place = $('[data-bohrteam="absences"][data-date="' + new_start_parts[2] + '.' + new_start_parts[1] + '.' + new_start_parts[0] + '"][data-vmnm="vm"]');
+        }
         $(place).css("position", "relative");
         var qty = data.dauer
         var width = (42 * qty);
