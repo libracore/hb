@@ -579,7 +579,8 @@ def has_infomail(project):
 def reschedule_project(project=None, team=None, day=None, start_half_day=None, popup=False, 
     new_project_start=None, new_project_end_date=None, end_half_day=None, visit_date=None, log=True):
     project = frappe.get_doc("Project", project)
-    project.visit_date = visit_date
+    if visit_date:
+        project.visit_date = visit_date
         
     project_changes = [{
         'project': project.name,
