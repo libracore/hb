@@ -1,4 +1,4 @@
-# Copyright (c) 2022-2023, libracore and Contributors
+# Copyright (c) 2022-2024, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 
 from __future__ import unicode_literals
@@ -210,7 +210,7 @@ def upload_file(self, event):
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
         if frappe.db.exists("Project", project):
             physical_file_name = get_physical_path(self.name)
-            if frappe.get_value("Purchase Order", self.attached_to_name, "supplier") in ("L-80011", "L-80061"):
+            if frappe.get_value("Purchase Order", self.attached_to_name, "supplier") in ("L-80011", "L-80061", "L-80154"):
                 write_project_file_from_local_file (project, physical_file_name, PATHS['supplier_ews'])
             else:
                 write_project_file_from_local_file (project, physical_file_name, PATHS['supplier_other'])
