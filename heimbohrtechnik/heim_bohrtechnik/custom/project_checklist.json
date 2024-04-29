@@ -1,0 +1,31 @@
+{
+ "custom_fields": [],
+ "custom_perms": [],
+ "doctype": "Project Checklist",
+ "property_setters": [
+  {
+   "_assign": null,
+   "_comments": null,
+   "_liked_by": null,
+   "_user_tags": null,
+   "creation": "2023-07-07 15:44:51.872855",
+   "default_value": null,
+   "doc_type": "Project Checklist",
+   "docstatus": 0,
+   "doctype_or_field": "DocField",
+   "field_name": "appointment_end",
+   "idx": 0,
+   "modified": "2023-07-07 15:44:51.872855",
+   "modified_by": "Administrator",
+   "name": "Project Checklist-appointment_end-depends_on",
+   "owner": "Administrator",
+   "parent": null,
+   "parentfield": null,
+   "parenttype": null,
+   "property": "depends_on",
+   "property_type": "Data",
+   "value": "eval:([\"Kran extern\", \"Mulde\", \"Verkehrsdienst\"].includes(doc.activity))"
+  }
+ ],
+ "sync_on_migrate": 1
+}
