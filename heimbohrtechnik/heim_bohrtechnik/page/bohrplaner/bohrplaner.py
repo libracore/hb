@@ -1489,3 +1489,28 @@ def get_gap(start, end):
             date = frappe.utils.add_days(date, 1)
     
     return gap_length
+
+@frappe.whitelist()
+def get_project_details(project):
+    details = {
+        'project': {},
+        'object': {},
+        'construction_site_description': {}
+    }
+    
+    if frappe.db.exists("Project", project):
+        project_doc = frappe.get_doc("Project", project)
+        details['project'] = project_doc.as_dict()
+        if project_doc.object:
+            object_doc = frappe.get_doc("Object", project_doc.object)
+            details['object'] = object_doc.as_dict()
+        construction_site_descriptions = frappe.get_all("Construction Site Description", 
+            filters={'project': project},
+            fields=['name']
+        )
+        if len(construction_site_descriptions) > 0:
+            construction_site_doc = frappe.get_doc("Construction Site Description", construction_site_descriptions[0]['name'])
+            details['construction_site_description'] = construction_site_doc.as_dict()
+
+    return details
+    
