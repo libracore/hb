@@ -28,7 +28,11 @@
     </tr>
     <tr>
         <td><b>{{ __("Location") }}</b></td>
-        <td>{{ object_location }}</td>
+        <td>
+            {{ object_location }}
+            <a href="https://www.google.com/maps/place/{{ object_street }},{{ object_location }}" target="_blank" title="Google Maps">&#127760</a>
+            <a href="/desk#object-overview?object={{ object }}" target="_blank" title="Objekt&uuml;bersicht">&#128205</a>
+        </td>
     </tr>
     <tr>
         <td><b>{{__("EWS Details") }}</b></td>
