@@ -181,18 +181,7 @@ frappe.ui.form.on('Object', {
         }
         if ((!frm.doc.addresses) || (frm.doc.addresses.length === 0)) {
             // fresh document, no addresses - load template
-            frappe.call({
-                "method": "heimbohrtechnik.heim_bohrtechnik.doctype.heim_settings.heim_settings.get_address_template",
-                "callback": function(response) {
-                    var address_types = response.message;
-                    for (var i = 0; i < address_types.length; i++) {
-                        var child = cur_frm.add_child('addresses');
-                        frappe.model.set_value(child.doctype, child.name, 'address_type', address_types[i].type);
-                        frappe.model.set_value(child.doctype, child.name, 'dt', address_types[i].dt);
-                    }
-                    cur_frm.refresh_field('addresses');
-                }
-            });
+            update_address_on_plz(frm);
         }
         if ((!frm.doc.checklist) || (frm.doc.checklist.length === 0)) {
             prepare_checklist_and_permits(frm);
@@ -243,6 +232,7 @@ frappe.ui.form.on('Object', {
         if ((frm.doc.__islocal) && (frm.doc.plz)) {
             update_permits_on_plz(frm);
             update_checklist_on_plz(frm);
+            update_address_on_plz(frm);
         }
     },
     city: function(frm) {
@@ -660,6 +650,24 @@ function update_checklist_on_plz(frm) {
             var standard_checklist = response.message;
             cur_frm.clear_table("checklist");
             fill_checklist(frm, standard_checklist);
+        }
+    });
+}
+
+function update_address_on_plz(frm) {
+    frappe.call({
+        "method": "heimbohrtechnik.heim_bohrtechnik.doctype.heim_settings.heim_settings.get_address_template",
+        "args": {
+            "pincode": frm.doc.plz
+        },
+        "callback": function(response) {
+            var address_types = response.message;
+            for (var i = 0; i < address_types.length; i++) {
+                var child = cur_frm.add_child('addresses');
+                frappe.model.set_value(child.doctype, child.name, 'address_type', address_types[i].type);
+                frappe.model.set_value(child.doctype, child.name, 'dt', address_types[i].dt);
+            }
+            cur_frm.refresh_field('addresses');
         }
     });
 }
