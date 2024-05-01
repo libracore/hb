@@ -305,13 +305,20 @@ def get_data():
                     "type": "report",
                     "name": "Account Sheets HBAG",
                     "doctype": "GL Entry",
-                    "is_query_report": True,
+                    "is_query_report": True
                 },
                 {
                     "type": "report",
                     "name": "Mahnliste",
                     "doctype": "Sales Invoice",
-                    "is_query_report": True,
+                    "is_query_report": True
+                },
+                {
+                    "type": "report",
+                    "name": "Kundenauszug",
+                    "doctype": "Customer",
+                    "label": _("Kunden- und Lieferantenauszug"),
+                    "is_query_report": True
                 }
             ]
         },

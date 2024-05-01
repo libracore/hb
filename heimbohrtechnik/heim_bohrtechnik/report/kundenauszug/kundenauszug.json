@@ -1,0 +1,46 @@
+{
+ "add_total_row": 0,
+ "creation": "2024-05-01 14:48:56.245031",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Commercial",
+ "modified": "2024-05-01 14:48:56.245031",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Kundenauszug",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Customer",
+ "report_name": "Kundenauszug",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "Sales Master Manager"
+  },
+  {
+   "role": "Stock Manager"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Stock User"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Item Manager"
+  }
+ ]
+}
