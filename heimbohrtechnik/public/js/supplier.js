@@ -16,10 +16,19 @@ frappe.ui.form.on('Supplier', {
         });
     },
     refresh(frm) {
-        if ((frm.doc.capabilities[0].activity == "Hotel") && (!frm.doc.gps_latitude) && (!locals.gps_requested)) {
+        if ((frm.doc.capabilities) 
+            && (frm.doc.capabilities.length > 0)
+            && (frm.doc.capabilities[0].activity == "Hotel") 
+            && (!frm.doc.gps_latitude) 
+            && (!locals.gps_requested)) {
             // prevent endless loop when gps cannot be found
             locals.gps_requested = true;
             set_gps_coordinates(frm);
+        }
+        if (!frm.doc.__islocal) {
+            frm.add_custom_button("Kontoauszug", function() {
+                frappe.set_route("query-report", "Kundenauszug", {"party_type": "Supplier", "supplier": frm.doc.name});
+            });
         }
     },
     before_save(frm) {

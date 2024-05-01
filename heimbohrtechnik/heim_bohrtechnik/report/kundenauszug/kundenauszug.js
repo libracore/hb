@@ -20,7 +20,6 @@ frappe.query_reports["Kundenauszug"] = {
             "reqd": 1,
             "default": "Customer",
             "on_change": function(query_report) {
-                console.log("Change party type");
                 show_conditional_filters();
             }
         },
@@ -39,14 +38,12 @@ frappe.query_reports["Kundenauszug"] = {
         {
             "fieldname":"from_date",
             "label": __("From Date"),
-            "fieldtype": "Date",
-            "default": frappe.datetime.add_months(frappe.datetime.get_today(), -3)
+            "fieldtype": "Date"
         },
         {
             "fieldname":"to_date",
             "label": __("To Date"),
-            "fieldtype": "Date",
-            "default": frappe.datetime.get_today()
+            "fieldtype": "Date"
         }
     ],
     "onload": function() {

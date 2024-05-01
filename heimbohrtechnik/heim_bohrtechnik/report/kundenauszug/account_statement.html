@@ -1,1 +1,226 @@
-<p>Hello</p>
+<!-- HEAD -->
+<div id="header-html" class="hidden-pdf">
+  {% set letter_head = frappe.get_doc("Letter Head", "Commercial") %}
+  {% if letter_head %}
+    {{ letter_head.content }}
+  {% else %}
+    <p>Letter head Standard not found. Please define the letter head under print settings.</p>
+  {% endif %}
+</div>
+
+<style>
+@font-face {
+    font-family: palaquin;
+    src: url('/assets/heimbohrtechnik/fonts/Palanquin-Regular.woff');
+}
+
+@font-face {
+    font-family: palaquin-bold;
+    src: url('/assets/heimbohrtechnik/fonts/Palanquin-Bold.woff');
+}
+
+.print-format {
+    margin-left: 10mm;
+    margin-right: 5mm;
+    font-size: 11px;
+    font-family: palaquin !important;
+}    
+
+.print-format b {
+  font-family: palaquin-bold !important;
+}
+
+.print-format td {
+    padding: 2px !important;
+}
+
+.print-format th {
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+}
+
+.avb .print-format td {
+    padding-left: 10px !important;
+}
+
+.avb td  {
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+ul {
+    padding-left: 15px;
+}
+</style>
+
+
+<!-- ADDRESS SECTION -->
+<p><br></p>
+<table style="width: 100%;">
+    <tr>
+        <td style="width: 55%; font-size: 12px; ">
+            <p><br></p>
+            <p><span style="font-size: 8px !important;"><u>{{ letter_head.address_line }}</u></span></p>
+            {% if filters.party_type == "Supplier" %}
+                {% set doc = frappe.get_doc("Supplier", filters.supplier) %}
+                {{ doc.supplier_name }}<br>
+                {% set supplier_address = get_primary_supplier_address(doc.name) %}
+                {% if supplier_address %}
+                {{ supplier_address.address_line1 }}<br>
+                {% if supplier_address.address_line2 %}{{ supplier_address.address_line2 }}<br>{% endif %}
+                {{ supplier_address.pincode }} {{ supplier_address.city }}<br>
+                {{ supplier_address.country }}<br>
+                {% endif %}
+            {% else %}
+                {% set doc = frappe.get_doc("Customer", filters.customer) %}
+                {{ doc.customer_name }}<br>
+                {% set customer_address = get_primary_customer_address(doc.name) %}
+                {% if customer_address %}
+                {{ customer_address.address_line1 }}<br>
+                {% if customer_address.address_line2 %}{{ customer_address.address_line2 }}<br>{% endif %}
+                {{ customer_address.pincode }} {{ customer_address.city }}<br>
+                {{ customer_address.country }}<br>
+                {% endif %}
+            {% endif %}
+        </td>
+        <td style="width: 45%; padding: 0px !important; margin-right: 1px; border: 1px solid grey; ">
+            <table style="width: 100%; font-size: 11px;">
+                <tr style="background-image: linear-gradient(silver, #eee); background-color: #eee; border-bottom: 1px solid grey;">
+                    <td colspan=3 style="padding: 3px 3px 0px 3px !important; text-align: left; font-size: 14px; width: 70%; ">
+                        <b>{{ _("Kontoauszug") }}<br>{{ filters.customer or filters.supplier }}</b>
+                    </td>
+                    <td style="padding: 3px 3px 0px 3px !important; text-align: right;  font-size: 14px; ">
+                        <b>per {{ frappe.utils.get_datetime(frappe.utils.now()).strftime('%d.%m.%Y') }}</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="padding: 3px 3px 0px 3px !important; width: 50%; text-align: left; ">
+                        <span style="color: grey; ">{{ _("Ihre Kundennummer") }}</span>
+                    </td>
+                    <td colspan=2 style="padding: 3px 3px 0px 3px !important; width: 50%; text-align: right;">
+                        <span style="color: grey; ">{{ _("Gebucht bis") }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="padding: 0px 3px 0px 3px !important; width: 50%; text-align: left; ">
+                        {{ filters.customer or filters.supplier }}
+                    </td>
+                    <td colspan=2 style="padding: 0px 3px 0px 3px !important; width: 50%; text-align: right;">
+                        {{ frappe.utils.get_datetime(frappe.utils.now()).strftime('%d.%m.%Y') }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="padding: 3px 3px 0px 3px !important; width: 50%; text-align: left; ">
+                        <span style="color: grey; ">{{ _("Bearbeiter") }}</span>
+                    </td>
+                    <td colspan=2 style="padding: 3px 3px 0px 3px !important; width: 50%; text-align: right; ">
+                        <span style="color: grey; ">
+                            {% if filters.from_date or filters.to_date %}
+                                {{ _("Datumsbereich") }}
+                            {% endif %}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="padding: 0px 3px 0px 3px !important; width: 50%; text-align: left; ">
+                        {% set owner = frappe.get_doc("User", frappe.session.user ) %}{{ owner.full_name }}
+                    </td>
+                    <td colspan=2 style="padding: 0px 3px 0px 3px !important; width: 50%; text-align: right;">
+                        {% if filters.from_date %}
+                            {{ frappe.utils.get_datetime(filters.from_date).strftime('%d.%m.%Y') }}
+                        {% endif %}
+                        {% if filters.from_date or filters.to_date %}..{% endif %}
+                        {% if filters.to_date %}
+                            {{ frappe.utils.get_datetime(filters.to_date).strftime('%d.%m.%Y') }}
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- TEXT Block -->
+<p><br><br><br><br><br><br></p>
+
+<!--  opening text -->
+<table style="width: 100%; ">
+ <tr><td><br>{{ _("Sehr geehrte Damen und Herren") }}</td></tr>
+ <tr><td>{{ _("Unten finden Sie einen vollständigen Kontenauszug Ihres Kundenkontos.") }}</td></tr>
+</table>
+
+<!-- positions -->
+<p><br /></p>
+<table style="width: 100%;">
+  <thead>
+  <tr style="border-bottom: 1px solid silver;">
+    <td style="width: 12%; "><strong>{{ _("Date") }}</strong></td>
+    <td style="width: 12%; "><strong>{{ _("Document") }}</strong></td>
+    <td style="width: 37%; "><strong>{{ _("Text") }}</strong></td>
+    <td style="width: 12%; text-align: right; "><strong>{{ _("Debit") }}</strong></td>
+    <td style="width: 12%; text-align: right; "><strong>{{ _("Credit") }}</strong></td>
+    <td style="width: 15%; text-align: right; "><strong>{{ _("Balance") }}</strong></td>
+ </tr>
+ </thead>
+ <tbody>
+ {% for transaction in data %}
+     <tr style="border-top: 1px solid silver; ">
+       <td>{{ frappe.format_value(transaction.posting_date, {'fieldtype': 'Date'}) }}</td>
+       <td>{{ transaction.voucher_no }}</td>
+       <td>{{ transaction.text }}</td>
+       <td style="text-align: right; ">{{ "{:,.2f}".format(transaction.debit).replace(",", "'") }}</td>
+       <td style="text-align: right; ">{{ "{:,.2f}".format(transaction.credit).replace(",", "'") }}</td>
+       <td style="text-align: right; ">{{ "{:,.2f}".format(transaction.balance).replace(",", "'") }}</td>
+     </tr>
+{% endfor %}
+
+    {% if data|len > 0 and data[-1]["balance"] != 0 %}
+     <tr style="border-top: 1px solid silver; ">
+       <td colspan=5><strong>{{ _("Balance") }}
+         {% if data[-1]["balance"] > 0 %} {{ _("zu unseren Gunsten") }}
+         {% elif data[-1]["balance"] < 0 %} {{ _("zu Ihren Gunsten") }}{% endif %}</strong></td>
+       <td colspan=2 style="text-align: right; "><strong>CHF {{ "{:,.2f}".format(data[-1]["balance"]).replace(",", "'") }}</strong></td>
+     </tr>
+    {% endif %}
+  </tbody>
+</table>
+
+<!-- closing text / terms -->
+<table style="width: 100%; ">
+ <tr><td><br>{{ _("Bei Fragen zögern Sie bitte nicht uns zu kontaktieren.") }}</td></tr>
+ <tr><td>{{ _("Mit freundlichen Grüssen") }}<br>
+Heim Bohrtechnik AG</td></tr>
+</table>
+
+<!-- page footer -->
+<div id="footer-html" class="visible-pdf">
+   <table style="font-size: 8px !important; width: 100%">
+    <tbody><tr style="color: #404040; line-height: 8pt;">
+        <td style="width: 20%; padding: 0px !important;"><b>HEIM Bohrtechnik AG</b><br>
+            Bafflesstrasse 15<br>
+            CH-9450 Altstätten (SG)<br>
+            Fon +41 (0)71 575 05 00<br>
+            info@hb-ag.ch<br>
+            www.hb-ag.ch</td>
+        <td style="width: 25%; padding: 0px !important;"><b>UBS AG, CH-9450 Altstätten<br></b>
+            IBAN CH30 0021 3213 8954 8601L<br>
+            BIC / SWIFT UBSWCHZH80A<br>
+            <br>
+            Geschäftsführer: Stephan Heim<br>
+            CHE-112.855.196 MWST</td>
+        <td style="width: 25%; padding: 0px !important;"><b>Finanzamt Deutschland:</b><br>
+            Konstanz, Steuer-Nr. 09410/18459<br>
+            USt-ID DE294953715<br>
+            <b>Finanzamt Östereich:</b><br>
+            Graz-Stadt, Steuer-Nr. 68496/1238<br>
+            USt-ID ATU7183504</td>
+        <td style="padding: 0px !important; text-align: right">
+            <img alt="Certificate" src="/files/HB-AG_ISO-9001_k.png" style="height: 38px !important; width: auto !important; float: left; position: relative; margin-right: 5px; ">
+            <img alt="Certificate" src="/files/zertifizierung bau_bw.png" style="height: 38px !important; filter: grayscale(100%); width: auto !important; float: left; position: relative; ">
+            <img alt="Certificate" src="/files/guetesiegel_2023.png" style="height: 38px !important; filter: grayscale(100%); width: auto !important; margin-right: 5px; ">
+            
+            <p><br>{{ doc.name }}: {{ _("Page") }} <span class="page"></span> {{ _("of") }} <span class="topage"></span></p>
+         </td>
+    </tr>
+</tbody></table>
+</div>

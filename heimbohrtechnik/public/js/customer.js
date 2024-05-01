@@ -37,6 +37,9 @@ frappe.ui.form.on('Customer', {
             frm.add_custom_button(__("Drilling Statistics"), function() {
                 frappe.set_route("query-report", "Drilling Statistics", {"customer": frm.doc.name});
             });
+            frm.add_custom_button("Kontoauszug", function() {
+                frappe.set_route("query-report", "Kundenauszug", {"party_type": "Customer", "customer": frm.doc.name});
+            });
         }
     }
 });

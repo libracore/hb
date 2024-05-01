@@ -59,7 +59,7 @@ def get_data(filters):
     for t in transactions:
         balance += (t.get("debit") - t.get("credit"))
         t['balance'] = balance
-        if t.get("voucher_type") == "Sales Invoice":
+        if t.get("voucher_type") in ("Sales Invoice", "Purchase Invoice"):
             if t.get("debit") >= 0:
                 t['text'] = _("Sales Invoice")
             else:
