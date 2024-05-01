@@ -17,6 +17,9 @@
   "is_hammer_drilling",
   "is_flushing_drilling",
   "needs_geocheck",
+  "needs_geopacker",
+  "needs_progress",
+  "needs_geologist",
   "col_main_3",
   "needs_subcontracting",
   "needs_digging",
@@ -266,9 +269,27 @@
    "fieldtype": "Select",
    "label": "Crane Length",
    "options": "\n10m\n15m\n20m\n25m\n30m\n35m\n40m"
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_geopacker",
+   "fieldtype": "Check",
+   "label": "Geopacker"
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_progress",
+   "fieldtype": "Check",
+   "label": "Verlaufsmessung"
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_geologist",
+   "fieldtype": "Check",
+   "label": "Geologische Begleitung"
   }
  ],
- "modified": "2024-03-12 21:41:13.088110",
+ "modified": "2024-05-01 12:05:31.149786",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Request",
