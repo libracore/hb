@@ -16,8 +16,13 @@ def check_resize_image(filename, debug=False):
         return
         
     # open image in RGB mode
-    im = Image.open(filename)
-    
+    try:
+        im = Image.open(filename)
+    except Exception as err:
+        if debug:
+            print("Failed to open image: {0}".format(err))
+        return
+        
     # find size of image
     width, height = im.size
         
