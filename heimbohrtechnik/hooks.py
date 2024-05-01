@@ -121,7 +121,10 @@ doc_events = {
         "on_update": "heimbohrtechnik.heim_bohrtechnik.nextcloud.upload_project_file"
     },
     "File": {
-        "after_insert": "heimbohrtechnik.heim_bohrtechnik.nextcloud.upload_file"
+        "after_insert": [
+            "heimbohrtechnik.heim_bohrtechnik.nextcloud.upload_file",
+            "heimbohrtechnik.heim_bohrtechnik.image_handler.check_new_image"
+        ]
     },
     "Expense Claim": {
         "on_submit": "heimbohrtechnik.heim_bohrtechnik.expense_claim.submit",
