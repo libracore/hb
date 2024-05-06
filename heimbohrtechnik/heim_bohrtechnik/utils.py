@@ -1126,12 +1126,19 @@ def item_description_save(item, event):
 
 def get_gps_coordinates(street, location):
     url = "https://nominatim.openstreetmap.org/search?q={street},{location}&format=json&polygon=1&addressdetails=0".format(street=street, location=location)
-    response = requests.get(url)
-    data = response.json()
-    gps_coordinates = None
-    if len(data) > 0:
-        gps_coordinates = {'lat': data[0]['lat'], 'lon': data[0]['lon']}
-    return gps_coordinates
+    response = None
+    try:
+        response = requests.get(url)
+        data = response.json()
+        gps_coordinates = None
+        if len(data) > 0:
+            gps_coordinates = {'lat': data[0]['lat'], 'lon': data[0]['lon']}
+        return gps_coordinates
+    except:
+        # failed to resolve address
+        if response and "Access blocked" in response.text:
+            frappe.throw(response.text)
+        return None
 
 @frappe.whitelist()
 def find_supplier_item(item_code, supplier, idx=None):

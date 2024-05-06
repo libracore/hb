@@ -100,6 +100,8 @@ frappe.object_overview = {
                     gps_lat = geo.gps_lat;
                     gps_long = geo.gps_long;
                     map.panTo(new L.LatLng(gps_lat, gps_long));
+                } else {
+                    frappe.show_alert( __("Adresse nicht gefunden...") );
                 }
                 
                 document.getElementById("overlay-text").innerHTML = "<p>" + geo.environment.length + " Objekte platzieren...</p>";
