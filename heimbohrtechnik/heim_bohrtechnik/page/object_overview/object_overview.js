@@ -45,7 +45,8 @@ frappe.object_overview = {
             if (event.keyCode === 13) {
                 var address = this.value;
                 if (address) {
-                    frappe.object_overview.render_map(address);
+                    frappe.object_overview.start_wait();
+                    find_gps(address);
                 }
             }
         });
@@ -189,4 +190,33 @@ function get_popup_str(object_name, rate=null, sales_order=null, cloud_url=null,
         + sv + "\" target=\"_blank\">SV</a>";
     }
     return html;
+}
+
+function find_gps(address) {
+    if (!locals.gps_location_pending) {
+        locals.gps_location_pending = true;     // prevent multiple calls from plz/city change events
+        frappe.call({
+            'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_gps',
+            'args': {
+                'street': address,
+                'location': ""
+            },
+            'callback': function(response) {
+                locals.gps_location_pending = false;
+                if (response.message) {
+                    if (response.message === "queued") {
+                        // the request has been sent, check back in a second
+                        setTimeout( function() {
+                            find_gps(address);
+                        }, 1000);
+                    } else {
+                        frappe.object_overview.render_map(address);
+                    }
+                } else {
+                    frappe.msgprint( __("Addresse nicht gefunden") , __("Geolocation") );
+                    frappe.object_overview.render_map();
+                }
+            }
+        });
+    }
 }

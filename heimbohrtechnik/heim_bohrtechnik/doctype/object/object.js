@@ -560,20 +560,31 @@ function update_gps(frm) {
 }
 
 function find_gps(frm) {
-    frappe.call({
-        'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_gps',
-        'args': {
-            'street': frm.doc.object_street,
-            'location': frm.doc.plz + " " + frm.doc.city
-        },
-        'callback': function(response) {
-            if (response.message) {
-                cur_frm.set_value("gps_coordinates", response.message);
-            } else {
-                console.log("Nothing found at " + frm.doc.object_street + " " + frm.doc.plz + " " + frm.doc.city);
+    if (!locals.gps_location_pending) {
+        locals.gps_location_pending = true;     // prevent multiple calls from plz/city change events
+        frappe.call({
+            'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_gps',
+            'args': {
+                'street': frm.doc.object_street,
+                'location': frm.doc.plz + " " + frm.doc.city
+            },
+            'callback': function(response) {
+                locals.gps_location_pending = false;
+                if (response.message) {
+                    if (response.message === "queued") {
+                        // the request has been sent, check back in a second
+                        setTimeout( function() {
+                            find_gps(cur_frm);
+                        }, 1000);
+                    } else {
+                        cur_frm.set_value("gps_coordinates", response.message);
+                    }
+                } else {
+                    console.log("Nothing found at " + frm.doc.object_street + " " + frm.doc.plz + " " + frm.doc.city);
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 function convert_ch_to_gps(frm) {

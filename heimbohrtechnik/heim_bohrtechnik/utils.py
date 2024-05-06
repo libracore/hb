@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2023, libracore and Contributors
+# Copyright (c) 2021-2024, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 
 from __future__ import unicode_literals
@@ -7,6 +7,9 @@ from frappe import _
 from frappe.model.mapper import get_mapped_doc
 from datetime import datetime, timedelta
 import json
+import re
+import uuid
+from PyPDF2 import PdfFileMerger
 from frappe.utils import cint, get_bench_path, get_files_path
 from frappe.utils.file_manager import save_file
 from erpnextswiss.erpnextswiss.utils import get_numeric_part
@@ -17,11 +20,8 @@ from frappe.core.doctype.communication.email import make as make_email
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_project_file_from_local_file
 from heimbohrtechnik.heim_bohrtechnik.timeshepherd import create_project
 from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
-import re
-import uuid
-from PyPDF2 import PdfFileMerger
-import requests
 from heimbohrtechnik.heim_bohrtechnik.date_controller import move_project, get_duration_days
+from heimbohrtechnik.heim_bohrtechnik.locator import get_gps_coordinates
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -256,22 +256,22 @@ def cancel_mudex_invoice(reference):
 @frappe.whitelist()
 def get_object_geographic_environment(object_name=None, radius=0.1, address=None, quotations=False, only_projects=False):
     data = None
-    if frappe.db.exists("Object", object_name):
-        obj = frappe.get_doc("Object", object_name)
-        data = {
-            'object': object_name,
-            'gps_lat': obj.gps_lat,
-            'gps_long': obj.gps_long
-        }
-    elif address:
+    if address:
         # find gps from address
-        gps = get_gps_coordinates(address, "")
+        gps = get_gps_coordinates(address, None)
         if gps:
             data = {
                 'object': address,
                 'gps_lat': gps['lat'],
                 'gps_long': gps['lon']
             }
+    elif frappe.db.exists("Object", object_name):
+        obj = frappe.get_doc("Object", object_name)
+        data = {
+            'object': object_name,
+            'gps_lat': obj.gps_lat,
+            'gps_long': obj.gps_long
+        }
     
     # default of no center is defined
     if not data:
@@ -1123,22 +1123,6 @@ def item_description_save(item, event):
     else:
         item.descritpion = item.item_name
     return
-
-def get_gps_coordinates(street, location):
-    url = "https://nominatim.openstreetmap.org/search?q={street},{location}&format=json&polygon=1&addressdetails=0".format(street=street, location=location)
-    response = None
-    try:
-        response = requests.get(url)
-        data = response.json()
-        gps_coordinates = None
-        if len(data) > 0:
-            gps_coordinates = {'lat': data[0]['lat'], 'lon': data[0]['lon']}
-        return gps_coordinates
-    except:
-        # failed to resolve address
-        if response and "Access blocked" in response.text:
-            frappe.throw(response.text)
-        return None
 
 @frappe.whitelist()
 def find_supplier_item(item_code, supplier, idx=None):

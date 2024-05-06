@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 from heimbohrtechnik.heim_bohrtechnik.dataparser import get_projects
-from heimbohrtechnik.heim_bohrtechnik.utils import update_project, get_gps_coordinates
+from heimbohrtechnik.heim_bohrtechnik.locator import update_project, get_gps_coordinates
 from erpnextswiss.scripts.crm_tools import get_primary_supplier_address, get_primary_customer_address
 from datetime import datetime
 import cgi

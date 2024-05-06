@@ -1,8 +1,8 @@
-# Copyright (c) 2023, libracore and Contributors
+# Copyright (c) 2023-2024, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 #
 #
-# Helper functions to find closest suppliers
+# Helper functions to find closest suppliers and geolocation
 #
 # Find closest hotels
 #  $ bench execute heimbohrtechnik.heim_bohrtechnik.locator.find_closest_hotels --kwargs "{'object_name': 'P-231234' }"
@@ -10,6 +10,9 @@
 
 import frappe
 import requests
+from frappe.utils.background_jobs import enqueue
+from datetime import datetime
+from frappe import _
 
 @frappe.whitelist()
 def find_closest_hotels(object_name):
@@ -63,3 +66,83 @@ def get_true_distance(from_lat, from_long, to_lat, to_long):
     response = requests.get(link)
     return response.json()
     
+
+def get_gps_coordinates(street, location):
+    # use local cache first
+    query_string = "{0},{1}".format(street, location) if location else street
+    if frappe.db.exists("OSM Cache", query_string):
+        gps_data = frappe.get_doc("OSM Cache", query_string)
+        if gps_data.gps_lat and gps_data.gps_long:
+            return {'lat': gps_data.gps_lat, 'lon': gps_data.gps_long}
+        else:
+            # check if creation is older than one day and it has a 0 location, reset cache
+            if type(gps_data.creation) == str:
+                created = datetime.strptime(gps_data.creation[:19], "%Y-%m-%d %H:%M:%S")
+            else:
+                created = gps_data.creation
+            if (datetime.now() - created).days > 1:
+                gps_data.delete(ignore_permissions=True)
+            else:
+                return None
+                
+    # create cache record
+    gps_cache = frappe.get_doc({
+        'doctype': 'OSM Cache',
+        'query_string': query_string,
+        'gps_lat': 0,
+        'gpd_long': 0
+    })
+    gps_cache.insert(ignore_permissions=True)
+    frappe.db.commit()
+    
+    # if the local cache has no value, locate
+    """     ISSUE: sometimes the queued process cannot update the database
+    
+    enqueue(
+        'heimbohrtechnik.heim_bohrtechnik.locator.geolocate',
+        queue='short',
+        timeout=5000,
+        query_string=query_string)
+    """
+    geolocate(query_string)
+    
+    return {'queued': 1}
+        
+def geolocate(query_string):
+    settings = frappe.get_doc("Heim Settings", "Heim Settings")
+    # check if OpenStreetMap was blocked
+    if settings.osm_blocked:
+        return None
+
+    url = "https://nominatim.openstreetmap.org/search?q={query}&format=json&polygon=1&addressdetails=0".format(query=query_string)
+    response = None
+    try:
+        response = requests.get(url)
+        data = response.json()
+        gps_coordinates = None
+        if len(data) > 0:
+            gps_coordinates = {'lat': data[0]['lat'], 'lon': data[0]['lon']}
+            # write gps to cache
+            gps_cache = frappe.get_doc("OSM Cache", query_string)
+            gps_cache.update({
+                'gps_lat': data[0]['lat'],
+                'gps_long': data[0]['lon']
+            })
+            gps_cache.save(ignore_permissions=True)
+            frappe.db.commit()
+        else:
+            gps_cache = frappe.get_doc("OSM Cache", query_string)
+            gps_cache.add_comment("Info", _("Adresse nicht gefunden"))
+            frappe.db.commit()
+            
+        return gps_coordinates
+    except:
+        # failed to resolve address
+        if response and "Access blocked" in response.text:
+            settings = frappe.get_doc("Heim Settings", "Heim Settings")
+            settings.osm_blocked = 1
+            settings.save(ignore_permissions = True)
+            frappe.db.commit()
+            frappe.throw(response.message)
+            
+        return None
