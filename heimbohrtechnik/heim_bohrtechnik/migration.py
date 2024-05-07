@@ -1,13 +1,16 @@
-# Copyright (c) 2021-2023, libracore and Contributors
+# Copyright (c) 2021-2024, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 
 from __future__ import unicode_literals
 import frappe
 from heimbohrtechnik.heim_bohrtechnik.dataparser import get_projects
-from heimbohrtechnik.heim_bohrtechnik.locator import update_project, get_gps_coordinates
+from heimbohrtechnik.heim_bohrtechnik.utils import update_project
+from heimbohrtechnik.heim_bohrtechnik.locator import get_gps_coordinates
+from heimbohrtechnik.heim_bohrtechnik.doctype.heim_settings.heim_settings import get_address_template
 from erpnextswiss.scripts.crm_tools import get_primary_supplier_address, get_primary_customer_address
 from datetime import datetime
 import cgi
+from frappe.utils import cint
 
 ROW_SEPARATOR = "\n"
 CELL_SEPARATOR = ";"
@@ -697,4 +700,48 @@ def fill_cloud_urls():
             print("{0}: {1}".format(p.get("name"), err))
         print("Updated {0}".format(p.get("name")))
         
+    return
+
+"""
+Extend addresses based on pincode-sepcific address list
+
+Run as
+ $ bench execute heimbohrtechnik.heim_bohrtechnik.migration.update_addresses
+"""
+def update_addresses():
+    # fetch all objects
+    objects = frappe.get_all("Object", fields=['name', 'plz'])
+    
+    # check each object for missing default address lines
+    counter = 0
+    for o in objects:
+        object_doc = frappe.get_doc("Object", o['name'])
+        if not object_doc.addresses or len(object_doc.addresses) == 0:
+            print("{0}% Skipping {1} (no addresses)".format(cint(100 * counter / len(objects)), o['name']))
+            continue
+        
+        default_addresses = get_address_template(o['plz'])
+        extended = False
+        for d in default_addresses:
+            found = False
+            for a in object_doc.addresses:
+                if a.address_type == d.get('type'):
+                    found = True
+                    continue    # this address type is present
+            if not found:
+                extended = True
+                object_doc.append('addresses', {
+                    'address_type': d.get('type'),
+                    'dt': d.get('st')
+                })
+                
+        if extended:
+            print("{0}% Extended {1}".format(cint(100 * counter / len(objects)), o['name']))
+            object_doc.save()
+            frappe.db.commit()
+        else:
+            print("{0}% All good {1}".format(cint(100 * counter / len(objects)), o['name']))
+        counter += 1
+
+    print("Done")
     return
