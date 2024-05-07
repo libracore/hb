@@ -247,7 +247,6 @@ def upload_file(self, event):
         
         physical_file_name = get_physical_path(self.name)
         write_project_file_from_local_file (project, physical_file_name, PATHS['drilling'])
-        frappe.log_error("upload as drilling: {0} ".format(self.as_dict()))
     
     elif self.attached_to_doctype == "Request for Public Area Use":
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
