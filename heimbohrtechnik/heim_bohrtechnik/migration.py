@@ -715,6 +715,7 @@ def update_addresses():
     # check each object for missing default address lines
     counter = 0
     for o in objects:
+        counter += 1
         object_doc = frappe.get_doc("Object", o['name'])
         if not object_doc.addresses or len(object_doc.addresses) == 0:
             print("{0}% Skipping {1} (no addresses)".format(cint(100 * counter / len(objects)), o['name']))
@@ -743,8 +744,7 @@ def update_addresses():
             except Exception as err:
                 print("Failed: {0}".format(err))
         else:
-            print("{0}% All good {1}".format(cint(100 * counter / len(objects)), o['name']))
-        counter += 1
+            print("{0}% All good {1}".format(cint(100 * counter / len(objects)), o['name']))   
 
     print("Done")
     return
