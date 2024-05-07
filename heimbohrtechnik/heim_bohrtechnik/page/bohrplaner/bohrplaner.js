@@ -457,7 +457,7 @@ frappe.bohrplaner = {
                     data.drilling_equipment = [];
                     if (details.construction_site_description.drilling_equipment) {
                         for (var i = 0; i < details.project.drilling_equipment.length; i++) {
-                            data.drilling_equipment.push(project.drilling_equipment[i].drilling_equipment);
+                            data.drilling_equipment.push(details.project.drilling_equipment[i].drilling_equipment);
                         }
                     }
                     
