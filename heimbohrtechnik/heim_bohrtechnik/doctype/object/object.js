@@ -675,6 +675,7 @@ function update_address_on_plz(frm) {
         },
         "callback": function(response) {
             var address_types = response.message;
+            cur_frm.clear_table('addresses');
             for (var i = 0; i < address_types.length; i++) {
                 var child = cur_frm.add_child('addresses');
                 frappe.model.set_value(child.doctype, child.name, 'address_type', address_types[i].type);
