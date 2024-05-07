@@ -737,8 +737,11 @@ def update_addresses():
                 
         if extended:
             print("{0}% Extended {1}".format(cint(100 * counter / len(objects)), o['name']))
-            object_doc.save()
-            frappe.db.commit()
+            try:
+                object_doc.save()
+                frappe.db.commit()
+            except Exception as err:
+                print("Failed: {0}".format(err))
         else:
             print("{0}% All good {1}".format(cint(100 * counter / len(objects)), o['name']))
         counter += 1
