@@ -147,7 +147,10 @@ function add_overlay(data) {
         'min_width': 35,
         'max_width': 70,
         'ews_details': data.ews_details,
-        'traffic_light': data.traffic_light
+        'traffic_light': data.traffic_light,
+        'toitoi': data.toitoi,
+        'red_drop': data.red_drop,
+        'blue_drop': data.blue_drop
     })).appendTo(place);
     return
 }
