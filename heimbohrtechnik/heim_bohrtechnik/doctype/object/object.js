@@ -381,6 +381,9 @@ frappe.ui.form.on('Object Address', {
                     var contact = response.message;
                     frappe.model.set_value(dt, dn, 'phone', contact.phone);
                     frappe.model.set_value(dt, dn, 'email', contact.email_id);
+                    if (contact.address) {
+                        frappe.model.set_value(dt, dn, 'address', contact.address);
+                    }
                 }
             });
         } else {
