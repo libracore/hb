@@ -79,6 +79,7 @@ def find_closest_troughs(object_name):
         WHERE 
             `tabSupplier Activity`.`activity` = "/*TROUGH*/"
             AND `tabSupplier`.`disabled` = 0
+            AND `tabSupplier Activity`.`remarks` != "NICHT AKTIV"
         ORDER BY `prox` ASC
         LIMIT 5;
     """.replace("/*TROUGH*/", trough_activity)
@@ -114,6 +115,7 @@ def find_closest_mud(object_name):
         WHERE 
             `tabSupplier Activity`.`activity` = "/*MUD*/"
             AND `tabSupplier`.`disabled` = 0
+            AND `tabSupplier Activity`.`remarks` != "NICHT AKTIV"
         ORDER BY `prox` ASC
         LIMIT 5;
     """.replace("/*MUD*/", mud_activity)
