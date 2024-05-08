@@ -64,10 +64,17 @@ cur_frm.fields_dict.checklist.grid.get_field('supplier').get_query =
     
 frappe.ui.form.on('Object', {
     refresh: function(frm) {
-        //Create button to find Hotels nearby
-        frm.add_custom_button(__("Find Hotel"), function() {
+        // Create button to find Hotels nearby
+        frm.add_custom_button(__("Hotel"), function() {
             find_hotel(frm);
-        });
+        }, __("Find"));
+        frm.add_custom_button(__("Trough"), function() {
+            find_trough(frm);
+        }, __("Find"));
+        frm.add_custom_button(__("Mud"), function() {
+            find_mud(frm);
+        }, __("Find"));
+        
         // show permits & checklist (in case coming from another record where it was hidden)
         var checklists = document.querySelectorAll("[data-fieldname='checklist']");
         try {
@@ -786,10 +793,18 @@ function find_hotel(frm) {
         frappe.call({
             'method': "heimbohrtechnik.heim_bohrtechnik.locator.find_closest_hotels",
             'args': {
-                "object_name": frm.doc.name
+                'object_name': frm.doc.name
             },
             'callback': function (r) {
-                frappe.msgprint(r.message.html, "Hotels");
+                var d = new frappe.ui.Dialog({
+                    'fields': [
+                        {'fieldname': 'ht', 'fieldtype': 'HTML'}
+                    ],
+                    'title': __("Hotels")
+                });
+                d.fields_dict.ht.$wrapper.html(r.message.html);
+                d.show();
+                
                 for (var i = 0; i < r.message.hotels.length; i++) {
                     find_true_distance(cur_frm, r.message.hotels[i].gps_latitude, r.message.hotels[i].gps_longitude,"hotel_distance_" + i, "hotel_time_" + i);
                 }
@@ -799,14 +814,15 @@ function find_hotel(frm) {
         frappe.msgprint(__("Keine Koordinaten"));
     }
 }
- function find_true_distance(frm, to_lat, to_long, target_distance_field, target_duration_field) {
+
+function find_true_distance(frm, to_lat, to_long, target_distance_field, target_duration_field) {
     frappe.call({
         'method': "heimbohrtechnik.heim_bohrtechnik.locator.get_true_distance",
         'args': {
-            "from_lat": frm.doc.gps_lat,
-            "from_long": frm.doc.gps_long,
-            "to_lat": to_lat,
-            "to_long": to_long
+            'from_lat': frm.doc.gps_lat,
+            'from_long': frm.doc.gps_long,
+            'to_lat': to_lat,
+            'to_long': to_long
         },
         'callback': function (r) {
             document.getElementById(target_distance_field).innerHTML=r.message.data['distance_in_kilometers'].toFixed(1) + " km";
@@ -815,3 +831,56 @@ function find_hotel(frm) {
     });
  }
 
+function find_trough(frm) {
+    if (frm.doc.gps_coordinates) {
+        frappe.call({
+            'method': "heimbohrtechnik.heim_bohrtechnik.locator.find_closest_troughs",
+            'args': {
+                'object_name': frm.doc.name
+            },
+            'callback': function (r) {
+                var d = new frappe.ui.Dialog({
+                    'fields': [
+                        {'fieldname': 'ht', 'fieldtype': 'HTML'}
+                    ],
+                    'title': __("Trough")
+                });
+                d.fields_dict.ht.$wrapper.html(r.message.html);
+                d.show();
+                
+                for (var i = 0; i < r.message.hotels.length; i++) {
+                    find_true_distance(cur_frm, r.message.hotels[i].gps_latitude, r.message.hotels[i].gps_longitude,"hotel_distance_" + i, "hotel_time_" + i);
+                }
+            }
+        });
+    } else {
+        frappe.msgprint(__("Keine Koordinaten"));
+    }
+}
+
+function find_mud(frm) {
+    if (frm.doc.gps_coordinates) {
+        frappe.call({
+            'method': "heimbohrtechnik.heim_bohrtechnik.locator.find_closest_mud",
+            'args': {
+                'object_name': frm.doc.name
+            },
+            'callback': function (r) {
+                var d = new frappe.ui.Dialog({
+                    'fields': [
+                        {'fieldname': 'ht', 'fieldtype': 'HTML'}
+                    ],
+                    'title': __("Mud")
+                });
+                d.fields_dict.ht.$wrapper.html(r.message.html);
+                d.show();
+                
+                for (var i = 0; i < r.message.hotels.length; i++) {
+                    find_true_distance(cur_frm, r.message.hotels[i].gps_latitude, r.message.hotels[i].gps_longitude,"hotel_distance_" + i, "hotel_time_" + i);
+                }
+            }
+        });
+    } else {
+        frappe.msgprint(__("Keine Koordinaten"));
+    }
+}

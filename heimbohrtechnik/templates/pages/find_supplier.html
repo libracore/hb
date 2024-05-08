@@ -1,0 +1,120 @@
+<style>
+.modal-dialog {
+    width: 800px !important;
+}
+
+.td {
+    padding: 5px;
+}
+
+.tr {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.taright {
+    text-align: right;
+}
+
+.tacenter {
+    text-align: center;
+}
+</style>
+
+<script>
+    function set_supplier(activity_type, supplier) {
+        if (cur_frm.doc.addresses) {
+            for (var a = 0; a < cur_frm.doc.addresses.length; a++) {
+                if (cur_frm.doc.addresses[a].address_type === activity_type) {
+                    frappe.model.set_value(cur_frm.doc.addresses[a].doctype, cur_frm.doc.addresses[a].name, "party", supplier);
+                    frappe.show_alert( supplier + " gesetzt.");
+                }
+            }
+        }
+    }
+    
+    function show_details(details, activity_type, supplier) {
+        frappe.confirm(
+            document.getElementById(details).innerHTML,
+            function(){
+                // on yes
+                set_supplier(activity_type, supplier);
+            },
+            function(){
+                // on no
+            }
+        )
+
+    }
+</script>
+
+<table style="width: 765px;">
+    <thead>
+        <tr class="tr">
+            <th class="td" style="min-width: 100px;">{{ _("Supplier") }}</th>
+            <th class="td">{{ _("Address") }}</th>
+            <th class="td tacenter" style="min-width: 120px;">{{ _("Phone") }}</th>
+            <th class="td tacenter">{{ _("Dist.") }}</th>
+            <th class="td tacenter">{{ _("Time") }}</th>
+            <th class="td">{{ _("Remarks") }}</th>
+            <th class="td">{{ _("More") }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for hotel in hotels %}
+            <tr class="tr">
+                <td class="td">{% if hotel.website %}<a href="https://{{ hotel.website }}">{{ hotel.supplier_name }}</a>{% else %}{{ hotel.supplier_name }}{% endif %}{% if hotel.main_hotel == 1 %}<i class="fa fa-star" aria-hidden="true"></i>{% endif %}</td>
+                <td class="td"><a href="geo:{{ hotel.gps_latitude }},{{ hotel.gps_longitude }}">{{ hotel.hauptadresse }}</a></td>
+                <td class="td tacenter"><a href="tel:{{ hotel.telefon }}">{{ hotel.telefon or "-" }}</a></td>
+                <td class="td taright"><div id="hotel_distance_{{ loop.index0 }}"><i class="fa fa-spinner fa-spin" style="color: #274b82;"></i></div></td>
+                <td class="td taright"><div id="hotel_time_{{ loop.index0 }}"></div></td>
+                <td class="td">{{ hotel.remarks }}</td>
+                <td class="td">
+                    <div id="details_{{ loop.index0 }}" style="display: none; ">
+                        <table style="table">
+                            <tr>
+                                <td>{{ _("Trough Size") }}</td>
+                                <td>{{ hotel.trough_size or '-' }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ _("Place Trough Rate") }}</td>
+                                <td>{{ hotel.place_trough_rate or '-' }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ _("Disposal Rate") }}</td>
+                                <td>{{ hotel.disposal_rate or '-' }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ _("Reach") }}</td>
+                                <td>{{ hotel.reach or '-' }}</td>
+                            </tr>
+                            {% if hotel.details %}
+                            <tr>
+                                <td>{{ _("Details") }}</td>
+                                <td>
+                                    <a href="{{ hotel.details }}" target="_blank">
+                                        <img src="/assets/heimbohrtechnik/images/pdf.png" style="height: 16px; ">
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td>{{ _("Other") }}</td>
+                                <td>{{ hotel.other or '-' }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <img 
+                        src="/assets/heimbohrtechnik/images/information.png" 
+                        style="height: 16px; "
+                        onclick="show_details(`details_{{ loop.index0 }}`, `{{ hotel.activity_type}}`, `{{ hotel.name}}`);"
+                    >
+
+                    <!-- <span 
+                        onclick="set_supplier(`{{ hotel.activity_type}}`, `{{ hotel.name}}`);"
+                        style="cursor: grab; "
+                    >{{ _("Anwenden") }}</span> -->
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

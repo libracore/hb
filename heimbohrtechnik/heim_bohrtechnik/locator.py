@@ -17,6 +17,112 @@ from time import sleep
 
 @frappe.whitelist()
 def find_closest_hotels(object_name):
+    query = """
+        SELECT 
+            `name`, 
+            `supplier_name`, 
+            `hauptadresse`, 
+            `telefon`, 
+            `main_hotel`, 
+            `remarks`,
+            ((ABS(`gps_latitude` - {lat}) + ABS(`gps_longitude` - {lon})) / POW(5, `main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
+            `gps_latitude`, 
+            `gps_longitude`
+        FROM `tabSupplier`
+        WHERE 
+            `disabled` = 0
+            AND `supplier_group` = "Hotel"
+        ORDER BY `prox` ASC
+        LIMIT 5;
+    """
+    
+    template = "heimbohrtechnik/templates/pages/find_hotels.html"
+    
+    closest_hotels = find_closest(object_name, query, template)
+    
+    if closest_hotels:
+        new_doc = frappe.get_doc({
+            'doctype': "Find Hotel Log",
+            'object': object_name,
+            'hotels': closest_hotels.get('html')
+        })
+        
+        new_doc.insert(ignore_permissions=True)
+        frappe.db.commit()
+    
+    return closest_hotels
+
+@frappe.whitelist()
+def find_closest_troughs(object_name):
+    trough_activity = frappe.get_value("Heim Settings", "Heim Settings", "trough_activity")
+    query = """
+        SELECT 
+            `tabSupplier`.`name`, 
+            `tabSupplier`.`supplier_name`, 
+            `tabSupplier`.`hauptadresse`, 
+            `tabSupplier`.`telefon`, 
+            `tabSupplier`.`main_hotel`, 
+            `tabSupplier`.`remarks`,
+            ((ABS(`tabSupplier Activity`.`gps_lat` - {lat}) + ABS(`tabSupplier Activity`.`gps_long` - {lon})) / POW(5, `tabSupplier`.`main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
+            `tabSupplier Activity`.`gps_lat` AS `gps_latitude`, 
+            `tabSupplier Activity`.`gps_long` AS `gps_longitude`,
+            `tabSupplier Activity`.`trough_size`,
+            `tabSupplier Activity`.`place_trough_rate`,
+            `tabSupplier Activity`.`disposal_rate`,
+            `tabSupplier Activity`.`reach`,
+            `tabSupplier Activity`.`trough_address`,
+            `tabSupplier Activity`.`details`,
+            `tabSupplier Activity`.`other`,
+            "/*MUD*/" AS `activity_type`
+        FROM `tabSupplier Activity`
+        LEFT JOIN `tabSupplier` ON `tabSupplier`.`name` = `tabSupplier Activity`.`parent`
+        WHERE 
+            `tabSupplier Activity`.`activity` = "/*TROUGH*/"
+            AND `tabSupplier`.`disabled` = 0
+        ORDER BY `prox` ASC
+        LIMIT 5;
+    """.replace("/*TROUGH*/", trough_activity)
+    
+    template = "heimbohrtechnik/templates/pages/find_supplier.html"
+    
+    return find_closest(object_name, query, template)
+    
+@frappe.whitelist()
+def find_closest_mud(object_name):
+    mud_activity = frappe.get_value("Heim Settings", "Heim Settings", "mud_disposer_activity")
+    query = """
+        SELECT 
+            `tabSupplier`.`name`, 
+            `tabSupplier`.`supplier_name`, 
+            `tabSupplier`.`hauptadresse`, 
+            `tabSupplier`.`telefon`, 
+            `tabSupplier`.`main_hotel`, 
+            `tabSupplier`.`remarks`,
+            ((ABS(`tabSupplier Activity`.`gps_lat` - {lat}) + ABS(`tabSupplier Activity`.`gps_long` - {lon})) / POW(5, `tabSupplier`.`main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
+            `tabSupplier Activity`.`gps_lat` AS `gps_latitude`, 
+            `tabSupplier Activity`.`gps_long` AS `gps_longitude`,
+            `tabSupplier Activity`.`trough_size`,
+            `tabSupplier Activity`.`place_trough_rate`,
+            `tabSupplier Activity`.`disposal_rate`,
+            `tabSupplier Activity`.`reach`,
+            `tabSupplier Activity`.`trough_address`,
+            `tabSupplier Activity`.`details`,
+            `tabSupplier Activity`.`other`,
+            "/*MUD*/" AS `activity_type`
+        FROM `tabSupplier Activity`
+        LEFT JOIN `tabSupplier` ON `tabSupplier`.`name` = `tabSupplier Activity`.`parent`
+        WHERE 
+            `tabSupplier Activity`.`activity` = "/*MUD*/"
+            AND `tabSupplier`.`disabled` = 0
+        ORDER BY `prox` ASC
+        LIMIT 5;
+    """.replace("/*MUD*/", mud_activity)
+    
+    template = "heimbohrtechnik/templates/pages/find_supplier.html"
+    
+    return find_closest(object_name, query, template)
+
+def find_closest(object_name, query, template):
     # fetch object
     object_doc = frappe.get_doc("Object", object_name)
     # check if GPS is available
@@ -25,30 +131,10 @@ def find_closest_hotels(object_name):
         return None
         
     # lat/long approximation
-    hotels = frappe.db.sql("""
-        SELECT `name`, `supplier_name`, `hauptadresse`, `telefon`, `main_hotel`, `remarks`,
-        ((ABS(`gps_latitude` - {lat}) + ABS(`gps_longitude` - {lon})) / POW(5, `main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
-        `gps_latitude`, `gps_longitude`
-        FROM `tabSupplier`
-        WHERE `disabled` = 0
-        AND `supplier_group` = "Hotel"
-        ORDER BY `prox` ASC
-        LIMIT 5;
-    """.format(lat=object_doc.gps_lat, lon=object_doc.gps_long), as_dict=True)
-    
-    # refine actual distance -> TBD
+    hotels = frappe.db.sql(query.format(lat=object_doc.gps_lat, lon=object_doc.gps_long), as_dict=True)
     
     #render hotels to dialog
-    html = frappe.render_template("heimbohrtechnik/templates/pages/find_hotels.html", {'hotels': hotels})
-    
-    new_doc = frappe.get_doc({
-        'doctype': "Find Hotel Log",
-        'object': object_name,
-        'hotels': html
-    })
-    
-    new_doc.insert(ignore_permissions=True)
-    frappe.db.commit()
+    html = frappe.render_template(template, {'hotels': hotels})
     
     return {
         'html': html,

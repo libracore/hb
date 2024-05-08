@@ -40,7 +40,7 @@
                 <td class="td tacenter"><a href="tel:{{ hotel.telefon }}">{{ hotel.telefon or "-" }}</a></td>
                 <td class="td taright"><div id="hotel_distance_{{ loop.index0 }}"><i class="fa fa-spinner fa-spin" style="color: #274b82;"></i></div></td>
                 <td class="td taright"><div id="hotel_time_{{ loop.index0 }}"></div></td>
-                <td class="td">{{ hotel.remarks }}</td>
+                <td class="td">{{ hotel.remarks or "-" }}</td>
             </tr>
         {% endfor %}
     </tbody>

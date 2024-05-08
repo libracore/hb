@@ -163,6 +163,10 @@ DocType: Object,Capabilities,Fähigkeiten
 DocType: Object,Object Address,Objektadresse
 DocType: Object,Information to,Informationen an
 DocType: Object,GPS checked,GPS-Daten kontrolliert
+DocType: Object,Address,Adresse
+DocType: Object,Drilling tool diameter (mm),Durchmesser Bohrwerkzeug (mm)
+DocType: Object,Time,Zeit
+DocType: Object,Find,Finde
 DocType: Project,Mud Disposer,Schlammentsorger
 DocType: Project,Mud disposer,Schlammentsorger
 DocType: Project,Drilling Equipment,Bohrequipment
@@ -445,9 +449,6 @@ DocType: Injection report,Bentonit (density x consumption),Bentonit (Dichte x Ve
 DocType: Injection report,Schwerspat (density x consumption),Schwerspat (Dichte x Verbrauch)
 DocType: Injection report,Sum (density x consumption),Summe (Dichte x Verbrauch)
 DocType: Injection report,Sum (Consumption),Summe (Verbrauch)
-DocType: Object,Address,Adresse
-DocType: Object,Drilling tool diameter (mm),Durchmesser Bohrwerkzeug (mm)
-DocType: Object,Time,Zeit
 DocType: Truck,Category (Planning),Kategorie (Planung)
 DocType: Truck,Mudex Calendar,Mudex Kalender
 DocType: Truck Planning,Calendar,Kalender
@@ -525,7 +526,7 @@ DocType: Layer Directory,Probe Diameter,Sondendurchmesser
 DocType: Project,Fixed date,Fixtermin
 DocType: Layer Directory,Drilling Order,Bohrauftrag
 DocType: Quotation,Disable AI,KI deaktivieren
-DocType: Supplier,Main Hotel,Stammhotel
+DocType: Supplier,Main Supplier,Stammlieferant
 Report: Drilling Statistics,Drilling Statistics,Bohrstatistik
 Report: Drilling Statistics,Invoiced Meter,Verrechnete Meter
 Report: Drilling Statistics,Actual Meter,Tatsächliche Meter
