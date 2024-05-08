@@ -167,7 +167,7 @@ def find_gps_for_address(address):
     if 'queued' in gps_coordinates and gps_coordinates['queued'] == 1:
         # wait for query to be executed (1 second)
         sleep(1)
-        gps_coordinates = get_gps_coordinates(address.address_line1, "{0} {1}".format(address.pincode, address_city))
+        gps_coordinates = get_gps_coordinates(address.address_line1, "{0} {1}".format(address.pincode, address.city))
         
     return gps_coordinates
     
