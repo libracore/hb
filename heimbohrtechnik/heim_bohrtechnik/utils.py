@@ -10,7 +10,7 @@ import json
 import re
 import uuid
 from PyPDF2 import PdfFileMerger
-from frappe.utils import cint, get_bench_path, get_files_path
+from frappe.utils import cint, flt, get_bench_path, get_files_path
 from frappe.utils.file_manager import save_file
 from erpnextswiss.erpnextswiss.utils import get_numeric_part
 from erpnextswiss.erpnextswiss.attach_pdf import execute, create_folder

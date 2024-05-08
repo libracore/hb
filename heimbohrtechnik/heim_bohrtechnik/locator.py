@@ -11,9 +11,11 @@
 import frappe
 import requests
 from frappe.utils.background_jobs import enqueue
+from frappe.utils import flt
 from datetime import datetime
 from frappe import _
 from time import sleep
+import re
 
 @frappe.whitelist()
 def find_closest_hotels(object_name):
@@ -170,6 +172,12 @@ def find_gps_for_address(address):
     return gps_coordinates
     
 def get_gps_coordinates(street, location):
+    # if street is a gps_coordinate pair, use this
+    gps_match = re.search("^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$", street)
+    if gps_match:
+        gps_lat_long = gps_match.group(0).split(", ")
+        return {'lat': flt(gps_lat_long[0]), 'lon': flt(gps_lat_long[1])}
+            
     # use local cache first
     query_string = "{0},{1}".format(street, location) if location else street
     if frappe.db.exists("OSM Cache", query_string):
