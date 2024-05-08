@@ -266,6 +266,12 @@ DocType: Purchase Order,We are hereby placing the following order:,Hiermit beste
 DocType: Purchase Order,Order confirmation,Auftragsbestätigung
 DocType: Supplier,Required Activity,Erforderliche Tätigkeit
 DocType: Supplier,Short Display,Kürzel
+DocType: Supplier,Trough Size,Muldengrösse
+DocType: Supplier,Place Trough Rate,Preis Mulde stellen
+DocType: Supplier,Disposal Rate,Preis Entsorgung
+DocType: Supplier,Reach,Einzugsbereich
+DocType: Supplier,Trough Address,Muldenadresse
+DocType: Supplier,Other,Diverses
 DocType: Drilling Team,Drilling rig manufacturer,Hersteller Bohrausrüsting
 DocType: Drilling Team,Drilling rig type,Typenbezeichnung der Bohrausrüstung
 DocType: Drilling Team,Truck and Weight,LKW und Gewicht

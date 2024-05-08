@@ -13,6 +13,7 @@ import requests
 from frappe.utils.background_jobs import enqueue
 from datetime import datetime
 from frappe import _
+from time import sleep
 
 @frappe.whitelist()
 def find_closest_hotels(object_name):
@@ -66,7 +67,20 @@ def get_true_distance(from_lat, from_long, to_lat, to_long):
     response = requests.get(link)
     return response.json()
     
-
+@frappe.whitelist()
+def find_gps_for_address(address):
+    if type(address) == str:
+        address = frappe.get_doc("Address", address)
+        
+    gps_coordinates = get_gps_coordinates(address.address_line1, "{0} {1}".format(address.pincode, address.city))
+    
+    if 'queued' in gps_coordinates and gps_coordinates['queued'] == 1:
+        # wait for query to be executed (1 second)
+        sleep(1)
+        gps_coordinates = get_gps_coordinates(address.address_line1, "{0} {1}".format(address.pincode, address_city))
+        
+    return gps_coordinates
+    
 def get_gps_coordinates(street, location):
     # use local cache first
     query_string = "{0},{1}".format(street, location) if location else street

@@ -6,7 +6,18 @@
  "field_order": [
   "activity",
   "required_activity",
-  "remarks"
+  "remarks",
+  "sec_trough",
+  "trough_size",
+  "place_trough_rate",
+  "disposal_rate",
+  "reach",
+  "trough_address",
+  "details",
+  "col_troigh",
+  "other",
+  "gps_lat",
+  "gps_long"
  ],
  "fields": [
   {
@@ -29,10 +40,68 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Remarks"
+  },
+  {
+   "depends_on": "eval:in_list([\"Mulde\", \"Schlammentsorgung\"], doc.activity)",
+   "fieldname": "sec_trough",
+   "fieldtype": "Section Break",
+   "label": "Trough"
+  },
+  {
+   "fieldname": "trough_size",
+   "fieldtype": "Data",
+   "label": "Trough Size"
+  },
+  {
+   "fieldname": "place_trough_rate",
+   "fieldtype": "Data",
+   "label": "Place Trough Rate"
+  },
+  {
+   "fieldname": "disposal_rate",
+   "fieldtype": "Data",
+   "label": "Disposal Rate"
+  },
+  {
+   "fieldname": "reach",
+   "fieldtype": "Data",
+   "label": "Reach"
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Attach",
+   "label": "Details"
+  },
+  {
+   "fieldname": "col_troigh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "other",
+   "fieldtype": "Small Text",
+   "label": "Other"
+  },
+  {
+   "fieldname": "trough_address",
+   "fieldtype": "Link",
+   "label": "Trough Address",
+   "options": "Address"
+  },
+  {
+   "fieldname": "gps_lat",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "GPS Lat"
+  },
+  {
+   "fieldname": "gps_long",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "GPS Long"
   }
  ],
  "istable": 1,
- "modified": "2021-05-17 07:12:40.078952",
+ "modified": "2024-05-08 15:33:56.183383",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Supplier Activity",

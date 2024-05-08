@@ -1,3 +1,6 @@
+// Copyright (c) 2021-2024, libracore AG and contributors
+// For license information, please see license.txt
+
 frappe.ui.form.on('Supplier', {
     setup(frm) {
         frm.set_query('default_sales_taxes_and_charges', 'accounts', function(doc, cdt, cdn) {
@@ -13,6 +16,16 @@ frappe.ui.form.on('Supplier', {
                 'company': d.company
             }
             return {'filters': filters}
+        });
+        frm.set_query('trough_address', 'capabilities', function(frm, cdt, cdn) {
+            var d = locals[cdt][cdn];
+            return {
+                'query': "frappe.contacts.doctype.address.address.address_query",
+                'filters': {
+                    "link_doctype": "Supplier",
+                    "link_name": frm.name || null
+                }
+            }
         });
     },
     refresh(frm) {
@@ -38,6 +51,15 @@ frappe.ui.form.on('Supplier', {
         }
         compile_remarks(frm);
         set_supplier_group(frm);
+    }
+});
+
+frappe.ui.form.on('Supplier Activity', {
+    trough_address(frm, cdt, cdn) {
+        var row = locals[cdt][cdn];
+        if (row.trough_address) {
+            fetch_gps(cdt, cdn, row.trough_address);
+        }
     }
 });
 
@@ -109,4 +131,19 @@ function set_supplier_group(frm) {
         }
     }
     cur_frm.set_value("supplier_group", supplier_group);
+}
+
+function fetch_gps(cdt, cdn, address) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.locator.find_gps_for_address',
+        'args': {
+            'address': address
+        },
+        'callback': function(response) {
+            if ((response.message) && (response.message.lat) && (response.message.lon)) {
+                frappe.model.set_value(cdt, cdn, 'gps_lat', response.message.lat);
+                frappe.model.set_value(cdt, cdn, 'gps_long', response.message.lon);
+            }
+        }
+    });
 }
