@@ -948,7 +948,7 @@
    "columns": 0,
    "creation": "2024-03-11 13:42:39.012153",
    "default": null,
-   "depends_on": "eval: doc.supplier_group == \"Hotel\";",
+   "depends_on": "",
    "description": null,
    "docstatus": 0,
    "dt": "Supplier",
