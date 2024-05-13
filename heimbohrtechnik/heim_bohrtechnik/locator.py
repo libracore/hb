@@ -191,7 +191,11 @@ def get_gps_coordinates(street, location):
             else:
                 created = gps_data.creation
             if (datetime.now() - created).days > 1:
-                gps_data.delete(ignore_permissions=True)
+                frappe.db.sql("""
+                    DELETE FROM `tabOSM Cache`
+                    WHERE `name` = "{name}";
+                    """.format(name=query_string))
+                frappe.db.commit()
             else:
                 return None
                 
@@ -246,7 +250,7 @@ def geolocate(query_string):
             frappe.db.commit()
             
         return gps_coordinates
-    except:
+    except Exception as err:
         # failed to resolve address
         if response and "Access blocked" in response.text:
             settings = frappe.get_doc("Heim Settings", "Heim Settings")
@@ -254,5 +258,7 @@ def geolocate(query_string):
             settings.save(ignore_permissions = True)
             frappe.db.commit()
             frappe.throw(response.message)
-            
+        else:
+            frappe.log_error("{0}, {1}".format(response, err), "Geolocate failed")
+        
         return None
