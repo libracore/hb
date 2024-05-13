@@ -20,6 +20,7 @@ from frappe.core.doctype.communication.email import make as make_email
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_project_file_from_local_file
 from heimbohrtechnik.heim_bohrtechnik.timeshepherd import create_project
 from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
+from erpnext.buying.doctype.purchase_order.purchase_order import make_purchase_receipt
 from heimbohrtechnik.heim_bohrtechnik.date_controller import move_project, get_duration_days
 from heimbohrtechnik.heim_bohrtechnik.locator import get_gps_coordinates
 
@@ -1210,3 +1211,23 @@ def find_and_attach_sv(object_name, sales_invoice):
                 
     return
             
+
+"""
+Purchase Order from stock: create Purchase Receipt and close both order and receipt
+"""
+@frappe.whitelist()
+def po_from_stock(purchase_order):
+    if type(purchase_order) == str:
+        purchase_order = frappe.get_doc("Purchase Order", purchase_order)
+    
+    # create purchase receipt
+    purchase_receipt = frappe.get_doc(make_purchase_receipt(purchase_order.name))
+    purchase_receipt.insert()
+    purchase_receipt.submit()
+    
+    # close purchase receipt and order
+    purchase_receipt.update_status("Closed")
+    purchase_order.update_status("Closed")
+    frappe.db.commit()
+    
+    return

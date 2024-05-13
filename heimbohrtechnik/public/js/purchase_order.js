@@ -25,6 +25,19 @@ frappe.ui.form.on('Purchase Order', {
                 cur_frm.reload_doc();
             }
         });
+        
+        if (frm.doc.lagervorrat) {
+            // create purchase receipt and close order and receipt
+            frappe.call({
+                'method': 'heimbohrtechnik.heim_bohrtechnik.utils.po_from_stock',
+                'args': {
+                    'purchase_order': frm.doc.name
+                },
+                'callback': function(response) {
+                    cur_frm.reload_doc();
+                }
+            });
+        }
     }
 });
 
