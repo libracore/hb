@@ -231,7 +231,7 @@ def geolocate(query_string):
     url = "https://nominatim.openstreetmap.org/search?q={query}&format=json&polygon=1&addressdetails=0".format(query=query_string)
     response = None
     try:
-        response = requests.get(url)
+        response = requests.get(url, headers={'referer': 'libracore geolocator'})
         data = response.json()
         gps_coordinates = None
         if len(data) > 0:
