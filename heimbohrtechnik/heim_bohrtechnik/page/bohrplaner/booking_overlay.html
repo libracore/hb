@@ -4,7 +4,7 @@
     draggable="{{ dragable }}"
     ondragstart="drag(event)">
     <div class="object-div" style="font-size: {{ font_size }}pt !important;" onclick="frappe.bohrplaner.show_detail_popup(this);" data-popupvalue="{{ project.name }}">
-        <div style="background-color: {{ ampeln[0] }} min-width:{{ min_width }}px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{{ project.name }}&nbsp;({{ project.drilling_meter_per_day }}m)</div>
+        <div style="background-color: {{ ampeln[0] }} min-width:{{ min_width }}px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{{ project.name }}&nbsp;({{ project.drilling_meter_per_day }}m/T)</div>
         <div style="background-color: {{ ampeln[1] }} min-width:{{ min_width }}px; max-width: {{ max_width }}px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if project.customer_name %}{{ project.customer_name }}{% else %}&nbsp;{% endif %}</div>
         <div style="background-color: {{ ampeln[2] }} min-width:{{ min_width }}px; max-width: {{ max_width }}px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if project.object_name %}{{ project.object_name }}{% else %}&nbsp;{% endif %}</div>
         <div style="background-color: {{ ampeln[3] }} min-width:{{ min_width }}px; max-width: {{ max_width }}px; height: {{ box_height }}px; padding-top: {{ padding }}px !important;">{% if project.object_street %}{{ project.object_street }}{% else %}&nbsp;{% endif %}</div>
