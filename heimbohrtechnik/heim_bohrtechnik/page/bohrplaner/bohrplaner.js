@@ -49,6 +49,10 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
         frappe.set_route("query-report", "Drilling Capacity Overview", {'from_date': $("#from").val(), 'to_date': $("#to").val()});
     });
     
+    page.add_menu_item( __('Freien Termin suchen'), () => {
+        get_free_date();
+    });
+    
     // check routes and if there is a route, navigate to this
     frappe.bohrplaner.load_route(page);
 }
@@ -900,4 +904,46 @@ function route_to_subproject(elmnt) {
     cur_dialog.hide();
     frappe.bohrplaner.load_route(frappe.bohrplaner.page);
     
+}
+
+var drilling_types = [
+    {'fieldname': 'flushing_drilling', 'label': "Spülbohrung"},
+    {'fieldname': 'hammer_drilling', 'label': "Hammerbohrung"},
+    {'fieldname': 'well_drilling', 'label': "Brunnenbohrung"},
+    {'fieldname': 'small_drilling_rig', 'label': "Kleinbohrgerät auf Bohrteam"}
+];
+
+function get_free_date() {
+    var dts = []
+    for (var i = 0; i < drilling_types.length; i++) {
+        dts.push(drilling_types[i].label);
+    }
+    frappe.prompt([
+        {
+            'fieldname': 'drilling_type', 
+            'label': __('Drilling type'),
+            'fieldtype': 'Select',
+            'options': dts.join("\n")
+        }
+    ],
+    function(values){
+        var drilling_type = null;
+        for (var i = 0; i < drilling_types.length; i++) {
+            if (drilling_types[i].label === values.drilling_type) {
+                drilling_type = drilling_types[i].fieldname;
+                label = drilling_types[i].label;
+                break;
+            }
+        }
+        frappe.call({
+            'method': "heimbohrtechnik.heim_bohrtechnik.report.drilling_capacity_overview.drilling_capacity_overview.get_free_date",
+            'args': {
+                "drilling_type": drilling_type,
+                "label": label
+            }
+        });
+    },
+    'Bohrteamart angeben',
+    'Termin suchen'
+    )
 }
