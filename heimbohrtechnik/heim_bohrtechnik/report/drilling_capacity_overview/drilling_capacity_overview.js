@@ -95,7 +95,8 @@ function filter_for_cw() {
         {
             'fieldname': 'calendar_week', 
             'label': __('Calendar week'),
-            'fieldtype': 'Int'
+            'fieldtype': 'Int',
+            "reqd": 1
         },
         {
             'fieldname': 'year', 
