@@ -30,9 +30,13 @@ frappe.ui.form.on('Quotation', {
             show_pincode_information(frm.doc.object);
         }
         
-        // set naming series (for company)
+        // fresh document
         if (frm.doc.__islocal) {
+            // set naming series (for company)
             select_naming_series(frm);
+            
+            // verify customer if set (on duplicate or revision)
+            get_tax_id(frm);
         }
         
         // get tax id
@@ -130,6 +134,9 @@ function get_tax_id(frm) {
         "callback": function(response) {
             var customer = response.message;
             cur_frm.set_value("tax_id", customer.tax_id);
+            if (customer.disabled === 1) {
+                frappe.msgprint( __("Vorsicht, der Kunde {0} ist deaktiviert").replace("{0}", customer.customer_name), __("Validation") );
+            }
         }
     });
 }
