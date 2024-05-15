@@ -184,6 +184,12 @@ frappe.ui.form.on('Project', {
                 }
             }
         }
+        
+        // scroll back behaviour
+        if (locals.scroll_to) {
+            frappe.utils.scroll_to(document.querySelector("[data-fieldname='" + locals.scroll_to + "']"));
+            locals.scroll_to = null;        // reset to prevent other scrolling
+        }
     },
     before_save(frm) {
         // hook to update subcontracting orders in case of changes
@@ -230,6 +236,18 @@ frappe.ui.form.on('Project Checklist', {
     supplier: function(frm, dt, dn) {
         get_required_activities(frm, dt, dn);
     }
+});
+
+frappe.ui.form.on('Construction Site Description Plan', {
+    file: function(frm, cdt, cdn) {
+        locals.scroll_to = "plans";         // store location before scroll on save
+    }    
+});
+
+frappe.ui.form.on('Project Permit', {
+    file: function(frm, cdt, cdn) {
+        locals.scroll_to = "permits";       // store location before scroll on save
+    }    
 });
 
 function create_full_file(frm) {
