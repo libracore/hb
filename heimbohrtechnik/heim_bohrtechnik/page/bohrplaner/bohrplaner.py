@@ -55,7 +55,8 @@ def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
             `expected_end_date`, 
             `start_half_day`, 
             `end_half_day`, 
-            `object`
+            `object`,
+            `drilling_meter_per_day`
         FROM `tabProject`
         WHERE `project_type` = "External"
           AND `status` IN ("Open", "Completed")
