@@ -9,6 +9,8 @@ from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_work
 from datetime import datetime, timedelta
 from frappe.utils.data import getdate
 from heimbohrtechnik.heim_bohrtechnik.date_controller import get_holidays
+from erpnextswiss.erpnextswiss.utils import get_first_day_of_first_cw
+from frappe.utils.data import getdate
 
 def execute(filters=None):
     data, weekend = get_data(filters)
@@ -21,9 +23,11 @@ def get_columns(data, weekend):
         width = 80
         if key == "Bohrteam":
             width = 150
-        elif key in weekend:
-            width = 20
-        columns.append({"label": _(key), "fieldname": key, "fieldtype": "Data", "width": width})
+            columns.append({"label": _(key), "fieldname": key, "fieldtype": "Link", "options": "Drilling Team", "width": width})
+        else:
+            if key in weekend:
+                width = 20
+            columns.append({"label": _(key), "fieldname": key, "fieldtype": "Data", "width": width})
     
     return columns
 
@@ -168,3 +172,15 @@ def get_free_date(drilling_type, label):
     frappe.msgprint(html, title='Freie Tage für {0}'.format(label), indicator='green')
                 
     return
+
+@frappe.whitelist()
+def get_filter_dates(calendar_week, year, start_check=False):
+    frappe.log_error(start_check)
+    monday_cw1 = get_first_day_of_first_cw(int(year))
+    if start_check == "1":
+        from_date = frappe.utils.add_days(monday_cw1, (int(calendar_week) - 1) * 7)
+    else:
+        from_date = getdate()
+    diff = (int(calendar_week) - 1) * 7 + 4
+    to_date = frappe.utils.add_days(monday_cw1, diff)
+    return from_date, to_date

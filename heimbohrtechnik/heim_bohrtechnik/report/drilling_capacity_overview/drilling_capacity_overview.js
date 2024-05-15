@@ -46,6 +46,9 @@ frappe.query_reports["Drilling Capacity Overview"] = {
         report.page.add_inner_button("Freien Termin suchen", function(){
             get_free_date();
         });
+        report.page.add_inner_button("Nach KW filtern", function(){
+            filter_for_cw();
+        });
     }
 };
 
@@ -81,5 +84,53 @@ function get_free_date() {
     },
     'Bohrteamart angeben',
     'Termin suchen'
+    )
+}
+
+function filter_for_cw() {
+    var currentDate = new Date();
+    var currentYear = currentDate.getFullYear();
+    var options = [currentYear, currentYear + 1]
+    frappe.prompt([
+        {
+            'fieldname': 'calendar_week', 
+            'label': __('Calendar week'),
+            'fieldtype': 'Int',
+            "reqd": 1
+        },
+        {
+            'fieldname': 'year', 
+            'label': __('Year'),
+            'fieldtype': 'Select',
+            'options': options,
+            'default': currentYear
+        },
+        {
+            'fieldname': 'start_check', 
+            'label': __('Startdatum ebenfalls anpassen'),
+            'fieldtype': 'Check'
+        }
+    ],
+    function(values){
+        var calendar_week = values.calendar_week;
+        var year = values.year;
+        var start_check = values.start_check;
+        frappe.call({
+            'method': "heimbohrtechnik.heim_bohrtechnik.report.drilling_capacity_overview.drilling_capacity_overview.get_filter_dates",
+            'args': {
+                'calendar_week': calendar_week,
+                'year': year,
+                'start_check': start_check
+            },
+            'async': false,
+            'callback': function(response) {
+                var from_date = response.message[0];
+                var to_date = response.message[1];
+                frappe.query_report.set_filters({'from_date': from_date, 'to_date': to_date}) 
+            }
+        });
+    },
+    'Kalenderwoche zum filtern angeben',
+    'Filtern'
     )
 }
