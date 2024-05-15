@@ -335,7 +335,7 @@ def order_ews(object):
     # find probe items
     items = []
     for p in obj.ews_specification:
-        item = find_item_for_ews(p.ews_depth, p.ews_diameter, p.ews_wall_strength, p.ews_material)
+        item = find_item_for_ews(p.ews_depth, p.ews_diameter, p.ews_wall_strength, material=p.ews_material, probe_type=p.probe_type)
         if item:
             items.append({
                 'item_code': item,
@@ -392,10 +392,13 @@ def get_default_supplier(item):
     else:
         return None
 
-def find_item_for_ews(depth, diameter, wall_strength, material=None):
+def find_item_for_ews(depth, diameter, wall_strength, material=None, probe_type=None):
     conditions = ""
     if material:
         conditions = """AND (`tabItem`.`raw_material` LIKE "%{material}%" OR `tabItem`.`raw_material` IS NULL) """.format(material=material)
+    if probe_type:
+        conditions = """AND (`tabItem`.`probe_type` LIKE "%{probe_type}%" OR `tabItem`.`probe_type` IS NULL) """.format(probe_type=probe_type)
+    
     sql_query = """SELECT
             `tabItem`.`item_code`
         FROM `tabItem`
@@ -405,9 +408,14 @@ def find_item_for_ews(depth, diameter, wall_strength, material=None):
             AND `tabItem`.`wall_strength` >= {wall_strength}
             AND `tabItem`.`length` >= {depth}
             {conditions}
-        ORDER BY `tabItem Default`.`default_supplier`, `tabItem`.`wall_strength` ASC, `tabItem`.`length` ASC
+        ORDER BY 
+            `tabItem`.`probe_type` DESC,        /* first find suitable probe type */
+            `tabItem`.`raw_material` DESC,      /* ..or suitable material */
+            `tabItem`.`wall_strength` ASC,      /* closest wall strength */
+            `tabItem`.`length` ASC,             /* then the shortest possible length */
+            `tabItem Default`.`default_supplier` ASC        /* and ideally from the preferred supplier (lowest supplier ID) */
         LIMIT 1;""".format(depth=depth, diameter=diameter, wall_strength=wall_strength, conditions=conditions)
-        
+    
     hits = frappe.db.sql(sql_query, as_dict=True)
     if len(hits) > 0:
         return hits[0]['item_code']
