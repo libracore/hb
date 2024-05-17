@@ -67,9 +67,14 @@ frappe.object_overview = {
         
         // prepare various icons
         var green_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-green.png'});
-        var red_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/BG_blau_64x64.png'});
+        var red_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/BG_blau_48x48.png'});
         var grey_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-grey.png'});
         var blue_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon.png'});
+        var orange_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-orange.png'});
+        var grey_icon_active = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-grey_active.png'});
+        var green_icon_active = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-green_active.png'});
+        var orange_icon_active = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-orange_active.png'});
+        var blue_icon_active = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon_active.png'});
         
         // create map     
         document.getElementById('map-container').innerHTML = "<div id='map' style='width: 100%; height: 800px;'></div>";
@@ -116,10 +121,18 @@ frappe.object_overview = {
                     for (var i = 0; i < geo.environment.length; i++) {
                         
                         // set icon color
-                        var icon = grey_icon;
+                        var icon = grey_icon;       // grey for any object
                         if (geo.environment[i].sales_order) {
-                            icon = green_icon;
+                            // has a sales order: can be planned, active or completed
+                            if (geo.environment[i].completed === 1) {
+                                icon = green_icon;
+                            } else if (geo.environment[i].active === 1) {
+                                icon = orange_icon_active;
+                            } else {
+                                icon = orange_icon;
+                            }
                         } else if (geo.environment[i].rate) {
+                            // has a quotation
                             icon = blue_icon;
                         }
                         L.marker([geo.environment[i].gps_lat, geo.environment[i].gps_long],

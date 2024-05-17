@@ -301,6 +301,10 @@ def get_object_geographic_environment(object_name=None, radius=0.1, address=None
             `tabObject`.`gps_long` AS `gps_long`,
             `tabObject`.`qtn_meter_rate` AS `rate`,
             `tabProject`.`sales_order` AS `sales_order`,
+            `tabProject`.`expected_start_date` AS `start_date`,
+            `tabProject`.`expected_end_date` AS `end_date`,
+            IF (`tabProject`.`expected_start_date` <= CURDATE() AND `tabProject`.`expected_end_date` >= CURDATE(), 1, 0) AS `active`,
+            IF (`tabProject`.`expected_end_date` < CURDATE(), 1, 0) AS `completed`,
             `tabProject`.`cloud_url` AS `cloud_url`,
             (SELECT `tabLayer Directory`.`name`
              FROM `tabLayer Directory`
