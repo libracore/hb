@@ -18,7 +18,7 @@ def get_address_template(pincode=None):
     address_types = []
     for at in settings.address_template:
         append_activity = False
-        if pincode:
+        if cint(at.restricted_by_pincode) and pincode:
             activity = frappe.get_doc("Checklist Activity", at.address_type)
             if activity.pincodes and len(activity.pincodes) > 0:
                 # only insert this if it is in range
