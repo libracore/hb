@@ -43,3 +43,18 @@ class LayerDirectory(Document):
             'drilling_team': drilling_team,
             'ews_details': ews_details
         }
+
+    def before_save(self):
+        # check if this is an arteser, and if so, mark object
+        is_arteser = False
+        if self.layers:
+            for l in self.layers:
+                if "Arteser" in (l.observations or ""):
+                    is_arteser = True
+                    break
+                    
+        if is_arteser and self.object:
+            frappe.db.sql("""UPDATE `tabObject` SET `arteser` = 1 WHERE `name` = "{o}";""".format(o=self.object))
+            frappe.db.commit()
+            
+        return

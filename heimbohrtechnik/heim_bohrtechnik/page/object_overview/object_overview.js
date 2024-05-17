@@ -108,6 +108,7 @@ frappe.object_overview = {
         var green_icon_active = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-green_active.png'});
         var orange_icon_active = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-orange_active.png'});
         var blue_icon_active = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon_active.png'});
+        var green_icon_warning = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-green_warning.png'});
         
         // create map     
         document.getElementById('map-container').innerHTML = "<div id='map' style='width: 100%; height: 800px;'></div>";
@@ -162,7 +163,11 @@ frappe.object_overview = {
                         if (geo.environment[i].sales_order) {
                             // has a sales order: can be planned, active or completed
                             if (geo.environment[i].completed === 1) {
-                                icon = green_icon;
+                                if (geo.environment[i].arteser === 1) {
+                                    icon = green_icon_warning;
+                                } else {
+                                    icon = green_icon;
+                                }
                             } else if (geo.environment[i].active === 1) {
                                 icon = orange_icon_active;
                             } else {
@@ -179,7 +184,10 @@ frappe.object_overview = {
                                 sales_order=geo.environment[i].sales_order,
                                 cloud_url=geo.environment[i].cloud_url,
                                 sv=geo.environment[i].sv,
-                                quotation=geo.environment[i].quotation));
+                                quotation=geo.environment[i].quotation,
+                                to_depth=geo.environment[i].to_depth,
+                                drilling_method=geo.environment[i].drilling_method,
+                                arteser=geo.environment[i].arteser));
 
                     }
                 }
@@ -215,7 +223,8 @@ frappe.object_overview = {
     }
 }
 
-function get_popup_str(object_name, rate=null, sales_order=null, cloud_url=null, sv=null, quotation=null) {
+function get_popup_str(object_name, rate=null, sales_order=null, cloud_url=null, sv=null, quotation=null, 
+    to_depth=null, drilling_method=null, arteser=null) {
     html = "<b><a href=\"/desk#Form/Object/" 
         + (object_name || "HB-AG") + "\" target=\"_blank\">" 
         + (object_name || "HB-AG") + "</a></b>";
@@ -238,6 +247,15 @@ function get_popup_str(object_name, rate=null, sales_order=null, cloud_url=null,
     if (sv) {
         html += "&nbsp;&middot;&nbsp;&nbsp;<a href=\"/desk#Form/Layer Directory/" 
         + sv + "\" target=\"_blank\">SV</a>";
+    }
+    if (to_depth) {
+        html += "<br>Verrohrung bis " + to_depth + " m";
+    }
+    if (drilling_method) {
+        html += "<br>" + drilling_method;
+    }
+    if (arteser === 1) {
+        html += "<br><b>Vorsicht Arteser!</b>";
     }
     return html;
 }

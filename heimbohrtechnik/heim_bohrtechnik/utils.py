@@ -309,27 +309,28 @@ def get_object_geographic_environment(object_name=None, radius=0.1, address=None
             `tabObject`.`gps_lat` AS `gps_lat`, 
             `tabObject`.`gps_long` AS `gps_long`,
             `tabObject`.`qtn_meter_rate` AS `rate`,
+            `tabObject`.`drilling_method` AS `drilling_method`,
+            `tabObject`.`arteser` AS `arteser`,
             `tabProject`.`sales_order` AS `sales_order`,
             `tabProject`.`expected_start_date` AS `start_date`,
             `tabProject`.`expected_end_date` AS `end_date`,
             IF (`tabProject`.`expected_start_date` <= CURDATE() AND `tabProject`.`expected_end_date` >= CURDATE(), 1, 0) AS `active`,
             IF (`tabProject`.`expected_end_date` < CURDATE(), 1, 0) AS `completed`,
             `tabProject`.`cloud_url` AS `cloud_url`,
-            (SELECT `tabLayer Directory`.`name`
-             FROM `tabLayer Directory`
-             WHERE `tabLayer Directory`.`object` = `tabObject`.`name`
-             ORDER BY `tabLayer Directory`.`object` DESC
-             LIMIT 1) AS `sv`
+            `tabLayer Directory`.`name` AS `sv`,
+            `tabLayer Directory`.`to_depth` AS `to_depth`
             {quotations}
         FROM `tabObject`
         LEFT JOIN `tabProject` ON `tabProject`.`object` = `tabObject`.`name`
+        LEFT JOIN `tabLayer Directory` ON `tabLayer Directory`.`object` = `tabObject`.`name`
         WHERE 
             `tabObject`.`gps_lat` >= ({gps_lat} - {lat_offset})
             AND `tabObject`.`gps_lat` <= ({gps_lat} + {lat_offset})
             AND `tabObject`.`gps_long` >= ({gps_long} - {long_offset})
             AND `tabObject`.`gps_long` <= ({gps_long} + {long_offset})
             AND `tabObject`.`name` != "{reference}"
-            {projects_filter};
+            {projects_filter}
+        GROUP BY `tabObject`.`name`;
     """.format(reference=object_name, gps_lat=data['gps_lat'], lat_offset=float(radius),
         gps_long=data['gps_long'], long_offset=(2 * float(radius)),
         quotations=qtn_column, projects_filter=projects_filter), as_dict=True)

@@ -748,3 +748,24 @@ def update_addresses():
 
     print("Done")
     return
+
+"""
+This function will find artesers and mark the objects correspondingly
+
+Run as
+ $ bench execute heimbohrtechnik.heim_bohrtechnik.migration.find_arteser
+"""
+def find_arteser():
+    arteser_objects = frappe.db.sql("""
+        SELECT `tabLayer Directory`.`name`, `tabLayer Directory`.`object`
+        FROM `tabLayer Directory Layer`
+        LEFT JOIN `tabLayer Directory` ON `tabLayer Directory`.`name` = `tabLayer Directory Layer`.`parent`
+        WHERE `observations` LIKE "%Arteser%"
+        GROUP BY `tabLayer Directory`.`object`;
+        """, as_dict=True)
+    
+    for o in arteser_objects:
+        frappe.db.sql("""UPDATE `tabObject` SET `arteser` = 1 WHERE `name` = "{o}";""".format(o=o['object']))
+        frappe.db.commit()
+        
+    return
