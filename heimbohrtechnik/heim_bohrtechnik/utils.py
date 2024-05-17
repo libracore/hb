@@ -255,7 +255,8 @@ def cancel_mudex_invoice(reference):
     return None
 
 @frappe.whitelist()
-def get_object_geographic_environment(object_name=None, radius=0.1, address=None, quotations=False, only_projects=False):
+def get_object_geographic_environment(object_name=None, radius=0.1, address=None, quotations=False, only_projects=False, \
+    hide_object=False, hide_quotation=False, hide_order=False, hide_completed=False):
     data = None
     if address:
         # find gps from address
@@ -293,7 +294,15 @@ def get_object_geographic_environment(object_name=None, radius=0.1, address=None
              LIMIT 1) AS `quotation`"""
     projects_filter = ""
     if cint(only_projects):
-        projects_filter = " AND `tabProject`.`name` IS NOT NULL "
+        projects_filter += " AND `tabProject`.`name` IS NOT NULL "
+    #if cint(hide_object):
+    #    projects_filter += " AND `tabObject`.`qtn_meter_rate` IS NOT NULL "
+    #if cint(hide_quotation): 
+    #    projects_filter += " AND `tabProject`.`sales_order` IS NOT NULL "
+    #if cint(hide_order): 
+    #    projects_filter += " AND (`tabProject`.`sales_order` IS NULL OR `completed` = 1) "
+    #if cint(hide_completed):
+    #    projects_filter += " AND (`tabProject`.`expected_end_date` > CURDATE() OR `tabProject`.`expected_end_date` IS NULL) "
     data['environment'] = frappe.db.sql("""
         SELECT 
             `tabObject`.`name` AS `object`, 
@@ -325,6 +334,27 @@ def get_object_geographic_environment(object_name=None, radius=0.1, address=None
         gps_long=data['gps_long'], long_offset=(2 * float(radius)),
         quotations=qtn_column, projects_filter=projects_filter), as_dict=True)
     
+    # apply hide filters
+    if cint(hide_object) or cint(hide_quotation) or cint(hide_order) or cint(hide_completed):
+        filtered_data = []
+        for d in data['environment']:
+            if cint(hide_object) and flt(d['rate']) == 0 and not d['sales_order']:
+                # hide_object selected and has no rate nor sales order
+                continue
+            if cint(hide_quotation) and flt(d['rate']) != 0 and not d['sales_order']:
+                # hide_quotation selected and this has a quotation but no sales order
+                continue
+            if cint(hide_order) and not cint(d['completed']) and d['sales_order']:
+                # hide_order selected and not completed but has an order
+                continue
+            if cint(hide_completed) and cint(d['completed']):
+                # hide_completed selected and completed
+                continue
+            # no condition applied: use this
+            filtered_data.append(d)
+            
+        data['environment'] = filtered_data
+
     return data
 
 """
@@ -399,9 +429,9 @@ def get_default_supplier(item):
 def find_item_for_ews(depth, diameter, wall_strength, material=None, probe_type=None):
     conditions = ""
     if material:
-        conditions = """AND (`tabItem`.`raw_material` LIKE "%{material}%" OR `tabItem`.`raw_material` IS NULL) """.format(material=material)
+        conditions += """AND (`tabItem`.`raw_material` = "{material}" OR `tabItem`.`raw_material` IS NULL) """.format(material=material)
     if probe_type:
-        conditions = """AND (`tabItem`.`probe_type` LIKE "%{probe_type}%" OR `tabItem`.`probe_type` IS NULL) """.format(probe_type=probe_type)
+        conditions += """AND (`tabItem`.`probe_type` = "{probe_type}" OR `tabItem`.`probe_type` IS NULL) """.format(probe_type=probe_type)
     
     sql_query = """SELECT
             `tabItem`.`item_code`

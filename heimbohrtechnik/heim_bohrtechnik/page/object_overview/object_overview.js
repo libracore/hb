@@ -18,9 +18,42 @@ frappe.object_overview = {
         var me = frappe.object_overview;
         me.page = page;
         me.body = $('<div></div>').appendTo(me.page.main);
+        
+        // prepare filters
+        locals.hide_object = 0;
+        locals.hide_quotation = 0;
+        locals.hide_order = 0;
+        locals.hide_completed = 0;
+        
         var data = "";
         $(frappe.render_template('object_overview', data)).appendTo(me.body);
         
+        // attach legend click handler
+        highlight_legend_item("legend_object", "900");
+        $("#hide_object").on('click', function() { 
+            locals.hide_object = 1 - locals.hide_object;        // toggle 1 and 0
+            highlight_legend_item("legend_object", locals.hide_object ? "500" : "900");
+            frappe.object_overview.render_map();
+        });
+        highlight_legend_item("legend_quotation", "900");
+        $("#hide_quotation").on('click', function() { 
+            locals.hide_quotation = 1 - locals.hide_quotation;        // toggle 1 and 0
+            highlight_legend_item("legend_quotation", locals.hide_quotation ? "500" : "900");
+            frappe.object_overview.render_map();
+        });
+        highlight_legend_item("legend_order", "900");
+        $("#hide_order").on('click', function() { 
+            locals.hide_order = 1 - locals.hide_order;        // toggle 1 and 0
+            highlight_legend_item("legend_order", locals.hide_order ? "500" : "900");
+            frappe.object_overview.render_map();
+        });
+        highlight_legend_item("legend_completed", "900");
+        $("#hide_completed").on('click', function() { 
+            locals.hide_completed = 1 - locals.hide_completed;        // toggle 1 and 0
+            highlight_legend_item("legend_completed", locals.hide_completed ? "500" : "900");
+            frappe.object_overview.render_map();
+        });
+
         // load leaflet
         var cssId = 'leafletCss'; 
         if (!document.getElementById(cssId))
@@ -98,7 +131,11 @@ frappe.object_overview = {
                 'radius': radius,
                 'address': address,
                 'quotations': show_quotations,
-                'only_projects': only_projects
+                'only_projects': only_projects,
+                'hide_object': locals.hide_object,
+                'hide_quotation': locals.hide_quotation,
+                'hide_order': locals.hide_order,
+                'hide_completed': locals.hide_completed
             },
             'callback': function(r) {
                 if (r.message) {
@@ -231,5 +268,12 @@ function find_gps(address) {
                 }
             }
         });
+    }
+}
+
+function highlight_legend_item(class_name, weight) {
+    var legends = document.getElementsByClassName(class_name);
+    for (var i = 0; i < legends.length; i++) {
+        legends[i].style.fontWeight = weight;
     }
 }
