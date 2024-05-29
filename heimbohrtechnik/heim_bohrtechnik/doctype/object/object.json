@@ -61,6 +61,7 @@
   "staged_cementation",
   "staged_cementation_depth",
   "elec_filling_meas",
+  "arteser",
   "column_geology",
   "assessment",
   "restrictions",
@@ -431,6 +432,13 @@
    "fieldname": "elec_filling_meas",
    "fieldtype": "Check",
    "label": "Electronic Filling Measurement"
+  },
+  {
+   "default": "0",
+   "fieldname": "arteser",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Arteser"
   }
  ],
  "modified": "2024-05-29 20:54:02.949228",

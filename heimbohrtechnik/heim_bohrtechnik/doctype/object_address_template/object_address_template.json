@@ -5,7 +5,8 @@
  "engine": "InnoDB",
  "field_order": [
   "address_type",
-  "dt"
+  "dt",
+  "restricted_by_pincode"
  ],
  "fields": [
   {
@@ -23,10 +24,17 @@
    "hidden": 1,
    "label": "Dt",
    "options": "DocType"
+  },
+  {
+   "default": "0",
+   "fieldname": "restricted_by_pincode",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Restricted by Pincode"
   }
  ],
  "istable": 1,
- "modified": "2021-05-10 21:07:51.409737",
+ "modified": "2024-05-17 10:46:29.036652",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object Address Template",

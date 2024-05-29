@@ -124,19 +124,21 @@ function add_discount_amount(text, amount) {
 }
 
 function get_tax_id(frm) {
-    frappe.call({
-        "method": "frappe.client.get",
-        "args": {
-            "doctype": "Customer",
-            "name": frm.doc.party_name
-        },
-        "async": false,
-        "callback": function(response) {
-            var customer = response.message;
-            cur_frm.set_value("tax_id", customer.tax_id);
-            if (customer.disabled === 1) {
-                frappe.msgprint( __("Vorsicht, der Kunde {0} ist deaktiviert").replace("{0}", customer.customer_name), __("Validation") );
+    if (frm.doc.party_name) {
+        frappe.call({
+            "method": "frappe.client.get",
+            "args": {
+                "doctype": "Customer",
+                "name": frm.doc.party_name
+            },
+            "async": false,
+            "callback": function(response) {
+                var customer = response.message;
+                cur_frm.set_value("tax_id", customer.tax_id);
+                if (customer.disabled === 1) {
+                    frappe.msgprint( __("Vorsicht, der Kunde {0} ist deaktiviert").replace("{0}", customer.customer_name), __("Validation") );
+                }
             }
-        }
-    });
+        });
+    }
 }

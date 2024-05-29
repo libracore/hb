@@ -18,9 +18,42 @@ frappe.object_overview = {
         var me = frappe.object_overview;
         me.page = page;
         me.body = $('<div></div>').appendTo(me.page.main);
+        
+        // prepare filters
+        locals.hide_object = 0;
+        locals.hide_quotation = 0;
+        locals.hide_order = 0;
+        locals.hide_completed = 0;
+        
         var data = "";
         $(frappe.render_template('object_overview', data)).appendTo(me.body);
         
+        // attach legend click handler
+        highlight_legend_item("legend_object", "900");
+        $("#hide_object").on('click', function() { 
+            locals.hide_object = 1 - locals.hide_object;        // toggle 1 and 0
+            highlight_legend_item("legend_object", locals.hide_object ? "500" : "900");
+            frappe.object_overview.render_map();
+        });
+        highlight_legend_item("legend_quotation", "900");
+        $("#hide_quotation").on('click', function() { 
+            locals.hide_quotation = 1 - locals.hide_quotation;        // toggle 1 and 0
+            highlight_legend_item("legend_quotation", locals.hide_quotation ? "500" : "900");
+            frappe.object_overview.render_map();
+        });
+        highlight_legend_item("legend_order", "900");
+        $("#hide_order").on('click', function() { 
+            locals.hide_order = 1 - locals.hide_order;        // toggle 1 and 0
+            highlight_legend_item("legend_order", locals.hide_order ? "500" : "900");
+            frappe.object_overview.render_map();
+        });
+        highlight_legend_item("legend_completed", "900");
+        $("#hide_completed").on('click', function() { 
+            locals.hide_completed = 1 - locals.hide_completed;        // toggle 1 and 0
+            highlight_legend_item("legend_completed", locals.hide_completed ? "500" : "900");
+            frappe.object_overview.render_map();
+        });
+
         // load leaflet
         var cssId = 'leafletCss'; 
         if (!document.getElementById(cssId))
@@ -67,9 +100,15 @@ frappe.object_overview = {
         
         // prepare various icons
         var green_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-green.png'});
-        var red_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/BG_blau_64x64.png'});
+        var red_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/BG_blau_48x48.png'});
         var grey_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-grey.png'});
         var blue_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon.png'});
+        var orange_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-orange.png'});
+        var grey_icon_active = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-grey_active.png'});
+        var green_icon_active = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-green_active.png'});
+        var orange_icon_active = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-orange_active.png'});
+        var blue_icon_active = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon_active.png'});
+        var green_icon_warning = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-green_warning.png'});
         
         // create map     
         document.getElementById('map-container').innerHTML = "<div id='map' style='width: 100%; height: 800px;'></div>";
@@ -93,7 +132,11 @@ frappe.object_overview = {
                 'radius': radius,
                 'address': address,
                 'quotations': show_quotations,
-                'only_projects': only_projects
+                'only_projects': only_projects,
+                'hide_object': locals.hide_object,
+                'hide_quotation': locals.hide_quotation,
+                'hide_order': locals.hide_order,
+                'hide_completed': locals.hide_completed
             },
             'callback': function(r) {
                 if (r.message) {
@@ -116,10 +159,22 @@ frappe.object_overview = {
                     for (var i = 0; i < geo.environment.length; i++) {
                         
                         // set icon color
-                        var icon = grey_icon;
+                        var icon = grey_icon;       // grey for any object
                         if (geo.environment[i].sales_order) {
-                            icon = green_icon;
+                            // has a sales order: can be planned, active or completed
+                            if (geo.environment[i].completed === 1) {
+                                if (geo.environment[i].arteser === 1) {
+                                    icon = green_icon_warning;
+                                } else {
+                                    icon = green_icon;
+                                }
+                            } else if (geo.environment[i].active === 1) {
+                                icon = orange_icon_active;
+                            } else {
+                                icon = orange_icon;
+                            }
                         } else if (geo.environment[i].rate) {
+                            // has a quotation
                             icon = blue_icon;
                         }
                         L.marker([geo.environment[i].gps_lat, geo.environment[i].gps_long],
@@ -129,7 +184,10 @@ frappe.object_overview = {
                                 sales_order=geo.environment[i].sales_order,
                                 cloud_url=geo.environment[i].cloud_url,
                                 sv=geo.environment[i].sv,
-                                quotation=geo.environment[i].quotation));
+                                quotation=geo.environment[i].quotation,
+                                to_depth=geo.environment[i].to_depth,
+                                drilling_method=geo.environment[i].drilling_method,
+                                arteser=geo.environment[i].arteser));
 
                     }
                 }
@@ -165,7 +223,8 @@ frappe.object_overview = {
     }
 }
 
-function get_popup_str(object_name, rate=null, sales_order=null, cloud_url=null, sv=null, quotation=null) {
+function get_popup_str(object_name, rate=null, sales_order=null, cloud_url=null, sv=null, quotation=null, 
+    to_depth=null, drilling_method=null, arteser=null) {
     html = "<b><a href=\"/desk#Form/Object/" 
         + (object_name || "HB-AG") + "\" target=\"_blank\">" 
         + (object_name || "HB-AG") + "</a></b>";
@@ -188,6 +247,15 @@ function get_popup_str(object_name, rate=null, sales_order=null, cloud_url=null,
     if (sv) {
         html += "&nbsp;&middot;&nbsp;&nbsp;<a href=\"/desk#Form/Layer Directory/" 
         + sv + "\" target=\"_blank\">SV</a>";
+    }
+    if (to_depth) {
+        html += "<br>Verrohrung bis " + to_depth + " m";
+    }
+    if (drilling_method) {
+        html += "<br>" + drilling_method;
+    }
+    if (arteser === 1) {
+        html += "<br><b>Vorsicht Arteser!</b>";
     }
     return html;
 }
@@ -218,5 +286,12 @@ function find_gps(address) {
                 }
             }
         });
+    }
+}
+
+function highlight_legend_item(class_name, weight) {
+    var legends = document.getElementsByClassName(class_name);
+    for (var i = 0; i < legends.length; i++) {
+        legends[i].style.fontWeight = weight;
     }
 }
