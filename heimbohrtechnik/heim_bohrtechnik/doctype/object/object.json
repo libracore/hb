@@ -60,6 +60,7 @@
   "progress_measurement",
   "staged_cementation",
   "staged_cementation_depth",
+  "elec_filling_meas",
   "column_geology",
   "assessment",
   "restrictions",
@@ -424,9 +425,15 @@
    "hidden": 1,
    "label": "Old Trough Supplier",
    "options": "Supplier"
+  },
+  {
+   "default": "0",
+   "fieldname": "elec_filling_meas",
+   "fieldtype": "Check",
+   "label": "Electronic Filling Measurement"
   }
  ],
- "modified": "2024-03-20 09:54:59.012568",
+ "modified": "2024-05-29 20:54:02.949228",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
