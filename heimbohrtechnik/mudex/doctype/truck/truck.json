@@ -9,6 +9,7 @@
   "title",
   "registration_number",
   "default_color",
+  "drilling_team",
   "column_main",
   "truck_owner",
   "category",
@@ -99,9 +100,15 @@
    "fieldtype": "Select",
    "label": "Category (Planning)",
    "options": "\nMudex Calendar\nDiesel"
+  },
+  {
+   "fieldname": "drilling_team",
+   "fieldtype": "Link",
+   "label": "Drilling Team",
+   "options": "Drilling Team"
   }
  ],
- "modified": "2023-08-22 13:52:30.771060",
+ "modified": "2024-05-29 20:59:50.049639",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "Truck",

@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2022, libracore AG and contributors
+# Copyright (c) 2021-2024, libracore AG and contributors
 # For license information, please see license.txt
 
 from frappe import _
@@ -10,6 +10,10 @@ def get_data():
          {
             'label': _("Projects"),
             'items': ['Project']
+         },
+         {
+            'label': _("Equipment"),
+            'items': ['Truck']
          }
       ]
    }
