@@ -97,13 +97,27 @@ def get_descriptions():
 @frappe.whitelist(allow_guest=True)
 def get_deputy_list():
     deputys = frappe.db.sql("""
-        SELECT `name`
-        FROM `tabDrilling Team`
-        WHERE `drilling_team_type` = 'Bohrteam'""", as_dict=True)
+        SELECT 
+            `name`
+        FROM 
+            `tabDrilling Team`
+        WHERE 
+            `drilling_team_type` = 'Bohrteam'""", as_dict=True)
+    
+    employees = frappe.db.sql("""
+        SELECT 
+            `employee_name`
+        FROM 
+            `tabEmployee`
+        WHERE 
+            `is_drilling_team_deputy` = 1""", as_dict=True)
     
     deputy_list = []
     for deputy in deputys:
         deputy_list.append(deputy.name)
+    
+    for employee in employees:
+        deputy_list.append("M - " + employee.employee_name)
     
     return deputy_list
 

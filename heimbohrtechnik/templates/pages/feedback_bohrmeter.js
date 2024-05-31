@@ -6,6 +6,7 @@ $(document).ready(function(){
 function make() {
     // get options for deputys
     get_deputys();
+    document.getElementById('date').valueAsDate = new Date();
 }
 
 function run() {
