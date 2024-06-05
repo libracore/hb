@@ -170,7 +170,7 @@ def insurance_application(project):
                     'name': a.simple_name,
                     'street': address_line[0],
                     'plz': plz_city[0:4],
-                    'city': plz_city[6:],
+                    'city': plz_city[5:],
                     'country': 'CH'
                 }
             else:
@@ -222,8 +222,8 @@ def insurance_application(project):
         project_no=project_doc.name[2:8],
         object_name=project_doc.object_name,
         object_street=project_doc.object_street,
-        plz=project_doc.object_street[0:4],
-        city=project_doc.object_street[6:],
+        plz=project_doc.object_location[0:4],
+        city=project_doc.object_location[5:],
         owner_name=owner.get("name"),
         owner_street=owner.get("street"),
         owner_plz=owner.get("plz"),
