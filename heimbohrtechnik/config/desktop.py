@@ -31,5 +31,12 @@ def get_data():
             "icon": "icon hb-ih-blue",
             "type": "module",
             "label": _("Immo Heim")
+        },
+        {
+            "module_name": "HPT Solutions",
+            "color": "#ffa500",
+            "icon": "icon hb-ih-blue",
+            "type": "module",
+            "label": _("HPT Solutions")
         }
     ]

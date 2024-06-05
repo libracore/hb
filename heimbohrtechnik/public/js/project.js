@@ -98,6 +98,9 @@ frappe.ui.form.on('Project', {
                     }
                 )
             }, __("More") );
+            frm.add_custom_button(__("Insurance application"), function() {
+                insurance_application(frm);
+            }, __("More") );
             // create full project file
             frm.add_custom_button(__("Dossier erstellen"), function() {
                 create_full_file(frm);
@@ -317,4 +320,30 @@ function get_drilling_meters_per_day(frm) {
             }
         });
     }
+}
+
+function insurance_application(frm) {
+    if (cur_frm.is_dirty()) {
+        cur_frm.save().then(function() {
+            get_insurance_application(frm);
+        });
+    } else {
+        get_insurance_application(frm);
+    }
+}
+
+function get_insurance_application(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.project.insurance_application',
+        'args': {
+            'project': frm.doc.name
+        },
+        'callback': function(response) {
+            navigator.clipboard.writeText(response.message).then(function() {
+                frappe.show_alert( __("Daten in der Zwischenablage, bitte ins Versicherungstool einfügen") );
+              }, function() {
+                 frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
+            });
+        }
+    });
 }

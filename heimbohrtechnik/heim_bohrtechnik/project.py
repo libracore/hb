@@ -6,6 +6,7 @@ from frappe import _
 from frappe.utils import get_url_to_form, cint
 from heimbohrtechnik.heim_bohrtechnik.utils import clone_attachments
 from erpnextswiss.scripts.crm_tools import get_primary_supplier_address, get_primary_supplier_contact
+from datetime import datetime
 
 own_trough_supplier = "L-04052"         # when switching to an internal trough team, use this internal trough
 mud_from_trough = "L-03749"             # if this supplier is set for the mud, do not override trough
@@ -147,3 +148,93 @@ def mark_trough_as_ordered(project):
     p_doc.save()
     frappe.db.commit()
     return
+
+@frappe.whitelist()
+def insurance_application(project):
+    # load base data
+    project_doc = frappe.get_doc("Project", project)
+    if not project_doc.object:
+        frappe.throw( _("Objekt fehlt in diesem Projekt") )
+    object_doc = frappe.get_doc("Object", project_doc.object)
+    if not project_doc.sales_order:
+        frappe.throw( _("Kundenauftrag fehlt in diesem Projekt") )
+    sales_order_doc = frappe.get_doc("Sales Order", project_doc.sales_order)
+    
+    # find owner data
+    for a in object_doc.addresses:
+        if a.address_type == "Eigentümer":
+            if a.is_simple:
+                address_line = (a.simple_address or "").split(",")
+                plz_city = address_line[1].strip() if len(address_line) > 1 else ""
+                owner = {
+                    'name': a.simple_name,
+                    'street': address_line[0],
+                    'plz': plz_city[0:4],
+                    'city': plz_city[6:],
+                    'country': 'CH'
+                }
+            else:
+                if a.address:
+                    address = frappe.get_doc("Address", a.address)
+                    owner = {
+                        'name': a.party_name,
+                        'street': address.address_line1,
+                        'plz': address.pincode,
+                        'city': address.city,
+                        'country': frappe.get_valu("Country", address.country, "code")
+                    }
+                else:
+                    owner = {
+                        'name': "",
+                        'street': "",
+                        'plz': "",
+                        'city': "",
+                        'country': 'CH'
+                    }
+    
+    # determine insurance
+    insurance = {
+        'base_package': 1,
+        'cancelation_included': 0,
+        'owner_insurance': 0
+    }
+    for i in sales_order_doc.items:
+        if i.item_code == "1.01.04.03":
+            insurance['owner_insurance'] = 1
+        if "Bohrabbruch-Versicherung" in i.item_name:
+            insurance['cancelation_included'] = 1
+    
+    # determine probes
+    probes = {
+        'below_250': 0,
+        'above_250': 0,
+        'count': 0
+    }
+    for p in object_doc.ews_specification:
+        if p.ews_depth >= 250:
+            probes['above_250'] += p.ews_count
+        else:
+            probes['below_250'] += p.ews_count
+        probes['count'] += p.ews_count
+    
+    insurance_form_str = "\t{date}\taktiv\t{project_no}\t{object_name}\t{object_street}\t{plz}\t{city}\t{owner_name}\t{owner_street}\t{owner_plz}\t{owner_city}\t{owner_country}\t{start_date}\t{base_package}\t{drilling_count}\t{cancelation_included}\t{owner_insurance}\t{probes_below_250}\t{probes_above_250}".format(
+        date=datetime.now().strftime("%d.%m.%Y"),
+        project_no=project_doc.name[2:8],
+        object_name=project_doc.object_name,
+        object_street=project_doc.object_street,
+        plz=project_doc.object_street[0:4],
+        city=project_doc.object_street[6:],
+        owner_name=owner.get("name"),
+        owner_street=owner.get("street"),
+        owner_plz=owner.get("plz"),
+        owner_city=owner.get("city"),
+        owner_country=owner.get("country"),
+        start_date=project_doc.expected_start_date.strftime("%d.%m.%Y"),
+        base_package="ja/oui" if insurance.get('base_package') else "nein/non",
+        drilling_count=probes.get('count'),
+        cancelation_included="ja/oui" if insurance.get('cancelation_included') else "nein/non",
+        owner_insurance="ja/oui" if insurance.get('owner_insurance') else "nein/non",
+        probes_below_250=probes.get('below_250'),
+        probes_above_250=probes.get('above_250')
+    )
+    return insurance_form_str
