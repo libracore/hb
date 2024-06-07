@@ -181,7 +181,7 @@ def insurance_application(project):
                         'street': address.address_line1,
                         'plz': address.pincode,
                         'city': address.city,
-                        'country': frappe.get_valu("Country", address.country, "code")
+                        'country': frappe.get_value("Country", address.country, "code")
                     }
                 else:
                     owner = {
