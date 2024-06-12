@@ -53,7 +53,8 @@ function create_excel() {
                 'callback': function(response) {
                     navigator.clipboard.writeText(response.message).then(function() {
                         frappe.show_alert( __("Daten in der Zwischenablage, bitte ins Versicherungstool einfügen") );
-                      }, function() {
+                        frappe.db.set_value("Project", project, "insurance_declared", 1);
+                    }, function() {
                          frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
                     });
                 }
