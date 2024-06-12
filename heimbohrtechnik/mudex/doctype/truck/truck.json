@@ -16,6 +16,7 @@
   "column_main2",
   "customer",
   "customer_name",
+  "user",
   "section_weight",
   "net_weight",
   "column_weight",
@@ -106,9 +107,15 @@
    "fieldtype": "Link",
    "label": "Drilling Team",
    "options": "Drilling Team"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
   }
  ],
- "modified": "2024-05-29 20:59:50.049639",
+ "modified": "2024-06-12 17:03:59.050460",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "Truck",

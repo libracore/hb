@@ -13,7 +13,7 @@ def get_data():
          },
          {
             'label': _("Maintenance"),
-            'items': ['Maintenance Report']
+            'items': ['Gas Receipt', 'Maintenance Report']
          }
       ]
    }
