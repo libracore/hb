@@ -563,6 +563,24 @@ def get_data():
             ]
         },
         {
+            "label": _("Maintenance"),
+            "icon": "fa fa-money",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "Maintenance Report",
+                   "label": _("Maintenance Report"),
+                   "description": _("Maintenance Report")
+                },
+                {
+                    "type": "report",
+                    "name": "Maintenance Matrix",
+                    "doctype": "Maintenance Report",
+                    "is_query_report": True
+                }
+            ]
+        },
+        {
             "label": _("Datenpflege"),
             "icon": "fa fa-money",
             "items": [
