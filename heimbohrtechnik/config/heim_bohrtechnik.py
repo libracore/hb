@@ -343,6 +343,13 @@ def get_data():
                    "name": "Expense Claim",
                    "label": _("Expense Claim"),
                    "description": _("Expense Claim")
+                },
+                {
+                    "type": "report",
+                    "name": "Tankliste",
+                    "doctype": "Gas Receipt",
+                    "label": _("Tankliste"),
+                    "is_query_report": True
                 }
             ]
         },
