@@ -1,4 +1,4 @@
-# Copyright (c) 2019-2023, libracore and contributors
+# Copyright (c) 2019-2024, libracore and contributors
 # For license information, please see license.txt
 
 import frappe
@@ -54,12 +54,17 @@ def before_save(self, method):
                 # if possible, revert to external trough supplier
                 supplier = frappe.get_value("Object", self.object, "old_trough_supplier")
                 if supplier:
-                    if self.checklist:
-                        for c in self.checklist:
-                            if c.activity == "Mulde":
-                                c.supplier = supplier
+                    if supplier == own_trough_supplier:     # prevent using own trough if this team has none
+                        supplier = None
+                if self.checklist:
+                    for c in self.checklist:
+                        if c.activity == "Mulde":
+                            c.supplier = supplier
+                            if supplier:
                                 c.supplier_name = frappe.get_value("Supplier", supplier, "supplier_name")
                                 update_object_address(self.object, "Mulde", c.supplier, c.supplier_name)
+                            else:
+                                c.supplier_name = None
     
     # bugfix: prevent 0 to null conversions
     if cint(self.actual_time) == 0:
