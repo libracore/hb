@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021, libracore and contributors
+# Copyright (c) 2021-2024, libracore and contributors
 # License: AGPL v3. See LICENCE
 
 from __future__ import unicode_literals
