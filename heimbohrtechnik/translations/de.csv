@@ -299,6 +299,7 @@ DocType: Quotation,Markup Positions,Zuschläge
 DocType: Quotation,Base for Markup and Discount,Basis für Zuschläge und Abschläge
 DocType: Quotation,Exclude from Markup and Discount,Bei Zu-/Abschlägen ausschliessen
 DocType: Quotation,Manual depth,Tiefe händisch eingeben (ohne autom. Berechnung)
+DocType: Quotation,Next Follow Up,Nächster Nachfass-Termin
 DocType: Truck Scale,Truck Scale,Lastwagenwaage
 DocType: Truck,Truck,Fahrzeug
 DocType: Truck,Registration Number,Fahrzeugkennzeichen

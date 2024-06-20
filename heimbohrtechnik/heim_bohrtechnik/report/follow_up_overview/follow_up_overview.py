@@ -23,6 +23,8 @@ follow_up_mail_content = """
     {{footer}}
 """
 
+FOLLOW_UP_DAYS = 21
+
 def execute(filters=None):
     columns = get_columns(filters)
     data = get_data(filters)
@@ -39,6 +41,7 @@ def get_columns(filters):
         {"label": _("Object name"), "fieldname": "object_name", "fieldtype": "Data", "width": 150},
         {"label": _("Angebot seit"), "fieldname": "days_since_quotation", "fieldtype": "Int", "width": 80},
         {"label": _("Nachgefasst seit"), "fieldname": "days_since_fup", "fieldtype": "Int", "width": 80},
+        {"label": _("Next Follow Up"), "fieldname": "next_follow_up", "fieldtype": "Date", "width": 80},
         {"label": _("Notes"), "fieldname": "notes", "fieldtype": "Data", "width": 300}
     ]
     return columns
@@ -65,6 +68,7 @@ def get_data(filters):
             `tabQuotation`.`base_net_total` AS `volume`,
             `tabQuotation`.`transaction_date` AS `transaction_date`,
             `tabQuotation`.`valid_till` AS `valid_until_date`,
+            `tabQuotation`.`next_follow_up` AS `next_follow_up`,
             (SELECT `tabFollow Up Note`.`name`
              FROM `tabFollow Up Note`
              WHERE `tabFollow Up Note`.`quotation` = `tabQuotation`.`name`
@@ -122,7 +126,10 @@ def bulk_follow_up(filters):
 
 def send_follow_up(quotation):
     doc = frappe.get_doc("Quotation", quotation)
-    footer = frappe.get_cached_value("Signature", frappe.session.user, "email_footer")
+    if frappe.session.user == "Administrator":
+        footer = frappe.get_cached_value("Signature", doc.owner, "email_footer")
+    else:
+        footer = frappe.get_cached_value("Signature", frappe.session.user, "email_footer")
     recipient = doc.get("email") or doc.get("email_id") or doc.get("contact_email")
     message = follow_up_mail_content.replace("{{footer}}", footer)
     
@@ -138,4 +145,44 @@ def send_follow_up(quotation):
         attachments=[],
         send_email=True
     )
+    return
+
+def update_next_follow_up(quotation):
+    doc = frappe.get_doc("Quotation", quotation)
+    if not doc.next_follow_up:
+        return                      # skip if no follow up is set
+    if doc.docstatus != 1 or doc.status != "Open":
+        doc.next_follow_up = None   # if this is not open, clear follow up
+    else:
+        if doc.next_follow_up > datetime.today().date():
+            return                  # next follow up is in th future, skip
+        else:
+            new_date = doc.next_follow_up + timedelta(days=FOLLOW_UP_DAYS)
+            if new_date <= datetime.today().date():
+                new_date = datetime.today().date()     # do not set follow up in the past
+            doc.next_follow_up = new_date
+            
+    doc.save()
+    frappe.db.commit()
+    return
+    
+"""
+Perform a nightly follow-up run
+"""
+def automatic_follow_up():
+    # get all quotations due to follow up
+    qtns = frappe.db.sql("""
+        SELECT `name`, `status`
+        FROM `tabQuotation`
+        WHERE DATE(`next_follow_up`) <= CURDATE();
+        """, as_dict=True)
+    
+    if len(qtns) == 0:
+        return
+        
+    for qtn in qtns:
+        if qtn['status'] == "Open":
+            send_follow_up(qtn['name'])
+        update_next_follow_up(qtn['name'])
+        
     return
