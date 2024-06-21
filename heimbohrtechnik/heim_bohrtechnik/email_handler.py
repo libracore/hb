@@ -143,6 +143,9 @@ def upload_communication_to_nextcloud(communication):
     elif communication.reference_doctype == "Purchase Order":
         project = frappe.get_value("Purchase Order", communication.reference_name, "object")
         target = get_path('supplier_ews')
+    elif communication.reference_doctype == "Water Supply Registration":
+        project = frappe.get_value("Water Supply Registration", communication.reference_name, "project")
+        target = get_path('drilling')
         
     # upload to nextcloud
     if project and "P-MX" not in project:
