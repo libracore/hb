@@ -136,7 +136,7 @@ def send_follow_up(quotation):
     # send mail
     make_email(
         recipients=recipient,
-        sender=frappe.session.user,
+        sender=frappe.session.user if frappe.session.user != "Administrator" else doc.owner,
         subject="{0} - Erinnerung: Angebot {1} - {2}".format((doc.object or ""), doc.name, (doc.object_address_display or "").replace("<br>", ", ")),
         content=message,
         doctype="Quotation",
