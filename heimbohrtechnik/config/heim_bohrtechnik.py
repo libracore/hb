@@ -343,6 +343,13 @@ def get_data():
                    "name": "Expense Claim",
                    "label": _("Expense Claim"),
                    "description": _("Expense Claim")
+                },
+                {
+                    "type": "report",
+                    "name": "Tankliste",
+                    "doctype": "Gas Receipt",
+                    "label": _("Tankliste"),
+                    "is_query_report": True
                 }
             ]
         },
@@ -558,6 +565,24 @@ def get_data():
                     "type": "report",
                     "name": "Drilling Statistics",
                     "doctype": "Project",
+                    "is_query_report": True
+                }
+            ]
+        },
+        {
+            "label": _("Maintenance"),
+            "icon": "fa fa-money",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "Maintenance Report",
+                   "label": _("Maintenance Report"),
+                   "description": _("Maintenance Report")
+                },
+                {
+                    "type": "report",
+                    "name": "Maintenance Matrix",
+                    "doctype": "Maintenance Report",
                     "is_query_report": True
                 }
             ]

@@ -1,0 +1,150 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2024-06-12 15:31:08.366694",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "drilling_team",
+  "project",
+  "col_main",
+  "date",
+  "sec_details",
+  "truck",
+  "col_details",
+  "kilometer",
+  "motor_hours",
+  "col_details_2",
+  "spare_parts",
+  "sec_protocol",
+  "protocol",
+  "naming_series"
+ ],
+ "fields": [
+  {
+   "fieldname": "drilling_team",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Drilling Team",
+   "options": "Drilling Team",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "col_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Date"
+  },
+  {
+   "fieldname": "sec_details",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "truck",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Truck",
+   "options": "Truck"
+  },
+  {
+   "fieldname": "col_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "kilometer",
+   "fieldtype": "Int",
+   "label": "Kilometer"
+  },
+  {
+   "fieldname": "motor_hours",
+   "fieldtype": "Int",
+   "label": "Motor Hours"
+  },
+  {
+   "fieldname": "col_details_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "spare_parts",
+   "fieldtype": "Small Text",
+   "label": "Spare Parts"
+  },
+  {
+   "fieldname": "sec_protocol",
+   "fieldtype": "Section Break",
+   "label": "Protocol"
+  },
+  {
+   "fieldname": "protocol",
+   "fieldtype": "Text Editor",
+   "label": "Protocol"
+  },
+  {
+   "default": "WB-.YY.####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "WB-.YY.####"
+  }
+ ],
+ "modified": "2024-06-12 16:07:43.689986",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Maintenance Report",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "drilling_team",
+ "track_changes": 1
+}

@@ -10,12 +10,14 @@
   "registration_number",
   "default_color",
   "drilling_team",
+  "key",
   "column_main",
   "truck_owner",
   "category",
   "column_main2",
   "customer",
   "customer_name",
+  "user",
   "section_weight",
   "net_weight",
   "column_weight",
@@ -106,9 +108,21 @@
    "fieldtype": "Link",
    "label": "Drilling Team",
    "options": "Drilling Team"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
+  },
+  {
+   "fieldname": "key",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Key"
   }
  ],
- "modified": "2024-05-29 20:59:50.049639",
+ "modified": "2024-06-14 16:36:50.760775",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "Truck",

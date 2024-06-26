@@ -14,6 +14,10 @@ def get_data():
          {
             'label': _("Equipment"),
             'items': ['Truck']
+         },
+         {
+            'label': _("Maintenance"),
+            'items': ['Maintenance Report']
          }
       ]
    }

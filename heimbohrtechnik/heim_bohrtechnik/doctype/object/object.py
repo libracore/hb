@@ -176,17 +176,17 @@ class Object(Document):
                     if self.drilling_type == "Brunnen":
                         _details = "Brunnen " + _details
                     # probe highlighting
-                    if "Vario" in (s.probe_type or ""):
+                    if "vario" in (s.probe_type or "").lower():
                         _details += """ <span style="color: red;"><b>Vario</b></span>"""
-                    elif "REX" in (s.probe_type or ""):
+                    elif "rex" in (s.probe_type or "").lower():
                         _details += """ <span style="color: red;"><b>REX</b></span>"""
-                    elif "hipress" in (s.probe_type or ""):
+                    elif "hipress" in (s.probe_type or "").lower():
                         _details += """ <span style="color: red;"><b>hipress</b></span>"""
-                    elif "vertex" in (s.probe_type or ""):
+                    elif "vertex" in (s.probe_type or "").lower():
                         _details += """ <span style="color: red;"><b>vertex</b></span>"""
-                    elif "powerwave" in (s.probe_type or ""):
+                    elif "powerwave" in (s.probe_type or "").lower():
                         _details += """ <span style="color: red;"><b>powerwave</b></span>"""
-                    elif "Flux" in (s.probe_type or ""):
+                    elif "flux" in (s.probe_type or "").lower():
                         _details += """ <span style="color: red;"><b>Flux</b></span>"""
                     elif "\"RT\"" in (s.probe_type or ""):
                         _details += """ <span style="color: red;"><b>RT</b></span>"""

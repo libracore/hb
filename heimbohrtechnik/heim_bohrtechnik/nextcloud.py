@@ -215,6 +215,15 @@ def upload_file(self, event):
             else:
                 write_project_file_from_local_file (project, physical_file_name, PATHS['supplier_other'])
     
+    elif self.attached_to_doctype == "Purchase Receipt":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            if frappe.get_value("Purchase Receipt", self.attached_to_name, "supplier") in ("L-80011", "L-80061", "L-80154"):
+                write_project_file_from_local_file (project, physical_file_name, PATHS['supplier_ews'])
+            else:
+                write_project_file_from_local_file (project, physical_file_name, PATHS['supplier_other'])
+                
     elif self.attached_to_doctype == "Quotation":
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "object")
         if frappe.db.exists("Project", project):
@@ -265,6 +274,12 @@ def upload_file(self, event):
         if frappe.db.exists("Project", project):
             physical_file_name = get_physical_path(self.name)
             write_project_file_from_local_file (project, physical_file_name, PATHS['subprojects'])
+            
+    elif self.attached_to_doctype == "Water Supply Registration":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            write_project_file_from_local_file (project, physical_file_name, PATHS['drilling'])
             
     return
 

@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2023, libracore AG and contributors
+// Copyright (c) 2021-2024, libracore AG and contributors
 // For license information, please see license.txt
 
 // extend dashboard
@@ -24,6 +24,9 @@ frappe.ui.form.on('Quotation', {
         if (frm.doc.__islocal) {
             select_naming_series(frm);
         }
+        
+        // set follow up date
+        cur_frm.set_value("next_follow_up",frappe.datetime.add_days(frm.doc.transaction_date, 21));
     },
     refresh: function(frm) {
         if (frm.doc.object) {

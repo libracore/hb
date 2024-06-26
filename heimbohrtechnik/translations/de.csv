@@ -199,6 +199,9 @@ DocType: Permit Type,Permit,Bewilligung
 DocType: Project,Permit number,Bewilligungsnummer
 DocType: Project,Permit date,Bewilligungsdatum
 DocType: Project,Other Projects,Andere Projekte
+DocType: Project,Insurance application,Versicherungsanmeldung
+DocType: Project,More,Mehr
+DocType: Project,Insurance declared,Versicherung angemeldet
 DocType: Permit Type,Is Mandatory,Ist zwingend erforderlich
 DocType: Checklist Activity,Checklist Activity,Aktivität
 DocType: Drilling Type,Drilling Type,Bohrart
@@ -296,6 +299,7 @@ DocType: Quotation,Markup Positions,Zuschläge
 DocType: Quotation,Base for Markup and Discount,Basis für Zuschläge und Abschläge
 DocType: Quotation,Exclude from Markup and Discount,Bei Zu-/Abschlägen ausschliessen
 DocType: Quotation,Manual depth,Tiefe händisch eingeben (ohne autom. Berechnung)
+DocType: Quotation,Next Follow Up,Nächster Nachfass-Termin
 DocType: Truck Scale,Truck Scale,Lastwagenwaage
 DocType: Truck,Truck,Fahrzeug
 DocType: Truck,Registration Number,Fahrzeugkennzeichen
@@ -546,3 +550,7 @@ DocType: Daily Feedback Description,Daily Feedback Description,Tagesrückmeldung
 DocType: Daily Feedback Description,Value,Wert
 DocType: Purchase Order,Rounding adjustment,Rundung
 DocType: Water Supply Registration,Water Supply Registration,Wasseranmeldung
+DocType: Maintenance Report,Maintenance Report,Wartungsbericht
+DocType: Maintenance Report,Motor Hours,Motorstunden
+DocType: Maintenance Report,Spare Parts,Ersatzteile
+Report: Maintenance Matrix,Maintenance Matrix,Wartungsmatrix

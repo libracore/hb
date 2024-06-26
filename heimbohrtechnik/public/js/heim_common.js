@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2022, libracore AG and contributors
+// Copyright (c) 2021-2024, libracore AG and contributors
 // For license information, please see license.txt
 // Common functions
 
@@ -19,6 +19,9 @@ window.onload = async function () {
                 console.log("colored Drilling Support");
             } else if (frappe.defaults.get_user_default("company").includes("Immo")) {
                 navbars[0].style.backgroundColor = "#800000";
+                console.log("colored Immo");
+            } else if (frappe.defaults.get_user_default("company").includes("HPT Solutions")) {
+                navbars[0].style.backgroundColor = "#ffa500";
                 console.log("colored Immo");
             }
         }

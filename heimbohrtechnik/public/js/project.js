@@ -1,17 +1,15 @@
 // extend dashboard
-try {
-    cur_frm.dashboard.add_transactions([
-        {
-            'label': 'Documents',
-            'items': ['Construction Site Description', 'Bohranzeige', 'Request for Public Area Use', 'Water Supply Registration', 'Infomail']
-        },
-        {
-            'label': 'Drilling',
-            'items': ['Construction Site Delivery', 'Subcontracting Order', 'Request for Public Area Use', 'Road Block Material Order', 'Layer Directory', 'Injection report']
+cur_frm.dashboard.add_transactions([
+    {
+        'label': 'Documents',
+        'items': ['Construction Site Description', 'Bohranzeige', 'Request for Public Area Use', 'Water Supply Registration', 'Infomail']
+    },
+    {
+        'label': 'Drilling',
+        'items': ['Construction Site Delivery', 'Subcontracting Order', 'Request for Public Area Use', 'Road Block Material Order', 'Layer Directory', 'Injection report']
 
-        }
-    ]);
-} catch { /* do nothing for older versions */ }
+    }
+]);
 
 frappe.ui.form.on('Project', {
     refresh(frm) {
@@ -98,6 +96,14 @@ frappe.ui.form.on('Project', {
                     }
                 )
             }, __("More") );
+            frm.add_custom_button(__("Insurance application"), function() {
+                insurance_application(frm);
+            }, __("More") );
+            if ((!frm.doc.__islocal) && (frm.doc.project_type === "Internal")) {
+                frm.add_custom_button(__("Maintenance Report"), function() {
+                    show_or_create_maintenance_report(frm);
+                }, __("More") );
+            }
             // create full project file
             frm.add_custom_button(__("Dossier erstellen"), function() {
                 create_full_file(frm);
@@ -317,4 +323,52 @@ function get_drilling_meters_per_day(frm) {
             }
         });
     }
+}
+
+function insurance_application(frm) {
+    if (cur_frm.is_dirty()) {
+        cur_frm.save().then(function() {
+            get_insurance_application(frm);
+        });
+    } else {
+        get_insurance_application(frm);
+    }
+}
+
+function get_insurance_application(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.heim_bohrtechnik.project.insurance_application',
+        'args': {
+            'project': frm.doc.name
+        },
+        'callback': function(response) {
+            navigator.clipboard.writeText(response.message).then(function() {
+                frappe.show_alert( __("Daten in der Zwischenablage, bitte ins Versicherungstool einfügen") );
+                frappe.db.set_value("Project", project, "insurance_declared", 1);
+              }, function() {
+                 frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
+            });
+        }
+    });
+}
+
+function show_or_create_maintenance_report(frm) {
+    frappe.call({
+        'method': 'frappe.client.get_list',
+        'args': {
+            'doctype': 'Maintenance Report',
+            'filters': [
+                ['project', '=', frm.doc.name]
+            ],
+            'fields': ['name'],
+        },
+        'callback': function(response) {
+            if (response.message.length > 0) {
+                frappe.set_route("Form", "Maintenance Report", response.message[0].name);
+            } else {
+                var target = __("New") + " " + __("Maintenance Report");
+                frappe.set_route("Form", "Maintenance Report", target);
+            }
+        }
+    });
 }

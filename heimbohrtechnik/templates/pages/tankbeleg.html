@@ -1,0 +1,89 @@
+<div style="margin: 5px; margin-top: 0px; border-top: 1px solid white; ">
+    <div class="section-body">
+        <div class="row">
+            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Fahrzeug</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-truck"></i></span>
+                    <input type="text" class="form-control" placeholder="Fahrzeug" id="truck" readonly>
+                </div>
+            </div>
+            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Betrag</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-money"></i></span>
+                    <input type="text" class="form-control" placeholder="Betrag" id="amount">
+                </div>
+            </div>
+            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Währung</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-money"></i></span>
+                    <select class="form-control" placeholder="Währung" id="currency">
+                        <option value="CHF">CHF</option>
+                        <option value="EUR">EUR</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Zahlung</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-money"></i></span>
+                    <select class="form-control" placeholder="Zahlung" id="payment">
+                        <option value="Avia">Avia</option>
+                        <option value="BP">BP</option>
+                        <option value="Coop">Coop</option>
+                        <option value="Migrol">Migrol</option>
+                        <option value="Shell">Shell</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Kilometer</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-list"></i></span>
+                    <input type="text" class="form-control" placeholder="Kilometer" id="kilometer">
+                </div>
+            </div>
+            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Liter</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-tint"></i></span>
+                    <input type="text" class="form-control" placeholder="Liter" id="liter">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row" id="action-row">
+            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">Beleg</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-file"></i></span>
+                    <input type="file" class="form-control" placeholder="Beleg" id="image-input">
+                </div>
+            </div>
+            <div class="form-column col-sm-4">
+                <label class="control-label" style="padding-right: 0px;">&nbsp;</label>
+                <div class="input-group">
+                    <button type="button" class="btn btn-success btn-submit" id="submit">Abschliessen</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row" style="margin-top: 20px; visibility: hidden; " id="finalised-row">
+            <div class="form-column col-sm-4">
+                <table>
+                    <tr>
+                        <td><img src="/assets/heimbohrtechnik/images/tick.png"></td>
+                        <td><p>Der Prozess ist erfolgreich abgeschlossen. <span id="result-doc"></span></p></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="text" class="form-control" id="key" style="visibility: hidden; ">
