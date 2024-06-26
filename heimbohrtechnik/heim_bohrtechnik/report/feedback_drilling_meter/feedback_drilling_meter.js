@@ -8,8 +8,7 @@ frappe.query_reports["Feedback Drilling Meter"] = {
             "fieldname":"drilling_team_filter",
             "label": __("Drilling Team"),
             "fieldtype": "Link",
-            "options": "Drilling Team",
-            "reqd": 1
+            "options": "Drilling Team"
         },
         {
             "fieldname":"year_filter",
