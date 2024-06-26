@@ -7,11 +7,12 @@ from frappe import _
 from erpnextswiss.erpnextswiss.utils import get_first_day_of_first_cw
 from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_days
 from frappe.utils.data import getdate
+from datetime import datetime
 
 
 def execute(filters=None):
-    columns = get_columns(filters)
-    data = get_data(filters)
+    columns, days = get_columns(filters)
+    data = get_data(filters, days)
     return columns, data
 
 def get_columns(filters):
@@ -29,6 +30,7 @@ def get_columns(filters):
             {"label": _("Week"), "fieldname": "week", "fieldtype": "Int", "width": 60},
             {"label": _("Remark"), "fieldname": "remark", "fieldtype": "Data", "width": 300}
         ]
+        days = None
     else:
         days = get_related_days()
         columns = [
@@ -36,13 +38,12 @@ def get_columns(filters):
         ]
         
         for index, day in enumerate(days):
-            columns.append({"label": _("{0}".format(day)), "fieldname": "day_{0}".format(index), "fieldtype": "Int", "width": 70})
+            columns.append({"label": _("{0}".format(day)), "fieldname": "day_{0}".format(index), "fieldtype": "Int", "width": 150})
             
         columns.append({"label": _("Remark"), "fieldname": "remark", "fieldtype": "Data", "width": 300})
-    frappe.log_error(columns, "columns")
-    return columns
+    return columns, days
 
-def get_data(filters):
+def get_data(filters, days):
     if filters.drilling_team_filter:
         data = []
         year_total = 0
@@ -123,12 +124,61 @@ def get_data(filters):
             'remark': "(Total {year})".format(year=filters.year_filter)
         }
         data.append(year_entry)
-        
-        return data
+        frappe.log_error(data, "data")
     else:
-        #get last 7 days of all drilling teams
-        data = 2
-        return
+        #get today and create variable for data
+        today = getdate()
+        data = []
+        #get all drilling teams
+        drilling_teams = frappe.db.sql("""
+                                        SELECT
+                                            `name`
+                                        FROM
+                                            `tabDrilling Team`
+                                        WHERE
+                                            `drilling_team_type` = 'Bohrteam'""", as_dict=True)
+        
+        for drilling_team in drilling_teams:
+            #get affected entries for related drilling team
+            entries = frappe.db.sql("""
+                                        SELECT
+                                            `drilling_meter`,
+                                            `date`,
+                                            `flushing`,
+                                            `hammer_change`,
+                                            `impact_part_change`
+                                        FROM 
+                                            `tabFeedback Drilling Meter`
+                                        WHERE
+                                            `date` BETWEEN '{start}' AND '{end}'
+                                        AND
+                                            `drilling_team` = '{dt}'
+                                        AND
+                                            `docstatus` =  1
+                                        ORDER BY
+                                            `date` DESC
+                                        """.format(start=frappe.utils.add_days(today, -7), end=frappe.utils.add_days(today, -1), dt=drilling_team.get('name')), as_dict=True)
+            #prepare line for report and add it do data
+            remarks = ""
+            line = {
+                    'drilling_team': drilling_team.get('name'),
+                    'flushing': []
+                    }
+            loop_index = 0
+            for day in days:
+                for entry in entries:
+                    if datetime.strptime(day[-10:], "%d.%m.%Y").date() == entry.get('date'):
+                        line['day_{0}'.format(loop_index)] = entry.get('drilling_meter')
+                        if entry.get('flushing') == 1:
+                            line['flushing'].append('day_{0}'.format(loop_index))
+                        if entry.get('hammer_change') == 1:
+                            remarks += "Neuer Hammer, "
+                        if entry.get('impact_part_change') == 1:
+                            remarks += "Neues Schlagteil, "
+                loop_index += 1
+            line['remark'] = remarks[:-2]
+            data.append(line)
+    return data
 
 def get_related_days():
     today = getdate()
