@@ -17,11 +17,5 @@ frappe.query_reports["Feedback Drilling Meter"] = {
             "default": new Date().getFullYear(),
             "reqd": 1
         }
-	],
-    "formatter":function (value, row, column, data, default_formatter) {
-            if (data.flushing && data.flushing.includes(column.fieldname)) {
-                return `<div style="color: red; text-align: right;">${value}</div>`;
-            }
-        return default_formatter(value, row, column, data);
-    }
+	]
 };
