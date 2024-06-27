@@ -18,7 +18,6 @@ frappe.query_reports["Feedback Drilling Meter"] = {
             "reqd": 1
         }
 	],
-    //Mark flushing days in red
     "formatter":function (value, row, column, data, default_formatter) {
             if (data.flushing && data.flushing.includes(column.fieldname)) {
                 return `<div style="color: red; text-align: right;">${value}</div>`;

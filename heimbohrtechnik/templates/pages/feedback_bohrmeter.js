@@ -23,6 +23,7 @@ function run() {
         });
         if (args['drilling_team']) {
             document.getElementById('drilling_team').value = args['drilling_team'].replace(/%20/g, " ").replace(/%C3%BC/g, "ü").replace(/%C3%B6/g, "ö").replace(/%C3%A4/g, "ä");
+            calculate_hammer_change(document.getElementById('drilling_team').value);
         }
         if (args['key']) {
             document.getElementById('key').value = args['key'];
@@ -239,4 +240,24 @@ function calculate_total_meter() {
         meter2 = 0;
     }
     document.getElementById('drilling_meter').value = meter + meter2;
+}
+
+function calculate_hammer_change(drilling_team) {
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.calculate_hammer_change',
+        'args': {
+            'drilling_team': drilling_team
+        },
+        'callback': function(response) {
+            var last_change = response.message[0]
+            var next_change = response.message[1]
+            var hammer_change_calc = document.getElementById('hammer_change_calc');
+            if (next_change < 0) {
+                hammer_change_calc.textContent = " (Fällig seit " + next_change * -1 + "m!)"
+                hammer_change_calc.style.color = "red";
+            } else {
+                hammer_change_calc.textContent = " (Vor " + last_change + "m, in " + next_change +"m)"
+            }
+        }
+    });
 }

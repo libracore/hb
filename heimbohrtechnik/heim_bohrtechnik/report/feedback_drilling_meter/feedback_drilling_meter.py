@@ -168,6 +168,7 @@ def get_data(filters, days):
             for day in days:
                 for entry in entries:
                     if datetime.strptime(day[-10:], "%d.%m.%Y").date() == entry.get('date'):
+                        # ~ line['day_{0}'.format(loop_index)] = "<a href='http://localhost:8000/desk#'>{0}</a>".format(entry.get('drilling_meter'))
                         line['day_{0}'.format(loop_index)] = entry.get('drilling_meter')
                         if entry.get('flushing') == 1:
                             line['flushing'].append('day_{0}'.format(loop_index))
