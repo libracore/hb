@@ -82,7 +82,6 @@ def get_data(filters, days):
             
             #loop through every entry of the actual week
             for entry in entrys:
-                frappe.log_error(entry, "entry")
                 #add amount of drilling meters for each entry to the week total
                 week_total += entry.drilling_meter
                 
@@ -98,9 +97,7 @@ def get_data(filters, days):
                     style = "style='color: red;'"
                 url = get_url_to_form("Feedback Drilling Meter", entry.name)
                 html = "<a href='{0}' {1}>{2}</a>".format(url, style, entry.drilling_meter)
-                frappe.log_error(html, "html")
                 #add html to entry
-                frappe.log_error(entry.day.lower(), "entry.day.lower()")
                 new_week[entry.day.lower()] = html
                 #check for remarks
                 if entry.hammer_change == 1:
@@ -135,7 +132,6 @@ def get_data(filters, days):
             'remark': "(Total {year})".format(year=filters.year_filter)
         }
         data.append(year_entry)
-        frappe.log_error(data, "data")
     else:
         #get today and create variable for data
         today = getdate()

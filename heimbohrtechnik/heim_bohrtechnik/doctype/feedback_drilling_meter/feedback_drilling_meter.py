@@ -18,45 +18,45 @@ class FeedbackDrillingMeter(Document):
         self.day = date.strftime('%A')
         
 def reminder():
-    #get yesterday
-    yesterday = frappe.utils.add_days(getdate(), -1)
-    
-    #check if yesterday was a working day -> Do Nothing if yes
-    holiday = frappe.db.sql("""
-                            SELECT
-                                `holiday_date`
-                            FROM
-                                `tabHoliday`
-                            WHERE
-                                `holiday_date` = '{day}'""".format(day=yesterday), as_dict=True)
-    if len(holiday) > 0:
+    #check settings
+    settings = frappe.db.get_value("Heim Settings", "Heim Settings", "send_feedback_reminder")
+    if settings == "0":
         return
-    
-    projects = get_overlay_datas(yesterday, yesterday, customer=None, drilling_team=None)
-    for project in projects:
-        entry = frappe.db.sql("""
-                        SELECT
-                            `name`
-                        FROM
-                            `tabFeedback Drilling Meter`
-                        WHERE
-                            `date` = '{date}'
-                        AND
-                            `drilling_team` = '{dt}'
-                        AND
-                            `docstatus` = 1""".format(date=yesterday, dt=project.get('bohrteam')), as_dict=True)
-        if not entry:
-            # send mail
-            make_email(
-                recipients=frappe.db.get_value("Drilling Team", project.get('bohrteam'), "email"),
-                sender= "Administrator",
-                subject="Erinnerung: BohrmeterRückmeldung",
-                content="Guten Morgen,<br><br>du hast gestern ({0}) keine Bohrmeter Rückmeldung eingereicht.".format(yesterday.strftime("%Y-%m-%d")),
-                doctype="Feedback Drilling Meter",
-                name=None,
-                print_format="Standard",
-                attachments=[],
-                send_email=True
-            )
-        else:
+    else:
+        #get yesterday
+        yesterday = frappe.utils.add_days(getdate(), -1)
+        
+        #check if yesterday was a working day -> Do Nothing if yes
+        holiday = frappe.db.sql("""
+                                SELECT
+                                    `holiday_date`
+                                FROM
+                                    `tabHoliday`
+                                WHERE
+                                    `holiday_date` = '{day}'""".format(day=yesterday), as_dict=True)
+        if len(holiday) > 0:
             return
+        
+        projects = get_overlay_datas(yesterday, yesterday, customer=None, drilling_team=None)
+        for project in projects:
+            entry = frappe.db.sql("""
+                            SELECT
+                                `name`
+                            FROM
+                                `tabFeedback Drilling Meter`
+                            WHERE
+                                `date` = '{date}'
+                            AND
+                                `drilling_team` = '{dt}'
+                            AND
+                                `docstatus` = 1""".format(date=yesterday, dt=project.get('bohrteam')), as_dict=True)
+            if not entry:
+                # send mail
+                make_email(
+                    recipients=frappe.db.get_value("Drilling Team", project.get('bohrteam'), "email"),
+                    sender= frappe.db.get_value("Drilling Team", project.get('bohrteam'), "modified_by"),
+                    subject="Erinnerung: BohrmeterRückmeldung",
+                    content="Guten Morgen,<br><br>du hast gestern ({0}) keine Bohrmeter Rückmeldung eingereicht.".format(yesterday.strftime("%d.%m.%Y")),
+                    send_email=True)
+            else:
+                return

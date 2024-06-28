@@ -561,3 +561,5 @@ Report: Feedback Drilling Meter,Mon, Mo
 Report: Feedback Drilling Meter,Tue, Di
 Report: Feedback Drilling Meter,Wed, Mi
 DocType: Drilling Team,Do not remember drilling meter feedback,Nicht an Bohrmeterrückmeldung erinnern
+DocType: Heim Settings,Feedback Drilling Meter,Bohrmeterrückmeldung
+DocType: Heim Settings,Send Feedback Reminder,Sende Erinnerung an Rückmeldung
