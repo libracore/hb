@@ -51,12 +51,17 @@ def reminder():
                             AND
                                 `docstatus` = 1""".format(date=yesterday, dt=project.get('bohrteam')), as_dict=True)
             if not entry:
-                # send mail
-                make_email(
-                    recipients=frappe.db.get_value("Drilling Team", project.get('bohrteam'), "email"),
-                    sender= frappe.db.get_value("Drilling Team", project.get('bohrteam'), "modified_by"),
-                    subject="Erinnerung: BohrmeterRückmeldung",
-                    content="Guten Morgen,<br><br>du hast gestern ({0}) keine Bohrmeter Rückmeldung eingereicht.".format(yesterday.strftime("%d.%m.%Y")),
-                    send_email=True)
+                #check if reminder is deactivated for this drilling team
+                reminder_check = frappe.db.get_value("Drilling Team", project.get('bohrteam'), "not_remember_feedback")
+                if reminder_check == 1:
+                    return
+                else:
+                    # send mail
+                    make_email(
+                        recipients=frappe.db.get_value("Drilling Team", project.get('bohrteam'), "email"),
+                        sender= frappe.db.get_value("Drilling Team", project.get('bohrteam'), "modified_by"),
+                        subject="Erinnerung: BohrmeterRückmeldung",
+                        content="Guten Morgen,<br><br>du hast gestern ({0}) keine Bohrmeter Rückmeldung eingereicht.".format(yesterday.strftime("%d.%m.%Y")),
+                        send_email=True)
             else:
                 return
