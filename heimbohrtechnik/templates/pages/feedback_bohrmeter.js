@@ -7,6 +7,7 @@ function make() {
     // get options for deputys
     get_deputys();
     document.getElementById('date').valueAsDate = new Date();
+    var set_date = document.getElementById('date').value
 }
 
 function run() {
@@ -24,6 +25,7 @@ function run() {
         if (args['drilling_team']) {
             document.getElementById('drilling_team').value = args['drilling_team'].replace(/%20/g, " ").replace(/%C3%BC/g, "ü").replace(/%C3%B6/g, "ö").replace(/%C3%A4/g, "ä");
             calculate_hammer_change(document.getElementById('drilling_team').value);
+            get_transmitted_information(document.getElementById('date').value, document.getElementById('drilling_team').value);
         }
         if (args['key']) {
             document.getElementById('key').value = args['key'];
@@ -258,6 +260,19 @@ function calculate_hammer_change(drilling_team) {
             } else {
                 hammer_change_calc.textContent = " (Vor " + last_change + "m, in " + next_change +"m)"
             }
+        }
+    });
+}
+
+function get_transmitted_information(date, drilling_team) {
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_transmitted_information',
+        'args': {
+            'date': date,
+            'drilling_team': drilling_team
+        },
+        'callback': function(response) {
+            document.getElementById('drilling_meter').value = response.message[0].drilling_meter;
         }
     });
 }

@@ -211,7 +211,6 @@ def create_document(drilling_team, deputy, date, project, project_meter, project
         feedback.append('project', project_entry)
         
     feedback = feedback.insert(ignore_permissions=True)
-    feedback.submit()
     return
 
 @frappe.whitelist(allow_guest=True)
@@ -237,3 +236,29 @@ def calculate_hammer_change(drilling_team):
             break
     next_change = 10000 - last_change
     return last_change, next_change
+
+@frappe.whitelist(allow_guest=True)
+def get_transmitted_information(date, drilling_team):
+    frappe.log_error(drilling_team, "drilling_team")
+    record = frappe.db.sql("""
+                            SELECT
+                                `record`.`date`,
+                                `record`.`drilling_team`,
+                                `record`.`deputy`,
+                                `record`.`drilling_meter`,
+                                `record`.`flushing`,
+                                `record`.`hammer_change`,
+                                `record`.`impact_part_change`
+                            FROM
+                                `tabFeedback Drilling Meter` AS `record`
+                            WHERE
+                                `record`.`date` = '{date}'
+                            AND
+                                `record`.`drilling_team` = '{dt}'""".format(date=date, dt=drilling_team), as_dict=True)
+                                
+    frappe.log_error(record, "record")
+    if len(record) > 0:
+        return record
+    else:
+        return None
+                                

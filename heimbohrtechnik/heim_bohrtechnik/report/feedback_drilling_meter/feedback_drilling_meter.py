@@ -71,7 +71,6 @@ def get_data(filters, days):
                 `impact_part_change`
                 FROM `tabFeedback Drilling Meter`
                 WHERE `drilling_team` = '{team}'
-                AND `docstatus` =  1
                 AND `date` BETWEEN '{week_start}' AND '{week_end}'
                 """.format(team=filters.drilling_team_filter, week_start=new_week['from'], week_end=new_week['to'])
                 
