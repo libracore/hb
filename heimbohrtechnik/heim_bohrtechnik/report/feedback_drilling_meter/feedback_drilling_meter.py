@@ -160,8 +160,6 @@ def get_data(filters, days):
                                             `date` BETWEEN '{start}' AND '{end}'
                                         AND
                                             `drilling_team` = '{dt}'
-                                        AND
-                                            `docstatus` =  1
                                         ORDER BY
                                             `date` DESC
                                         """.format(start=frappe.utils.add_days(today, -7), end=frappe.utils.add_days(today, -1), dt=drilling_team.get('name')), as_dict=True)

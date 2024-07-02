@@ -123,96 +123,100 @@ def get_deputy_list():
 
 def create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19, second_project_row=False):
     #check if already a document is existing for this day / drilling team
-    feedback_doc = frappe.get_list(doctype="Feedback Drilling Meter", filters={'date': date, 'drilling_team': drilling_team}, ignore_permissions=True)
-    frappe.log_error(feedback_doc, "feedback_doc")
-    # ~ feedback = frappe.get_doc({
-        # ~ 'doctype': 'Feedback Drilling Meter',
-        # ~ 'drilling_team': drilling_team,
-        # ~ 'date': date,
-        # ~ 'drilling_meter': drilling_meter,
-        # ~ 'flushing': flushing_check,
-        # ~ 'hammer_change': hammer_change_check,
-        # ~ 'impact_part_change': impact_part_change_check,
-        # ~ #Create subtable "layers" for projects
-        # ~ 'project': [{
-        # ~ 'reference_doctype': "Feedback Drilling Meter Project",
-        # ~ 'project_number': project,
-        # ~ 'project_meter': project_meter
-        # ~ }],
-        # ~ #Create subtable "layers" for description
-        # ~ 'description': [{
-        # ~ 'reference_doctype': "Feedback Drilling Meter Description",
-        # ~ 'description_time': "07:00 - 08:00",
-        # ~ 'description': description_07_08
-        # ~ },
-        # ~ {
-        # ~ 'reference_doctype': "Feedback Drilling Meter Description",
-        # ~ 'description_time': "08:00 - 09:00",
-        # ~ 'description': description_08_09
-        # ~ },
-        # ~ {
-        # ~ 'reference_doctype': "Feedback Drilling Meter Description",
-        # ~ 'description_time': "09:00 - 10:00",
-        # ~ 'description': description_09_10
-        # ~ },
-        # ~ {
-        # ~ 'reference_doctype': "Feedback Drilling Meter Description",
-        # ~ 'description_time': "10:00 - 11:00",
-        # ~ 'description': description_10_11
-        # ~ },
-        # ~ {
-        # ~ 'reference_doctype': "Feedback Drilling Meter Description",
-        # ~ 'description_time': "11:00 - 12:00",
-        # ~ 'description': description_11_12
-        # ~ },
-        # ~ {
-        # ~ 'reference_doctype': "Feedback Drilling Meter Description",
-        # ~ 'description_time': "12:00 - 13:00",
-        # ~ 'description': description_12_13
-        # ~ },
-        # ~ {
-        # ~ 'reference_doctype': "Feedback Drilling Meter Description",
-        # ~ 'description_time': "13:00 - 14:00",
-        # ~ 'description': description_13_14
-        # ~ },
-        # ~ {
-        # ~ 'reference_doctype': "Feedback Drilling Meter Description",
-        # ~ 'description_time': "14:00 - 15:00",
-        # ~ 'description': description_14_15
-        # ~ },
-        # ~ {
-        # ~ 'reference_doctype': "Feedback Drilling Meter Description",
-        # ~ 'description_time': "15:00 - 16:00",
-        # ~ 'description': description_15_16
-        # ~ },
-        # ~ {
-        # ~ 'reference_doctype': "Feedback Drilling Meter Description",
-        # ~ 'description_time': "16:00 - 17:00",
-        # ~ 'description': description_16_17
-        # ~ },
-        # ~ {
-        # ~ 'reference_doctype': "Feedback Drilling Meter Description",
-        # ~ 'description_time': "17:00 - 18:00",
-        # ~ 'description': description_17_18
-        # ~ },
-        # ~ {
-        # ~ 'reference_doctype': "Feedback Drilling Meter Description",
-        # ~ 'description_time': "18:00 - 19:00",
-        # ~ 'description': description_18_19
-        # ~ }]
-    # ~ })
-    
-    # ~ if deputy != "Nein":
-        # ~ feedback.deputy = deputy
-
-    # ~ if project2:
-        # ~ project_entry = {
-        # ~ 'project_number': project2,
-        # ~ 'project_meter': project_meter2
-        # ~ }
-        # ~ feedback.append('project', project_entry)
+    feedback = frappe.get_list(doctype="Feedback Drilling Meter", filters={'date': date, 'drilling_team': drilling_team}, ignore_permissions=True)
+    if feedback:
+        #if doc is existing, delete it
+        feedback_doc = frappe.delete_doc("Feedback Drilling Meter", feedback[0].get('name'), ignore_permissions=True)
         
-    # ~ feedback = feedback.insert(ignore_permissions=True)
+    #create new doc
+    feedback_doc = frappe.get_doc({
+        'doctype': 'Feedback Drilling Meter',
+        'drilling_team': drilling_team,
+        'date': date,
+        'drilling_meter': drilling_meter,
+        'flushing': flushing_check,
+        'hammer_change': hammer_change_check,
+        'impact_part_change': impact_part_change_check,
+        #Create subtable "layers" for projects
+        'project': [{
+        'reference_doctype': "Feedback Drilling Meter Project",
+        'project_number': project,
+        'project_meter': project_meter
+        }],
+        #Create subtable "layers" for description
+        'description': [{
+        'reference_doctype': "Feedback Drilling Meter Description",
+        'description_time': "07:00 - 08:00",
+        'description': description_07_08
+        },
+        {
+        'reference_doctype': "Feedback Drilling Meter Description",
+        'description_time': "08:00 - 09:00",
+        'description': description_08_09
+        },
+        {
+        'reference_doctype': "Feedback Drilling Meter Description",
+        'description_time': "09:00 - 10:00",
+        'description': description_09_10
+        },
+        {
+        'reference_doctype': "Feedback Drilling Meter Description",
+        'description_time': "10:00 - 11:00",
+        'description': description_10_11
+        },
+        {
+        'reference_doctype': "Feedback Drilling Meter Description",
+        'description_time': "11:00 - 12:00",
+        'description': description_11_12
+        },
+        {
+        'reference_doctype': "Feedback Drilling Meter Description",
+        'description_time': "12:00 - 13:00",
+        'description': description_12_13
+        },
+        {
+        'reference_doctype': "Feedback Drilling Meter Description",
+        'description_time': "13:00 - 14:00",
+        'description': description_13_14
+        },
+        {
+        'reference_doctype': "Feedback Drilling Meter Description",
+        'description_time': "14:00 - 15:00",
+        'description': description_14_15
+        },
+        {
+        'reference_doctype': "Feedback Drilling Meter Description",
+        'description_time': "15:00 - 16:00",
+        'description': description_15_16
+        },
+        {
+        'reference_doctype': "Feedback Drilling Meter Description",
+        'description_time': "16:00 - 17:00",
+        'description': description_16_17
+        },
+        {
+        'reference_doctype': "Feedback Drilling Meter Description",
+        'description_time': "17:00 - 18:00",
+        'description': description_17_18
+        },
+        {
+        'reference_doctype': "Feedback Drilling Meter Description",
+        'description_time': "18:00 - 19:00",
+        'description': description_18_19
+        }]
+    })
+    
+    if deputy != "Nein":
+        feedback_doc.deputy = deputy
+
+    if project2:
+        project_entry = {
+        'project_number': project2,
+        'project_meter': project_meter2
+        }
+        feedback_doc.append('project', project_entry)
+        
+    feedback_doc = feedback_doc.insert(ignore_permissions=True)
     return
 
 @frappe.whitelist(allow_guest=True)

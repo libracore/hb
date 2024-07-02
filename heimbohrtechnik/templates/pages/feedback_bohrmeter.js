@@ -285,8 +285,7 @@ function get_transmitted_information(date, drilling_team) {
                 if (value = record[0].deputy) {
                     document.getElementById('deputy').value = record[0].deputy;
                 } else {
-                    console.log("Nein")
-                    var deputy = "Keine";
+                    var deputy = "Nein";
                     document.getElementById('deputy').value = deputy;
                 }
                 if (value = record[0].flushing == 1) {
@@ -318,9 +317,31 @@ function get_transmitted_information(date, drilling_team) {
                     document.getElementById(field_name).value = descriptions[i].description;
                 }
             } else {
-                console.log("no_record");
+                document.getElementById('drilling_meter').value = "";
+                document.getElementById('deputy').value = "Nein";
+                document.getElementById('flushing').value = "Nein";
+                document.getElementById('hammer_change').value = "Nein";
+                document.getElementById('impact_part_change').value = "Nein";
+                document.getElementById('project').value = "";
+                document.getElementById('project_meter').value = "";
+                document.getElementById('project2').value = "";
+                document.getElementById('project_meter2').value = "";
+                document.getElementById('project2').value = "";
+                document.getElementById('project_meter2').value = "";
+                document.getElementById('description_07_08').value = "";
+                document.getElementById('description_08_09').value = "";
+                document.getElementById('description_09_10').value = "";
+                document.getElementById('description_10_11').value = "";
+                document.getElementById('description_11_12').value = "";
+                document.getElementById('description_12_13').value = "";
+                document.getElementById('description_13_14').value = "";
+                document.getElementById('description_14_15').value = "";
+                document.getElementById('description_15_16').value = "";
+                document.getElementById('description_16_17').value = "";
+                document.getElementById('description_17_18').value = "";
+                document.getElementById('description_18_19').value = "";
             }
         }
     });
 }
-description_07_08
+
