@@ -127,6 +127,11 @@ function run() {
             input.addEventListener('input', function() {
                 handle_button_visibillity(check);
             });
+            //Load other transmitted record if date is changed
+            var entered_date = document.getElementById('date');
+            entered_date.addEventListener('input', function() {
+                get_transmitted_information(document.getElementById('date').value, document.getElementById('drilling_team').value);
+            });
         }
     });
     //calculate total drilling meters
@@ -272,7 +277,50 @@ function get_transmitted_information(date, drilling_team) {
             'drilling_team': drilling_team
         },
         'callback': function(response) {
-            document.getElementById('drilling_meter').value = response.message[0].drilling_meter;
+            if (response.message) {
+                var record = response.message[0];
+                var projects = response.message[1];
+                var descriptions = response.message[2];
+                document.getElementById('drilling_meter').value = record[0].drilling_meter;
+                if (value = record[0].deputy) {
+                    document.getElementById('deputy').value = record[0].deputy;
+                } else {
+                    console.log("Nein")
+                    var deputy = "Keine";
+                    document.getElementById('deputy').value = deputy;
+                }
+                if (value = record[0].flushing == 1) {
+                    document.getElementById('flushing').value = "Ja";
+                } else {
+                    document.getElementById('flushing').value = "Nein";
+                }
+                if (value = record[0].hammer_change == 1) {
+                    document.getElementById('hammer_change').value = "Ja";
+                } else {
+                    document.getElementById('hammer_change').value = "Nein";
+                }
+                if (value = record[0].impact_part_change == 1) {
+                    document.getElementById('impact_part_change').value = "Ja";
+                } else {
+                    document.getElementById('impact_part_change').value = "Nein";
+                }
+                document.getElementById('project').value = projects[0].project_number;
+                document.getElementById('project_meter').value = projects[0].project_meter;
+                if (projects[1]) {
+                    document.getElementById('project2').value = projects[1].project_number;
+                    document.getElementById('project_meter2').value = projects[1].project_meter;
+                } else {
+                    document.getElementById('project2').value = "";
+                    document.getElementById('project_meter2').value = "";
+                }
+                for (i=0; i < descriptions.length; i++) {
+                    field_name = "description_" + descriptions[i].description_time.substring(0, 2) + "_" + descriptions[i].description_time.substring(8, 10);
+                    document.getElementById(field_name).value = descriptions[i].description;
+                }
+            } else {
+                console.log("no_record");
+            }
         }
     });
 }
+description_07_08

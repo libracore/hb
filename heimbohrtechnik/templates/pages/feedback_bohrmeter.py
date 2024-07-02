@@ -122,7 +122,8 @@ def get_deputy_list():
     return deputy_list
 
 def create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19, second_project_row=False):
-    frappe.log_error(deputy, "deputy")
+    #check if already a document is existing for this day / drilling team
+    feedback_doc = frappe.db.get_doc("Feedback Drilling Meter", 
     feedback = frappe.get_doc({
         'doctype': 'Feedback Drilling Meter',
         'drilling_team': drilling_team,
@@ -224,8 +225,6 @@ def calculate_hammer_change(drilling_team):
                                 `tabFeedback Drilling Meter`
                             WHERE
                                 `drilling_team` = '{dt}'
-                            AND
-                                `docstatus` =  1
                             ORDER BY
                                 `date` DESC""".format(dt=drilling_team), as_dict=True)
     
@@ -239,26 +238,47 @@ def calculate_hammer_change(drilling_team):
 
 @frappe.whitelist(allow_guest=True)
 def get_transmitted_information(date, drilling_team):
-    frappe.log_error(drilling_team, "drilling_team")
+    #get record for entered date
     record = frappe.db.sql("""
                             SELECT
-                                `record`.`date`,
-                                `record`.`drilling_team`,
-                                `record`.`deputy`,
-                                `record`.`drilling_meter`,
-                                `record`.`flushing`,
-                                `record`.`hammer_change`,
-                                `record`.`impact_part_change`
+                                `name`,
+                                `date`,
+                                `drilling_team`,
+                                `deputy`,
+                                `drilling_meter`,
+                                `flushing`,
+                                `hammer_change`,
+                                `impact_part_change`
                             FROM
-                                `tabFeedback Drilling Meter` AS `record`
+                                `tabFeedback Drilling Meter`
                             WHERE
-                                `record`.`date` = '{date}'
+                                `date` = '{date}'
                             AND
-                                `record`.`drilling_team` = '{dt}'""".format(date=date, dt=drilling_team), as_dict=True)
-                                
-    frappe.log_error(record, "record")
+                                `drilling_team` = '{dt}'""".format(date=date, dt=drilling_team), as_dict=True)
+    
+    #if there is a record for this day, get projects and descriptions and return everything
     if len(record) > 0:
-        return record
+        projects = frappe.db.sql("""
+                                SELECT
+                                    `project_number`,
+                                    `project_meter`
+                                FROM
+                                    `tabFeedback Drilling Meter Project`
+                                WHERE
+                                    `parent` = '{rec}'""".format(rec=record[0].get('name')), as_dict=True)
+        
+        descriptions = frappe.db.sql("""
+                                    SELECT
+                                        `description_time`,
+                                        `description`
+                                    FROM
+                                        `tabFeedback Drilling Meter Description`
+                                    WHERE
+                                        `parent` = '{rec}'
+                                    ORDER BY
+                                        `description_time` ASC""".format(rec=record[0].get('name')), as_dict=True)
+        
+        return record, projects, descriptions
     else:
         return None
                                 
