@@ -6,6 +6,8 @@ $(document).ready(function(){
 function make() {
     // get options for deputys
     get_deputys();
+    document.getElementById('date').valueAsDate = new Date();
+    var set_date = document.getElementById('date').value
 }
 
 function run() {
@@ -22,6 +24,8 @@ function run() {
         });
         if (args['drilling_team']) {
             document.getElementById('drilling_team').value = args['drilling_team'].replace(/%20/g, " ").replace(/%C3%BC/g, "ü").replace(/%C3%B6/g, "ö").replace(/%C3%A4/g, "ä");
+            calculate_hammer_change(document.getElementById('drilling_team').value);
+            get_transmitted_information(document.getElementById('date').value, document.getElementById('drilling_team').value);
         }
         if (args['key']) {
             document.getElementById('key').value = args['key'];
@@ -122,6 +126,11 @@ function run() {
             var input = document.getElementById('form');
             input.addEventListener('input', function() {
                 handle_button_visibillity(check);
+            });
+            //Load other transmitted record if date is changed
+            var entered_date = document.getElementById('date');
+            entered_date.addEventListener('input', function() {
+                get_transmitted_information(document.getElementById('date').value, document.getElementById('drilling_team').value);
             });
         }
     });
@@ -239,3 +248,100 @@ function calculate_total_meter() {
     }
     document.getElementById('drilling_meter').value = meter + meter2;
 }
+
+function calculate_hammer_change(drilling_team) {
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.calculate_hammer_change',
+        'args': {
+            'drilling_team': drilling_team
+        },
+        'callback': function(response) {
+            var last_change = response.message[0]
+            var next_change = response.message[1]
+            var hammer_change_calc = document.getElementById('hammer_change_calc');
+            if (next_change < 0) {
+                hammer_change_calc.textContent = " (Fällig seit " + next_change * -1 + "m!)"
+                hammer_change_calc.style.color = "red";
+            } else {
+                hammer_change_calc.textContent = " (Vor " + last_change + "m, in " + next_change +"m)"
+            }
+        }
+    });
+}
+
+function get_transmitted_information(date, drilling_team) {
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_transmitted_information',
+        'args': {
+            'date': date,
+            'drilling_team': drilling_team
+        },
+        'callback': function(response) {
+            if (response.message) {
+                var record = response.message[0];
+                var projects = response.message[1];
+                var descriptions = response.message[2];
+                document.getElementById('drilling_meter').value = record[0].drilling_meter;
+                if (value = record[0].deputy) {
+                    document.getElementById('deputy').value = record[0].deputy;
+                } else {
+                    var deputy = "Nein";
+                    document.getElementById('deputy').value = deputy;
+                }
+                if (value = record[0].flushing == 1) {
+                    document.getElementById('flushing').value = "Ja";
+                } else {
+                    document.getElementById('flushing').value = "Nein";
+                }
+                if (value = record[0].hammer_change == 1) {
+                    document.getElementById('hammer_change').value = "Ja";
+                } else {
+                    document.getElementById('hammer_change').value = "Nein";
+                }
+                if (value = record[0].impact_part_change == 1) {
+                    document.getElementById('impact_part_change').value = "Ja";
+                } else {
+                    document.getElementById('impact_part_change').value = "Nein";
+                }
+                document.getElementById('project').value = projects[0].project_number;
+                document.getElementById('project_meter').value = projects[0].project_meter;
+                if (projects[1]) {
+                    document.getElementById('project2').value = projects[1].project_number;
+                    document.getElementById('project_meter2').value = projects[1].project_meter;
+                } else {
+                    document.getElementById('project2').value = "";
+                    document.getElementById('project_meter2').value = "";
+                }
+                for (i=0; i < descriptions.length; i++) {
+                    field_name = "description_" + descriptions[i].description_time.substring(0, 2) + "_" + descriptions[i].description_time.substring(8, 10);
+                    document.getElementById(field_name).value = descriptions[i].description;
+                }
+            } else {
+                document.getElementById('drilling_meter').value = "";
+                document.getElementById('deputy').value = "Nein";
+                document.getElementById('flushing').value = "Nein";
+                document.getElementById('hammer_change').value = "Nein";
+                document.getElementById('impact_part_change').value = "Nein";
+                document.getElementById('project').value = "";
+                document.getElementById('project_meter').value = "";
+                document.getElementById('project2').value = "";
+                document.getElementById('project_meter2').value = "";
+                document.getElementById('project2').value = "";
+                document.getElementById('project_meter2').value = "";
+                document.getElementById('description_07_08').value = "";
+                document.getElementById('description_08_09').value = "";
+                document.getElementById('description_09_10').value = "";
+                document.getElementById('description_10_11').value = "";
+                document.getElementById('description_11_12').value = "";
+                document.getElementById('description_12_13').value = "";
+                document.getElementById('description_13_14').value = "";
+                document.getElementById('description_14_15').value = "";
+                document.getElementById('description_15_16').value = "";
+                document.getElementById('description_16_17').value = "";
+                document.getElementById('description_17_18').value = "";
+                document.getElementById('description_18_19').value = "";
+            }
+        }
+    });
+}
+

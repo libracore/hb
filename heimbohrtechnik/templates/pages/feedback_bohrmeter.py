@@ -97,19 +97,39 @@ def get_descriptions():
 @frappe.whitelist(allow_guest=True)
 def get_deputy_list():
     deputys = frappe.db.sql("""
-        SELECT `name`
-        FROM `tabDrilling Team`
-        WHERE `drilling_team_type` = 'Bohrteam'""", as_dict=True)
+        SELECT 
+            `name`
+        FROM 
+            `tabDrilling Team`
+        WHERE 
+            `drilling_team_type` = 'Bohrteam'""", as_dict=True)
+    
+    employees = frappe.db.sql("""
+        SELECT 
+            `employee_name`
+        FROM 
+            `tabEmployee`
+        WHERE 
+            `is_drilling_team_deputy` = 1""", as_dict=True)
     
     deputy_list = []
     for deputy in deputys:
         deputy_list.append(deputy.name)
     
+    for employee in employees:
+        deputy_list.append("M - " + employee.employee_name)
+    
     return deputy_list
 
 def create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19, second_project_row=False):
-    frappe.log_error(deputy, "deputy")
-    feedback = frappe.get_doc({
+    #check if already a document is existing for this day / drilling team
+    feedback = frappe.get_list(doctype="Feedback Drilling Meter", filters={'date': date, 'drilling_team': drilling_team}, ignore_permissions=True)
+    if feedback:
+        #if doc is existing, delete it
+        feedback_doc = frappe.delete_doc("Feedback Drilling Meter", feedback[0].get('name'), ignore_permissions=True)
+        
+    #create new doc
+    feedback_doc = frappe.get_doc({
         'doctype': 'Feedback Drilling Meter',
         'drilling_team': drilling_team,
         'date': date,
@@ -187,15 +207,83 @@ def create_document(drilling_team, deputy, date, project, project_meter, project
     })
     
     if deputy != "Nein":
-        feedback.deputy = deputy
+        feedback_doc.deputy = deputy
 
     if project2:
         project_entry = {
         'project_number': project2,
         'project_meter': project_meter2
         }
-        feedback.append('project', project_entry)
+        feedback_doc.append('project', project_entry)
         
-    feedback = feedback.insert(ignore_permissions=True)
-    feedback.submit()
+    feedback_doc = feedback_doc.insert(ignore_permissions=True)
     return
+
+@frappe.whitelist(allow_guest=True)
+def calculate_hammer_change(drilling_team):
+    feedbacks = frappe.db.sql("""
+                            SELECT
+                                `date`,
+                                `drilling_meter`,
+                                `hammer_change`
+                            FROM
+                                `tabFeedback Drilling Meter`
+                            WHERE
+                                `drilling_team` = '{dt}'
+                            ORDER BY
+                                `date` DESC""".format(dt=drilling_team), as_dict=True)
+    
+    last_change = 0
+    for feedback in feedbacks:
+        last_change += feedback.get('drilling_meter')
+        if feedback.get('hammer_change') == 1:
+            break
+    next_change = 10000 - last_change
+    return last_change, next_change
+
+@frappe.whitelist(allow_guest=True)
+def get_transmitted_information(date, drilling_team):
+    #get record for entered date
+    record = frappe.db.sql("""
+                            SELECT
+                                `name`,
+                                `date`,
+                                `drilling_team`,
+                                `deputy`,
+                                `drilling_meter`,
+                                `flushing`,
+                                `hammer_change`,
+                                `impact_part_change`
+                            FROM
+                                `tabFeedback Drilling Meter`
+                            WHERE
+                                `date` = '{date}'
+                            AND
+                                `drilling_team` = '{dt}'""".format(date=date, dt=drilling_team), as_dict=True)
+    
+    #if there is a record for this day, get projects and descriptions and return everything
+    if len(record) > 0:
+        projects = frappe.db.sql("""
+                                SELECT
+                                    `project_number`,
+                                    `project_meter`
+                                FROM
+                                    `tabFeedback Drilling Meter Project`
+                                WHERE
+                                    `parent` = '{rec}'""".format(rec=record[0].get('name')), as_dict=True)
+        
+        descriptions = frappe.db.sql("""
+                                    SELECT
+                                        `description_time`,
+                                        `description`
+                                    FROM
+                                        `tabFeedback Drilling Meter Description`
+                                    WHERE
+                                        `parent` = '{rec}'
+                                    ORDER BY
+                                        `description_time` ASC""".format(rec=record[0].get('name')), as_dict=True)
+        
+        return record, projects, descriptions
+    else:
+        return None
+                                
