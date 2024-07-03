@@ -54,6 +54,12 @@ def get_data():
                    "name": "Pincode",
                    "label": _("Pincode"),
                    "description": _("Pincode")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Parking",
+                   "label": _("Parking"),
+                   "description": _("Parking")
                 }
             ]
         },
@@ -564,6 +570,12 @@ def get_data():
                 {
                     "type": "report",
                     "name": "Drilling Statistics",
+                    "doctype": "Project",
+                    "is_query_report": True
+                },
+                {
+                    "type": "report",
+                    "name": "Project Geographic Optimisation",
                     "doctype": "Project",
                     "is_query_report": True
                 }

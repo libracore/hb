@@ -45,6 +45,7 @@
   "crane_length",
   "sec_access",
   "site_access",
+  "parking_links",
   "parking_area",
   "column_break_34",
   "site_access_remarks",
@@ -349,7 +350,7 @@
   {
    "fieldname": "parking_area",
    "fieldtype": "Data",
-   "label": "Parking Area"
+   "label": "Parking Area (free)"
   },
   {
    "default": "BBS-.YY.#####",
@@ -429,9 +430,15 @@
    "fieldname": "tractor_details",
    "fieldtype": "Data",
    "label": "Tractor details"
+  },
+  {
+   "fieldname": "parking_links",
+   "fieldtype": "Table MultiSelect",
+   "label": "Parking",
+   "options": "Parking Link"
   }
  ],
- "modified": "2024-01-24 19:53:40.267967",
+ "modified": "2024-07-03 21:49:24.015565",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
