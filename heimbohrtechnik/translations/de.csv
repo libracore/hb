@@ -168,6 +168,7 @@ DocType: Object,Drilling tool diameter (mm),Durchmesser Bohrwerkzeug (mm)
 DocType: Object,Time,Zeit
 DocType: Object,Find,Finde
 DocType: Object,Electronic Filling Measurement,Elektronische Hinterfüllungsmessung
+DocType: Object,Geological Location,Einmessung durch Geometer
 DocType: Project,Mud Disposer,Schlammentsorger
 DocType: Project,Mud disposer,Schlammentsorger
 DocType: Project,Drilling Equipment,Bohrequipment
