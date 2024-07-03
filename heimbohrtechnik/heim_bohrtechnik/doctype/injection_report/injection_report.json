@@ -87,7 +87,12 @@
   "schwerspat_dxc",
   "column_break_70",
   "sum_dxc",
-  "sum_c"
+  "sum_c",
+  "backfill",
+  "steps",
+  "product",
+  "mixing_type",
+  "backfill_sample"
  ],
  "fields": [
   {
@@ -589,10 +594,38 @@
    "fieldname": "hsplus_sack_weight",
    "fieldtype": "Int",
    "label": "Sack weight (kg)"
+  },
+  {
+   "fieldname": "backfill",
+   "fieldtype": "Section Break",
+   "label": "Backfill"
+  },
+  {
+   "fieldname": "steps",
+   "fieldtype": "Int",
+   "label": "Steps"
+  },
+  {
+   "fieldname": "product",
+   "fieldtype": "Select",
+   "label": "Product",
+   "options": "\nSchwenk"
+  },
+  {
+   "fieldname": "mixing_type",
+   "fieldtype": "Select",
+   "label": "Mixing type",
+   "options": "\nZement-Bentonit\nSchwenk F\u00fcllbinder GTM-hs (verbesserte H.)\nSchwenk F\u00fcllbinder H-hs plus (dotiert)"
+  },
+  {
+   "fieldname": "backfill_sample",
+   "fieldtype": "Select",
+   "label": "Backfill sample",
+   "options": "\nGeologe\nBeh\u00f6rde\nMagazin"
   }
  ],
  "is_submittable": 1,
- "modified": "2023-08-25 16:01:03.668572",
+ "modified": "2024-07-03 12:56:31.097378",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Injection report",
