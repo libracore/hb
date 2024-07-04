@@ -569,3 +569,5 @@ DocType: Injection report,Steps,Stufen
 DocType: Injection report,Backfill,Hinterfüllung
 DocType: Injection report,Mixing type,Mischart
 DocType: Injection report,Backfill sample,Hinterfüllungsprobe
+Report: Project Geographic Optimisation,Project Geographic Optimisation,Fahrtwegoptimierung
+DocType: Parking,Parking,Abstellplätze
