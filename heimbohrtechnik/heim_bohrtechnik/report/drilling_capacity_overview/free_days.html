@@ -3,18 +3,12 @@
 </style>
 
 <table style="width: 70%;">
-    <thead>
-        <tr>
-            <th class="td">Bohrteam</th>
-            <th class="td">Datum</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for hit in hits %}
-            <tr>
-                <td>{{ hit.drilling_team }}</td>
-                <td>{{ hit.date }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
+    {% for drilling_team in hits %}
+        <tr><td><b>{{ drilling_team.drilling_team }}</b></td></tr>
+            {% for date in drilling_team.dates %}
+                <tr>
+                    <td>{{ date.date }}</td>
+                </tr>
+            {% endfor %}
+    {% endfor %}
 </table>

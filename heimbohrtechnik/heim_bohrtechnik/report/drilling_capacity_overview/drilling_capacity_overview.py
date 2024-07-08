@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from frappe.utils.data import getdate
 from heimbohrtechnik.heim_bohrtechnik.date_controller import get_holidays
 from erpnextswiss.erpnextswiss.utils import get_first_day_of_first_cw
-from frappe.utils.data import getdate
+from frappe.utils.data import getdate, date_diff
 
 def execute(filters=None):
     data, weekend = get_data(filters)
@@ -131,7 +131,7 @@ def get_data(filters):
 def get_free_date(drilling_type, label):    
     #get non working days
     holidays = get_holidays()
-
+    
     #get all drilling teams with needed ability
     drilling_teams = frappe.db.sql("""
     SELECT `name`
@@ -143,34 +143,70 @@ def get_free_date(drilling_type, label):
     if len(drilling_teams) == 0:
         frappe.msgprint("Kein Bohrteam mit dieser Fähigkeit gefunden!")
         return
-    
+        
     hits = []
-    date = getdate()
-    
-    #check for the dates, where teams are free
-    while len(hits) <= 9:
-        date = frappe.utils.add_days(date, 1)
-        if not date.strftime("%Y-%m-%d") in holidays:
-            for team in drilling_teams:
-                possible_hit = None
-                possible_hit = frappe.db.sql("""
-                    SELECT `drilling_team`
-                    FROM `tabProject`
-                    WHERE `expected_start_date` <= '{date}'
-                    AND `expected_end_date` >= '{date}'
-                    AND `drilling_team` = '{team}'
-                    AND `status` IN ("Open", "Completed")
-                    """.format(date=date, team=team['name']), as_dict=True)
-                if len(possible_hit) == 0:
-                    hits.append({
-                        'drilling_team': team.name,
-                        'date': date.strftime("%d.%m.%Y")
+    for team in  drilling_teams:
+        dt_hits = []
+        #get today
+        date = getdate()
+        actual_hit = None
+        actual_hit_string = None
+        #check for the dates, where teams are free
+        while len(dt_hits) <= 4:
+            if actual_hit_string:
+                if len(actual_hit_string) > 250:
+                    actual_hit_string = "Ab " + actual_hit_string[:10] + " keine Projekte mehr..."
+                    dt_hits.append({
+                        'date': actual_hit_string
                     })
-                    
-    html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/report/drilling_capacity_overview/free_days.html", {'hits': hits})
-                    
-    frappe.msgprint(html, title='Freie Tage für {0}'.format(label), indicator='green')
+                    break
+            date = frappe.utils.add_days(date, 1)
+            possible_hit = []
+            possible_hit = frappe.db.sql("""
+                SELECT `drilling_team`
+                FROM `tabProject`
+                WHERE `expected_start_date` <= '{date}'
+                AND `expected_end_date` >= '{date}'
+                AND `drilling_team` = '{team}'
+                AND `status` IN ("Open", "Completed")
+                """.format(date=date, team=team['name']), as_dict=True)
+            if len(possible_hit) == 0:
+                if not actual_hit:
+                    if date.strftime("%Y-%m-%d") in holidays:
+                        actual_hit = date
+                        actual_hit_string = ""
+                    else:
+                        actual_hit = date
+                        actual_hit_string = date.strftime("%d.%m.%Y")
+                else:
+                    if date_diff(date, actual_hit) == 1:
+                        if date.strftime("%Y-%m-%d") in holidays:
+                            actual_hit = date
+                        else:
+                            actual_hit = date
+                            actual_hit_string += ", "
+                            actual_hit_string += date.strftime("%d.%m.%Y")
+                    else:
+                        if actual_hit_string[:2] == ", ":
+                            actual_hit_string = actual_hit_string[2:]
+                        dt_hits.append({
+                            'date': actual_hit_string
+                        })
+                        if date.strftime("%Y-%m-%d") in holidays:
+                            actual_hit = date
+                            actual_hit_string = ""
+                        else:
+                            actual_hit = date
+                            actual_hit_string = date.strftime("%d.%m.%Y")
+        hits.append({
+            'drilling_team': team.name,
+            'dates': dt_hits
+        })
                 
+    html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/report/drilling_capacity_overview/free_days.html", {'hits': hits})
+                
+    frappe.msgprint(html, title='Freie Tage für {0}'.format(label), indicator='green')
+            
     return
 
 @frappe.whitelist()
