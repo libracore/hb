@@ -10,7 +10,7 @@ INTERMEDIATE_TEXT = "Zwischenkonto für {0}"
 Create a purchase invoice for an internal company from a sales invoice
 """
 @frappe.whitelist()
-def create_pinv_from_sinv(sales_invoice):
+def create_pinv_from_sinv(sales_invoice, intracompany_account=False):
     sinv = frappe.get_doc("Sales Invoice", sales_invoice)
     # create mathing purchase invoice
     pinv_company = sinv.customer_name
@@ -61,70 +61,71 @@ def create_pinv_from_sinv(sales_invoice):
     # insert
     new_pinv.insert()
     new_pinv.submit()
-    # create payment records against intracompany account 1199
-    pinv_account = frappe.db.sql("""
-        SELECT `name`
-        FROM `tabAccount`
-        WHERE `company` = "{pinv_company}" AND `name` LIKE "1199%";""".format(pinv_company=pinv_company), as_dict=True)
-    if len(pinv_account) > 0:
-        pinv_jv = frappe.get_doc({
-            'doctype': 'Journal Entry',
-            'company': pinv_company,
-            'posting_date': sinv.posting_date,
-            'accounts': [
-                {
-                    'account': new_pinv.credit_to,
-                    'party_type': 'Supplier',
-                    'party': pinv_supplier,
-                    'reference_type': 'Purchase Invoice',
-                    'reference_name': new_pinv.name,
-                    'debit': sinv.outstanding_amount,
-                    'debit_in_account_currency': sinv.outstanding_amount
-                },
-                {
-                    'account': pinv_account[0]['name'],
-                    'credit': sinv.outstanding_amount,
-                    'credit_in_account_currency': sinv.outstanding_amount
-                }
-            ],
-            'user_remark': INTERMEDIATE_TEXT.format(new_pinv.name)
-        })
-        pinv_jv.insert()
-        pinv_jv.submit()
-    else:
-        frappe.log_error("Zwischenkonto 1199% fehlt für Unternehmen {0}".format(pinv_company), "Intracompany-Verrechnung")
-    sinv_account = frappe.db.sql("""
-        SELECT `name`
-        FROM `tabAccount`
-        WHERE `company` = "{sinv_company}" AND `name` LIKE "1199%";""".format(sinv_company=sinv.company), as_dict=True)
-    if len(sinv_account) > 0:
-        sinv_jv = frappe.get_doc({
-            'doctype': 'Journal Entry',
-            'company': sinv.company,
-            'posting_date': sinv.posting_date,
-            'accounts': [
-                {
-                    'account': sinv.debit_to,
-                    'party_type': 'Customer',
-                    'party': sinv.customer,
-                    'reference_type': 'Sales Invoice',
-                    'reference_name': sinv.name,
-                    'credit': sinv.outstanding_amount,
-                    'credit_in_account_currency': sinv.outstanding_amount
-                },
-                {
-                    'account': sinv_account[0]['name'],
-                    'debit': sinv.outstanding_amount,
-                    'debit_in_account_currency': sinv.outstanding_amount
-                }
-            ],
-            'user_remark': INTERMEDIATE_TEXT.format(sinv.name)
-        })
-        sinv_jv.insert()
-        sinv_jv.submit()
-    else:
-        frappe.log_error("Zwischenkonto 1199% fehlt für Unternehmen {0}".format(sinv.company), "Intracompany-Verrechnung")
-        
+    if intracompany_account:
+        # create payment records against intracompany account 1199
+        pinv_account = frappe.db.sql("""
+            SELECT `name`
+            FROM `tabAccount`
+            WHERE `company` = "{pinv_company}" AND `name` LIKE "1199%";""".format(pinv_company=pinv_company), as_dict=True)
+        if len(pinv_account) > 0:
+            pinv_jv = frappe.get_doc({
+                'doctype': 'Journal Entry',
+                'company': pinv_company,
+                'posting_date': sinv.posting_date,
+                'accounts': [
+                    {
+                        'account': new_pinv.credit_to,
+                        'party_type': 'Supplier',
+                        'party': pinv_supplier,
+                        'reference_type': 'Purchase Invoice',
+                        'reference_name': new_pinv.name,
+                        'debit': sinv.outstanding_amount,
+                        'debit_in_account_currency': sinv.outstanding_amount
+                    },
+                    {
+                        'account': pinv_account[0]['name'],
+                        'credit': sinv.outstanding_amount,
+                        'credit_in_account_currency': sinv.outstanding_amount
+                    }
+                ],
+                'user_remark': INTERMEDIATE_TEXT.format(new_pinv.name)
+            })
+            pinv_jv.insert()
+            pinv_jv.submit()
+        else:
+            frappe.log_error("Zwischenkonto 1199% fehlt für Unternehmen {0}".format(pinv_company), "Intracompany-Verrechnung")
+        sinv_account = frappe.db.sql("""
+            SELECT `name`
+            FROM `tabAccount`
+            WHERE `company` = "{sinv_company}" AND `name` LIKE "1199%";""".format(sinv_company=sinv.company), as_dict=True)
+        if len(sinv_account) > 0:
+            sinv_jv = frappe.get_doc({
+                'doctype': 'Journal Entry',
+                'company': sinv.company,
+                'posting_date': sinv.posting_date,
+                'accounts': [
+                    {
+                        'account': sinv.debit_to,
+                        'party_type': 'Customer',
+                        'party': sinv.customer,
+                        'reference_type': 'Sales Invoice',
+                        'reference_name': sinv.name,
+                        'credit': sinv.outstanding_amount,
+                        'credit_in_account_currency': sinv.outstanding_amount
+                    },
+                    {
+                        'account': sinv_account[0]['name'],
+                        'debit': sinv.outstanding_amount,
+                        'debit_in_account_currency': sinv.outstanding_amount
+                    }
+                ],
+                'user_remark': INTERMEDIATE_TEXT.format(sinv.name)
+            })
+            sinv_jv.insert()
+            sinv_jv.submit()
+        else:
+            frappe.log_error("Zwischenkonto 1199% fehlt für Unternehmen {0}".format(sinv.company), "Intracompany-Verrechnung")
+            
     frappe.db.commit()
     # create pdf attachments
     try:

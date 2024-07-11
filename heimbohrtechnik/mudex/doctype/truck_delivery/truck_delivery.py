@@ -9,6 +9,7 @@ from frappe import _
 from datetime import datetime
 from erpnextswiss.erpnextswiss.attach_pdf import attach_pdf, execute
 from frappe.utils.file_manager import add_attachments
+from heimbohrtechnik.heim_bohrtechnik.invoicing import create_pinv_from_sinv
 
 PH_ITEMS = {
     '11': '2.01.01.05',
@@ -141,54 +142,7 @@ def create_invoice(object):
         if customer == config.default_customer_for_mud:
             new_sinv.submit()
             # create mathing purchase invoice
-            pinv_company = new_sinv.customer_name
-            pinv_supplier = frappe.get_all("Supplier", 
-                filters={'supplier_name': config.company}, fields=['name'])[0]['name']
-            pinv_cost_center = frappe.get_value("Company", pinv_company, "cost_center")
-            # find taxes from customer record
-            pinv_tax_templates = frappe.get_all('Party Account', 
-                filters={'parent': pinv_supplier, 'company': pinv_company},
-                fields=['default_purchase_taxes_and_charges'])
-            if pinv_tax_templates and len(pinv_tax_templates) > 0:
-                pinv_tax_template = pinv_tax_templates[0]['default_purchase_taxes_and_charges']
-            else:
-                pinv_tax_template = None
-            # create new purchase invoice
-            new_pinv = frappe.get_doc({
-                'doctype': 'Purchase Invoice',
-                'company': pinv_company,
-                'supplier': pinv_supplier,
-                'bill_no': new_sinv.name,
-                'bill_date': new_sinv.posting_date,
-                'due_date': new_sinv.due_date,
-                'object': new_sinv.object,
-                'project': new_sinv.project,
-                'cost_center': pinv_cost_center,
-                'taxes_and_charges': pinv_tax_template,
-                'disable_rounded_total': 1
-            })
-            # add item positions
-            for i in new_sinv.items:
-                new_pinv.append('items', {
-                    'item_code': i.item_code,
-                    'qty': i.qty,
-                    'description': i.description,
-                    'rate': i.rate,
-                    'cost_center': pinv_cost_center
-                })
-            # apply taxes
-            if pinv_tax_template:
-                pinv_tax_details = frappe.get_doc("Purchase Taxes and Charges Template", pinv_tax_template)
-                for t in pinv_tax_details.taxes:
-                    new_pinv.append('taxes', {
-                        'charge_type': t.charge_type,
-                        'account_head': t.account_head,
-                        'description': t.description,
-                        'rate': t.rate
-                    })
-            # insert
-            new_pinv.insert()
-            new_pinv.submit()
+            create_pinv_from_sinv(new_sinv.name, intracompany_account=True)
             # create pdf attachments
             try:
                 # use execute instead of attach_pdf to make it sync for the subsequent doc
@@ -197,7 +151,6 @@ def create_invoice(object):
                 attached_file = frappe.get_all("File", 
                     filters={'attached_to_name': new_sinv.name, 'attached_to_doctype': "Sales Invoice"},
                     fields=['name']) 
-                add_attachments("Purchase Invoice", new_pinv.name, [attached_file[0]['name']])
             except Exception as err:
                 frappe.log_error("Unable to attach pdf: {0}".format(err), "Truck delivery document creation {0}".format(object))
         elif customer == "K-19985":
