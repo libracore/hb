@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2023, libracore AG and contributors
+# Copyright (c) 2023-2024, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
@@ -8,6 +8,7 @@ from frappe.model.document import Document
 from frappe.core.doctype.communication.email import make as make_email
 from frappe.utils.data import getdate
 from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_overlay_datas
+from frappe.utils import cint
 
 class FeedbackDrillingMeter(Document):
     def validate(self):
@@ -19,8 +20,8 @@ class FeedbackDrillingMeter(Document):
         
 def reminder():
     #check settings
-    settings = frappe.db.get_value("Heim Settings", "Heim Settings", "send_feedback_reminder")
-    if settings == "0":
+    reminder_active = frappe.db.get_value("Heim Settings", "Heim Settings", "send_feedback_reminder")
+    if cint(reminder_active) == 0:
         return
     else:
         #get yesterday
@@ -53,7 +54,7 @@ def reminder():
             if not entry:
                 #check if reminder is deactivated for this drilling team
                 reminder_check = frappe.db.get_value("Drilling Team", project.get('bohrteam'), "not_remember_feedback")
-                if reminder_check == 1:
+                if cint(reminder_check) == 1:
                     return
                 else:
                     # send mail
