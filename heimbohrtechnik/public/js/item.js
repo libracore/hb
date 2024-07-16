@@ -9,12 +9,12 @@ frappe.ui.form.on('Item', {
         }
     },
     refresh: function(frm) {
-        frm.add_custom_button(__("Small"), function() {
+        frm.add_custom_button(__("Klein"), function() {
             create_label(frm, "small");
-        },__("Create Label")); 
-        frm.add_custom_button(__("Big"), function() {
+        },__("Etikette erstellen")); 
+        frm.add_custom_button(__("Gross"), function() {
             create_label(frm, "big");
-        },__("Create Label"));  
+        },__("Etikette erstellen"));  
     }
 });
 
