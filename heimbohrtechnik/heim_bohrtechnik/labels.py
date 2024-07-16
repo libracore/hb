@@ -1,5 +1,6 @@
 import frappe
 from frappe import _
+from erpnextswiss.erpnextswiss.doctype.label_printer.label_printer import create_pdf
 
 
 @frappe.whitelist()
@@ -28,7 +29,7 @@ def get_label(item, label_type):
     }
 
     #prepare content
-    content = frappe.render_template("heim_bohrtechnik/templates/labels/"+label_template, data)
+    content = frappe.render_template("heimbohrtechnik/templates/labels/"+label_template, data)
     #create label
     printer=frappe.get_doc("Label Printer", label_printer)
     pdf = create_pdf(printer, content)
