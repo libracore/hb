@@ -935,11 +935,15 @@ function get_free_date() {
                 break;
             }
         }
+        frappe.dom.freeze('Bitte warten, Termine werden gesucht...');
         frappe.call({
             'method': "heimbohrtechnik.heim_bohrtechnik.report.drilling_capacity_overview.drilling_capacity_overview.get_free_date",
             'args': {
                 "drilling_type": drilling_type,
                 "label": label
+            },
+            'callback': function(response) {
+                frappe.dom.unfreeze();
             }
         });
     },
