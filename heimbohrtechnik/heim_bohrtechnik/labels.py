@@ -28,6 +28,8 @@ def get_label(item, label_type):
         "price": item.standard_rate,
     }
 
+    frappe.msgprint("Label Printer: {0}".format(data))
+
     #prepare content
     content = frappe.render_template("heimbohrtechnik/templates/labels/"+label_template, data)
     #create label
@@ -35,6 +37,6 @@ def get_label(item, label_type):
     pdf = create_pdf(printer, content)
 
     #return download
-    frappe.local.response.filename = "{name}.pdf".format(name=label_printer.replace(" ", "-").replace("/", "-"))
+    frappe.local.response.filename = "{name}.pdf".format(name=item.item_code + label_printer.replace(" ", "-").replace("/", "-"))
     frappe.local.response.filecontent = pdf
     frappe.local.response.type = "download"
