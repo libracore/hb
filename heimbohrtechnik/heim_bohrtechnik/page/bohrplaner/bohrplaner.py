@@ -479,7 +479,10 @@ def get_traffic_lights_indicator(project):
     
     #ews_details [7]
     ews_details_color = BG_RED                      # red
-    po = frappe.db.sql("""SELECT `per_received`, `order_confirmation` FROM `tabPurchase Order` WHERE `object` = '{0}' AND `docstatus` = 1""".format(project.object), as_dict=True)
+    po = frappe.db.sql("""
+        SELECT AVG(`per_received`) AS `per_received`, `order_confirmation` 
+        FROM `tabPurchase Order` 
+        WHERE `object` = '{0}' AND `docstatus` = 1;""".format(project.object), as_dict=True)
     if len(po) > 0:
         ews_details_color = BG_YELLOW               # yellow: ordered
         if po[0].order_confirmation:
