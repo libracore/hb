@@ -318,7 +318,9 @@ def get_object_geographic_environment(object_name=None, radius=0.1, address=None
             {quotations}
         FROM `tabObject`
         LEFT JOIN `tabProject` ON `tabProject`.`object` = `tabObject`.`name`
-        LEFT JOIN `tabLayer Directory` ON `tabLayer Directory`.`object` = `tabObject`.`name`
+        LEFT JOIN `tabLayer Directory` ON (
+            `tabLayer Directory`.`object` = `tabObject`.`name`
+            AND `tabLayer Directory`.`docstatus` < 2)
         WHERE 
             `tabObject`.`gps_lat` >= ({gps_lat} - {lat_offset})
             AND `tabObject`.`gps_lat` <= ({gps_lat} + {lat_offset})
