@@ -46,6 +46,25 @@ def get_data(filters):
     data = []
     # compute each account
     for account in accounts:
+        # get positions
+        positions = frappe.db.sql("""SELECT 
+                `posting_date` AS `posting_date`,
+                `debit` AS `debit`,
+                `credit` AS `credit`,
+                `remarks` AS `remarks`,
+                `voucher_type` AS `voucher_type`,
+                `voucher_no` AS `voucher`,
+                `against` AS `against`
+            FROM `tabGL Entry`
+            WHERE `account` = "{account}"
+              AND `docstatus` = 1
+              AND DATE(`posting_date`) >= "{from_date}"
+              AND DATE(`posting_date`) <= "{to_date}"
+              {conditions}
+            ORDER BY `posting_date` ASC;""".format(conditions=transaction_conditions,
+            account=account['name'], from_date=filters.from_date, to_date=filters.to_date), as_dict=True)
+        if len(positions) == 0:     # skip account in case of no transactions (#85)
+            continue
         # insert account head
         data.append({'remarks': account['name']})
         # get opening balance
@@ -72,23 +91,7 @@ def get_data(filters):
             'balance': opening_balance,
             'remarks': _("Opening")
         })
-        # get positions
-        positions = frappe.db.sql("""SELECT 
-                `posting_date` AS `posting_date`,
-                `debit` AS `debit`,
-                `credit` AS `credit`,
-                `remarks` AS `remarks`,
-                `voucher_type` AS `voucher_type`,
-                `voucher_no` AS `voucher`,
-                `against` AS `against`
-            FROM `tabGL Entry`
-            WHERE `account` = "{account}"
-              AND `docstatus` = 1
-              AND DATE(`posting_date`) >= "{from_date}"
-              AND DATE(`posting_date`) <= "{to_date}"
-              {conditions}
-            ORDER BY `posting_date` ASC;""".format(conditions=transaction_conditions,
-            account=account['name'], from_date=filters.from_date, to_date=filters.to_date), as_dict=True)
+        # insert transaction data / positions
         for position in positions:
             opening_debit += position['debit']
             opening_credit += position['credit']
