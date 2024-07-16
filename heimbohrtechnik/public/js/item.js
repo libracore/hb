@@ -20,8 +20,8 @@ frappe.ui.form.on('Item', {
 
 function create_label(frm, label_type) {
     // html-content of the label - price label
-    var url = "/api/method/heim_bohrtechnik.heim_bohrtechnik.labels.get_labels"  
-            + "?item=" + encodeURIComponent(frm.doc.name) + "?label_type=" + label_type;
+    var url = "/api/method/heimbohrtechnik.heim_bohrtechnik.labels.get_label"  
+            + "?item=" + encodeURIComponent(frm.doc.name) + "&label_type=" + label_type;
     var w = window.open(
             frappe.urllib.get_full_url(url)
     );
