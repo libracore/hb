@@ -100,10 +100,13 @@ def get_data(filters):
                 against = "{0} (...)".format((position['against'] or "").split(" ")[0])
             else:
                 against = (position['against'] or "").split(" ")[0]
-            if len(position['remarks'] or "") > 30:
-                remarks = "{0}...".format(position['remarks'][:30])
-            else:
-                remarks = position['remarks']
+            
+            remarks = position['remarks'] or ""
+            if remarks.startswith("Hinweis: "):
+                remarks = remarks[9:]
+            if len(remarks) > 40:
+                remarks = "{0}...".format(remarks[:40])
+                
             group = None
             if (position['against'] or "").startswith("L-") and frappe.db.exists("Supplier", position['against']):
                 group = frappe.get_cached_value("Supplier", position['against'], 'supplier_name')
