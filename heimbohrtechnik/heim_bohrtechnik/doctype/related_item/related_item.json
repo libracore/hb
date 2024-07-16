@@ -4,7 +4,8 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "item_code"
+  "item_code",
+  "qty"
  ],
  "fields": [
   {
@@ -14,10 +15,17 @@
    "label": "Item",
    "options": "Item",
    "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Qty"
   }
  ],
  "istable": 1,
- "modified": "2022-07-11 11:52:03.441842",
+ "modified": "2024-07-16 15:24:12.036983",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Related Item",

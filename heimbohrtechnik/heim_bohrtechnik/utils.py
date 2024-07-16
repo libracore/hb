@@ -377,8 +377,8 @@ def order_ews(object):
             related_items = get_related_items(item)
             for r in related_items:
                 items.append({
-                    'item_code': r,
-                    'qty': p.ews_count,
+                    'item_code': r.get('item_code'),
+                    'qty': p.ews_count * (r.get('qty') or 1),
                     'project': object
                 })
                 # recursion: in case of staged cementation, check sub-level also
@@ -386,8 +386,8 @@ def order_ews(object):
                     sub_related_items = get_related_items(r)
                     for sr in sub_related_items:
                         items.append({
-                            'item_code': sr,
-                            'qty': p.ews_count,
+                            'item_code': sr.get('item_code'),
+                            'qty': p.ews_count * (sr.get('qty') or 1),
                             'project': object
                         })
                     
@@ -631,7 +631,10 @@ def get_related_items(item_code):
     item = frappe.get_doc("Item", item_code)
     related_items = []
     for i in item.related_items:
-        related_items.append(i.item_code)
+        related_items.append({
+            'item_code': i.item_code,
+            'qty': i.qty or 1
+        })
     return related_items
 
 """
