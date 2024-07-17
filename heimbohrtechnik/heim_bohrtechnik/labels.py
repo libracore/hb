@@ -24,7 +24,6 @@ def get_label(item, label_type):
     data = {
         "item_code": item.item_code,
         "item_name": item.item_name,
-        "barcodes": item.barcodes,
     }
 
     frappe.msgprint("Label Printer: {0}".format(data))

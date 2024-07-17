@@ -1,18 +1,13 @@
-<table style="width: 48mm; height: 23mm; font-size: 11px; ">
+<table style="width: 48mm; height: 23mm; font-size: 10px; ">
     <tr>
-        <td style="margin-top: 0px; "><b>{{ item_name }}</b><br><br>
-            <table style="width: 48mm;">
-                <tr>
-                    <td style="text-align: left; margin: 0px !important; width: 50%; font-size: 11px;">Artikelnummer: {{ item_code }}</td>
-                    <td style="text-align: right; margin: 0px; padding-right: 5px; width: 50%; ">
-                        {% if barcodes|length > 0 %}    
-                        <div class="pull-right">        
-                            <img src="https://data.libracore.ch/phpqrcode/api/qrcode.php?f=png&s=code128&d={{ barcodes[0].barcode }}&h=20"/>        
-                        </div>    
-                        {% endif %}
-                    </td>
-                </tr>
-            </table>
+        <td style="margin-top: 0px; width: 50%;  ">
+            <b>{{ item_name }}</b><br>
+            Artikelnummer: {{ item_code }}
+        </td>
+        <td style="text-align: right; margin: 0px; width: 50%; ">
+            <div class="pull-right">        
+                <img src="https://data.libracore.ch/phpqrcode/api/qrcode.php?content={{ item_code }}&size=4"/>        
+            </div>    
         </td>
     </tr>
 </table>
