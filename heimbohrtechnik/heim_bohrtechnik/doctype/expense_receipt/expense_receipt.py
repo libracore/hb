@@ -40,7 +40,8 @@ class ExpenseReceipt(Document):
             'account': self.expense_account,
             'debit_in_account_currency': net_base_amount,
             'debit': net_base_amount,
-            'currency': company_currency
+            'currency': company_currency,
+            'account_currency': frappe.get_cached_value("Account", self.expense_account, "account_currency")
         })
         # pretax allocation  (expense currency)
         if self.vst != 0:
@@ -65,7 +66,8 @@ class ExpenseReceipt(Document):
             'account': account,
             'credit_in_account_currency': self.amount if credit_card_currency != company_currency else base_gross_amount,
             'credit': base_gross_amount,
-            'exchange_rate': exchange_rate if credit_card_currency != company_currency else 1
+            'exchange_rate': exchange_rate if credit_card_currency != company_currency else 1,
+            'account_currency': frappe.get_cached_value("Account", account, "account_currency")
         })
         
         # test for currency deviations
