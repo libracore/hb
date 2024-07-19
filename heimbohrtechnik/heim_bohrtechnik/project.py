@@ -16,7 +16,7 @@ def before_save(self, method):
     if self.checklist:
         for c in self.checklist:
             # define trough count/size in case of internal troughs
-            if c.activity == "Mulde" and c.supplier in [own_trough_supplier, "L-81511"]:
+            if c.activity == "Mulde" and c.supplier in [own_trough_supplier]:
                 c.trough_count = 1
                 c.trough_size = "±25m³"
             
