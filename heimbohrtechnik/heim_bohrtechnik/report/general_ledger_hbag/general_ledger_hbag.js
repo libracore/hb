@@ -1,4 +1,4 @@
-// Copyright (c) 2023, libracore and contributors
+// Copyright (c) 2023-2024, libracore and contributors
 // For license information, please see license.txt
 /* eslint-disable */
 
@@ -60,10 +60,10 @@ frappe.query_reports["General Ledger HBAG"] = {
         {
             "fieldname":"party_type",
             "label": __("Party Type"),
-            "fieldtype": "Link",
-            "options": "Party Type",
+            "fieldtype": "Select",
+            "options": "\nCustomer\nSupplier",
             "default": "",
-            on_change: function() {
+            "on_change": function() {
                 frappe.query_report.set_filter_value('party', "");
             }
         },
@@ -108,14 +108,14 @@ frappe.query_reports["General Ledger HBAG"] = {
             "fieldtype": "Data",
             "hidden": 1
         },
-        {
+        /*{
             "fieldname":"group_by",
             "label": __("Group by"),
             "fieldtype": "Select",
             "options": ["", __("Group by Voucher"), __("Group by Voucher (Consolidated)"),
                 __("Group by Account"), __("Group by Party")],
             "default": __("Group by Voucher (Consolidated)")
-        },
+        },*/
         {
             "fieldname":"tax_id",
             "label": __("Tax Id"),
@@ -131,18 +131,23 @@ frappe.query_reports["General Ledger HBAG"] = {
         {
             "fieldname":"cost_center",
             "label": __("Cost Center"),
-            "fieldtype": "MultiSelectList",
-            get_data: function(txt) {
-                return frappe.db.get_link_options('Cost Center', txt);
+            "fieldtype": "Link",
+            "options": "Cost Center",
+            "get_query": function() {
+                var company = frappe.query_report.get_filter_value('company');
+                return {
+                    "doctype": "Cost Center",
+                    "filters": {
+                        "company": company,
+                    }
+                }
             }
         },
         {
             "fieldname":"project",
             "label": __("Project"),
-            "fieldtype": "MultiSelectList",
-            get_data: function(txt) {
-                return frappe.db.get_link_options('Project', txt);
-            }
+            "fieldtype": "Link",
+            "options": "Project"
         },
         {
             "fieldname": "show_opening_entries",

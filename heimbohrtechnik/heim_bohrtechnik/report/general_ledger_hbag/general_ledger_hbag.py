@@ -1,4 +1,4 @@
-# Copyright (c) 2023, libracore and contributors
+# Copyright (c) 2023-2024, libracore and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
@@ -35,10 +35,12 @@ def execute(filters=None):
 
     filters = set_account_currency(filters)
 
+    filters.group_by = _('Group by Voucher (Consolidated)')
+    
     columns = get_columns(filters)
 
     res = get_result(filters, account_details)
-
+    
     return columns, res
 
 
@@ -112,7 +114,7 @@ def get_result(filters, account_details):
 
     data = get_data_with_opening_closing(filters, account_details, gl_entries)
 
-    result = get_result_as_list(data, filters)
+    result = data #get_result_as_list(data, filters)
 
     # enrich additional fields
     for r in result:
@@ -258,7 +260,7 @@ def get_data_with_opening_closing(filters, account_details, gl_entries):
         data.append({})
     else:
         data += entries
-
+    
     # totals
     data.append(totals.total)
 
