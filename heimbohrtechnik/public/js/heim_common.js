@@ -35,6 +35,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
         // disable deleting document attachments
         sheet.insertRule('.attachment-row>.close { display: none !important; }');
     }
+    
+
+});
+
+$(document).ready(function() {
+    // redirect general ledger
+    if (window.location.hash === "#query-report/General%20Ledger") {
+        window.location.replace("/desk#query-report/General Ledger HBAG"); 
+    }
 });
 
 function get_object_address(frm) {
