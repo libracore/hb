@@ -62,23 +62,40 @@ def find_closest_parkings(object_name):
             `street`, 
             `pincode`, 
             `city`, 
-            `canton`, 
-            `remarks`,
-            ((ABS(`gps_latitude` - {lat}) + ABS(`gps_longitude` - {lon})) / POW(5, `main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
-            `gps_latitude`, 
-            `gps_longitude`
-        FROM `tabParking`
-        WHERE 
-            `disabled` = 0
-            AND `supplier_group` = "Hotel"
-        ORDER BY `prox` ASC
-        LIMIT 5;
+            `canton`
+        FROM `tabParking`;
     """
 
+    parkings = frappe.db.sql(query, as_dict=True)
+
+    results = []
+
+    object_doc = frappe.get_doc("Object", object_name)
+
+    for parking in parkings:
+        gps_coordinates = get_gps_coordinates(parking['street'], parking['city'])
+        
+        if gps_coordinates and gps_coordinates.get('queued') == 1:
+            # wait for query to be executed (1 second)
+            sleep(1)
+            gps_coordinates = get_gps_coordinates(parking['street'], parking['city'])
+            frappe.log_error("Queued: {0}".format(gps_coordinates), "Queued")
+
+            parking['gps_latitude'] = gps_coordinates['lat']
+            parking['gps_longitude'] = gps_coordinates['lon']
+            parking['prox'] = abs(gps_coordinates['lat'] - object_doc.gps_lat) + abs(gps_coordinates['lon'] - object_doc.gps_long)
+            
+            results.append(parking)
+    
+    parkings = sorted(results, key=lambda x: x['prox'])[:5]
+
     template = "heimbohrtechnik/templates/pages/find_parkings.html"
-
-    return find_closest(object_name, query, template)
-
+    
+    html = frappe.render_template(template, {'parkings': parkings})
+    
+    return {
+        'html': html
+    }
 
 @frappe.whitelist()
 def find_closest_troughs(object_name):
