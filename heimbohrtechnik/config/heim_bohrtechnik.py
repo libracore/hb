@@ -515,6 +515,12 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Holiday List",
+                   "label": _("Holiday List"),
+                   "description": _("Holiday List")
+                },
+                {
+                   "type": "doctype",
                    "name": "Regional Holidays",
                    "label": _("Regional Holidays"),
                    "description": _("Regional Holidays")
