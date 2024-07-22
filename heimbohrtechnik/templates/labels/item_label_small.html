@@ -1,13 +1,11 @@
-<table style="width: 29mm; height: 23mm; font-size: 10px; ">
+<table style="width: 29mm; height: 23mm; font-size: 7.5px; ">
     <tr>
-        <td style="margin-top: 0px; width: 50%;  ">
-            <b>{{ item_name }}</b><br>
+        <td style="margin: 0px; width: 100%;  ">
             Artikelnummer: {{ item_code }}
-        </td>
-        <td style="text-align: right; margin: 0px; width: 50%; ">
+            <br>
             <div class="pull-right">        
-                <img src="https://data.libracore.ch/phpqrcode/api/qrcode.php?content={{ item_code }}&size=4"/>        
-            </div>    
+                <img src="https://data.libracore.ch/phpqrcode/api/qrcode.php?content={{ item_code }}&size=3"/>        
+            </div> 
         </td>
     </tr>
 </table>
