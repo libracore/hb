@@ -55,6 +55,32 @@ def find_closest_hotels(object_name):
     return closest_hotels
 
 @frappe.whitelist()
+def find_closest_parkings(object_name):
+    query = """
+        SELECT 
+            `name`, 
+            `street`, 
+            `pincode`, 
+            `city`, 
+            `canton`, 
+            `remarks`,
+            ((ABS(`gps_latitude` - {lat}) + ABS(`gps_longitude` - {lon})) / POW(5, `main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
+            `gps_latitude`, 
+            `gps_longitude`
+        FROM `tabParking`
+        WHERE 
+            `disabled` = 0
+            AND `supplier_group` = "Hotel"
+        ORDER BY `prox` ASC
+        LIMIT 5;
+    """
+
+    template = "heimbohrtechnik/templates/pages/find_parkings.html"
+
+    return find_closest(object_name, query, template)
+
+
+@frappe.whitelist()
 def find_closest_troughs(object_name):
     trough_activity = frappe.get_value("Heim Settings", "Heim Settings", "trough_activity")
     query = """
