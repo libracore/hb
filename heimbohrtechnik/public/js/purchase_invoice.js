@@ -17,6 +17,9 @@ frappe.ui.form.on('Purchase Invoice', {
             
             find_attached_expenses(frm);
         }
+        if (frm.doc.docstatus === 0) {
+            cur_frm.set_value("quick_remarks", frm.doc.remarks);
+        }
     },
     before_save: function(frm) {
         if (frm.doc.object) {
@@ -25,6 +28,9 @@ frappe.ui.form.on('Purchase Invoice', {
     },
     before_cancel: function(frm) {
         unlink_expenses(frm);
+    },
+    quick_remarks: function(frm) {
+        cur_frm.set_value("remarks", frm.doc.quick_remarks);
     }
 });
 
