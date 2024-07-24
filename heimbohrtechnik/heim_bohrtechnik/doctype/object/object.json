@@ -418,8 +418,9 @@
   },
   {
    "fieldname": "m_u_m",
-   "fieldtype": "Int",
-   "label": "M.\u00fc.M"
+   "fieldtype": "Float",
+   "label": "M.\u00fc.M",
+   "precision": "1"
   },
   {
    "fieldname": "old_trough_supplier",
@@ -448,7 +449,7 @@
    "label": "Geological Location"
   }
  ],
- "modified": "2024-07-03 09:34:45.215771",
+ "modified": "2024-07-24 10:03:51.905916",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
