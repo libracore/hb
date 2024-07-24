@@ -38,7 +38,8 @@ function make() {
                     'payment': document.getElementById('payment').value, 
                     'currency': document.getElementById('currency').value,
                     'kilometer': document.getElementById('kilometer').value, 
-                    'liter': document.getElementById('liter').value
+                    'liter': document.getElementById('liter').value,
+                    'operating_hours': document.getElementById('operating_hours').value
                 },
                 'callback': function(r) {
                     if (typeof r.message !== 'undefined') {

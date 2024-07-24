@@ -12,7 +12,7 @@ from frappe.utils.file_manager import save_file
 import base64
 
 @frappe.whitelist(allow_guest=True)
-def insert_receipt(truck, key, date, amount, payment, currency, kilometer, liter):
+def insert_receipt(truck, key, date, amount, payment, currency, kilometer, liter, operating_hours=0):
     if not verify_key(truck, key):
         frappe.throw( _("Invalid key") )
     
@@ -24,6 +24,7 @@ def insert_receipt(truck, key, date, amount, payment, currency, kilometer, liter
         'payment': payment,
         'currency': currency,
         'kilometer': kilometer,
+        'operating_hours': operating_hours,
         'liter': liter
     })
     try:
