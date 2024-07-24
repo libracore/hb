@@ -46,8 +46,10 @@
   "sec_caldav",
   "caldav_secret",
   "sec_print",
+  "item_label_printer_small",
   "block_length_factor",
   "col_print",
+  "item_label_printer_big",
   "enable_image_resize",
   "resize_to",
   "sec_routing",
@@ -353,10 +355,22 @@
    "fieldname": "send_feedback_reminder",
    "fieldtype": "Check",
    "label": "Send Feedback Reminder"
+  },
+  {
+   "fieldname": "item_label_printer_small",
+   "fieldtype": "Link",
+   "label": "Item Label Printer small",
+   "options": "Label Printer"
+  },
+  {
+   "fieldname": "item_label_printer_big",
+   "fieldtype": "Link",
+   "label": "Item Label Printer big",
+   "options": "Label Printer"
   }
  ],
  "issingle": 1,
- "modified": "2024-06-28 09:50:00.325026",
+ "modified": "2024-07-16 15:15:28.773091",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",
