@@ -820,13 +820,15 @@ function find_hotel(frm) {
 
 function find_parking(frm) {
     if (frm.doc.gps_coordinates) {
+        console.log("find parking");
         frappe.call({
             'method': "heimbohrtechnik.heim_bohrtechnik.locator.find_closest_parkings",
             'args': {
                 'object_name': frm.doc.name
             },
             'callback': function (r) {
-                var d = new frappe.ui.Dialog({
+                console.log(r.message);
+/*                 var d = new frappe.ui.Dialog({
                     'fields': [
                         {'fieldname': 'ht', 'fieldtype': 'HTML'}
                     ],
@@ -837,7 +839,7 @@ function find_parking(frm) {
 
                 for (var i = 0; i < r.message.parkings.length; i++) {
                     find_true_distance(cur_frm, r.message.parkings[i].gps_latitude, r.message.parkings[i].gps_longitude,"parking_distance_" + i, "parking_time_" + i);
-                }
+                } */
             }
         });
     } else {

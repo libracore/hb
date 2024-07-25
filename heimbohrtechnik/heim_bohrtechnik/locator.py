@@ -79,7 +79,6 @@ def find_closest_parkings(object_name):
             # wait for query to be executed (1 second)
             sleep(1)
             gps_coordinates = get_gps_coordinates(parking['street'], parking['city'])
-            frappe.log_error("Queued: {0}".format(gps_coordinates), "Queued")
 
             parking['gps_latitude'] = gps_coordinates['lat']
             parking['gps_longitude'] = gps_coordinates['lon']
@@ -88,6 +87,7 @@ def find_closest_parkings(object_name):
             results.append(parking)
     
     parkings = sorted(results, key=lambda x: x['prox'])[:5]
+    frappe.log_error(parkings, "Parkings")
 
     template = "heimbohrtechnik/templates/pages/find_parkings.html"
     
