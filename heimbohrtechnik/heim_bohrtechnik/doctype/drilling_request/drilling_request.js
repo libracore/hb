@@ -9,7 +9,17 @@ frappe.ui.form.on('Drilling Request', {
         }
         if (!frm.doc.quotation_until) {
             // set in 3 days as default quotation date
-            cur_frm.set_value("quotation_until", frappe.datetime.add_days(frappe.datetime.get_today(), 3));
+            frappe.call({
+                'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.holiday_safe_add_days',
+                'args': {
+                    'source_date': (frm.doc.date || frappe.datetime.get_today()),
+                    'days': 3
+                },
+                'callback': function(response) {
+                    cur_frm.set_value("quotation_until", response.message);
+                }
+            });
+            //cur_frm.set_value("quotation_until", frappe.datetime.add_days(frappe.datetime.get_today(), 3));
         }
         
         if (!frm.doc.__islocal) {
