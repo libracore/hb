@@ -81,7 +81,7 @@ function create_quotation(frm) {
             'method': 'create_quotation',
             'doc': cur_frm.doc,
             'callback': function(response) {
-                frappe.set_route("Form", "Quotation", response.message);
+                window.open(frappe.utils.get_form_link("Quotation", response.message), "_blank");
             }
         });
     });
