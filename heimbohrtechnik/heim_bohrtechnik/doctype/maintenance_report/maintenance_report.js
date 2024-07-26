@@ -12,9 +12,11 @@ frappe.ui.form.on('Maintenance Report', {
             }
         }
         cur_frm.fields_dict['truck'].get_query = function(doc) {
-            return {
-                'filters': {
-                    'drilling_team': cur_frm.doc.drilling_team
+            if (cur_frm.doc.drilling_team) {
+                return {
+                    'filters': {
+                        'drilling_team': cur_frm.doc.drilling_team
+                    }
                 }
             }
         }
@@ -34,6 +36,12 @@ frappe.ui.form.on('Maintenance Report', {
         if (frm.doc.project) {
             fetch_project_details(frm);
         }
+    },
+    truck: function(frm) {
+        get_team_from_truck(frm);
+    },
+    drilling_equipment: function(frm) {
+        get_team_from_equipment(frm);
     }
 });
 
@@ -51,4 +59,36 @@ function fetch_project_details(frm) {
             
         }
     });
+}
+
+function get_team_from_truck(frm) {
+    if (frm.doc.truck) {
+        frappe.call({
+            "method": "frappe.client.get",
+            "args": {
+                "doctype": "Truck",
+                "name": frm.doc.truck
+            },
+            "callback": function(response) {
+                var truck = response.message;
+                cur_frm.set_value('drilling_team', truck.drilling_team);
+            }
+        });
+    }
+}
+
+function get_team_from_equipment(frm) {
+    if (frm.doc.drilling_equipment) {
+        frappe.call({
+            "method": "frappe.client.get",
+            "args": {
+                "doctype": "Drilling Equipment",
+                "name": frm.doc.drilling_equipment
+            },
+            "callback": function(response) {
+                var equipment = response.message;
+                cur_frm.set_value('drilling_team', equipment.drilling_team);
+            }
+        });
+    }
 }

@@ -5,7 +5,8 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "title"
+  "title",
+  "drilling_team"
  ],
  "fields": [
   {
@@ -15,9 +16,15 @@
    "label": "Title",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "drilling_team",
+   "fieldtype": "Link",
+   "label": "Drilling Team",
+   "options": "Drilling Team"
   }
  ],
- "modified": "2021-06-07 09:51:16.754382",
+ "modified": "2024-07-26 15:36:18.643291",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Equipment",

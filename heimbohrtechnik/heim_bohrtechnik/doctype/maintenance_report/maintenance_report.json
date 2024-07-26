@@ -11,6 +11,7 @@
   "date",
   "sec_details",
   "truck",
+  "drilling_equipment",
   "col_details",
   "kilometer",
   "motor_hours",
@@ -99,9 +100,15 @@
    "hidden": 1,
    "label": "Naming Series",
    "options": "WB-.YY.####"
+  },
+  {
+   "fieldname": "drilling_equipment",
+   "fieldtype": "Link",
+   "label": "Drilling Equipment",
+   "options": "Drilling Equipment"
   }
  ],
- "modified": "2024-06-12 16:07:43.689986",
+ "modified": "2024-07-26 15:32:41.886458",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Maintenance Report",
