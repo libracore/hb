@@ -62,7 +62,9 @@ def find_closest_parkings(object_name):
             `street`, 
             `pincode`, 
             `city`, 
-            `canton`
+            `canton`,
+            `gps_latitude`,
+            `gps_longitude`
         FROM `tabParking`;
     """
 
@@ -73,18 +75,29 @@ def find_closest_parkings(object_name):
     object_doc = frappe.get_doc("Object", object_name)
 
     for parking in parkings:
-        gps_coordinates = get_gps_coordinates(parking['street'], parking['city'])
+        if not parking['gps_latitude'] or not parking['gps_longitude']:
+            gps_coordinates = get_gps_coordinates(parking['street'], "{0} {1}".format(parking['pincode'], parking['city']))
         
-        if gps_coordinates and gps_coordinates.get('queued') == 1:
-            # wait for query to be executed (1 second)
-            sleep(1)
-            gps_coordinates = get_gps_coordinates(parking['street'], parking['city'])
+            if gps_coordinates and gps_coordinates.get('queued') == 1:
+                # wait for query to be executed (1 second)
+                sleep(1)
+                gps_coordinates = get_gps_coordinates(parking['street'], parking['city'])
 
+            if gps_coordinates is None:
+                continue
+            
             parking['gps_latitude'] = gps_coordinates['lat']
             parking['gps_longitude'] = gps_coordinates['lon']
-            parking['prox'] = abs(gps_coordinates['lat'] - object_doc.gps_lat) + abs(gps_coordinates['lon'] - object_doc.gps_long)
+
+            # update parking in database
+            frappe.db.sql("""
+                UPDATE `tabParking`
+                SET `gps_latitude` = {lat}, `gps_longitude` = {lon}
+                WHERE `name` = "{name}";
+                """.format(lat=gps_coordinates['lat'], lon=gps_coordinates['lon'], name=parking['name']))
+            frappe.db.commit()
             
-            results.append(parking)
+        results.append(parking)
     
     parkings = sorted(results, key=lambda x: x['prox'])[:5]
     frappe.log_error(parkings, "Parkings")
