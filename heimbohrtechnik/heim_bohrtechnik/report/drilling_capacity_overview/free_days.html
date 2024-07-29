@@ -3,18 +3,29 @@
 </style>
 
 <table style="width: 70%;">
-    <thead>
-        <tr>
-            <th class="td">Bohrteam</th>
-            <th class="td">Datum</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for hit in hits %}
-            <tr>
-                <td>{{ hit.drilling_team }}</td>
-                <td>{{ hit.date }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
+    {% for drilling_team in hits %}
+        <tr><td style="border-bottom: 1px solid black; padding-top: 20px; width: 27%; border-top: None;"><b>{{ drilling_team.drilling_team[:5] }}</b></td><td style="border: None; border-bottom: 1px solid black !important; padding-top: 20px; width: 73%;"><b>{{ drilling_team.drilling_team[8:] }}</b></td></tr>
+            {% for date in drilling_team.dates %}
+                {% if date.date|length == 1 %}
+                    <tr>
+                        <td style="border-bottom: 1px solid grey;">Am {{ date.date[0] }}</td><td style="border-bottom: 1px solid grey;"> verfügbar.</td>
+                    </tr>
+                {% else %}
+                    {% for d in date.date %}
+                        {% if loop.first %}
+                        <tr>
+                            <td style="border-bottom: 1px solid grey;">Von {{ d }}</td>
+                        {% elif loop.last %}
+                            {% if d == "end" %}
+                                    <td style="border-bottom: 1px solid grey;">mind. 4 Wochen verfügbar.</td>
+                                </tr>
+                            {% else %}
+                                    <td style="border-bottom: 1px solid grey;">bis {{ d }} verfügbar.</td>
+                                </tr>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+    {% endfor %}
 </table>
