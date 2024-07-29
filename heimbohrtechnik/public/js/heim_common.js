@@ -2,6 +2,13 @@
 // For license information, please see license.txt
 // Common functions
 
+const avaliable_drilling_types = [
+    {'fieldname': 'flushing_drilling', 'label': "Spülbohrung"},
+    {'fieldname': 'hammer_drilling', 'label': "Hammerbohrung"},
+    {'fieldname': 'well_drilling', 'label': "Brunnenbohrung"},
+    {'fieldname': 'small_drilling_rig', 'label': "Kleinbohrgerät auf Bohrteam"}
+];
+
 // 1 sec after start (has to be delayed after document ready)
 window.onload = async function () {
     setTimeout(function() {
@@ -653,4 +660,48 @@ function get_kw(date) {
     var days =  Math.floor((current_date - start_date) / (24 * 60 * 60 * 1000));
     var week = Math.ceil(( current_date.getDay() + 1 + days) / 7);
     return week;
+}
+
+function get_avaliable_drilling_teams() {
+    var dts = []
+    for (var i = 0; i < avaliable_drilling_types.length; i++) {
+        dts.push(avaliable_drilling_types[i].label);
+    }
+    frappe.prompt([
+        {
+            'fieldname': 'drilling_type', 
+            'label': __('Drilling type'),
+            'fieldtype': 'Select',
+            'options': dts.join("\n")
+        }
+    ],
+    function(values){
+        var drilling_type = null;
+        for (var i = 0; i < avaliable_drilling_types.length; i++) {
+            if (avaliable_drilling_types[i].label === values.drilling_type) {
+                drilling_type = avaliable_drilling_types[i].fieldname;
+                label = avaliable_drilling_types[i].label;
+                break;
+            }
+        }
+        frappe.call({
+            'method': "heimbohrtechnik.heim_bohrtechnik.report.drilling_capacity_overview.drilling_capacity_overview.get_free_date",
+            'args': {
+                "drilling_type": drilling_type,
+                "label": label
+            },
+            'freeze': true,
+            'freeze_message': "Bitte warten, Termine werden gesucht...",
+            'callback': function(response) {
+                frappe.msgprint({
+                                    indicator: 'green',
+                                    title: response.message.title,
+                                    message: response.message.html
+                                });
+            }
+        });
+    },
+    'Bohrteamart angeben',
+    'Termin suchen'
+    )
 }

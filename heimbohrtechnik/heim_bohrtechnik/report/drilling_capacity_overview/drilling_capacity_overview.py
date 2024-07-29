@@ -201,14 +201,11 @@ def get_free_date(drilling_type, label):
             'drilling_team': team.name,
             'dates': dt_hits
         })
-        
-    frappe.log_error(hits, "hits")
                 
     html = frappe.render_template("heimbohrtechnik/heim_bohrtechnik/report/drilling_capacity_overview/free_days.html", {'hits': hits})
-                
-    frappe.msgprint(html, title='Freie Tage für {0}'.format(label), indicator='green')
+    
             
-    return "Done"
+    return {'html': html, 'title': 'Freie Tage für {0}'.format(label)}
 
 @frappe.whitelist()
 def get_filter_dates(calendar_week, year, start_check=False):
