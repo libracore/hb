@@ -531,6 +531,32 @@ DocType: Feedback Drilling Meter,Date,Datum
 DocType: Feedback Drilling Meter,Project,Projekt
 DocType: Feedback Drilling Meter,Number,Nummer
 DocType: Subcontracting Order Finish,Subcontracting Order Finish,Verlängerungs-Abschluss
+DocType: Subcontracting Order Finish,Protocol,Protokoll
+DocType: Subcontracting Order Finish,Measurement Type,Messtyp
+DocType: Subcontracting Order Finish,Site in Order,Bauplatz in Ordnung übergeben 
+DocType: Subcontracting Order Finish,Probes,Sonden
+DocType: Subcontracting Order Finish,Tube Length to Connector,Länge Verbindungsleitungen bis Verteiler
+DocType: Subcontracting Order Finish,Tube Length to Pump,Länge Verbindungsleitungen bis WP
+DocType: Subcontracting Order Finish,Test Duration,Prüfdauer
+DocType: Subcontracting Order Finish,Test Pressure,Prüfdruck
+DocType: Subcontracting Order Finish,Pressure Out,Druckablauf
+DocType: Subcontracting Order Finish,Flow Tested,Durchfluss geprüft
+DocType: Subcontracting Order Finish,Test Passed,Prüfung bestanden
+DocType: Subcontracting Order Finish,Fill Protocol,Füllprotokoll
+DocType: Subcontracting Order Finish,Compensation Tank,Ausgleichsgefäss
+DocType: Subcontracting Order Finish,Volume,Volumen
+DocType: Subcontracting Order Finish,Pressure,Druck
+DocType: Subcontracting Order Finish,Flush Duration,Spüldauer
+DocType: Subcontracting Order Finish,Filling Station Present,Füllstation vorhanden
+DocType: Subcontracting Order Finish,Vent Present,Entlüfter vorhanden
+DocType: Subcontracting Order Finish,Heat Carrier,Wärmeträger-Fluid
+DocType: Subcontracting Order Finish,Device Volume,Anlageninhalt
+DocType: Subcontracting Order Finish,Antifreeze Volume,Volumen Frostschutzmittel
+DocType: Subcontracting Order Finish,Concentration,Konzentration
+DocType: Subcontracting Order Finish,Protection,Schutz
+DocType: Subcontracting Order Finish,Fill Pressure,Gefüllter Druck 
+DocType: Subcontracting Order Finish,Fill Date,Fülldatum
+DocType: Subcontracting Order Finish,Filled with,Befüllt mit
 Report: Subcontracting Control,Subcontracting Control,Kontrolle Verlängerungsaufträge
 DocType: Layer Directory,Probe Diameter,Sondendurchmesser
 DocType: Project,Fixed date,Fixtermin
