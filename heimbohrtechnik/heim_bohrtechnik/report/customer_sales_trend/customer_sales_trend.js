@@ -1,4 +1,4 @@
-// Copyright (c) 2023, libracore AG and contributors
+// Copyright (c) 2023-2024, libracore AG and contributors
 // For license information, please see license.txt
 /* eslint-disable */
 
@@ -26,6 +26,24 @@ frappe.query_reports["Customer sales trend"] = {
             "options": "Sales Order\nSales Invoice",
             "default": "Sales Order",
             "reqd": 1
+        },
+        {
+            "fieldname":"aggregation",
+            "label": __("Type"),
+            "fieldtype": "Select",
+            "options": "Yearly\nQuarterly\nMonthly",
+            "default": "Yearly",
+            "reqd": 1
+        },
+        {
+            "fieldname":"from_date",
+            "label": __("From Date"),
+            "fieldtype": "Date"
+        },
+        {
+            "fieldname":"to_date",
+            "label": __("To Date"),
+            "fieldtype": "Date"
         }
     ]
 };

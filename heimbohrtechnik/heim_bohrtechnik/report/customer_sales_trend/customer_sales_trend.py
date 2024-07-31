@@ -19,7 +19,7 @@ def execute(filters=None):
     
 def get_columns():
     columns = [
-        {"label": _("Year"), "fieldname": "year", "fieldtype": "Int", "width": 60},
+        {"label": _("Year"), "fieldname": "year", "fieldtype": "Data", "width": 60},
         {"label": _("Net amount"), "fieldname": "net_amount", "fieldtype": "Currency", "width": 160},
         {"label": _("Customer"), "fieldname": "customer", "fieldtype": "Link", "options": "Customer", "width": 80},
         {"label": _("Customer Name"), "fieldname": "customer_name", "fieldtype": "Data", "width": 100},
@@ -32,19 +32,68 @@ def get_data(filters):
         date_field = "transaction_date"
     else:
         date_field = "posting_date"
-    sql_query = """
-        SELECT
-            YEAR(`{date_field}`) AS `year`,
-            SUM(`base_net_total`) AS `net_amount`,
-            `customer` AS `customer`,
-            `customer_name` AS `customer_name`
-        FROM `tab{base}`
-        WHERE `customer` = '{customer}'
-            AND `docstatus` = 1
-            AND `company` = "{company}"
-        GROUP BY `year`
-        ORDER BY `year` DESC
-    """.format(customer=filters.customer, company=filters.company, base=filters.base, date_field=date_field)
+    
+    conditions = ""
+    if filters.from_date:
+        conditions += """ AND `{date_field}` >= "{from_date}" """.format(date_field=date_field, from_date=filters.from_date)
+    if filters.to_date:
+        conditions += """ AND `{date_field}` <= "{to_date}" """.format(date_field=date_field, to_date=filters.to_date)
+        
+    if filters.aggregation == "Quarterly":
+        sql_query = """
+            SELECT
+                CONCAT(
+                    YEAR(`{date_field}`),
+                    CASE
+                        WHEN SUBSTRING(`{date_field}`, 6, 2) BETWEEN "01" AND "03" THEN "-Q1"
+                        WHEN SUBSTRING(`{date_field}`, 6, 2) BETWEEN "04" AND "06" THEN "-Q2"
+                        WHEN SUBSTRING(`{date_field}`, 6, 2) BETWEEN "07" AND "09" THEN "-Q3"
+                        ELSE "-Q4"
+                    END
+                ) AS `year`,
+                SUM(`base_net_total`) AS `net_amount`,
+                `customer` AS `customer`,
+                `customer_name` AS `customer_name`
+            FROM `tab{base}`
+            WHERE `customer` = '{customer}'
+                AND `docstatus` = 1
+                AND `company` = "{company}"
+                {conditions}
+            GROUP BY `year`
+            ORDER BY `year` DESC
+        """.format(customer=filters.customer, company=filters.company, base=filters.base, date_field=date_field, conditions=conditions)
+        
+    elif filters.aggregation == "Monthly":
+        sql_query = """
+            SELECT
+                SUBSTRING(`{date_field}`, 1, 7) AS `year`,
+                SUM(`base_net_total`) AS `net_amount`,
+                `customer` AS `customer`,
+                `customer_name` AS `customer_name`
+            FROM `tab{base}`
+            WHERE `customer` = '{customer}'
+                AND `docstatus` = 1
+                AND `company` = "{company}"
+                {conditions}
+            GROUP BY `year`
+            ORDER BY `year` DESC
+        """.format(customer=filters.customer, company=filters.company, base=filters.base, date_field=date_field, conditions=conditions)
+        
+    else:
+        sql_query = """
+            SELECT
+                YEAR(`{date_field}`) AS `year`,
+                SUM(`base_net_total`) AS `net_amount`,
+                `customer` AS `customer`,
+                `customer_name` AS `customer_name`
+            FROM `tab{base}`
+            WHERE `customer` = '{customer}'
+                AND `docstatus` = 1
+                AND `company` = "{company}"
+                {conditions}
+            GROUP BY `year`
+            ORDER BY `year` DESC
+        """.format(customer=filters.customer, company=filters.company, base=filters.base, date_field=date_field, conditions=conditions)
     
     data = frappe.db.sql(sql_query, as_dict=True)
     
