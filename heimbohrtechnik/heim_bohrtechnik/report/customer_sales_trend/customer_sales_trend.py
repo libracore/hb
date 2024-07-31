@@ -28,18 +28,18 @@ def get_columns():
     return columns
     
 def get_data(filters):
-    if filters.base == "Sales Order":
+    if filters.get('base') == "Sales Order":
         date_field = "transaction_date"
     else:
         date_field = "posting_date"
     
     conditions = ""
-    if filters.from_date:
-        conditions += """ AND `{date_field}` >= "{from_date}" """.format(date_field=date_field, from_date=filters.from_date)
-    if filters.to_date:
-        conditions += """ AND `{date_field}` <= "{to_date}" """.format(date_field=date_field, to_date=filters.to_date)
+    if filters.get('from_date'):
+        conditions += """ AND `{date_field}` >= "{from_date}" """.format(date_field=date_field, from_date=filters.get('from_date'))
+    if filters.get('to_date'):
+        conditions += """ AND `{date_field}` <= "{to_date}" """.format(date_field=date_field, to_date=filters.get('to_date'))
         
-    if filters.aggregation == "Quarterly":
+    if filters.get('aggregation') == "Quarterly":
         sql_query = """
             SELECT
                 CONCAT(
@@ -61,9 +61,9 @@ def get_data(filters):
                 {conditions}
             GROUP BY `year`
             ORDER BY `year` DESC
-        """.format(customer=filters.customer, company=filters.company, base=filters.base, date_field=date_field, conditions=conditions)
+        """.format(customer=filters.get('customer'), company=filters.get('company'), base=filters.get('base'), date_field=date_field, conditions=conditions)
         
-    elif filters.aggregation == "Monthly":
+    elif filters.get('aggregation') == "Monthly":
         sql_query = """
             SELECT
                 SUBSTRING(`{date_field}`, 1, 7) AS `year`,
@@ -77,7 +77,7 @@ def get_data(filters):
                 {conditions}
             GROUP BY `year`
             ORDER BY `year` DESC
-        """.format(customer=filters.customer, company=filters.company, base=filters.base, date_field=date_field, conditions=conditions)
+        """.format(customer=filters.get('customer'), company=filters.get('company'), base=filters.get('base'), date_field=date_field, conditions=conditions)
         
     else:
         sql_query = """
@@ -93,7 +93,7 @@ def get_data(filters):
                 {conditions}
             GROUP BY `year`
             ORDER BY `year` DESC
-        """.format(customer=filters.customer, company=filters.company, base=filters.base, date_field=date_field, conditions=conditions)
+        """.format(customer=filters.get('customer'), company=filters.get('company'), base=filters.get('base'), date_field=date_field, conditions=conditions)
     
     data = frappe.db.sql(sql_query, as_dict=True)
     
@@ -111,7 +111,7 @@ def get_chart(filters, data):
         values.append(data[i-1]['net_amount'])
         
     datasets = [{
-        'name': [frappe.get_value("Customer", filters.customer, "customer_name")],
+        'name': [frappe.get_value("Customer", filters.get('customer'), "customer_name")],
         'values': values
     }]
     

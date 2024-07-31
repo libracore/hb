@@ -64,7 +64,8 @@ jenv = {
         "get_project_pressure:heimbohrtechnik.heim_bohrtechnik.jinja.get_project_pressure",
         "get_sales_invoices_for_order:heimbohrtechnik.heim_bohrtechnik.jinja.get_sales_invoices_for_order",
         "get_sales_invoice_positions:heimbohrtechnik.heim_bohrtechnik.jinja.get_sales_invoice_positions",
-        "get_document_attachments:heimbohrtechnik.heim_bohrtechnik.jinja.get_document_attachments"
+        "get_document_attachments:heimbohrtechnik.heim_bohrtechnik.jinja.get_document_attachments",
+        "get_customer_kpi:heimbohrtechnik.heim_bohrtechnik.customer_kpi.get_customer_kpi"
     ]
 }
 
