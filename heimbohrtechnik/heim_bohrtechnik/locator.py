@@ -83,7 +83,7 @@ def find_closest_parkings(object_name):
                 sleep(1)
                 gps_coordinates = get_gps_coordinates(parking['street'], parking['city'])
 
-            if gps_coordinates is None:
+            if not gps_coordinates['lat'] or not gps_coordinates['lon']:
                 continue
             
             parking['gps_latitude'] = gps_coordinates['lat']
