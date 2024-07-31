@@ -584,6 +584,12 @@ def get_data():
                     "name": "Project Geographic Optimisation",
                     "doctype": "Project",
                     "is_query_report": True
+                },
+                {
+                    "type": "report",
+                    "name": "Customer sales trend",
+                    "doctype": "Customer",
+                    "is_query_report": True
                 }
             ]
         },
