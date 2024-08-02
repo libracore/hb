@@ -81,9 +81,9 @@ def find_closest_parkings(object_name):
             if gps_coordinates and gps_coordinates.get('queued') == 1:
                 # wait for query to be executed (1 second)
                 sleep(1)
-                gps_coordinates = get_gps_coordinates(parking['street'], parking['city'])
+                gps_coordinates = get_gps_coordinates(parking['street'], "{0} {1}".format(parking['pincode'], parking['city']))
 
-            if not gps_coordinates['lat'] or not gps_coordinates['lon']:
+            if not gps_coordinates:
                 continue
             
             parking['gps_latitude'] = gps_coordinates['lat']
@@ -98,6 +98,10 @@ def find_closest_parkings(object_name):
             frappe.db.commit()
             
         results.append(parking)
+    
+    frappe.log_error(results, "Results")
+    for parking in results:
+        parking['prox'] = ((abs(flt(parking['gps_latitude']) - object_doc.gps_lat) + abs(flt(parking['gps_longitude']) - object_doc.gps_long)) / pow(5, 1))
     
     parkings = sorted(results, key=lambda x: x['prox'])[:5]
     frappe.log_error(parkings, "Parkings")

@@ -828,7 +828,7 @@ function find_parking(frm) {
             },
             'callback': function (r) {
                 console.log(r.message);
-/*                 var d = new frappe.ui.Dialog({
+                 var d = new frappe.ui.Dialog({
                     'fields': [
                         {'fieldname': 'ht', 'fieldtype': 'HTML'}
                     ],
@@ -836,10 +836,6 @@ function find_parking(frm) {
                 });
                 d.fields_dict.ht.$wrapper.html(r.message.html);
                 d.show();
-
-                for (var i = 0; i < r.message.parkings.length; i++) {
-                    find_true_distance(cur_frm, r.message.parkings[i].gps_latitude, r.message.parkings[i].gps_longitude,"parking_distance_" + i, "parking_time_" + i);
-                } */
             }
         });
     } else {
