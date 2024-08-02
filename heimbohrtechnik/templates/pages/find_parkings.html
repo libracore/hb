@@ -1,42 +1,56 @@
-<style>
-  .modal-dialog {
-    width: 800px !important;
-  }
-  
-  .td {
-      padding: 5px;
-  }
-  
-  .tr {
-      border: 1px solid rgba(0, 0, 0, 0.2);
-  }
-  
-  .taright {
-      text-align: right;
-  }
-  
-  .tacenter {
-      text-align: center;
-  }
-  
-  </style>
-  
-  <table style="width: 765px;">
-      <thead>
-          <tr class="tr">
-              <th class="td" style="min-width: 100px;">{{ _("Parking") }}</th>
-              <th class="td">{{ _("Address") }}</th>
-              <th class="td">{{ _("Remarks") }}</th>
-          </tr>
-      </thead>
-      <tbody>
-          {% for parking in parkings %}
-              <tr class="tr">
-                  <td class="td">{{ parking.name }}</td>
-                  <td class="td"><a href="geo:{{ parking.gps_latitude }},{{ parking.gps_longitude }}">{{ parking.street }}, {{ parking.pincode }} {{ parking.city }}</a></td>
-                  <td class="td">{{ parking.remarks or "-" }}</td>
-              </tr>
-          {% endfor %}
-      </tbody>
-  </table>
-  
+<div style="margin: 5px; margin-top: 0px; border-top: 1px solid white; ">
+    <div id="map-container"></div>
+</div> 
+
+
+<script src="/assets/heimbohrtechnik/js/leaflet.js"></script>
+<script>
+        function addToConstructionSiteDescription(parkingName) {
+            console.log("Hinzufügen zu Baustellenbeschreibung: ", parkingName);
+            // Implementieren Sie die Logik zum Hinzufügen der Parkplatzdaten zur Baustellenbeschreibung
+            // Schließen Sie das Fenster, wenn nötig
+            //window.close(); // Dies schließt das aktuelle Fenster. Stellen Sie sicher, dass dies das gewünschte Verhalten ist.
+        }
+
+        var gps_lat = {{ object_doc.gps_lat }};
+        var gps_long = {{ object_doc.gps_long }};
+        var initial_zoom = 13;
+        var geo = null;
+        var radius = 0.1;
+        var green_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-green.png'});
+        var orange_icon = new L.Icon({'iconUrl': '/assets/heimbohrtechnik/images/marker-icon-orange.png'});
+        document.getElementById('map-container').innerHTML = "<div id='map' style='width: 100%; height: 800px;'></div>";
+        var map = L.map('map').setView([gps_lat, gps_long], initial_zoom);
+        // create layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // hack: issue a resize event
+        window.dispatchEvent(new Event('resize')); 
+        
+        document.getElementById("overlay-text").innerHTML = "<p>Objekte suchen...</p>";
+
+        var marker = L.marker([{{ object_doc.gps_lat }}, {{ object_doc.gps_long }}], {'icon': orange_icon}).addTo(map);
+        marker.bindPopup("<b>{{ object_doc.object_name }}</b><br>{{ object_doc.object_street }}, {{ object_doc.object_location }}").openPopup();
+
+        setTimeout(function() {
+            map.panTo(new L.LatLng(gps_lat, gps_long));
+        }, 500);
+
+        {% for parking in parkings %}
+            var marker = L.marker([{{ parking.gps_latitude }}, {{ parking.gps_longitude }}], {'icon': green_icon}).addTo(map);
+            marker.bindPopup("<b>{{ parking.name }}</b><br>{{ parking.street }}, {{ parking.pincode }} {{ parking.city }}<br><button onclick='addToConstructionSiteDescription(\"{{ parking.name }}\")'>Zu Baustelle hinzufügen</button>").openPopup();
+        {% endfor %}
+
+        document.getElementById("waitingScreen").style.display = "none";
+
+</script>
+
+<div id="waitingScreen" class="overlay">
+  <!-- Overlay content -->
+  <div class="overlay-content">
+    <p><i class="fa fa-spinner fa-spin" style="font-size: 80px"></i></p>
+    <p id="overlay-text">Loading...</p>
+  </div>
+</div>

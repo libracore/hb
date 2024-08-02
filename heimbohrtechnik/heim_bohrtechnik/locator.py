@@ -99,16 +99,14 @@ def find_closest_parkings(object_name):
             
         results.append(parking)
     
-    frappe.log_error(results, "Results")
     for parking in results:
         parking['prox'] = ((abs(flt(parking['gps_latitude']) - object_doc.gps_lat) + abs(flt(parking['gps_longitude']) - object_doc.gps_long)) / pow(5, 1))
     
     parkings = sorted(results, key=lambda x: x['prox'])[:5]
-    frappe.log_error(parkings, "Parkings")
 
     template = "heimbohrtechnik/templates/pages/find_parkings.html"
     
-    html = frappe.render_template(template, {'parkings': parkings})
+    html = frappe.render_template(template, {'parkings': parkings, 'object_doc': object_doc})
     
     return {
         'html': html,
