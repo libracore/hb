@@ -1,28 +1,42 @@
-<div style="margin: 5px; margin-top: 0px; border-top: 1px solid white; ">
-    <div id="map-container"></div>
-</div> 
-
-<script src="/assets/heimbohrtechnik/js/leaflet.js"></script>
-<script>
-    frappe.pages['object-overview'].on_page_load = function(wrapper) {
-    var page = frappe.ui.make_app_page({
-        parent: wrapper,
-        title: __('Object Overview'),
-        single_column: true
-    });
-    
-    frappe.object_overview.make(page);
-    frappe.object_overview.run();
-    
-    // add the application reference
-    frappe.breadcrumbs.add("Heim Bohrtechnik");
-}
-</script>
-
-<div id="waitingScreen" class="overlay">
-  <!-- Overlay content -->
-  <div class="overlay-content">
-    <p><i class="fa fa-spinner fa-spin" style="font-size: 80px"></i></p>
-    <p id="overlay-text">Laden</p>
-  </div>
-</div>
+<style>
+  .modal-dialog {
+    width: 800px !important;
+  }
+  
+  .td {
+      padding: 5px;
+  }
+  
+  .tr {
+      border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  
+  .taright {
+      text-align: right;
+  }
+  
+  .tacenter {
+      text-align: center;
+  }
+  
+  </style>
+  
+  <table style="width: 765px;">
+      <thead>
+          <tr class="tr">
+              <th class="td" style="min-width: 100px;">{{ _("Parking") }}</th>
+              <th class="td">{{ _("Address") }}</th>
+              <th class="td">{{ _("Remarks") }}</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for parking in parkings %}
+              <tr class="tr">
+                  <td class="td">{{ parking.name }}</td>
+                  <td class="td"><a href="geo:{{ parking.gps_latitude }},{{ parking.gps_longitude }}">{{ parking.street }}, {{ parking.pincode }} {{ parking.city }}</a></td>
+                  <td class="td">{{ parking.remarks or "-" }}</td>
+              </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+  

@@ -111,7 +111,8 @@ def find_closest_parkings(object_name):
     html = frappe.render_template(template, {'parkings': parkings})
     
     return {
-        'html': html
+        'html': html,
+        'parkings': parkings
     }
 
 @frappe.whitelist()
