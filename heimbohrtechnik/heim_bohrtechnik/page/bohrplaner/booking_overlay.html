@@ -16,10 +16,10 @@
         <div style="width: {{ max_width }}px;">
             <div style="float:left; min-width:{{ min_width }}px; max-width:{{ min_width }}px; background-color: {{ ampeln[11] }} color: {{ ampeln[13] }} overflow: visible; height: {{ box_height }}px; padding-top: {{ padding }}px !important; text-shadow: 2px 2px 4px black; ">{% if manager_short %}{{ manager_short }}{% else %}&nbsp;{% endif %}</div>
             <div style="float:left; min-width:{{ min_width }}px; max-width:{{ min_width }}px; background-color: {{ ampeln[12] }} height: {{ box_height }}px; padding-top: {{ padding }}px !important;">
-                {% if traffic_light %}&#128678;{% endif %}
-                {% if toitoi %}&#128699;{% endif %}
-                {% if red_drop %}&#129656;{% endif %}
-                {% if blue_drop %}&#128167;{% endif %}
+                {% if traffic_light %}<img src="/assets/heimbohrtechnik/images/traffic-light.png" style="max-height: 98%; max-width: auto;">{% endif %}
+                {% if toitoi %}<img src="/assets/heimbohrtechnik/images/toitoi.png" style="max-height: 98%; max-width: auto;">{% endif %}
+                {% if red_drop %}<img src="/assets/heimbohrtechnik/images/red-drop.png" style="max-height: 98%; max-width: auto;">{% endif %}
+                {% if blue_drop %}<img src="/assets/heimbohrtechnik/images/blue-drop.png" style="max-height: 98%; max-width: auto;">{% endif %}
             </div>
         </div>
         <div style="clear: both;"></div>

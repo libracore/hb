@@ -26,7 +26,7 @@ frappe.ui.form.on('Quotation', {
         }
         
         // set follow up date
-        cur_frm.set_value("next_follow_up",frappe.datetime.add_days(frm.doc.transaction_date, 21));
+        cur_frm.set_value("next_follow_up",frappe.datetime.add_days(frm.doc.transaction_date, 14));
     },
     refresh: function(frm) {
         if (frm.doc.object) {

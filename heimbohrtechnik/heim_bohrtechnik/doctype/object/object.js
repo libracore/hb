@@ -253,6 +253,8 @@ frappe.ui.form.on('Object', {
     },
     ch_coordinates: function(frm) {
         convert_ch_to_gps(frm);
+        
+        get_elevation(frm);
     },
     gps_coordinates: function(frm) {
         convert_gps_to_ch(frm);
@@ -631,6 +633,30 @@ function convert_gps_to_ch(frm) {
                 }
             }
         });
+    }
+}
+
+function get_elevation(frm) {
+    if (frm.doc.ch_coordinates) {
+        let xy = frm.doc.ch_coordinates.split(" / ");
+        if (xy.length === 2) {
+            frappe.call({
+                'method': 'erpnextswiss.erpnextswiss.swisstopo.get_height_above_sea_level',
+                'args': {
+                    'x': xy[0].replaceAll("'", ""),
+                    'y': xy[1].replaceAll("'", "")
+                },
+                'callback': function(response) {
+                    if (response.message) {
+                        cur_frm.set_value("m_u_m", response.message);
+                    }
+                }
+            });
+        } else {
+            console.log("Get elevation: Invalid coordinates");
+        }
+    } else {
+        console.log("Get elevation: No coordinates");
     }
 }
 

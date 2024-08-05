@@ -75,34 +75,37 @@ frappe.ui.form.on('Project', {
             if (frm.doc.notes) {
                 cur_frm.dashboard.add_comment( "Hinweise beachten!", 'blue', true);
             }
-            // split project button
-            frm.add_custom_button(__("Projekt teilen"), function() {
-                frappe.confirm(
-                    __('Soll das Projekt wirklich aufgeteilt werden?'),
-                    function(){
-                        // on yes
-                        frappe.call({
-                            'method': "heimbohrtechnik.heim_bohrtechnik.project.split_project",
-                            'args': {
-                                'project': frm.doc.name
-                            },
-                            'callback': function(response) {
-                                window.location.href=response.message.uri;
-                            }
-                        });
-                    },
-                    function(){
-                        // on no
-                    }
-                )
-            }, __("More") );
-            frm.add_custom_button(__("Insurance application"), function() {
-                insurance_application(frm);
-            }, __("More") );
-            if ((!frm.doc.__islocal) && (frm.doc.project_type === "Internal")) {
-                frm.add_custom_button(__("Maintenance Report"), function() {
-                    show_or_create_maintenance_report(frm);
+            
+            if (frappe.user.has_role("Projects Manager")) {     // restrict to projects managers
+                // split project button
+                frm.add_custom_button(__("Projekt teilen"), function() {
+                    frappe.confirm(
+                        __('Soll das Projekt wirklich aufgeteilt werden?'),
+                        function(){
+                            // on yes
+                            frappe.call({
+                                'method': "heimbohrtechnik.heim_bohrtechnik.project.split_project",
+                                'args': {
+                                    'project': frm.doc.name
+                                },
+                                'callback': function(response) {
+                                    window.location.href=response.message.uri;
+                                }
+                            });
+                        },
+                        function(){
+                            // on no
+                        }
+                    )
                 }, __("More") );
+                frm.add_custom_button(__("Insurance application"), function() {
+                    insurance_application(frm);
+                }, __("More") );
+                if ((!frm.doc.__islocal) && (frm.doc.project_type === "Internal")) {
+                    frm.add_custom_button(__("Maintenance Report"), function() {
+                        show_or_create_maintenance_report(frm);
+                    }, __("More") );
+                }
             }
             // create full project file
             frm.add_custom_button(__("Dossier erstellen"), function() {
@@ -195,6 +198,19 @@ frappe.ui.form.on('Project', {
         if (locals.scroll_to) {
             frappe.utils.scroll_to(document.querySelector("[data-fieldname='" + locals.scroll_to + "']"));
             locals.scroll_to = null;        // reset to prevent other scrolling
+        }
+        
+        // access: restrict field access for non-project managers
+        if (!frappe.user.has_role("Projects Manager") ) {
+            cur_frm.set_df_property('status', 'read_only', 1);
+            cur_frm.set_df_property('expected_start_date', 'read_only', 1);
+            cur_frm.set_df_property('start_half_day', 'read_only', 1);
+            cur_frm.set_df_property('expected_end_date', 'read_only', 1);
+            cur_frm.set_df_property('end_half_day', 'read_only', 1);
+            cur_frm.set_df_property('project_type', 'read_only', 1);
+            cur_frm.set_df_property('object', 'read_only', 1);
+            cur_frm.set_df_property('customer', 'read_only', 1);
+            cur_frm.set_df_property('sales_order', 'read_only', 1);
         }
     },
     before_save(frm) {

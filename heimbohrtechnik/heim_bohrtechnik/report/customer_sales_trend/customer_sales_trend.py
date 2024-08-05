@@ -1,4 +1,4 @@
-# Copyright (c) 2023, libracore AG and contributors
+# Copyright (c) 2023-2024, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
@@ -19,7 +19,7 @@ def execute(filters=None):
     
 def get_columns():
     columns = [
-        {"label": _("Year"), "fieldname": "year", "fieldtype": "Int", "width": 60},
+        {"label": _("Year"), "fieldname": "year", "fieldtype": "Data", "width": 60},
         {"label": _("Net amount"), "fieldname": "net_amount", "fieldtype": "Currency", "width": 160},
         {"label": _("Customer"), "fieldname": "customer", "fieldtype": "Link", "options": "Customer", "width": 80},
         {"label": _("Customer Name"), "fieldname": "customer_name", "fieldtype": "Data", "width": 100},
@@ -28,23 +28,72 @@ def get_columns():
     return columns
     
 def get_data(filters):
-    if filters.base == "Sales Order":
+    if filters.get('base') == "Sales Order":
         date_field = "transaction_date"
     else:
         date_field = "posting_date"
-    sql_query = """
-        SELECT
-            YEAR(`{date_field}`) AS `year`,
-            SUM(`base_net_total`) AS `net_amount`,
-            `customer` AS `customer`,
-            `customer_name` AS `customer_name`
-        FROM `tab{base}`
-        WHERE `customer` = '{customer}'
-            AND `docstatus` = 1
-            AND `company` = "{company}"
-        GROUP BY `year`
-        ORDER BY `year` DESC
-    """.format(customer=filters.customer, company=filters.company, base=filters.base, date_field=date_field)
+    
+    conditions = ""
+    if filters.get('from_date'):
+        conditions += """ AND `{date_field}` >= "{from_date}" """.format(date_field=date_field, from_date=filters.get('from_date'))
+    if filters.get('to_date'):
+        conditions += """ AND `{date_field}` <= "{to_date}" """.format(date_field=date_field, to_date=filters.get('to_date'))
+        
+    if filters.get('aggregation') == "Quarterly":
+        sql_query = """
+            SELECT
+                CONCAT(
+                    YEAR(`{date_field}`),
+                    CASE
+                        WHEN SUBSTRING(`{date_field}`, 6, 2) BETWEEN "01" AND "03" THEN "-Q1"
+                        WHEN SUBSTRING(`{date_field}`, 6, 2) BETWEEN "04" AND "06" THEN "-Q2"
+                        WHEN SUBSTRING(`{date_field}`, 6, 2) BETWEEN "07" AND "09" THEN "-Q3"
+                        ELSE "-Q4"
+                    END
+                ) AS `year`,
+                SUM(`base_net_total`) AS `net_amount`,
+                `customer` AS `customer`,
+                `customer_name` AS `customer_name`
+            FROM `tab{base}`
+            WHERE `customer` = '{customer}'
+                AND `docstatus` = 1
+                AND `company` = "{company}"
+                {conditions}
+            GROUP BY `year`
+            ORDER BY `year` DESC
+        """.format(customer=filters.get('customer'), company=filters.get('company'), base=filters.get('base'), date_field=date_field, conditions=conditions)
+        
+    elif filters.get('aggregation') == "Monthly":
+        sql_query = """
+            SELECT
+                SUBSTRING(`{date_field}`, 1, 7) AS `year`,
+                SUM(`base_net_total`) AS `net_amount`,
+                `customer` AS `customer`,
+                `customer_name` AS `customer_name`
+            FROM `tab{base}`
+            WHERE `customer` = '{customer}'
+                AND `docstatus` = 1
+                AND `company` = "{company}"
+                {conditions}
+            GROUP BY `year`
+            ORDER BY `year` DESC
+        """.format(customer=filters.get('customer'), company=filters.get('company'), base=filters.get('base'), date_field=date_field, conditions=conditions)
+        
+    else:
+        sql_query = """
+            SELECT
+                YEAR(`{date_field}`) AS `year`,
+                SUM(`base_net_total`) AS `net_amount`,
+                `customer` AS `customer`,
+                `customer_name` AS `customer_name`
+            FROM `tab{base}`
+            WHERE `customer` = '{customer}'
+                AND `docstatus` = 1
+                AND `company` = "{company}"
+                {conditions}
+            GROUP BY `year`
+            ORDER BY `year` DESC
+        """.format(customer=filters.get('customer'), company=filters.get('company'), base=filters.get('base'), date_field=date_field, conditions=conditions)
     
     data = frappe.db.sql(sql_query, as_dict=True)
     
@@ -62,7 +111,7 @@ def get_chart(filters, data):
         values.append(data[i-1]['net_amount'])
         
     datasets = [{
-        'name': [frappe.get_value("Customer", filters.customer, "customer_name")],
+        'name': [frappe.get_value("Customer", filters.get('customer'), "customer_name")],
         'values': values
     }]
     
