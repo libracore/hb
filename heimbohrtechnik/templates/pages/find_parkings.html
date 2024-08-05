@@ -11,7 +11,6 @@
 <script src="/assets/heimbohrtechnik/js/leaflet.js"></script>
 <script>
         function addToConstructionSiteDescription(parkingName) {
-            console.log("Hinzufügen zu Baustellenbeschreibung: ", parkingName);
             frappe.call({
                 method: 'heimbohrtechnik.templates.pages.find_parkings.add_parking_to_construction_site',
                 args: {
@@ -19,7 +18,6 @@
                     object_id: "{{ object_doc.name }}"
                 },
                 callback: function(response) {
-                    console.log(response);
                     if (response.message) {
                         alert("Parkplatz erfolgreich hinzugefügt");
                         window.close();
@@ -28,9 +26,6 @@
                     }
                 }
             });
-            // Implementieren Sie die Logik zum Hinzufügen der Parkplatzdaten zur Baustellenbeschreibung
-            // Schließen Sie das Fenster, wenn nötig
-            //window.close(); // Dies schließt das aktuelle Fenster. Stellen Sie sicher, dass dies das gewünschte Verhalten ist.
         }
 
         var gps_lat = {{ object_doc.gps_lat }};

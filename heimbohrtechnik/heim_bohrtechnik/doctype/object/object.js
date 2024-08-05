@@ -818,24 +818,31 @@ function find_hotel(frm) {
     }
 }
 
+var parkingDialog = null;
+
 function find_parking(frm) {
-    console.log("find parking");
     if (frm.doc.gps_coordinates) {
+        if (!parkingDialog) {
+            // Erstelle den Dialog, wenn er noch nicht existiert
+            parkingDialog = new frappe.ui.Dialog({
+                'fields': [
+                    {'fieldname': 'ht', 'fieldtype': 'HTML'}
+                ],
+                'title': __("Parkings")
+            });
+        } else {
+            // Reset den Inhalt des Dialogs, wenn er bereits existiert
+            parkingDialog.fields_dict.ht.$wrapper.empty();
+        }
+
         frappe.call({
             'method': "heimbohrtechnik.heim_bohrtechnik.locator.find_closest_parkings",
             'args': {
                 'object_name': frm.doc.name
             },
             'callback': function (r) {
-                console.log(r.message);
-                 var d = new frappe.ui.Dialog({
-                    'fields': [
-                        {'fieldname': 'ht', 'fieldtype': 'HTML'}
-                    ],
-                    'title': __("Parkings")
-                });
-                d.fields_dict.ht.$wrapper.html(r.message.html);
-                d.show();
+                parkingDialog.fields_dict.ht.$wrapper.html(r.message.html);
+                parkingDialog.show();
             }
         });
     } else {
