@@ -819,6 +819,7 @@ function find_hotel(frm) {
 }
 
 function find_parking(frm) {
+    console.log("find parking");
     if (frm.doc.gps_coordinates) {
         frappe.call({
             'method': "heimbohrtechnik.heim_bohrtechnik.locator.find_closest_parkings",
@@ -826,6 +827,7 @@ function find_parking(frm) {
                 'object_name': frm.doc.name
             },
             'callback': function (r) {
+                console.log(r.message);
                  var d = new frappe.ui.Dialog({
                     'fields': [
                         {'fieldname': 'ht', 'fieldtype': 'HTML'}
