@@ -19,10 +19,10 @@
                 },
                 callback: function(response) {
                     if (response.message) {
-                        alert("Parkplatz erfolgreich hinzugefügt");
+                        alert(__("Parkplatz wurde zur Baustellenbeschreibung hinzugefügt"));
                         window.close();
                     } else {
-                        alert("Fehler beim Hinzufügen des Parkplatzes");
+                        alert(__("Fehler beim Hinzufügen des Parkplatzes zur Baustellenbeschreibung"));
                     }
                 }
             });
@@ -56,10 +56,13 @@
 
         {% for parking in parkings %}
             var marker = L.marker([{{ parking.gps_latitude }}, {{ parking.gps_longitude }}], {'icon': green_icon}).addTo(map);
-            marker.bindPopup("<b>{{ parking.name }}</b><br>{{ parking.street }}, {{ parking.pincode }} {{ parking.city }}<br><button onclick='addToConstructionSiteDescription(\"{{ parking.name }}\")'>Zu Baustelle hinzufügen</button>");
+            marker.bindPopup("<b>{{ parking.name }}</b><br>{{ parking.street }}, {{ parking.pincode }} {{ parking.city }}<br><button onclick='addToConstructionSiteDescription(\"{{ parking.name }}\")'>{{ _('Zu Baustellenbeschreibung hinzufügen') }}</button>");
         {% endfor %}
 
         document.getElementById("waitingScreen").style.display = "none";
+
+        // hack: issue a resize event
+        window.dispatchEvent(new Event('resize'));
 
 </script>
 

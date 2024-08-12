@@ -17,7 +17,7 @@ def add_parking_to_construction_site(parking, object_id):
         if construction_site.parking_links:
             for parking_link in construction_site.parking_links:
                 if parking_link.parking == parking:
-                    frappe.throw(f"Parking already added to Construction Site")
+                    frappe.throw(("Parkplatz bereits hinzugefügt."))
                     return False
         construction_site.append("parking_links", {
             "parking": parking_doc.name
@@ -25,6 +25,6 @@ def add_parking_to_construction_site(parking, object_id):
         construction_site.save()
         return True
     else:
-        frappe.throw(f"No Construction Site found for object_id: {object_id}")
+        frappe.throw(("Keine Baustellenbeschreibung für dieses Objekt gefunden."))
         return False
         
