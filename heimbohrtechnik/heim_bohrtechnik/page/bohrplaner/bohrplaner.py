@@ -1449,10 +1449,13 @@ This function will add days until the date is no longer a holiday.
 
 Test: $ bench execute heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.holiday_safe_add_days --kwargs "{'source_date': '2023-07-31', 'days': 1}"
 """
+@frappe.whitelist()
 def holiday_safe_add_days(source_date, days):
     if type(source_date) == str:
         source_date = datetime.strptime(source_date, "%Y-%m-%d")
-        
+    if type(days) == str:
+        days = cint(days)
+    
     target_date = source_date + timedelta(days=days)
     while (date_is_holiday(target_date)):
         target_date = target_date + timedelta(days=1)

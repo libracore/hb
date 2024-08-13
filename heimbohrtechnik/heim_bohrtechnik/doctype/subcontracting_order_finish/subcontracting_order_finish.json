@@ -9,13 +9,39 @@
   "subcontracting_order",
   "project",
   "team",
+  "date",
   "col_main",
   "object",
   "object_name",
   "object_street",
   "object_location",
   "sec_remarks",
-  "remarks"
+  "remarks",
+  "sec_protocol",
+  "mesaurement_type",
+  "col_prot_1",
+  "site_in_order",
+  "col_prot_2",
+  "observations",
+  "sec_probes",
+  "probes",
+  "sec_fill",
+  "col_compensation",
+  "tank_volume",
+  "tank_pressure",
+  "flush_duration",
+  "filling_station",
+  "vent",
+  "tank_observations",
+  "col_carrier",
+  "device_volume",
+  "antifreeze_volume",
+  "concentration",
+  "protection",
+  "fill_pressure",
+  "fill_date",
+  "filled_with",
+  "manufacturer"
  ],
  "fields": [
   {
@@ -90,9 +116,152 @@
    "fieldname": "remarks",
    "fieldtype": "Text Editor",
    "label": "Remarks"
+  },
+  {
+   "fieldname": "sec_protocol",
+   "fieldtype": "Section Break",
+   "label": "Protocol"
+  },
+  {
+   "fieldname": "mesaurement_type",
+   "fieldtype": "Select",
+   "label": "Measurement Type",
+   "options": "Luft\nWasser"
+  },
+  {
+   "fieldname": "col_prot_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "site_in_order",
+   "fieldtype": "Check",
+   "label": "Site in Order"
+  },
+  {
+   "fieldname": "col_prot_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "observations",
+   "fieldtype": "Data",
+   "label": "Observations"
+  },
+  {
+   "fieldname": "sec_probes",
+   "fieldtype": "Section Break",
+   "label": "Probes"
+  },
+  {
+   "fieldname": "probes",
+   "fieldtype": "Table",
+   "label": "Probes",
+   "options": "Subcontracting Order Finish Probe"
+  },
+  {
+   "fieldname": "sec_fill",
+   "fieldtype": "Section Break",
+   "label": "Fill Protocol"
+  },
+  {
+   "fieldname": "col_compensation",
+   "fieldtype": "Column Break",
+   "label": "Compensation Tank"
+  },
+  {
+   "description": "in L",
+   "fieldname": "tank_volume",
+   "fieldtype": "Int",
+   "label": "Volume"
+  },
+  {
+   "description": "in bar",
+   "fieldname": "tank_pressure",
+   "fieldtype": "Float",
+   "label": "Pressure"
+  },
+  {
+   "description": "in min",
+   "fieldname": "flush_duration",
+   "fieldtype": "Float",
+   "label": "Flush Duration"
+  },
+  {
+   "default": "0",
+   "fieldname": "filling_station",
+   "fieldtype": "Check",
+   "label": "Filling Station Present"
+  },
+  {
+   "default": "0",
+   "fieldname": "vent",
+   "fieldtype": "Check",
+   "label": "Vent Present"
+  },
+  {
+   "fieldname": "tank_observations",
+   "fieldtype": "Data",
+   "label": "Observations"
+  },
+  {
+   "fieldname": "col_carrier",
+   "fieldtype": "Column Break",
+   "label": "Heat Carrier"
+  },
+  {
+   "description": "in L",
+   "fieldname": "device_volume",
+   "fieldtype": "Int",
+   "label": "Device Volume"
+  },
+  {
+   "description": "in L",
+   "fieldname": "antifreeze_volume",
+   "fieldtype": "Int",
+   "label": "Antifreeze Volume"
+  },
+  {
+   "description": "in %",
+   "fieldname": "concentration",
+   "fieldtype": "Percent",
+   "label": "Concentration"
+  },
+  {
+   "description": "in \u00b0C",
+   "fieldname": "protection",
+   "fieldtype": "Float",
+   "label": "Protection"
+  },
+  {
+   "description": "in L",
+   "fieldname": "fill_pressure",
+   "fieldtype": "Int",
+   "label": "Fill Pressure"
+  },
+  {
+   "fieldname": "fill_date",
+   "fieldtype": "Date",
+   "label": "Fill Date"
+  },
+  {
+   "fieldname": "filled_with",
+   "fieldtype": "Select",
+   "label": "Filled with",
+   "options": "Monoethylenglykol N-Geo\nPolypropylenglykol L"
+  },
+  {
+   "fieldname": "manufacturer",
+   "fieldtype": "Data",
+   "label": "Manufacturer"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
   }
  ],
- "modified": "2024-01-17 19:37:58.762412",
+ "modified": "2024-07-29 21:03:24.016548",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order Finish",
@@ -118,6 +287,17 @@
    "read": 1,
    "report": 1,
    "role": "Projects User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Anbindung",
    "share": 1,
    "write": 1
   }

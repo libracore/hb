@@ -17,6 +17,7 @@ def get_columns(filters):
         {"label": _("Drilling Team"), "fieldname": "drilling_team", "fieldtype": "Link", "options": "Drilling Team", "width": 150},
         {"label": _("Truck"), "fieldname": "truck", "fieldtype": "Link", "options": "Truck", "width": 90},
         {"label": _("Kilometer"), "fieldname": "kilometer", "fieldtype": "Int", "width": 80},
+        {"label": _("Operating Hours"), "fieldname": "operating_hours", "fieldtype": "Float", "precision": 1, "width": 80},
         {"label": _("Liter"), "fieldname": "liter", "fieldtype": "Float", "width": 80},
         {"label": _("Amount"), "fieldname": "amount", "fieldtype": "Currency", "options": "currency", "width": 80}
     ]
@@ -36,6 +37,7 @@ def get_data(filters):
             `tabGas Receipt`.`drilling_team` AS `drilling_team`,
             `tabGas Receipt`.`truck` AS `truck`,
             `tabGas Receipt`.`kilometer` AS `kilometer`,
+            `tabGas Receipt`.`operating_hours` AS `operating_hours`,
             `tabGas Receipt`.`liter` AS `liter`,
             `tabGas Receipt`.`amount` AS `amount`,
             `tabGas Receipt`.`currency` AS `currency`

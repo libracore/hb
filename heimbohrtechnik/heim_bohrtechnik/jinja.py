@@ -1,9 +1,10 @@
-# Copyright (c) 2021-2023, libracore and Contributors
+# Copyright (c) 2021-2024, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 
 from __future__ import unicode_literals
 import frappe
 import json
+from frappe.desk.form.load import get_attachments
 
 """
 Return the structured data for the pressure check QR
@@ -69,3 +70,10 @@ def get_sales_invoice_positions(sales_invoices):
         
         
     return invoice_positions
+
+"""
+Return a list of attachments of a document
+"""
+def get_document_attachments(dt, dn):
+    return get_attachments(dt, dn)
+    

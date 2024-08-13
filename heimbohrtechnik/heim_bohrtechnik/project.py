@@ -243,3 +243,12 @@ def insurance_application(project):
         probes_above_250=probes.get('above_250')
     )
     return insurance_form_str
+
+@frappe.whitelist()
+def check_sv_ib(project):
+    sv = frappe.get_all("Layer Directory", filters={'project': project}, fields=['name'])
+    ib = frappe.get_all("Injection report", filters={'project': project}, fields=['name'])
+    if len(sv) > 0 and len(ib) > 0:
+        return True
+    else:
+        return False

@@ -273,7 +273,7 @@ def upload_file(self, event):
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
         if frappe.db.exists("Project", project):
             physical_file_name = get_physical_path(self.name)
-            write_project_file_from_local_file (project, physical_file_name, PATHS['subprojects'])
+            write_project_file_from_local_file (project, physical_file_name, PATHS['subprojects_heim'])
             
     elif self.attached_to_doctype == "Water Supply Registration":
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")

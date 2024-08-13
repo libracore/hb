@@ -1,0 +1,93 @@
+{
+ "creation": "2024-07-29 17:56:44.066381",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "depth",
+  "tube_length_1",
+  "tube_length_2",
+  "test_duration",
+  "test_pressure",
+  "pressure_out",
+  "flow_tested",
+  "test_passed"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "description": "in m",
+   "fieldname": "depth",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Depth"
+  },
+  {
+   "columns": 2,
+   "description": "in m",
+   "fieldname": "tube_length_1",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Tube Length to Connector"
+  },
+  {
+   "columns": 2,
+   "description": "in m",
+   "fieldname": "tube_length_2",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Tube Length to Pump"
+  },
+  {
+   "columns": 1,
+   "description": "in min [30 Min]",
+   "fieldname": "test_duration",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Test Duration"
+  },
+  {
+   "columns": 1,
+   "description": "in bar [2.5-3.0 bar]",
+   "fieldname": "test_pressure",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Test Pressure"
+  },
+  {
+   "columns": 1,
+   "description": "in bar",
+   "fieldname": "pressure_out",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Pressure Out"
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "flow_tested",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Flow Tested"
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "test_passed",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Test Passed"
+  }
+ ],
+ "istable": 1,
+ "modified": "2024-07-29 18:14:53.216094",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Subcontracting Order Finish Probe",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
