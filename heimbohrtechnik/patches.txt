@@ -1,2 +1,2 @@
 heimbohrtechnik.patches.v0_9_191.drilling_team_structure_bugfix
-heimbohrtechnik.patches.update_parking_gps.update_parking_gps
+heimbohrtechnik.patches.v0_9_220.update_parking_gps
