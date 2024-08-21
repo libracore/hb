@@ -8,6 +8,8 @@
     }
 </style>
 
+{% set object_doc = frappe.get_doc("Object", object_name) %}
+
 <script src="/assets/heimbohrtechnik/js/leaflet.js"></script>
 <script>
         function addToConstructionSiteDescription(parkingName) {
@@ -19,10 +21,10 @@
                 },
                 callback: function(response) {
                     if (response.message) {
-                        alert(__("Parkplatz wurde zur Baustellenbeschreibung hinzugefügt"));
-                        window.close();
+                        frappe.msgprint(__("Parkplatz wurde zur Baustellenbeschreibung hinzugefügt"));
+                        cur_dialog.hide();
                     } else {
-                        alert(__("Fehler beim Hinzufügen des Parkplatzes zur Baustellenbeschreibung"));
+                        frappe.msgprint(__("Fehler beim Hinzufügen des Parkplatzes zur Baustellenbeschreibung"));
                     }
                 }
             });
@@ -54,7 +56,7 @@
             map.panTo(new L.LatLng(gps_lat, gps_long));
         }, 500);
 
-        {% for parking in parkings %}
+        {% for parking in hotels %}
             var marker = L.marker([{{ parking.gps_latitude }}, {{ parking.gps_longitude }}], {'icon': green_icon}).addTo(map);
             marker.bindPopup("<b>{{ parking.name }}</b><br>{{ parking.street }}, {{ parking.pincode }} {{ parking.city }}<br><button onclick='addToConstructionSiteDescription(\"{{ parking.name }}\")'>{{ _('Zu Baustellenbeschreibung hinzufügen') }}</button>");
         {% endfor %}

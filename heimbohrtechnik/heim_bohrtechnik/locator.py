@@ -67,6 +67,9 @@ def find_closest_parkings(object_name):
             `gps_longitude`,
             ((ABS(`tabParking`.`gps_latitude` - {lat}) + ABS(`tabParking`.`gps_longitude` - {lon}))) AS `prox`        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
         FROM `tabParking`
+        WHERE 
+            `gps_latitude` IS NOT NULL
+            AND `gps_longitude` IS NOT NULL
         ORDER BY `prox` ASC
         LIMIT 5;
     """
@@ -159,7 +162,7 @@ def find_closest(object_name, query, template):
     hotels = frappe.db.sql(query.format(lat=object_doc.gps_lat, lon=object_doc.gps_long), as_dict=True)
     
     #render hotels to dialog
-    html = frappe.render_template(template, {'hotels': hotels})
+    html = frappe.render_template(template, {'hotels': hotels, 'object_name': object_name})
     
     return {
         'html': html,
