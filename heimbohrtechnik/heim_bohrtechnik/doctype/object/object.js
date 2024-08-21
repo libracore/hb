@@ -74,6 +74,9 @@ frappe.ui.form.on('Object', {
         frm.add_custom_button(__("Mud"), function() {
             find_mud(frm);
         }, __("Find"));
+        frm.add_custom_button(__("Parking"), function() {
+            find_parking(frm);
+        }, __("Find"));
         
         // show permits & checklist (in case coming from another record where it was hidden)
         var checklists = document.querySelectorAll("[data-fieldname='checklist']");
@@ -840,6 +843,39 @@ function find_hotel(frm) {
         frappe.msgprint(__("Keine Koordinaten"));
     }
 }
+
+var parkingDialog = null;
+
+function find_parking(frm) {
+    if (frm.doc.gps_coordinates) {
+        if (!parkingDialog) {
+            // Erstelle den Dialog, wenn er noch nicht existiert
+            parkingDialog = new frappe.ui.Dialog({
+                'fields': [
+                    {'fieldname': 'ht', 'fieldtype': 'HTML'}
+                ],
+                'title': __("Parkings")
+            });
+        } else {
+            // Reset den Inhalt des Dialogs, wenn er bereits existiert
+            parkingDialog.fields_dict.ht.$wrapper.empty();
+        }
+
+        frappe.call({
+            'method': "heimbohrtechnik.heim_bohrtechnik.locator.find_closest_parkings",
+            'args': {
+                'object_name': frm.doc.name
+            },
+            'callback': function (r) {
+                parkingDialog.fields_dict.ht.$wrapper.html(r.message.html);
+                parkingDialog.show();
+            }
+        });
+    } else {
+        frappe.msgprint(__("Keine Koordinaten"));
+    }
+}
+
 
 function find_true_distance(frm, to_lat, to_long, target_distance_field, target_duration_field) {
     frappe.call({

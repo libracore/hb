@@ -13,6 +13,8 @@
   "city",
   "location",
   "canton",
+  "gps_latitude",
+  "gps_longitude",
   "sec_remarks",
   "remarks"
  ],
@@ -73,9 +75,21 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Remarks"
+  },
+  {
+   "fieldname": "gps_latitude",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "GPS Latitude"
+  },
+  {
+   "fieldname": "gps_longitude",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "GPS Longitude"
   }
  ],
- "modified": "2024-07-03 22:03:36.658143",
+ "modified": "2024-07-25 14:37:20.024089",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Parking",

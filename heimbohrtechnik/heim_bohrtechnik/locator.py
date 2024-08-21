@@ -55,6 +55,30 @@ def find_closest_hotels(object_name):
     return closest_hotels
 
 @frappe.whitelist()
+def find_closest_parkings(object_name):
+    query = """
+        SELECT 
+            `name`, 
+            `street`, 
+            `pincode`, 
+            `city`, 
+            `canton`,
+            `gps_latitude`,
+            `gps_longitude`,
+            ((ABS(`tabParking`.`gps_latitude` - {lat}) + ABS(`tabParking`.`gps_longitude` - {lon}))) AS `prox`        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
+        FROM `tabParking`
+        WHERE 
+            `gps_latitude` IS NOT NULL
+            AND `gps_longitude` IS NOT NULL
+        ORDER BY `prox` ASC
+        LIMIT 5;
+    """
+    
+    template = "heimbohrtechnik/templates/pages/find_parkings.html"
+    
+    return find_closest(object_name, query, template)
+    
+@frappe.whitelist()
 def find_closest_troughs(object_name):
     trough_activity = frappe.get_value("Heim Settings", "Heim Settings", "trough_activity")
     query = """
@@ -138,7 +162,7 @@ def find_closest(object_name, query, template):
     hotels = frappe.db.sql(query.format(lat=object_doc.gps_lat, lon=object_doc.gps_long), as_dict=True)
     
     #render hotels to dialog
-    html = frappe.render_template(template, {'hotels': hotels})
+    html = frappe.render_template(template, {'hotels': hotels, 'object_name': object_name})
     
     return {
         'html': html,
@@ -162,12 +186,20 @@ def find_gps_for_address(address):
     if type(address) == str:
         address = frappe.get_doc("Address", address)
         
-    gps_coordinates = get_gps_coordinates(address.address_line1, "{0} {1}".format(address.pincode, address.city))
+    gps_coordinates = find_gps_coordinates(address.address_line1, "{0} {1}".format(address.pincode, address.city))
+        
+    return gps_coordinates
+
+"""
+This is a wrapper function that includes both local cache and OSM request delay
+"""
+def find_gps_coordinates(street, location):
+    gps_coordinates = get_gps_coordinates(street, location)
     
     if gps_coordinates and gps_coordinates.get('queued') == 1:
         # wait for query to be executed (1 second)
         sleep(1)
-        gps_coordinates = get_gps_coordinates(address.address_line1, "{0} {1}".format(address.pincode, address.city))
+        gps_coordinates = get_gps_coordinates(street, location)
         
     return gps_coordinates
     
