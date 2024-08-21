@@ -58,7 +58,7 @@
 
         {% for parking in hotels %}
             var marker = L.marker([{{ parking.gps_latitude }}, {{ parking.gps_longitude }}], {'icon': green_icon}).addTo(map);
-            marker.bindPopup("<b>{{ parking.name }}</b><br>{{ parking.street }}, {{ parking.pincode }} {{ parking.city }}<br><button onclick='addToConstructionSiteDescription(\"{{ parking.name }}\")'>{{ _('Zu Baustellenbeschreibung hinzufügen') }}</button>");
+            marker.bindPopup("<b>{{ parking.name }}</b><br>{{ parking.street }}, {{ parking.pincode }} {{ parking.city }}<br><button class='btn btn-primary' onclick='addToConstructionSiteDescription(\"{{ parking.name }}\")'>{{ _('Zu Baustellenbeschreibung hinzufügen') }}</button>");
         {% endfor %}
 
         document.getElementById("waitingScreen").style.display = "none";
