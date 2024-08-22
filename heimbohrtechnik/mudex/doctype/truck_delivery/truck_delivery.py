@@ -142,7 +142,7 @@ def create_invoice(object):
         if customer == config.default_customer_for_mud:
             new_sinv.submit()
             # create mathing purchase invoice
-            create_pinv_from_sinv(new_sinv.name, intracompany_account=True)
+            create_pinv_from_sinv(new_sinv.name, intracompany_account=1199)
             # create pdf attachments
             try:
                 # use execute instead of attach_pdf to make it sync for the subsequent doc
