@@ -92,7 +92,7 @@ def create_pinv_from_sinv(sales_invoice, intracompany_account=False):
                 ],
                 'user_remark': INTERMEDIATE_TEXT.format(new_pinv.name)
             })
-            pinv_jv.insert(ignore_permissions)
+            pinv_jv.insert(ignore_permissions=True)
             pinv_jv.submit()
         else:
             frappe.log_error("Zwischenkonto {account}% fehlt für Unternehmen {0}".format(pinv_company, account=intracompany_account), "Intracompany-Verrechnung")
