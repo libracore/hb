@@ -59,7 +59,7 @@ def create_pinv_from_sinv(sales_invoice, intracompany_account=False):
                 'rate': t.rate
             })
     # insert
-    new_pinv.insert()
+    new_pinv.insert(ignore_permissions=True)
     new_pinv.submit()
     if intracompany_account:
         # create payment records against intracompany account 1199
@@ -90,7 +90,7 @@ def create_pinv_from_sinv(sales_invoice, intracompany_account=False):
                 ],
                 'user_remark': INTERMEDIATE_TEXT.format(new_pinv.name)
             })
-            pinv_jv.insert()
+            pinv_jv.insert(ignore_permissions)
             pinv_jv.submit()
         else:
             frappe.log_error("Zwischenkonto 1199% fehlt für Unternehmen {0}".format(pinv_company), "Intracompany-Verrechnung")
@@ -121,7 +121,7 @@ def create_pinv_from_sinv(sales_invoice, intracompany_account=False):
                 ],
                 'user_remark': INTERMEDIATE_TEXT.format(sinv.name)
             })
-            sinv_jv.insert()
+            sinv_jv.insert(ignore_permissions=True)
             sinv_jv.submit()
         else:
             frappe.log_error("Zwischenkonto 1199% fehlt für Unternehmen {0}".format(sinv.company), "Intracompany-Verrechnung")
