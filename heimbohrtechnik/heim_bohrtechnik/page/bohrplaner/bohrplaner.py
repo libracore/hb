@@ -479,17 +479,23 @@ def get_traffic_lights_indicator(project):
     
     #ews_details [7]
     ews_details_color = BG_RED                      # red
-    po = frappe.db.sql("""
-        SELECT AVG(`per_received`) AS `per_received`, `order_confirmation` 
+    pos = frappe.db.sql("""
+        SELECT `per_received`, `order_confirmation`, `status`
         FROM `tabPurchase Order` 
         WHERE `object` = '{0}' 
-          AND `docstatus` = 1 
-          AND `status` != "Closed";""".format(project.object), as_dict=True)
-    if len(po) > 0 and po[0]['per_received'] != None:
+          AND `docstatus` = 1;""".format(project.object), as_dict=True)
+    if len(pos) > 0 and pos[0]['per_received'] != None:
         ews_details_color = BG_YELLOW               # yellow: ordered
-        if po[0].order_confirmation:
+        all_closed_or_confirmed = True
+        all_received = True
+        for p in pos:
+            if not p['order_confirmation'] and p['status'] != "Closed":
+                all_closed_or_confirmed = False
+            if cint(p['per_received']) < 100:
+                all_received = False
+        if all_closed_or_confirmed:
             ews_details_color = BG_ORANGE           # orange: confirmed
-        if cint(po[0].per_received) == 100:
+        if all_received:
             ews_details_color = BG_GREEN            # green: available
     colors.append(ews_details_color)
     
