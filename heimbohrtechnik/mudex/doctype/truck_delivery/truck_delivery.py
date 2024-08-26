@@ -54,8 +54,15 @@ Create an invoice from all open positions of an object
 @frappe.whitelist()
 def create_invoice(object):
     config = frappe.get_doc("MudEx Settings", "MudEx Settings")
-    # find customer: either from Object or default
-    o = frappe.get_doc("Object", object)
+    # find customer: either from Project/Object or default
+    # check if there is a project
+    projects = frappe.get_all("Project", filters={'object': object}, fields=['name'])
+    if len(projects) > 0:
+        # use project checklist
+        o = frappe.get_doc("Project", projects[0]['name'])
+    else:
+        # use object checklist
+        o = frappe.get_doc("Object", object)
     customer = config.default_customer_for_mud
     for c in o.checklist:
         if c.activity == config.mud_activity:

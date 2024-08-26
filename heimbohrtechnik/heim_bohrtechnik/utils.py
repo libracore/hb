@@ -385,7 +385,7 @@ def order_ews(object):
                 })
                 # recursion: in case of staged cementation, check sub-level also
                 if cint(obj.staged_cementation) == 1:
-                    sub_related_items = get_related_items(r)
+                    sub_related_items = get_related_items(r.get('item_code'))
                     for sr in sub_related_items:
                         items.append({
                             'item_code': sr.get('item_code'),
