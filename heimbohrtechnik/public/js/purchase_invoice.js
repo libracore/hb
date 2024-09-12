@@ -19,6 +19,10 @@ frappe.ui.form.on('Purchase Invoice', {
         }
         if (frm.doc.docstatus === 0) {
             cur_frm.set_value("quick_remarks", frm.doc.remarks);
+            
+            frm.add_custom_button(__("TAB-Maske"), function() {
+                tab_input(frm);
+            });
         }
     },
     before_save: function(frm) {
@@ -197,4 +201,125 @@ function unlink_expenses(frm) {
         },
         'async': false
     });
+}
+
+function tab_input(frm) {
+    // show dialog
+    let item = null;
+    let rate = 0;
+    let cost_center = null;
+    if ((frm.doc.items) && (frm.doc.items.length > 0)) {
+        item = frm.doc.items[0].item_code;
+        rate = frm.doc.items[0].rate;
+        cost_center = frm.doc.items[0].cost_center;
+    }
+    const fields = [
+        {
+            'fieldtype': 'Link',
+            'fieldname': 'supplier',
+            'label': __('Supplier'),
+            'options': 'Supplier',
+            'default': frm.doc.supplier,
+            'onchange': function() {
+                if (d.get_value('supplier')) {
+                    frappe.call({
+                        "method": "frappe.client.get",
+                        "args": {
+                            "doctype": "Supplier",
+                            "name": d.get_value('supplier')
+                        },
+                        "callback": function(response) {
+                            d.set_value('supplier_name',  response.message.supplier_name)  ;
+                        }
+                    });
+                }
+            }
+        }, {
+            'fieldtype': 'Data',
+            'fieldname': 'supplier_name',
+            'label': __('Supplier name'),
+            'read_only': 1,
+            'fetch_from': 'supplier.supplier_name',
+            'default': frm.doc.supplier_name
+        }, {
+            'fieldtype': 'Date',
+            'fieldname': 'posting_date',
+            'label': __('Posting Date'),
+            'default': frm.doc.posting_date
+        }, {
+            'fieldtype': 'Link',
+            'fieldname': 'object',
+            'label': __('Object'),
+            'options': 'Object',
+            'default': frm.doc.object
+        }, {
+            'fieldtype': 'Data',
+            'fieldname': 'bill_no',
+            'label': __('Supplier Invoice No'),
+            'default': frm.doc.bill_no
+        }, {
+            'fieldtype': 'Link',
+            'fieldname': 'item',
+            'label': __('Item'),
+            'default': item,
+            'options': 'Item'
+        }, {
+            'fieldtype': 'Column Break',
+            'fieldname': 'col_main'
+        }, {
+            'fieldtype': 'Currency',
+            'fieldname': 'rate',
+            'label': __('Rate'),
+            'default': rate
+        }, {
+            'fieldtype': 'Link',
+            'fieldname': 'cost_center',
+            'label': __('Cost Center'),
+            'default': cost_center,
+            'options': 'Cost Center'
+        }, {
+            'fieldtype': 'Link',
+            'fieldname': 'taxes_and_charges',
+            'label': __('Purchase Taxes and Charges Template'),
+            'default': frm.doc.taxes_and_charges,
+            'options': 'Purchase Taxes and Charges Template',
+            'get_query': function() { return { filters: {'company': frm.doc.company } } }
+        }, {
+            'fieldtype': 'Small Text',
+            'fieldname': 'quick_remarks',
+            'label': __('Quick Remarks'),
+            'default': frm.doc.quick_remarks
+        }
+    ];
+    var d = new frappe.ui.Dialog({
+        'fields': fields,
+        'primary_action': function(){
+            d.hide();
+            let values = d.get_values();
+            // apply values
+            for (const [key, value] of Object.entries(values)) {
+                if (key === "item") {
+                    if (value) {
+                        frappe.model.set_value(frm.doc.items[0].doctype, frm.doc.items[0].name, 'item_code', value);
+                    }
+                } else if (key === "rate") {
+                    if (value) {
+                        setTimeout(function(rate) {
+                            frappe.model.set_value(frm.doc.items[0].doctype, frm.doc.items[0].name, 'rate', rate);
+                        }, 500, value);
+                    }
+                } else if (key === "cost_center") {
+                    if (value) {
+                        frappe.model.set_value(frm.doc.items[0].doctype, frm.doc.items[0].name, 'cost_center', value);
+                    }
+                } else if (key.includes("col_")) {
+                    // do nothing
+                } else {
+                    cur_frm.set_value(key, value);
+                }
+            }
+        },
+        'primary_action_label': __('OK')
+    });
+    d.show();
 }
