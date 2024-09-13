@@ -1,4 +1,4 @@
-// Copyright (c) 2022-2023, libracore AG and contributors
+// Copyright (c) 2022-2024, libracore AG and contributors
 // For license information, please see license.txt
 
 frappe.ui.form.on('Layer Directory', {
@@ -59,6 +59,7 @@ function autocomplete_object(frm) {
                             cur_frm.set_value("probe_length", data.ews_details[x-1].ews_depth);
                             cur_frm.set_value("probe_diameter", data.ews_details[x-1].ews_diameter);
                             cur_frm.set_value("probe_type", data.ews_details[x-1].probe_type);
+                            cur_frm.set_value("pressure_level", data.ews_details[x-1].pressure_level);
                             set_drilling_order(data.ews_details[x-1].count, data.ews_details[x-1].ews_depth);
                         }
                     );
@@ -66,6 +67,7 @@ function autocomplete_object(frm) {
                     cur_frm.set_value("probe_length", data.ews_details[0].ews_depth);
                     cur_frm.set_value("probe_diameter", data.ews_details[0].ews_diameter);
                     cur_frm.set_value("probe_type", data.ews_details[0].probe_type);
+                    cur_frm.set_value("pressure_level", data.ews_details[0].pressure_level);
                     set_drilling_order(data.ews_details[0].count, data.ews_details[0].ews_depth);
                 }
                 

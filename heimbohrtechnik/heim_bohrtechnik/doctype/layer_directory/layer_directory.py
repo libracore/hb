@@ -33,7 +33,8 @@ class LayerDirectory(Document):
                 'ews_depth': ews.ews_depth,
                 'ews_diameter': ews.ews_diameter,
                 'probe_type': ews.probe_type,
-                'count': ews.ews_count
+                'count': ews.ews_count,
+                'pressure_level': ews.pressure_level
                 })
             
         return {
