@@ -10,7 +10,7 @@ import datetime
 from frappe.utils.data import getdate
 
 @frappe.whitelist(allow_guest=True)
-def insert_feedback(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing, hammer_change, impact_part_change, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19, link_key):
+def insert_feedback(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing, hammer_change, impact_part_change, assistant_1, assistant_2, temporary, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19, link_key):
     #check key
     team_key = frappe.db.get_value("Drilling Team", drilling_team, "team_key")
     if link_key != team_key:
@@ -32,9 +32,9 @@ def insert_feedback(drilling_team, deputy, date, project, project_meter, project
             impact_part_change_check = 0
         # create new record
         if not project2:
-            create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19, second_project_row=False)
+            create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19, second_project_row=False)
         else:
-            create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19, second_project_row=True)
+            create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19, second_project_row=True)
         return
 
 @frappe.whitelist(allow_guest=True)
@@ -121,7 +121,7 @@ def get_deputy_list():
     
     return deputy_list
 
-def create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19, second_project_row=False):
+def create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19, second_project_row=False):
     #check if already a document is existing for this day / drilling team
     feedback = frappe.get_list(doctype="Feedback Drilling Meter", filters={'date': date, 'drilling_team': drilling_team}, ignore_permissions=True)
     if feedback:
@@ -137,6 +137,9 @@ def create_document(drilling_team, deputy, date, project, project_meter, project
         'flushing': flushing_check,
         'hammer_change': hammer_change_check,
         'impact_part_change': impact_part_change_check,
+        'drilling_assistant_1': assistant_1,
+        'drilling_assistant_2': drilling_assistant_2,
+        'temporary': temporary,
         #Create subtable "layers" for projects
         'project': [{
         'reference_doctype': "Feedback Drilling Meter Project",

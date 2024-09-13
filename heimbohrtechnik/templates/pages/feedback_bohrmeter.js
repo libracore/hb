@@ -161,6 +161,9 @@ function run() {
                 'flushing': document.getElementById('flushing').value,
                 'hammer_change': document.getElementById('hammer_change').value,
                 'impact_part_change': document.getElementById('impact_part_change').value,
+                'assistant_1': document.getElementById('assistant_1').value,
+                'assistant_2': document.getElementById('assistant_2').value,
+                'temporary': document.getElementById('temporary').value,
                 'description_07_08': document.getElementById('description_07_08').value,
                 'description_08_09': document.getElementById('description_08_09').value,
                 'description_09_10': document.getElementById('description_09_10').value,
@@ -249,6 +252,10 @@ function get_assistants() {
                 var assistantElement = document.createElement('option');
                 assistantElement.text = option;
                 assistant_1Select.add(assistantElement);
+            });
+            assistants.forEach(function(option) {
+                var assistantElement = document.createElement('option');
+                assistantElement.text = option;
                 assistant_2Select.add(assistantElement);
             });
         }
