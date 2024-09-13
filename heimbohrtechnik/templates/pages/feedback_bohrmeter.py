@@ -138,7 +138,7 @@ def create_document(drilling_team, deputy, date, project, project_meter, project
         'hammer_change': hammer_change_check,
         'impact_part_change': impact_part_change_check,
         'drilling_assistant_1': assistant_1,
-        'drilling_assistant_2': drilling_assistant_2,
+        'drilling_assistant_2': assistant_2,
         'temporary': temporary,
         #Create subtable "layers" for projects
         'project': [{
