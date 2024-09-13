@@ -6,6 +6,7 @@ $(document).ready(function(){
 function make() {
     // get options for deputys
     get_deputys();
+    get_assistants();
     document.getElementById('date').valueAsDate = new Date();
     var set_date = document.getElementById('date').value
 }
@@ -236,6 +237,24 @@ function get_deputys() {
         }
     });
 }
+
+function get_assistants() {
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_assistants_list',
+        'callback': function(r) {
+            var assistants = r.message
+            var assistant_1Select = document.getElementById('assistant_1');
+            var assistant_2Select = document.getElementById('assistant_2');
+            assistants.forEach(function(option) {
+                var assistantElement = document.createElement('option');
+                assistantElement.text = option;
+                assistant_1Select.add(assistantElement);
+                assistant_2Select.add(assistantElement);
+            });
+        }
+    });
+}
+
 
 function calculate_total_meter() {
     var meter = parseInt(document.getElementById('project_meter').value)

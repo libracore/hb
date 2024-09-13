@@ -286,4 +286,19 @@ def get_transmitted_information(date, drilling_team):
         return record, projects, descriptions
     else:
         return None
-                                
+    
+@frappe.whitelist(allow_guest=True)
+def get_assistants_list():
+    assistants = frappe.db.sql("""
+        SELECT 
+            `employee_name`
+        FROM 
+            `tabEmployee`
+        WHERE 
+            `designation` IN ('Bohrmeister', 'Bohrhelfer', 'Verlängerung', 'Verwaltung', 'Werkstatt')""", as_dict=True)
+    
+    assistants_list = []
+    for assistant in assistants:
+        assistants_list.append(assistant.get('employee_name'))
+    
+    return assistants_list
