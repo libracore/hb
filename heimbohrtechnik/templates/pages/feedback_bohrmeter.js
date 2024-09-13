@@ -6,6 +6,7 @@ $(document).ready(function(){
 function make() {
     // get options for deputys
     get_deputys();
+    get_assistants();
     document.getElementById('date').valueAsDate = new Date();
     var set_date = document.getElementById('date').value
 }
@@ -160,6 +161,9 @@ function run() {
                 'flushing': document.getElementById('flushing').value,
                 'hammer_change': document.getElementById('hammer_change').value,
                 'impact_part_change': document.getElementById('impact_part_change').value,
+                'assistant_1': document.getElementById('assistant_1').value,
+                'assistant_2': document.getElementById('assistant_2').value,
+                'temporary': document.getElementById('temporary').value,
                 'description_07_08': document.getElementById('description_07_08').value,
                 'description_08_09': document.getElementById('description_08_09').value,
                 'description_09_10': document.getElementById('description_09_10').value,
@@ -236,6 +240,28 @@ function get_deputys() {
         }
     });
 }
+
+function get_assistants() {
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_assistants_list',
+        'callback': function(r) {
+            var assistants = r.message
+            var assistant_1Select = document.getElementById('assistant_1');
+            var assistant_2Select = document.getElementById('assistant_2');
+            assistants.forEach(function(option) {
+                var assistantElement = document.createElement('option');
+                assistantElement.text = option;
+                assistant_1Select.add(assistantElement);
+            });
+            assistants.forEach(function(option) {
+                var assistantElement = document.createElement('option');
+                assistantElement.text = option;
+                assistant_2Select.add(assistantElement);
+            });
+        }
+    });
+}
+
 
 function calculate_total_meter() {
     var meter = parseInt(document.getElementById('project_meter').value)
