@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021-2023s, libracore AG and contributors
+# Copyright (c) 2021-2024, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
@@ -190,9 +190,26 @@ class Object(Document):
                         _details += """ <span style="color: red;"><b>RT</b></span>"""
                     
                     detail_list.append(_details)
-                details = ", ".join(detail_list)
+                details = safe_join_details(detail_list)
+
         return details
-        
+
+"""
+This function makes sure, the raw string of probes including html codes does not exceed 140 characters
+"""
+def safe_join_details(detail_list):
+    details = ""
+    for d in detail_list:
+        if (len(details) + d) > 133:        # includes ", " to append itself and 5 characters for ", ..." for trailing cut
+            details += ", ..."
+            break
+        else:
+            if len(details) == 0:
+                details = d
+            else:
+                details += ", " + details
+    return details
+
 @frappe.whitelist()
 def get_key():
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(32))
