@@ -200,14 +200,14 @@ This function makes sure, the raw string of probes including html codes does not
 def safe_join_details(detail_list):
     details = ""
     for d in detail_list:
-        if (len(details) + d) > 133:        # includes ", " to append itself and 5 characters for ", ..." for trailing cut
+        if (len(details) + len(d)) > 133:        # includes ", " to append itself and 5 characters for ", ..." for trailing cut
             details += ", ..."
             break
         else:
             if len(details) == 0:
                 details = d
             else:
-                details += ", " + details
+                details += ", " + d
     return details
 
 @frappe.whitelist()
