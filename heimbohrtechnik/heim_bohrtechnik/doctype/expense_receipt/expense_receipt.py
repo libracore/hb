@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2023, libracore AG and contributors
+# Copyright (c) 2023-2024, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
@@ -9,17 +9,29 @@ from erpnext import get_default_company
 from erpnextswiss.erpnextswiss.finance import get_exchange_rate
 from frappe.utils import flt, rounded
 import json
+from frappe import _
 
 class ExpenseReceipt(Document):
-        
-    def on_submit(self):
-        # create journal entry
-        multi_currency = 0
+    def before_save(self):
         exchange_rate = 1
         company_currency = frappe.get_cached_value("Company", self.company, "default_currency")
         if self.currency != company_currency:
-            multi_currency = 1
             exchange_rate = get_exchange_rate(from_currency=self.currency, company=self.company, date=self.date)
+        self.exchange_rate = exchange_rate
+        base_gross_amount = rounded(self.amount * exchange_rate, 2)
+        self.base_amount = base_gross_amount
+        return
+        
+    def on_submit(self):
+        # check expense account
+        if not self.expense_account:
+            frappe.throw( _("Please define an expense account.") )
+            
+        # create journal entry
+        multi_currency = 0
+        company_currency = frappe.get_cached_value("Company", self.company, "default_currency")
+        if self.currency != company_currency:
+            multi_currency = 1
         
         remark = ("{0} ({1}, {2})".format(
                 self.remarks or "Spesen {0}".format(self.employee_name),
@@ -35,7 +47,7 @@ class ExpenseReceipt(Document):
             'title': self.name
         })
         # expense allocation (company currency)
-        net_base_amount = rounded((self.amount - self.vst) * exchange_rate, 2)
+        net_base_amount = rounded((self.amount - self.vst) * self.exchange_rate, 2)
         jv.append("accounts", {
             'account': self.expense_account,
             'debit_in_account_currency': net_base_amount,
@@ -45,12 +57,12 @@ class ExpenseReceipt(Document):
         })
         # pretax allocation  (expense currency)
         if self.vst != 0:
-            pretax_base_amount = rounded(self.vst * exchange_rate, 2)
+            pretax_base_amount = rounded(self.vst * self.exchange_rate, 2)
             jv.append("accounts", {
                 'account': self.vat_account,
                 'debit_in_account_currency': self.vst,
                 'debit': pretax_base_amount,
-                'exchange_rate': exchange_rate,
+                'exchange_rate': self.exchange_rate,
                 'account_currency': self.currency
             })
             
@@ -61,12 +73,12 @@ class ExpenseReceipt(Document):
             if a.company == self.company:
                 account = a.default_account
         credit_card_currency = frappe.get_cached_value("Account", account, "account_currency")
-        base_gross_amount = rounded(self.amount * exchange_rate, 2)
+        base_gross_amount = rounded(self.amount * self.exchange_rate, 2)
         jv.append("accounts", {
             'account': account,
             'credit_in_account_currency': self.amount if credit_card_currency != company_currency else base_gross_amount,
             'credit': base_gross_amount,
-            'exchange_rate': exchange_rate if credit_card_currency != company_currency else 1,
+            'exchange_rate': self.exchange_rate if credit_card_currency != company_currency else 1,
             'account_currency': frappe.get_cached_value("Account", account, "account_currency")
         })
         
