@@ -509,7 +509,10 @@ Create a project if required from sales order
 @frappe.whitelist()
 def check_create_project(sales_order):
     if type(sales_order) == str:
-        sales_order = json.loads(sales_order)
+        if frappe.db.exists("Sales Order", sales order):
+            sales_order = frappe.get_doc("Sales Order", sales_order).as_dict()
+        else:
+            sales_order = json.loads(sales_order)
     if 'object' in sales_order and sales_order['object']:
         if not frappe.db.exists("Project", sales_order['object']):
             o = frappe.get_doc("Object", sales_order['object'])
