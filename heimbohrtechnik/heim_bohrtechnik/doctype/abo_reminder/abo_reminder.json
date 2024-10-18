@@ -1,0 +1,44 @@
+{
+ "creation": "2024-10-18 13:51:26.055202",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "reminder_date",
+  "reminder_to",
+  "action_done"
+ ],
+ "fields": [
+  {
+   "fieldname": "reminder_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reminder_to",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Reminder To",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "action_done",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Action done"
+  }
+ ],
+ "istable": 1,
+ "modified": "2024-10-18 13:51:54.761059",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Abo Reminder",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

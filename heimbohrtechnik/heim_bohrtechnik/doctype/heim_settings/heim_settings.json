@@ -57,7 +57,11 @@
   "col_routing",
   "osm_blocked",
   "sec_feedback",
-  "send_feedback_reminder"
+  "send_feedback_reminder",
+  "abo_reminder_section",
+  "send_abo_reminder",
+  "column_break_57",
+  "abo_reminder_to"
  ],
  "fields": [
   {
@@ -367,10 +371,32 @@
    "fieldtype": "Link",
    "label": "Item Label Printer big",
    "options": "Label Printer"
+  },
+  {
+   "fieldname": "abo_reminder_section",
+   "fieldtype": "Section Break",
+   "label": "Abo Reminder"
+  },
+  {
+   "default": "0",
+   "fieldname": "send_abo_reminder",
+   "fieldtype": "Check",
+   "label": "Send Abo Reminder"
+  },
+  {
+   "fieldname": "column_break_57",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.send_abo_reminder;",
+   "fieldname": "abo_reminder_to",
+   "fieldtype": "Link",
+   "label": "Reminder To",
+   "options": "User"
   }
  ],
  "issingle": 1,
- "modified": "2024-07-16 15:15:28.773091",
+ "modified": "2024-10-18 14:46:02.816535",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",

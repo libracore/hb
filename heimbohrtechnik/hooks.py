@@ -152,7 +152,8 @@ scheduler_events = {
          "heimbohrtechnik.heim_bohrtechnik.data_maintenance.link_sales_orders_to_projects",
          "heimbohrtechnik.heim_bohrtechnik.data_maintenance.remove_bohrplaner_prints",
          "heimbohrtechnik.heim_bohrtechnik.report.follow_up_overview.follow_up_overview.automatic_follow_up",
-         "heimbohrtechnik.heim_bohrtechnik.doctype.feedback_drilling_meter.feedback_drilling_meter.reminder"
+         "heimbohrtechnik.heim_bohrtechnik.doctype.feedback_drilling_meter.feedback_drilling_meter.reminder",
+         "heimbohrtechnik.heim_bohrtechnik.doctype.abo.abo.send_abo_reminder"
      ],
      "weekly": [
          "heimbohrtechnik.heim_bohrtechnik.migration.update_object_meter_rates"
