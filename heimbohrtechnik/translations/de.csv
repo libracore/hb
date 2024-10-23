@@ -606,3 +606,11 @@ DocType: Feedback Drilling Meter,Drilling Assistant 1,Bohrhelfer 1
 DocType: Feedback Drilling Meter,Assistant 2,Bohrhelfer 2
 DocType: Feedback Drilling Meter,Temporary,Temporärmitarbeiter
 DocType: Regional Holidays,Regional Holidays,Regionale Feiertage
+DocType: Abo,Action done,Aktion erledigt
+DocType: Abo,First Reminder,Erste Erinnerung
+DocType: Abo,Last Reminder,Letzte Erinnerung
+DocType: Abo,Next Reminder,Nächste Erinnerung
+DocType: Abo,Set Reminder manually,Erinnerungsdatum manuell setzten
+DocType: Abo,Reminder To,Erinnerung an
+DocType: Abo,Reminders,Erinnerungen
+DocType: Abo,Biannual,Zweijährlich
