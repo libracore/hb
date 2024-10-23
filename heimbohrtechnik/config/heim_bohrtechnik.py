@@ -104,12 +104,6 @@ def get_data():
                    "description": _("Sales Invoice")
                 },
                 {
-                   "type": "doctype",
-                   "name": "Abo",
-                   "label": _("Abo"),
-                   "description": _("Abo")
-                },
-                {
                     "type": "report",
                     "name": "Offene Akonto-Rechnungen",
                     "doctype": "Sales Invoice",
@@ -126,6 +120,12 @@ def get_data():
                     "name": "Follow-Up Overview",
                     "doctype": "Quotation",
                     "is_query_report": True,
+                },
+                {
+                   "type": "doctype",
+                   "name": "Abo",
+                   "label": _("Abo"),
+                   "description": _("Abo")
                 }
             ]
         },
