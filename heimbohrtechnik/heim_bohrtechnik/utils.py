@@ -1286,3 +1286,26 @@ def po_from_stock(purchase_order):
     frappe.db.commit()
     
     return
+
+"""
+Find default trough size
+"""
+@frappe.whitelist()
+def get_default_trough_size(supplier):
+    trough_activity = frappe.get_value("Heim Settings", "Heim Settings", "trough_activity")
+    defaults = frappe.db.sql("""
+        SELECT `default_trough_size`
+        FROM `tabSupplier Activity`
+        WHERE 
+            `parenttype` = "Supplier"
+            AND `parentfield` = "capabilities"
+            AND `activity` = "{activity}"
+            AND `parent` = "{supplier}"
+        ;""".format(activity=trough_activity, supplier=supplier),
+        as_dict=True)
+        
+    if len(defaults) > 0:
+        return defaults[0]['default_trough_size']
+    else:
+        return None
+        

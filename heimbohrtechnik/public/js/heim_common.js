@@ -191,7 +191,7 @@ function update_additional_discount(frm, discount_amount) {
 }
 
 function get_required_activities(frm, dt, dn) {
-    var v = locals[dt][dn];
+    let v = locals[dt][dn];
     if (v.supplier) {
         frappe.call({
             'method': "heimbohrtechnik.heim_bohrtechnik.filters.get_required_activities",
@@ -200,9 +200,9 @@ function get_required_activities(frm, dt, dn) {
                 'activity': v.activity
             },
             'callback': function(response) {
-                var activities = response.message;
-                for (var i = 0; i < activities.length; i++) {
-                    for (var r = 0; r < frm.doc.checklist.length; r++) {
+                let activities = response.message;
+                for (let i = 0; i < activities.length; i++) {
+                    for (let r = 0; r < frm.doc.checklist.length; r++) {
                         if (frm.doc.checklist[r].activity === activities[i]) {
                             frappe.model.set_value(frm.doc.checklist[r].doctype, frm.doc.checklist[r].name, 
                                 'supplier', v.supplier);
@@ -213,6 +213,28 @@ function get_required_activities(frm, dt, dn) {
                 }
                 
                 cur_frm.refresh_field('addresses');
+            }
+        });
+    } else {
+        frappe.model.set_value(v.doctype, v.name, "supplier_name", null);
+    }
+}
+
+function get_default_trough_size(frm, dt, dn) {
+    let v = locals[dt][dn];
+    if (v.supplier) {
+        frappe.call({
+            'method': "heimbohrtechnik.heim_bohrtechnik.utils.get_default_trough_size",
+            'args': {
+                'supplier': v.supplier
+            },
+            'callback': function(response) {
+                let default_trough_size = response.message;
+                if (default_trough_size) {
+                    frappe.model.set_value(dt, dn, 'trough_size', default_trough_size);
+                }
+                
+                cur_frm.refresh_field('checklist');
             }
         });
     } else {

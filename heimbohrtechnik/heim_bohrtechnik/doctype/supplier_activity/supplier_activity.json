@@ -9,6 +9,7 @@
   "remarks",
   "sec_trough",
   "trough_size",
+  "default_trough_size",
   "place_trough_rate",
   "disposal_rate",
   "reach",
@@ -98,10 +99,16 @@
    "fieldtype": "Float",
    "hidden": 1,
    "label": "GPS Long"
+  },
+  {
+   "fieldname": "default_trough_size",
+   "fieldtype": "Select",
+   "label": "Default Trough Size",
+   "options": "\n\u00b110m\u00b3\n\u00b125m\u00b3\n\u00b140m\u00b3"
   }
  ],
  "istable": 1,
- "modified": "2024-05-08 15:33:56.183383",
+ "modified": "2024-10-23 17:37:37.053514",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Supplier Activity",

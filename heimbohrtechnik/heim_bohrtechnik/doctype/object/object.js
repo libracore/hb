@@ -495,6 +495,8 @@ frappe.ui.form.on('Object Address', {
 frappe.ui.form.on('Project Checklist', {
     supplier: function(frm, dt, dn) {
         get_required_activities(frm, dt, dn);
+        
+        get_default_trough_size(frm, dt, dn);
     }
 });
 

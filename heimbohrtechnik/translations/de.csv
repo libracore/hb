@@ -283,6 +283,7 @@ DocType: Supplier,Disposal Rate,Preis Entsorgung
 DocType: Supplier,Reach,Einzugsbereich
 DocType: Supplier,Trough Address,Muldenadresse
 DocType: Supplier,Other,Diverses
+DocType: Supplier,Default Trough Size,Standard-Muldengrösse
 DocType: Drilling Team,Drilling rig manufacturer,Hersteller Bohrausrüsting
 DocType: Drilling Team,Drilling rig type,Typenbezeichnung der Bohrausrüstung
 DocType: Drilling Team,Truck and Weight,LKW und Gewicht
