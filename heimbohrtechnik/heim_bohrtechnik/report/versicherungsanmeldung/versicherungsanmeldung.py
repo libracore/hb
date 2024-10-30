@@ -1,9 +1,10 @@
-# Copyright (c) 2022, libracore AG and contributors
+# Copyright (c) 2022-2024, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
 import frappe
 from frappe import _
+from frappe.utils import cint
 
 def execute(filters=None):
     columns = get_columns(filters)
@@ -97,3 +98,27 @@ def has_insurance(project):
     ;""".format(project=project)
     data = frappe.db.sql(sql_query, as_dict=True)
     return data
+
+def needs_insurance(sales_order):
+    sql_query = """SELECT
+            `tabSales Order`.`object` AS `object`,
+            `tabSales Order`.`name` AS `sales_order`,
+            `tabSales Order Item`.`item_name` AS `insurances`
+        FROM `tabSales Order`
+        LEFT JOIN `tabSales Order Item` ON 
+            (`tabSales Order Item`.`parent` = `tabSales Order`.`name`
+             AND `tabSales Order Item`.`item_name` LIKE "%Versicherung%")
+        WHERE 
+            `tabSales Order Item`.`alternativ` = 0
+            AND `tabSales Order Item`.`eventual` = 0
+            AND `tabSales Order Item`.`name` IS NOT NULL
+        GROUP BY `tabSales Order`.`object`
+    ;"""
+    data = frappe.db.sql(sql_query, as_dict=True)
+    if len(data) > 0:
+        return True
+    if frappe.get_value("Sales Order", "object"):
+        object_arteser = frappe.get_value("Object", frappe.get_value("Sales Order", "object"), "insurance_required")
+        if cint(object_arteser):
+            return True
+    return False

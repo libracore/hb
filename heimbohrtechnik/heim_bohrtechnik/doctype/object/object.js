@@ -318,6 +318,27 @@ frappe.ui.form.on('Object', {
             check_add_address(frm, "Geologe");
             // check_add_checklist(frm, "Geologe"); // 2022-09-07: not required
         }
+    },
+    needs_insurance: function(frm) {
+        if (frm.doc.needs_insurance) {
+            frappe.confirm(
+                'Soll die Versicherung in die Checkliste eingefügt werden?',
+                function(){
+                    // on yes
+                    // add to related project if applicable
+                    frappe.call({
+                        'method': "heimbohrtechnik.heim_bohrtechnik.doctype.object.object.update_project_checklist",
+                        'args': {
+                            'obj': frm.doc.name,
+                            'activity_type': "Versicherung"
+                        }
+                    });
+                },
+                function(){
+                    // on no
+                }
+            );
+        }
     }
 });
 

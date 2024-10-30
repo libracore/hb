@@ -516,7 +516,7 @@ def check_create_project(sales_order):
     if 'object' in sales_order and sales_order['object']:
         if not frappe.db.exists("Project", sales_order['object']):
             o = frappe.get_doc("Object", sales_order['object'])
-            o.create_project(sales_order)
+            o.create_project(sales_order.get('name'))
         # reference customer and sales order
         p = frappe.get_doc("Project", sales_order['object'])
         p.customer = sales_order['customer']
@@ -540,7 +540,7 @@ def update_project(project):
         o = None
     # find sales order data
     items = {
-        'thermo' :frappe.get_value("Heim Settings", "Heim Settings", "thermozement_item"),
+        'thermo': frappe.get_value("Heim Settings", "Heim Settings", "thermozement_item"),
         'staged_cementation': frappe.get_value("Heim Settings", "Heim Settings", "staged_cementation_item"),
         'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "internal_crane_item"),
         'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "external_crane_item"),

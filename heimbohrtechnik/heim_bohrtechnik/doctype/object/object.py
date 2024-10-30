@@ -14,6 +14,7 @@ from frappe.utils import get_url_to_form
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import create_project_folder, get_cloud_url, upload_attachments
 from heimbohrtechnik.heim_bohrtechnik.utils import clone_attachments
 from heimbohrtechnik.heim_bohrtechnik.locator import get_gps_coordinates
+from heimbohrtechnik.heim_bohrtechnik.report.versicherungsanmeldung.versicherungsanmeldung import needs_insurance
 
 class Object(Document):
     def before_save(self):
@@ -51,16 +52,22 @@ class Object(Document):
             # add checklist and permits
             has_int_crane = False
             has_ext_crane = False
+            has_insurance = False
+            ext_crane_activity = frappe.get_value("Heim Settings", "Heim Settings", "crane_activity")
+            int_crane_activity = frappe.get_value("Heim Settings", "Heim Settings", "int_crane_activity")
+            insurance_activity = frappe.get_value("Heim Settings", "Heim Settings", "insurance_activity")
             for c in self.checklist:
                 project.append("checklist", {
                   'activity': c.activity,
                   'supplier': c.supplier,
                   'supplier_name': c.supplier_name  
                 })
-                if c.activity == "Kran extern":
+                if c.activity == ext_crane_activity:
                     has_ext_crane = True
-                elif c.activity == "Kran intern":
+                elif c.activity == int_crane_activity:
                     has_int_crane = True
+                elif c.activity == insurance_activity:
+                    has_insurance = True
                     
             for p in self.permits:
                 project.append("permits", {
@@ -78,17 +85,19 @@ class Object(Document):
                         needs_int_crane = True
                     elif item.item_name == "Kranarbeit mit Subunternehmer":
                         needs_ext_crane = True
-                        
                 
                 if needs_int_crane and not has_int_crane:
                     project.append("checklist", {
-                      'activity': "Kran intern"
+                      'activity': int_crane_activity
                     })
                 elif needs_ext_crane and not has_ext_crane:
                     project.append("checklist", {
-                      'activity': "Kran extern"
+                      'activity': ext_crane_activity
                     })
-                    
+                if needs_insurance(sales_order) and not has_insurance:
+                    project.append("checklist", {
+                      'activity': insurance_activity
+                    })
                     
             project.insert()
             frappe.db.commit()
@@ -312,9 +321,11 @@ def get_permit_details(permit_item, object=None, project=None):
 Update project checklist from address
 """
 @frappe.whitelist()
-def update_project_checklist(obj, activity_type, supplier):
+def update_project_checklist(obj, activity_type, supplier=None):
     if frappe.db.exists("Project", obj):
         check_object_checklist(obj, activity_type, has_project=True, supplier=supplier)
+    else:
+        check_object_checklist(obj, activity_type, has_project=False, supplier=supplier)
     return
 
 """
