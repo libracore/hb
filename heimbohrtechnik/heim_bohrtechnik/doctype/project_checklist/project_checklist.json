@@ -18,7 +18,9 @@
   "sec_trough",
   "trough_count",
   "col_trough",
-  "trough_size"
+  "trough_size",
+  "sec_insurance",
+  "insurance_certificate"
  ],
  "fields": [
   {
@@ -114,10 +116,21 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Supplier Short Display"
+  },
+  {
+   "depends_on": "eval:([\"Versicherung\"].includes(doc.activity))",
+   "fieldname": "sec_insurance",
+   "fieldtype": "Section Break",
+   "label": "Insurance"
+  },
+  {
+   "fieldname": "insurance_certificate",
+   "fieldtype": "Attach",
+   "label": "Insurance Certificate"
   }
  ],
  "istable": 1,
- "modified": "2023-01-20 20:33:11.524920",
+ "modified": "2024-10-30 21:05:04.918882",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Project Checklist",

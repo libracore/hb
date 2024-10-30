@@ -170,6 +170,8 @@ DocType: Object,Find,Finde
 DocType: Object,Electronic Filling Measurement,Elektronische Hinterfüllungsmessung
 DocType: Object,Geological Location,Einmessung durch Geometer
 DocType: Object,Needs Insurance,Benötigt eine Versicherung
+DocType: Object,Insurance,Versicherung
+DocType: Object,Insurance Certificate,Versicherungszertifikat
 DocType: Project,Mud Disposer,Schlammentsorger
 DocType: Project,Mud disposer,Schlammentsorger
 DocType: Project,Drilling Equipment,Bohrequipment

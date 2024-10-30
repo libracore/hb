@@ -287,6 +287,20 @@ function create_full_file(frm) {
 }
 
 function create_pdf(frm) {
+    // verify that in case there is an insurance required, the certificate is available
+    if (frm.doc.checklist) {
+        for (let i = 0; i < frm.doc.checklist.length; i++) {
+            if ((frm.doc.checklist[i].activity === "Versicherung") && (!frm.doc.checklist[i].insurance_certificate)) {
+                frappe.msgprint({
+                    'title': __("Versicherungsanmeldung"),
+                    'message': __("Dieses Projekt benötigt eine Versicherungsanmeldung, jedoch ist das Zertifikat noch nicht abgelegt. Bitte das Zertifikat in der Checkliste eintragen."), 
+                    'indicator': 'red'
+                });
+                return
+            }
+        }
+    }
+    
     frappe.call({
         'method': 'heimbohrtechnik.heim_bohrtechnik.utils.update_attached_project_pdf',
         'args': {'project': frm.doc.name},
