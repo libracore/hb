@@ -15,8 +15,6 @@
   "object_name",
   "object_street",
   "object_location",
-  "sec_remarks",
-  "remarks",
   "sec_protocol",
   "mesaurement_type",
   "col_prot_1",
@@ -41,7 +39,9 @@
   "fill_pressure",
   "fill_date",
   "filled_with",
-  "manufacturer"
+  "manufacturer",
+  "sec_remarks",
+  "remarks"
  ],
  "fields": [
   {
@@ -261,7 +261,7 @@
    "label": "Date"
   }
  ],
- "modified": "2024-07-29 21:03:24.016548",
+ "modified": "2024-10-30 21:34:16.271778",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order Finish",
