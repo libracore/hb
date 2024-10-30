@@ -212,6 +212,12 @@ frappe.ui.form.on('Project', {
             cur_frm.set_df_property('customer', 'read_only', 1);
             cur_frm.set_df_property('sales_order', 'read_only', 1);
         }
+        
+        // disable heatmap
+        let heatmap = document.getElementsByClassName("form-heatmap");
+        for (let i = 0; i < heatmap.length; i++) {
+            heatmap[i].style.display = "None";
+        }
     },
     before_save(frm) {
         // hook to update subcontracting orders in case of changes
