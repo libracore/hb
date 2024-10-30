@@ -298,7 +298,7 @@ def get_assistants_list():
         FROM 
             `tabEmployee`
         WHERE 
-            `designation` IN ('Bohrmeister', 'Bohrhelfer', 'Verlängerung', 'Verwaltung', 'Werkstatt')""", as_dict=True)
+            `designation` IN ('Bohrhelfer')""", as_dict=True)
     
     assistants_list = []
     for assistant in assistants:
