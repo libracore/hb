@@ -483,7 +483,7 @@ def get_traffic_lights_indicator(project):
         SELECT `per_received`, `order_confirmation`, `status`
         FROM `tabPurchase Order` 
         WHERE `object` = '{0}' 
-          AND `docstatus` = 1;""".format(project.object), as_dict=True)
+          AND `docstatus` < 2;""".format(project.object), as_dict=True)
     if len(pos) > 0 and pos[0]['per_received'] != None:
         ews_details_color = BG_YELLOW               # yellow: ordered
         all_closed_or_confirmed = True
