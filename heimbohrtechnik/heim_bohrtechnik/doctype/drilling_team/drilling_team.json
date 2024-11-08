@@ -113,7 +113,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Drilling team type",
-   "options": "Bohrteam\nVerl\u00e4ngerungsteam\nAndere"
+   "options": "Bohrteam\nVerl\u00e4ngerungsteam\nAndere\nDeaktiviert"
   },
   {
    "default": "0",
@@ -152,7 +152,7 @@
    "options": "Drilling Equipment"
   }
  ],
- "modified": "2024-07-24 08:56:11.481643",
+ "modified": "2024-11-09 00:18:50.592152",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Team",

@@ -775,7 +775,7 @@ def get_weekend_day_correction(from_date, to_date):
 def get_drilling_teams(only_teams=False):
     team_filter = ''
     if only_teams:
-        team_filter = """WHERE `drilling_team_type` = 'Bohrteam'"""
+        team_filter = """AND `drilling_team_type` = 'Bohrteam'"""
     drilling_teams = frappe.db.sql("""
         SELECT 
             `name` AS `team_id`, 
@@ -790,6 +790,7 @@ def get_drilling_teams(only_teams=False):
             `phone`,
             `drilling_team_type`
         FROM `tabDrilling Team`
+        WHERE `drilling_team_type` != 'Deaktiviert'
         {team_filter}""".format(
             trough=_('Has Trough'), crane=_('Has Crane'), team_filter=team_filter), as_dict=True)
         
