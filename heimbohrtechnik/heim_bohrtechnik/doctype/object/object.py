@@ -183,7 +183,7 @@ class Object(Document):
                     if self.drilling_type == "Brunnen":
                         _details = "Brunnen " + _details
                     elif self.drilling_type == "Anodenbohrung":
-                        _details = += """ <span style="color: red;"><b>Anoden</b></span>"""
+                        _details += """ <span style="color: red;"><b>Anoden</b></span>"""
                     # probe highlighting
                     if "vario" in (s.probe_type or "").lower():
                         _details += """ <span style="color: red;"><b>Vario</b></span>"""
