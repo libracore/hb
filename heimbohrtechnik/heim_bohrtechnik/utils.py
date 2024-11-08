@@ -552,7 +552,7 @@ def update_project(project):
         'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "int_crane_activity"),
         'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "crane_activity"),
         'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_activity"),
-        'insurance' = frappe.get_value("Heim Settings", "Heim Settings", "insurance_activity")
+        'insurance': frappe.get_value("Heim Settings", "Heim Settings", "insurance_activity")
     }
     
     if p.sales_order and frappe.db.exists("Sales Order", p.sales_order):
