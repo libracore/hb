@@ -23,6 +23,7 @@ from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
 from erpnext.buying.doctype.purchase_order.purchase_order import make_purchase_receipt
 from heimbohrtechnik.heim_bohrtechnik.date_controller import move_project, get_duration_days
 from heimbohrtechnik.heim_bohrtechnik.locator import get_gps_coordinates
+from heimbohrtechnik.heim_bohrtechnik.report.versicherungsanmeldung.versicherungsanmeldung import needs_insurance
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -550,7 +551,8 @@ def update_project(project):
     activities = {
         'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "int_crane_activity"),
         'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "crane_activity"),
-        'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_activity")
+        'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_activity"),
+        'insurance' = frappe.get_value("Heim Settings", "Heim Settings", "insurance_activity")
     }
     
     if p.sales_order and frappe.db.exists("Sales Order", p.sales_order):
@@ -582,7 +584,9 @@ def update_project(project):
             p = set_checklist_activity(p, activities['carrymax'])
         if has_self_crane:
             p = set_checklist_activity(p, activities['external_crane'])
-            
+        if needs_insurance(p.sales_order):
+            p = set_checklist_activity(p, activities['insurance'])
+        
         p.save()
         if o:
             o.save()
