@@ -595,7 +595,7 @@ def set_checklist_activity(project_doc, activity):
     occurs = False
     for a in project_doc.checklist:
         if a.activity == activity:
-            occures = True
+            occurs = True
             break
     if not occurs:
         project_doc.append("checklist", {
