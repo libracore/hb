@@ -1,38 +1,197 @@
 {
- "creation": "2024-11-14 21:18:41.852943",
- "doctype": "DocType",
- "editable_grid": 1,
- "engine": "InnoDB",
- "field_order": [
-  "product"
- ],
- "fields": [
-  {
-   "fieldname": "product",
-   "fieldtype": "Data",
-   "label": "Product"
-  }
- ],
- "modified": "2024-11-14 21:18:41.852943",
- "modified_by": "Administrator",
- "module": "HPT Solutions",
- "name": "Probe",
- "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
- "sort_field": "modified",
- "sort_order": "DESC",
- "track_changes": 1
+    "allow_import": 1,
+    "autoname": "naming_series:",
+    "creation": "2024-11-04 11:28:09.678008",
+    "doctype": "DocType",
+    "editable_grid": 1,
+    "engine": "InnoDB",
+    "field_order": [
+     "naming_series",
+     "manufacturer",
+     "product",
+     "col_main",
+     "probe_type",
+     "disabled",
+     "sec_dimensions",
+     "outer_diameter",
+     "pressure_level",
+     "nominative_pressure",
+     "wall_strength",
+     "column_break_12",
+     "radius",
+     "inner_diameter",
+     "volume_per_m",
+     "material",
+     "sec_details",
+     "max_short_inner_pressure",
+     "col_details",
+     "tube_roughness"
+    ],
+    "fields": [
+     {
+      "default": "S-.####",
+      "fieldname": "naming_series",
+      "fieldtype": "Select",
+      "hidden": 1,
+      "label": "Naming Series",
+      "options": "S-.####",
+      "reqd": 1
+     },
+     {
+      "fieldname": "manufacturer",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "label": "Manufacturer",
+      "options": "Brand"
+     },
+     {
+      "fieldname": "product",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "label": "Product"
+     },
+     {
+      "default": "Simplex/Duplex",
+      "fieldname": "probe_type",
+      "fieldtype": "Select",
+      "label": "Probe Type",
+      "options": "Simplex\nDuplex\nSimplex/Duplex"
+     },
+     {
+      "description": "mm",
+      "fieldname": "outer_diameter",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "label": "Outer Diameter",
+      "precision": "1"
+     },
+     {
+      "fieldname": "pressure_level",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "in_standard_filter": 1,
+      "label": "Pressure Level",
+      "options": "Pressure Level"
+     },
+     {
+      "description": "mm",
+      "fieldname": "wall_strength",
+      "fieldtype": "Float",
+      "label": "Wall Strength",
+      "precision": "1"
+     },
+     {
+      "description": "mm",
+      "fieldname": "radius",
+      "fieldtype": "Float",
+      "label": "Radius",
+      "precision": "1"
+     },
+     {
+      "description": "mm",
+      "fieldname": "inner_diameter",
+      "fieldtype": "Float",
+      "label": "Inner Diameter",
+      "precision": "1"
+     },
+     {
+      "fieldname": "material",
+      "fieldtype": "Link",
+      "label": "Material",
+      "options": "Material"
+     },
+     {
+      "fieldname": "col_main",
+      "fieldtype": "Column Break"
+     },
+     {
+      "default": "0",
+      "fieldname": "disabled",
+      "fieldtype": "Check",
+      "label": "Disabled"
+     },
+     {
+      "fieldname": "sec_dimensions",
+      "fieldtype": "Section Break",
+      "label": "Dimensions"
+     },
+     {
+      "fieldname": "column_break_12",
+      "fieldtype": "Column Break"
+     },
+     {
+      "fieldname": "sec_details",
+      "fieldtype": "Section Break",
+      "label": "Details"
+     },
+     {
+      "description": "bar",
+      "fieldname": "max_short_inner_pressure",
+      "fieldtype": "Float",
+      "label": "Max Short Inner Pressure",
+      "precision": "1"
+     },
+     {
+      "fieldname": "col_details",
+      "fieldtype": "Column Break"
+     },
+     {
+      "description": "mm",
+      "fieldname": "tube_roughness",
+      "fieldtype": "Float",
+      "label": "Tube Roughness",
+      "precision": "3"
+     },
+     {
+      "description": "bar",
+      "fieldname": "nominative_pressure",
+      "fieldtype": "Float",
+      "label": "Nominative Pressure",
+      "precision": "1"
+     },
+     {
+      "description": "ml",
+      "fieldname": "volume_per_m",
+      "fieldtype": "Float",
+      "label": "Volume per Meter"
+     }
+    ],
+    "modified": "2024-11-14 21:36:41.852943",
+    "modified_by": "Administrator",
+    "module": "HPT Solutions",
+    "name": "Probe",
+    "owner": "Administrator",
+    "permissions": [
+     {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+     },
+     {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "HPT Power User",
+      "share": 1,
+      "write": 1
+     }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "title_field": "product",
+    "track_changes": 1
 }
