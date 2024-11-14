@@ -68,5 +68,59 @@ def get_data():
                    "description": _("Purchase Invoice")
                 }
             ]
+        },
+        {
+            "label": _("Manufacturing"),
+            "icon": "fa fa-tools",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "Item",
+                   "label": _("Item"),
+                   "description": _("Item")
+                },
+                {
+                   "type": "doctype",
+                   "name": "BOM",
+                   "label": _("BOM"),
+                   "description": _("BOM")
+                }
+            ]
+        },
+        {
+            "label": _("Settings"),
+            "icon": "fa fa-tools",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "HPT Settings",
+                   "label": _("HPT Settings"),
+                   "description": _("HPT Settings")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Probe",
+                   "label": _("Probe"),
+                   "description": _("Probe")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Brand",
+                   "label": _("Brand"),
+                   "description": _("Brand")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Pressure Level",
+                   "label": _("Pressure Level"),
+                   "description": _("Pressure Level")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Raw Material",
+                   "label": _("Material"),
+                   "description": _("Material")
+                },
+            ]
         }
     ]
