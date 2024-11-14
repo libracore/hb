@@ -1,0 +1,37 @@
+{
+ "creation": "2024-11-14 20:57:52.090090",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "hpt_api_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "hpt_api_key",
+   "fieldtype": "Data",
+   "label": "HPT API Key"
+  }
+ ],
+ "issingle": 1,
+ "modified": "2024-11-14 20:58:10.785432",
+ "modified_by": "Administrator",
+ "module": "HPT Solutions",
+ "name": "HPT Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
