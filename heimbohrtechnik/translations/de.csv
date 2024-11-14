@@ -619,3 +619,12 @@ DocType: Abo,Reminder To,Erinnerung an
 DocType: Abo,Reminders,Erinnerungen
 DocType: Abo,Biannual,Zweijährlich
 DocType: HPT Settings,HPT Settings,HPT-Einstellungen
+DocType: Probe,Dimensions,Dimensionen
+DocType: Probe,Probe,Sonde
+DocType: Probe,Outer Diameter,Aussendurchmesser
+DocType: Probe,Inner Diameter,Innendurchmesser
+DocType: Probe,Nominative Pressure,Nenndruck
+DocType: Probe,Wall Strength,Wandstärke
+DocType: Probe,Volume per Meter,Volumen pro Meter
+DocType: Probe,Max Short Inner Pressure,Maximaler kurzfristiger Innendruck
+DocType: Probe,Tube Roughness,Rohrrauigkeit
