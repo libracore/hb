@@ -1,0 +1,46 @@
+{
+ "creation": "2024-11-15 17:06:08.958263",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "flow",
+  "col_1",
+  "pressure_los"
+ ],
+ "fields": [
+  {
+   "description": "l/min",
+   "fieldname": "flow",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Flow",
+   "precision": "1",
+   "reqd": 1
+  },
+  {
+   "description": "mbar/m",
+   "fieldname": "pressure_los",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Pressure Loss",
+   "precision": "5",
+   "reqd": 1
+  },
+  {
+   "fieldname": "col_1",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "istable": 1,
+ "modified": "2024-11-15 17:11:57.000787",
+ "modified_by": "Administrator",
+ "module": "HPT Solutions",
+ "name": "Probe Pressure Loss",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

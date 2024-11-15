@@ -628,3 +628,10 @@ DocType: Probe,Wall Strength,Wandstärke
 DocType: Probe,Volume per Meter,Volumen pro Meter
 DocType: Probe,Max Short Inner Pressure,Maximaler kurzfristiger Innendruck
 DocType: Probe,Tube Roughness,Rohrrauigkeit
+DocType: Probe,Test Pressure,Prüfdruck
+DocType: Probe,Test Nominal Pressure,Prüf-Solldruck
+DocType: Probe,Flow,Durchfluss
+DocType: Probe,Pressure Loss,Druckverlust
+DocType: Probe,Vent Amount,Ablassmenge
+DocType: Probe,Vent Pressure,Abgelassener Druck
+

@@ -16,8 +16,7 @@ class Probe(Document):
         """
         Transmit this probe to the HPT cloud
         """
-        parameters = {
-            "probe": {
+        probe = {
                 "name": self.name,
                 "naming_series": self.naming_series,
                 "manufacturer": self.manufacturer,
@@ -33,8 +32,30 @@ class Probe(Document):
                 "volume_per_m": self.volume_per_m,
                 "material": self.material,
                 "max_short_inner_pressure": self.max_short_inner_pressure,
-                "tube_roughness": self.tube_roughness
-            },
+                "tube_roughness": self.tube_roughness,
+                "test_pressures": [],
+                "pressure_losses": [],
+                "vent_amounts": []
+            }
+        for tp in self.test_pressures:
+            probe["test_pressures"].append({
+                "density": tp.density,
+                "length": tp.length,
+                "test_nominal_pressure": tp.test_nominal_pressure
+            })
+        for pl in self.pressure_losses:
+            probe["pressure_losses"].append({
+                "flow": pl.flow,
+                "pressure_loss": pl.pressure_loss
+            })
+        for va in self.vent_amounts:
+            probe["vent_amounts"].append({
+                "vent_pressure": va.vent_pressure,
+                "volume": va.volume
+            })
+            
+        parameters = {
+            "probe": probe,
             "key": frappe.get_value("HPT Settings", "HPT Settings", "hpt_api_key")
         }
         
