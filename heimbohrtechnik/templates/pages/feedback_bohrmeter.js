@@ -63,6 +63,11 @@ function run() {
                     chose_project(projects_html, field);
                 });
             //Set default descriptions as Options for all description fields
+            var description_06_07_icon = document.getElementById('description_06_07_icon');
+                description_06_07_icon.addEventListener('click', function() {
+                    var description_field = 'description_06_07';
+                    chose_description(descriptions_html, description_field);
+                });
             var description_07_08_icon = document.getElementById('description_07_08_icon');
                 description_07_08_icon.addEventListener('click', function() {
                     var description_field = 'description_07_08';
@@ -123,6 +128,26 @@ function run() {
                     var description_field = 'description_18_19';
                     chose_description(descriptions_html, description_field);
                 });
+            var description_19_20_icon = document.getElementById('description_19_20_icon');
+                description_19_20_icon.addEventListener('click', function() {
+                    var description_field = 'description_19_20';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_20_21_icon = document.getElementById('description_20_21_icon');
+                description_20_21_icon.addEventListener('click', function() {
+                    var description_field = 'description_20_21';
+                    chose_description(descriptions_html, description_field);
+                });
+            var description_21_22_icon = document.getElementById('description_21_22_icon');
+                description_21_22_icon.addEventListener('click', function() {
+                    var description_field = 'description_21_22';
+                    chose_description(descriptions_html, description_field);
+                });
+            var notes_icon = document.getElementById('notes_icon');
+                notes_icon.addEventListener('click', function() {
+                    var description_field = 'notes';
+                    chose_description(descriptions_html, description_field);
+                });
             //Check if all mandatory fields are filled
             var input = document.getElementById('form');
             input.addEventListener('input', function() {
@@ -147,41 +172,11 @@ function run() {
     });
     //create document in ERPNext, when submit button has been pushed
     $(".btn-submit").on('click', function() {
-        frappe.call({
-            'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.insert_feedback',
-            'args': {
-                'drilling_team': document.getElementById('drilling_team').value,
-                'deputy': document.getElementById('deputy').value,
-                'date': document.getElementById('date').value,
-                'project': document.getElementById('project').value,
-                'project_meter': document.getElementById('project_meter').value,
-                'project2': document.getElementById('project2').value,
-                'project_meter2': document.getElementById('project_meter2').value,
-                'drilling_meter': document.getElementById('drilling_meter').value,
-                'flushing': document.getElementById('flushing').value,
-                'hammer_change': document.getElementById('hammer_change').value,
-                'impact_part_change': document.getElementById('impact_part_change').value,
-                'assistant_1': document.getElementById('assistant_1').value,
-                'assistant_2': document.getElementById('assistant_2').value,
-                'temporary': document.getElementById('temporary').value,
-                'description_07_08': document.getElementById('description_07_08').value,
-                'description_08_09': document.getElementById('description_08_09').value,
-                'description_09_10': document.getElementById('description_09_10').value,
-                'description_10_11': document.getElementById('description_10_11').value,
-                'description_11_12': document.getElementById('description_11_12').value,
-                'description_12_13': document.getElementById('description_12_13').value,
-                'description_13_14': document.getElementById('description_13_14').value,
-                'description_14_15': document.getElementById('description_14_15').value,
-                'description_15_16': document.getElementById('description_15_16').value,
-                'description_16_17': document.getElementById('description_16_17').value,
-                'description_17_18': document.getElementById('description_17_18').value,
-                'description_18_19': document.getElementById('description_18_19').value,
-                'link_key': document.getElementById('key').value = args['key']
-            },
-            'callback': function(r) {
-                frappe.msgprint("<b>Daten erfolgreich übermittelt!</b>", "Info");
-            }
-        });
+        insert_feedback(1, args['key']);
+    });
+    
+    $(".btn-save").on('click', function() {
+        insert_feedback(0, args['key']);
     });
 }
 
@@ -371,3 +366,51 @@ function get_transmitted_information(date, drilling_team) {
     });
 }
 
+function get_overview_link() {
+    //~ frappe.set_route("query-report", "Feedback Drilling Meter");
+}
+//~ , {"anlass": frm.doc.name}
+
+function insert_feedback(finished_document, key) {
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.insert_feedback',
+        'args': {
+            'drilling_team': document.getElementById('drilling_team').value,
+            'deputy': document.getElementById('deputy').value,
+            'date': document.getElementById('date').value,
+            'project': document.getElementById('project').value,
+            'project_meter': document.getElementById('project_meter').value,
+            'project2': document.getElementById('project2').value,
+            'project_meter2': document.getElementById('project_meter2').value,
+            'drilling_meter': document.getElementById('drilling_meter').value,
+            'flushing': document.getElementById('flushing').value,
+            'hammer_change': document.getElementById('hammer_change').value,
+            'impact_part_change': document.getElementById('impact_part_change').value,
+            'assistant_1': document.getElementById('assistant_1').value,
+            'assistant_2': document.getElementById('assistant_2').value,
+            'temporary': document.getElementById('temporary').value,
+            'description_06_07': document.getElementById('description_06_07').value,
+            'description_07_08': document.getElementById('description_07_08').value,
+            'description_08_09': document.getElementById('description_08_09').value,
+            'description_09_10': document.getElementById('description_09_10').value,
+            'description_10_11': document.getElementById('description_10_11').value,
+            'description_11_12': document.getElementById('description_11_12').value,
+            'description_12_13': document.getElementById('description_12_13').value,
+            'description_13_14': document.getElementById('description_13_14').value,
+            'description_14_15': document.getElementById('description_14_15').value,
+            'description_15_16': document.getElementById('description_15_16').value,
+            'description_16_17': document.getElementById('description_16_17').value,
+            'description_17_18': document.getElementById('description_17_18').value,
+            'description_18_19': document.getElementById('description_18_19').value,
+            'description_19_20': document.getElementById('description_19_20').value,
+            'description_20_21': document.getElementById('description_20_21').value,
+            'description_21_22': document.getElementById('description_21_22').value,
+            'notes': document.getElementById('notes').value,
+            'finished_document': finished_document,
+            'link_key': document.getElementById('key').value = key
+        },
+        'callback': function(r) {
+            frappe.msgprint("<b>Daten erfolgreich übermittelt!</b>", "Info");
+        }
+    });
+}
