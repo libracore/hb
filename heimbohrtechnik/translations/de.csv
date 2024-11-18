@@ -628,3 +628,4 @@ DocType: Probe,Wall Strength,Wandstärke
 DocType: Probe,Volume per Meter,Volumen pro Meter
 DocType: Probe,Max Short Inner Pressure,Maximaler kurzfristiger Innendruck
 DocType: Probe,Tube Roughness,Rohrrauigkeit
+DocType: Heim Settings,Will recieve an E-Mail if a Drilling Master has not provided a Drilling Meter for 3 consecutive days,Erhält eine E-Mail wenn ein Bohrteam an 3 aufeinanderfolgenden Tagen keine Rückmeldung gegeben hat

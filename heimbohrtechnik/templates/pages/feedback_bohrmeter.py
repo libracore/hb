@@ -10,7 +10,7 @@ import datetime
 from frappe.utils.data import getdate
 
 @frappe.whitelist(allow_guest=True)
-def insert_feedback(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing, hammer_change, impact_part_change, assistant_1, assistant_2, temporary, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22,  notes, finished_document, link_key):
+def insert_feedback(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing, hammer_change, impact_part_change, assistant_1, assistant_2, temporary, hotel_night, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22,  notes, finished_document, link_key):
     #check key
     team_key = frappe.db.get_value("Drilling Team", drilling_team, "team_key")
     if link_key != team_key:
@@ -30,11 +30,15 @@ def insert_feedback(drilling_team, deputy, date, project, project_meter, project
             impact_part_change_check = 1
         else:
             impact_part_change_check = 0
+        if hotel_night == "Ja":
+            hotel_night_check = 1
+        else:
+            hotel_night_check = 0
         # create new record
         if not project2:
-            create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22,  notes, finished_document, second_project_row=False)
+            create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, hotel_night_check, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22,  notes, finished_document, second_project_row=False)
         else:
-            create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22,  notes, finished_document, second_project_row=True)
+            create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, hotel_night_check, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22,  notes, finished_document, second_project_row=True)
         return
 
 @frappe.whitelist(allow_guest=True)
@@ -121,7 +125,7 @@ def get_deputy_list():
     
     return deputy_list
 
-def create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22,  notes, finished_document, second_project_row=False):
+def create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, hotel_night_check, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22,  notes, finished_document, second_project_row=False):
     #check if already a document is existing for this day / drilling team
     feedback = frappe.get_list(doctype="Feedback Drilling Meter", filters={'date': date, 'drilling_team': drilling_team}, ignore_permissions=True)
     if feedback:
@@ -140,6 +144,7 @@ def create_document(drilling_team, deputy, date, project, project_meter, project
         'drilling_assistant_1': assistant_1,
         'drilling_assistant_2': assistant_2,
         'temporary': temporary,
+        'hotel_night': hotel_night_check,
         'finished_document': finished_document,
         #Create subtable "layers" for projects
         'project': [{
@@ -269,6 +274,28 @@ def calculate_hammer_change(drilling_team):
             break
     next_change = 10000 - last_change
     return last_change, next_change
+    
+@frappe.whitelist(allow_guest=True)
+def calculate_impact_part_change(drilling_team):
+    feedbacks = frappe.db.sql("""
+                            SELECT
+                                `date`,
+                                `drilling_meter`,
+                                `impact_part_change`
+                            FROM
+                                `tabFeedback Drilling Meter`
+                            WHERE
+                                `drilling_team` = '{dt}'
+                            ORDER BY
+                                `date` DESC""".format(dt=drilling_team), as_dict=True)
+    
+    last_change = 0
+    for feedback in feedbacks:
+        last_change += feedback.get('drilling_meter')
+        if feedback.get('impact_part_change') == 1:
+            break
+    next_change = 3000 - last_change
+    return last_change, next_change
 
 @frappe.whitelist(allow_guest=True)
 def get_transmitted_information(date, drilling_team):
@@ -282,7 +309,11 @@ def get_transmitted_information(date, drilling_team):
                                 `drilling_meter`,
                                 `flushing`,
                                 `hammer_change`,
-                                `impact_part_change`
+                                `impact_part_change`,
+                                `drilling_assistant_1`,
+                                `drilling_assistant_2`,
+                                `temporary`,
+                                `hotel_night`
                             FROM
                                 `tabFeedback Drilling Meter`
                             WHERE
@@ -324,10 +355,16 @@ def get_assistants_list():
         FROM 
             `tabEmployee`
         WHERE 
-            `designation` IN ('Bohrhelfer')""", as_dict=True)
+            `designation` IN ('Bohrhelfer')
+        AND
+            `status` = 'Active'""", as_dict=True)
     
     assistants_list = []
     for assistant in assistants:
         assistants_list.append(assistant.get('employee_name'))
     
     return assistants_list
+    
+@frappe.whitelist(allow_guest=True)
+def get_project_location(project):
+    return frappe.get_value("Project", project, "object_location")
