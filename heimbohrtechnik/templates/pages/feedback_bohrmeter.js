@@ -352,7 +352,6 @@ function get_transmitted_information(date, drilling_team) {
                 } else {
                     document.getElementById('assistant_2').value = "Keiner";
                 }
-                console.log(descriptions);
                 if (record[0].temporary) {
                     document.getElementById('temporary').value = record[0].temporary;
                 } else {
@@ -420,10 +419,25 @@ function get_transmitted_information(date, drilling_team) {
     });
 }
 
-function get_overview_link() {
-    //~ frappe.set_route("query-report", "Feedback Drilling Meter");
+function get_overview() {
+    let drilling_team = document.getElementById('drilling_team').value
+    let year = new Date().getFullYear()
+    console.log(year);
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_overview',
+        'args': {
+            'drilling_team': drilling_team,
+            'year': year
+        },
+        'callback': function(response) {
+            //~ if (response.message) {
+                //~ document.getElementById(location_field).value = response.message;
+            //~ } else {
+                //~ document.getElementById(location_field).value = null;
+            //~ }
+        }
+    });
 }
-//~ , {"anlass": frm.doc.name}
 
 function insert_feedback(finished_document, key) {
     frappe.call({

@@ -629,3 +629,10 @@ DocType: Probe,Volume per Meter,Volumen pro Meter
 DocType: Probe,Max Short Inner Pressure,Maximaler kurzfristiger Innendruck
 DocType: Probe,Tube Roughness,Rohrrauigkeit
 DocType: Heim Settings,Will recieve an E-Mail if a Drilling Master has not provided a Drilling Meter for 3 consecutive days,Erhält eine E-Mail wenn ein Bohrteam an 3 aufeinanderfolgenden Tagen keine Rückmeldung gegeben hat
+DocType: Feedback Drilling Meter,Monday,Montag
+DocType: Feedback Drilling Meter,Tuesday,Dienstag
+DocType: Feedback Drilling Meter,Wednesday,Mittwoch
+DocType: Feedback Drilling Meter,Thursday,Donnerstag
+DocType: Feedback Drilling Meter,Friday,Freitag
+DocType: Feedback Drilling Meter,Saturday,Samstag
+DocType: Feedback Drilling Meter,Sunday,Sonntag

@@ -1,0 +1,33 @@
+<p>Bohrmeterübersicht {{ year }} - {{ drilling_team }}</p>
+<table>
+    <thead>
+        <tr>
+            <td>Woche</td>
+            <td>Von</td>
+            <td>Bis</td>
+            <td>Montag</td>
+            <td>Dienstag</td>
+            <td>Mittwoch</td>
+            <td>Donnerstag</td>
+            <td>Freitag</td>
+            <td>Wochentotal</td>
+            <td>Bemerkungen</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in data %}
+            <tr>
+                <td>{{ d.cw or "" }}</td>
+                <td>{{ d.from or "" }}</td>
+                <td>{{ d.to or "" }}</td>
+                <td>{{ d.monday or "" }}</td>
+                <td>{{ d.tuesday or "" }}</td>
+                <td>{{ d.wednesday or "" }}</td>
+                <td>{{ d.thursday or "" }}</td>
+                <td>{{ d.friday or "" }}</td>
+                <td>{{ d.week or "" }}</td>
+                <td>{{ d.remark or "" }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

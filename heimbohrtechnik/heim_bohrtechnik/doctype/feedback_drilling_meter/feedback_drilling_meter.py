@@ -25,8 +25,7 @@ def reminder():
         return
     else:
         #get yesterday
-        # ~ yesterday = frappe.utils.add_days(getdate(), -1)
-        yesterday = frappe.utils.add_days(getdate(), 3)
+        yesterday = frappe.utils.add_days(getdate(), -1)
         
         #check if yesterday was a working day -> Do Nothing if yes
         holiday = frappe.db.sql("""

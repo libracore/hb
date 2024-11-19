@@ -44,7 +44,7 @@ def get_columns(filters):
         columns.append({"label": _("Remark"), "fieldname": "remark", "fieldtype": "Data", "width": 300})
     return columns, days
 
-def get_data(filters, days):
+def get_data(filters, days, with_url=True):
     if filters.drilling_team_filter:
         data = []
         year_total = 0
@@ -61,21 +61,26 @@ def get_data(filters, days):
             }
             
             #get entrys for every calendar week
-            sql_query = """SELECT
-                `name`,
-                `date`,
-                `drilling_meter`,
-                `day`,
-                `flushing`,
-                `hammer_change`,
-                `impact_part_change`
-                FROM `tabFeedback Drilling Meter`
-                WHERE `drilling_team` = '{team}'
-                AND `date` BETWEEN '{week_start}' AND '{week_end}'
+            sql_query = """
+                SELECT
+                    `name`,
+                    `date`,
+                    `drilling_meter`,
+                    `day`,
+                    `flushing`,
+                    `hammer_change`,
+                    `impact_part_change`
+                FROM
+                    `tabFeedback Drilling Meter`
+                WHERE
+                `drilling_team` = '{team}'
+                AND
+                    `finished_document` = 1
+                AND
+                    `date` BETWEEN '{week_start}' AND '{week_end}'
                 """.format(team=filters.drilling_team_filter, week_start=new_week['from'], week_end=new_week['to'])
                 
             entrys = frappe.db.sql(sql_query, as_dict=True)
-            
             week_total = 0
             remark = []
             
@@ -94,16 +99,20 @@ def get_data(filters, days):
                 style = "style='color: black;'"
                 if entry.flushing == 1:
                     style = "style='color: red;'"
-                url = get_url_to_form("Feedback Drilling Meter", entry.name)
-                html = "<a href='{0}' {1}>{2}</a>".format(url, style, entry.drilling_meter)
-                #add html to entry
-                new_week[entry.day.lower()] = html
-                #check for remarks
                 if entry.hammer_change == 1:
+                    style = "style='color: green;'"
                     remark.append("Neuer Hammer")
                 if entry.impact_part_change == 1:
+                    style = "style='color: blue;'"
                     remark.append("Neues Schlagteil")
-            
+                frappe.log_error(with_url, "with_url")
+                if with_url:
+                    url = get_url_to_form("Feedback Drilling Meter", entry.name)
+                    html = "<a href='{0}' {1}>{2}</a>".format(url, style, entry.drilling_meter)
+                else:
+                    html = "<p {0}>{1}</p>".format(style, entry.drilling_meter)
+                #add html to entry
+                new_week[entry.day.lower()] = html
             #add the week total to actual week dict
             new_week['week'] = week_total
             
@@ -160,6 +169,8 @@ def get_data(filters, days):
                                             `date` BETWEEN '{start}' AND '{end}'
                                         AND
                                             `drilling_team` = '{dt}'
+                                        AND
+                                            `finished_document` = 1
                                         ORDER BY
                                             `date` DESC
                                         """.format(start=frappe.utils.add_days(today, -7), end=frappe.utils.add_days(today, -1), dt=drilling_team.get('name')), as_dict=True)
@@ -175,12 +186,14 @@ def get_data(filters, days):
                         style = "style='color: black;'"
                         if entry.get('flushing') == 1:
                             style = "style='color: red;'"
-                        url = get_url_to_form("Feedback Drilling Meter", entry.get('name'))
-                        line['day_{0}'.format(loop_index)] = "<a href='{0}' {1}>{2}</a>".format(url, style, entry.get('drilling_meter'))
                         if entry.get('hammer_change') == 1:
                             remarks += "Neuer Hammer, "
+                            style = "style='color: green;'"
                         if entry.get('impact_part_change') == 1:
                             remarks += "Neues Schlagteil, "
+                            style = "style='color: blue;'"
+                        url = get_url_to_form("Feedback Drilling Meter", entry.get('name'))
+                        line['day_{0}'.format(loop_index)] = "<a href='{0}' {1}>{2}</a>".format(url, style, entry.get('drilling_meter'))
                 loop_index += 1
             line['remark'] = remarks[:-2]
             data.append(line)
