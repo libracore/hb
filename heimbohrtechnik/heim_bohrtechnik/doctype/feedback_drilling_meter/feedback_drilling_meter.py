@@ -71,8 +71,6 @@ def reminder():
                         
                     #check two additional days and send mail to head if there were no feedbacks for more than two days
                     check_inactivity(yesterday, project.get('bohrteam'), default_sender)
-            else:
-                return
 
 def check_inactivity(yesterday, drilling_team, default_sender):
     next_checking_date = frappe.utils.add_days(yesterday, -1)
@@ -80,8 +78,6 @@ def check_inactivity(yesterday, drilling_team, default_sender):
     
     #go one day back and check if there is a project for drilling team
     while checked_dates < 3:
-        print(drilling_team)
-        print(next_checking_date)
         is_checking_date = get_overlay_datas(next_checking_date, next_checking_date, customer=None, drilling_team=drilling_team)
         if len(is_checking_date) > 0:
             #if there is a project, check if a feedback has been submitted
@@ -103,6 +99,8 @@ def check_inactivity(yesterday, drilling_team, default_sender):
             else:
                 checked_dates += 1
                 next_checking_date = frappe.utils.add_days(next_checking_date, -1)
+        else:
+            next_checking_date = frappe.utils.add_days(next_checking_date, -1)
                 
     #if there are 3 missing dates in sequence, send Mail to Responsible
     if checked_dates >= 3:
