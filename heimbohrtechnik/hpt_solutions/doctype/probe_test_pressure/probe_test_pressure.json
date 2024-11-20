@@ -1,0 +1,56 @@
+{
+ "creation": "2024-11-15 17:03:16.506165",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "density",
+  "col_1",
+  "length",
+  "col_2",
+  "test_nominal_pressure"
+ ],
+ "fields": [
+  {
+   "description": "g/L",
+   "fieldname": "density",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Density",
+   "reqd": 1
+  },
+  {
+   "description": "m",
+   "fieldname": "length",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Length",
+   "reqd": 1
+  },
+  {
+   "description": "bar",
+   "fieldname": "test_nominal_pressure",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Test Nominal Pressure"
+  },
+  {
+   "fieldname": "col_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "col_2",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "istable": 1,
+ "modified": "2024-11-15 17:11:47.673439",
+ "modified_by": "Administrator",
+ "module": "HPT Solutions",
+ "name": "Probe Test Pressure",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

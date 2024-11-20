@@ -25,7 +25,19 @@
   "sec_details",
   "max_short_inner_pressure",
   "col_details",
-  "tube_roughness"
+  "tube_roughness",
+  "sec_test_pressure",
+  "test_pressures",
+  "sec_pressure_loss",
+  "pressure_losses",
+  "sec_vent_amount",
+  "vent_amounts",
+  "sec_tables",
+  "min_test_pressure",
+  "purge_water_amount",
+  "col_tables",
+  "pressure_loss_table",
+  "pressure_loss_formula"
  ],
  "fields": [
   {
@@ -157,9 +169,75 @@
    "fieldname": "volume_per_m",
    "fieldtype": "Float",
    "label": "Volume per Meter"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sec_test_pressure",
+   "fieldtype": "Section Break",
+   "label": "Test Pressure"
+  },
+  {
+   "fieldname": "test_pressures",
+   "fieldtype": "Table",
+   "label": "Test Pressure",
+   "options": "Probe Test Pressure"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sec_pressure_loss",
+   "fieldtype": "Section Break",
+   "label": "Pressure Loss"
+  },
+  {
+   "fieldname": "pressure_losses",
+   "fieldtype": "Table",
+   "label": "Pressure Loss",
+   "options": "Probe Pressure Loss"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sec_vent_amount",
+   "fieldtype": "Section Break",
+   "label": "Vent Amount"
+  },
+  {
+   "fieldname": "vent_amounts",
+   "fieldtype": "Table",
+   "label": "Vent Amount",
+   "options": "Probe Vent Amount"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sec_tables",
+   "fieldtype": "Section Break",
+   "label": "Tables"
+  },
+  {
+   "fieldname": "min_test_pressure",
+   "fieldtype": "Data",
+   "label": "Minimal Test Pressure"
+  },
+  {
+   "fieldname": "pressure_loss_table",
+   "fieldtype": "Data",
+   "label": "Pressure Loss Table"
+  },
+  {
+   "fieldname": "pressure_loss_formula",
+   "fieldtype": "Data",
+   "label": "Pressure Loss Formula"
+  },
+  {
+   "fieldname": "purge_water_amount",
+   "fieldtype": "Data",
+   "label": "Purge Water Amount"
+  },
+  {
+   "fieldname": "col_tables",
+   "fieldtype": "Column Break"
   }
  ],
- "modified": "2024-11-14 21:43:36.986316",
+ "modified": "2024-11-20 16:03:25.946218",
  "modified_by": "Administrator",
  "module": "HPT Solutions",
  "name": "Probe",
