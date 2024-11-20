@@ -59,6 +59,8 @@
   "osm_blocked",
   "sec_feedback",
   "send_feedback_reminder",
+  "column_break_56",
+  "feedback_responsible",
   "abo_reminder_section",
   "send_abo_reminder",
   "column_break_57",
@@ -400,10 +402,23 @@
    "fieldtype": "Link",
    "label": "Insurance Activity",
    "options": "Checklist Activity"
+  },
+  {
+   "fieldname": "column_break_56",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: doc.send_feedback_reminder;",
+   "description": "Will recieve an E-Mail, if a Drilling Master has not provided a Drilling Meter for 3 consecutive days",
+   "fieldname": "feedback_responsible",
+   "fieldtype": "Link",
+   "label": "Feedback Responsible",
+   "options": "User",
+   "reqd": 1
   }
  ],
  "issingle": 1,
- "modified": "2024-10-30 12:18:49.951367",
+ "modified": "2024-11-18 15:45:00.755090",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",

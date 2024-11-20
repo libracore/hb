@@ -1,4 +1,5 @@
 {
+ "allow_rename": 1,
  "autoname": "field:value",
  "creation": "2024-03-20 09:53:35.479778",
  "doctype": "DocType",
@@ -17,7 +18,7 @@
    "unique": 1
   }
  ],
- "modified": "2024-03-20 21:36:13.946581",
+ "modified": "2024-11-18 13:53:36.632606",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Daily Feedback Description",

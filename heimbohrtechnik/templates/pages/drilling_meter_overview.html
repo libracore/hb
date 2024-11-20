@@ -1,0 +1,67 @@
+<style>
+  .pdf-row {
+    line-height: 20px;
+    height: 20px;
+    border-bottom: 1px solid #E0E0E0;
+    padding-top: 6px;
+  }
+  
+  .table-border {
+    width: 100%;
+    border-collapse: collapse;
+  }
+</style>
+<p style="font-size: 25px; margin-top: 2px !important;"><b>Bohrmeterübersicht {{ year }} - {{ drilling_team }}</b></p>
+<table class="table-border" style="width: 100%;">
+    <thead>
+        <tr>
+            <td style="width 5%;">KW</td>
+            <td style="width 17.5%;">Von</td>
+            <td style="width 17.5%;">Bis</td>
+            <td style="width 10%;">Montag</td>
+            <td style="width 10%;">Dienstag</td>
+            <td style="width 10%;">Mittwoch</td>
+            <td style="width 10%;">Donnerstag</td>
+            <td style="width 10%;">Freitag</td>
+            <td style="width 10%;">Wochentotal</td>
+<!--
+            <td style="width 10%;">Bemerkungen</td>
+-->
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in data %}
+            {% if loop.last %}
+                <tr>
+                    <td class="pdf-row"></td>
+                    <td class="pdf-row"><b>Total</b></td>
+                    <td class="pdf-row"><b>{{ year }}</b></td>
+                    <td class="pdf-row"></td>
+                    <td class="pdf-row"></td>
+                    <td class="pdf-row"></td>
+                    <td class="pdf-row"></td>
+                    <td class="pdf-row"></td>
+                    <td class="pdf-row"><b>{{ d.week or "" }}</b></td>
+<!--
+                    <td>{{ d.remark or "" }}</td>
+-->
+                </tr>
+            {% else %}
+                <tr>
+                    <td class="pdf-row">{{ d.cw or "" }}</td>
+                    <td class="pdf-row">{{ frappe.utils.get_datetime(d.from).strftime('%d.%m.%Y') or "" }}</td>
+                    <td class="pdf-row">{{ frappe.utils.get_datetime(d.to).strftime('%d.%m.%Y') or "" }}</td>
+                    <td class="pdf-row">{{ d.monday or "" }}</td>
+                    <td class="pdf-row">{{ d.tuesday or "" }}</td>
+                    <td class="pdf-row">{{ d.wednesday or "" }}</td>
+                    <td class="pdf-row">{{ d.thursday or "" }}</td>
+                    <td class="pdf-row">{{ d.friday or "" }}</td>
+                    <td class="pdf-row">{{ d.week or "" }}</td>
+<!--
+                    <td>{{ d.remark or "" }}</td>
+-->
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>

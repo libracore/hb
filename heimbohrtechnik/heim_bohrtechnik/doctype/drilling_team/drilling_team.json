@@ -17,6 +17,7 @@
   "drilling_master",
   "phone",
   "email",
+  "not_remember_feedback",
   "section_info",
   "has_trough",
   "trough_details",
@@ -150,9 +151,15 @@
    "fieldtype": "Link",
    "label": "Drilling Equipment",
    "options": "Drilling Equipment"
+  },
+  {
+   "default": "0",
+   "fieldname": "not_remember_feedback",
+   "fieldtype": "Check",
+   "label": "Do not remind drilling meter feedback"
   }
  ],
- "modified": "2024-11-09 00:18:50.592152",
+ "modified": "2024-11-15 08:08:49.001915",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Team",

@@ -218,6 +218,7 @@ DocType: Heim Settings,Mud Disposer Activity,Schlammentsorger Aktivität
 DocType: Heim Settings,Crane Activity,Kran Aktivität
 DocType: Heim Settings,Item Label Printer small,Artikel Label Drucker klein
 DocType: Heim Settings,Item Label Printer big,Artikel Label Drucker gross
+DocType: Heim Settings,Will recieve an E-Mail if a Drilling Master has not provided a Drilling Meter for 3 consecutive days,Erhält eine E-Mail wenn ein Bohrteam an 3 aufeinanderfolgenden Tagen keine Rückmeldung gegeben hat
 DocType: Construction Site Description,Construction Site Description,Baustellenbeschreibung
 DocType: Construction Site Description,Construction Plan,Werkleitungspläne
 DocType: Construction Site Description,Construction Plan checked,Werkleitungspläne geprüft
@@ -535,6 +536,13 @@ DocType: Feedback Drilling Meter,Drilling Team,Bohrteam
 DocType: Feedback Drilling Meter,Date,Datum
 DocType: Feedback Drilling Meter,Project,Projekt
 DocType: Feedback Drilling Meter,Number,Nummer
+DocType: Feedback Drilling Meter,Deputy,Vertretung
+DocType: Feedback Drilling Meter,Time,Zeitraum
+DocType: Feedback Drilling Meter,Description,Beschreibung
+DocType: Feedback Drilling Meter,Drilling Assistant 1,Bohrhelfer 1
+DocType: Feedback Drilling Meter,Assistant 2,Bohrhelfer 2
+DocType: Feedback Drilling Meter,Temporary,Temporärmitarbeiter
+Report: Feedback Drilling Meter,undefined,nicht definiert
 DocType: Subcontracting Order Finish,Subcontracting Order Finish,Verlängerungs-Abschluss
 DocType: Subcontracting Order Finish,Protocol,Protokoll
 DocType: Subcontracting Order Finish,Measurement Type,Messtyp
@@ -579,9 +587,6 @@ DocType: Layer Directory,From,Von
 DocType: Layer Directory,To,bis
 DocType: Layer Directory,Tense until (+/-),gespannt bis (+/-)
 DocType: Layer Directory,Measure type,Messart
-DocType: Feedback Drilling Meter,Deputy,Vertretung
-DocType: Feedback Drilling Meter,Time,Zeitraum
-DocType: Feedback Drilling Meter,Description,Beschreibung
 DocType: Daily Feedback Description,Daily Feedback Description,Tagesrückmeldung Beschreibung
 DocType: Daily Feedback Description,Value,Wert
 DocType: Purchase Order,Rounding adjustment,Rundung
@@ -590,12 +595,6 @@ DocType: Maintenance Report,Maintenance Report,Wartungsbericht
 DocType: Maintenance Report,Motor Hours,Motorstunden
 DocType: Maintenance Report,Spare Parts,Ersatzteile
 Report: Maintenance Matrix,Maintenance Matrix,Wartungsmatrix
-Report: Feedback Drilling Meter,undefined, 
-Report: Feedback Drilling Meter,Thu, Do
-Report: Feedback Drilling Meter,Fri, Fr
-Report: Feedback Drilling Meter,Mon, Mo
-Report: Feedback Drilling Meter,Tue, Di
-Report: Feedback Drilling Meter,Wed, Mi
 DocType: Drilling Team,Do not remind drilling meter feedback,Nicht an Bohrmeterrückmeldung erinnern
 DocType: Heim Settings,Feedback Drilling Meter,Bohrmeterrückmeldung
 DocType: Heim Settings,Send Feedback Reminder,Sende Erinnerung an Rückmeldung
@@ -606,9 +605,6 @@ DocType: Injection report,Mixing type,Mischart
 DocType: Injection report,Backfill sample,Hinterfüllungsprobe
 Report: Project Geographic Optimisation,Project Geographic Optimisation,Fahrtwegoptimierung
 DocType: Parking,Parking,Abstellplätze
-DocType: Feedback Drilling Meter,Drilling Assistant 1,Bohrhelfer 1
-DocType: Feedback Drilling Meter,Assistant 2,Bohrhelfer 2
-DocType: Feedback Drilling Meter,Temporary,Temporärmitarbeiter
 DocType: Regional Holidays,Regional Holidays,Regionale Feiertage
 DocType: Abo,Action done,Aktion erledigt
 DocType: Abo,First Reminder,Erste Erinnerung
