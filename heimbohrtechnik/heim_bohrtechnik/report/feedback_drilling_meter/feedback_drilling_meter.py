@@ -105,7 +105,6 @@ def get_data(filters, days, with_url=True):
                 if entry.impact_part_change == 1:
                     style = "style='color: blue;'"
                     remark.append("Neues Schlagteil")
-                frappe.log_error(with_url, "with_url")
                 if with_url:
                     url = get_url_to_form("Feedback Drilling Meter", entry.name)
                     html = "<a href='{0}' {1}>{2}</a>".format(url, style, entry.drilling_meter)

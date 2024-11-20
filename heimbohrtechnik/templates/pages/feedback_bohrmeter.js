@@ -422,22 +422,15 @@ function get_transmitted_information(date, drilling_team) {
 function get_overview() {
     let drilling_team = document.getElementById('drilling_team').value
     let year = new Date().getFullYear()
-    console.log(year);
-    frappe.call({
-        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_overview',
-        'args': {
-            'drilling_team': drilling_team,
-            'year': year
-        },
-        'callback': function(response) {
-            //~ if (response.message) {
-                //~ document.getElementById(location_field).value = response.message;
-            //~ } else {
-                //~ document.getElementById(location_field).value = null;
-            //~ }
-        }
-    });
+    var url = window.location.protocol  + "/api/method/heimbohrtechnik.templates.pages.feedback_bohrmeter.get_overview"
+        + "?drilling_team=" + encodeURIComponent(drilling_team) + "&year=" + encodeURIComponent(year)
+    var w = window.open(url);
+    if (!w) {
+        frappe.msgprint("Bitte Pop-Up aktivieren")
+        return
+    }
 }
+
 
 function insert_feedback(finished_document, key) {
     frappe.call({

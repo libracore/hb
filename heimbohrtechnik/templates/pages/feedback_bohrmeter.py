@@ -381,7 +381,7 @@ def get_overview(drilling_team, year):
     data = get_data(_dict({'drilling_team_filter': drilling_team, 'year_filter': year}), None, with_url=False)
     overview_html = frappe.render_template("heimbohrtechnik/templates/pages/drilling_meter_overview.html", {'data': data, 'drilling_team': drilling_team, 'year': year})
     pdf = get_pdf(overview_html)
-    frappe.local.response.filename = "overview.pdf"  # Dateiname, der dem Benutzer angezeigt wird
-    frappe.local.response.filecontent = pdf  # Der Inhalt des generierten PDFs
-    frappe.local.response.type = "pdf"  # Legt fest, dass es als PDF behandelt wird
+    frappe.local.response.filename = "overview.pdf"
+    frappe.local.response.filecontent = pdf
+    frappe.local.response.type = "download"
     return
