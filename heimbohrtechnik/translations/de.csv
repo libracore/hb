@@ -635,3 +635,8 @@ DocType: Probe,Pressure Loss,Druckverlust
 DocType: Probe,Vent Amount,Ablassmenge
 DocType: Probe,Vent Pressure,Abgelassener Druck
 DocType: Probe,Density,Dichte
+DocType: Probe,Tables,Tabellen
+DocType: Probe,Minimal Test Pressure,Mindestprüfdruck
+DocType: Probe,Pressure Loss Table,Druckverlust-Tabelle
+DocType: Probe,Pressure Loss Formula,Druckverlust-Formel
+DocType: Probe,Purge Water Amount,Abgelassene Wassermenge

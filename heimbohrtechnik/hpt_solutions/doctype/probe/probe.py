@@ -35,7 +35,11 @@ class Probe(Document):
                 "tube_roughness": self.tube_roughness,
                 "test_pressures": [],
                 "pressure_losses": [],
-                "vent_amounts": []
+                "vent_amounts": [],
+                "min_test_pressure": self.min_test_pressure,
+                "pressure_loss_table": self.pressure_loss_table,
+                "pressure_loss_formula": self.pressure_loss_formula,
+                "purge_water_amount": self.purge_water_amount
             }
         for tp in self.test_pressures:
             probe["test_pressures"].append({

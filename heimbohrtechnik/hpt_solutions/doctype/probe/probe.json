@@ -31,7 +31,13 @@
   "sec_pressure_loss",
   "pressure_losses",
   "sec_vent_amount",
-  "vent_amounts"
+  "vent_amounts",
+  "sec_tables",
+  "min_test_pressure",
+  "purge_water_amount",
+  "col_tables",
+  "pressure_loss_table",
+  "pressure_loss_formula"
  ],
  "fields": [
   {
@@ -199,9 +205,39 @@
    "fieldtype": "Table",
    "label": "Vent Amount",
    "options": "Probe Vent Amount"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sec_tables",
+   "fieldtype": "Section Break",
+   "label": "Tables"
+  },
+  {
+   "fieldname": "min_test_pressure",
+   "fieldtype": "Data",
+   "label": "Minimal Test Pressure"
+  },
+  {
+   "fieldname": "pressure_loss_table",
+   "fieldtype": "Data",
+   "label": "Pressure Loss Table"
+  },
+  {
+   "fieldname": "pressure_loss_formula",
+   "fieldtype": "Data",
+   "label": "Pressure Loss Formula"
+  },
+  {
+   "fieldname": "purge_water_amount",
+   "fieldtype": "Data",
+   "label": "Purge Water Amount"
+  },
+  {
+   "fieldname": "col_tables",
+   "fieldtype": "Column Break"
   }
  ],
- "modified": "2024-11-15 17:10:54.345979",
+ "modified": "2024-11-20 16:03:25.946218",
  "modified_by": "Administrator",
  "module": "HPT Solutions",
  "name": "Probe",
