@@ -120,7 +120,7 @@ def needs_insurance(sales_order):
         return True
     obj = frappe.get_value("Sales Order", sales_order, "object")
     if obj:
-        object_arteser = frappe.get_value("Object", obj, "insurance_required")
+        object_arteser = frappe.get_value("Object", obj, "needs_insurance")
         if cint(object_arteser):
             return True
     return False
