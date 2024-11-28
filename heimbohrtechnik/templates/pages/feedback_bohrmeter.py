@@ -60,7 +60,8 @@ def check_key(link_key, team):
         descriptions_html = frappe.render_template("heimbohrtechnik/templates/pages/descriptions_template.html", {'descriptions': descriptions})
     else:
         frappe.msgprint("Invalid or missing Key!")
-    
+        projects_html = None
+        descriptions_html = None
     
     return {'is_valid': is_valid, 'projects_html': projects_html, 'descriptions_html': descriptions_html}
 
@@ -377,11 +378,21 @@ def get_project_location(project):
     return frappe.get_value("Project", project, "object_location")
     
 @frappe.whitelist(allow_guest=True)
-def get_overview(drilling_team, year):
+def get_total_overview(drilling_team, year):
     data = get_data(_dict({'drilling_team_filter': drilling_team, 'year_filter': year}), None, with_url=False)
     overview_html = frappe.render_template("heimbohrtechnik/templates/pages/drilling_meter_overview.html", {'data': data, 'drilling_team': drilling_team, 'year': year})
     pdf = get_pdf(overview_html)
     frappe.local.response.filename = "overview.pdf"
+    frappe.local.response.filecontent = pdf
+    frappe.local.response.type = "download"
+    return
+    
+@frappe.whitelist(allow_guest=True)
+def get_daily_overview(drilling_team, day):
+    feedback_doc_name = frappe.get_value("Feedback Drilling Meter", {"drilling_team": drilling_team, 'date': day}, "name")
+    daily_overview_html = frappe.render_template("heimbohrtechnik/templates/pages/drilling_meter_daily_overview.html", {'doc_name': feedback_doc_name})
+    pdf = get_pdf(daily_overview_html)
+    frappe.local.response.filename = "daily_overview.pdf"
     frappe.local.response.filecontent = pdf
     frappe.local.response.type = "download"
     return

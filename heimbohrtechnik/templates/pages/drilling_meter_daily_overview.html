@@ -1,0 +1,174 @@
+<div id="header-html" class="hidden-pdf">
+    {% set letter_head = frappe.get_doc("Letter Head", "Commercial") %}
+    {{ letter_head.content }}
+</div>
+
+<style>
+@font-face {
+    font-family: palaquin;
+    src: url('/assets/heimbohrtechnik/fonts/Palanquin-Regular.woff');
+}
+
+@font-face {
+    font-family: palaquin-bold;
+    src: url('/assets/heimbohrtechnik/fonts/Palanquin-Bold.woff');
+}
+
+.print-format {
+    margin-left: 10mm;
+    margin-right: 5mm;
+    font-size: 11px;
+    font-family: palaquin !important;
+}    
+
+.print-format b {
+  font-family: palaquin-bold !important;
+}
+
+.print-format td {
+    padding: 2px !important;
+}
+
+.print-format th {
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+}
+
+.avb .print-format td {
+    padding-left: 10px !important;
+}
+
+.avb td  {
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+ul {
+    padding-left: 15px;
+}
+
+.siegel {
+    page-break-before: always;
+    width: 100%;
+    height: 100%;
+}
+</style>
+
+{% set doc = frappe.get_doc("Feedback Drilling Meter", doc_name) %}
+
+<p><br></p>
+<table style="width: 100%; ">
+    <tr>
+        <td style="width: 55%; font-size: 12px; ">
+            <p><br></p>
+            <p><span style="font-size: 8px !important;"></span></p>
+            <p><span style="font-size: 9px !important;"></span></p>
+        </td>
+        <td style="width: 45%; padding: 0px !important; margin-right: 1px; border: 1px solid grey; ">
+            <table style="width: 100%; font-size: 11px;">
+                <tr style="background-image: linear-gradient(silver, #eee); background-color: #eee; border-bottom: 1px solid grey;">
+                    <td colspan=3 style="padding: 3px 3px 0px 3px !important; text-align: left; font-size: 14px; width: 70%; ">
+                        <b>{{ _("Tagesbericht") }}</b>
+                    </td>
+                    <td style="padding: 3px 3px 0px 3px !important; text-align: right;  font-size: 14px; ">
+                        <b>{{ doc.day }} {{ doc.get_formatted('date') }}</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="padding: 3px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        <span style="color: grey; ">{{ _("Bohrteam") }}</span>
+                    </td>
+                    <td colspan=2 style="padding: 3px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        <span style="color: grey; ">{{ _("Total Bohrmeter") }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="padding: 0px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        {{ doc.drilling_team or "" }}
+                    </td>
+                    <td colspan=2 style="padding: 0px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        {{ doc.drilling_meter or "" }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="padding: 3px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        <span style="color: grey; ">{{ _("Vertretung") }}</span>
+                    </td>
+                    <td colspan=2 style="padding: 3px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        <span style="color: grey; ">{{ _("Projekte") }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="padding: 0px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        {{ doc.deputy or "-" }}
+                    </td>
+                    <td colspan=2 style="padding: 0px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        {% for project in doc.project %}
+                            {% if loop.index > 1 %}
+                                <br>{{ project.project_number or "-" }}({{ project.project_name or "-" }}) - {{ project.project_meter or "-" }} Meter
+                            {% else %}
+                                {{ project.project_number or "-" }}({{ project.project_name or "-" }}) - {{ project.project_meter or "-" }} Meter
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="padding: 3px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        <span style="color: grey; ">{{ _("Bohrhelfer") }}</span>
+                    </td>
+                    <td colspan=2 style="padding: 3px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        <span style="color: grey; ">{{ _("Spülung / Wechsel") }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="padding: 0px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        {% if doc.drilling_assistant_1 != "Keiner" %}{{ doc.drilling_assistant_1 or "" }}{% endif %}
+                        {% if doc.drilling_assistant_2 != "Keiner" %}<br>{{ doc.drilling_assistant_2 or "" }}{% endif %}
+                    </td>
+                    <td colspan=2 style="padding: 0px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        Spülung: {% if doc.flushing %}Ja{% else %}Nein{% endif %}<br>
+                        Hammerwechsel: {% if doc.hammer_change %}Ja{% else %}Nein{% endif %}<br>
+                        Schlagteilwechsel: {% if doc.impact_part_change %}Ja{% else %}Nein{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="padding: 3px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        <span style="color: grey; ">{{ _("Temporärmitarbeiter") }}</span>
+                    </td>
+                    <td colspan=2 style="padding: 3px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        <span style="color: grey; ">{{ _("Bemerkungen") }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2 style="padding: 0px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        {{ doc.temporary or "-" }}
+                    </td>
+                    <td colspan=2 style="padding: 0px 3px 0px 3px !important; width: 50%; text-align: left; vertical-align: top;">
+                        Hotelübernachtung: {% if doc.hotel_night %}Ja{% else %}Nein{% endif %}<br>
+                        Fertige Rückmeldung: {% if doc.finished_document %}Ja{% else %}<b>Nein</b>{% endif %}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+<!-- description -->
+<p><br /></p>
+<table class="repeatheader" style="width: 100%; font-size: 11px;">
+<thead>
+	<tr style="border-bottom: 1px solid black; border-top: 1px solid black; background-image: linear-gradient(silver, #eee); background-color: #eee; ">
+		<th style="width: 20%; "><strong>{{ _("Time") }}</strong></th>
+		<th style="width: 80%; "><strong>{{ _("Description") }}</strong></th>
+	</tr>
+</thead>
+<tbody>
+    {% for d in doc.description %}
+        <tr style="height: 25px; border-bottom: 1px solid grey;">
+        	<td>{{ d.get('description_time') }}</td>
+        	<td>{{ d.get('description') }}</td>
+        </tr>
+    {% endfor %}
+</tbody>
+</table>

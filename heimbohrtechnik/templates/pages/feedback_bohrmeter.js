@@ -48,6 +48,10 @@ function run() {
             document.getElementById('check_memory').value = check;
             if (response.message) {
                 check = response.message.is_valid;
+                if (!check) {
+                    console.log(check);
+                    document.getElementById("form").style.display = "none";
+                }
                 document.getElementById('check_memory').value = check;
                 var projects_html = response.message.projects_html;
                 var descriptions_html = response.message.descriptions_html;
@@ -163,6 +167,9 @@ function run() {
             //Show Object Location if Project is filled
             show_project_location("project", "location");
             show_project_location("project2", "location2");
+            
+            //Hide Tagesrückmeldung if no feedback is provided yet
+            handle_daily_feedback_visibillity()
         }
     });
     
@@ -419,11 +426,23 @@ function get_transmitted_information(date, drilling_team) {
     });
 }
 
-function get_overview() {
+function get_total_overview() {
     let drilling_team = document.getElementById('drilling_team').value
     let year = new Date().getFullYear()
-    var url = window.location.protocol  + "/api/method/heimbohrtechnik.templates.pages.feedback_bohrmeter.get_overview"
+    var url = window.location.protocol  + "/api/method/heimbohrtechnik.templates.pages.feedback_bohrmeter.get_total_overview"
         + "?drilling_team=" + encodeURIComponent(drilling_team) + "&year=" + encodeURIComponent(year)
+    var w = window.open(url);
+    if (!w) {
+        frappe.msgprint("Bitte Pop-Up aktivieren")
+        return
+    }
+}
+
+function get_daily_overview() {
+    let drilling_team = document.getElementById('drilling_team').value
+    let day = document.getElementById('date').value
+    var url = window.location.protocol  + "/api/method/heimbohrtechnik.templates.pages.feedback_bohrmeter.get_daily_overview"
+        + "?drilling_team=" + encodeURIComponent(drilling_team) + "&day=" + encodeURIComponent(day)
     var w = window.open(url);
     if (!w) {
         frappe.msgprint("Bitte Pop-Up aktivieren")
@@ -506,6 +525,25 @@ function show_project_location(project_field, location_field) {
         },
         'callback': function(response) {
             if (response.message) {
+                document.getElementById(location_field).value = response.message;
+            } else {
+                document.getElementById(location_field).value = null;
+            }
+        }
+    });
+}
+
+function handle_daily_feedback_visibillity() {
+    let drilling_team = document.getElementById('drilling_team').value
+    let day = document.getElementById('date').value
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.check_daily_feedback',
+        'args': {
+            'drilling_team': drilling_team,
+            'day': day
+        },
+        'callback': function(response) {
+            if (!response.message) {
                 document.getElementById(location_field).value = response.message;
             } else {
                 document.getElementById(location_field).value = null;
