@@ -552,10 +552,8 @@ function handle_daily_feedback_visibillity() {
         'callback': function(response) {
             let daily_feedback_button = document.getElementById('daily_feedback_button')
             if (!response.message) {
-                console.log(response.message)
                 daily_feedback_button.style.visibility = "hidden";
             } else {
-                console.log(response.message)
                 daily_feedback_button.style.visibility = "visible";
             }
         }
