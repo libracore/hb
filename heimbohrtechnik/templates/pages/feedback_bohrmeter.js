@@ -49,7 +49,7 @@ function run() {
             if (response.message) {
                 check = response.message.is_valid;
                 if (!check) {
-                    console.log(check);
+                    //Hide Page if key is wrong
                     document.getElementById("form").style.display = "none";
                 }
                 document.getElementById('check_memory').value = check;
@@ -201,6 +201,11 @@ function run() {
     
     $(".btn-save").on('click', function() {
         insert_feedback(0, args['key']);
+    });
+    
+    //Handle Daily overview visibillity when Date is changed
+    $("#date").on('input', function() {
+        handle_daily_feedback_visibillity()
     });
 }
 
@@ -492,6 +497,7 @@ function insert_feedback(finished_document, key) {
         },
         'callback': function(r) {
             frappe.msgprint("<b>Daten erfolgreich übermittelt!</b>", "Info");
+            handle_daily_feedback_visibillity()
         }
     });
 }
@@ -537,16 +543,20 @@ function handle_daily_feedback_visibillity() {
     let drilling_team = document.getElementById('drilling_team').value
     let day = document.getElementById('date').value
     frappe.call({
-        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.check_daily_feedback',
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_daily_overview',
         'args': {
             'drilling_team': drilling_team,
-            'day': day
+            'day': day,
+            'check': true
         },
         'callback': function(response) {
+            let daily_feedback_button = document.getElementById('daily_feedback_button')
             if (!response.message) {
-                document.getElementById(location_field).value = response.message;
+                console.log(response.message)
+                daily_feedback_button.style.visibility = "hidden";
             } else {
-                document.getElementById(location_field).value = null;
+                console.log(response.message)
+                daily_feedback_button.style.visibility = "visible";
             }
         }
     });

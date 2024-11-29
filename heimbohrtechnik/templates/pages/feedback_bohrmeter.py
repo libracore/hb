@@ -388,8 +388,12 @@ def get_total_overview(drilling_team, year):
     return
     
 @frappe.whitelist(allow_guest=True)
-def get_daily_overview(drilling_team, day):
+def get_daily_overview(drilling_team, day, check=False):
     feedback_doc_name = frappe.get_value("Feedback Drilling Meter", {"drilling_team": drilling_team, 'date': day}, "name")
+    if check and not feedback_doc_name:
+        return False
+    elif check and feedback_doc_name:
+        return True
     daily_overview_html = frappe.render_template("heimbohrtechnik/templates/pages/drilling_meter_daily_overview.html", {'doc_name': feedback_doc_name})
     pdf = get_pdf(daily_overview_html)
     frappe.local.response.filename = "daily_overview.pdf"
