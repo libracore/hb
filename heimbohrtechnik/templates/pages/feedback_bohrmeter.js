@@ -36,9 +36,9 @@ function run() {
         // no arguments provided
         
     }
-    // Check if key in link is valid
+    // Get Projects and Descriptions
     frappe.call({
-        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.check_key',
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_projects_and_descriptions',
         'args': {
             'link_key': document.getElementById('key').value,
             'team': document.getElementById('drilling_team').value
@@ -254,6 +254,9 @@ function handle_button_visibillity(check) {
 function get_deputys() {
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_deputy_list',
+        'args': {
+            'link_key': document.getElementById('key').value
+        },
         'callback': function(r) {
             var deputys = r.message
             var deputySelect = document.getElementById('deputy');
@@ -269,6 +272,9 @@ function get_deputys() {
 function get_assistants() {
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_assistants_list',
+        'args': {
+            'link_key': document.getElementById('key').value
+        },
         'callback': function(r) {
             var assistants = r.message
             var assistant_1Select = document.getElementById('assistant_1');
@@ -304,7 +310,8 @@ function calculate_hammer_change(drilling_team) {
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.calculate_hammer_change',
         'args': {
-            'drilling_team': drilling_team
+            'drilling_team': drilling_team,
+            'link_key': document.getElementById('key').value
         },
         'callback': function(response) {
             var last_change = response.message[0]
@@ -325,7 +332,8 @@ function get_transmitted_information(date, drilling_team) {
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_transmitted_information',
         'args': {
             'date': date,
-            'drilling_team': drilling_team
+            'drilling_team': drilling_team,
+            'link_key': document.getElementById('key').value
         },
         'callback': function(response) {
             if (response.message) {
@@ -435,7 +443,7 @@ function get_total_overview() {
     let drilling_team = document.getElementById('drilling_team').value
     let year = new Date().getFullYear()
     var url = window.location.protocol  + "/api/method/heimbohrtechnik.templates.pages.feedback_bohrmeter.get_total_overview"
-        + "?drilling_team=" + encodeURIComponent(drilling_team) + "&year=" + encodeURIComponent(year)
+        + "?drilling_team=" + encodeURIComponent(drilling_team) + "&year=" + encodeURIComponent(year) + "&link_key=" + document.getElementById('key').value
     var w = window.open(url);
     if (!w) {
         frappe.msgprint("Bitte Pop-Up aktivieren")
@@ -447,7 +455,7 @@ function get_daily_overview() {
     let drilling_team = document.getElementById('drilling_team').value
     let day = document.getElementById('date').value
     var url = window.location.protocol  + "/api/method/heimbohrtechnik.templates.pages.feedback_bohrmeter.get_daily_overview"
-        + "?drilling_team=" + encodeURIComponent(drilling_team) + "&day=" + encodeURIComponent(day)
+        + "?drilling_team=" + encodeURIComponent(drilling_team) + "&day=" + encodeURIComponent(day) + "&link_key=" + document.getElementById('key').value
     var w = window.open(url);
     if (!w) {
         frappe.msgprint("Bitte Pop-Up aktivieren")
@@ -506,7 +514,8 @@ function calculate_impact_part_change(drilling_team) {
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.calculate_impact_part_change',
         'args': {
-            'drilling_team': drilling_team
+            'drilling_team': drilling_team,
+            'link_key': document.getElementById('key').value
         },
         'callback': function(response) {
             var last_change = response.message[0]
@@ -527,7 +536,8 @@ function show_project_location(project_field, location_field) {
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_project_location',
         'args': {
-            'project': entered_project
+            'project': entered_project,
+            'link_key': document.getElementById('key').value
         },
         'callback': function(response) {
             if (response.message) {
@@ -547,7 +557,7 @@ function handle_daily_feedback_visibillity() {
         'args': {
             'drilling_team': drilling_team,
             'day': day,
-            'check': true
+            'visibillity_check': true
         },
         'callback': function(response) {
             let daily_feedback_button = document.getElementById('daily_feedback_button')
