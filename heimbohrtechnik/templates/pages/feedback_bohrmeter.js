@@ -255,6 +255,7 @@ function get_deputys() {
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_deputy_list',
         'args': {
+            'drilling_team': document.getElementById('drilling_team').value,
             'link_key': document.getElementById('key').value
         },
         'callback': function(r) {
@@ -273,10 +274,12 @@ function get_assistants() {
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_assistants_list',
         'args': {
+            'drilling_team': document.getElementById('drilling_team').value,
             'link_key': document.getElementById('key').value
         },
         'callback': function(r) {
             var assistants = r.message
+            console.log(assistants);
             var assistant_1Select = document.getElementById('assistant_1');
             var assistant_2Select = document.getElementById('assistant_2');
             assistants.forEach(function(option) {
@@ -503,9 +506,11 @@ function insert_feedback(finished_document, key) {
             'finished_document': finished_document,
             'link_key': document.getElementById('key').value = key
         },
-        'callback': function(r) {
-            frappe.msgprint("<b>Daten erfolgreich übermittelt!</b>", "Info");
-            handle_daily_feedback_visibillity()
+        'callback': function(response) {
+            if (response.message) {
+                frappe.msgprint("<b>Daten erfolgreich übermittelt!</b>", "Info");
+                handle_daily_feedback_visibillity()
+            }
         }
     });
 }
@@ -537,6 +542,7 @@ function show_project_location(project_field, location_field) {
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_project_location',
         'args': {
             'project': entered_project,
+            'drilling_team': document.getElementById('drilling_team').value,
             'link_key': document.getElementById('key').value
         },
         'callback': function(response) {
@@ -557,6 +563,7 @@ function handle_daily_feedback_visibillity() {
         'args': {
             'drilling_team': drilling_team,
             'day': day,
+            'link_key': document.getElementById('key').value,
             'visibillity_check': true
         },
         'callback': function(response) {

@@ -15,7 +15,7 @@ from frappe.utils.pdf import get_pdf
 @frappe.whitelist(allow_guest=True)
 def insert_feedback(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing, hammer_change, impact_part_change, assistant_1, assistant_2, temporary, hotel_night, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22,  notes, finished_document, link_key):
     #check key
-    check = check_key(link_key)
+    check = check_key(drilling_team, link_key)
     
     if check:
         #Translate checkboxes
@@ -40,14 +40,16 @@ def insert_feedback(drilling_team, deputy, date, project, project_meter, project
             create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, hotel_night_check, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22,  notes, finished_document, second_project_row=False)
         else:
             create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, hotel_night_check, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22,  notes, finished_document, second_project_row=True)
-        return
+        return True
+    else:
+        return False
 
 @frappe.whitelist(allow_guest=True)
 def get_projects_and_descriptions(link_key, team):
     
     #validate key and prepare response
     is_valid = False 
-    check = check_key(link_key)
+    check = check_key(team, link_key)
     
     if check:
         is_valid = True
@@ -57,6 +59,8 @@ def get_projects_and_descriptions(link_key, team):
         descriptions_html = frappe.render_template("heimbohrtechnik/templates/pages/descriptions_template.html", {'descriptions': descriptions})
     
         return {'is_valid': is_valid, 'projects_html': projects_html, 'descriptions_html': descriptions_html}
+    else:
+        return {'is_valid': is_valid, 'projects_html': None, 'descriptions_html': None}
 
 def get_projects(team):
     #get today and calculate start and end date of period
@@ -96,9 +100,9 @@ def get_descriptions():
     return descriptions
     
 @frappe.whitelist(allow_guest=True)
-def get_deputy_list(link_key):
+def get_deputy_list(drilling_team, link_key):
     #check key
-    check = check_key(link_key)
+    check = check_key(drilling_team, link_key)
     
     if check:
         deputys = frappe.db.sql("""
@@ -257,7 +261,7 @@ def create_document(drilling_team, deputy, date, project, project_meter, project
 @frappe.whitelist(allow_guest=True)
 def calculate_hammer_change(drilling_team, link_key):
     #check key
-    check = check_key(link_key)
+    check = check_key(drilling_team, link_key)
     
     if check:
         feedbacks = frappe.db.sql("""
@@ -285,7 +289,7 @@ def calculate_hammer_change(drilling_team, link_key):
 @frappe.whitelist(allow_guest=True)
 def calculate_impact_part_change(drilling_team, link_key):
     #check key
-    check = check_key(link_key)
+    check = check_key(drilling_team, link_key)
     
     if check:
         feedbacks = frappe.db.sql("""
@@ -313,7 +317,7 @@ def calculate_impact_part_change(drilling_team, link_key):
 @frappe.whitelist(allow_guest=True)
 def get_transmitted_information(date, drilling_team, link_key):
     #check key
-    check = check_key(link_key)
+    check = check_key(drilling_team, link_key)
     
     if check:
         #get record for entered date
@@ -365,9 +369,9 @@ def get_transmitted_information(date, drilling_team, link_key):
             return None
     
 @frappe.whitelist(allow_guest=True)
-def get_assistants_list(link_key):
+def get_assistants_list(drilling_team, link_key):
     #check key
-    check = check_key(link_key)
+    check = check_key(drilling_team, link_key)
     
     if check:
         assistants = frappe.db.sql("""
@@ -387,9 +391,9 @@ def get_assistants_list(link_key):
         return assistants_list
     
 @frappe.whitelist(allow_guest=True)
-def get_project_location(project, link_key):
+def get_project_location(project, drilling_team, link_key):
     #check key
-    check = check_key(link_key)
+    check = check_key(drilling_team, link_key)
     
     if check:
         return frappe.get_value("Project", project, "object_location")
@@ -397,7 +401,7 @@ def get_project_location(project, link_key):
 @frappe.whitelist(allow_guest=True)
 def get_total_overview(drilling_team, year, link_key):
     #check key
-    check = check_key(link_key)
+    check = check_key(drilling_team, link_key)
     
     if check:
         data = get_data(_dict({'drilling_team_filter': drilling_team, 'year_filter': year}), None, with_url=False)
@@ -411,7 +415,7 @@ def get_total_overview(drilling_team, year, link_key):
 @frappe.whitelist(allow_guest=True)
 def get_daily_overview(drilling_team, day, link_key, visibillity_check=False):
     #check key
-    check = check_key(link_key)
+    check = check_key(drilling_team, link_key)
     
     if check:
         feedback_doc_name = frappe.get_value("Feedback Drilling Meter", {"drilling_team": drilling_team, 'date': day}, "name")
@@ -426,7 +430,7 @@ def get_daily_overview(drilling_team, day, link_key, visibillity_check=False):
         frappe.local.response.type = "download"
         return
 
-def check_key(link_key):
+def check_key(team, link_key):
     #get Team Key
     team_key = frappe.db.get_value("Drilling Team", team, "team_key")
     
@@ -434,4 +438,5 @@ def check_key(link_key):
     if link_key == team_key:
         return True
     else:
-        frappe.throw("Missing or invalid Key")
+        frappe.msgprint("Missing or invalid Key")
+        return False
