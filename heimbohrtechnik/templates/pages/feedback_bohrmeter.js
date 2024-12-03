@@ -5,7 +5,7 @@ $(document).ready(function(){
 
 function make() {
     //get Arguments from Link and safe it in the HTML File / Calculate Hammer and Impact Part change and display it
-    get_arguments()
+    get_arguments();
     // get options for deputys and assistants
     get_deputys();
     get_assistants();
