@@ -183,7 +183,7 @@ function run() {
     
     //Handle Daily overview visibillity when Date is changed
     $("#date").on('input', function() {
-        handle_daily_feedback_visibillity()
+        handle_daily_feedback_visibillity();
     });
 }
 
