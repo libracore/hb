@@ -4,7 +4,9 @@ $(document).ready(function(){
 });
 
 function make() {
-    // get options for deputys
+    //get Arguments from Link and safe it in the HTML File / Calculate Hammer and Impact Part change and display it
+    get_arguments();
+    // get options for deputys and assistants
     get_deputys();
     get_assistants();
     document.getElementById('date').valueAsDate = new Date();
@@ -12,33 +14,9 @@ function make() {
 }
 
 function run() {
-    //get all arguments and safe it in the HTML File
-    var arguments = window.location.toString().split("?");
-    if (!arguments[arguments.length - 1].startsWith("http")) {
-        var args_raw = arguments[arguments.length - 1].split("&");
-        var args = {};
-        args_raw.forEach(function (arg) {
-            var kv = arg.split("=");
-            if (kv.length > 1) {
-                args[kv[0]] = kv[1];
-            }
-        });
-        if (args['drilling_team']) {
-            document.getElementById('drilling_team').value = args['drilling_team'].replace(/%20/g, " ").replace(/%C3%BC/g, "ü").replace(/%C3%B6/g, "ö").replace(/%C3%A4/g, "ä");
-            calculate_hammer_change(document.getElementById('drilling_team').value);
-            calculate_impact_part_change(document.getElementById('drilling_team').value);
-            get_transmitted_information(document.getElementById('date').value, document.getElementById('drilling_team').value);
-        }
-        if (args['key']) {
-            document.getElementById('key').value = args['key'];
-        }        
-    } else {
-        // no arguments provided
-        
-    }
-    // Check if key in link is valid
+    // Get Projects and Descriptions
     frappe.call({
-        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.check_key',
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_projects_and_descriptions',
         'args': {
             'link_key': document.getElementById('key').value,
             'team': document.getElementById('drilling_team').value
@@ -48,6 +26,10 @@ function run() {
             document.getElementById('check_memory').value = check;
             if (response.message) {
                 check = response.message.is_valid;
+                if (!check) {
+                    //Hide Page if key is wrong
+                    document.getElementById("form").style.display = "none";
+                }
                 document.getElementById('check_memory').value = check;
                 var projects_html = response.message.projects_html;
                 var descriptions_html = response.message.descriptions_html;
@@ -163,6 +145,9 @@ function run() {
             //Show Object Location if Project is filled
             show_project_location("project", "location");
             show_project_location("project2", "location2");
+            
+            //Hide Tagesrückmeldung if no feedback is provided yet
+            handle_daily_feedback_visibillity();
         }
     });
     
@@ -189,11 +174,16 @@ function run() {
     
     //create document in ERPNext, when submit button has been pushed
     $(".btn-submit").on('click', function() {
-        insert_feedback(1, args['key']);
+        insert_feedback(1, document.getElementById('key').value);
     });
     
     $(".btn-save").on('click', function() {
-        insert_feedback(0, args['key']);
+        insert_feedback(0, document.getElementById('key').value);
+    });
+    
+    //Handle Daily overview visibillity when Date is changed
+    $("#date").on('input', function() {
+        handle_daily_feedback_visibillity();
     });
 }
 
@@ -203,8 +193,8 @@ function chose_project(projects_html, field) {
 }
 
 function set_project(self, choice) {
-    var field = document.getElementById('field_memory').value;
-    var check = document.getElementById('check_memory').value;
+    let field = document.getElementById('field_memory').value;
+    let check = document.getElementById('check_memory').value;
     document.getElementById(field).value = choice;
     handle_button_visibillity(check);
     frappe.ui.open_dialogs[0].hide();
@@ -242,6 +232,10 @@ function handle_button_visibillity(check) {
 function get_deputys() {
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_deputy_list',
+        'args': {
+            'drilling_team': document.getElementById('drilling_team').value,
+            'link_key': document.getElementById('key').value
+        },
         'callback': function(r) {
             var deputys = r.message
             var deputySelect = document.getElementById('deputy');
@@ -257,17 +251,21 @@ function get_deputys() {
 function get_assistants() {
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_assistants_list',
+        'args': {
+            'drilling_team': document.getElementById('drilling_team').value,
+            'link_key': document.getElementById('key').value
+        },
         'callback': function(r) {
-            var assistants = r.message
-            var assistant_1Select = document.getElementById('assistant_1');
-            var assistant_2Select = document.getElementById('assistant_2');
+            let assistants = r.message;
+            let assistant_1Select = document.getElementById('assistant_1');
+            let assistant_2Select = document.getElementById('assistant_2');
             assistants.forEach(function(option) {
-                var assistantElement = document.createElement('option');
+                let assistantElement = document.createElement('option');
                 assistantElement.text = option;
                 assistant_1Select.add(assistantElement);
             });
             assistants.forEach(function(option) {
-                var assistantElement = document.createElement('option');
+                let assistantElement = document.createElement('option');
                 assistantElement.text = option;
                 assistant_2Select.add(assistantElement);
             });
@@ -277,11 +275,11 @@ function get_assistants() {
 
 
 function calculate_total_meter() {
-    var meter = parseInt(document.getElementById('project_meter').value)
+    let meter = parseInt(document.getElementById('project_meter').value);
     if (isNaN(meter)) {
         meter = 0;
     }
-    var meter2 = parseInt(document.getElementById('project_meter2').value)
+    let meter2 = parseInt(document.getElementById('project_meter2').value);
     if (isNaN(meter2)) {
         meter2 = 0;
     }
@@ -292,17 +290,18 @@ function calculate_hammer_change(drilling_team) {
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.calculate_hammer_change',
         'args': {
-            'drilling_team': drilling_team
+            'drilling_team': drilling_team,
+            'link_key': document.getElementById('key').value
         },
         'callback': function(response) {
-            var last_change = response.message[0]
-            var next_change = response.message[1]
-            var hammer_change_calc = document.getElementById('hammer_change_calc');
+            let last_change = response.message[0];
+            let next_change = response.message[1];
+            let hammer_change_calc = document.getElementById('hammer_change_calc');
             if (next_change < 0) {
-                hammer_change_calc.textContent = " (Fällig seit " + next_change * -1 + "m!)"
+                hammer_change_calc.textContent = " (Fällig seit " + next_change * -1 + "m!)";
                 hammer_change_calc.style.color = "red";
             } else {
-                hammer_change_calc.textContent = " (Vor " + last_change + "m, in " + next_change +"m)"
+                hammer_change_calc.textContent = " (Vor " + last_change + "m, in " + next_change +"m)";
             }
         }
     });
@@ -313,18 +312,19 @@ function get_transmitted_information(date, drilling_team) {
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_transmitted_information',
         'args': {
             'date': date,
-            'drilling_team': drilling_team
+            'drilling_team': drilling_team,
+            'link_key': document.getElementById('key').value
         },
         'callback': function(response) {
             if (response.message) {
-                var record = response.message[0];
-                var projects = response.message[1];
-                var descriptions = response.message[2];
+                let record = response.message[0];
+                let projects = response.message[1];
+                let descriptions = response.message[2];
                 document.getElementById('drilling_meter').value = record[0].drilling_meter;
                 if (record[0].deputy) {
                     document.getElementById('deputy').value = record[0].deputy;
                 } else {
-                    var deputy = "Nein";
+                    let deputy = "Nein";
                     document.getElementById('deputy').value = deputy;
                 }
                 if (record[0].flushing == 1) {
@@ -419,14 +419,26 @@ function get_transmitted_information(date, drilling_team) {
     });
 }
 
-function get_overview() {
-    let drilling_team = document.getElementById('drilling_team').value
-    let year = new Date().getFullYear()
-    var url = window.location.protocol  + "/api/method/heimbohrtechnik.templates.pages.feedback_bohrmeter.get_overview"
-        + "?drilling_team=" + encodeURIComponent(drilling_team) + "&year=" + encodeURIComponent(year)
-    var w = window.open(url);
+function get_total_overview() {
+    let drilling_team = document.getElementById('drilling_team').value;
+    let year = new Date().getFullYear();
+    let url = "/api/method/heimbohrtechnik.templates.pages.feedback_bohrmeter.get_total_overview"
+        + "?drilling_team=" + encodeURIComponent(drilling_team) + "&year=" + encodeURIComponent(year) + "&link_key=" + document.getElementById('key').value;
+    let w = window.open(url);
     if (!w) {
-        frappe.msgprint("Bitte Pop-Up aktivieren")
+        frappe.msgprint("Bitte Pop-Up aktivieren");
+        return
+    }
+}
+
+function get_daily_overview() {
+    let drilling_team = document.getElementById('drilling_team').value;
+    let day = document.getElementById('date').value;
+    let url = "/api/method/heimbohrtechnik.templates.pages.feedback_bohrmeter.get_daily_overview"
+        + "?drilling_team=" + encodeURIComponent(drilling_team) + "&day=" + encodeURIComponent(day) + "&link_key=" + document.getElementById('key').value;
+    let w = window.open(url);
+    if (!w) {
+        frappe.msgprint("Bitte Pop-Up aktivieren");
         return
     }
 }
@@ -471,8 +483,11 @@ function insert_feedback(finished_document, key) {
             'finished_document': finished_document,
             'link_key': document.getElementById('key').value = key
         },
-        'callback': function(r) {
-            frappe.msgprint("<b>Daten erfolgreich übermittelt!</b>", "Info");
+        'callback': function(response) {
+            if (response.message) {
+                frappe.msgprint("<b>Daten erfolgreich übermittelt!</b>", "Info");
+                handle_daily_feedback_visibillity();
+            }
         }
     });
 }
@@ -481,28 +496,31 @@ function calculate_impact_part_change(drilling_team) {
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.calculate_impact_part_change',
         'args': {
-            'drilling_team': drilling_team
+            'drilling_team': drilling_team,
+            'link_key': document.getElementById('key').value
         },
         'callback': function(response) {
-            var last_change = response.message[0]
-            var next_change = response.message[1]
-            var impact_part_change_calc = document.getElementById('impact_part_change_calc');
+            let last_change = response.message[0];
+            let next_change = response.message[1];
+            let impact_part_change_calc = document.getElementById('impact_part_change_calc');
             if (next_change < 0) {
-                impact_part_change_calc.textContent = " (Fällig seit " + next_change * -1 + "m!)"
+                impact_part_change_calc.textContent = " (Fällig seit " + next_change * -1 + "m!)";
                 impact_part_change_calc.style.color = "red";
             } else {
-                impact_part_change_calc.textContent = " (Vor " + last_change + "m, in " + next_change +"m)"
+                impact_part_change_calc.textContent = " (Vor " + last_change + "m, in " + next_change +"m)";
             }
         }
     });
 }
 
 function show_project_location(project_field, location_field) {
-    let entered_project = document.getElementById(project_field).value
+    let entered_project = document.getElementById(project_field).value;
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_project_location',
         'args': {
-            'project': entered_project
+            'project': entered_project,
+            'drilling_team': document.getElementById('drilling_team').value,
+            'link_key': document.getElementById('key').value
         },
         'callback': function(response) {
             if (response.message) {
@@ -512,4 +530,51 @@ function show_project_location(project_field, location_field) {
             }
         }
     });
+}
+
+function handle_daily_feedback_visibillity() {
+    let drilling_team = document.getElementById('drilling_team').value;
+    let day = document.getElementById('date').value;
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_daily_overview',
+        'args': {
+            'drilling_team': drilling_team,
+            'day': day,
+            'link_key': document.getElementById('key').value,
+            'visibillity_check': true
+        },
+        'callback': function(response) {
+            let daily_feedback_button = document.getElementById('daily_feedback_button')
+            if (!response.message) {
+                daily_feedback_button.style.visibility = "hidden";
+            } else {
+                daily_feedback_button.style.visibility = "visible";
+            }
+        }
+    });
+}
+
+function get_arguments() {
+    var arguments = window.location.toString().split("?");
+    if (!arguments[arguments.length - 1].startsWith("http")) {
+        var args_raw = arguments[arguments.length - 1].split("&");
+        var args = {};
+        args_raw.forEach(function (arg) {
+            var kv = arg.split("=");
+            if (kv.length > 1) {
+                args[kv[0]] = kv[1];
+            }
+        });
+        if (args['key']) {
+            document.getElementById('key').value = args['key'];
+        }
+        if (args['drilling_team']) {
+            document.getElementById('drilling_team').value = decodeURIComponent(args['drilling_team']);
+            calculate_hammer_change(document.getElementById('drilling_team').value);
+            calculate_impact_part_change(document.getElementById('drilling_team').value);
+            get_transmitted_information(document.getElementById('date').value, document.getElementById('drilling_team').value);
+        }
+    } else {
+        // no arguments provided
+    }
 }
