@@ -285,6 +285,8 @@ def calculate_hammer_change(drilling_team, link_key):
                 break
         next_change = 10000 - last_change
         return last_change, next_change
+    else:
+        return None, None
     
 @frappe.whitelist(allow_guest=True)
 def calculate_impact_part_change(drilling_team, link_key):
@@ -313,6 +315,8 @@ def calculate_impact_part_change(drilling_team, link_key):
                 break
         next_change = 3000 - last_change
         return last_change, next_change
+    else:
+        return None, None
 
 @frappe.whitelist(allow_guest=True)
 def get_transmitted_information(date, drilling_team, link_key):
@@ -396,7 +400,12 @@ def get_project_location(project, drilling_team, link_key):
     check = check_key(drilling_team, link_key)
     
     if check:
-        return frappe.get_value("Project", project, "object_location")
+        object_street = frappe.get_value("Project", project, "object_street")
+        object_location = frappe.get_value("Project", project, "object_location")
+        if object_street or object_location:
+            return "{0}, {1}".format(object_street or "-", object_location or "-")
+        else:
+            return ""
     
 @frappe.whitelist(allow_guest=True)
 def get_total_overview(drilling_team, year, link_key):
@@ -419,9 +428,9 @@ def get_daily_overview(drilling_team, day, link_key, visibillity_check=False):
     
     if check:
         feedback_doc_name = frappe.get_value("Feedback Drilling Meter", {"drilling_team": drilling_team, 'date': day}, "name")
-        if check and not feedback_doc_name:
+        if visibillity_check and not feedback_doc_name:
             return False
-        elif check and feedback_doc_name:
+        elif visibillity_check and feedback_doc_name:
             return True
         daily_overview_html = frappe.render_template("heimbohrtechnik/templates/pages/drilling_meter_daily_overview.html", {'doc_name': feedback_doc_name})
         pdf = get_pdf(daily_overview_html)

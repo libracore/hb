@@ -4,7 +4,9 @@ $(document).ready(function(){
 });
 
 function make() {
-    // get options for deputys
+    //get Arguments from Link and safe it in the HTML File / Calculate Hammer and Impact Part change and display it
+    get_arguments()
+    // get options for deputys and assistants
     get_deputys();
     get_assistants();
     document.getElementById('date').valueAsDate = new Date();
@@ -12,30 +14,6 @@ function make() {
 }
 
 function run() {
-    //get all arguments and safe it in the HTML File
-    var arguments = window.location.toString().split("?");
-    if (!arguments[arguments.length - 1].startsWith("http")) {
-        var args_raw = arguments[arguments.length - 1].split("&");
-        var args = {};
-        args_raw.forEach(function (arg) {
-            var kv = arg.split("=");
-            if (kv.length > 1) {
-                args[kv[0]] = kv[1];
-            }
-        });
-        if (args['drilling_team']) {
-            document.getElementById('drilling_team').value = args['drilling_team'].replace(/%20/g, " ").replace(/%C3%BC/g, "ü").replace(/%C3%B6/g, "ö").replace(/%C3%A4/g, "ä");
-            calculate_hammer_change(document.getElementById('drilling_team').value);
-            calculate_impact_part_change(document.getElementById('drilling_team').value);
-            get_transmitted_information(document.getElementById('date').value, document.getElementById('drilling_team').value);
-        }
-        if (args['key']) {
-            document.getElementById('key').value = args['key'];
-        }        
-    } else {
-        // no arguments provided
-        
-    }
     // Get Projects and Descriptions
     frappe.call({
         'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.get_projects_and_descriptions',
@@ -196,11 +174,11 @@ function run() {
     
     //create document in ERPNext, when submit button has been pushed
     $(".btn-submit").on('click', function() {
-        insert_feedback(1, args['key']);
+        insert_feedback(1, document.getElementById('key').value);
     });
     
     $(".btn-save").on('click', function() {
-        insert_feedback(0, args['key']);
+        insert_feedback(0, document.getElementById('key').value);
     });
     
     //Handle Daily overview visibillity when Date is changed
@@ -279,7 +257,6 @@ function get_assistants() {
         },
         'callback': function(r) {
             var assistants = r.message
-            console.log(assistants);
             var assistant_1Select = document.getElementById('assistant_1');
             var assistant_2Select = document.getElementById('assistant_2');
             assistants.forEach(function(option) {
@@ -575,4 +552,29 @@ function handle_daily_feedback_visibillity() {
             }
         }
     });
+}
+
+function get_arguments() {
+    var arguments = window.location.toString().split("?");
+    if (!arguments[arguments.length - 1].startsWith("http")) {
+        var args_raw = arguments[arguments.length - 1].split("&");
+        var args = {};
+        args_raw.forEach(function (arg) {
+            var kv = arg.split("=");
+            if (kv.length > 1) {
+                args[kv[0]] = kv[1];
+            }
+        });
+        if (args['key']) {
+            document.getElementById('key').value = args['key'];
+        }
+        if (args['drilling_team']) {
+            document.getElementById('drilling_team').value = args['drilling_team'].replace(/%20/g, " ").replace(/%C3%BC/g, "ü").replace(/%C3%B6/g, "ö").replace(/%C3%A4/g, "ä");
+            calculate_hammer_change(document.getElementById('drilling_team').value);
+            calculate_impact_part_change(document.getElementById('drilling_team').value);
+            get_transmitted_information(document.getElementById('date').value, document.getElementById('drilling_team').value);
+        }
+    } else {
+        // no arguments provided
+    }
 }
