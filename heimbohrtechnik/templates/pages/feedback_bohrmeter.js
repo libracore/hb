@@ -147,7 +147,7 @@ function run() {
             show_project_location("project2", "location2");
             
             //Hide Tagesrückmeldung if no feedback is provided yet
-            handle_daily_feedback_visibillity()
+            handle_daily_feedback_visibillity();
         }
     });
     
