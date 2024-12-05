@@ -1,16 +1,38 @@
 $(document).ready(function(){
-    make();
-    run();
+    check();
 });
 
-function make() {
+function check() {
     //get Arguments from Link and safe it in the HTML File / Calculate Hammer and Impact Part change and display it
     get_arguments();
+    //check key and hide page / stop code if key is wrong
+    frappe.call({
+        'method': 'heimbohrtechnik.templates.pages.feedback_bohrmeter.check_key',
+        'args': {
+            'team': document.getElementById('drilling_team').value,
+            'link_key': document.getElementById('key').value
+        },
+        'callback': function(response) {
+            if (!response.message) {
+                document.getElementById("form").style.display = "none";
+                return;
+            } else {
+                make();
+                run();
+            }
+        }
+    });
+}
+
+function make() {
     // get options for deputys and assistants
     get_deputys();
     get_assistants();
     document.getElementById('date').valueAsDate = new Date();
     var set_date = document.getElementById('date').value
+    get_transmitted_information(set_date, document.getElementById('drilling_team').value);
+    calculate_hammer_change(document.getElementById('drilling_team').value);
+    calculate_impact_part_change(document.getElementById('drilling_team').value);
 }
 
 function run() {
@@ -419,7 +441,8 @@ function get_transmitted_information(date, drilling_team) {
     });
 }
 
-function get_total_overview() {
+function get_total_overview(event) {
+    event.preventDefault();
     let drilling_team = document.getElementById('drilling_team').value;
     let year = new Date().getFullYear();
     let url = "/api/method/heimbohrtechnik.templates.pages.feedback_bohrmeter.get_total_overview"
@@ -431,7 +454,8 @@ function get_total_overview() {
     }
 }
 
-function get_daily_overview() {
+function get_daily_overview(event) {
+    event.preventDefault();
     let drilling_team = document.getElementById('drilling_team').value;
     let day = document.getElementById('date').value;
     let url = "/api/method/heimbohrtechnik.templates.pages.feedback_bohrmeter.get_daily_overview"
@@ -485,7 +509,11 @@ function insert_feedback(finished_document, key) {
         },
         'callback': function(response) {
             if (response.message) {
-                frappe.msgprint("<b>Daten erfolgreich übermittelt!</b>", "Info");
+                if (finished_document) {
+                    frappe.msgprint("<b>Daten erfolgreich übermittelt!</b>", "Info");
+                } else {
+                    frappe.msgprint("<b>Daten erfolgreich gespeichert!</b>", "Info");
+                }
                 handle_daily_feedback_visibillity();
             }
         }
@@ -570,9 +598,6 @@ function get_arguments() {
         }
         if (args['drilling_team']) {
             document.getElementById('drilling_team').value = decodeURIComponent(args['drilling_team']);
-            calculate_hammer_change(document.getElementById('drilling_team').value);
-            calculate_impact_part_change(document.getElementById('drilling_team').value);
-            get_transmitted_information(document.getElementById('date').value, document.getElementById('drilling_team').value);
         }
     } else {
         // no arguments provided

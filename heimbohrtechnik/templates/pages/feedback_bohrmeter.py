@@ -437,6 +437,7 @@ def get_daily_overview(drilling_team, day, link_key, visibillity_check=False):
     frappe.local.response.type = "download"
     return
 
+@frappe.whitelist(allow_guest=True)
 def check_key(team, link_key):
     #get Team Key
     team_key = frappe.db.get_value("Drilling Team", team, "team_key")
