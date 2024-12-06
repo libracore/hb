@@ -26,7 +26,7 @@ class Probe(Document):
                 "outer_diameter": self.outer_diameter,
                 "pressure_level": self.pressure_level,
                 "nominative_pressure": self.nominative_pressure,
-                "wall_strength": self.nominative_pressure,
+                "wall_strength": self.wall_strength,
                 "radius": self.radius,
                 "inner_diameter": self.inner_diameter,
                 "volume_per_m": self.volume_per_m,
