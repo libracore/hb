@@ -546,7 +546,8 @@ def update_project(project):
         'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "internal_crane_item"),
         'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "external_crane_item"),
         'self_crane': frappe.get_value("Heim Settings", "Heim Settings", "self_crane_item"),
-        'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_item")
+        'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_item"),
+        'trt': frappe.get_value("Heim Settings", "Heim Settings", "trt_item")
     }
     activities = {
         'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "int_crane_activity"),
@@ -575,6 +576,8 @@ def update_project(project):
                 has_external_crane = True
             elif i.item_code == items['carrymax']:
                 has_carrymax = True
+            elif i.item_code == items['trt']:
+                o.trt = 1
                 
         if has_internal_crane:
             p = set_checklist_activity(p, activities['internal_crane'])

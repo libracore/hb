@@ -25,6 +25,7 @@
   "external_crane_item",
   "self_crane_item",
   "carrymax_item",
+  "trt_item",
   "section_pricing",
   "buying_price_list_chf",
   "buying_price_list_eur",
@@ -415,10 +416,16 @@
    "label": "Feedback Responsible",
    "options": "User",
    "reqd": 1
+  },
+  {
+   "fieldname": "trt_item",
+   "fieldtype": "Long Text",
+   "label": "TRT item",
+   "options": "Item"
   }
  ],
  "issingle": 1,
- "modified": "2024-11-18 15:45:00.755090",
+ "modified": "2024-12-11 12:02:23.251731",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",
