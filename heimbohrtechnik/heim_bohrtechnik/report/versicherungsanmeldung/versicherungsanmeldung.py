@@ -112,13 +112,15 @@ def needs_insurance(sales_order):
             `tabSales Order Item`.`alternativ` = 0
             AND `tabSales Order Item`.`eventual` = 0
             AND `tabSales Order Item`.`name` IS NOT NULL
+            AND `tabSales Order`.`name` = "{sales_order}"
         GROUP BY `tabSales Order`.`object`
-    ;"""
+    ;""".format(sales_order=sales_order)
     data = frappe.db.sql(sql_query, as_dict=True)
     if len(data) > 0:
         return True
-    if frappe.get_value("Sales Order", "object"):
-        object_arteser = frappe.get_value("Object", frappe.get_value("Sales Order", "object"), "insurance_required")
+    obj = frappe.get_value("Sales Order", sales_order, "object")
+    if obj:
+        object_arteser = frappe.get_value("Object", obj, "needs_insurance")
         if cint(object_arteser):
             return True
     return False
