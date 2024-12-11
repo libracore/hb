@@ -51,6 +51,18 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Request for Quotation",
+                   "label": _("Request for Quotation"),
+                   "description": _("Request for Quotation")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Supplier Quotation",
+                   "label": _("Supplier Quotation"),
+                   "description": _("Supplier Quotation")
+                },
+                {
+                   "type": "doctype",
                    "name": "Purchase Order",
                    "label": _("Purchase Order"),
                    "description": _("Purchase Order")
