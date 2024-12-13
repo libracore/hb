@@ -18,6 +18,9 @@ class FeedbackDrillingMeter(Document):
         date = frappe.utils.data.getdate(self.date)
         self.day = date.strftime('%A')
         
+    def autoname(self):
+        self.name = "{0} - {1}".format(self.drilling_team, self.date)
+        
 def reminder():
     #check settings
     reminder_active = frappe.db.get_value("Heim Settings", "Heim Settings", "send_feedback_reminder")

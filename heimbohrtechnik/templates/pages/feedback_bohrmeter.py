@@ -135,7 +135,7 @@ def create_document(drilling_team, deputy, date, project, project_meter, project
     if feedback:
         #if doc is existing, delete it
         feedback_doc = frappe.delete_doc("Feedback Drilling Meter", feedback[0].get('name'), ignore_permissions=True)
-        
+    
     #create new doc
     feedback_doc = frappe.get_doc({
         'doctype': 'Feedback Drilling Meter',
