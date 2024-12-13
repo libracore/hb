@@ -111,10 +111,10 @@ def get_data(filters, days, with_url=True):
             new_week['cw'] = i
             
             #add remarks
-            # ~ if remark:
-                # ~ new_week['remark'] = ', '.join(remark)
-            # ~ else:
-                # ~ new_week['remark'] = "-"
+            if remark:
+                new_week['remark'] = ', '.join(remark)
+            else:
+                new_week['remark'] = "-"
             
             #ad from and to date
             first_day = frappe.utils.add_days(first_day, 7)
