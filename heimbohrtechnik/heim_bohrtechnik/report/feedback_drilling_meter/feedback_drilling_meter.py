@@ -96,20 +96,12 @@ def get_data(filters, days, with_url=True):
                     # ~ new_week[entry.day.lower()] = entry.drilling_meter
                     
                 #prepare html for meters entry
-                style = "style='color: black;'"
-                if entry.flushing == 1:
-                    style = "style='color: red;'"
-                if entry.hammer_change == 1:
-                    style = "style='color: green;'"
-                    remark.append("Neuer Hammer")
-                if entry.impact_part_change == 1:
-                    style = "style='color: blue;'"
-                    remark.append("Neues Schlagteil")
+                style, remark = apply_styles_and_remark(entry.hammer_change, entry.impact_part_change, entry.flushing, remark)
                 if with_url:
                     url = get_url_to_form("Feedback Drilling Meter", entry.name)
                     html = "<a href='{0}' {1}>{2}</a>".format(url, style, entry.drilling_meter)
                 else:
-                    html = "<p {0}>{1}</p>".format(style, entry.drilling_meter)
+                    html = "<span {0}>{1}</span>".format(style, entry.drilling_meter)
                 #add html to entry
                 new_week[entry.day.lower()] = html
             #add the week total to actual week dict
@@ -174,7 +166,7 @@ def get_data(filters, days, with_url=True):
                                             `date` DESC
                                         """.format(start=frappe.utils.add_days(today, -7), end=frappe.utils.add_days(today, -1), dt=drilling_team.get('name')), as_dict=True)
             #prepare line for report and add it do data
-            remarks = ""
+            remark = []
             line = {
                     'drilling_team': drilling_team.get('name')
                     }
@@ -182,19 +174,12 @@ def get_data(filters, days, with_url=True):
             for day in days:
                 for entry in entries:
                     if datetime.strptime(day[-10:], "%d.%m.%Y").date() == entry.get('date'):
-                        style = "style='color: black;'"
-                        if entry.get('flushing') == 1:
-                            style = "style='color: red;'"
-                        if entry.get('hammer_change') == 1:
-                            remarks += "Neuer Hammer, "
-                            style = "style='color: green;'"
-                        if entry.get('impact_part_change') == 1:
-                            remarks += "Neues Schlagteil, "
-                            style = "style='color: blue;'"
+                        style, remark = apply_styles_and_remark(entry.get('hammer_change'), entry.get('impact_part_change'), entry.get('flushing'), remark)
                         url = get_url_to_form("Feedback Drilling Meter", entry.get('name'))
                         line['day_{0}'.format(loop_index)] = "<a href='{0}' {1}>{2}</a>".format(url, style, entry.get('drilling_meter'))
                 loop_index += 1
-            line['remark'] = remarks[:-2]
+            remarks = ', '.join(remark)
+            line['remark'] = remarks
             data.append(line)
     return data
 
@@ -206,3 +191,20 @@ def get_related_days():
         if value != "Sat" and value != "Sun":
             related_days.append("{0} {1}".format(value, key))
     return related_days
+
+def apply_styles_and_remark(hammer_change, impact_part_change, flushing, remark):
+    style = "style='color: black;'"
+    if hammer_change == 1 and impact_part_change == 1:
+        style = "style='color: #B22222;'"
+        remark.append("Neuer Hammer")
+        remark.append("Neues Schlagteil")
+    elif hammer_change == 1:
+        style = "style='color: green;'"
+        remark.append("Neuer Hammer")
+    elif impact_part_change == 1:
+        style = "style='color: blue;'"
+        remark.append("Neues Schlagteil")
+    if flushing == 1:
+        style = style[:-1]
+        style += "background-color: #FFDAB9; padding-top: 3px;'"
+    return style, remark
