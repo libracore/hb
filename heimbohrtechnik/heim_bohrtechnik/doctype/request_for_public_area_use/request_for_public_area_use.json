@@ -35,6 +35,9 @@
   "no_parking_white",
   "inform_residents",
   "comply_min_width",
+  "full_closure",
+  "pedestrians_possible",
+  "municipality_signalization",
   "sec_installation",
   "installation_plan",
   "col_installation",
@@ -284,9 +287,27 @@
   {
    "fieldname": "column_break_39",
    "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "full_closure",
+   "fieldtype": "Check",
+   "label": "Full closure"
+  },
+  {
+   "default": "0",
+   "fieldname": "pedestrians_possible",
+   "fieldtype": "Check",
+   "label": "Passage for pedestrians Possible"
+  },
+  {
+   "default": "0",
+   "fieldname": "municipality_signalization",
+   "fieldtype": "Check",
+   "label": "Signalization - support from the municipality required"
   }
  ],
- "modified": "2023-10-03 16:51:14.385834",
+ "modified": "2024-12-18 09:07:43.087928",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Request for Public Area Use",

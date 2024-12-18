@@ -374,6 +374,9 @@ DocType: Request for Public Area Use,From Owner,Vom Eigentümer
 DocType: Request for Public Area Use,Different Installation Address,Abweichende Installationsadresse
 DocType: Request for Public Area Use,Installation Street,Strasse (Installation)
 DocType: Request for Public Area Use,Installation Location,Ort der Installation
+DocType: Request for Public Area Use,Full closure,Vollsperrung
+DocType: Request for Public Area Use,Passage for pedestrians Possible,Durchgang für Fussgänger Möglich
+DocType: Request for Public Area Use,Signalization - support from the municipality required,Signalisation - Unterstützung durch gemeinde notwenig
 Report: General Ledger HBAG,General Ledger HBAG,Hauptbuch HBAG
 Report: Account Sheets HBAG,Account Sheets HBAG,Kontenblätter HBAG
 DocType: Layer Directory,Layer Directory,Schichtenverzeichnis
