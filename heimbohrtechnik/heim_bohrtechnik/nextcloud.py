@@ -27,7 +27,7 @@ PATHS = {
     'supplier_mud':     "6_Lieferanten/Mulden_und_Saugwagen",
     'supplier_other':   "6_Lieferanten/Diverses",
     'incidents':        "7_Schadenfälle",
-    'memo':             "8_Memos_und_Notizen"
+    'memo':             "8_Baustellenbeschreibung"
 }
 
 def get_path(target):
@@ -142,8 +142,13 @@ def write_project_file_from_local_file(project, file_name, target=PATHS['drillin
     if client.check(os.path.join(project_path, target)):
         client.upload_sync(os.path.join(project_path, target, file_name.split("/")[-1]), file_name)
     else:
-        # fallback to root (for migration projects)
-        client.upload_sync(os.path.join(project_path, file_name.split("/")[-1]), file_name)
+        # try to create the requested folder
+        try:
+            create_path(client, os.path.join(project_path, target))
+            client.upload_sync(os.path.join(project_path, target, file_name.split("/")[-1]), file_name)
+        except:
+            # fallback to root (for migration projects)
+            client.upload_sync(os.path.join(project_path, file_name.split("/")[-1]), file_name)
 
     return
 
@@ -280,6 +285,12 @@ def upload_file(self, event):
         if frappe.db.exists("Project", project):
             physical_file_name = get_physical_path(self.name)
             write_project_file_from_local_file (project, physical_file_name, PATHS['drilling'])
+    
+    elif self.attached_to_doctype == "Construction Site Description":
+        project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
+        if frappe.db.exists("Project", project):
+            physical_file_name = get_physical_path(self.name)
+            write_project_file_from_local_file (project, physical_file_name, PATHS['subprojects'])
             
     return
 
