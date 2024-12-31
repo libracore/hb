@@ -58,6 +58,8 @@
   "geologist",
   "column_break_36",
   "amount_disposed",
+  "so_mud_amount",
+  "ignore_mud_deviation",
   "forwarder",
   "disposer",
   "depth_arteser_section",
@@ -462,10 +464,22 @@
    "fieldname": "drilling_tool_diameter_2",
    "fieldtype": "Int",
    "label": "Drilling tool 2 diameter (mm)"
+  },
+  {
+   "fieldname": "so_mud_amount",
+   "fieldtype": "Float",
+   "label": "Mud Amount from Sales Order",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "ignore_mud_deviation",
+   "fieldtype": "Check",
+   "label": "Ignore Mud Deviation"
   }
  ],
  "is_submittable": 1,
- "modified": "2024-09-30 12:13:41.280063",
+ "modified": "2024-12-31 11:47:37.760478",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory",

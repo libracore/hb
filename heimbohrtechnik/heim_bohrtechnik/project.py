@@ -16,7 +16,7 @@ def before_save(self, method):
     if self.checklist:
         for c in self.checklist:
             # define trough count/size in case of internal troughs
-            if c.activity == frappe.get_value("Heim Settings", "Heim Settings", "trough_activity") \         # Mulde
+            if c.activity == frappe.get_value("Heim Settings", "Heim Settings", "trough_activity") \
                 and c.supplier in [own_trough_supplier]:
                 c.trough_count = 1
                 c.trough_size = "±25m³"
@@ -45,7 +45,8 @@ def before_save(self, method):
                         and self.checklist[c].supplier == mud_from_trough:
                         set_internal_trough = -1        # reset in case trough from mud supplier
                 if set_internal_trough >= 0:
-                    frappe.db.set_value("Object", self.object, "old_trough_supplier", self.checklist[set_internal_trough].supplier, update_modified = False)
+                    frappe.db.set_value("Object", self.object, "old_trough_supplier", 
+                        self.checklist[set_internal_trough].supplier, update_modified = False)
                     frappe.db.commit()
                     self.checklist[set_internal_trough].supplier = own_trough_supplier
                     supplier_name = frappe.get_value("Supplier", own_trough_supplier, "supplier_name")

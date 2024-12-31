@@ -14,7 +14,16 @@ class LayerDirectory(Document):
             drilling_team = frappe.get_doc("Drilling Team", project_doc.drilling_team)
         else:
             drilling_team = None
-            
+        
+        # find amount of mud in the sales order
+        sales_order_mud_amount = 0
+        if project_doc.sales_order:
+            sales_order = frappe.get_doc("Sales Order", project_doc.sales_order)
+            mud_item = frappe.get_value("Heim Settings", "Heim Settings", "mud_item")
+            for item in sales_order.items:
+                if item.item_code.startswith(mud_item):
+                    sales_order_mud_amount = item.qty
+        
         construction_site_descriptions = frappe.get_all(
             "Construction Site Description", 
             filters={'object': object_doc.name},
@@ -42,7 +51,8 @@ class LayerDirectory(Document):
             'object': object_doc.as_dict(),
             'construction_site_description': construction_site_description,
             'drilling_team': drilling_team,
-            'ews_details': ews_details
+            'ews_details': ews_details,
+            'sales_order_mud_amount': sales_order_mud_amount
         }
 
     def before_save(self):
@@ -57,5 +67,5 @@ class LayerDirectory(Document):
         if is_arteser and self.object:
             frappe.db.sql("""UPDATE `tabObject` SET `arteser` = 1 WHERE `name` = "{o}";""".format(o=self.object))
             frappe.db.commit()
-            
+        
         return

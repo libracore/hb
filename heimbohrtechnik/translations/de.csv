@@ -510,6 +510,8 @@ DocType: Layer Directory,Piping2 (mm),Verrohrung2 (mm)
 DocType: Layer Directory,Drilling,Bohrung
 DocType: Layer Directory,Drilling type,Bohrtyp
 DocType: Layer Directory,Drilling Length (mm),Länge (mm)
+DocType: Layer Directory,Mud Amount from Sales Order,Erwartete Schlammmenge (Kundenauftrag)
+DocType: Layer Directory,Ignore Mud Deviation,Abweichung bei der Schlammmenge ignorieren
 DocType: Drilling Team,Flushing drilling,Spülbohrung
 DocType: Drilling Team,Hammer drilling,Hammerbohrung
 DocType: Drilling Team,Well drilling,Brunnenbohrung

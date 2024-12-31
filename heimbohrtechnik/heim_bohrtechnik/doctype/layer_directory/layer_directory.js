@@ -8,6 +8,23 @@ frappe.ui.form.on('Layer Directory', {
     project: function(frm) {
         autocomplete_object(frm);
     },
+    validate: function(frm) {
+        if ((frm.doc.so_mud_amount) 
+            && (!frm.doc.ignore_mud_deviation) 
+            && (frm.doc.amount_disposed > 0)
+            && (frm.doc.amount_disposed < frm.doc.so_mud_amount)) {
+            frappe.msgprint( __("Vorsicht, es wurde weniger Schlamm angeliefert als im Kundenauftrag erwartet") );
+        }
+    },
+    before_submit: function(frm) {
+        if ((frm.doc.so_mud_amount) 
+            && (!frm.doc.ignore_mud_deviation) 
+            && (frm.doc.amount_disposed > 0)
+            && (frm.doc.amount_disposed < frm.doc.so_mud_amount)) {
+            frappe.msgprint( __("Eine Schlammunterlieferung kann nur mit der Option <b>Schlammmenge ignorieren</b> gebucht werden.") );
+            frappe.validated = false;
+        }
+    }
 });
 
 function autocomplete_object(frm) {
@@ -26,6 +43,7 @@ function autocomplete_object(frm) {
                 cur_frm.set_value("object_location", data.object.object_location);
                 cur_frm.set_value("drilling_team", data.project.drilling_team);
                 cur_frm.set_value("drilling_tool", data.drilling_team.drt);
+                cur_frm.set_value("so_mud_amount", data.sales_order_mud_amount);
                 
                 // find permits
                 for (var i = 0; i < data.project.permits.length; i++) {
