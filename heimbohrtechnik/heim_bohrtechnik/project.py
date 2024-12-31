@@ -16,13 +16,21 @@ def before_save(self, method):
     if self.checklist:
         for c in self.checklist:
             # define trough count/size in case of internal troughs
-            if c.activity == "Mulde" and c.supplier in [own_trough_supplier]:
+            if c.activity == frappe.get_value("Heim Settings", "Heim Settings", "trough_activity") \         # Mulde
+                and c.supplier in [own_trough_supplier]:
                 c.trough_count = 1
                 c.trough_size = "±25m³"
             
             # set trough and mud date
-            if c.activity in ["Mulde", "Schlammentsorgung"]:
+            if c.activity in [
+                frappe.get_value("Heim Settings", "Heim Settings", "trough_activity"),           # Mulde
+                frappe.get_value("Heim Settings", "Heim Settings", "mud_disposer_activity")]:    # Schlammentsorgung
                 c.appointment = self.expected_start_date
+            
+            # this is an insurance record and has a certificate: mark insurance OK
+            if c.activity == frappe.get_value("Heim Settings", "Heim Settings", "insurance_activity") \
+                and c.insurance_certificate:
+                c.insurance_declared = 1
 
     # check if the drilling team has an internal trough
     if self.drilling_team and self.object:
@@ -31,9 +39,10 @@ def before_save(self, method):
             if self.checklist:
                 set_internal_trough = -1
                 for c in range(0, len(self.checklist)):
-                    if self.checklist[c].activity == "Mulde":
+                    if self.checklist[c].activity == frappe.get_value("Heim Settings", "Heim Settings", "trough_activity"):      # Mulde
                         set_internal_trough = c
-                    elif self.checklist[c].activity == "Schlammentsorgung" and self.checklist[c].supplier == mud_from_trough:
+                    elif self.checklist[c].activity == frappe.get_value("Heim Settings", "Heim Settings", "mud_disposer_activity") \
+                        and self.checklist[c].supplier == mud_from_trough:
                         set_internal_trough = -1        # reset in case trough from mud supplier
                 if set_internal_trough >= 0:
                     frappe.db.set_value("Object", self.object, "old_trough_supplier", self.checklist[set_internal_trough].supplier, update_modified = False)
@@ -41,13 +50,18 @@ def before_save(self, method):
                     self.checklist[set_internal_trough].supplier = own_trough_supplier
                     supplier_name = frappe.get_value("Supplier", own_trough_supplier, "supplier_name")
                     self.checklist[set_internal_trough].supplier_name = supplier_name
-                    update_object_address(self.object, "Mulde", own_trough_supplier, supplier_name)
+                    update_object_address(
+                        self.object, 
+                        frappe.get_value("Heim Settings", "Heim Settings", "trough_activity"),           # Mulde
+                        own_trough_supplier, 
+                        supplier_name
+                    )
         else:
             # verify if an external trough is used
             reset_trough_supplier = False
             if self.checklist:
                 for c in self.checklist:
-                    if c.activity == "Mulde":
+                    if c.activity == frappe.get_value("Heim Settings", "Heim Settings", "trough_activity"):     # Mulde
                         if c.supplier == own_trough_supplier:
                             reset_trough_supplier = True
             if reset_trough_supplier:
@@ -58,11 +72,16 @@ def before_save(self, method):
                         supplier = None
                 if self.checklist:
                     for c in self.checklist:
-                        if c.activity == "Mulde":
+                        if c.activity == frappe.get_value("Heim Settings", "Heim Settings", "trough_activity"):
                             c.supplier = supplier
                             if supplier:
                                 c.supplier_name = frappe.get_value("Supplier", supplier, "supplier_name")
-                                update_object_address(self.object, "Mulde", c.supplier, c.supplier_name)
+                                update_object_address(
+                                    self.object, 
+                                    frappe.get_value("Heim Settings", "Heim Settings", "trough_activity"), 
+                                    c.supplier, 
+                                    c.supplier_name
+                                )
                             else:
                                 c.supplier_name = None
     
