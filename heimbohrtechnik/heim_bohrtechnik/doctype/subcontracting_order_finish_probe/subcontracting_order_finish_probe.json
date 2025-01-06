@@ -41,6 +41,7 @@
   },
   {
    "columns": 1,
+   "default": "30",
    "description": "in min [30 Min]",
    "fieldname": "test_duration",
    "fieldtype": "Int",
@@ -49,6 +50,7 @@
   },
   {
    "columns": 1,
+   "default": "2.5",
    "description": "in bar [2.5-3.0 bar]",
    "fieldname": "test_pressure",
    "fieldtype": "Float",
@@ -57,6 +59,7 @@
   },
   {
    "columns": 1,
+   "default": "0.0",
    "description": "in bar",
    "fieldname": "pressure_out",
    "fieldtype": "Float",
@@ -65,7 +68,7 @@
   },
   {
    "columns": 1,
-   "default": "0",
+   "default": "1",
    "fieldname": "flow_tested",
    "fieldtype": "Check",
    "in_list_view": 1,
@@ -73,7 +76,7 @@
   },
   {
    "columns": 1,
-   "default": "0",
+   "default": "1",
    "fieldname": "test_passed",
    "fieldtype": "Check",
    "in_list_view": 1,
@@ -86,7 +89,7 @@
   }
  ],
  "istable": 1,
- "modified": "2024-10-30 21:44:26.373566",
+ "modified": "2025-01-06 15:18:17.701488",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order Finish Probe",

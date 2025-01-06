@@ -553,8 +553,8 @@ DocType: Subcontracting Order Finish,Protocol,Protokoll
 DocType: Subcontracting Order Finish,Measurement Type,Messtyp
 DocType: Subcontracting Order Finish,Site in Order,Bauplatz in Ordnung übergeben 
 DocType: Subcontracting Order Finish,Probes,Sonden
-DocType: Subcontracting Order Finish,Tube Length to Connector,Länge Verbindungsleitungen bis Verteiler
-DocType: Subcontracting Order Finish,Tube Length to Pump,Länge Verbindungsleitungen bis WP
+DocType: Subcontracting Order Finish,Tube Length to Connector,VBL-Hauseintritt/Verteiler
+DocType: Subcontracting Order Finish,Tube Length to Pump,VBL-bis WP
 DocType: Subcontracting Order Finish,Test Duration,Prüfdauer
 DocType: Subcontracting Order Finish,Test Pressure,Prüfdruck
 DocType: Subcontracting Order Finish,Pressure Out,Druckablauf
