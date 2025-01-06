@@ -603,8 +603,8 @@ function find_gps(frm) {
         frappe.call({
             'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.object.object.get_gps',
             'args': {
-                'street': frm.doc.object_street,
-                'location': frm.doc.plz + " " + frm.doc.city
+                'street': (frm.doc.object_street || ""),
+                'location': (frm.doc.plz || "") + " " + (frm.doc.city || "")
             },
             'callback': function(response) {
                 locals.gps_location_pending = false;
