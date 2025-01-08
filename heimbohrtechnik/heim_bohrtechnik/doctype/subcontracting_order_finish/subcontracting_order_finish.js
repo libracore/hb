@@ -28,6 +28,9 @@ frappe.ui.form.on('Subcontracting Order Finish', {
                 }
             });
         }
+    }, 
+    concentration: function(frm) {
+        get_protection(frm);
     }
 });
 
@@ -70,4 +73,17 @@ function add_probes(probes) {
         frappe.model.set_value(child.doctype, child.name, 'depth', probes[i].depth);
     }
     cur_frm.refresh_field('probes');
+}
+
+function get_protection(frm){
+    let concentration = frm.doc.concentration;
+    let protection = null;
+    if (concentration == 20){
+        protection = -9;
+    } else if (concentration == 25) {
+        protection = -13;
+    } else if (concentration == 30) {
+        protection = -17;
+    }
+    cur_frm.set_value("protection", protection);
 }
