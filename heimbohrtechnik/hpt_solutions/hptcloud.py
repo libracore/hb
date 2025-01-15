@@ -16,6 +16,9 @@ def send_project(project, debug=False):
             frappe.throw(err)
     else:
         project_doc = project
+    
+    if project_doc.project_type != "External":
+        return
         
     object_doc = frappe.get_doc("Object", project_doc.object)
     
