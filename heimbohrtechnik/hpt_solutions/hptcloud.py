@@ -4,10 +4,10 @@
 import frappe
 import requests
 
-def send_project(project):
-    settings = frappe.get_doc("Heim Settings", "Heim Settings")
+def send_project(project, debug=False):
+    settings = frappe.get_doc("HPT Settings", "HPT Settings")
     if not settings.hpt_cloud_customer or not settings.hpt_cloud_secret:
-        frappe.throw("HPTcloud configuration missing. Please update Heim Settings")
+        return
         
     if isinstance(project, str):
         try:
@@ -15,13 +15,13 @@ def send_project(project):
         except Exception as err:
             frappe.throw(err)
     else:
-        frappe.throw("Invalid project parameter: please provide a valid project name")
+        project_doc = project
         
-    object_doc = frappe.get_doc("Object", projevct_doc.object)
+    object_doc = frappe.get_doc("Object", project_doc.object)
     
     order = {
         'name': project_doc.name,
-        'date': project_doc.expected_start_date,
+        'date': "{0}".format(project_doc.expected_start_date),
         'object_name': object_doc.object_name,
         'object_street': object_doc.object_street,
         'object_location': object_doc.object_location,
@@ -30,9 +30,18 @@ def send_project(project):
         'details': []
     }
     
-    if 'ews_specification' in object_doc:
+    if 'ews_specification' in object_doc.as_dict():
         for e in object_doc.ews_specification:
-            order['details'].append(e.as_dict())
+            order['details'].append({
+                'ews_count': e.ews_count,
+                'ews_depth': e.ews_depth,
+                'ews_diameter': e.ews_diameter,
+                'ews_diameter_unit': e.ews_diameter_unit,
+                'ews_wall_strength': e.ews_wall_strength,
+                'pressure_level': e.pressure_level,
+                'probe_type': e.probe_type,
+                'ews_material': e.ews_material
+            })
             
     parameters = {
         "customer": settings.hpt_cloud_customer,

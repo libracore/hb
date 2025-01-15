@@ -4,17 +4,40 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "hpt_api_key"
+  "hpt_api_key",
+  "sec_order_api",
+  "hpt_cloud_customer",
+  "col_order_api",
+  "hpt_cloud_secret"
  ],
  "fields": [
   {
    "fieldname": "hpt_api_key",
    "fieldtype": "Data",
    "label": "HPT API Key"
+  },
+  {
+   "fieldname": "sec_order_api",
+   "fieldtype": "Section Break",
+   "label": "Order API"
+  },
+  {
+   "fieldname": "hpt_cloud_customer",
+   "fieldtype": "Data",
+   "label": "HPT Cloud Customer"
+  },
+  {
+   "fieldname": "col_order_api",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "hpt_cloud_secret",
+   "fieldtype": "Data",
+   "label": "HPT Cloud Secret"
   }
  ],
  "issingle": 1,
- "modified": "2024-11-14 20:58:10.785432",
+ "modified": "2025-01-15 21:19:23.857376",
  "modified_by": "Administrator",
  "module": "HPT Solutions",
  "name": "HPT Settings",

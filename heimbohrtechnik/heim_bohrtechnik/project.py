@@ -7,6 +7,7 @@ from frappe.utils import get_url_to_form, cint
 from heimbohrtechnik.heim_bohrtechnik.utils import clone_attachments
 from erpnextswiss.scripts.crm_tools import get_primary_supplier_address, get_primary_supplier_contact
 from datetime import datetime
+from heimbohrtechnik.hpt_solutions.hptcloud import send_project
 
 own_trough_supplier = "L-04052"         # when switching to an internal trough team, use this internal trough
 mud_from_trough = "L-03749"             # if this supplier is set for the mud, do not override trough
@@ -95,7 +96,10 @@ def before_save(self, method):
         self.total_expense_claim = 0
     if cint(self.total_billable_amount) == 0:
         self.total_billable_amount = 0
-        
+    
+    # send to hpt
+    send_project(self)
+    
     return
 
 def update_object_address(object_name, address_type, supplier, supplier_name):
