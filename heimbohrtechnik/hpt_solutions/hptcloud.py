@@ -60,7 +60,7 @@ def send_project(project, debug=False):
     if response.status_code != 200:
         frappe.log_error( "Order upload failed with {0}".format(response.text), "HPT Upload failed")
     if 'error' in response.text:
-        frappe.log_error( "Order upload failed with {0}".format(response.json()['message']['error']), "HPT Upload failed")
+        frappe.log_error( "Order upload failed with {0}".format(response.text), "HPT Upload failed")
 
     if debug:
         print(response.text)
