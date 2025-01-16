@@ -547,7 +547,9 @@ def update_project(project):
         'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "external_crane_item"),
         'self_crane': frappe.get_value("Heim Settings", "Heim Settings", "self_crane_item"),
         'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_item"),
-        'trt': frappe.get_value("Heim Settings", "Heim Settings", "trt_item")
+        'trt': frappe.get_value("Heim Settings", "Heim Settings", "trt_item"),
+        'flush_drilling': frappe.get_value("Heim Settings", "Heim Settings", "flush_drilling_items"),
+        'subcontracting_bkp': frappe.get_value("Heim Settings", "Heim Settings", "subcontracting_bkp")
     }
     activities = {
         'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "int_crane_activity"),
@@ -578,6 +580,10 @@ def update_project(project):
                 has_carrymax = True
             elif i.item_code == items['trt']:
                 o.trt = 1
+            elif i.item_code.startswith(items['flush_drilling']):
+                p.drilling_method = "Spülbohrung"
+            if i.bkp == items['subcontracting_bkp'] and i.rate > 0:     # exclude external bkp 6 (free of charge)
+                p.has_subproject = 1
                 
         if has_internal_crane:
             p = set_checklist_activity(p, activities['internal_crane'])

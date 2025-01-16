@@ -206,6 +206,7 @@ DocType: Project,Other Projects,Andere Projekte
 DocType: Project,Insurance application,Versicherungsanmeldung
 DocType: Project,More,Mehr
 DocType: Project,Insurance declared,Versicherung angemeldet
+DocType: Project,Has Subproject,Mit Verlängerung
 DocType: Permit Type,Is Mandatory,Ist zwingend erforderlich
 DocType: Checklist Activity,Checklist Activity,Aktivität
 DocType: Drilling Type,Drilling Type,Bohrart
