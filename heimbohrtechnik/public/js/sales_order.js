@@ -101,6 +101,11 @@ frappe.ui.form.on('Sales Order', {
         if (frm.doc.__islocal) {
             select_naming_series(frm);
         }
+        
+        // show important notes
+        if (frm.doc.important_notes) {
+            cur_frm.dashboard.add_comment(frm.doc.important_notes, 'yellow', true);
+        }
     },
     on_submit: function(frm) {
         // create and attach PDF

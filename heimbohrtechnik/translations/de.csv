@@ -643,3 +643,4 @@ DocType: Probe,Minimal Test Pressure,Mindestprüfdruck
 DocType: Probe,Pressure Loss Table,Druckverlust-Tabelle
 DocType: Probe,Pressure Loss Formula,Druckverlust-Formel
 DocType: Probe,Purge Water Amount,Abgelassene Wassermenge
+DocType: Sales Order,Important Note,Wichtige Bemerkung
