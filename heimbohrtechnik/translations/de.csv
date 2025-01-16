@@ -576,6 +576,7 @@ DocType: Subcontracting Order Finish,Protection,Schutz
 DocType: Subcontracting Order Finish,Fill Pressure,Gefüllter Druck 
 DocType: Subcontracting Order Finish,Fill Date,Fülldatum
 DocType: Subcontracting Order Finish,Filled with,Befüllt mit
+DocType: Subcontracting Order Finish,Without Filling,Ohne Füllung
 Report: Subcontracting Control,Subcontracting Control,Kontrolle Verlängerungsaufträge
 DocType: Layer Directory,Probe Diameter,Sondendurchmesser
 DocType: Project,Fixed date,Fixtermin
