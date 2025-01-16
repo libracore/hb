@@ -56,7 +56,9 @@ def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
             `start_half_day`, 
             `end_half_day`, 
             `object`,
-            `drilling_meter_per_day`
+            `drilling_meter_per_day`,
+            `has_subproject`,
+            `drilling_method`
         FROM `tabProject`
         WHERE `project_type` = "External"
           AND `status` IN ("Open", "Completed")
@@ -222,7 +224,9 @@ def get_project_data(p, dauer):
             'traffic_light': traffic_light,
             'toitoi': toitoi,
             'red_drop': red_drop,
-            'blue_drop': blue_drop
+            'blue_drop': blue_drop,
+            'has_subproject': p.get('has_subproject'),
+            'drilling_method': p.get('drilling_method')
         }
         
     return p_data
