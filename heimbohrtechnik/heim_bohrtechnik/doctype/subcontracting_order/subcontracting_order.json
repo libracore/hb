@@ -16,6 +16,7 @@
   "to_date",
   "drilling_team",
   "order_description",
+  "appointment",
   "prio",
   "section_items",
   "items",
@@ -179,9 +180,14 @@
    "fieldtype": "Percent",
    "label": "Margin",
    "permlevel": 1
+  },
+  {
+   "fieldname": "appointment",
+   "fieldtype": "Data",
+   "label": "Appointment"
   }
  ],
- "modified": "2024-05-08 22:07:32.974176",
+ "modified": "2025-01-16 17:12:21.780402",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order",
