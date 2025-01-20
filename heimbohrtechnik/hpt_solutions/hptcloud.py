@@ -84,7 +84,7 @@ def post_report(customer, secret, project, report, report_name):
     
     save_file(
         fname="{0}.pdf".format(report_name),
-        content=base64.b64decode(s),
+        content=base64.b64decode(report),
         dt="Project",
         dn=project,
         is_private=True
