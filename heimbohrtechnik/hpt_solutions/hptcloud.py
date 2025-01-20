@@ -3,6 +3,8 @@
 
 import frappe
 import requests
+import base64
+from frappe.utils.file_manager import save_file
 
 def send_project(project, debug=False):
     settings = frappe.get_doc("HPT Settings", "HPT Settings")
@@ -66,3 +68,26 @@ def send_project(project, debug=False):
         print(response.text)
     
     return
+
+@frappe.whitelist(allow_guest=True)
+def post_report(customer, secret, project, report, report_name):
+    settings = frappe.get_doc("HPT Settings", "HPT Settings")
+    if not settings.hpt_cloud_customer or not settings.hpt_cloud_secret:
+        frappe.log_error( "Posting report from hptcloud to ERP failed: missing configuration", "hptcloud" )
+        return {'success': False}
+    if customer != settings.hpt_cloud_customer or secret != settings.hpt_cloud_secret:
+        frappe.log_error( "Posting report from hptcloud to ERP failed: invalid credentials", "hptcloud" )
+        return {'success': False}
+    if not frappe.db.exists("Project", project):
+        frappe.log_error( "Posting report from hptcloud to ERP failed: project {0} not found".format(project), "hptcloud" )
+        return {'success': False}
+    
+    save_file(
+        fname="{0}.pdf".format(report_name),
+        content=base64.b64decode(s),
+        dt="Project",
+        dn=project,
+        is_private=True
+    )
+    
+    return {'success': True}
