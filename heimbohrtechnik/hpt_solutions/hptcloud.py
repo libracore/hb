@@ -24,6 +24,18 @@ def send_project(project, debug=False):
         
     object_doc = frappe.get_doc("Object", project_doc.object)
     
+    # check for purchase orders
+    po_suppliers = frappe.get_all("Purchase Order",
+        filters={
+            'docstatus': 1,
+            'object': project_doc.object
+        },
+        fields=['name', 'supplier_name']
+    )
+    supplier = None
+    if po_suppliers and len(po_suppliers) > 0:
+        supplier = po_suppliers[0]['supplier_name']
+    
     order = {
         'name': project_doc.name,
         'date': "{0}".format(project_doc.expected_start_date),
@@ -32,7 +44,8 @@ def send_project(project, debug=False):
         'object_location': object_doc.object_location,
         'gps_lat': object_doc.gps_lat,
         'gps_long': object_doc.gps_long,
-        'details': []
+        'details': [],
+        'manufacturer': supplier
     }
     
     if 'ews_specification' in object_doc.as_dict():
