@@ -44,8 +44,7 @@ def send_project(project, debug=False):
         'object_location': object_doc.object_location,
         'gps_lat': object_doc.gps_lat,
         'gps_long': object_doc.gps_long,
-        'details': [],
-        'manufacturer': supplier
+        'details': []
     }
     
     if 'ews_specification' in object_doc.as_dict():
@@ -58,7 +57,8 @@ def send_project(project, debug=False):
                 'ews_wall_strength': e.ews_wall_strength,
                 'pressure_level': e.pressure_level,
                 'probe_type': e.probe_type,
-                'ews_material': e.ews_material
+                'ews_material': e.ews_material,
+                'manufacturer': supplier
             })
             
     parameters = {

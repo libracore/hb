@@ -292,8 +292,9 @@ def get_internal_overlay_datas(from_date, to_date, customer=None):
 @frappe.whitelist()
 def get_subproject_overlay_datas(from_date, to_date, drilling_team=None):
     subproject_list = []
-    shift_controll = {}
     condition = ""
+    earliest_start = None
+    last_end = None
     if drilling_team:
         condition = """ AND `tabSubcontracting Order`.`drilling_team` = "{drilling_team}" """.format(drilling_team=drilling_team)
         
@@ -304,34 +305,41 @@ def get_subproject_overlay_datas(from_date, to_date, drilling_team=None):
             `tabProject Subproject`.`team`,
             `tabProject Subproject`.`description`,
             `tabProject Subproject`.`subcontracting_order` AS `subcontracting_order`,
+            `tabSubcontracting Order`.`prio`,
             `tabProject`.`name` as `project`,
             `tabProject`.`customer_name` as `customer_name`,
             `tabProject`.`ews_details` as `ews_details`,
             `tabProject`.`object_name`,
             `tabProject`.`object_street`,
-            `tabProject`.`object_location`
+            `tabProject`.`object_location`,
+            `tabUser`.`username` AS `manager_short`
         FROM `tabProject Subproject`
         LEFT JOIN `tabProject` ON `tabProject`.`name` = `tabProject Subproject`.`parent`
         LEFT JOIN `tabSubcontracting Order` ON `tabSubcontracting Order`.`name` = `tabProject Subproject`.`subcontracting_order`
+        LEFT JOIN `tabUser` ON `tabProject`.`manager` = `tabUser`.`name`
         WHERE 
             (`tabProject Subproject`.`start` BETWEEN "{from_date}" AND "{to_date}"
             OR `tabProject Subproject`.`end` BETWEEN "{from_date}" AND "{to_date}")
             AND `tabProject`.`status` IN ("Open", "Completed")
             {condition}
         ORDER BY 
-            `tabProject Subproject`.`team` ASC, `tabSubcontracting Order`.`prio` ASC;""".format(
+            `tabProject Subproject`.`team` ASC, `tabProject Subproject`.`start` ASC, `tabSubcontracting Order`.`prio` ASC;""".format(
             from_date=from_date, to_date=to_date, condition=condition), as_dict=True)
     for subproject in subprojects:
         subproject_duration = calc_duration(subproject.start, subproject.end, from_date, to_date)
-        subproject_shift, shift_controll = subproject_shift_controll(subproject, get_datetime(subproject_duration['start']).strftime('%d.%m.%Y'), shift_controll)
-        
+
+        if not earliest_start or subproject.start < earliest_start:
+            earliest_start = subproject.start
+        if not last_end or subproject.end > last_end:
+            last_end = subproject.end
+            
         subproject_data = {
             'bohrteam': subproject.team,
             'start': get_datetime(subproject_duration['start']).strftime('%d.%m.%Y'),
             'dauer': subproject_duration['dauer'],
+            'end': subproject.end,
             'description': subproject.description,
             'id': subproject.name,
-            'subproject_shift': subproject_shift,
             'project': subproject.project,
             'customer_name': subproject.customer_name,
             'ews_details': subproject.ews_details,
@@ -339,12 +347,54 @@ def get_subproject_overlay_datas(from_date, to_date, drilling_team=None):
             'object_street': subproject.object_street,
             'object_location': subproject.object_location,
             'subcontracting_order': subproject.subcontracting_order,
-            'background': get_project_billing_status_color(subproject.project) or "#ffffe0"
+            'background': get_project_billing_status_color(subproject.project) or "#ffffe0",
+            'manager_short':subproject.manager_short
         }
         subproject_list.append(subproject_data)
     
+    # shift controller
+    current_date = earliest_start
+    shift_control = {}
+    drilling_teams = frappe.get_all("Drilling Team", filters={'drilling_team_type': 'Verlängerungsteam'}, fields=['name'])
+    # prepare a matrix with each day, each team to count active subprojects
+    while current_date <= last_end:
+        cur_date_str = current_date.strftime('%Y-%m-%d')
+        shift_control[cur_date_str] = {}
+        for d in drilling_teams:
+            # prepare three lanes
+            shift_control[cur_date_str][d['name']] = {'0': 0, '1': 0, '2': 0}
+        current_date = add_days(current_date, 1)
+    for s in subproject_list:
+        # find first available lane for subproject
+        current_date = datetime.strptime(s['start'], '%d.%m.%Y').date()        # need to decode from array
+        available_lanes = {'0': 0, '1': 0, '2': 0}
+        subproject_days = []
+        while current_date <= s['end']:
+            cur_date_str = current_date.strftime('%Y-%m-%d')
+            subproject_days.append(cur_date_str)
+            available_lanes['0'] += shift_control[cur_date_str][s['bohrteam']]['0']
+            available_lanes['1'] += shift_control[cur_date_str][s['bohrteam']]['1']
+            available_lanes['2'] += shift_control[cur_date_str][s['bohrteam']]['2']
+
+            current_date = add_days(current_date, 1)
+            
+        if available_lanes['0'] == 0:
+            s['subproject_shift'] = 0
+            reserve_lane(shift_control, subproject_days, s['bohrteam'], '0')
+        elif available_lanes['1'] == 0:
+            s['subproject_shift'] = 1
+            reserve_lane(shift_control, subproject_days, s['bohrteam'], '1')
+        else:
+            s['subproject_shift'] = 2
+            reserve_lane(shift_control, subproject_days, s['bohrteam'], '2')
+    
     return subproject_list
 
+def reserve_lane(shift_control, subproject_days, bohrteam, lane):
+    for day in subproject_days:
+        shift_control[day][bohrteam][lane] = 1
+    return
+    
 def calc_duration(start, end, from_date, to_date):
     '''
     start = record start date
@@ -379,14 +429,6 @@ def calc_duration(start, end, from_date, to_date):
         'start': fixed_start
     }
     
-
-def subproject_shift_controll(subproject, start, shift_controll):
-    if str(start) + str(subproject.team) in shift_controll:
-        shift_controll[str(start) + str(subproject.team)] += 1
-        return shift_controll[str(start) + str(subproject.team)], shift_controll
-    else:
-        shift_controll[str(start) + str(subproject.team)] = 0
-        return 0, shift_controll
 
 def get_project_billing_status_color(project):
     color = None
