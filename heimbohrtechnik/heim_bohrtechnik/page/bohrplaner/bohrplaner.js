@@ -456,7 +456,8 @@ frappe.bohrplaner = {
                         'sales_order': details.project.sales_order,
                         'object_location': details.object.object_location,
                         'object_street': details.object.object_street,
-                        'cloud_url': details.project.cloud_url
+                        'cloud_url': details.project.cloud_url,
+                        'subprojects': []
                     };
                     
                     data.customer = __('No Customer found');
@@ -483,6 +484,12 @@ frappe.bohrplaner = {
                     }
                     
                     data.manager = details.project.manager_name ? details.project.manager_name : __('No Manager found');
+                    
+                    if (details.project.subprojects) {
+                        for (let s = 0; s < details.project.subprojects.length; s++) {
+                            data.subprojects.push(new Date(details.project.subprojects[s].start).toLocaleDateString() + ": " + details.project.subprojects[s].description);
+                        }
+                    }
                     
                     data.ews_details = details.project.ews_details ? details.project.ews_details : __('No EWS Details found');
                     
