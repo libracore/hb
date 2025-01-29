@@ -353,40 +353,44 @@ def get_subproject_overlay_datas(from_date, to_date, drilling_team=None):
         subproject_list.append(subproject_data)
     
     # shift controller
-    current_date = earliest_start
-    shift_control = {}
-    drilling_teams = frappe.get_all("Drilling Team", filters={'drilling_team_type': 'Verlängerungsteam'}, fields=['name'])
-    # prepare a matrix with each day, each team to count active subprojects
-    while current_date <= last_end:
-        cur_date_str = current_date.strftime('%Y-%m-%d')
-        shift_control[cur_date_str] = {}
-        for d in drilling_teams:
-            # prepare three lanes
-            shift_control[cur_date_str][d['name']] = {'0': 0, '1': 0, '2': 0}
-        current_date = add_days(current_date, 1)
-    for s in subproject_list:
-        # find first available lane for subproject
-        current_date = datetime.strptime(s['start'], '%d.%m.%Y').date()        # need to decode from array
-        available_lanes = {'0': 0, '1': 0, '2': 0}
-        subproject_days = []
-        while current_date <= s['end']:
+    if len(subproject_list) > 0:
+        current_date = earliest_start
+        shift_control = {}
+        drilling_teams = frappe.get_all("Drilling Team", filters={'drilling_team_type': 'Verlängerungsteam'}, fields=['name'])
+        # prepare a matrix with each day, each team to count active subprojects
+        while current_date <= last_end:
             cur_date_str = current_date.strftime('%Y-%m-%d')
-            subproject_days.append(cur_date_str)
-            available_lanes['0'] += shift_control[cur_date_str][s['bohrteam']]['0']
-            available_lanes['1'] += shift_control[cur_date_str][s['bohrteam']]['1']
-            available_lanes['2'] += shift_control[cur_date_str][s['bohrteam']]['2']
-
+            shift_control[cur_date_str] = {}
+            for d in drilling_teams:
+                # prepare three lanes
+                shift_control[cur_date_str][d['name']] = {'0': 0, '1': 0, '2': 0}
             current_date = add_days(current_date, 1)
-            
-        if available_lanes['0'] == 0:
-            s['subproject_shift'] = 0
-            reserve_lane(shift_control, subproject_days, s['bohrteam'], '0')
-        elif available_lanes['1'] == 0:
-            s['subproject_shift'] = 1
-            reserve_lane(shift_control, subproject_days, s['bohrteam'], '1')
-        else:
-            s['subproject_shift'] = 2
-            reserve_lane(shift_control, subproject_days, s['bohrteam'], '2')
+        for s in subproject_list:
+            # check if the relevant parameters start, end and team are available
+            if not s['bohrteam'] or not s['start'] or not s['end']:
+                continue
+            # find first available lane for subproject
+            current_date = datetime.strptime(s['start'], '%d.%m.%Y').date()        # need to decode from array
+            available_lanes = {'0': 0, '1': 0, '2': 0}
+            subproject_days = []
+            while current_date <= s['end']:
+                cur_date_str = current_date.strftime('%Y-%m-%d')
+                subproject_days.append(cur_date_str)
+                available_lanes['0'] += shift_control[cur_date_str][s['bohrteam']]['0']
+                available_lanes['1'] += shift_control[cur_date_str][s['bohrteam']]['1']
+                available_lanes['2'] += shift_control[cur_date_str][s['bohrteam']]['2']
+
+                current_date = add_days(current_date, 1)
+                
+            if available_lanes['0'] == 0:
+                s['subproject_shift'] = 0
+                reserve_lane(shift_control, subproject_days, s['bohrteam'], '0')
+            elif available_lanes['1'] == 0:
+                s['subproject_shift'] = 1
+                reserve_lane(shift_control, subproject_days, s['bohrteam'], '1')
+            else:
+                s['subproject_shift'] = 2
+                reserve_lane(shift_control, subproject_days, s['bohrteam'], '2')
     
     return subproject_list
 
