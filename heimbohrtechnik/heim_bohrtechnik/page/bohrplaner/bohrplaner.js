@@ -28,30 +28,34 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
     page.set_secondary_action( __('Soft Reload'), () => {
         frappe.bohrplaner.reset_dates(page);
     });
-    page.add_menu_item(__('Drucken'), () => {
-        var from = $("#from").val();
-        var to = $("#to").val();
-        print_content(page, from, to);
-    });
-    page.set_primary_action( __('Search'), () => {
-        frappe.bohrplaner.search(page);
-    });
     
-    page.add_menu_item( __('Find conflicts'), () => {
-        frappe.bohrplaner.find_conflicts(page);
-    });
+    if (!frappe.user.has_role("Bohrmeister")) {
+        page.add_menu_item(__('Drucken'), () => {
+            var from = $("#from").val();
+            var to = $("#to").val();
+            print_content(page, from, to);
+        });
     
-    page.add_menu_item( __('Alle Projekte schieben...'), () => {
-        frappe.bohrplaner.move_projects(page);
-    });
+        page.set_primary_action( __('Search'), () => {
+            frappe.bohrplaner.search(page);
+        });
     
-    page.add_menu_item( __('Bohrmeterübersicht'), () => {
-        frappe.set_route("query-report", "Drilling Capacity Overview", {'from_date': $("#from").val(), 'to_date': $("#to").val()});
-    });
-    
-    page.add_menu_item( __('Freien Termin suchen'), () => {
-        get_avaliable_drilling_teams();
-    });
+        page.add_menu_item( __('Find conflicts'), () => {
+            frappe.bohrplaner.find_conflicts(page);
+        });
+        
+        page.add_menu_item( __('Alle Projekte schieben...'), () => {
+            frappe.bohrplaner.move_projects(page);
+        });
+        
+        page.add_menu_item( __('Bohrmeterübersicht'), () => {
+            frappe.set_route("query-report", "Drilling Capacity Overview", {'from_date': $("#from").val(), 'to_date': $("#to").val()});
+        });
+        
+        page.add_menu_item( __('Freien Termin suchen'), () => {
+            get_avaliable_drilling_teams();
+        });
+    }
     
     // check routes and if there is a route, navigate to this
     frappe.bohrplaner.load_route(page);
@@ -67,20 +71,32 @@ frappe.bohrplaner = {
         var me = frappe.bohrplaner;
         me.page = page;
         
-        var planning_days = 30;
-        // fetch planning days
-        frappe.call({
-            'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_user_planning_days',
-            'async': false,
-            'args': {
-                'user': frappe.session.user
-            },
-            'callback': function(response) {
-                locals.planning_days = response.message.planning_days;
-                locals.planning_past_days = response.message.planning_past_days;
-                locals.print_block_length_factor = response.message.print_block_length_factor;
+        if (frappe.user.has_role("Bohrmeister")) {
+            // hard-coded values for drilling masters
+            let current_day = (new Date()).getDay();
+            if (current_day < 5) {
+                locals.planning_days = (6 - current_day);
+            } else {
+                locals.planning_days = 1;
             }
-        });
+            locals.planning_past_days = 30;
+            locals.print_block_length_factor = 42;
+        } else {
+            var planning_days = 30;
+            // fetch planning days
+            frappe.call({
+                'method': 'heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner.get_user_planning_days',
+                'async': false,
+                'args': {
+                    'user': frappe.session.user
+                },
+                'callback': function(response) {
+                    locals.planning_days = response.message.planning_days;
+                    locals.planning_past_days = response.message.planning_past_days;
+                    locals.print_block_length_factor = response.message.print_block_length_factor;
+                }
+            });
+        }
         
         // set today as default "from" date
         var now = new Date();
