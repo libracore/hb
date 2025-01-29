@@ -482,7 +482,7 @@ frappe.bohrplaner = {
                         }
                     }
                     
-                    data.manager = details.project.manager ? details.project.manager : __('No Manager found');
+                    data.manager = details.project.manager_name ? details.project.manager_name : __('No Manager found');
                     
                     data.ews_details = details.project.ews_details ? details.project.ews_details : __('No EWS Details found');
                     

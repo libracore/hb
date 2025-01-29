@@ -1577,6 +1577,9 @@ def get_project_details(project):
         if len(construction_site_descriptions) > 0:
             construction_site_doc = frappe.get_doc("Construction Site Description", construction_site_descriptions[0]['name'])
             details['construction_site_description'] = construction_site_doc.as_dict()
-
+        if project_doc.manager:
+            user_doc = frappe.get_doc("User", project_doc.manager)
+            details["project"]["manager_name"] = user_doc.full_name
+            
     return details
     
