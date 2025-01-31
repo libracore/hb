@@ -1,4 +1,4 @@
-# Copyright (c) 2022-2024, libracore and Contributors
+# Copyright (c) 2022-2025, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 
 from __future__ import unicode_literals
@@ -27,7 +27,8 @@ PATHS = {
     'supplier_mud':     "6_Lieferanten/Mulden_und_Saugwagen",
     'supplier_other':   "6_Lieferanten/Diverses",
     'incidents':        "7_Schadenfälle",
-    'memo':             "8_Baustellenbeschreibung"
+    'memo':             "8_Baustellenbeschreibung",
+    'hpt':              "9_HPT"
 }
 
 def get_path(target):
@@ -260,7 +261,10 @@ def upload_file(self, event):
         frappe.db.commit()
         
         physical_file_name = get_physical_path(self.name)
-        write_project_file_from_local_file (project, physical_file_name, PATHS['drilling'])
+        if (physical_file_name.startswith("HPT")) and (physical_file_name.lower().endswith(".pdf")):
+            write_project_file_from_local_file (project, physical_file_name, PATHS['hpt'])
+        else:
+            write_project_file_from_local_file (project, physical_file_name, PATHS['drilling'])
     
     elif self.attached_to_doctype == "Request for Public Area Use":
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
@@ -290,7 +294,7 @@ def upload_file(self, event):
         project = frappe.get_value(self.attached_to_doctype, self.attached_to_name, "project")
         if frappe.db.exists("Project", project):
             physical_file_name = get_physical_path(self.name)
-            write_project_file_from_local_file (project, physical_file_name, PATHS['subprojects'])
+            write_project_file_from_local_file (project, physical_file_name, PATHS['memo'])
             
     return
 
