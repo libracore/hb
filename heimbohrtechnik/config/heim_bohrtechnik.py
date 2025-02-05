@@ -218,6 +218,12 @@ def get_data():
                    "description": _("Object Overview")
                 },
                 {
+                   "type": "page",
+                   "name": "teams-standorte",
+                   "label": _("Teams Standorte"),
+                   "description": _("Teams Standorte")
+                },
+                {
                    "type": "doctype",
                    "name": "Bohranzeige",
                    "label": _("Bohranzeige"),
