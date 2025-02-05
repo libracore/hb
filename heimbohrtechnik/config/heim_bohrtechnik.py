@@ -623,7 +623,7 @@ def get_data():
                 },
                 {
                     "type": "report",
-                    "name": "Materialbazugsliste",
+                    "name": "Materialbezugsliste",
                     "doctype": "Stock Entry",
                     "is_query_report": True
                 }
