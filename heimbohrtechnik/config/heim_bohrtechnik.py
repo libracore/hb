@@ -600,6 +600,36 @@ def get_data():
             ]
         },
         {
+            "label": _("Kleidermagazin"),
+            "icon": "fa fa-money",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "Item",
+                   "label": _("Item"),
+                   "description": _("Item")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Stock Entry",
+                   "label": _("Stock Entry"),
+                   "description": _("Stock Entry")
+                },
+                {
+                    "type": "page",
+                    "name": "stock-balance",
+                    "label": _("Stock Summary"),
+                    "dependencies": ["Item"],
+                },
+                {
+                    "type": "report",
+                    "name": "Materialbazugsliste",
+                    "doctype": "Stock Entry",
+                    "is_query_report": True
+                }
+            ]
+        },
+        {
             "label": _("Maintenance"),
             "icon": "fa fa-money",
             "items": [
