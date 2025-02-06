@@ -172,6 +172,7 @@ def get_project_data(p, dauer):
     # set crane base
     if flag_ext_crane:
         pneukran = pneukran_details.get('supplier_short_display') or pneukran_details.get('supplier_name') or "ext. Kran"
+        project.crane_required = 1
     if flag_int_crane:
         pneukran = pneukran_details.get('supplier_short_display') or pneukran_details.get('supplier_name') or "int. Kran"
     if flag_ext_crane and flag_int_crane:
