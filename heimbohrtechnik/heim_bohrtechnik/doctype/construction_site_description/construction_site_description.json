@@ -49,6 +49,12 @@
   "parking_area",
   "column_break_34",
   "site_access_remarks",
+  "sec_options",
+  "internal_distributor",
+  "trench",
+  "column_break_48",
+  "wall_box",
+  "distribution_shaft",
   "sec_other",
   "electricity",
   "water_supply",
@@ -436,9 +442,42 @@
    "fieldtype": "Table MultiSelect",
    "label": "Parking",
    "options": "Parking Link"
+  },
+  {
+   "fieldname": "sec_options",
+   "fieldtype": "Section Break",
+   "label": "Options"
+  },
+  {
+   "default": "0",
+   "fieldname": "internal_distributor",
+   "fieldtype": "Check",
+   "label": "Internal Distributor"
+  },
+  {
+   "default": "0",
+   "fieldname": "trench",
+   "fieldtype": "Check",
+   "label": "Trench"
+  },
+  {
+   "fieldname": "column_break_48",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "wall_box",
+   "fieldtype": "Check",
+   "label": "Wall Box"
+  },
+  {
+   "default": "0",
+   "fieldname": "distribution_shaft",
+   "fieldtype": "Check",
+   "label": "Distribution Shaft"
   }
  ],
- "modified": "2024-07-03 21:49:24.015565",
+ "modified": "2025-02-07 09:58:18.351006",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",

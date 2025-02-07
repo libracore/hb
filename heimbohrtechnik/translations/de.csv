@@ -241,6 +241,11 @@ DocType: Construction Site Description,Crane Length,Kran-Auslegung
 DocType: Construction Site Description,Crane organized,Kran organisiert
 DocType: Construction Site Description,Site Access,Zufahrt
 DocType: Construction Site Description,Site Access Remarks,Bemerkungen Zufahrt
+DocType: Construction Site Description,Options,Optionen
+DocType: Construction Site Description,Internal Distributor,Innenverteiler
+DocType: Construction Site Description,Trench,Graben
+DocType: Construction Site Description,Wall Box,Wandbox
+DocType: Construction Site Description,Distribution Shaft,Verteilerschacht
 DocType: Construction Site Description,Electricity,Stromanschluss
 DocType: Construction Site Description,Water supply,Wasserbezug
 DocType: Construction Site Description,Hydrant number,Hydrantennummer
