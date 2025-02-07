@@ -60,7 +60,9 @@ class Object(Document):
                 project.append("checklist", {
                   'activity': c.activity,
                   'supplier': c.supplier,
-                  'supplier_name': c.supplier_name  
+                  'supplier_name': c.supplier_name,
+                  'trough_count': c.trough_count,
+                  'trough_size': c.trough_size
                 })
                 if c.activity == ext_crane_activity:
                     has_ext_crane = True
