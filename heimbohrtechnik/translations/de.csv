@@ -649,3 +649,16 @@ DocType: Probe,Pressure Loss Table,Druckverlust-Tabelle
 DocType: Probe,Pressure Loss Formula,Druckverlust-Formel
 DocType: Probe,Purge Water Amount,Abgelassene Wassermenge
 DocType: Sales Order,Important Note,Wichtige Bemerkung
+Doctype: Drilling Sample,Drilling Sample,Bohrprobe
+Doctype: Drilling Sample,Geology office name,Geologe
+Doctype: Drilling Sample,Geology office,Geologe Adresse
+Doctype: Drilling Sample,Storage location,Lagerort
+Doctype: Drilling Sample,Condition of drill material / drill bags,Zustand Bohrgut/Bohrsäcke
+Doctype: Drilling Sample,Drilling samples distance,Bohrproben Abstand
+Doctype: Drilling Sample,Custom drilling depth,Benutzerdefinierte Bohrtiefe
+Doctype: Drilling Sample,Receipt confirmation,Eingangsbestätigung
+Doctype: Drilling Sample,Drilling master,Bohrmeister
+Doctype: Drilling Sample,Acceptance by,Entgegennahme durch
+Doctype: Drilling Sample,Handover confirmation,Übergabebestätigung
+Doctype: Drilling Sample,Geological expert,Geologische Fachperson
+Doctype: Drilling Sample,Issued by,Ausgehändigt von
