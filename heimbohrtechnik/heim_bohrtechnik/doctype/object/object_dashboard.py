@@ -17,11 +17,15 @@ def get_data():
          },
          {
             'label': _("Documentation"),
-            'items': ['Construction Site Description', 'Bohranzeige', 'Construction Site Delivery', 'Subcontracting Order', 'Project', 'Layer Directory', 'Drilling Sample']
+            'items': ['Construction Site Description', 'Bohranzeige', 'Project']
          },
          {
             'label': _("MudEX"),
             'items': ['Truck Delivery', 'Truck Planning']
+         },
+         {
+            'label': _("Drilling"),
+            'items': ['Construction Site Delivery', 'Subcontracting Order', 'Layer Directory', 'Drilling Sample']
          }
       ]
    }

@@ -2,11 +2,11 @@
 cur_frm.dashboard.add_transactions([
     {
         'label': 'Documents',
-        'items': ['Construction Site Description', 'Bohranzeige', 'Request for Public Area Use', 'Water Supply Registration', 'Infomail', 'Drilling Sample']
+        'items': ['Construction Site Description', 'Bohranzeige', 'Request for Public Area Use', 'Water Supply Registration', 'Infomail']
     },
     {
         'label': 'Drilling',
-        'items': ['Construction Site Delivery', 'Subcontracting Order', 'Request for Public Area Use', 'Road Block Material Order', 'Layer Directory', 'Injection report']
+        'items': ['Construction Site Delivery', 'Subcontracting Order', 'Request for Public Area Use', 'Road Block Material Order', 'Layer Directory', 'Injection report', 'Drilling Sample']
 
     }
 ]);
