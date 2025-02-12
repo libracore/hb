@@ -66,9 +66,8 @@
   },
   {
    "fieldname": "geology_office",
-   "fieldtype": "Link",
-   "label": "Geology office",
-   "options": "Address"
+   "fieldtype": "Data",
+   "label": "Geology office"
   },
   {
    "fieldname": "receipt_confirmation_section",
@@ -166,12 +165,11 @@
   },
   {
    "fieldname": "geology_office_name",
-   "fieldtype": "Link",
-   "label": "Geology office name",
-   "options": "Contact"
+   "fieldtype": "Data",
+   "label": "Geology office name"
   }
  ],
- "modified": "2025-02-11 16:17:00.721397",
+ "modified": "2025-02-12 10:31:24.352612",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Sample",
