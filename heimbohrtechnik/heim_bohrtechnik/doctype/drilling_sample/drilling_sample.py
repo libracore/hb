@@ -10,10 +10,12 @@ from frappe.model.document import Document
 class DrillingSample(Document):
 	pass
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def fetch_project_data(project_name):
 	project_data = {}
 	project = frappe.get_doc("Project", project_name)
+	project_data["expected_start_date"] = project.expected_start_date
+	project_data["expected_end_date"] = project.expected_end_date
 
 	object_data = frappe.get_doc("Object", project.object)
 	project_data["object"] = object_data.name

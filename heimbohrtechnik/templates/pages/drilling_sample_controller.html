@@ -1,0 +1,69 @@
+<h2>Bohrprobe Erfassung</h2>
+
+<section id="valid-project">
+    <section id="project-data-section">
+        <h3>Projektdaten</h3>
+        <div class="readonly-text" id="project">Projekt: </div>
+        <div class="readonly-text" id="address">Adresse: </div>
+        <div class="readonly-text" id="geologist_name">Geologe Name: </div>
+        <div class="readonly-text" id="geologist_address">Geologe Adresse: </div>
+    </section>
+
+    <section id="drilling-master-section">
+        <h3>Auszufüllen durch Bohrmeister</h3>
+        
+        <label for="lagerort">Lagerort:</label><br>
+        <input type="radio" id="lagerort_magazin" name="lagerort" value="Magazin">
+        <label for="lagerort_magazin">Magazin</label><br>
+        <input type="radio" id="lagerort_baustelle" name="lagerort" value="Baustelle/Bauherrschaft">
+        <label for="lagerort_baustelle">Baustelle/Bauherrschaft</label><br><br>
+
+        <label for="bohrprobe_alle">Bohrprobe alle:</label><br>
+        <input type="radio" id="bohrprobe_2m" name="bohrprobe_alle" value="alle 2m">
+        <label for="bohrprobe_2m">2m</label><br>
+        <input type="radio" id="bohrprobe_4m" name="bohrprobe_alle" value="alle 4m">
+        <label for="bohrprobe_4m">4m</label><br>
+        <input type="radio" id="bohrprobe_benutzerdefiniert" name="bohrprobe_alle" value="benutzerdefiniert">
+        <label for="bohrprobe_benutzerdefiniert">Benutzerdefiniert</label><br><br>
+
+        <div id="custom_drilling_depth" style="display: none;">
+            <label for="benutzerdefiniert_num">Geben Sie die benutzerdefinierte Länge ein:</label>
+            <input type="number" id="benutzerdefiniert_num" name="benutzerdefiniert_num"><br><br>
+        </div>
+        
+        <label for="zustand_bohrmaterial">Zustand Bohrmaterial/Bohrsäcke:</label><br>
+        <input type="radio" id="zustand_OK" name="zustand_bohrmaterial" value="OK">
+        <label for="zustand_OK">OK</label><br>
+        <input type="radio" id="zustand_mittel" name="zustand_bohrmaterial" value="mittel">
+        <label for="zustand_mittel">Mittel</label><br>
+        <input type="radio" id="zustand_schlecht" name="zustand_bohrmaterial" value="schlecht">
+        <label for="zustand_schlecht">Schlecht</label><br><br>
+
+
+        <label for="bohrmeister">Bohrmeister:</label>
+        <input type="text" id="bohrmeister" name="bohrmeister"><br><br>
+
+        <label for="entgegennahme_durch">Entgegennahme durch:</label>
+        <input type="text" id="entgegennahme_durch" name="entgegennahme_durch"><br><br>
+    </section>
+
+    <section id="geologist-section">
+        <h3>Auszufüllen durch Geologe</h3>
+
+        <label for="geologische_fachperson">Geologische Fachperson:</label>
+        <input type="text" id="geologische_fachperson" name="geologische_fachperson"><br><br>
+
+        <label for="ausgehaendigt_von">Ausgehändigt von:</label>
+        <input type="text" id="ausgehaendigt_von" name="ausgehaendigt_von"><br><br>
+    </section>
+
+    <button id="submit" type="submit">Absenden</button>
+</section>
+<section id="invalid-project">
+    <h3>Projekt nicht gefunden</h3>
+    <p>Das Projekt konnte nicht gefunden werden oder steht nicht zur Bearbeitung frei. Bitte überprüfen Sie die eingegebenen Daten.</p>
+</section>
+<section id="end-section">
+    <h3>Übermittelt</h3>
+    <p>Die Daten wurden erfolgreich übermittelt.</p>
+</section>
