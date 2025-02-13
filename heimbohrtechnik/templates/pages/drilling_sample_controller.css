@@ -47,6 +47,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    margin: 3px;
 }
 
 button:hover {
@@ -61,6 +62,10 @@ button:hover {
     margin-bottom: 16px;
 }
 
+#drilling-master-section {
+    display: none;
+}
+
 #geologist-section{
     display: none;
 }
@@ -70,5 +75,9 @@ button:hover {
 }
 
 #end-section {
+    display: none;
+}
+
+#submit {
     display: none;
 }

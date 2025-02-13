@@ -5,17 +5,13 @@ var global = {
 
 $('document').ready(function(){
     make();
-    run();
 });
 
 function make(){
     reset_fields();
     add_event_listeners();
     fetch_project_data();
-}
-
-function run(){
-    display_correct_fields();
+    fetch_samples();
 }
 
 function reset_fields(){
@@ -35,6 +31,20 @@ function reset_fields(){
     document.getElementById('zustand_OK').checked = false;
     document.getElementById('zustand_mittel').checked = false;
     document.getElementById('zustand_schlecht').checked = false;
+
+    //enable radio buttons
+    document.getElementById('bohrprobe_2m').disabled = false;
+    document.getElementById('bohrprobe_4m').disabled = false;
+    document.getElementById('bohrprobe_benutzerdefiniert').disabled = false;
+    document.getElementById('lagerort_magazin').disabled = false;
+    document.getElementById('lagerort_baustelle').disabled = false;
+    document.getElementById('zustand_OK').disabled = false;
+    document.getElementById('zustand_mittel').disabled = false;
+    document.getElementById('zustand_schlecht').disabled = false;
+
+    document.getElementById('bohrmeister').readOnly = false;
+    document.getElementById('entgegennahme_durch').readOnly = false;
+    document.getElementById('benutzerdefiniert_num').readOnly = false;
 }
 
 function add_event_listeners(){
@@ -45,7 +55,7 @@ function add_event_listeners(){
         }
     });
     document.getElementById('bohrprobe_2m').addEventListener('change', function() {
-        if (this.checked) {
+        if (this.checked) {display_drilling_master_form
             document.getElementById('custom_drilling_depth').style.display = 'none';
         }
     });
@@ -55,6 +65,11 @@ function add_event_listeners(){
         }
     });
 
+    // event listener for new button
+    document.getElementById('new-sample-btn').addEventListener('click', function() {
+        display_drilling_master_form();
+        reset_fields();
+    });
 
     // event listener for submission
     document.getElementById('submit').addEventListener('click', function() {
@@ -124,7 +139,7 @@ function fetch_project_data(){
     }
 }
 
-function display_correct_fields(){
+function fetch_samples(){
     frappe.call({
         "method": "heimbohrtechnik.templates.pages.drilling_sample_controller.get_drilling_sample",
         "args": {
@@ -132,20 +147,38 @@ function display_correct_fields(){
         },
         "callback": function(response) {
             if (response.message) {
-                if (response.message.some(sample => sample.status === "erfasst")) {
-                    var drilling_sample = response.message.find(sample => sample.status === "erfasst");
-                    global.status = "erfasst";
-                    display_geologist_form(drilling_sample);
-                } else {
-                    global.status = "neu";
-                }
+                // for each sample with status "erfasst", add a new sample button
+                response.message.forEach(sample => {
+                    console.log(sample);
+                    if (sample.status === "erfasst") {
+                        var newSampleBtn = document.createElement('button');
+                        newSampleBtn.innerHTML = sample.name;
+                        newSampleBtn.className = 'sample-btn';
+                        newSampleBtn.id = sample.name;
+                        newSampleBtn.addEventListener('click', function() {
+                            global.status = "erfasst";
+                            display_geologist_form(sample);
+                        });
+                        document.getElementById('samples-container').appendChild(newSampleBtn);
+                    }
+                });
             }
         }
     });
 }
 
+function display_drilling_master_form(){
+    global.status = "neu";
+    document.getElementById('drilling-master-section').style.display = 'block';
+    document.getElementById('submit').style.display = 'block';
+    document.getElementById('geologist-section').style.display = 'none';
+}
+
 function display_geologist_form(drilling_sample){
     //disable radio buttons
+    console.log(drilling_sample);
+    document.getElementById('drilling-master-section').style.display = 'block';
+    document.getElementById('submit').style.display = 'block';
     document.getElementById('bohrprobe_2m').disabled = true;
     document.getElementById('bohrprobe_4m').disabled = true;
     document.getElementById('bohrprobe_benutzerdefiniert').disabled = true;

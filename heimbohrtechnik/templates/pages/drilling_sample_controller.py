@@ -11,7 +11,7 @@ from frappe.utils import now
 @frappe.whitelist(allow_guest=True)
 def get_drilling_sample(project):
     #get all drilling samples where status is either erfasst or bestätigt
-    drilling_samples = frappe.get_all("Drilling Sample", filters={"project": project, "status": ["in", ["erfasst", "bestätigt"]]}, fields=["status", "storage_location", "drilling_samples_all", "condition_of_drill_material__drill_bags", "custom_drilling_depth", "drilling_master", "acceptance_by", "geological_expert", "issued_by"])
+    drilling_samples = frappe.get_all("Drilling Sample", filters={"project": project, "status": "erfasst"}, fields=["name", "status", "storage_location", "drilling_samples_all", "condition_of_drill_material__drill_bags", "custom_drilling_depth", "drilling_master", "acceptance_by", "geological_expert", "issued_by"])
     return drilling_samples
 
 @frappe.whitelist(allow_guest=True)
