@@ -35,7 +35,7 @@ def submit_drilling_sample(project, status, lagerort, bohrprobe_alle, benutzerde
         drilling_sample.geological_expert = geologische_fachperson
         drilling_sample.issued_by = ausgehaendigt_von
         drilling_sample.browserid_geologist = geologist_browser
-        drilling_sample.date_drilling_master = now()
+        drilling_sample.date_drilling_master = time_without_ms(now())
         drilling_sample.browserid_drilling_master = drilling_master_browser
         drilling_sample.insert(ignore_permissions=True)
         return "Drilling Sample created successfully"
@@ -45,9 +45,12 @@ def submit_drilling_sample(project, status, lagerort, bohrprobe_alle, benutzerde
         drilling_sample.status = "bestätigt"
         drilling_sample.geological_expert = geologische_fachperson
         drilling_sample.issued_by = ausgehaendigt_von
-        drilling_sample.date_geologist = now()
+        drilling_sample.date_geologist = time_without_ms(now())
         drilling_sample.browserid_geologist = geologist_browser
         drilling_sample.save(ignore_permissions=True)
         return "Drilling Sample updated successfully"
     else:
         return False
+    
+def time_without_ms(current_time):
+    return datetime.strptime(current_time, '%Y-%m-%d %H:%M:%S.%f').strftime('%Y-%m-%d %H:%M:%S')
