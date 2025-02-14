@@ -15,7 +15,7 @@ def get_drilling_sample(project):
     return drilling_samples
 
 @frappe.whitelist(allow_guest=True)
-def submit_drilling_sample(project, status, lagerort, bohrprobe_alle, benutzerdefiniert_num, zustand_bohrmaterial, bohrmeister, entgegennahme_durch, geologische_fachperson, ausgehaendigt_von, geologist_browser, drilling_master_browser):
+def submit_drilling_sample(project, drilling_sample, status, lagerort, bohrprobe_alle, benutzerdefiniert_num, zustand_bohrmaterial, bohrmeister, entgegennahme_durch, geologische_fachperson, ausgehaendigt_von, geologist_browser, drilling_master_browser):
     #if status is neu, create a new drilling sample
     if status == "neu":
         project_data = fetch_project_data(project)
@@ -41,7 +41,7 @@ def submit_drilling_sample(project, status, lagerort, bohrprobe_alle, benutzerde
         return "Drilling Sample created successfully"
     #if status is erfasst, update the drilling sample
     elif status == "erfasst":
-        drilling_sample = frappe.get_doc("Drilling Sample", {"project": project, "status": "erfasst"})
+        drilling_sample = frappe.get_doc("Drilling Sample", {"project": project, "name": drilling_sample, "status": "erfasst"})
         drilling_sample.status = "bestätigt"
         drilling_sample.geological_expert = geologische_fachperson
         drilling_sample.issued_by = ausgehaendigt_von

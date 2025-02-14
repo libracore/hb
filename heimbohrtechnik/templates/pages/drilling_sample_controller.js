@@ -1,6 +1,7 @@
 var global = {
     status: null,
-    project: null
+    project: null,
+    drilling_sample: null
 };
 
 $('document').ready(function(){
@@ -149,7 +150,6 @@ function fetch_samples(){
             if (response.message) {
                 // for each sample with status "erfasst", add a new sample button
                 response.message.forEach(sample => {
-                    console.log(sample);
                     if (sample.status === "erfasst") {
                         var newSampleBtn = document.createElement('button');
                         newSampleBtn.innerHTML = sample.name;
@@ -169,6 +169,7 @@ function fetch_samples(){
 
 function display_drilling_master_form(){
     global.status = "neu";
+    global.drilling_sample = null;
     document.getElementById('drilling-master-section').style.display = 'block';
     document.getElementById('submit').style.display = 'block';
     document.getElementById('geologist-section').style.display = 'none';
@@ -177,6 +178,7 @@ function display_drilling_master_form(){
 function display_geologist_form(drilling_sample){
     //disable radio buttons
     console.log(drilling_sample);
+    global.drilling_sample = drilling_sample.name;
     document.getElementById('drilling-master-section').style.display = 'block';
     document.getElementById('submit').style.display = 'block';
     document.getElementById('bohrprobe_2m').disabled = true;
@@ -257,6 +259,7 @@ function submit_drilling_sample(){
         "method": "heimbohrtechnik.templates.pages.drilling_sample_controller.submit_drilling_sample",
         "args": {
             "project": global.project,
+            "drilling_sample": global.drilling_sample,
             "status": global.status,
             "lagerort": lagerort,
             "bohrprobe_alle": bohrprobe_alle,
