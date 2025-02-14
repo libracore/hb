@@ -26,11 +26,12 @@ def fetch_project_data(project_name):
 	geology_office_addresses = object_data.addresses
 	for address in geology_office_addresses:
 		if address.address_type == "Geologe":
-			split_address = address.address_display.split("<br>")
-			if len(split_address) == 5:
-				address_string = split_address[1] + ", " + split_address[2] + ", " + split_address[3]
-			else:
-				address_string = split_address[1] + ", " + split_address[2]
-			project_data["geology_office"] = address_string
-			project_data["geology_office_name"] = split_address[0]
+			if address.address_display:
+				split_address = address.address_display.split("<br>")
+				if len(split_address) == 5:
+					address_string = split_address[1] + ", " + split_address[2] + ", " + split_address[3]
+				else:
+					address_string = split_address[1] + ", " + split_address[2]
+				project_data["geology_office"] = address_string
+				project_data["geology_office_name"] = split_address[0]
 	return project_data
