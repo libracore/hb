@@ -56,6 +56,7 @@
   "has_drilling_samples",
   "drilling_samples",
   "drilling_sample_storage",
+  "internal_drilling_samples",
   "trt",
   "progress_measurement",
   "staged_cementation",
@@ -454,9 +455,15 @@
    "fieldname": "needs_insurance",
    "fieldtype": "Check",
    "label": "Needs Insurance"
+  },
+  {
+   "default": "0",
+   "fieldname": "internal_drilling_samples",
+   "fieldtype": "Check",
+   "label": "Internal drilling samples"
   }
  ],
- "modified": "2024-10-30 15:08:25.233244",
+ "modified": "2025-02-14 10:34:08.308632",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Object",
