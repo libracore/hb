@@ -1,0 +1,194 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2025-02-10 17:55:17.663200",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "status",
+  "project",
+  "geology_office_name",
+  "column_break_5",
+  "object",
+  "address",
+  "geology_office",
+  "data_section",
+  "storage_location",
+  "drilling_samples_all",
+  "column_break_10",
+  "condition_of_drill_material__drill_bags",
+  "custom_drilling_depth",
+  "receipt_confirmation_section",
+  "date_drilling_master",
+  "browserid_drilling_master",
+  "drilling_master",
+  "acceptance_by",
+  "handover_confirmation_section",
+  "date_geologist",
+  "browserid_geologist",
+  "geological_expert",
+  "issued_by"
+ ],
+ "fields": [
+  {
+   "default": "DS-.YY.####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "DS-.YY.####"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "erfasst\nbest\u00e4tigt",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fieldname": "object",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Object",
+   "options": "Object",
+   "reqd": 1
+  },
+  {
+   "fieldname": "geology_office",
+   "fieldtype": "Data",
+   "label": "Geology office"
+  },
+  {
+   "fieldname": "receipt_confirmation_section",
+   "fieldtype": "Section Break",
+   "label": "Receipt confirmation"
+  },
+  {
+   "fieldname": "handover_confirmation_section",
+   "fieldtype": "Section Break",
+   "label": "Handover confirmation"
+  },
+  {
+   "fieldname": "data_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "storage_location",
+   "fieldtype": "Select",
+   "label": "Storage location",
+   "options": "Magazin\nBaustelle/Bauherrschaft"
+  },
+  {
+   "fieldname": "drilling_samples_all",
+   "fieldtype": "Select",
+   "label": "Drilling samples distance",
+   "options": "alle 2m\nalle 4m\nbenutzerdefiniert"
+  },
+  {
+   "fieldname": "condition_of_drill_material__drill_bags",
+   "fieldtype": "Select",
+   "label": "Condition of drill material / drill bags",
+   "options": "OK\nmittel\nschlecht"
+  },
+  {
+   "fieldname": "date_drilling_master",
+   "fieldtype": "Datetime",
+   "label": "Date"
+  },
+  {
+   "fieldname": "drilling_master",
+   "fieldtype": "Data",
+   "label": "Drilling master or representative"
+  },
+  {
+   "fieldname": "acceptance_by",
+   "fieldtype": "Data",
+   "label": "Acceptance by"
+  },
+  {
+   "fieldname": "browserid_drilling_master",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "BrowserID drilling master",
+   "read_only": 1
+  },
+  {
+   "fieldname": "date_geologist",
+   "fieldtype": "Datetime",
+   "label": "Date"
+  },
+  {
+   "fieldname": "browserid_geologist",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "BrowserID geologist",
+   "read_only": 1
+  },
+  {
+   "fieldname": "geological_expert",
+   "fieldtype": "Data",
+   "label": "Geological expert"
+  },
+  {
+   "fieldname": "issued_by",
+   "fieldtype": "Data",
+   "label": "Issued by"
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "custom_drilling_depth",
+   "fieldtype": "Data",
+   "label": "Custom drilling depth"
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Data",
+   "label": "Address"
+  },
+  {
+   "fieldname": "geology_office_name",
+   "fieldtype": "Data",
+   "label": "Geology office name"
+  }
+ ],
+ "modified": "2025-02-14 09:45:28.697775",
+ "modified_by": "Administrator",
+ "module": "Heim Bohrtechnik",
+ "name": "Drilling Sample",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
