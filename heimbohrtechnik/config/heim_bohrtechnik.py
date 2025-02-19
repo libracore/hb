@@ -602,6 +602,12 @@ def get_data():
                     "name": "Customer sales trend",
                     "doctype": "Customer",
                     "is_query_report": True
+                },
+                {
+                    "type": "report",
+                     "name": "Bohrproben",
+                     "doctype": "Drilling Sample",
+                     "is_query_report": True
                 }
             ]
         },

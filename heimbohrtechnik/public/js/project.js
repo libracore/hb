@@ -6,7 +6,7 @@ cur_frm.dashboard.add_transactions([
     },
     {
         'label': 'Drilling',
-        'items': ['Construction Site Delivery', 'Subcontracting Order', 'Request for Public Area Use', 'Road Block Material Order', 'Layer Directory', 'Injection report']
+        'items': ['Construction Site Delivery', 'Subcontracting Order', 'Request for Public Area Use', 'Road Block Material Order', 'Layer Directory', 'Injection report', 'Drilling Sample']
 
     }
 ]);
