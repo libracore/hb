@@ -39,10 +39,10 @@ frappe.ui.form.on('Injection report', {
         autocomplete_needs(frm);
     },
     sonde_length: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     need: function(frm) {
-    autocomplete_needs(frm);
+        autocomplete_needs(frm);
     },
     needed_ewm: function(frm) {
         autocomplete_needs(frm);
@@ -53,10 +53,16 @@ frappe.ui.form.on('Injection report', {
     needed_bentonit: function(frm) {
         autocomplete_needs(frm);
     },
+    needed_zeo_therm: function(frm) {
+        autocomplete_needs(frm);
+    },
     gtm_water: function(frm) {
         autocomplete_needs(frm);
     },
     zm_water: function(frm) {
+        autocomplete_needs(frm);
+    },
+    zeo_water: function(frm) {
         autocomplete_needs(frm);
     },
     gtm_hs: function(frm) {
@@ -68,10 +74,16 @@ frappe.ui.form.on('Injection report', {
     bentonit: function(frm) {
         autocomplete_needs(frm);
     },
+    zeo_therm: function(frm) {
+        autocomplete_needs(frm);
+    },
     gtm_suspension: function(frm) {
         autocomplete_needs(frm);
     },
     zm_suspension: function(frm) {
+        autocomplete_needs(frm);
+    },
+    zeo_suspension: function(frm) {
         autocomplete_needs(frm);
     },
     gtm_sack_weight: function(frm) {
@@ -80,10 +92,22 @@ frappe.ui.form.on('Injection report', {
     zm_sack_weight: function(frm) {
         autocomplete_needs(frm);
     },
+    zeo_sack_weight: function(frm) {
+        autocomplete_needs(frm);
+    },
     ac_grouting: function(frm) {
         autocomplete_needs(frm);
     },
     suspension_lt: function(frm) {
+        autocomplete_needs(frm);
+    },
+    gtm_suspension_lt: function(frm) {
+        autocomplete_needs(frm);
+    },
+    hsplus_suspension_lt: function(frm) {
+        autocomplete_needs(frm);
+    },
+    zeo_suspension_lt: function(frm) {
         autocomplete_needs(frm);
     },
     water_density: function(frm) {
@@ -152,6 +176,11 @@ function autocomplete_needs() {
         cur_frm.set_value('needed_ewm', Math.round((cur_frm.doc.hs_plus / cur_frm.doc.hsplus_suspension)*cur_frm.doc.need));
         cur_frm.set_value('needed_sacks_hsplus', Math.round(cur_frm.doc.needed_ewm / cur_frm.doc.hsplus_sack_weight));
         cur_frm.set_value('ac_tot', Math.round((cur_frm.doc.ac_grouting / cur_frm.doc.hsplus_suspension_lt)*1000));
+    } else if (cur_frm.doc.mortar == "ZEO-THERM 2.0" ) {
+        cur_frm.set_value('needed_water', Math.round((cur_frm.doc.zeo_water / cur_frm.doc.zeo_suspension)*cur_frm.doc.need));
+        cur_frm.set_value('needed_zeo_therm', Math.round((cur_frm.doc.zeo_therm / cur_frm.doc.zeo_suspension)*cur_frm.doc.need));
+        cur_frm.set_value('needed_sacks_hsplus', Math.round(cur_frm.doc.needed_zeo_therm / cur_frm.doc.zeo_sack_weight));
+        cur_frm.set_value('ac_tot', Math.round((cur_frm.doc.ac_grouting / cur_frm.doc.zeo_suspension_lt)*1000));
     }
 }
 
