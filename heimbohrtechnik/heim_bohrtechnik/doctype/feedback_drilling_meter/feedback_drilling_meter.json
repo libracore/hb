@@ -14,6 +14,8 @@
   "flushing",
   "hammer_change",
   "impact_part_change",
+  "consumables",
+  "consumables_qty",
   "drilling_assistant_1",
   "drilling_assistant_2",
   "temporary",
@@ -131,9 +133,21 @@
    "fieldname": "finished_document",
    "fieldtype": "Check",
    "label": "Finished Document"
+  },
+  {
+   "fieldname": "consumables",
+   "fieldtype": "Select",
+   "label": "Consumables",
+   "options": "Keine\nBentonite\nZement\nThermozement\nAntisol"
+  },
+  {
+   "fieldname": "consumables_qty",
+   "fieldtype": "Select",
+   "label": "Consumables Quantity",
+   "options": "Keine\n20kg\n40kg\n125kg"
   }
  ],
- "modified": "2024-12-13 09:32:30.971350",
+ "modified": "2025-02-20 11:00:58.761741",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Feedback Drilling Meter",
