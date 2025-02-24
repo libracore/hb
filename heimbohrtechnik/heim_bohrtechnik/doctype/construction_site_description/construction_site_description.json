@@ -10,6 +10,7 @@
   "project",
   "column_main",
   "object_name",
+  "with_extension_order",
   "section_images",
   "images",
   "sec_checks",
@@ -475,9 +476,15 @@
    "fieldname": "distribution_shaft",
    "fieldtype": "Check",
    "label": "Distribution Shaft"
+  },
+  {
+   "default": "0",
+   "fieldname": "with_extension_order",
+   "fieldtype": "Check",
+   "label": "With extension order"
   }
  ],
- "modified": "2025-02-07 09:58:18.351006",
+ "modified": "2025-02-24 17:03:20.574591",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
