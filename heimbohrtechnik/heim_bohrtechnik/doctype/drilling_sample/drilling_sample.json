@@ -169,7 +169,7 @@
    "label": "Geology office name"
   }
  ],
- "modified": "2025-02-14 09:45:28.697775",
+ "modified": "2025-02-24 15:55:41.149220",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Drilling Sample",
@@ -186,6 +186,15 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1
   }
  ],
  "sort_field": "modified",
