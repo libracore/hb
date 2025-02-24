@@ -55,6 +55,10 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
         page.add_menu_item( __('Freien Termin suchen'), () => {
             get_avaliable_drilling_teams();
         });
+    } else {
+        //Set Dates Ready only, if User is a Drilling Master
+        document.getElementById("from").readOnly = true;
+        document.getElementById("to").readOnly = true; 
     }
     
     // check routes and if there is a route, navigate to this
