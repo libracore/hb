@@ -23,7 +23,8 @@ def get_columns():
         {"label": _("Drilling master"), "fieldname": "drilling_master", "fieldtype": "Data", "width": 100},
         {"label": _("Geological expert"), "fieldname": "geological_expert", "fieldtype": "Data", "width": 100},
         {"label": _("Start Date"), "fieldname": "expected_start_date", "fieldtype": "Date", "width": 80},
-        {"label": _("End Date"), "fieldname": "expected_end_date", "fieldtype": "Date", "width": 80}
+        {"label": _("End Date"), "fieldname": "expected_end_date", "fieldtype": "Date", "width": 80},
+        {"label": _("Drilling Sample"), "fieldname": "drilling_sample", "fieldtype": "Link", "options": "Drilling Sample", "width": 80}
     ]
     return columns
 
@@ -52,7 +53,8 @@ def get_data(filters):
             `tabDrilling Sample`.`drilling_master`,
             `tabDrilling Sample`.`geological_expert`,
             `tabProject`.`expected_start_date`,
-            `tabProject`.`expected_end_date`
+            `tabProject`.`expected_end_date`,
+            `tabDrilling Sample`.`name` AS `drilling_sample`
         FROM `tabProject`
         LEFT JOIN `tabObject` ON `tabObject`.`name` = `tabProject`.`object`
         LEFT JOIN `tabObject Address` ON `tabObject Address`.`parent` = `tabObject`.`name`
