@@ -21,7 +21,9 @@ def get_columns():
         {"label": _("Custom drilling depth"), "fieldname": "custom_drilling_depth", "fieldtype": "Data", "width": 50},
         {"label": _("Condition of drill material (drill bags)"), "fieldname": "condition_of_drill_material__drill_bags", "fieldtype": "Data", "width": 80},
         {"label": _("Drilling master"), "fieldname": "drilling_master", "fieldtype": "Data", "width": 100},
-        {"label": _("Geological expert"), "fieldname": "geological_expert", "fieldtype": "Data", "width": 100}
+        {"label": _("Geological expert"), "fieldname": "geological_expert", "fieldtype": "Data", "width": 100},
+        {"label": _("Start Date"), "fieldname": "expected_start_date", "fieldtype": "Date", "width": 80},
+        {"label": _("End Date"), "fieldname": "expected_end_date", "fieldtype": "Date", "width": 80}
     ]
     return columns
 
@@ -48,14 +50,16 @@ def get_data(filters):
             `tabDrilling Sample`.`custom_drilling_depth`,
             `tabDrilling Sample`.`condition_of_drill_material__drill_bags`,
             `tabDrilling Sample`.`drilling_master`,
-            `tabDrilling Sample`.`geological_expert`
+            `tabDrilling Sample`.`geological_expert`,
+            `tabProject`.`expected_start_date`,
+            `tabProject`.`expected_end_date`
         FROM `tabProject`
         LEFT JOIN `tabObject` ON `tabObject`.`name` = `tabProject`.`object`
         LEFT JOIN `tabObject Address` ON `tabObject Address`.`parent` = `tabObject`.`name`
         LEFT JOIN `tabDrilling Sample` ON `tabDrilling Sample`.`project` = `tabProject`.`name`
         {condition}
         AND `tabObject Address`.`address_type` = "Geologe"
-        ORDER BY `tabProject`.`creation` DESC""".format(condition=condition)
+        ORDER BY `tabProject`.`expected_start_date` DESC""".format(condition=condition)
     
     data = frappe.db.sql(sql_query, as_dict=True)
 
