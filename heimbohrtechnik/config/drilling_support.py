@@ -34,6 +34,24 @@ def get_data():
             ]
         },
         {
+            "label": _("Drilling Samples"),
+            "icon": "fa fa-tools",
+            "items": [
+                {
+                   "type": "doctype",
+                   "name": "Drilling Sample",
+                   "label": _("Drilling Sample"),
+                   "description": _("Drilling Sample")
+                },
+                {
+                    "type": "report",
+                    "name": "Bohrproben",
+                    "doctype": "Drilling Sample",
+                    "is_query_report": True,
+                }
+            ]
+        },
+        {
             "label": _("Selling"),
             "icon": "fa fa-tools",
             "items": [
