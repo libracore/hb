@@ -59,6 +59,7 @@ def get_data(filters):
         LEFT JOIN `tabDrilling Sample` ON `tabDrilling Sample`.`project` = `tabProject`.`name`
         {condition}
         AND `tabObject Address`.`address_type` = "Geologe"
+        AND `tabProject`.`project_type` = "External"
         ORDER BY `tabProject`.`expected_start_date` DESC""".format(condition=condition)
     
     data = frappe.db.sql(sql_query, as_dict=True)
