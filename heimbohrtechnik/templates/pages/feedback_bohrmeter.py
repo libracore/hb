@@ -7,7 +7,7 @@ import frappe
 from frappe import _
 import json
 import datetime
-from frappe.utils.data import getdate, cint
+from frappe.utils.data import getdate
 from heimbohrtechnik.heim_bohrtechnik.report.feedback_drilling_meter.feedback_drilling_meter import get_data
 from frappe import _dict
 from frappe.utils.pdf import get_pdf
@@ -135,7 +135,7 @@ def create_document(drilling_team, deputy, date, project, project_meter, project
     if feedback:
         #if doc is existing, delete it
         feedback_doc = frappe.delete_doc("Feedback Drilling Meter", feedback[0].get('name'), ignore_permissions=True)
-    frappe.log_error(type(bentonite), "type")
+    
     #create new doc
     feedback_doc = frappe.get_doc({
         'doctype': 'Feedback Drilling Meter',
@@ -144,7 +144,7 @@ def create_document(drilling_team, deputy, date, project, project_meter, project
         'drilling_meter': drilling_meter,
         'flushing': flushing_check,
         'hammer_change': hammer_change_check,
-        'bentonite': cint(bentonite),
+        'bentonite': bentonite,
         'zement': zement,
         'thermozement': thermozement, 
         'antisol': antisol, 
