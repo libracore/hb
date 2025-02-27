@@ -179,7 +179,7 @@ function autocomplete_needs() {
     } else if (cur_frm.doc.mortar == "ZEO-THERM 2.0" ) {
         cur_frm.set_value('needed_water', Math.round((cur_frm.doc.zeo_water / cur_frm.doc.zeo_suspension)*cur_frm.doc.need));
         cur_frm.set_value('needed_zeo_therm', Math.round((cur_frm.doc.zeo_therm / cur_frm.doc.zeo_suspension)*cur_frm.doc.need));
-        cur_frm.set_value('needed_sacks_hsplus', Math.round(cur_frm.doc.needed_zeo_therm / cur_frm.doc.zeo_sack_weight));
+        cur_frm.set_value('needed_sacks_zeo_therm', Math.round(cur_frm.doc.needed_zeo_therm / cur_frm.doc.zeo_sack_weight));
         cur_frm.set_value('ac_tot', Math.round((cur_frm.doc.ac_grouting / cur_frm.doc.zeo_suspension_lt)*1000));
     }
 }

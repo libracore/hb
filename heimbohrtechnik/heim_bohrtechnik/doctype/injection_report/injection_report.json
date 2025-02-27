@@ -647,21 +647,25 @@
    "label": "Base ZEO-THERM 2.0"
   },
   {
+   "default": "680",
    "fieldname": "zeo_water",
    "fieldtype": "Int",
    "label": "Water (L / m3)"
   },
   {
+   "default": "850",
    "fieldname": "zeo_therm",
    "fieldtype": "Int",
    "label": "ZEO-THERM (kg / m3)"
   },
   {
+   "default": "1000",
    "fieldname": "zeo_suspension",
    "fieldtype": "Int",
    "label": "Suspension (L)"
   },
   {
+   "default": "1176",
    "fieldname": "zeo_suspension_lt",
    "fieldtype": "Int",
    "label": "Suspension (l/t)"
@@ -671,6 +675,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "25",
    "fieldname": "zeo_sack_weight",
    "fieldtype": "Int",
    "label": "Sack weight (kg)"
@@ -684,7 +689,7 @@
   }
  ],
  "is_submittable": 1,
- "modified": "2025-02-20 17:37:04.927341",
+ "modified": "2025-02-27 12:56:47.639748",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Injection report",
