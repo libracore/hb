@@ -14,8 +14,6 @@
   "flushing",
   "hammer_change",
   "impact_part_change",
-  "consumables",
-  "consumables_qty",
   "drilling_assistant_1",
   "drilling_assistant_2",
   "temporary",
@@ -23,6 +21,12 @@
   "finished_document",
   "section_break_6",
   "project",
+  "consumables_section",
+  "bentonite",
+  "thermozement",
+  "column_break_23",
+  "zement",
+  "antisol",
   "section_break_12",
   "description"
  ],
@@ -135,19 +139,36 @@
    "label": "Finished Document"
   },
   {
-   "fieldname": "consumables",
-   "fieldtype": "Select",
-   "label": "Consumables",
-   "options": "Keine\nBentonite\nZement\nThermozement\nAntisol"
+   "fieldname": "consumables_section",
+   "fieldtype": "Section Break",
+   "label": "Consumables"
   },
   {
-   "fieldname": "consumables_qty",
-   "fieldtype": "Select",
-   "label": "Consumables Quantity",
-   "options": "Keine\n20kg\n40kg\n125kg"
+   "fieldname": "bentonite",
+   "fieldtype": "Int",
+   "label": "Bentonite"
+  },
+  {
+   "fieldname": "thermozement",
+   "fieldtype": "Int",
+   "label": "Thermozement"
+  },
+  {
+   "fieldname": "column_break_23",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "zement",
+   "fieldtype": "Int",
+   "label": "Zement"
+  },
+  {
+   "fieldname": "antisol",
+   "fieldtype": "Int",
+   "label": "Antisol"
   }
  ],
- "modified": "2025-02-20 11:00:58.761741",
+ "modified": "2025-02-27 16:35:36.459134",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Feedback Drilling Meter",

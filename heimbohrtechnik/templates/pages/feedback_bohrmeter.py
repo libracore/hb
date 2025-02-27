@@ -7,13 +7,13 @@ import frappe
 from frappe import _
 import json
 import datetime
-from frappe.utils.data import getdate
+from frappe.utils.data import getdate, cint
 from heimbohrtechnik.heim_bohrtechnik.report.feedback_drilling_meter.feedback_drilling_meter import get_data
 from frappe import _dict
 from frappe.utils.pdf import get_pdf
 
 @frappe.whitelist(allow_guest=True)
-def insert_feedback(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing, hammer_change, impact_part_change, assistant_1, assistant_2, temporary, hotel_night, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22, notes, consumables, consumables_qty, finished_document, link_key):
+def insert_feedback(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing, hammer_change, impact_part_change, assistant_1, assistant_2, temporary, hotel_night, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22, notes, bentonite, zement, thermozement, antisol, finished_document, link_key):
     #check key
     if not check_key(drilling_team, link_key):
         return False
@@ -37,9 +37,9 @@ def insert_feedback(drilling_team, deputy, date, project, project_meter, project
         hotel_night_check = 0
     # create new record
     if not project2:
-        create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, hotel_night_check, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22, notes, consumables, consumables_qty, finished_document, second_project_row=False)
+        create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, hotel_night_check, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22, notes, bentonite, zement, thermozement, antisol, finished_document, second_project_row=False)
     else:
-        create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, hotel_night_check, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22, notes, consumables, consumables_qty, finished_document, second_project_row=True)
+        create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, hotel_night_check, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22, notes, bentonite, zement, thermozement, antisol, finished_document, second_project_row=True)
     return True
         
 
@@ -129,13 +129,13 @@ def get_deputy_list(drilling_team, link_key):
     
     return deputy_list
 
-def create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, hotel_night_check, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22, notes, consumables, consumables_qty, finished_document, second_project_row=False):
+def create_document(drilling_team, deputy, date, project, project_meter, project2, project_meter2, drilling_meter, flushing_check, hammer_change_check, impact_part_change_check, assistant_1, assistant_2, temporary, hotel_night_check, description_06_07, description_07_08, description_08_09, description_09_10, description_10_11, description_11_12, description_12_13, description_13_14, description_14_15, description_15_16, description_16_17, description_17_18, description_18_19,  description_19_20,  description_20_21,  description_21_22, notes, bentonite, zement, thermozement, antisol, finished_document, second_project_row=False):
     #check if already a document is existing for this day / drilling team
     feedback = frappe.get_list(doctype="Feedback Drilling Meter", filters={'date': date, 'drilling_team': drilling_team}, ignore_permissions=True)
     if feedback:
         #if doc is existing, delete it
         feedback_doc = frappe.delete_doc("Feedback Drilling Meter", feedback[0].get('name'), ignore_permissions=True)
-    
+    frappe.log_error(type(bentonite), "type")
     #create new doc
     feedback_doc = frappe.get_doc({
         'doctype': 'Feedback Drilling Meter',
@@ -144,8 +144,10 @@ def create_document(drilling_team, deputy, date, project, project_meter, project
         'drilling_meter': drilling_meter,
         'flushing': flushing_check,
         'hammer_change': hammer_change_check,
-        'consumables': consumables,
-        'consumables_qty': consumables_qty, 
+        'bentonite': cint(bentonite),
+        'zement': zement,
+        'thermozement': thermozement, 
+        'antisol': antisol, 
         'impact_part_change': impact_part_change_check,
         'drilling_assistant_1': assistant_1,
         'drilling_assistant_2': assistant_2,
@@ -334,8 +336,10 @@ def get_transmitted_information(date, drilling_team, link_key):
                                 `flushing`,
                                 `hammer_change`,
                                 `impact_part_change`,
-                                `consumables`,
-                                `consumables_qty`,
+                                `bentonite`,
+                                `zement`,
+                                `thermozement`,
+                                `antisol`,
                                 `drilling_assistant_1`,
                                 `drilling_assistant_2`,
                                 `temporary`,

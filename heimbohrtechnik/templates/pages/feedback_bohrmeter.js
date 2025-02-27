@@ -401,8 +401,10 @@ function get_transmitted_information(date, drilling_team) {
                         document.getElementById(field_name).value = descriptions[i].description;
                     }
                 }
-                document.getElementById('consumables').value = record[0].consumables;
-                document.getElementById('consumables_qty').value = record[0].consumables_qty;
+                document.getElementById('bentonite').value = record[0].bentonite;
+                document.getElementById('zement').value = record[0].zement;
+                document.getElementById('thermozement').value = record[0].thermozement;
+                document.getElementById('antisol').value = record[0].antisol;
             } else {
                 document.getElementById('drilling_meter').value = "";
                 document.getElementById('deputy').value = "Nein";
@@ -436,8 +438,10 @@ function get_transmitted_information(date, drilling_team) {
                 document.getElementById('description_20_21').value = "";
                 document.getElementById('description_21_22').value = "";
                 document.getElementById('notes').value = "";
-                document.getElementById('consumables').value = "";
-                document.getElementById('consumables_qty').value = "";
+                document.getElementById('bentonite').value = "";
+                document.getElementById('zement').value = "";
+                document.getElementById('thermozement').value = "";
+                document.getElementById('antisol').value = "";
             }
             show_project_location("project", "location");
             show_project_location("project2", "location2");
@@ -508,8 +512,10 @@ function insert_feedback(finished_document, key) {
             'description_20_21': document.getElementById('description_20_21').value,
             'description_21_22': document.getElementById('description_21_22').value,
             'notes': document.getElementById('notes').value,
-            'consumables': document.getElementById('consumables').value,
-            'consumables_qty': document.getElementById('consumables_qty').value,
+            'bentonite': parseInt(document.getElementById('bentonite').value),
+            'zement': parseInt(document.getElementById('zement').value),
+            'thermozement': parseInt(document.getElementById('thermozement').value),
+            'antisol': parseInt(document.getElementById('antisol').value),
             'finished_document': finished_document,
             'link_key': document.getElementById('key').value = key
         },
