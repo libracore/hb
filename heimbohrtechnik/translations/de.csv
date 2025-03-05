@@ -451,6 +451,9 @@ DocType: Injection report,Manual consumption entry,Verbrauch manuell eingeben
 DocType: Injection report,Actual consumption Water (L),Tatsächlicher Verbrauch Wasser (L)
 DocType: Injection report,Actual consumption Zement (kg),Tatsächlicher Verbrauch Zement (kg)
 DocType: Injection report,Actual consumption Bentonit (kg),Tatsächlicher Verbrauch Bentonit (kg)
+DocType: Injection report,Needed ZEO-THERM 2.0,Benötigter ZEO-THERM 2.0
+DocType: Injection report,Needed sacks ZEO-THERM 2.0,Benötigte ZEO-THERM 2.0 Säcke
+DocType: Injection report,Base ZEO-THERM 2.0,Basis ZEO-THERM 2.0
 Report: Mud per Week,Mud per Week,Schlamm pro Woche
 DocType: Expense Claim,Expense Claim,Spesenabrechnung
 DocType: Expense Claim,VAT included,VSt inkl.
