@@ -83,7 +83,7 @@ def send_project(project, debug=False):
     return
 
 @frappe.whitelist(allow_guest=True)
-def post_report(customer, secret, project, report, report_name):
+def post_report(customer, secret, project, report, report_name, device_type, hole_id):
     settings = frappe.get_doc("HPT Settings", "HPT Settings")
     if not settings.hpt_cloud_customer or not settings.hpt_cloud_secret:
         frappe.log_error( "Posting report from hptcloud to ERP failed: missing configuration", "hptcloud" )
@@ -95,8 +95,23 @@ def post_report(customer, secret, project, report, report_name):
         frappe.log_error( "Posting report from hptcloud to ERP failed: project {0} not found".format(project), "hptcloud" )
         return {'success': False}
     
+    fname = "{0}_{1}.pdf".format(report_name, device_type)
+    
+    # create an intermediate record (HPT Report File) for later file allocation
+    if not frappe.db.exists("HPT Record File", report_name):
+        hpt_report_file = frappe.get_doc({
+            'doctype': "HPT Record File",
+            'project': project,
+            'hole_id': hole_id,
+            'device_type': device_type,
+            'file_name': fname,
+            'report_name': report_name
+        })
+        hpt_report_file.insert(ignore_permissions=True)
+        frappe.db.commit()
+    
     save_file(
-        fname="{0}.pdf".format(report_name),
+        fname=fname,
         content=base64.b64decode(report),
         dt="Project",
         dn=project,

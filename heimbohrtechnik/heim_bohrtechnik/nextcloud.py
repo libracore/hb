@@ -261,8 +261,9 @@ def upload_file(self, event):
         frappe.db.commit()
         
         physical_file_name = get_physical_path(self.name)
-        if (self.file_name.startswith("HPT")) and (self.file_name.lower().endswith(".pdf")):
-            write_project_file_from_local_file (project, physical_file_name, PATHS['hpt'])
+        if frappe.db.exists("HPT Report File", self.file_name):
+            target_path = "{0}/{1}".format(PATHS['hpt'], frappe.get_value("HPT Report File", self.file_name, "hole_id") or "-")
+            write_project_file_from_local_file (project, physical_file_name, target_path)
         else:
             write_project_file_from_local_file (project, physical_file_name, PATHS['drilling'])
     
