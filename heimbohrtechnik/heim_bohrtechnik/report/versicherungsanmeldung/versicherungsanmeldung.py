@@ -66,8 +66,8 @@ def get_data(filters):
             AND `tabProject`.`expected_start_date` <= "{to_date}"
             AND `tabProject`.`status` != "Cancelled"
             AND `tabProject`.`insurance_declared` = 0
-            AND `tabSales Order Item`.`alternativ` = 0
-            AND `tabSales Order Item`.`eventual` = 0
+            AND ((`tabSales Order Item`.`alternativ` = 0
+            AND `tabSales Order Item`.`eventual` = 0) OR `tabObject`.`needs_insurance` = 1)
         GROUP BY `tabProject`.`name`
         ORDER BY `tabProject`.`expected_start_date` ASC, `tabProject`.`name` ASC
     ;""".format(from_date=filters.from_date, to_date=filters.to_date)
