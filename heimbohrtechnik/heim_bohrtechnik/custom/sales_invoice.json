@@ -1756,7 +1756,7 @@
    "doctype_or_field": "DocField",
    "field_name": "naming_series",
    "idx": 0,
-   "modified": "2022-01-07 09:15:22.571838",
+   "modified": "2025-03-10 17:17:22.571838",
    "modified_by": "Administrator",
    "name": "Sales Invoice-naming_series-options",
    "owner": "Administrator",
@@ -1765,7 +1765,7 @@
    "parenttype": null,
    "property": "options",
    "property_type": "Text",
-   "value": "RE-.YY.#####\nGS-.YY.#####\nRE-MX-.YY.#####\nGS-MX-.YY.#####\nRE-HDSE-.YY.#####\nGS-HDSE-.YY.#####\nRE-IH-.YY.#####\nGS-IH-.YY.#####\n"
+   "value": "RE-.YY.#####\nGS-.YY.#####\nRE-MX-.YY.#####\nGS-MX-.YY.#####\nRE-HDSE-.YY.#####\nGS-HDSE-.YY.#####\nRE-IH-.YY.#####\nGS-IH-.YY.#####\nRE-HPT-.YY.#####\nGS-HPTX-.YY.#####\n"
   },
   {
    "_assign": null,

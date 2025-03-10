@@ -1287,7 +1287,7 @@
    "doctype_or_field": "DocField",
    "field_name": "naming_series",
    "idx": 0,
-   "modified": "2022-01-07 09:11:34.881624",
+   "modified": "2025-03-10 17:33:34.881624",
    "modified_by": "Administrator",
    "name": "Quotation-naming_series-options",
    "owner": "Administrator",
@@ -1296,7 +1296,7 @@
    "parenttype": null,
    "property": "options",
    "property_type": "Text",
-   "value": "AN-.YY.#####\nAN-MX-.YY.#####\nAN-HDSE-.YY.#####\nAN-IH-.YY.#####"
+   "value": "AN-.YY.#####\nAN-MX-.YY.#####\nAN-HDSE-.YY.#####\nAN-IH-.YY.#####\nAN-HPT-.YY.#####"
   },
   {
    "_assign": null,

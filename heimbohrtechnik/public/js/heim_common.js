@@ -410,6 +410,8 @@ function select_naming_series(frm) {
             cur_frm.set_value("naming_series", "AN-HDSE-.YY.#####");
         } else if (frm.doc.company.includes("Immo")) {
             cur_frm.set_value("naming_series", "AN-IH-.YY.#####");
+        } else if (frm.doc.company.includes("HPT")) {
+            cur_frm.set_value("naming_series", "AN-HPT-.YY.#####");
         }
     } else if (frm.doc.doctype === "Sales Order") {
         if (frm.doc.company.includes("MudEX")) {
@@ -418,6 +420,8 @@ function select_naming_series(frm) {
             cur_frm.set_value("naming_series", "AB-HDSE-.YY.#####");
         } else if (frm.doc.company.includes("Immo")) {
             cur_frm.set_value("naming_series", "AB-IH-.YY.#####");
+        } else if (frm.doc.company.includes("HPT")) {
+            cur_frm.set_value("naming_series", "AB-HPT-.YY.#####");
         }
     } else if (frm.doc.doctype === "Delivery Note") {
         if (frm.doc.company.includes("MudEX")) {
@@ -426,6 +430,8 @@ function select_naming_series(frm) {
             cur_frm.set_value("naming_series", "LS-HDSE-.YY.#####");
         } else if (frm.doc.company.includes("Immo")) {
             cur_frm.set_value("naming_series", "LS-IH-.YY.#####");
+        } else if (frm.doc.company.includes("HPT")) {
+            cur_frm.set_value("naming_series", "LS-HPT-.YY.#####");
         }
     } else if (frm.doc.doctype === "Sales Invoice") {
         if (frm.doc.is_return === 1) {
@@ -435,6 +441,8 @@ function select_naming_series(frm) {
                 cur_frm.set_value("naming_series", "GS-HDSE-.YY.#####");
             } else if (frm.doc.company.includes("Immo")) {
                 cur_frm.set_value("naming_series", "GS-IH-.YY.#####");
+            } else if (frm.doc.company.includes("HPT")) {
+                cur_frm.set_value("naming_series", "GS-HPTX-.YY.#####");
             } else {
                 cur_frm.set_value("naming_series", "GS-.YY.#####");
             }
@@ -445,6 +453,10 @@ function select_naming_series(frm) {
                 cur_frm.set_value("naming_series", "RE-HDSE-.YY.#####");
             } else if (frm.doc.company.includes("Immo")) {
                 cur_frm.set_value("naming_series", "RE-IH-.YY.#####");
+            } else if (frm.doc.company.includes("HPT")) {
+                cur_frm.set_value("naming_series", "RE-HPT-.YY.#####");
+            } else {
+                cur_frm.set_value("naming_series", "RE-.YY.#####");
             }
         }
     } else if (frm.doc.doctype === "Payment Reminder") {
@@ -454,6 +466,8 @@ function select_naming_series(frm) {
             cur_frm.set_value("naming_series", "MA-HDSE-.YY.#####");
         } else if (frm.doc.company.includes("Immo")) {
             cur_frm.set_value("naming_series", "MA-IH-.YY.#####");
+        } else if (frm.doc.company.includes("HPT")) {
+            cur_frm.set_value("naming_series", "MA-HPT-.YY.#####");
         }
     }
 }

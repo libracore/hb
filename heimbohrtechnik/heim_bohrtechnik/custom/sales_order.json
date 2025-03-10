@@ -1316,7 +1316,7 @@
    "doctype_or_field": "DocField",
    "field_name": "naming_series",
    "idx": 0,
-   "modified": "2022-01-07 09:12:33.771117",
+   "modified": "2025-03-10 17:31:33.771117",
    "modified_by": "Administrator",
    "name": "Sales Order-naming_series-options",
    "owner": "Administrator",
@@ -1325,7 +1325,7 @@
    "parenttype": null,
    "property": "options",
    "property_type": "Text",
-   "value": "AB-.YY.#####\nAB-MX-.YY.#####\nAB-HDSE-.YY.#####\nAB-IH-.YY.#####"
+   "value": "AB-.YY.#####\nAB-MX-.YY.#####\nAB-HDSE-.YY.#####\nAB-IH-.YY.#####\nAB-HPT-.YY.#####"
   },
   {
    "_assign": null,
