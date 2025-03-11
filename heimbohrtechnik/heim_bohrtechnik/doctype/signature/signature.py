@@ -15,3 +15,13 @@ class Signature(Document):
         email_footer = frappe.render_template(template.template, self.as_dict())
         self.email_footer = email_footer
         return
+
+@frappe.whitelist()
+def get_email_footer(template_name, user):
+    template = frappe.get_doc("Email Footer Template", template_name)
+    signature = frappe.get_doc("Signature", user)
+    email_footer = frappe.render_template(template.template, signature.as_dict())
+    return email_footer
+
+
+#function set_value(doctype, docname, fieldname, value, fieldtype)
