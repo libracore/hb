@@ -40,6 +40,9 @@ frappe.ui.form.on('Quotation', {
             
             // verify customer if set (on duplicate or revision)
             get_tax_id(frm);
+
+            // set valid till date
+            cur_frm.set_value("valid_till",frappe.datetime.add_days(frm.doc.transaction_date, 30));
         }
         
         // get tax id
