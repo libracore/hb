@@ -311,22 +311,42 @@ function create_mud_invoice(object_name) {
     });
 }
 
-function cache_email_footer() {
+function cache_email_footer(doc=null) {
     try {
-        frappe.call({
-            'method': "frappe.client.get",
-            'args': {
-                'doctype': "Signature",
-                'name': frappe.session.user
-            },
-            'callback': function(response) {
-                var signature = response.message;
+        if (doc.company == "HPT Solutions") {
+            console.log("HPT Solutions");
+            frappe.call({
+                'method': "heimbohrtechnik.heim_bohrtechnik.doctype.signature.signature.get_email_footer",
+                'args': {
+                    'template_name': "HPT Solutions",
+                    'user': frappe.session.user
+                },
+                'callback': function(response) {
+                    console.log(response);
+                    var signature = response.message;
 
-                if (signature) {
-                    locals.email_footer = signature.email_footer;
-                } 
-            }
-        });
+                    if (signature) {
+                        locals.email_footer = signature;
+                    } 
+                }
+            });
+        } else {
+            frappe.call({
+                'method': "frappe.client.get",
+                'args': {
+                    'doctype': "Signature",
+                    'name': frappe.session.user
+                },
+                'callback': function(response) {
+                    console.log(response);
+                    var signature = response.message;
+    
+                    if (signature) {
+                        locals.email_footer = signature.email_footer;
+                    } 
+                }
+            });
+        }
     } catch (e) { 
         console.log("signature not found"); 
     }
