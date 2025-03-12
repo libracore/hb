@@ -25,14 +25,14 @@
   "expense_account",
   "checked",
   "exchange_rate",
+  "manual_exchange_rate",
   "base_amount",
   "sec_links",
   "purchase_invoice",
   "expense_claim",
   "col_links",
   "journal_entry",
-  "amended_from",
-  "manual_exchange_rate"
+  "amended_from"
  ],
  "fields": [
   {
