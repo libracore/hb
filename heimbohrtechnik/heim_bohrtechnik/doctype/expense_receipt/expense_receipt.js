@@ -61,6 +61,21 @@ frappe.ui.form.on('Expense Receipt', {
             });
         }
         
+        if (frm.doc.docstatus < 1) {
+            frm.add_custom_button(__("Kurs manuell setzen"), function() {
+                frappe.prompt([
+                    {'fieldname': 'exchange_rate', 'fieldtype': 'Float', 'label': __('Exchange Rate'), 'reqd': 1, 'default': cur_frm.doc.exchange_rate}  
+                ],
+                function(values){
+                    cur_frm.set_value("manual_exchange_rate", 1);
+                    cur_frm.set_value("exchange_rate", values.exchange_rate);
+                },
+                __("Kurs manuell setzen"),
+                _("OK")
+                );
+            });
+        }
+
         if (!frm.doc.company) {
             cur_frm.set_value("company", frappe.defaults.get_user_default("company") || frappe.defaults.get_global_default("company"));
         }

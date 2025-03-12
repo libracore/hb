@@ -7,18 +7,19 @@ import frappe
 from frappe.model.document import Document
 from erpnext import get_default_company
 from erpnextswiss.erpnextswiss.finance import get_exchange_rate
-from frappe.utils import flt, rounded
+from frappe.utils import cint, flt, rounded
 import json
 from frappe import _
 
 class ExpenseReceipt(Document):
     def before_save(self):
-        exchange_rate = 1
-        company_currency = frappe.get_cached_value("Company", self.company, "default_currency")
-        if self.currency != company_currency:
-            exchange_rate = get_exchange_rate(from_currency=self.currency, company=self.company, date=self.date)
-        self.exchange_rate = exchange_rate
-        base_gross_amount = rounded(self.amount * exchange_rate, 2)
+        if not cint(self.manual_exchange_rate):
+            exchange_rate = 1
+            company_currency = frappe.get_cached_value("Company", self.company, "default_currency")
+            if self.currency != company_currency:
+                exchange_rate = get_exchange_rate(from_currency=self.currency, company=self.company, date=self.date)
+            self.exchange_rate = exchange_rate
+        base_gross_amount = rounded(self.amount * self.exchange_rate, 2)
         self.base_amount = base_gross_amount
         return
         

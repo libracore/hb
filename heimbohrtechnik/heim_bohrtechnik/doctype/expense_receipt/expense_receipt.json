@@ -31,7 +31,8 @@
   "expense_claim",
   "col_links",
   "journal_entry",
-  "amended_from"
+  "amended_from",
+  "manual_exchange_rate"
  ],
  "fields": [
   {
@@ -205,11 +206,19 @@
    "fieldtype": "Currency",
    "label": "Amount in Company Currency",
    "read_only": 1
-  }
+  },
+  {
+    "default": 0,
+    "fieldname": "manual_exchange_rate",
+    "fieldtype": "Check",
+    "label": "Manual Exchange Rate",
+    "read_only": 1,
+    "no_copy": 1
+   }
  ],
  "image_field": "image",
  "is_submittable": 1,
- "modified": "2024-09-20 10:31:45.909045",
+ "modified": "2025-03-12 07:51:45.909045",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Expense Receipt",
