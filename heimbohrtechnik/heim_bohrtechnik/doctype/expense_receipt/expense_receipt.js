@@ -71,7 +71,7 @@ frappe.ui.form.on('Expense Receipt', {
                     cur_frm.set_value("exchange_rate", values.exchange_rate);
                 },
                 __("Kurs manuell setzen"),
-                _("OK")
+                __("OK")
                 );
             });
         }
