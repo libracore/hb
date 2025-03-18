@@ -24,6 +24,9 @@ frappe.ui.form.on('Layer Directory', {
             frappe.msgprint( __("Eine Schlammunterlieferung kann nur mit der Option <b>Schlammmenge ignorieren</b> gebucht werden.") );
             frappe.validated = false;
         }
+    },
+    mixing_type: function(frm) {
+        set_product(frm);
     }
 });
 
@@ -127,3 +130,10 @@ function set_drilling_order(count, depth) {
     cur_frm.set_value("drilling_order", drilling_order);
 }
     
+function set_product(frm) {
+    if (frm.doc.mixing_type == "ZEO-THERM 2.0") {
+        cur_frm.set_value("product", "Küchler");
+    } else {
+        cur_frm.set_value("product", "Schwenk");
+    }
+}
