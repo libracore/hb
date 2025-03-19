@@ -13,7 +13,7 @@ def execute(filters=None):
 def get_columns():
     columns = [
         {"label": _("Project"), "fieldname": "name", "fieldtype": "Link", "options": "Project", "width": 100},
-        {"label": _("Status"), "fieldname": "status", "fieldtype": "Data", "width": 80},
+        {"label": _("Status"), "fieldname": "status", "fieldtype": "Data", "width": 110},
         {"label": _("Address"), "fieldname": "address", "fieldtype": "Data", "width": 200},
         {"label": _("Geology office"), "fieldname": "geology_office", "fieldtype": "Data", "width": 250},
         {"label": _("Storage location"), "fieldname": "storage_location", "fieldtype": "Data", "width": 100},
@@ -46,6 +46,8 @@ def get_data(filters):
              FROM `tabObject`
              WHERE `tabObject`.`name` = `tabProject`.`object`) AS `address`,
             REPLACE(`tabObject Address`.`address_display`, '<br>', ', ') as `geology_office`,
+            `tabObject`.`accompaniment`,
+            `tabObject`.`has_drilling_samples`,
             `tabDrilling Sample`.`storage_location`,
             `tabDrilling Sample`.`drilling_samples_all`,
             `tabDrilling Sample`.`custom_drilling_depth`,
@@ -76,6 +78,8 @@ def apply_styles(data):
             row['status'] = '<span style="color:green;">&#11044; ' + row['status'] + '</span>'
         elif row['status'] == 'erfasst':
             row['status'] = '<span style="color:orange;">&#11044; ' + row['status'] + '</span>'
+        elif row['accompaniment'] == 1 and row['has_drilling_samples'] == 0:
+            row['status'] = '<span style="color:blue;">&#11044; ' + 'nur Begleitung' + '</span>'
         else:
             row['status'] = '<span style="color:grey;">&#11044; ' + row['status'] + '</span>'
     
