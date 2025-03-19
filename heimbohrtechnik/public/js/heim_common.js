@@ -313,7 +313,7 @@ function create_mud_invoice(object_name) {
 
 function cache_email_footer(doc=null) {
     try {
-        if (doc.company == "HPT Solutions") {
+        if (cur_frm.doc.company == "HPT Solutions") {
             console.log("HPT Solutions");
             frappe.call({
                 'method': "heimbohrtechnik.heim_bohrtechnik.doctype.signature.signature.get_email_footer",
