@@ -137,7 +137,10 @@ Write the project file (local file path) to nextcloud
 def write_project_file_from_local_file(project, file_name, target=PATHS['drilling']):
     if cint(frappe.get_value("Heim Settings", "Heim Settings", "nextcloud_enabled")) == 0:
         return      # skip if nextcloud is disabled (develop environments)
-        
+    
+    if not file_name:
+        frappe.log_error( "Project {p} tried to upload an empty file to {t}".format(p=project, t=target), "Nextcloud upload failed")
+
     client = get_client()
     project_path = get_project_path(project)
     if client.check(os.path.join(project_path, target)):
@@ -321,6 +324,9 @@ def upload_project_file(project, event):
         
     for p in pending_uploads:
         physical_file_name = get_physical_path(p.get("file_id"))
+        if not physical_file_name:
+            # this file has been deleted in the meantime, skip
+            continue
         # check if this is a plan
         plan_matches = frappe.db.sql("""
             SELECT `parent`
