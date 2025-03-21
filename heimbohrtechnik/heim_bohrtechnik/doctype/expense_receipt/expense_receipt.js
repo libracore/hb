@@ -64,7 +64,14 @@ frappe.ui.form.on('Expense Receipt', {
         if (frm.doc.docstatus < 1) {
             frm.add_custom_button(__("Kurs manuell setzen"), function() {
                 frappe.prompt([
-                    {'fieldname': 'exchange_rate', 'fieldtype': 'Float', 'label': __('Exchange Rate'), 'reqd': 1, 'default': cur_frm.doc.exchange_rate}  
+                    {
+                        'fieldname': 'exchange_rate', 
+                        'fieldtype': 'Float', 
+                        'label': __('Exchange Rate'), 
+                        'reqd': 1, 
+                        'default': cur_frm.doc.exchange_rate,
+                        'precision': 8
+                    }  
                 ],
                 function(values){
                     cur_frm.set_value("manual_exchange_rate", 1);
