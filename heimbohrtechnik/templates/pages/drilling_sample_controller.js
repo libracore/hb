@@ -118,10 +118,10 @@ function fetch_project_data(){
                 let today = new Date();
                 let todayPlus7 = new Date(today);
                 todayPlus7.setDate(today.getDate() + 7);
-                let todayMinus21 = new Date(today);
-                todayMinus21.setDate(today.getDate() - 21)
+                let todayMinus22 = new Date(today);
+                todayMinus22.setDate(today.getDate() - 22)
 
-                if (r.message && new Date(r.message.expected_start_date) <= todayPlus7 && new Date(r.message.expected_end_date) >= todayMinus21) {
+                if (r.message && new Date(r.message.expected_start_date) <= todayPlus7 && new Date(r.message.expected_end_date) >= todayMinus22) {
                     document.getElementById('project').innerHTML = "Projekt: " + global.project;
                     document.getElementById('project').setAttribute('readonly', true);
                     document.getElementById('address').innerHTML = "Adresse: " + r.message.address;
