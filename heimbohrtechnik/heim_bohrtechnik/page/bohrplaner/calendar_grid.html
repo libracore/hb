@@ -76,6 +76,10 @@
                                 <span class="drilling_team-tooltiptext">{{ drilling_team.phone }}</span>
                             </a>
                         {% endif %}
+                        {% if drilling_team.appartment %}
+                            <br>
+                            <span style="font-size: 9px; ">{{ drilling_team.appartment }}</span>
+                        {% endif %}
                     </td>
                     {% for day in days %}
                         {% if day_list[day] != "Sun" %}

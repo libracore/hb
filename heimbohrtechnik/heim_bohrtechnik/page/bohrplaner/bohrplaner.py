@@ -839,7 +839,8 @@ def get_drilling_teams(only_teams=False):
             `has_crane`, 
             IFNULL(`crane_details`, "{crane}") AS `crane_details`, 
             `phone`,
-            `drilling_team_type`
+            `drilling_team_type`,
+            `appartment`
         FROM `tabDrilling Team`
         WHERE `drilling_team_type` != 'Deaktiviert'
         {team_filter}""".format(
