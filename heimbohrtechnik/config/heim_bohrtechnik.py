@@ -548,6 +548,12 @@ def get_data():
                    "name": "Daily Feedback Description",
                    "label": _("Daily Feedback Description"),
                    "description": _("Daily Feedback Description")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Appartment",
+                   "label": _("Appartment"),
+                   "description": _("Appartment")
                 }
             ]
         },
