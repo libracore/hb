@@ -53,9 +53,12 @@
   "sec_options",
   "internal_distributor",
   "trench",
+  "data_49",
   "column_break_48",
   "wall_box",
   "distribution_shaft",
+  "column_break_53",
+  "mounting_block",
   "sec_other",
   "electricity",
   "water_supply",
@@ -482,9 +485,23 @@
    "fieldname": "has_subcontracting_order",
    "fieldtype": "Check",
    "label": "Has subcontracting order"
+  },
+  {
+   "fieldname": "data_49",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "column_break_53",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "mounting_block",
+   "fieldtype": "Check",
+   "label": "Mounting Block"
   }
  ],
- "modified": "2025-02-25 11:19:29.412933",
+ "modified": "2025-03-27 09:51:30.483429",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
