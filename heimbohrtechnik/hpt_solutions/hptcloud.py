@@ -98,7 +98,7 @@ def post_report(customer, secret, project, report, report_name, device_type, hol
     fname = "{0}_{1}.pdf".format(report_name, device_type)
     
     # create an intermediate record (HPT Report File) for later file allocation
-    if not frappe.db.exists("HPT Report File", report_name):
+    if not frappe.db.exists("HPT Report File", fname):
         hpt_report_file = frappe.get_doc({
             'doctype': "HPT Report File",
             'project': project,
