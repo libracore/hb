@@ -245,6 +245,7 @@ DocType: Construction Site Description,Options,Optionen
 DocType: Construction Site Description,Internal Distributor,Innenverteiler
 DocType: Construction Site Description,Trench,Graben
 DocType: Construction Site Description,Wall Box,Wandbox
+DocType: Construction Site Description,Mounting Block,Montageblock
 DocType: Construction Site Description,Distribution Shaft,Verteilerschacht
 DocType: Construction Site Description,Electricity,Stromanschluss
 DocType: Construction Site Description,Water supply,Wasserbezug
