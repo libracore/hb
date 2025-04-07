@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2022-2023, libracore and contributors
+# Copyright (c) 2022-2025, libracore and contributors
 # License: AGPL v3. See LICENCE
 
 from __future__ import unicode_literals
@@ -104,6 +104,7 @@ def get_last_date(customer=None, key=None, drilling_team=None):
         if not frappe.db.exists("Drilling Team", drilling_team):
             return None
         if frappe.get_value("Drilling Team", drilling_team, "team_key") != key:
+            frappe.log_error("invalid key used for external drilling plan {0}".format(drilling_team), "Bohrplan Access Error")
             return None
         
         last_date = frappe.db.sql("""

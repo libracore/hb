@@ -42,6 +42,8 @@ function make() {
                     locals.to_date = new Date(response.message);
                     // get grid
                     get_grid()
+                } else {
+                    console.log("no planned projects found");
                 }
            }
         });
@@ -78,6 +80,7 @@ function get_grid() {
 }
 
 function run(from_date, to_date) {
+    console.log("getting data...");
     frappe.call({
         'method': "heimbohrtechnik.templates.pages.bohrplan.get_data",
         'args': {
@@ -182,7 +185,8 @@ function add_subproject_overlay(data) {
         'subcontracting_order': data.subcontracting_order,
         'dragable': "false",
         'multi_day': (data.dauer > 2) ? "multi_day" : "single_day",
-        'background': data.background
+        'background': data.background,
+        'manager_short': data.manager_short
     })).appendTo(place);
     return
 }

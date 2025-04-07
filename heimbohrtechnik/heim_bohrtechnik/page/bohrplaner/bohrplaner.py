@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2017-2023, libracore and contributors
+# Copyright (c) 2017-2025, libracore and contributors
 
 from __future__ import unicode_literals
 import frappe
@@ -349,7 +349,7 @@ def get_subproject_overlay_datas(from_date, to_date, drilling_team=None):
             'object_location': subproject.object_location,
             'subcontracting_order': subproject.subcontracting_order,
             'background': get_project_billing_status_color(subproject.project) or "#ffffe0",
-            'manager_short':subproject.manager_short
+            'manager_short': subproject.manager_short
         }
         subproject_list.append(subproject_data)
     
