@@ -115,13 +115,10 @@ function fetch_project_data(){
                 "project_name": global.project
             },
             'callback': function(r) {
-                let today = new Date();
-                let todayPlus7 = new Date(today);
-                todayPlus7.setDate(today.getDate() + 7);
-                let todayMinus22 = new Date(today);
-                todayMinus22.setDate(today.getDate() - 22)
+                let today_plus_7 = frappe.datetime.add_days(frappe.datetime.get_today(), 7);
+                let today_minus_90 = frappe.datetime.add_days(frappe.datetime.get_today(), -90);
 
-                if (r.message && new Date(r.message.expected_start_date) <= todayPlus7 && new Date(r.message.expected_end_date) >= todayMinus22) {
+                if ((r.message) && (r.message.expected_start_date <= today_plus_7) && (r.message.expected_end_date >= today_minus_90)) {
                     document.getElementById('project').innerHTML = "Projekt: " + global.project;
                     document.getElementById('project').setAttribute('readonly', true);
                     document.getElementById('address').innerHTML = "Adresse: " + r.message.address;
