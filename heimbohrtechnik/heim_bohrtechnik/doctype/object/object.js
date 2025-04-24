@@ -258,6 +258,7 @@ frappe.ui.form.on('Object', {
     },
     gps_coordinates: function(frm) {
         convert_gps_to_ch(frm);
+        update_long_lat(frm);
     },
     button_open_map: function(frm) {
         if (frm.doc.ch_coordinates) {
@@ -656,6 +657,18 @@ function convert_gps_to_ch(frm) {
                 }
             }
         });
+    }
+}
+
+function update_long_lat(frm) {
+    if (frm.doc.gps_coordinates) {
+        let parts = frm.doc.gps_coordinates.split(",");
+        if (parts.length == 2) {
+            let long = parts[1].replaceAll("'", "");
+            let lat = parts[0].replaceAll("'", "");
+            cur_frm.set_value("gps_long", long);
+            cur_frm.set_value("gps_lat", lat);
+        }
     }
 }
 
