@@ -20,7 +20,7 @@ class Object(Document):
     def before_save(self):
         if not self.object_key:
             self.set_key()
-        if self.gps_coordinates and not self.gps_lat:
+        if self.gps_coordinates:
             self.set_gps()
             
         return
