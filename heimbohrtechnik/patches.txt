@@ -1,4 +1,4 @@
 heimbohrtechnik.patches.v0_9_191.drilling_team_structure_bugfix
 heimbohrtechnik.patches.v0_9_220.update_parking_gps
 heimbohrtechnik.patches.v0_9_232.create_insurance
-heimbohrtechnik.patches.update_object_gps.update_object_gps
+heimbohrtechnik.patches.v0_9_271.update_object_gps
