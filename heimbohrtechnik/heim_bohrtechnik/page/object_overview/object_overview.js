@@ -155,7 +155,6 @@ frappe.object_overview = {
                     .bindPopup(get_popup_str(object_name));
                 // add other markers
                 if (geo) {
-                    console.log(geo);
                     for (var i = 0; i < geo.environment.length; i++) {
                         
                         // set icon color
