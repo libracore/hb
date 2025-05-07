@@ -3,3 +3,4 @@ webdavclient3
 icalendar
 html2text
 tqdm
+opcua

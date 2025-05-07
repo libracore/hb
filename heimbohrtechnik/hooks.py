@@ -146,7 +146,8 @@ doc_events = {
 scheduler_events = {
      "all": [
          "heimbohrtechnik.heim_bohrtechnik.utils.check_infomails",
-         "heimbohrtechnik.heim_bohrtechnik.utils.check_sent_public_access_requests"
+         "heimbohrtechnik.heim_bohrtechnik.utils.check_sent_public_access_requests",
+         "heimbohrtechnik.mudex.doctype.ph_sensor.ph_sensor.read_sensors"
      ],
      "daily": [
          "heimbohrtechnik.heim_bohrtechnik.data_maintenance.link_sales_orders_to_projects",

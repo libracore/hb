@@ -1,0 +1,118 @@
+{
+ "allow_rename": 1,
+ "autoname": "field:title",
+ "creation": "2025-05-07 11:23:25.729252",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "enabled",
+  "host",
+  "col_main",
+  "ph",
+  "sensor_active",
+  "timestamp",
+  "sec_document",
+  "update_dt",
+  "update_dn"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Enabled"
+  },
+  {
+   "description": "Format: opc.tcp://192.168.105.10:4840",
+   "fieldname": "host",
+   "fieldtype": "Data",
+   "label": "Host"
+  },
+  {
+   "fieldname": "col_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ph",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "pH",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "sensor_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Active",
+   "read_only": 1
+  },
+  {
+   "fieldname": "timestamp",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Timestamp",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_document",
+   "fieldtype": "Section Break",
+   "label": "Document"
+  },
+  {
+   "fieldname": "update_dt",
+   "fieldtype": "Link",
+   "label": "Update Doctype",
+   "options": "DocType",
+   "read_only": 1
+  },
+  {
+   "fieldname": "update_dn",
+   "fieldtype": "Dynamic Link",
+   "label": "Update Name",
+   "options": "update_dt",
+   "read_only": 1
+  }
+ ],
+ "modified": "2025-05-07 12:01:31.434063",
+ "modified_by": "Administrator",
+ "module": "MudEx",
+ "name": "pH Sensor",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "title"
+}

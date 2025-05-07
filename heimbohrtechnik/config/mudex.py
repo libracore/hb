@@ -26,6 +26,12 @@ def get_data():
                    "description": _("Truck Scale")
                 },
                 {
+                   "type": "doctype",
+                   "name": "pH Sensor",
+                   "label": _("pH Sensor"),
+                   "description": _("pH Sensor")
+                },
+                {
                     "type": "report",
                     "name": "Mud to invoice",
                     "doctype": "Truck Delivery",
