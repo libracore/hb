@@ -611,6 +611,7 @@ DocType: Water Supply Registration,Water Supply Registration,Wasseranmeldung
 DocType: Maintenance Report,Maintenance Report,Wartungsbericht
 DocType: Maintenance Report,Motor Hours,Motorstunden
 DocType: Maintenance Report,Spare Parts,Ersatzteile
+DocType: Maintenance Report,Keyword,Stichwort
 Report: Maintenance Matrix,Maintenance Matrix,Wartungsmatrix
 DocType: Drilling Team,Do not remind drilling meter feedback,Nicht an Bohrmeterrückmeldung erinnern
 DocType: Heim Settings,Feedback Drilling Meter,Bohrmeterrückmeldung
