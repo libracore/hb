@@ -126,6 +126,8 @@ def bulk_follow_up(filters):
 
 def send_follow_up(quotation):
     doc = frappe.get_doc("Quotation", quotation)
+    if doc.company == "HPT Solutions AG":
+        return
     if frappe.session.user == "Administrator":
         footer = frappe.get_cached_value("Signature", doc.owner, "email_footer")
     else:
