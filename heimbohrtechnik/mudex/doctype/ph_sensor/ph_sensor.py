@@ -13,7 +13,7 @@ import traceback
 
 SENSOR_ACTIVE_NODE = """\"COM__Waage_send\".\"ph Messung\".\"aktiv\""""
 SENSOR_PH_NODE = """\"COM__Waage_send\".\"ph Messung\".\"Wert\""""
-SENSOR_ID = 0
+SENSOR_ID = 3
 
 class pHSensor(Document):
     def read_sensor(self):
