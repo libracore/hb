@@ -312,11 +312,17 @@ function create_mud_invoice(object_name) {
 }
 
 function cache_email_footer(doc=null) {
-    if ((doc.company) && (doc.company.includes("HPT"))) {
+    console.log("cache_email_footer");
+    if (doc.company && (doc.company.includes("HPT") || doc.company.includes("Drilling"))) {
+        if (doc.company.includes("HPT")){
+            template_name = "HPT Solutions";
+        } else if (doc.company.includes("Drilling")) {
+            template_name = "HDSE";
+        }
         frappe.call({
             'method': "heimbohrtechnik.heim_bohrtechnik.doctype.signature.signature.get_email_footer",
             'args': {
-                'template_name': "HPT Solutions",
+                'template_name': template_name,
                 'user': frappe.session.user
             },
             'callback': function(response) {
