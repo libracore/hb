@@ -77,6 +77,7 @@ def get_data(filters):
         FROM `tabQuotation`
         WHERE
             `tabQuotation`.`status` = "Open"
+            AND `tabQuotation`.`company` NOT LIKE "%HPT%" 
             {conditions}
             /* AND `tabQuotation`.`valid_till` >= CURDATE() */
         ORDER BY `tabQuotation`.`base_net_total` DESC;
