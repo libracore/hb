@@ -20,6 +20,17 @@ class TruckDelivery(Document):
     def on_submit(self): 
         if self.net_weight < 1:
             frappe.throw( _("There is no valid weight recorded."), _("No weight") )
+        
+        # check and hook into ph Sensor
+        ph_sensor_name = frappe.get_value("MudEx Settings", "MudEx Settings", "default_ph_sensor")
+        if ph_sensor_name:
+            frappe.db.sql("""
+                UPDATE `tabpH Sensor`
+                SET `update_dt` = "{dt}", `update_dn` = "{dn}"
+                WHERE `name` = "{name}";
+                """.format(dt=self.doctype, dn=self.name, name=ph_sensor_name)
+            )
+            frappe.db.commit()
         return
     
     def before_save(self):

@@ -5,6 +5,7 @@
  "engine": "InnoDB",
  "field_order": [
   "default_scale",
+  "default_ph_sensor",
   "column_main",
   "company",
   "section_invoicing",
@@ -63,10 +64,16 @@
    "fieldtype": "Link",
    "label": "Sales Invoice Print Format",
    "options": "Print Format"
+  },
+  {
+   "fieldname": "default_ph_sensor",
+   "fieldtype": "Link",
+   "label": "Default pH Sensor",
+   "options": "pH Sensor"
   }
  ],
  "issingle": 1,
- "modified": "2022-02-09 07:44:35.544369",
+ "modified": "2025-05-09 12:15:05.094463",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "MudEx Settings",
