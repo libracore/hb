@@ -21,6 +21,7 @@ def get_columns(filters):
         {"label": _("Bemerkungen"), "fieldname": "remarks", "fieldtype": "Data", "width": 200},
         #{"label": _("Dokument"), "fieldname": "voucher_type", "fieldtype": "Data", "width": 100},
         {"label": _("Dokument"), "fieldname": "voucher", "fieldtype": "Dynamic Link", "options": "voucher_type", "width": 120},
+        {"label": _("Steuercode"), "fieldname": "tax_code", "fieldtype": "Data", "width": 80},
         {"label": _(""), "fieldname": "blank", "fieldtype": "Data", "width": 20}
     ]
 
@@ -118,6 +119,21 @@ def get_data(filters):
                 group = frappe.get_value(position['voucher_type'], position['voucher'], 'supplier_name')
             elif (position['voucher_type'] in ("Purchase Invoice")):
                 group = frappe.get_value(position['voucher_type'], position['voucher'], 'customer_name')
+            
+            if position['voucher_type'] in ["Sales Invoice", "Purchase Invoice", "Payment Entry", "Journal Entry"]:
+                if position['voucher_type'] == "Sales Invoice":
+                    tax_dt = "Sales Taxes and Charges Template"
+                elif position['voucher_type'] == "Purchase Invoice":
+                    tax_dt = "Purchase Taxes and Charges Template"
+                else:
+                    tax_dt = frappe.get_value(position['voucher_type'], position['voucher'], "tax_type")
+                tax_dn = frappe.get_value(position['voucher_type'], position['voucher'], "taxes_and_charges")
+                if tax_dt and tax_dn:
+                    tax_code = frappe.get_cached_value(tax_dt, tax_dn, "tax_code")
+                else:
+                    tax_code = None
+            else:
+                tax_code = None
                 
             data.append({
                 'date': position['posting_date'], 
@@ -128,7 +144,8 @@ def get_data(filters):
                 'voucher': position['voucher'],
                 'against': against,
                 'group': group,
-                'remarks': remarks
+                'remarks': remarks,
+                'tax_code': tax_code
             })
         # add closing balance
         data.append({

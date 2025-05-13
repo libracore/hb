@@ -296,6 +296,12 @@ def get_data():
                     "is_query_report": True,
                 },
                 {
+                    "type": "report",
+                    "name": "Saldenliste Periode",
+                    "doctype": "GL Entry",
+                    "is_query_report": True,
+                },
+                {
                    "type": "doctype",
                    "name": "Purchase Invoice",
                    "label": _("Purchase Invoice"),
