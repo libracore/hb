@@ -12,6 +12,7 @@
   "col_main",
   "probe_type",
   "disabled",
+  "conic_probe",
   "sec_dimensions",
   "outer_diameter",
   "pressure_level",
@@ -21,6 +22,7 @@
   "radius",
   "inner_diameter",
   "volume_per_m",
+  "conic_formula",
   "material",
   "sec_details",
   "max_short_inner_pressure",
@@ -165,6 +167,7 @@
    "precision": "1"
   },
   {
+   "depends_on": "eval:doc.conic_probe==0",
    "description": "ml",
    "fieldname": "volume_per_m",
    "fieldtype": "Float",
@@ -235,9 +238,21 @@
   {
    "fieldname": "col_tables",
    "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "conic_probe",
+   "fieldtype": "Check",
+   "label": "Konische Sonde"
+  },
+  {
+   "depends_on": "eval:doc.conic_probe==1",
+   "fieldname": "conic_formula",
+   "fieldtype": "Data",
+   "label": "Formel f\u00fcr konische Volumenberechnung"
   }
  ],
- "modified": "2024-11-20 16:03:25.946218",
+ "modified": "2025-05-28 21:12:54.149433",
  "modified_by": "Administrator",
  "module": "HPT Solutions",
  "name": "Probe",
