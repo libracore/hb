@@ -33,6 +33,8 @@ class Probe(Document):
                 "material": self.material,
                 "max_short_inner_pressure": self.max_short_inner_pressure,
                 "tube_roughness": self.tube_roughness,
+                "conic_probe": self.conic_probe,
+                "conic_formula": self.conic_formula,
                 "test_pressures": [],
                 "pressure_losses": [],
                 "vent_amounts": [],
