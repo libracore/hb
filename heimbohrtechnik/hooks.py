@@ -139,6 +139,9 @@ doc_events = {
     },
     "Communication": {
         "after_insert": "heimbohrtechnik.heim_bohrtechnik.email_handler.communication_on_insert"
+    },
+    "Purchase Order": {
+        "on_submit": "heimbohrtechnik.heim_bohrtechnik.utils.submit_purchase_order",
     }
  }
 

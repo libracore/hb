@@ -204,7 +204,22 @@ class Object(Document):
                     
                     detail_list.append(_details)
                 details = safe_join_details(detail_list)
-
+        
+        # extend supplier
+        supplier = frappe.db.sql("""
+            SELECT `supplier_name`
+            FROM `tabPurchase Order`
+            WHERE 
+                `docstatus` = 1
+                AND `object` = %(object)s
+            ORDER BY `creation` DESC
+            LIMIT 1;""",
+            {'object': self.name},
+            as_dict=True
+        )
+        if len(supplier) > 0:
+            details += " ({0})".format(supplier[0]['supplier_name'][:1])
+            
         return details
 
 """

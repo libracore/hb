@@ -1322,3 +1322,16 @@ def get_default_trough_size(supplier):
     else:
         return None
         
+"""
+Update project ews details when a purchase order is submitted (to include supplier)
+"""
+def submit_purchase_order(doc, event):
+    if doc.object:
+        obj = frappe.get_doc("Object", doc.object)
+        ews_details = obj.get_ews_details()
+        frappe.db.set_value("Object", doc.object, "ews_details", ews_details)
+        projects = frappe.get_all("Project", filters={'object': doc.object}, fields=['name'])
+        for p in projects:
+            frappe.db.set_value("Project", p['name'], "ews_details", ews_details)
+        frappe.db.commit()
+    return

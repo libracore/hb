@@ -313,7 +313,7 @@ function create_mud_invoice(object_name) {
 
 function cache_email_footer(doc=null) {
     console.log("cache_email_footer");
-    if (doc.company && (doc.company.includes("HPT") || doc.company.includes("Drilling"))) {
+    if ((doc) && ((doc.company) && (doc.company.includes("HPT") || doc.company.includes("Drilling")))) {
         if (doc.company.includes("HPT")){
             template_name = "HPT Solutions";
         } else if (doc.company.includes("Drilling")) {
