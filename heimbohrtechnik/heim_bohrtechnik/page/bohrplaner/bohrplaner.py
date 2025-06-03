@@ -157,7 +157,7 @@ def get_project_data(p, dauer):
             flag_carrymax = True
         elif cl_entry.activity == activities['traffic_control']:
             requires_traffic_control = True
-        elif cl_entry.activity == activities['water_supply']:
+        elif cl_entry.activity == activities['water_supply'] and cint(cl_entry.no_hydrant) == 0:
             requires_water_supply = True
     
     # read construction site
