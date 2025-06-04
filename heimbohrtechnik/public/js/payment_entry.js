@@ -15,7 +15,7 @@ frappe.ui.form.on('Payment Entry', {
                 }
             }
         };
-        if (!frm.doc.tax_type) {
+        if ((frm.doc.docstatus == 0) && (!frm.doc.tax_type)) {
             set_tax_type(frm);
         }
     },
