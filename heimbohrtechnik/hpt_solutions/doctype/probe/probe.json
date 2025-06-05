@@ -34,6 +34,7 @@
   "pressure_losses",
   "sec_vent_amount",
   "vent_amounts",
+  "vent_amounts_conic",
   "sec_tables",
   "min_test_pressure",
   "purge_water_amount",
@@ -204,6 +205,7 @@
    "label": "Vent Amount"
   },
   {
+   "depends_on": "eval:doc.conic_probe==0",
    "fieldname": "vent_amounts",
    "fieldtype": "Table",
    "label": "Vent Amount",
@@ -250,9 +252,16 @@
    "fieldname": "conic_formula",
    "fieldtype": "Data",
    "label": "Formel f\u00fcr konische Volumenberechnung"
+  },
+  {
+   "depends_on": "eval:doc.conic_probe==1",
+   "fieldname": "vent_amounts_conic",
+   "fieldtype": "Table",
+   "label": "Vent Amount",
+   "options": "Probe Vent Amount Conic"
   }
  ],
- "modified": "2025-05-28 21:12:54.149433",
+ "modified": "2025-06-05 22:13:35.891825",
  "modified_by": "Administrator",
  "module": "HPT Solutions",
  "name": "Probe",

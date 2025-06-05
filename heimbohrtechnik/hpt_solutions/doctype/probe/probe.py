@@ -38,6 +38,7 @@ class Probe(Document):
                 "test_pressures": [],
                 "pressure_losses": [],
                 "vent_amounts": [],
+                "vent_amounts_conic": [],
                 "min_test_pressure": self.min_test_pressure,
                 "pressure_loss_table": self.pressure_loss_table,
                 "pressure_loss_formula": self.pressure_loss_formula,
@@ -58,6 +59,12 @@ class Probe(Document):
             probe["vent_amounts"].append({
                 "vent_pressure": va.vent_pressure,
                 "volume": va.volume
+            })
+        for vac in self.vent_amounts_conic:
+            probe["vent_amounts_conic"].append({
+                "vent_pressure": vac.vent_pressure,
+                "probe_length": vac.probe_length,
+                "volume": vac.volume
             })
             
         parameters = {

@@ -1,0 +1,55 @@
+{
+ "creation": "2025-06-05 22:09:06.440382",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "vent_pressure",
+  "probe_length",
+  "col_1",
+  "volume"
+ ],
+ "fields": [
+  {
+   "description": "bar",
+   "fieldname": "vent_pressure",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Vent Pressure",
+   "precision": "1",
+   "reqd": 1
+  },
+  {
+   "description": "m",
+   "fieldname": "probe_length",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Probe Length",
+   "reqd": 1
+  },
+  {
+   "fieldname": "col_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "ml/m",
+   "fieldname": "volume",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Volume",
+   "precision": "2",
+   "reqd": 1
+  }
+ ],
+ "istable": 1,
+ "modified": "2025-06-05 22:10:32.666614",
+ "modified_by": "Administrator",
+ "module": "HPT Solutions",
+ "name": "Probe Vent Amount Conic",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
