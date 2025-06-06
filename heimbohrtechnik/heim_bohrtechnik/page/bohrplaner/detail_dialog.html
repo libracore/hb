@@ -5,11 +5,18 @@
     </tr>   
     <tr>
         <td><b>{{ __("Object") }}</b></td>
-        <td><a href="/desk#Form/Object/{{ object }}" target="_blank">{{ object }}</a></td>
+        <td>
+            <a href="/desk#Form/Object/{{ object }}" target="_blank">{{ object }}</a>
+            {% if base_object %}
+                <a href="/desk#Form/Project/{{ base_object }}" target="_blank">({{ base_object }})</a>
+            {% endif %}
+        </td>
     </tr>
     <tr>
         <td><b>{{ __("Project") }}</b></td>
-        <td><a href="/desk#Form/Project/{{ project }}" target="_blank">{{ project }}</a></td>
+        <td>
+            <a href="/desk#Form/Project/{{ project }}" target="_blank">{{ project }}</a>
+        </td>
     </tr>
     <tr>
         <td><b>{{ __("Cloud") }}</b></td>

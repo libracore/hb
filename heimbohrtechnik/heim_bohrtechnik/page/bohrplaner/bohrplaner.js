@@ -451,11 +451,12 @@ frappe.bohrplaner = {
                 'project': _project
             },
             'callback': function(response) {
-                var details = response.message;
+                let details = response.message;
             
                 if (details.object) {
-                    var data = {
+                    let data = {
                         'object': details.object.name,
+                        'base_object': null,
                         'project': details.project.name,
                         'sales_order': details.project.sales_order,
                         'object_location': details.object.object_location,
@@ -463,7 +464,10 @@ frappe.bohrplaner = {
                         'cloud_url': details.project.cloud_url,
                         'subprojects': []
                     };
-                    
+                    let object_name_parts = details.object.name.split("-");
+                    if (object_name_parts.length > 2) {
+                        data.base_object = object_name_parts[0] + "-" + object_name_parts[1]
+                    }
                     data.customer = __('No Customer found');
                     data.customer_name = '';
                     if (details.project.customer) {
