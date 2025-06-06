@@ -31,7 +31,7 @@ def before_save(self, method):
             # this is an insurance record and has a certificate: mark insurance OK
             if c.activity == frappe.get_value("Heim Settings", "Heim Settings", "insurance_activity") \
                 and c.insurance_certificate:
-                c.insurance_declared = 1
+                self.insurance_declared = 1
 
     # check if the drilling team has an internal trough
     if self.drilling_team and self.object:
