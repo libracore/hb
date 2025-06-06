@@ -365,6 +365,6 @@ def split_object(object_name):
     
     frappe.db.commit()
     
-    clone_attachments("Object", object_name, "Object", target_namee)
+    clone_attachments("Object", object_name, "Object", target_name)
     
     return {'object': target_name, 'uri': get_url_to_form("Object", target_name)}
