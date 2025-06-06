@@ -367,4 +367,15 @@ def split_object(object_name):
     
     clone_attachments("Object", object_name, "Object", target_name)
     
+    # close old project if it was the base project (only one dash)
+    project_name = frappe.get_all("Project",  filters={'object': object_name}, fields=['name'])
+    if len(project_name) > 0 and project_name[0]['name'].count("-") == 1:
+        prj = frappe.get_doc("Project", project_name[0]['name'])
+        try:
+            prj.status = "Completed"
+            prj.save()
+            frappe.db.commit()
+        except Exception as err:
+            frappe.log_error(err, "Closing base project failed")
+            
     return {'object': target_name, 'uri': get_url_to_form("Object", target_name)}
