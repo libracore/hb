@@ -142,6 +142,9 @@ doc_events = {
     },
     "Purchase Order": {
         "on_submit": "heimbohrtechnik.heim_bohrtechnik.utils.submit_purchase_order",
+    },
+    "Address": {
+        "on_update": "heimbohrtechnik.heim_bohrtechnik.utils.update_address"
     }
  }
 

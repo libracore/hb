@@ -13,6 +13,7 @@ from PyPDF2 import PdfFileMerger
 from frappe.utils import cint, flt, get_bench_path, get_files_path
 from frappe.utils.file_manager import save_file
 from erpnextswiss.erpnextswiss.utils import get_numeric_part
+from erpnextswiss.scripts.crm_tools import get_primary_customer_address, get_primary_supplier_address
 from erpnextswiss.erpnextswiss.attach_pdf import execute, create_folder
 from frappe.desk.form.load import get_attachments
 from frappe.utils.file_manager import remove_file
@@ -1334,4 +1335,26 @@ def submit_purchase_order(doc, event):
         for p in projects:
             frappe.db.set_value("Project", p['name'], "ews_details", ews_details)
         frappe.db.commit()
+    return
+
+"""
+Update trigger when an address has been updated
+
+Use to update main address of linked customers/supliers
+"""
+def update_address(doc, event):
+    if doc.links:
+        for ref in doc.links:
+            if ref.link_doctype == "Customer":
+                address = get_primary_customer_address(ref.link_name)
+                adr_line = "{0}, {1} {2}".format(address.get("address_line1"), address.get("pincode"), address.get("city"))
+                if frappe.get_value("Customer", ref.link_name, "hauptadresse") != adr_line:
+                    frappe.db.set_value("Customer", ref.link_name, "hauptadresse", adr_line)
+                    frappe.db.commit()
+            if ref.link_doctype == "Supplier":
+                address = get_primary_supplier_address(ref.link_name)
+                adr_line = "{0}, {1} {2}".format(address.get("address_line1"), address.get("pincode"), address.get("city"))
+                if frappe.get_value("Supplier", ref.link_name, "hauptadresse") != adr_line:
+                    frappe.db.set_value("Supplier", ref.link_name, "hauptadresse", adr_line)
+                    frappe.db.commit()
     return
