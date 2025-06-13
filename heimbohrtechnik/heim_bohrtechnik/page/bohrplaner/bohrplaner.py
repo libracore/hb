@@ -632,10 +632,12 @@ def has_public_area_request(project):
         return False
 
 def has_infomail(project):
-    infomails = frappe.get_all("Infomail",
-        filters={'project': project},
-        fields=['name']
-    )
+    # consider all infomails with the same base project
+    infomails = frappe.db.sql("""
+        SELECT `name`
+        FROM `tabInfomail`
+        WHERE `project` LIKE "{project_base}%";
+        """.format(project_base=project[:8]), as_dict=True)
     return True if len(infomails) > 0 else False
         
 @frappe.whitelist()
