@@ -1358,3 +1358,15 @@ def update_address(doc, event):
                     frappe.db.set_value("Supplier", ref.link_name, "hauptadresse", adr_line)
                     frappe.db.commit()
     return
+
+"""
+Trigger when a stock entry is being saved
+"""
+def stock_entry_before_save(doc, event):
+    translate_stock_entry_title(doc)
+    return
+
+def translate_stock_entry_title(doc):
+    doc.title = _(doc.stock_entry_type, "de")
+    return
+    

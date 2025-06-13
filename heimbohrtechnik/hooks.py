@@ -145,6 +145,9 @@ doc_events = {
     },
     "Address": {
         "on_update": "heimbohrtechnik.heim_bohrtechnik.utils.update_address"
+    },
+    "Stock Entry": {
+        "before_save": "heimbohrtechnik.heim_bohrtechnik.utils.stock_entry_before_save"
     }
  }
 
