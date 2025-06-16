@@ -1174,8 +1174,10 @@ def find_holiday_conflicts():
                         'drilling_team': project['drilling_team']
                     }
                 )
-            
-    return conflicted_projects
+    # sort conflicts by ascending date
+    sorted_conflicted_projects = sorted(conflicted_projects, key=lambda d: d['date'], reverse=False)
+    
+    return sorted_conflicted_projects
 
 """
 In open projects, per drilling team, find overlaps
