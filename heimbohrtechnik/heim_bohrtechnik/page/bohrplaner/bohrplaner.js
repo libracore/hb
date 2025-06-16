@@ -495,7 +495,12 @@ frappe.bohrplaner = {
                     
                     if (details.project.subprojects) {
                         for (let s = 0; s < details.project.subprojects.length; s++) {
-                            data.subprojects.push(new Date(details.project.subprojects[s].start).toLocaleDateString() + ": " + details.project.subprojects[s].description);
+                            // only use the last part of the drilling team name (shorter)
+                            let sub_team_parts = (details.project.subprojects[s].team || "").split(" ");
+                            data.subprojects.push(new Date(details.project.subprojects[s].start).toLocaleDateString() 
+                                + ": " + details.project.subprojects[s].description
+                                + (sub_team_parts.length > 1 ? (" (" + sub_team_parts[sub_team_parts.length - 1] + ")") : "")
+                            );
                         }
                     }
                     
