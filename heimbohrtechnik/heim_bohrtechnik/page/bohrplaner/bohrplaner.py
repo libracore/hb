@@ -1153,6 +1153,7 @@ def find_holiday_conflicts():
                 AND `object_location` LIKE "%{region}"
                 AND `expected_start_date` IS NOT NULL
                 AND `expected_end_date` IS NOT NULL
+                AND `project_type` != "Internal"
             """.format(region=region['region']), as_dict=True)
         
         for project in projects:
