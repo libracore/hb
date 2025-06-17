@@ -261,6 +261,12 @@ def get_data():
                 },
                 {
                     "type": "report",
+                    "name": "Projekte mit Toitoi",
+                    "doctype": "Construction Site Description",
+                    "is_query_report": True
+                },
+                {
+                    "type": "report",
                     "name": "Subcontracting Control",
                     "doctype": "Subcontracting Order",
                     "is_query_report": True
@@ -560,6 +566,12 @@ def get_data():
                    "name": "Appartment",
                    "label": _("Appartment"),
                    "description": _("Appartment")
+                },
+                {
+                   "type": "doctype",
+                   "name": "Einstellungen Kleidermagazin",
+                   "label": _("Einstellungen Kleidermagazin"),
+                   "description": _("Einstellungen Kleidermagazin")
                 }
             ]
         },

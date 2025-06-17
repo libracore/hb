@@ -52,7 +52,7 @@ frappe.ui.form.on('Quotation', {
         
         // navigate to environment
         if (frm.doc.object) {
-            frm.add_custom_button("Umgebung", function() {
+            frm.add_custom_button( __("Umgebung"), function() {
                 window.open("/desk#object-overview?object=" + frm.doc.object, "_blank");
             });
         }
@@ -65,6 +65,21 @@ frappe.ui.form.on('Quotation', {
             if (!frm.doc.object_description) {
                 get_object_description(frm);
             }
+        }
+        
+        // allow to extend valid until to today (to create sales order on an expired qtn
+        if ((frm.doc.docstatus == 1) && (frm.doc.valid_till < frappe.datetime.get_today())) {
+            frm.add_custom_button( __("Verlängern"), function() {
+                frappe.call({
+                    'method': 'heimbohrtechnik.heim_bohrtechnik.utils.extend_quotation_due_date',
+                    'args': {
+                        'quotation': frm.doc.name
+                    },
+                    'callback': function(response) {
+                        cur_frm.reload_doc();
+                    }
+                });
+            });
         }
     },
     party_name: function(frm) {

@@ -273,6 +273,10 @@ DocType: Construction Site Description,Tractor,Traktor
 DocType: Construction Site Description,Tractor name,Traktorname
 DocType: Construction Site Description,Tractor details,Traktor-Details
 DocType: Construction Site Description,With extension order,Mit Verlängerungsauftrag
+DocType: Construction Site Description,Has subcontracting order,Mit Verlängerungsauftrag drucken
+DocType: Construction Site Description,Requires Toitoi,Toitoi benötigt
+DocType: Construction Site Description,required,benötigt
+DocType: Construction Site Description,organised,organisiert
 DocType: Item,Packaging,Verpackung
 DocType: Item,Wall Strength,Wandstärke
 DocType: Item,Material,Material

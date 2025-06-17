@@ -1370,3 +1370,21 @@ def translate_stock_entry_title(doc):
     doc.title = _(doc.stock_entry_type, "de")
     return
     
+
+"""
+Extend the validity until today so that an order can be created
+"""
+@frappe.whitelist()
+def extend_quotation_due_date(quotation):
+    qtn_doc = frappe.get_doc("Quotation", quotation)
+    if qtn_doc.docstatus == 1 and qtn_doc.valid_till < datetime.today().date():
+        frappe.db.sql("""
+            UPDATE `tabQuotation`
+            SET `valid_till` = CURDATE()
+            WHERE `name` = %(qtn)s;
+            """,
+            {'qtn': quotation}
+        )
+        frappe.db.commit()
+    return
+    

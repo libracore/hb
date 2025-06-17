@@ -62,6 +62,7 @@
   "sec_other",
   "electricity",
   "water_supply",
+  "requires_toitoi",
   "col_other",
   "hydrant",
   "hydrant_no",
@@ -499,9 +500,15 @@
    "fieldname": "mounting_block",
    "fieldtype": "Check",
    "label": "Mounting Block"
+  },
+  {
+   "default": "0",
+   "fieldname": "requires_toitoi",
+   "fieldtype": "Check",
+   "label": "Requires Toitoi"
   }
  ],
- "modified": "2025-03-27 09:51:30.483429",
+ "modified": "2025-06-17 20:02:57.144826",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Description",
