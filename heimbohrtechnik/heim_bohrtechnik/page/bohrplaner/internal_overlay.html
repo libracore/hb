@@ -1,11 +1,11 @@
 <div class="internal_overlay" id="{{ project.name }}"
-    style="width: {{ width }}px; "
+    style="width: {{ width }}px; {% if (project.object_name == "Frei") %}background-color: #ffffb7 !important; {% endif %}"
     draggable="true" ondragstart="drag(event)"
     onclick="frappe.bohrplaner.open_project(this);"
     data-project="{{ project.name }}">
-    <div class="object-div" style="font-size: {{ font_size }}pt;" data-popupvalue="{{ project.name }}">
+    <div class="object-div" style="font-size: {{ font_size }}pt; " data-popupvalue="{{ project.name }}">
         <div style="min-width:35px; ">{{ project.name }}</div>
-        <div style="min-width:35px; "><b>{{ project.object_name }}</b></div>
+        <div style="min-width:35px; "><b>{% if (project.object_name != "Frei") %}{{ project.object_name }}{% endif %}</b></div>
         <div style="clear: both;"></div>
     </div>
 </div>
