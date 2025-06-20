@@ -27,15 +27,14 @@ def get_columns(filters):
         # ~ {"label": _("Per Meter"), "fieldname": "thermozement_per_meter", "fieldtype": "Int", "width": 100},
         {"label": _("Antisol"), "fieldname": "antisol", "fieldtype": "Int", "width": 100},
         # ~ {"label": _("Per Meter"), "fieldname": "antisol_per_meter", "fieldtype": "Int", "width": 100},
-        {"label": _("Total Consumables"), "fieldname": "total", "fieldtype": "Int", "width": 100},
         {"label": _("Total Drilling Meter"), "fieldname": "drilling_meter", "fieldtype": "Int", "width": 100},
-        {"label": _("Per Meter"), "fieldname": "total_per_meter", "fieldtype": "Int", "width": 100}
+        {"label": _("Total Consumables"), "fieldname": "total", "fieldtype": "Int", "width": 100},
+        {"label": _("Per Meter"), "fieldname": "total_per_meter", "fieldtype": "Float", "width": 100}
     ]
     
     return columns
 
 def get_data(filters):
-    year_total = 0
     rows = get_rows(filters)
     
     for row in rows:
@@ -45,7 +44,10 @@ def get_data(filters):
         else:
             drilling_team_condition = ""
             
-        if 
+        if filters.period_filter == "Per Day":
+            date_condition = """`date` = '{0}'""".format(row.get('period'))
+        else:
+            date_condition = """`date` BETWEEN '{0}' AND '{1}'""".format(row.get('from'), row.get('to'))
         
         #get data for row
         data = frappe.db.sql("""
@@ -61,7 +63,18 @@ def get_data(filters):
                                 {date_condition}
                                 {drilling_team_condition}
                             AND
-                                `finished_document` = 1""".format(date_condition=date_condition, drilling_team_condition=drilling_team_condition)
+                                `finished_document` = 1""".format(date_condition=date_condition, drilling_team_condition=drilling_team_condition), as_dict=True)
+        frappe.log_error(data, "data")
+        row['bentonite'] = data[0].get('bentonite') or 0
+        row['zement'] = data[0].get('zement') or 0
+        row['thermozement'] = data[0].get('thermozement') or 0
+        row['antisol'] = data[0].get('antisol') or 0
+        row['total'] = row.get('bentonite') + row.get('zement') + row.get('thermozement') + row.get('antisol')
+        row['drilling_meter'] = data[0].get('drilling_meter') or 0
+        if row.get('drilling_meter') > 0:
+            row['total_per_meter'] = row.get('total') / row.get('drilling_meter')
+            frappe.log_error(row.get('total_per_meter'), "total_per_meter")
+    
     return rows
 
 def get_rows(filters):
