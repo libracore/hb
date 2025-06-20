@@ -1,4 +1,4 @@
-# Copyright (c) 2013, libracore AG and contributors
+# Copyright (c) 2025, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
@@ -113,7 +113,6 @@ def get_data(filters, days, with_url=True):
                 #add html to entry
                 new_week[entry.day.lower()] = html
             #add the week total to actual week dict
-            # ~ new_week['week'] = week_total
             new_week['week'] = "<span>{0} ({1})</span>".format(week_total, concrete_total)
             
             #add cw
