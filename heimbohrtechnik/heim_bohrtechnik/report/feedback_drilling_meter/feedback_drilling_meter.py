@@ -28,7 +28,7 @@ def get_columns(filters):
             {"label": _("Wednesday"), "fieldname": "wednesday", "fieldtype": "Data", "width": 70},
             {"label": _("Thursday"), "fieldname": "thursday", "fieldtype": "Data", "width": 70},
             {"label": _("Friday"), "fieldname": "friday", "fieldtype": "Data", "width": 70},
-            {"label": _("Week"), "fieldname": "week", "fieldtype": "Data", "width": 60},
+            {"label": _("Week"), "fieldname": "week", "fieldtype": "Data", "width": 80},
             {"label": _("Remark"), "fieldname": "remark", "fieldtype": "Data", "width": 300}
         ]
         days = None
@@ -69,7 +69,11 @@ def get_data(filters, days, with_url=True):
                     `day`,
                     `flushing`,
                     `hammer_change`,
-                    `impact_part_change`
+                    `impact_part_change`,
+                    `bentonite`,
+                    `zement`,
+                    `thermozement`,
+                    `antisol`
                 FROM
                     `tabFeedback Drilling Meter`
                 WHERE
@@ -82,12 +86,14 @@ def get_data(filters, days, with_url=True):
                 
             entrys = frappe.db.sql(sql_query, as_dict=True)
             week_total = 0
+            concrete_total = 0
             remark = []
             
             #loop through every entry of the actual week
             for entry in entrys:
                 #add amount of drilling meters for each entry to the week total
                 week_total += entry.drilling_meter
+                
                 
                 #create the day of the entry in the week or add the meter to the existing day
                 # ~ if entry.day.lower() in new_week:
@@ -97,15 +103,18 @@ def get_data(filters, days, with_url=True):
                     
                 #prepare html for meters entry
                 style, remark = apply_styles_and_remark(entry.hammer_change, entry.impact_part_change, entry.flushing, remark)
+                daily_concrete = entry.get('bentonite') + entry.get('zement') + entry.get('thermozement') + entry.get('antisol')
+                concrete_total += daily_concrete
                 if with_url:
                     url = get_url_to_form("Feedback Drilling Meter", entry.name)
-                    html = "<a href='{0}' {1}>{2}</a>".format(url, style, entry.drilling_meter)
+                    html = "<a href='{0}' {1}>{2} ({3})</a>".format(url, style, entry.drilling_meter, daily_concrete)
                 else:
-                    html = "<span {0}>{1}</span>".format(style, entry.drilling_meter)
+                    html = "<span {0}>{1} ({2})</span>".format(style, entry.drilling_meter, daily_concrete)
                 #add html to entry
                 new_week[entry.day.lower()] = html
             #add the week total to actual week dict
-            new_week['week'] = week_total
+            # ~ new_week['week'] = week_total
+            new_week['week'] = "<span>{0} ({1})</span>".format(week_total, concrete_total)
             
             #add cw
             new_week['cw'] = i
@@ -153,7 +162,11 @@ def get_data(filters, days, with_url=True):
                                             `date`,
                                             `flushing`,
                                             `hammer_change`,
-                                            `impact_part_change`
+                                            `impact_part_change`,
+                                            `bentonite`,
+                                            `zement`,
+                                            `thermozement`,
+                                            `antisol`
                                         FROM 
                                             `tabFeedback Drilling Meter`
                                         WHERE
@@ -176,7 +189,8 @@ def get_data(filters, days, with_url=True):
                     if datetime.strptime(day[-10:], "%d.%m.%Y").date() == entry.get('date'):
                         style, remark = apply_styles_and_remark(entry.get('hammer_change'), entry.get('impact_part_change'), entry.get('flushing'), remark)
                         url = get_url_to_form("Feedback Drilling Meter", entry.get('name'))
-                        line['day_{0}'.format(loop_index)] = "<a href='{0}' {1}>{2}</a>".format(url, style, entry.get('drilling_meter'))
+                        concrete_total = entry.get('bentonite') + entry.get('zement') + entry.get('thermozement') + entry.get('antisol')
+                        line['day_{0}'.format(loop_index)] = "<a href='{0}' {1}>{2} ({3})</a>".format(url, style, entry.get('drilling_meter'), concrete_total)
                 loop_index += 1
             remarks = ', '.join(remark)
             line['remark'] = remarks
