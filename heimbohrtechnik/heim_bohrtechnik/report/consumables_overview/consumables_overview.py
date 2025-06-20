@@ -39,6 +39,14 @@ def get_data(filters):
     rows = get_rows(filters)
     
     for row in rows:
+        #prepate conditions for sql
+        if filters.drilling_team:
+            drilling_team_condition = """AND `drilling_team` = '{0}'""".format(filters.drilling_team)
+        else:
+            drilling_team_condition = ""
+            
+        if 
+        
         #get data for row
         data = frappe.db.sql("""
                             SELECT
