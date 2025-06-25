@@ -68,14 +68,17 @@ function make() {
             },
             'callback': function(r) {
                 if (typeof r.message !== 'undefined') {
-                    var btn_submit = document.getElementById('submit');
+                    let btn_submit = document.getElementById('submit');
                     btn_submit.disabled = true;
                     btn_submit.style.visibility = "hidden";
-                    var row_success = document.getElementById('finalised-row');
-                    row_success.style.visibility = "visible";
-                    var txt_success = document.getElementById('result-doc');
-                    txt_success.innerHTML = r.message.delivery;
                     document.getElementById('load_type').disabled = true;
+                    
+                    let row_ph = document.getElementById('ph-row');
+                    row_ph.style.visibility = "visible";
+                    
+                    let txt_success = document.getElementById('result-doc');
+                    txt_success.innerHTML = r.message.delivery;
+                    
                 } else {
                     console.log("Invalid response");
                 }
@@ -83,6 +86,16 @@ function make() {
         });
         
     });
+    
+    // embed QR code reader
+    if (typeof Html5Qrcode === 'undefined') {
+        const script = document.createElement('script');
+        script.src = '/assets/heimbohrtechnik/js/html5-qrcode.min.js';
+        script.onload = start_scanner;
+        document.body.appendChild(script);
+    } else {
+        start_scanner();
+    }
 }
 function run() {
     // get command line parameters
@@ -210,4 +223,28 @@ function get_now() {
     var now = new Date();
     var timestamp = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
     return timestamp;
+}
+
+function start_scanner() {
+    const qr_code_scanner = new Html5Qrcode("qrreader");
+    qr_code_scanner.start(
+        { 
+            'facingMode': "environment"
+        },
+        {
+            'fps': 10, 
+            'qrbox': 250
+        },
+        (decoded_text, decoded_result) => {
+            if (decoded_text === "MudEX_start_pH") {
+                var row_success = document.getElementById('finalised-row');
+                row_success.style.visibility = "visible";
+                qr_code_scanner.stop();
+            }
+        }
+    ).catch(err => {
+        show_alert({
+            'message': __(`QR-Scanner konnte nicht gestartet werden: ${err}`), 
+            'indicator': 'red'});
+    });
 }
