@@ -10,6 +10,7 @@ from opcua import Client
 from opcua import ua
 from datetime import datetime
 import traceback
+from random import randrange 
 
 SENSOR_ACTIVE_NODE = """\"COM__Waage_send\".\"ph Messung\".\"aktiv\""""
 SENSOR_PH_NODE = """\"COM__Waage_send\".\"ph Messung\".\"Wert\""""
@@ -17,6 +18,11 @@ SENSOR_ID = 3
 
 class pHSensor(Document):
     def read_sensor(self):
+        # random mode for debug
+        if cint(self.random_mode) == 1:
+            self.ph = (randrange(10, 140) / 10)
+            return
+            
         # host should be a connection string like "opc.tcp://192.168.105.10:4840"
         if cint(self.enabled) and self.host:
             try:

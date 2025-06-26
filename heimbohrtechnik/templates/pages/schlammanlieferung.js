@@ -47,7 +47,7 @@ function make() {
             'args': {
                 'truck': document.getElementById('truck').value, 
                 'customer': document.getElementById('customer').value, 
-                'object': document.getElementById('object').value, 
+                'object_name': document.getElementById('object').value, 
                 'full_weight': document.getElementById('full_weight').value, 
                 'empty_weight': document.getElementById('empty_weight').value, 
                 'net_weight': document.getElementById('net_weight').value, 
@@ -64,7 +64,8 @@ function make() {
                     'process_id': document.getElementById('empty_process_id').value
                 }],
                 'load_type': document.getElementById('load_type').value,
-                'ph': document.getElementById('ph').value
+                'ph': document.getElementById('ph').value,
+                'key': document.getElementById('key').value
             },
             'callback': function(r) {
                 if (typeof r.message !== 'undefined') {
@@ -79,6 +80,8 @@ function make() {
                     let txt_success = document.getElementById('result-doc');
                     txt_success.innerHTML = r.message.delivery;
                     
+                    start_scanner();
+                    
                 } else {
                     console.log("Invalid response");
                 }
@@ -91,10 +94,8 @@ function make() {
     if (typeof Html5Qrcode === 'undefined') {
         const script = document.createElement('script');
         script.src = '/assets/heimbohrtechnik/js/html5-qrcode.min.js';
-        script.onload = start_scanner;
+        //script.onload = start_scanner;
         document.body.appendChild(script);
-    } else {
-        start_scanner();
     }
 }
 function run() {
@@ -226,7 +227,7 @@ function get_now() {
 }
 
 function start_scanner() {
-    const qr_code_scanner = new Html5Qrcode("qrreader");
+    const qr_code_scanner = new Html5Qrcode("reader");
     qr_code_scanner.start(
         { 
             'facingMode': "environment"
@@ -237,14 +238,28 @@ function start_scanner() {
         },
         (decoded_text, decoded_result) => {
             if (decoded_text === "MudEX_start_pH") {
-                var row_success = document.getElementById('finalised-row');
+                let row_success = document.getElementById('finalised-row');
                 row_success.style.visibility = "visible";
+                let row_ph = document.getElementById('ph-row');
+                row_ph.style.visibility = "visible";
                 qr_code_scanner.stop();
+                console.log("call API");
+                frappe.call({
+                    'method': 'heimbohrtechnik.templates.pages.schlammanlieferung.set_ph',
+                    'args': {
+                        'truck_delivery': document.getElementById('result-doc').innerHTML,
+                        'truck': document.getElementById('truck').value, 
+                        'customer': document.getElementById('customer').value, 
+                        'object_name': document.getElementById('object').value, 
+                        'key': document.getElementById('key').value
+                    },
+                    'callback': function(response) {
+                        console.log(response.message);
+                    }
+                });
             }
         }
     ).catch(err => {
-        show_alert({
-            'message': __(`QR-Scanner konnte nicht gestartet werden: ${err}`), 
-            'indicator': 'red'});
+        console.log(err);
     });
 }

@@ -44,13 +44,16 @@ def validate_credentials(truck, customer, object_name, key):
         return False
 
 @frappe.whitelist(allow_guest=True)
-def insert_delivery(truck, customer, object, full_weight, empty_weight, net_weight, traces, load_type, ph):
+def insert_delivery(truck, customer, object_name, full_weight, empty_weight, net_weight, traces, load_type, ph, key):
+    if not validate_credentials(truck, customer, object_name, key):
+        return {'delivery': 'Invalid Key'}
+        
     # prepare values
     allocation = None
-    if frappe.db.exists("Object", object):
-        o = frappe.get_doc("Object", object)
+    if frappe.db.exists("Object", object_name):
+        o = frappe.get_doc("Object", object_name)
         allocation = [{
-            'object': object,
+            'object': object_name,
             'oject_name': o.object_name,
             'object_street': o.object_street,
             'object_location': o.object_location,
@@ -96,3 +99,32 @@ def get_load_types(object=None):
         load_type = None
         
     return {'types': all_load_types, 'object_load_type': load_type}
+
+@frappe.whitelist(allow_guest=True)
+def set_ph(truck_delivery, truck, customer, object_name, key):
+    if not validate_credentials(truck, customer, object_name, key):
+        return "Invalid Key"
+        
+    # prepare values
+    allocation = None
+    if frappe.db.exists("Truck Delivery", truck_delivery):
+        ph_sensor_name = frappe.get_value("MudEx Settings", "MudEx Settings", "default_ph_sensor")
+        ph_sensor = frappe.get_doc("pH Sensor", ph_sensor_name)
+        ph_sensor.read_sensor()
+        if frappe.db.exists("Truck Delivery", truck_delivery):
+            frappe.db.sql("""
+                UPDATE `tabTruck Delivery`
+                SET `ph` = %(ph)s
+                WHERE `name` = %(name)s;
+                """,
+                {'ph': ph_sensor.ph, 'name': truck_delivery}
+            )
+            frappe.db.commit()
+            return "Stored pH = {0} to {1}".format(ph_sensor.ph, truck_delivery)
+            
+        else:
+            return "Invalid Truck Delivery"
+    
+    else:
+        return "Truck delivery {0} not found".format(truck_delivery)
+    

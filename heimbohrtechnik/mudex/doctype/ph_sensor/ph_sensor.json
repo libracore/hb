@@ -12,6 +12,7 @@
   "col_main",
   "ph",
   "sensor_active",
+  "random_mode",
   "timestamp",
   "sec_document",
   "update_dt",
@@ -82,9 +83,15 @@
    "label": "Update Name",
    "options": "update_dt",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "random_mode",
+   "fieldtype": "Check",
+   "label": "Random Mode"
   }
  ],
- "modified": "2025-05-07 12:01:31.434063",
+ "modified": "2025-06-26 22:16:24.228093",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "pH Sensor",
