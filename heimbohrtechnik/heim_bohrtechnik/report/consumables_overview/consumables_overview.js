@@ -22,7 +22,7 @@ frappe.query_reports["Consumables Overview"] = {
             "label": __("Period"),
             "fieldtype": "Select",
             "options": "Per Day\nPer Week\nPer Month",
-            "default": "Per Day"
+            "default": "Per Week"
         }
 	]
 };

@@ -611,6 +611,12 @@ def get_data():
                 },
                 {
                     "type": "report",
+                    "name": "Consumables Overview",
+                    "doctype": "Feedback Drilling Meter",
+                    "is_query_report": True
+                },
+                {
+                    "type": "report",
                     "name": "Drilling Statistics",
                     "doctype": "Project",
                     "is_query_report": True
