@@ -53,9 +53,27 @@ class pHSensor(Document):
             self.update_dn = None
         return
 
-def read_sensors():
+def read_sensors(store=False):
     enabled_sensors = frappe.get_all("pH Sensor", filters={'enabled': 1}, fields=['name'])
     for s in enabled_sensors:
         sensor = frappe.get_doc("pH Sensor", s['name'])
         sensor.read_sensor()
+        if store:
+            stored_ph = frappe.get_doc({
+                'doctype': "pH Record",
+                'ph_sensor': sensor.name,
+                'ph_value': sensor.ph
+            })
+            stored_ph.insert(ignore_permissions=True)
+            
     return
+
+"""
+This function is hooked on all, will read each enabled sensor and store its value in pH Record
+
+heimbohrtechnik.mudex.doctype.ph_sensor.ph_sensor.store_ph
+"""
+def store_ph():
+    read_sensors(store=True)
+    return
+    

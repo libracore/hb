@@ -1,0 +1,73 @@
+{
+ "creation": "2025-06-27 14:09:22.602794",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "ph_sensor",
+  "col_main",
+  "ph_value"
+ ],
+ "fields": [
+  {
+   "fieldname": "ph_sensor",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "ph Sensor",
+   "options": "pH Sensor",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "ph_value",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "pH Value",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "col_main",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "modified": "2025-06-27 14:30:26.041535",
+ "modified_by": "Administrator",
+ "module": "MudEx",
+ "name": "pH Record",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects Manager",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
