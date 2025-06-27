@@ -537,14 +537,16 @@ def get_traffic_lights_indicator(project):
           AND `docstatus` < 2;""".format(project.object), as_dict=True)
     if len(pos) > 0 and pos[0]['per_received'] != None:
         ews_details_color = BG_YELLOW               # yellow: ordered
-        all_closed_or_confirmed = True
+        all_confirmed = True
         all_received = True
         for p in pos:
-            if not p['order_confirmation'] and p['status'] != "Closed":
-                all_closed_or_confirmed = False
+            if p['status'] == "Closed":
+                continue
+            if not p['order_confirmation']:
+                all_confirmed = False
             if cint(p['per_received']) < 100:
                 all_received = False
-        if all_closed_or_confirmed:
+        if all_confirmed:
             ews_details_color = BG_ORANGE           # orange: confirmed
         if all_received:
             ews_details_color = BG_GREEN            # green: available
