@@ -21,8 +21,8 @@ def get_columns(filters):
         {"label": _("Zement"), "fieldname": "zement", "fieldtype": "Int", "width": 100},
         {"label": _("Thermozement"), "fieldname": "thermozement", "fieldtype": "Int", "width": 100},
         {"label": _("Antisol"), "fieldname": "antisol", "fieldtype": "Int", "width": 100},
-        {"label": _("Total Drilling Meter"), "fieldname": "drilling_meter", "fieldtype": "Int", "width": 100},
-        {"label": _("Total Consumables"), "fieldname": "total", "fieldtype": "Int", "width": 100},
+        {"label": _("Total Drilling Meter"), "fieldname": "drilling_meter", "fieldtype": "Int", "width": 130},
+        {"label": _("Total Consumables"), "fieldname": "total", "fieldtype": "Int", "width": 130},
         {"label": _("Per Meter"), "fieldname": "total_per_meter", "fieldtype": "Float", "width": 100}
     ]
     
