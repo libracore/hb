@@ -24,5 +24,10 @@ frappe.query_reports["Consumables Overview"] = {
             "options": "Per Day\nPer Week\nPer Month",
             "default": "Per Week"
         }
-	]
+	],
+    onload: function(report) {
+        report.page.add_inner_button("Feedback Drilling Meter", function() {
+            frappe.set_route("query-report", "Feedback Drilling Meter");
+        });
+    },
 };

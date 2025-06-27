@@ -17,5 +17,10 @@ frappe.query_reports["Feedback Drilling Meter"] = {
             "default": new Date().getFullYear(),
             "reqd": 1
         }
-	]
+	],
+    onload: function(report) {
+        report.page.add_inner_button("Consumables Overview", function() {
+            frappe.set_route("query-report", "Consumables Overview");
+        });
+    },
 };
