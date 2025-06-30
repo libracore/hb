@@ -38,7 +38,7 @@ def get_data(filters):
         else:
             drilling_team_condition = ""
             
-        if filters.period_filter == "Per Day":
+        if filters.period_filter == "Pro Tag":
             date_condition = """`date` = '{0}'""".format(datetime.datetime.strptime(row.get('period'), "%d.%m.%Y").date())
         else:
             date_condition = """`date` BETWEEN '{0}' AND '{1}'""".format(row.get('from'), row.get('to'))
@@ -76,7 +76,7 @@ def get_rows(filters):
     today = datetime.date.today()
     
     #Add rows for "Per Day"
-    if filters.period_filter == "Per Day":
+    if filters.period_filter == "Pro Tag":
         current_date = datetime.date(filters.year_filter, 1, 1)
         _, weekend_days, _, _ ,_ = get_days(current_date, today)
         
@@ -85,7 +85,7 @@ def get_rows(filters):
                 rows.append({'period': current_date.strftime("%d.%m.%Y")})
             current_date = frappe.utils.add_days(current_date, 1)
     #Add rows for "Per Week"
-    elif filters.period_filter == "Per Week":
+    elif filters.period_filter == "Pro Woche":
         #get first day of cw1
         first_day_of_cw = get_first_day_of_first_cw(filters.year_filter).date()
         
@@ -102,7 +102,7 @@ def get_rows(filters):
             
             #Update First Day of CW
             first_day_of_cw = frappe.utils.add_days(first_day_of_cw, 7)
-    elif filters.period_filter == "Per Month":
+    elif filters.period_filter == "Pro Monat":
         #Get the first of january
         first_day_of_month = datetime.date(filters.year_filter, 1, 1)
         

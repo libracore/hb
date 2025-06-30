@@ -21,8 +21,8 @@ frappe.query_reports["Consumables Overview"] = {
             "fieldname":"period_filter",
             "label": __("Period"),
             "fieldtype": "Select",
-            "options": "Per Day\nPer Week\nPer Month",
-            "default": "Per Week"
+            "options": "Pro Tag\nPro Woche\nPro Monat",
+            "default": "Pro Woche"
         }
 	],
     onload: function(report) {
