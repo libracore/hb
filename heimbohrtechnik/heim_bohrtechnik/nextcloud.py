@@ -78,7 +78,8 @@ def create_project_folder(project):
     create_path(client, os.path.join(project_path, PATHS['supplier_other']))
     create_path(client, os.path.join(project_path, PATHS['incidents']))
     create_path(client, os.path.join(project_path, PATHS['memo']))
-    
+    create_path(client, os.path.join(project_path, PATHS['hpt']))
+
     check_upload_quotation(project)
     return
 
