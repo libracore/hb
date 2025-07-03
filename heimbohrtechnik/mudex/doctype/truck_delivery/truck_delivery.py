@@ -138,7 +138,7 @@ def create_invoice(object):
             new_sinv.append('items', {
                 'item_code': mud_type_map[i['load_type']],
                 'qty': i['weight'] / 1000,
-                'description': "{date}: {truck}, pH: {ph}".format(
+                'description': "{date}: {truck}, pH: {ph:.2f}".format(
                     date=d.strftime("%d.%m.%Y, %H:%M"), truck=i['truck'], ph=i['ph']),
                 'truck_delivery': i['delivery'],
                 'truck_delivery_detail': i['detail'],
