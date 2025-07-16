@@ -106,6 +106,33 @@ frappe.ui.form.on('Sales Order', {
         if (frm.doc.important_notes) {
             cur_frm.dashboard.add_comment(frm.doc.important_notes, 'yellow', true);
         }
+        
+        // create watermarked pdf
+        if (frm.doc.docstatus === 1) {
+            let attachments = cur_frm.attachments.get_attachments();
+            let has_pdf = false;
+            let file_name = frm.doc.name + ".pdf";
+            for (let a = 0; a < attachments.length; a++) {
+                if (attachments[a].file_name === file_name) {
+                    has_pdf = true;
+                    break;
+                }
+            }
+            if (has_pdf) {
+                frm.add_custom_button( __("Wasserzeichen einfügen"), function() {
+                    frappe.call({
+                        'method': 'heimbohrtechnik.heim_bohrtechnik.utils.add_watermark',
+                        'args': {
+                            'file_name': file_name
+                        },
+                        'callback': function(response) {
+                            frappe.show_alert( __("Wasserzeichen eingefügt in") + " " + file_name);
+                            cur_frm.reload_doc();
+                        }
+                    });
+                });
+            }
+        }
     },
     on_submit: function(frm) {
         // create and attach PDF

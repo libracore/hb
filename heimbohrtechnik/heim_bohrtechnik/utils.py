@@ -753,6 +753,22 @@ def update_attached_csd_pdf(construction_site_description):
     # create and attach
     execute("Construction Site Description", construction_site_description, title=project, print_format="Baustellenbeschreibung", file_name=title)
     return
+
+"""
+Update attached subcontracting order pdf
+"""
+@frappe.whitelist()
+def update_attached_sub_ord_pdf(subcontracting_order):
+    # check if this is already attached
+    attachments = get_attachments("Subcontracting Order", subcontracting_order)
+    title = "{0}.pdf".format(subcontracting_order)
+    project = frappe.get_value("Subcontracting Order", subcontracting_order, "project")
+    for a in attachments:
+        if a.file_name.startswith(subcontracting_order):
+            remove_file(a.name, "Subcontracting Order", subcontracting_order)
+    # create and attach
+    execute("Subcontracting Order", subcontracting_order, title=project, print_format="Verlängerungsauftrag", file_name=title)
+    return
     
 """ 
 Create a full project file
@@ -1392,6 +1408,7 @@ def extend_quotation_due_date(quotation):
 """
 Add the watermark to a document
 """
+@frappe.whitelist()
 def add_watermark(file_name):
     file_path = str(frappe.get_site_path("private", "files", file_name))
     temp_path = "{0}.tmp".format(file_path)
