@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Feedback Drilling Meter"] = {
+frappe.query_reports["Consumables Overview"] = {
 	"filters": [
         {
             "fieldname":"drilling_team_filter",
@@ -16,11 +16,18 @@ frappe.query_reports["Feedback Drilling Meter"] = {
             "fieldtype": "Int",
             "default": new Date().getFullYear(),
             "reqd": 1
+        },
+        {
+            "fieldname":"period_filter",
+            "label": __("Period"),
+            "fieldtype": "Select",
+            "options": "Pro Tag\nPro Woche\nPro Monat",
+            "default": "Pro Woche"
         }
 	],
     onload: function(report) {
-        report.page.add_inner_button("Consumables Overview", function() {
-            frappe.set_route("query-report", "Consumables Overview");
+        report.page.add_inner_button("Feedback Drilling Meter", function() {
+            frappe.set_route("query-report", "Feedback Drilling Meter");
         });
     },
 };

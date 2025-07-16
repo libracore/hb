@@ -677,3 +677,7 @@ Doctype: Object,Internal drilling samples,Bohrproben intern
 Doctype: Item,Description English,Beschreibung Englisch
 Doctype: Item,Item Name English,Artikelname Englisch
 DocType: Appartment,Appartment,Betriebswohung
+Report: Consumables Overview,Total Drilling Meter,Total Bohrmeter
+Report: Consumables Overview,Total Consumables,Total Verbrauchsmaterialien
+Report: Consumables Overview,Per Meter,Pro Meter
+Report: Consumables Overview,Consumables Overview,Verbrauchsmaterialienübersicht
