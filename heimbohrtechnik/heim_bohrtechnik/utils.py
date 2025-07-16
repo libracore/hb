@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2024, libracore and Contributors
+# Copyright (c) 2021-2025, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 
 from __future__ import unicode_literals
@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import json
 import re
 import uuid
-from PyPDF2 import PdfFileMerger
+from PyPDF2 import PdfFileMerger, PdfFileWriter, PdfFileReader
 from frappe.utils import cint, flt, get_bench_path, get_files_path
 from frappe.utils.file_manager import save_file
 from erpnextswiss.erpnextswiss.utils import get_numeric_part
@@ -25,6 +25,7 @@ from erpnext.buying.doctype.purchase_order.purchase_order import make_purchase_r
 from heimbohrtechnik.heim_bohrtechnik.date_controller import move_project, get_duration_days
 from heimbohrtechnik.heim_bohrtechnik.locator import get_gps_coordinates
 from heimbohrtechnik.heim_bohrtechnik.report.versicherungsanmeldung.versicherungsanmeldung import needs_insurance
+import os
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -1388,3 +1389,33 @@ def extend_quotation_due_date(quotation):
         frappe.db.commit()
     return
     
+"""
+Add the watermark to a document
+"""
+def add_watermark(file_name):
+    file_path = str(frappe.get_site_path("private", "files", file_name))
+    temp_path = "{0}.tmp".format(file_path)
+    watermark_path = str(frappe.get_app_path("heimbohrtechnik", "public", "images", "watermark.pdf"))
+    
+    try:
+        with open(file_path, "rb") as source_file, open(watermark_path, "rb") as watermark_file:
+            source_pdf = PdfFileReader(source_file)
+            watermark_pdf = PdfFileReader(watermark_file)
+            watermark_page = watermark_pdf.getPage(0)
+            
+            output = PdfFileWriter()
+            
+            for p in range(source_pdf.getNumPages()):
+                pdf_page = source_pdf.getPage(p)
+                pdf_page.mergePage(watermark_page)
+                output.addPage(pdf_page)
+                
+            with open(temp_path, "wb") as watermarked_file:
+                output.write(watermarked_file)
+            
+        os.rename(temp_path, file_path)
+        
+    except Exception as err:
+        frappe.log_error("{0}".format(err), "watermarking failed")
+        
+    return
