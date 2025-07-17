@@ -122,7 +122,8 @@ def create_invoice(object):
                 'charge_type': t.charge_type,
                 'account_head': t.account_head,
                 'description': t.description,
-                'rate': t.rate
+                'rate': t.rate,
+                'cost_center': t.cost_center
             })
     # get deliveries and add as positions
     invoiceable_deliveries = get_deliveries(object)
