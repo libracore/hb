@@ -82,12 +82,14 @@ def create_pinv_from_sinv(sales_invoice, intracompany_account=False):
                         'reference_type': 'Purchase Invoice',
                         'reference_name': new_pinv.name,
                         'debit': sinv.outstanding_amount,
-                        'debit_in_account_currency': sinv.outstanding_amount
+                        'debit_in_account_currency': sinv.outstanding_amount,
+                        'cost_center': pinv_cost_center
                     },
                     {
                         'account': pinv_account[0]['name'],
                         'credit': sinv.outstanding_amount,
-                        'credit_in_account_currency': sinv.outstanding_amount
+                        'credit_in_account_currency': sinv.outstanding_amount,
+                        'cost_center': pinv_cost_center
                     }
                 ],
                 'user_remark': INTERMEDIATE_TEXT.format(new_pinv.name)
@@ -100,6 +102,7 @@ def create_pinv_from_sinv(sales_invoice, intracompany_account=False):
             SELECT `name`
             FROM `tabAccount`
             WHERE `company` = "{sinv_company}" AND `name` LIKE "{account}%";""".format(sinv_company=sinv.company, account=intracompany_account), as_dict=True)
+        sinv_cost_center = frappe.get_value("Company", sinv.company, "cost_center")
         if len(sinv_account) > 0:
             sinv_jv = frappe.get_doc({
                 'doctype': 'Journal Entry',
@@ -113,12 +116,14 @@ def create_pinv_from_sinv(sales_invoice, intracompany_account=False):
                         'reference_type': 'Sales Invoice',
                         'reference_name': sinv.name,
                         'credit': sinv.outstanding_amount,
-                        'credit_in_account_currency': sinv.outstanding_amount
+                        'credit_in_account_currency': sinv.outstanding_amount,
+                        'cost_center': sinv_cost_center
                     },
                     {
                         'account': sinv_account[0]['name'],
                         'debit': sinv.outstanding_amount,
-                        'debit_in_account_currency': sinv.outstanding_amount
+                        'debit_in_account_currency': sinv.outstanding_amount,
+                        'cost_center': sinv_cost_center
                     }
                 ],
                 'user_remark': INTERMEDIATE_TEXT.format(sinv.name)
