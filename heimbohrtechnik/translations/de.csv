@@ -681,3 +681,15 @@ Report: Consumables Overview,Total Drilling Meter,Total Bohrmeter
 Report: Consumables Overview,Total Consumables,Total Verbrauchsmaterialien
 Report: Consumables Overview,Per Meter,Pro Meter
 Report: Consumables Overview,Consumables Overview,Verbrauchsmaterialienübersicht
+DocType: Filling Binder,Filling Binder,Füllbinder
+DocType: Filling Binder,Mixture Type,Mischungstyp
+DocType: Filling Binder,Water,Wasser
+DocType: Filling Binder,Cement,Zement
+DocType: Filling Binder,Bentonite,Bentonit
+DocType: Filling Binder,Suspension,Suspension
+DocType: Filling Binder,Thermal Conductivity,Wärmeleitfähigkeit
+DocType: Filling Binder,Density Water,Dichte Wasser
+DocType: Filling Binder,Density Cement,Dichte Zement
+DocType: Filling Binder,Density Bentonite,Dichte Bentonit
+DocType: Filling Binder,Suspension Ratio,Suspensionsverhältnis
+DocType: Filling Binder,Manufacturer Density,Hersteller-Dichte

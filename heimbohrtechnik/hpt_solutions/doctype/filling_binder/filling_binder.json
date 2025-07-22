@@ -1,0 +1,198 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2025-07-22 17:06:40.275596",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "manufacturer",
+  "product",
+  "col_main",
+  "mixture_type",
+  "status",
+  "sec_mix",
+  "water",
+  "cement",
+  "bentonite",
+  "gtm_hs",
+  "suspension",
+  "thermal_conductivity",
+  "col_mix",
+  "density_water",
+  "density_cement",
+  "density_bentonite",
+  "suspension_ratio",
+  "density_manufacturer"
+ ],
+ "fields": [
+  {
+   "default": "FB-.####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "FB-.####"
+  },
+  {
+   "fieldname": "manufacturer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Manufacturer",
+   "options": "Brand",
+   "reqd": 1
+  },
+  {
+   "fieldname": "product",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Product",
+   "reqd": 1
+  },
+  {
+   "fieldname": "col_main",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nDisabled"
+  },
+  {
+   "description": "L/m3",
+   "fieldname": "water",
+   "fieldtype": "Int",
+   "label": "Water"
+  },
+  {
+   "depends_on": "eval:doc.mixture_type==\"Standardmischung\"",
+   "description": "kg/m3",
+   "fieldname": "cement",
+   "fieldtype": "Int",
+   "label": "Cement"
+  },
+  {
+   "depends_on": "eval:doc.mixture_type==\"Standardmischung\"",
+   "description": "kg/m3",
+   "fieldname": "bentonite",
+   "fieldtype": "Int",
+   "label": "Bentonite"
+  },
+  {
+   "description": "L",
+   "fieldname": "suspension",
+   "fieldtype": "Int",
+   "label": "Suspension"
+  },
+  {
+   "fieldname": "sec_mix",
+   "fieldtype": "Section Break",
+   "label": "Mixture"
+  },
+  {
+   "depends_on": "eval:doc.mixture_type==\"Fertigmischung\"",
+   "description": "kg/m3",
+   "fieldname": "gtm_hs",
+   "fieldtype": "Int",
+   "label": "GTM-hs"
+  },
+  {
+   "fieldname": "col_mix",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "g/cm3",
+   "fieldname": "density_water",
+   "fieldtype": "Float",
+   "label": "Density Water",
+   "precision": "3"
+  },
+  {
+   "description": "g/cm3",
+   "fieldname": "density_bentonite",
+   "fieldtype": "Float",
+   "label": "Density Bentonite"
+  },
+  {
+   "description": "L/t",
+   "fieldname": "suspension_ratio",
+   "fieldtype": "Int",
+   "label": "Suspension Ratio"
+  },
+  {
+   "description": "W/m*K",
+   "fieldname": "thermal_conductivity",
+   "fieldtype": "Float",
+   "label": "Thermal Conductivity"
+  },
+  {
+   "description": "g/cm3",
+   "fieldname": "density_manufacturer",
+   "fieldtype": "Float",
+   "label": "Manufacturer Density",
+   "precision": "3"
+  },
+  {
+   "default": "Standardmischung",
+   "fieldname": "mixture_type",
+   "fieldtype": "Select",
+   "label": "Mixture Type",
+   "options": "Standardmischung\nFertigmischung"
+  },
+  {
+   "depends_on": "eval:doc.mixture_type==\"Standardmischung\"",
+   "description": "g/cm3",
+   "fieldname": "density_cement",
+   "fieldtype": "Float",
+   "label": "Density Cement",
+   "precision": "3"
+  }
+ ],
+ "modified": "2025-07-22 21:54:49.756858",
+ "modified_by": "Administrator",
+ "module": "HPT Solutions",
+ "name": "Filling Binder",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HPT Power User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Projects User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "product",
+ "track_changes": 1
+}

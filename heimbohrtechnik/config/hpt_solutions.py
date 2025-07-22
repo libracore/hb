@@ -129,6 +129,12 @@ def get_data():
                 },
                 {
                    "type": "doctype",
+                   "name": "Filling Binder",
+                   "label": _("Filling Binder"),
+                   "description": _("Filling Binder")
+                },
+                {
+                   "type": "doctype",
                    "name": "Raw Material",
                    "label": _("Material"),
                    "description": _("Material")
