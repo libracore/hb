@@ -53,6 +53,19 @@ class SubcontractingOrder(Document):
                 frappe.db.commit()
         return
     
+    def on_trash(self):
+        # remove entries from linked projects
+        frappe.db.sql("""
+            DELETE FROM `tabProject Subproject`
+            WHERE 
+                `subcontracting_order` = %(subcontracting_order)s
+            ;
+            """,
+            {'subcontracting_order': self.name}
+        )
+        frappe.db.commit()
+        return
+        
     def get_bkps(self):
         if not self.project:
             return []
