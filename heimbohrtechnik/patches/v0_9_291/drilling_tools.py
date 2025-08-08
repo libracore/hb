@@ -10,4 +10,53 @@ def execute():
     layer_directories = frappe.db.sql("""
                                         SELECT
                                             `name`,
-                                            `
+                                            `drilling_tool`,
+                                            `drilling_tool_diameter`,
+                                            `multiple_drilling_tools`,
+                                            `drilling_tool_2`,
+                                            `drilling_tool_diameter_2`,
+                                            `probe_length`
+                                        FROM
+                                            `tabLayer Directory`
+                                        WHERE
+                                            `docstatus` != 2
+                                        ORDER BY
+                                            `modified` DESC;""", as_dict=True)
+    loop = 0
+    #Add Entries to child Table
+    for layer_directory in layer_directories:
+        frappe.log_error(layer_directory.get('name'), "Layer Directory")
+        drilling_tool = frappe.get_doc({
+            "doctype": "Layer Directory Layer",
+            "parent": layer_directory.get('name'),
+            "parenttype": "Layer Directory",
+            "parentfield": "layers",
+            "drilling_tool": layer_directory.get('drilling_tool'),
+            "diameter": layer_directory.get('drilling_tool_diameter'),
+            "to_depth": layer_directory.get('probe_length')
+        })
+        
+        try:
+            drilling_tool.insert()
+        except Exception as Err:
+            frappe.log_error(str(Err), "Drilling Tool Patch Error")
+        
+        if layer_directory.get('multiple_drilling_tools'):
+            drilling_tool_2 = frappe.get_doc({
+                "doctype": "Layer Directory Layer",
+                "parent": layer_directory.get('name'),
+                "parenttype": "Layer Directory",
+                "parentfield": "layers",
+                "drilling_tool": layer_directory.get('drilling_tool_2'),
+                "diameter": layer_directory.get('drilling_tool_diameter_2'),
+                "to_depth": layer_directory.get('probe_length')
+            })
+            
+            try:
+                drilling_tool_2.insert()
+            except Exception as Err:
+                frappe.log_error(str(Err), "Drilling Tool Patch Error")
+        # ~ loop += 1
+        # ~ if loop > 1:
+        break
+    frappe.db.commit()
