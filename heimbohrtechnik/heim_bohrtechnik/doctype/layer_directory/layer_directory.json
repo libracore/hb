@@ -47,6 +47,8 @@
   "angled_drill",
   "sec_layers",
   "layers",
+  "drilling_tool_section",
+  "drilling_tools",
   "backfill",
   "steps",
   "product",
@@ -175,10 +177,10 @@
   },
   {
    "fetch_from": "project.expected_end_date",
+   "fetch_if_empty": 1,
    "fieldname": "end_date",
    "fieldtype": "Date",
-   "label": "End date",
-   "read_only": 1
+   "label": "End date"
   },
   {
    "fieldname": "drilling_number",
@@ -476,10 +478,20 @@
    "fieldname": "ignore_mud_deviation",
    "fieldtype": "Check",
    "label": "Ignore Mud Deviation"
+  },
+  {
+   "fieldname": "drilling_tool_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "drilling_tools",
+   "fieldtype": "Table",
+   "label": "Drilling Tools",
+   "options": "Layer Directory Drilling Tool"
   }
  ],
  "is_submittable": 1,
- "modified": "2025-03-18 16:35:20.673449",
+ "modified": "2025-08-08 09:46:40.847890",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory",
