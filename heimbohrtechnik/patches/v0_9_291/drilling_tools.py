@@ -27,7 +27,7 @@ def execute():
     for layer_directory in layer_directories:
         frappe.log_error(layer_directory.get('name'), "Layer Directory")
         drilling_tool = frappe.get_doc({
-            "doctype": "Layer Directory Layer",
+            "doctype": "Layer Directory Drilling Tool",
             "parent": layer_directory.get('name'),
             "parenttype": "Layer Directory",
             "parentfield": "layers",
@@ -43,7 +43,7 @@ def execute():
         
         if layer_directory.get('multiple_drilling_tools'):
             drilling_tool_2 = frappe.get_doc({
-                "doctype": "Layer Directory Layer",
+                "doctype": "Layer Directory Drilling Tool",
                 "parent": layer_directory.get('name'),
                 "parenttype": "Layer Directory",
                 "parentfield": "layers",
