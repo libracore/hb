@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from tqdm import tqdm
 
 def execute():
     frappe.reload_doc("heim_bohrtechnik", "doctype", "Layer Directory")
@@ -25,7 +26,7 @@ def execute():
                                             `modified` DESC;""", as_dict=True)
     loop = 0
     #Add Entries to child Table
-    for layer_directory in layer_directories:
+    for layer_directory in tqdm(layer_directories, desc="Updating layer directories", unit="layer directory"):
         if layer_directory.get('drilling_tool'):
             drilling_tool = frappe.get_doc({
                 "doctype": "Layer Directory Drilling Tool",
