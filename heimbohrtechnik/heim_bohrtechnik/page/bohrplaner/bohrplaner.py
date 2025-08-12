@@ -221,7 +221,7 @@ def get_project_data(p, dauer):
             'pneukran': pneukran,
             'manager_short': manager_short,
             'drilling_equipment': drilling_equipment,
-            'ews_details': (project.ews_details or "").replace("PN20", "<b>PN20</b>").replace("PN35", "<b>PN35</b>"),
+            'ews_details': (project.ews_details or "").replace("PN20", "<b>PN20</b>").replace("PN35", "<b>PN35</b>").replace("PN50", "<b>PN50</b>"),
             'traffic_light': traffic_light,
             'toitoi': toitoi,
             'red_drop': red_drop,
