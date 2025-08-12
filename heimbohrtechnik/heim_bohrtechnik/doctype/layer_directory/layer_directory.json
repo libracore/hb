@@ -47,6 +47,8 @@
   "angled_drill",
   "sec_layers",
   "layers",
+  "drilling_tool_section",
+  "drilling_tools",
   "backfill",
   "steps",
   "product",
@@ -175,10 +177,10 @@
   },
   {
    "fetch_from": "project.expected_end_date",
+   "fetch_if_empty": 1,
    "fieldname": "end_date",
    "fieldtype": "Date",
-   "label": "End date",
-   "read_only": 1
+   "label": "End date"
   },
   {
    "fieldname": "drilling_number",
@@ -213,6 +215,7 @@
   {
    "fieldname": "drilling_tool",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Drilling tool",
    "options": "\nStufenmeissel\nRollenmeissel\nImlochhammer\nExzenter\nPDC-Meissel"
   },
@@ -319,6 +322,7 @@
   {
    "fieldname": "drilling_tool_diameter",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Drilling tool diameter (mm)"
   },
   {
@@ -450,12 +454,14 @@
    "default": "0",
    "fieldname": "multiple_drilling_tools",
    "fieldtype": "Check",
+   "hidden": 1,
    "label": "Multiple Drilling Tools"
   },
   {
    "depends_on": "eval: doc.multiple_drilling_tools;",
    "fieldname": "drilling_tool_2",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Drilling Tool 2",
    "options": "\nStufenmeissel\nRollenmeissel\nImlochhammer\nExzenter\nPDC-Meissel"
   },
@@ -463,6 +469,7 @@
    "depends_on": "eval: doc.multiple_drilling_tools;",
    "fieldname": "drilling_tool_diameter_2",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Drilling tool 2 diameter (mm)"
   },
   {
@@ -476,10 +483,20 @@
    "fieldname": "ignore_mud_deviation",
    "fieldtype": "Check",
    "label": "Ignore Mud Deviation"
+  },
+  {
+   "fieldname": "drilling_tool_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "drilling_tools",
+   "fieldtype": "Table",
+   "label": "Drilling Tools",
+   "options": "Layer Directory Drilling Tool"
   }
  ],
  "is_submittable": 1,
- "modified": "2025-03-18 16:35:20.673449",
+ "modified": "2025-08-11 19:10:41.128503",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory",
