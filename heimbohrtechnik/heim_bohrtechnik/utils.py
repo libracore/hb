@@ -543,22 +543,23 @@ def update_project(project):
     else:
         o = None
     # find sales order data
+    settings = frappe.get_doc("Heim Settings", "Heim Settings")
     items = {
-        'thermo': frappe.get_value("Heim Settings", "Heim Settings", "thermozement_item"),
-        'staged_cementation': frappe.get_value("Heim Settings", "Heim Settings", "staged_cementation_item"),
-        'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "internal_crane_item"),
-        'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "external_crane_item"),
-        'self_crane': frappe.get_value("Heim Settings", "Heim Settings", "self_crane_item"),
-        'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_item"),
-        'trt': frappe.get_value("Heim Settings", "Heim Settings", "trt_item"),
-        'flush_drilling': frappe.get_value("Heim Settings", "Heim Settings", "flush_drilling_items"),
-        'subcontracting_bkp': frappe.get_value("Heim Settings", "Heim Settings", "subcontracting_bkp")
+        'thermo': settings.get("thermozement_item"),
+        'staged_cementation': settings.get("staged_cementation_item"),
+        'internal_crane': settings.get("internal_crane_item"),
+        'external_crane': settings.get("external_crane_item"),
+        'self_crane': settings.get("self_crane_item"),
+        'carrymax': settings.get("carrymax_item"),
+        'trt': settings.get("trt_item"),
+        'flush_drilling': settings.get("flush_drilling_items"),
+        'subcontracting_bkp': settings.get("subcontracting_bkp")
     }
     activities = {
-        'internal_crane': frappe.get_value("Heim Settings", "Heim Settings", "int_crane_activity"),
-        'external_crane': frappe.get_value("Heim Settings", "Heim Settings", "crane_activity"),
-        'carrymax': frappe.get_value("Heim Settings", "Heim Settings", "carrymax_activity"),
-        'insurance': frappe.get_value("Heim Settings", "Heim Settings", "insurance_activity")
+        'internal_crane': settings.get("int_crane_activity"),
+        'external_crane': settings.get("crane_activity"),
+        'carrymax': settings.get("carrymax_activity"),
+        'insurance': settings.get("insurance_activity")
     }
     
     if p.sales_order and frappe.db.exists("Sales Order", p.sales_order):
