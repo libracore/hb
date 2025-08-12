@@ -603,6 +603,7 @@ def update_project(project):
         p.save()
         if o:
             o.save()
+        frappe.db.commit()
     return
 
 """
