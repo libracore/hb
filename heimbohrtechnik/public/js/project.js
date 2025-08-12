@@ -257,6 +257,11 @@ frappe.ui.form.on('Project', {
         if (!frm.doc.__islocal && frm.doc.object && frm.doc.project_type == "External") {
             get_drilling_meters_per_day(frm);
         }
+    },
+    sales_order: function(frm) {
+        if (frm.doc.sales_order) {
+            check_sales_order(frm);
+        }
     }
 });
 
@@ -408,5 +413,21 @@ function show_or_create_maintenance_report(frm) {
                 frappe.set_route("Form", "Maintenance Report", target);
             }
         }
+    });
+}
+
+function check_sales_order(frm) {
+    cur_frm.save().then(() => {
+        frappe.show_alert( __("Auftragsdaten abgleichen...") );
+        frappe.call({
+            'method': 'heimbohrtechnik.heim_bohrtechnik.utils.check_create_project',
+            'args': {
+                'sales_order': cur_frm.doc.sales_order
+            },
+            'callback': function() {
+                cur_frm.reload_doc();
+                frappe.show_alert( __("Auftragsdaten OK") );
+            }
+        });
     });
 }

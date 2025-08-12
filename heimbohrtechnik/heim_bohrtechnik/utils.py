@@ -535,6 +535,7 @@ def check_create_project(sales_order):
 """
 Update project data
 """
+@frappe.whitelist()
 def update_project(project):
     p = frappe.get_doc("Project", project)
     if p.object:
