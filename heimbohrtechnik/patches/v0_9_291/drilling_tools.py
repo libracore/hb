@@ -5,6 +5,7 @@ import frappe
 
 def execute():
     frappe.reload_doc("heim_bohrtechnik", "doctype", "Layer Directory")
+    frappe.reload_doc("heim_bohrtechnik", "doctype", "Layer Directory Drilling Tool")
     
     #get all Layer Directories
     layer_directories = frappe.db.sql("""
