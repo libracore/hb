@@ -45,7 +45,7 @@ function autocomplete_object(frm) {
                 cur_frm.set_value("object_street", data.object.object_street);
                 cur_frm.set_value("object_location", data.object.object_location);
                 cur_frm.set_value("drilling_team", data.project.drilling_team);
-                cur_frm.set_value("drilling_tool", data.drilling_team.drt);
+                //cur_frm.set_value("drilling_tool", data.drilling_team.drt);       // deprecated: this is now a child table - drt is an equipment not a drilling tool
                 cur_frm.set_value("so_mud_amount", data.sales_order_mud_amount);
                 
                 // find permits
