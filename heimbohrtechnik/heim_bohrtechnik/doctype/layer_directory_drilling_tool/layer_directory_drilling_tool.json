@@ -11,10 +11,11 @@
  "fields": [
   {
    "fieldname": "drilling_tool",
-   "fieldtype": "Data",
-   "in_list_view": 0,
+   "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Drilling Tool",
-   "hidden": 1
+   "options": "\nStufenmeissel\nRollenmeissel\nImlochhammer\nExzenter\nPDC-Meissel",
+   "reqd": 1
   },
   {
    "fieldname": "diameter",
@@ -31,7 +32,7 @@
    "reqd": 1
   }
  ],
- "modified": "2025-08-14 18:13:22.758308",
+ "modified": "2025-08-15 10:17:22.758308",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Layer Directory Drilling Tool",
