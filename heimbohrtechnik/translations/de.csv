@@ -406,6 +406,7 @@ DocType: Layer Directory,Permit Date,Bewilligungs Datum
 DocType: Layer Directory,Drilling instrument,Bohrgerät
 DocType: Layer Directory,Piping (mm),Verrohrung (mm)
 DocType: Layer Directory,Drilling tool,Bohrwerkzeug
+DocType: Layer Directory,Drilling tools,Bohrwerkzeuge
 DocType: Layer Directory,Drilling tool diameter,Bohrwerkzeug Durchmesser
 DocType: Layer Directory,Drilling quote,Bohrkote
 DocType: Layer Directory,To depth (m),bis Tiefe (m)

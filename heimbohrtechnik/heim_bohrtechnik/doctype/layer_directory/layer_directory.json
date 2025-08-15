@@ -490,7 +490,7 @@
   {
    "fieldname": "drilling_tools",
    "fieldtype": "Table",
-   "label": "Drilling Tools",
+   "label": "Drilling tools",
    "options": "Layer Directory Drilling Tool"
   }
  ],

@@ -13,7 +13,7 @@
    "fieldname": "drilling_tool",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Drilling Tool",
+   "label": "Drilling tool",
    "options": "\nStufenmeissel\nRollenmeissel\nImlochhammer\nExzenter\nPDC-Meissel",
    "reqd": 1
   },
@@ -28,7 +28,7 @@
    "fieldname": "to_depth",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "To Depth",
+   "label": "To depth (m)",
    "reqd": 1
   }
  ],
