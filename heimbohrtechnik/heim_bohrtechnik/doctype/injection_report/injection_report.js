@@ -266,7 +266,17 @@ function fetch_layer_directory(layer_directory) {
         },
         'callback': function(response) {
             var layer_directory_doc = response.message;
-            cur_frm.set_value("drilling", layer_directory_doc.drilling_tool_diameter);
+            //~ cur_frm.set_value("drilling", layer_directory_doc.drilling_tool_diameter);
+            if (layer_directory_doc.drilling_tools && layer_directory_doc.drilling_tools.length > 0) {
+                let drilling_tool_diameters = ""
+                for (let i = 0; i < layer_directory_doc.drilling_tools.length; i++) {
+                    if (i > 0) {
+                        drilling_tool_diameters = drilling_tool_diameters + " / "
+                    }
+                    drilling_tool_diameters = drilling_tool_diameters + layer_directory_doc.drilling_tools[i].diameter;
+                }
+                cur_frm.set_value("drilling_diameter", drilling_tool_diameters);
+            }
             cur_frm.set_value("piping", layer_directory_doc.piping);
             cur_frm.set_value("piped_to", layer_directory_doc.to_depth);
             cur_frm.set_value("mortar", layer_directory_doc.mixing_type);

@@ -3,3 +3,4 @@ heimbohrtechnik.patches.v0_9_220.update_parking_gps
 heimbohrtechnik.patches.v0_9_232.create_insurance
 heimbohrtechnik.patches.v0_9_271.update_object_gps
 heimbohrtechnik.patches.v0_9_291.drilling_tools
+heimbohrtechnik.patches.v0_9_292.ib_drilling_diameter
