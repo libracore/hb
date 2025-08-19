@@ -266,7 +266,6 @@ function fetch_layer_directory(layer_directory) {
         },
         'callback': function(response) {
             var layer_directory_doc = response.message;
-            //~ cur_frm.set_value("drilling", layer_directory_doc.drilling_tool_diameter);
             if (layer_directory_doc.drilling_tools && layer_directory_doc.drilling_tools.length > 0) {
                 let drilling_tool_diameters = ""
                 for (let i = 0; i < layer_directory_doc.drilling_tools.length; i++) {
