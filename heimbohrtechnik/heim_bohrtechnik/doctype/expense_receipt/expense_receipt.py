@@ -31,6 +31,7 @@ class ExpenseReceipt(Document):
         # create journal entry
         multi_currency = 0
         company_currency = frappe.get_cached_value("Company", self.company, "default_currency")
+        cost_center = frappe.get_cached_value("Company", self.company, "cost_center")
         if self.currency != company_currency:
             multi_currency = 1
         
@@ -54,7 +55,8 @@ class ExpenseReceipt(Document):
             'debit_in_account_currency': net_base_amount,
             'debit': net_base_amount,
             'currency': company_currency,
-            'account_currency': frappe.get_cached_value("Account", self.expense_account, "account_currency")
+            'account_currency': frappe.get_cached_value("Account", self.expense_account, "account_currency"),
+            'cost_center': cost_center
         })
         # pretax allocation  (expense currency)
         if self.vst != 0:
@@ -64,7 +66,8 @@ class ExpenseReceipt(Document):
                 'debit_in_account_currency': self.vst,
                 'debit': pretax_base_amount,
                 'exchange_rate': self.exchange_rate,
-                'account_currency': self.currency
+                'account_currency': self.currency,
+                'cost_center': cost_center
             })
             
         # credit card allocation
@@ -80,7 +83,8 @@ class ExpenseReceipt(Document):
             'credit_in_account_currency': self.amount if credit_card_currency != company_currency else base_gross_amount,
             'credit': base_gross_amount,
             'exchange_rate': self.exchange_rate if credit_card_currency != company_currency else 1,
-            'account_currency': frappe.get_cached_value("Account", account, "account_currency")
+            'account_currency': frappe.get_cached_value("Account", account, "account_currency"),
+            'cost_center': cost_center
         })
         
         # test for currency deviations
@@ -91,7 +95,8 @@ class ExpenseReceipt(Document):
             jv.append('accounts', {
                 'account': currency_deviation_account,
                 'credit': currency_deviation,
-                'account_currency': frappe.get_cached_value("Account", currency_deviation_account, "account_currency")
+                'account_currency': frappe.get_cached_value("Account", currency_deviation_account, "account_currency"),
+                'cost_center': cost_center
             })
 
             jv.set_total_debit_credit()
