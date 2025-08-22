@@ -13,7 +13,10 @@ frappe.ui.form.on('Layer Directory', {
             && (!frm.doc.ignore_mud_deviation) 
             && (frm.doc.amount_disposed > 0)
             && (frm.doc.amount_disposed < frm.doc.so_mud_amount)) {
-            frappe.msgprint( __("Vorsicht, es wurde weniger Schlamm angeliefert als im Kundenauftrag erwartet") );
+            frappe.msgprint( __("Vorsicht, es wurde weniger Schlamm angeliefert als im Kundenauftrag erwartet"), __("Validation") );
+        }
+        if ((!frm.doc.drilling_tools) || (frm.doc.drilling_tools.length === 0)) {
+            frappe.msgprint( __("Bitte mindestens ein Bohrwerkzeug erfassen."), __("Validation") );
         }
     },
     before_submit: function(frm) {

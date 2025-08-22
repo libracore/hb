@@ -265,7 +265,9 @@ function fetch_layer_directory(layer_directory) {
             'name': layer_directory
         },
         'callback': function(response) {
-            var layer_directory_doc = response.message;
+            let layer_directory_doc = response.message;
+            let drilling_depth = 0;
+            let drilling_diameter_aggregated = 0;
             if (layer_directory_doc.drilling_tools && layer_directory_doc.drilling_tools.length > 0) {
                 let drilling_tool_diameters = ""
                 for (let i = 0; i < layer_directory_doc.drilling_tools.length; i++) {
@@ -273,7 +275,13 @@ function fetch_layer_directory(layer_directory) {
                         drilling_tool_diameters = drilling_tool_diameters + " / "
                     }
                     drilling_tool_diameters = drilling_tool_diameters + layer_directory_doc.drilling_tools[i].diameter;
+                    drilling_diameter_aggregated += layer_directory_doc.drilling_tools[i].diameter * 
+                        (layer_directory_doc.drilling_tools[i].to_depth - drilling_depth);
+                    drilling_depth = layer_directory_doc.drilling_tools[i].to_depth;    // update to last
                 }
+                // this is required for filling amount calculation - DO NOT DROP!
+                let avg_drilling_diameter = drilling_diameter_aggregated / drilling_depth;
+                cur_frm.set_value("drilling", avg_drilling_diameter);    // average numeric diameter
                 cur_frm.set_value("drilling_diameter", drilling_tool_diameters);
             }
             cur_frm.set_value("piping", layer_directory_doc.piping);
