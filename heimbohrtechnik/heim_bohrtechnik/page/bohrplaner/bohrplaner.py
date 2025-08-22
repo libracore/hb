@@ -101,6 +101,7 @@ def get_project_data(p, dauer):
     toitoi = 0
     blue_drop = 0
     red_drop = 0
+    clear_drop = 0
     requires_water_supply = False
     construction_sites = frappe.get_all("Construction Site Description", 
         filters={'project': p.get('name')}, 
@@ -157,8 +158,11 @@ def get_project_data(p, dauer):
             flag_carrymax = True
         elif cl_entry.activity == activities['traffic_control']:
             requires_traffic_control = True
-        elif cl_entry.activity == activities['water_supply'] and cint(cl_entry.no_hydrant) == 0:
-            requires_water_supply = True
+        elif cl_entry.activity == activities['water_supply']:
+            if cint(cl_entry.no_hydrant) == 0:
+                requires_water_supply = True
+            else:
+                clear_drop = 1              # mark reuqired but not available
     
     # read construction site
     if len(construction_sites) > 0:
@@ -226,6 +230,7 @@ def get_project_data(p, dauer):
             'toitoi': toitoi,
             'red_drop': red_drop,
             'blue_drop': blue_drop,
+            'clear_drop': clear_drop,
             'has_subproject': p.get('has_subproject'),
             'drilling_method': p.get('drilling_method')
         }
