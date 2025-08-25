@@ -24,7 +24,7 @@ function create_accrual_booking() {
     let today = frappe.datetime.get_today();
     for (let i = 0; i < (frappe.query_report.data || []).length; i++) {
         if (frappe.query_report.data[i].expected_end_date < today) {
-            accrual_amount += frappe.query_report.data[i].amount;
+            accrual_amount += frappe.query_report.data[i].net_amount;
             invoices.push(frappe.query_report.data[i]);
         }
     }
