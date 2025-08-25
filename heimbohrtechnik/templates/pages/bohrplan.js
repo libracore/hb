@@ -153,7 +153,8 @@ function add_overlay(data) {
         'traffic_light': data.traffic_light,
         'toitoi': data.toitoi,
         'red_drop': data.red_drop,
-        'blue_drop': data.blue_drop
+        'blue_drop': data.blue_drop,
+        'clear_drop': data.clear_drop
     })).appendTo(place);
     return
 }
