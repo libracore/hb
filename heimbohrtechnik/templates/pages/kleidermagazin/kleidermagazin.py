@@ -47,8 +47,11 @@ def validate_credentials(secret):
         return False
 
 @frappe.whitelist(allow_guest=True)
-def insert_material_issue(secret, user, item, qty, employee, remarks=None):
+def insert_material_issue(secret, user, items, employee, remarks=None):
     config = frappe.get_doc("Einstellungen Kleidermagazin", "Einstellungen Kleidermagazin")
+    
+    if type(items) == str:
+        items = json.loads(items)
     
     # create new record
     material = frappe.get_doc({
@@ -60,10 +63,13 @@ def insert_material_issue(secret, user, item, qty, employee, remarks=None):
         'owner': user,
         'remarks': remarks
     })
-    material.append("items", {
-        'item_code': item,
-        'qty': qty
-    })
+    
+    for item in items:
+        material.append("items", {
+            'item_code': item,
+            'qty': 1
+        })
+    
     material = material.insert(ignore_permissions=True)
     material.submit()
     return {'material': material.name}

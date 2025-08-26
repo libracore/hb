@@ -23,13 +23,18 @@ function make() {
     
     // attach button handlers
     $(".btn-submit").on('click', function() { 
+        let items = [];
+        let cart = document.getElementById("cart");
+        for (let i = 0; i < cart.children.length; i++) {
+            items.push(cart.children[i].innerHTML.split("&nbsp;")[0]);
+        }
+        console.log(items);
         frappe.call({
             'method': 'heimbohrtechnik.templates.pages.kleidermagazin.kleidermagazin.insert_material_issue',
             'args': {
                 'secret': document.getElementById('secret').value, 
                 'user': document.getElementById('user').value, 
-                'item': document.getElementById('item_code').value, 
-                'qty': document.getElementById('qty').value, 
+                'items': items,
                 'employee': document.getElementById('employee').value, 
                 'remarks': document.getElementById('remarks').value || ""
             },
@@ -108,10 +113,9 @@ function pin_input(e) {
                 if (r.message.user) {
                     document.getElementById('user').value = r.message.user;
                     document.getElementById('action-row').style.visibility = "visible";
+                    document.getElementById('pin-row').style.display = "none";
                     document.getElementById('item_code').value = "";
                     document.getElementById('remarks').value = "";
-                    document.getElementById('qty').value = 1;
-                    document.getElementById('pin-row').style.display = "none";
                 } else {
                     frappe.msgprint("Ungültiger Zugang")
                 }
@@ -142,9 +146,15 @@ function start_scanner() {
             'qrbox': 250
         },
         (decoded_text, decoded_result) => {
-            document.getElementById('item_code').value = decoded_text;
-            enable_submit();
-            qr_code_scanner.stop();
+            // only accept scan if it is 3 seconds after last or different code (prevent double reads)
+            if ((decoded_text != document.getElementById('item_code').value) ||
+                (Date.now() > (parseInt(document.getElementById('last_scan').value) + 3000))) {
+                    var now = Date.now();
+                    document.getElementById('item_code').value = decoded_text;
+                    document.getElementById('cart').innerHTML += "<p id='item_" + now + "'>" + decoded_text + "&nbsp;&nbsp;<span onclick='remove_item(`item_" + now + "`);' style='cursor: pointer; '><i class='fa fa-trash'></i></span></p>";
+                    document.getElementById('last_scan').value = Date.now();
+                    enable_submit();
+            }
         }
     ).catch(err => {
         show_alert({
@@ -153,4 +163,6 @@ function start_scanner() {
     });
 }
 
-
+function remove_item(item_name) {
+    document.getElementById(item_name).remove();
+}

@@ -33,13 +33,11 @@
                 </div>
             </div>
             <div class="form-column col-sm-4 col-xs-12">
-                <label class="control-label" style="padding-right: 0px;">Menge</label>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-cubes"></i></span>
-                    <input type="number" class="form-control" placeholder="Menge" id="qty" min="1" max="12" value="1" step="1">
-                    </select>
+                <label class="control-label" style="padding-right: 0px;">Warenkorb</label>
+                <div id="cart">
                 </div>
             </div>
+            
             <div class="form-column col-sm-4 col-xs-12">
                 <label class="control-label" style="padding-right: 0px;">Bemerkungen</label>
                 <div class="input-group">
@@ -69,3 +67,4 @@
 
 <input type="text" class="form-control" id="secret" style="visibility: hidden; ">
 <input type="text" class="form-control" id="user" style="visibility: hidden; ">
+<input type="text" class="form-control" id="last_scan" style="visibility: hidden; " value=0>
