@@ -96,6 +96,12 @@ def get_data():
                    "name": "BOM",
                    "label": _("BOM"),
                    "description": _("BOM")
+                },
+                {
+                    "type": "report",
+                    "name": "Stock Balance",
+                    "doctype": "Item",
+                    "is_query_report": True
                 }
             ]
         },
