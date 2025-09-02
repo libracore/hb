@@ -15,7 +15,7 @@
   "water",
   "cement",
   "bentonite",
-  "gtm_hs",
+  "filling_binder",
   "suspension",
   "thermal_conductivity",
   "col_mix",
@@ -23,7 +23,9 @@
   "density_cement",
   "density_bentonite",
   "suspension_ratio",
-  "density_manufacturer"
+  "density_manufacturer",
+  "water_solid_value",
+  "bag_weight"
  ],
  "fields": [
   {
@@ -83,7 +85,7 @@
    "label": "Bentonite"
   },
   {
-   "description": "L",
+   "description": "m3",
    "fieldname": "suspension",
    "fieldtype": "Int",
    "label": "Suspension"
@@ -94,13 +96,6 @@
    "label": "Mixture"
   },
   {
-   "depends_on": "eval:doc.mixture_type==\"Fertigmischung\"",
-   "description": "kg/m3",
-   "fieldname": "gtm_hs",
-   "fieldtype": "Int",
-   "label": "GTM-hs"
-  },
-  {
    "fieldname": "col_mix",
    "fieldtype": "Column Break"
   },
@@ -108,6 +103,7 @@
    "description": "g/cm3",
    "fieldname": "density_water",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "Density Water",
    "precision": "3"
   },
@@ -115,12 +111,14 @@
    "description": "g/cm3",
    "fieldname": "density_bentonite",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "Density Bentonite"
   },
   {
    "description": "L/t",
    "fieldname": "suspension_ratio",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Suspension Ratio"
   },
   {
@@ -130,7 +128,7 @@
    "label": "Thermal Conductivity"
   },
   {
-   "description": "g/cm3",
+   "description": "kg/m3",
    "fieldname": "density_manufacturer",
    "fieldtype": "Float",
    "label": "Manufacturer Density",
@@ -148,11 +146,31 @@
    "description": "g/cm3",
    "fieldname": "density_cement",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "Density Cement",
    "precision": "3"
+  },
+  {
+   "fieldname": "water_solid_value",
+   "fieldtype": "Float",
+   "label": "Water-Solid-Value",
+   "precision": "2"
+  },
+  {
+   "description": "kg",
+   "fieldname": "bag_weight",
+   "fieldtype": "Float",
+   "label": "Bag Weight"
+  },
+  {
+   "depends_on": "eval:doc.mixture_type==\"Fertigmischung\"",
+   "description": "kg/m3",
+   "fieldname": "filling_binder",
+   "fieldtype": "Int",
+   "label": "Filling Binder"
   }
  ],
- "modified": "2025-07-22 21:54:49.756858",
+ "modified": "2025-09-02 12:32:55.996182",
  "modified_by": "Administrator",
  "module": "HPT Solutions",
  "name": "Filling Binder",

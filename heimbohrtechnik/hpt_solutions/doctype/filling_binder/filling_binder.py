@@ -26,14 +26,16 @@ class FillingBinder(Document):
                 "water": self.water,
                 "cement": self.cement,
                 "bentonite": self.bentonite,
-                "gtm_hs": self.gtm_hs,
+                "filling_binder": self.filling_binder,
                 "suspension": self.suspension,
                 "thermal_conductivity": self.thermal_conductivity,
                 "density_water": self.density_water,
                 "density_cement": self.density_cement,
                 "density_bentonite": self.density_bentonite,
                 "suspension_ratio": self.suspension_ratio,
-                "density_manufacturer": self.density_manufacturer
+                "density_manufacturer": self.density_manufacturer,
+                "water_solid_value": self.water_solid_value,
+                "bag_weight": self.bag_weight
             }
             
         parameters = {

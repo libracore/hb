@@ -694,6 +694,8 @@ DocType: Filling Binder,Density Cement,Dichte Zement
 DocType: Filling Binder,Density Bentonite,Dichte Bentonit
 DocType: Filling Binder,Suspension Ratio,Suspensionsverhältnis
 DocType: Filling Binder,Manufacturer Density,Hersteller-Dichte
+DocType: Filling Binder,Water-Solid-Value,Wasser-Feststoff-Wert
+DocType: Filling Binder,Bag Weight,Sackgewicht
 DocType: Akonto Abgrenzung,Accrual Date,Abgrenzungsdatum
 DocType: Akonto Abgrenzung,Resolution Date,Auflösungsdatum
 DocType: Akonto Abgrenzung,Accrual Account,Abgrenzungskonto
