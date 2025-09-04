@@ -109,6 +109,10 @@ class SubcontractingOrder(Document):
         })
         finish.insert()
         return finish
+    
+    def get_gant_data(self):
+        from heimbohrtechnik.heim_bohrtechnik.doctype.subcontracting_order.utils import get_data
+        return get_data(self.project, self.name)
 
 @frappe.whitelist()
 def update_from_project(subcontracting_order, start_date, end_date, drilling_team, description):

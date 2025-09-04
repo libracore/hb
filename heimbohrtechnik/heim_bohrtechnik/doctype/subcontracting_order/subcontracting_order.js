@@ -11,7 +11,10 @@ frappe.ui.form.on('Subcontracting Order', {
                  }
              }
         }
-    
+        
+        // Render Subcontracting Gant-Like HTML View
+        render_gant(frm);
+
         // from object: new bohranzeige: link project
         if ((frm.doc.object) && (!frm.doc.project)) {
             cur_frm.set_value("project", frm.doc.object);
@@ -238,4 +241,120 @@ function open_create_finish(frm) {
             }
         }
     });
+}
+
+function render_gant(frm) {
+    frappe.call({
+        'method': 'get_gant_data',
+        'doc': frm.doc,
+        'callback': function(r) { 
+            renderTimeline(r.message);
+        }
+    });
+}
+
+function renderTimeline(data){
+    // Funktion zur Visualisierung der vorgängig aufbereiteten Daten
+    const cols = data.days.length;
+
+    // Header Zeile
+    const header = [
+        `<div class="subcontract-gant-header" style="--cols:${cols}">`,
+        ...data.days.map(d => `<div class="subcontract-gant-col-day${d.is_today?' is-today':''}">${frappe.utils.escape_html(d.label)}</div>`),
+        `</div>`
+    ].join('');
+
+    // Gant-Einträge
+    const gant_entries = (data.render_data || []).map(t => {
+        const startCol = t.render_start_col;
+        const span = (t.render_span ?? 1);
+        const css_klassen = [
+            "subcontract-gant-task",
+            (t.current ? 'current':''),
+            (t.is_subcontract ? 'is-subcontract':'')
+        ].filter(Boolean).join(' ');
+        const style = `grid-column:${startCol} / span ${span}; --lane:${t.lane || 0};`;
+        const tooltip = frappe.utils.escape_html(t.tooltip || '');
+        const url = `/desk#Form/${encodeURIComponent(t.doctype)}/${encodeURIComponent(t.docname)}`;
+
+        return `
+            <a href="${url}"
+                class="${css_klassen}"
+                style="${style}"
+                data-tooltip="${frappe.utils.escape_html(t.tooltip || t.label || '')}">
+                ${t.label || ''}
+            </a>`;
+    }).join('');
+
+    const row = `<div class="subcontract-gant-row" style="--cols:${cols}">${gant_entries}</div>`;
+    const $container = $(`<div class="subcontract-gant-wrapper">${[header, row].join('')}</div>`);
+
+    setupFloatingTooltip($container);
+}
+
+function setupFloatingTooltip($root){
+    // Hilfsfunktion zum erstellen eines Tootip Containers relativ zum Body
+    let tipEl = null;
+    let hideTimer = null;
+
+    const showTip = (text, x, y) => {
+        if (!tipEl) {
+            tipEl = document.createElement('div');
+            tipEl.className = 'subcontract-gant-float-tip';
+            document.body.appendChild(tipEl);
+        }
+        tipEl.textContent = text;
+        positionTip(x, y);
+        requestAnimationFrame(() => tipEl.classList.add('show'));
+    };
+
+    const hideTip = () => {
+        if (!tipEl) return;
+        tipEl.classList.remove('show');
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => {
+            if (tipEl && !tipEl.classList.contains('show')) {
+            tipEl.remove();
+            tipEl = null;
+            }
+        }, 150);
+    };
+
+    const positionTip = (x, y) => {
+        if (!tipEl) return;
+        const pad = 10;
+        let left = x + pad;
+        let top  = y + pad;
+
+        const rect = tipEl.getBoundingClientRect();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        if (left + rect.width + 8 > vw) left = vw - rect.width - 8;
+        if (top + rect.height + 8 > vh) top = y - rect.height - pad;
+
+        tipEl.style.left = `${left}px`;
+        tipEl.style.top  = `${top}px`;
+    };
+
+    // Events-Handler für Tasks-Tooltips
+    $root.on('mouseenter', '.subcontract-gant-task', function (ev) {
+        const text = this.getAttribute('data-tooltip') || this.textContent || '';
+        showTip(text, ev.clientX, ev.clientY);
+    });
+    $root.on('mousemove', '.subcontract-gant-task', function (ev) {
+        positionTip(ev.clientX, ev.clientY);
+    });
+    $root.on('mouseleave', '.subcontract-gant-task', function () {
+        hideTip();
+    });
+
+    window.addEventListener('scroll', () => hideTip(), { passive: true });
+    window.addEventListener('resize', () => hideTip());
+
+    show_gant($root);
+}
+
+function show_gant(gant) {
+    cur_frm.set_df_property('gant_like_html', 'options', gant);
 }
