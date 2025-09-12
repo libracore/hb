@@ -8,9 +8,11 @@
   "project",
   "file_name",
   "hole_id",
+  "passed",
   "col_main",
   "device_type",
-  "report_name"
+  "report_name",
+  "file_id"
  ],
  "fields": [
   {
@@ -28,7 +30,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "File Name",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "hole_id",
@@ -53,9 +56,20 @@
    "fieldtype": "Data",
    "label": "Report Name",
    "unique": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "passed",
+   "fieldtype": "Check",
+   "label": "Passed"
+  },
+  {
+   "fieldname": "file_id",
+   "fieldtype": "Data",
+   "label": "File ID"
   }
  ],
- "modified": "2025-04-02 13:09:24.804249",
+ "modified": "2025-09-12 14:08:57.617103",
  "modified_by": "Administrator",
  "module": "HPT Solutions",
  "name": "HPT Report File",

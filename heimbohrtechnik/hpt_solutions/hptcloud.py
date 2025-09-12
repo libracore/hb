@@ -5,6 +5,7 @@ import frappe
 import requests
 import base64
 from frappe.utils.file_manager import save_file
+from frappe.utils import cint
 
 def send_project(project, debug=False):
     settings = frappe.get_doc("HPT Settings", "HPT Settings")
@@ -83,7 +84,7 @@ def send_project(project, debug=False):
     return
 
 @frappe.whitelist(allow_guest=True)
-def post_report(customer, secret, project, report, report_name, device_type, hole_id):
+def post_report(customer, secret, project, report, report_name, device_type, hole_id="", passed=0):
     settings = frappe.get_doc("HPT Settings", "HPT Settings")
     if not settings.hpt_cloud_customer or not settings.hpt_cloud_secret:
         frappe.log_error( "Posting report from hptcloud to ERP failed: missing configuration", "hptcloud" )
@@ -105,12 +106,13 @@ def post_report(customer, secret, project, report, report_name, device_type, hol
             'hole_id': hole_id,
             'device_type': device_type,
             'file_name': fname,
-            'report_name': report_name
+            'report_name': report_name,
+            'passed': cint(passed)
         })
         hpt_report_file.insert(ignore_permissions=True)
         frappe.db.commit()
     
-    save_file(
+    f = save_file(
         fname=fname,
         content=base64.b64decode(report),
         dt="Project",
@@ -118,4 +120,12 @@ def post_report(customer, secret, project, report, report_name, device_type, hol
         is_private=True
     )
     
+    if f and f.get("name"):
+        frappe.db.sql("""
+            UPDATE `tabHPT Report File` SET `file_id` = %(id)s, `passed` = %(passed)s WHERE `name` = %(name)s;
+            """,
+            {'id': f.get("name"), 'name': fname, 'passed': cint(passed)}
+        )
+        frappe.db.commit()
+        
     return {'success': True}
