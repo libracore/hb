@@ -168,24 +168,26 @@ frappe.ui.form.on('Object', {
                     window.open("/desk#object-overview?object=" + frm.doc.name, "_blank");
                 });
             }
-            // button to order probes
-            frm.add_custom_button("EWS bestellen", function() {
-                order_ews(frm.doc.name);
-            });
-            // add button to open construction site description
-            add_construction_site_description_button(frm, frm.doc.name)
-            // split project button
-            frm.add_custom_button(__("Objekt teilen"), function() {
-                frappe.call({
-                    'method': "heimbohrtechnik.heim_bohrtechnik.doctype.object.object.split_object",
-                    'args': {
-                        'object_name': frm.doc.name
-                    },
-                    'callback': function(response) {
-                        window.location.href=response.message.uri;
-                    }
+            if (frappe.user.has_role("Projects Manager")) {     // restrict to projects managers
+                // button to order probes
+                frm.add_custom_button("EWS bestellen", function() {
+                    order_ews(frm.doc.name);
                 });
-            }, __("More") );
+                // add button to open construction site description
+                add_construction_site_description_button(frm, frm.doc.name)
+                // split project button
+                frm.add_custom_button(__("Objekt teilen"), function() {
+                    frappe.call({
+                        'method': "heimbohrtechnik.heim_bohrtechnik.doctype.object.object.split_object",
+                        'args': {
+                            'object_name': frm.doc.name
+                        },
+                        'callback': function(response) {
+                            window.location.href=response.message.uri;
+                        }
+                    });
+                }, __("More") );
+            }
             // show siblings
             check_display_siblings("Object", frm.doc.name);
         }
