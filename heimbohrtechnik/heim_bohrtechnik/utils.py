@@ -26,6 +26,7 @@ from heimbohrtechnik.heim_bohrtechnik.date_controller import move_project, get_d
 from heimbohrtechnik.heim_bohrtechnik.locator import get_gps_coordinates
 from heimbohrtechnik.heim_bohrtechnik.report.versicherungsanmeldung.versicherungsanmeldung import needs_insurance
 import os
+import random 
 
 @frappe.whitelist()
 def get_standard_permits(pincode=None):
@@ -1439,3 +1440,17 @@ def add_watermark(file_name):
         frappe.log_error("{0}".format(err), "watermarking failed")
         
     return
+
+"""
+Set the employee short code (before_save employee)
+"""
+def set_employee_short(doc, event):
+    doc.short = "{0}{1}".format((doc.first_name or "")[:1], (doc.last_name or "")[:1])
+    # also, assure that there is a color set (use pastel colors)
+    if not doc.color:
+        red = random.randint(127, 255)
+        green = random.randint(127, 255)
+        blue = random.randint(127, 255)
+        doc.color = "#{red:02x}{green:02x}{blue:02x}".format(red=red, green=green, blue=blue)
+    return
+    

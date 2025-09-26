@@ -151,6 +151,9 @@ doc_events = {
     },
     "Stock Entry": {
         "before_save": "heimbohrtechnik.heim_bohrtechnik.utils.stock_entry_before_save"
+    },
+    "Employee": {
+        "before_save": "heimbohrtechnik.heim_bohrtechnik.utils.set_employee_short"
     }
  }
 
