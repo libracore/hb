@@ -114,8 +114,9 @@ def get_result(filters, account_details):
 
     data = get_data_with_opening_closing(filters, account_details, gl_entries)
 
-    result = data #get_result_as_list(data, filters)
-
+    #result = data #get_result_as_list(data, filters)                   # this hides the balance column
+    result = get_result_as_list(data, filters)
+    
     # enrich additional fields
     for r in result:
         if 'voucher_type' in r:
