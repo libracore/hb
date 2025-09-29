@@ -165,7 +165,7 @@ def get_subcontracting_order_map(project):
     for item in order_items:
         if item.get('wizard_field') == "do_probing":
             probe_count = item.get('qty')
-        elif item.get('wizard_field').startswith("do_long"):
+        elif (item.get('wizard_field') or "").startswith("do_long"):
             try:
                 parts = item.get('description').split(" ")
                 long_diameter = parts[-1]
