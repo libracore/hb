@@ -5,7 +5,8 @@
  "engine": "InnoDB",
  "field_order": [
   "qty",
-  "description"
+  "description",
+  "remarks"
  ],
  "fields": [
   {
@@ -23,10 +24,15 @@
    "in_list_view": 1,
    "label": "Description",
    "reqd": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remakrs"
   }
  ],
  "istable": 1,
- "modified": "2022-08-25 20:53:27.949604",
+ "modified": "2025-09-30 22:35:26.487013",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order Item",
