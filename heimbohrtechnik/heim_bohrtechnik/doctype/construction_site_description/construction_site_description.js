@@ -77,7 +77,18 @@ function show_subcontracting_wizard(frm) {
             let wizard = new frappe.ui.Dialog({
                 'fields': locals.subcontracting_wizard_fields,
                 'primary_action': function() {
-                    
+                    wizard.hide();
+                    // trigger updates of subcontracting orders
+                    frappe.call({
+                        'method': 'heimbohrtechnik.heim_bohrtechnik.doctype.construction_site_description.construction_site_description.save_subcontracting_wizard',
+                        'args': {
+                            'project': frm.doc.project,
+                            'fields': locals.subcontracting_wizard_fields,
+                            'values': wizard.get_values()
+                        },
+                        'freeze': true,
+                        'freeze_message': __("Aufträge aktualisieren...")
+                    });
                 },
                 'primary_action_label': __("OK"),
                 'title': __("Verlängerungs-Assistent")

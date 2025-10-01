@@ -6,6 +6,7 @@ import frappe
 from frappe.model.document import Document
 from frappe.utils import cint
 from frappe import _
+import json
 
 class ConstructionSiteDescription(Document):
     def before_save(self):
@@ -153,7 +154,14 @@ def get_subcontracting_order_map(project):
     # apply values
     for item in order_items:
         for field in fields:
-            if field.get('label') == item.get('description'):
+            if field.get('fieldname') == item.get('wizard_description_field'):
+                field.update({
+                    'subcontracting_order': item.get('subcontracting_order'),
+                    'order_detail': item.get('order_detail'),
+                    'bold': 1,
+                    'default': item.get('remarks')
+                })
+            elif field.get('fieldname') == item.get('wizard_field'):
                 field.update({
                     'subcontracting_order': item.get('subcontracting_order'),
                     'order_detail': item.get('order_detail'),
@@ -165,6 +173,79 @@ def get_subcontracting_order_map(project):
                 break   # field found - skip to next item
                 
     return fields
+
+"""
+Save/update wizard form to subcontracting orders
+"""
+@frappe.whitelist()
+def save_subcontracting_wizard(project, fields, values):
+    if type(fields) == str:
+        fields = json.loads(fields)
+    if type(values) == str:
+        values = json.loads(values)
+        
+    subcontracting_order = None
+    for field in fields:
+        fieldname = field.get('fieldname')
+        if fieldname == "do_probing":
+            subcontracting_order = update_activity(
+                project=project, 
+                qty=values.get("probe_count"), 
+                description=field.get('label'), 
+                subcontracting_order=field.get('subcontracting_order') or subcontracting_order,
+                subcontracting_order_detail=None, 
+                remarks=values.get("remarks_probing")
+            )
+    return
+    
+    
+def update_activity(project, qty, description, subcontracting_order=None, \
+    subcontracting_order_detail=None, remarks=None, wizard_field=None, wizard_description_field=None):
+    if subcontracting_order_detail:
+        # existing record, update
+        frappe.db.sql("""
+                UPDATE `tabSubcontracting Order Item`
+                SET 
+                    `qty` = %(qty)s,
+                    `description` = %(description)s,
+                    `remarks` = %(remarks)s,
+                    `wizard_field` = %(wizard_field)s,
+                    `wizard_description_field` = %(wizard_description_field)s
+                WHERE `name` = %(name)s;
+            """,
+            {
+                'qty': qty,
+                'description': description,
+                'remarks': remarks,
+                'wizard_field': wizard_field,
+                'wizard_description_field': wizard_description_field,
+                'name': subcontracting_order_detail
+            }
+        )
+        subcontracting_order = frappe.get_value("tabSubcontracting Order Item", subcontracting_order_detail, "parent")
+    else:
+        if subcontracting_order:
+            # append to existing
+            order_doc = frappe.get_doc("Subcontracting Order", subcontracting_order)
+        else:
+            # create new subcontracting order
+            order_doc = frappe.get_doc({
+                'doctype': "Subcontracting Order", 
+                'project': project,
+                'object': frappe.get_value("Project", project, "object"),
+                'order_description': "Verlängerung"
+            })
+        order_doc.append("items", {
+            'qty': qty,
+            'description': description,
+            'remarks': remarks,
+            'wizard_field': wizard_field,
+            'wizard_description_field': wizard_description_field
+        })
+        order_doc.save(ignore_permissions=True)
+        subcontracting_order = order_doc.name
+    frappe.db.commit()
+    return subcontracting_order
     
 """
 Field structure for the subcontracting wizard

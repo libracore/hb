@@ -6,7 +6,10 @@
  "field_order": [
   "qty",
   "description",
-  "remarks"
+  "col_main",
+  "remarks",
+  "wizard_field",
+  "wizard_description_field"
  ],
  "fields": [
   {
@@ -28,11 +31,28 @@
   {
    "fieldname": "remarks",
    "fieldtype": "Data",
-   "label": "Remakrs"
+   "in_list_view": 1,
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "wizard_field",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Wizard Field"
+  },
+  {
+   "fieldname": "wizard_description_field",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Wizard Description Field"
+  },
+  {
+   "fieldname": "col_main",
+   "fieldtype": "Column Break"
   }
  ],
  "istable": 1,
- "modified": "2025-09-30 22:35:26.487013",
+ "modified": "2025-10-01 09:40:32.771148",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Subcontracting Order Item",
