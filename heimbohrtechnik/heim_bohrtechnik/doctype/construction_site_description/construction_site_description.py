@@ -139,7 +139,9 @@ def get_subcontracting_order_map(project):
             `tabSubcontracting Order Item`.`name` AS `order_detail`,
             `tabSubcontracting Order Item`.`qty` AS `qty`,
             `tabSubcontracting Order Item`.`description` AS `description`,
-            `tabSubcontracting Order Item`.`remarks` AS `remarks`
+            `tabSubcontracting Order Item`.`remarks` AS `remarks`,
+            `tabSubcontracting Order Item`.`wizard_field` AS `wizard_field`,
+            `tabSubcontracting Order Item`.`wizard_description_field` AS `wizard_description_field`
         FROM `tabSubcontracting Order Item`
         LEFT JOIN `tabSubcontracting Order` ON `tabSubcontracting Order`.`name` = `tabSubcontracting Order Item`.`parent`
         WHERE `tabSubcontracting Order`.`project` = %(project)s;
@@ -152,9 +154,73 @@ def get_subcontracting_order_map(project):
     fields = get_subcontracing_fields()
     
     # apply values
+    probe_count = 1
+    long_diameter = ""
+    long_meter = 1
+    gly_n = ""
+    gly_l = ""
+    wall_box_type = ""
+    mount_type = ""
+    round_shaft_type = ""
     for item in order_items:
+        if item.get('wizard_field') == "do_probing":
+            probe_count = item.get('qty')
+        elif item.get('wizard_field').startswith("do_long"):
+            try:
+                parts = item.get('description').split(" ")
+                long_diameter = parts[-1]
+                long_meter = item.get('qty')
+            except:
+                pass        # probably a content error
+        elif item.get('wizard_field') == "do_fill_glycol":
+            try:
+                parts = item.get('description').split(" ")
+                if parts[-2] == "N":
+                    gly_n = parts[-1]
+                else:
+                    gly_l = parts[-1]
+            except:
+                pass        # probably a content error
+        elif item.get('wizard_field') == "do_wall_box":
+            try:
+                parts = item.get('description').split(" ")
+                wall_box_type = parts[1]
+            except:
+                pass        # probably a content error
+        elif item.get('wizard_field') == "do_mount":
+            try:
+                parts = item.get('description').split(" ")
+                mount_type = parts[1]
+            except:
+                pass        # probably a content error
+        elif item.get('wizard_field') == "do_round_shaft":
+            try:
+                parts = item.get('description').split(" ")
+                round_shaft_type = parts[1]
+            except:
+                pass        # probably a content error
+                    
         for field in fields:
+            # set additional parameters
+            if field.get('fieldname') == "probe_count":
+                field['default'] = probe_count
+            elif field.get('fieldname') == "long_diameter":
+                field['default'] = long_diameter
+            elif field.get('fieldname') == "long_meter":
+                field['default'] = long_meter
+            elif field.get('fieldname') == "fill_ethglyn":
+                field['default'] = gly_n
+            elif field.get('fieldname') == "fill_ethglyl":
+                field['default'] = gly_l
+            elif field.get('fieldname') == "wall_box_type":
+                field['default'] = wall_box_type
+            elif field.get('fieldname') == "mount_type":
+                field['default'] = mount_type
+            elif field.get('fieldname') == "round_shaft_type":
+                field['default'] = round_shaft_type
+                    
             if field.get('fieldname') == item.get('wizard_description_field'):
+                # update remarks
                 field.update({
                     'subcontracting_order': item.get('subcontracting_order'),
                     'order_detail': item.get('order_detail'),
@@ -162,6 +228,7 @@ def get_subcontracting_order_map(project):
                     'default': item.get('remarks')
                 })
             elif field.get('fieldname') == item.get('wizard_field'):
+                # field for item found: update
                 field.update({
                     'subcontracting_order': item.get('subcontracting_order'),
                     'order_detail': item.get('order_detail'),
@@ -170,8 +237,10 @@ def get_subcontracting_order_map(project):
                 if field.get('fieldtype') == "Check":
                     field['default'] = 1
                 
-                break   # field found - skip to next item
-                
+                #break   # need to process all fields in case of later parameters
+        
+        
+            
     return fields
 
 """
@@ -187,14 +256,278 @@ def save_subcontracting_wizard(project, fields, values):
     subcontracting_order = None
     for field in fields:
         fieldname = field.get('fieldname')
-        if fieldname == "do_probing":
+        params = None
+        # probing / Sondierung
+        if fieldname == "do_probing" and values.get(fieldname):
+            params = {
+                'qty': values.get("probe_count"),
+                'remarks': values.get("remarks_probing"),
+                'description': field.get('label'),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_probing"
+            }
+        elif fieldname == "do_empty_tube" and values.get(fieldname):
+            params = {
+                'qty': values.get("probe_count"),
+                'remarks': values.get("remarks_probing"),
+                'description': field.get('label'),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_probing"
+            }
+        # open ditch / Graben öffnen
+        elif fieldname == "do_open_ditch" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_open_ditch"),
+                'description': field.get('label'),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_open_ditch"
+            }
+        # close ditch / Graben schliessen
+        elif fieldname == "do_close_ditch" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_close_ditch"),
+                'description': field.get('label'),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_close_ditch"
+            }
+        elif fieldname == "do_close_ditch_extend" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_close_ditch"),
+                'description': field.get('label'),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_close_ditch"
+            }
+        elif fieldname == "do_close_ditch_tar" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_close_ditch"),
+                'description': field.get('label'),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_close_ditch"
+            }
+        # core / Kernbohrung
+        elif fieldname == "do_core_80" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_core"),
+                'description': "Kernbohrung {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_core"
+            }
+        elif fieldname == "do_core_100" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_core"),
+                'description': "Kernbohrung {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_core"
+            }
+        elif fieldname == "do_core_125" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_core"),
+                'description': "Kernbohrung {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_core"
+            }
+        elif fieldname == "do_core_150" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_core"),
+                'description': "Kernbohrung {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_core"
+            }
+        elif fieldname == "do_core_200" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_core"),
+                'description': "Kernbohrung {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_core"
+            }
+        elif fieldname == "do_core_250" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_core"),
+                'description': "Kernbohrung {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_core"
+            }
+        # pressure rings / Pressringe
+        elif fieldname == "do_pring_8050" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_pring"),
+                'description': "Pressring {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_pring"
+            }
+        elif fieldname == "do_pring_10050" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_pring"),
+                'description': "Pressring {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_pring"
+            }
+        elif fieldname == "do_pring_10063" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_pring"),
+                'description': "Pressring {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_pring"
+            }
+        elif fieldname == "do_pring_10075" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_pring"),
+                'description': "Pressring {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_pring"
+            }
+        elif fieldname == "do_pring_12575" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_pring"),
+                'description': "Pressring {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_pring"
+            }
+        elif fieldname == "do_pring_150250" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_pring"),
+                'description': "Pressring {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_pring"
+            }
+        elif fieldname == "do_pring_15075" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_pring"),
+                'description': "Pressring {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_pring"
+            }
+        elif fieldname == "do_pring_15090" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_pring"),
+                'description': "Pressring {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_pring"
+            }
+        # extension / Verlängerung
+        elif fieldname == "do_long_404050H" and values.get(fieldname):
+            params = {
+                'qty': values.get('long_meter'),
+                'remarks': values.get("remarks_long"),
+                'description': "Verlängerung {0} {1}".format(field.get('label'), values.get('long_diameter')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_long"
+            }
+        elif fieldname == "do_long_323240H" and values.get(fieldname):
+            params = {
+                'qty': values.get('long_meter'),
+                'remarks': values.get("remarks_long"),
+                'description': "Verlängerung {0} {1}".format(field.get('label'), values.get('long_diameter')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_long"
+            }
+        elif fieldname == "do_long_404050V" and values.get(fieldname):
+            params = {
+                'qty': values.get('long_meter'),
+                'remarks': values.get("remarks_long"),
+                'description': "Verlängerung {0} {1}".format(field.get('label'), values.get('long_diameter')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_long"
+            }
+        elif fieldname == "do_long_323240V" and values.get(fieldname):
+            params = {
+                'qty': values.get('long_meter'),
+                'remarks': values.get("remarks_long"),
+                'description': "Verlängerung {0} {1}".format(field.get('label'), values.get('long_diameter')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_long"
+            }
+        elif fieldname == "do_long_323240V" and values.get(fieldname):
+            params = {
+                'qty': values.get('long_meter'),
+                'remarks': values.get("remarks_long"),
+                'description': "Verlängerung {0} {1}".format(field.get('label'), values.get('long_diameter')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_long"
+            }
+        # filling / Befüllung
+        elif fieldname == "do_fill_water" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_fill"),
+                'description': field.get('label'),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_fill"
+            }
+        elif fieldname == "do_fill_glycol" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_fill"),
+                'description': "{0} {1} {2}".format(
+                    field.get('label'), 
+                    "Ethylenglykol N" if values.get("fill_ethglyn") else "Ethylenglykol L",
+                    values.get("ethglyn") if values.get("fill_ethglyn") else values.get("fill_ethglyl")
+                ),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_fill"
+            }
+        # wall box / Wandbox
+        elif fieldname == "do_wall_box" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_wall"),
+                'description': "{0} {1}".format(field.get('label'), values.get('wall_box_type')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_wall"
+            }
+        elif fieldname == "do_mount" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_wall"),
+                'description': "{0} {1}".format(field.get('label'), values.get('mount_type')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_wall"
+            }
+        elif fieldname == "do_round_shaft" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_wall"),
+                'description': "{0} {1}".format(field.get('label'), values.get('round_shaft_type')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_wall"
+            }
+        elif fieldname == "do_passable" and values.get(fieldname):
+            params = {
+                'qty': 1,
+                'remarks': values.get("remarks_wall"),
+                'description': "Rundschacht {0}".format(field.get('label')),
+                'wizard_field': fieldname, 
+                'wizard_description_field': "remarks_wall"
+            }
+            
+        if params:
             subcontracting_order = update_activity(
                 project=project, 
-                qty=values.get("probe_count"), 
-                description=field.get('label'), 
+                qty=params.get('qty'), 
+                description=params.get('description'), 
                 subcontracting_order=field.get('subcontracting_order') or subcontracting_order,
-                subcontracting_order_detail=None, 
-                remarks=values.get("remarks_probing")
+                subcontracting_order_detail=field.get('order_detail'), 
+                remarks=params.get('remarks'),
+                wizard_field=params.get('wizard_field'), 
+                wizard_description_field=params.get('wizard_description_field')
             )
     return
     
