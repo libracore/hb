@@ -12,7 +12,10 @@ class ConstructionSiteDescription(Document):
     def before_save(self):
         # make sure there is a trace to the project
         has_project = False
-        if self.object and frappe.db.exists("Project", self.object):
+        if self.project:
+            has_project = True
+        elif self.object and frappe.db.exists("Project", self.object):
+            # fallback to project from object
             self.project = self.object
             has_project = True
         # create required fields
@@ -107,23 +110,34 @@ def check_object_permit(obj, permit, has_project):
 Checks, if a constrcution site decsription is available and returns the descriptions
 """
 @frappe.whitelist()
-def has_construction_site_description(object):
-    docs = frappe.get_all("Construction Site Description", filters={'object': object}, fields=['name'])
-    return docs
+def has_construction_site_description(project):
+    docs = frappe.db.sql("""
+        SELECT `exact`.`name`
+        FROM `tabConstruction Site Description` AS `exact`
+        WHERE `exact`.`project` = %(project)s
+        UNION SELECT `base`.`name`
+        FROM `tabConstruction Site Description` AS `base`
+        WHERE SUBSTRING(`base`.`project`, 1, 8) = SUBSTRING(%(project)s, 1, 8);
+        """,
+        {'project': project},
+        as_dict=True
+    )
+    return [docs[0]] if docs else None
     
 """
 Checks, if a constrcution site decsription exists or if not, creates one
 """
 @frappe.whitelist()
-def find_create_construction_site_description(object):
-    docs = has_construction_site_description(object)
-    if len(docs) > 0:
+def find_create_construction_site_description(project):
+    docs = has_construction_site_description(project)
+    if docs:
         return docs[0]['name']
     else:
         # create new record
         doc = frappe.get_doc({
             'doctype': 'Construction Site Description',
-            'object': object
+            'project': project,
+            'object': frappe.get_value("Project", project, "object")
         })
         doc.insert()
         return doc.name

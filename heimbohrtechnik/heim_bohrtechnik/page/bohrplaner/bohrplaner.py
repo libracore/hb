@@ -12,7 +12,7 @@ from math import floor
 from heimbohrtechnik.heim_bohrtechnik.nextcloud import write_file_to_base_path, get_physical_path
 from heimbohrtechnik.heim_bohrtechnik.date_controller import move_project, get_duration_days
 from heimbohrtechnik.heim_bohrtechnik.utils import get_drilling_meters_per_day
-
+from heimbohrtechnik.heim_bohrtechnik.doctype.construction_site_description.construction_site_description import has_construction_site_description
 
 BG_GREEN = '#81d41a;'
 BG_ORANGE = '#ffbf00;'
@@ -103,11 +103,10 @@ def get_project_data(p, dauer):
     red_drop = 0
     clear_drop = 0
     requires_water_supply = False
-    construction_sites = frappe.get_all("Construction Site Description", 
-        filters={'project': p.get('name')}, 
-        fields=['name', 'internal_crane_required', 'external_crane_Required', 'carrymax'])
+    construction_sites = has_construction_site_description(p.get('name'))
     manager_short = frappe.get_cached_value("User", project.manager, "username") if project.manager else ''
     drilling_equipment = []
+    construction_site = None
     if len(construction_sites) > 0:
         construction_site = frappe.get_doc("Construction Site Description", construction_sites[0].get('name'))
         for de in (construction_site.drilling_equipment or []):
@@ -165,12 +164,12 @@ def get_project_data(p, dauer):
                 clear_drop = 1              # mark reuqired but not available
     
     # read construction site
-    if len(construction_sites) > 0:
-        if construction_sites[0].get('carrymax') == 1:
+    if construction_site:
+        if construction_site.get('carrymax') == 1:
             flag_carrymax = True
-        elif construction_sites[0].get('internal_crane_required') == 1:
+        elif construction_site.get('internal_crane_required') == 1:
             flag_int_crane = True
-        elif construction_sites[0].get('external_crane_required') == 1:
+        elif construction_site.get('external_crane_required') == 1:
             flag_ext_crane = True
             
     # set crane base
@@ -614,10 +613,13 @@ def get_traffic_lights_indicator(project):
 
 def is_construction_site_inspected(project):
     inspected = frappe.db.sql("""
-        SELECT MAX(`tabConstruction Site Description`.`site_inspected`) AS `is_inspected`
-        FROM `tabConstruction Site Description`
-        WHERE `tabConstruction Site Description`.`project` = "{project}";
-    """.format(project=project), as_dict=True)
+            SELECT MAX(`tabConstruction Site Description`.`site_inspected`) AS `is_inspected`
+            FROM `tabConstruction Site Description`
+            WHERE SUBSTRING(`tabConstruction Site Description`.`project`, 1, 8) = SUBSTRING(%(project)s, 1, 8);
+        """,
+        {'project': project}, 
+        as_dict=True
+    )
     return inspected[0]['is_inspected'] if len(inspected) > 0 else 0
     
 def has_public_area_request(project):
@@ -1584,11 +1586,8 @@ def get_project_details(project):
         if project_doc.object:
             object_doc = frappe.get_doc("Object", project_doc.object)
             details['object'] = object_doc.as_dict()
-        construction_site_descriptions = frappe.get_all("Construction Site Description", 
-            filters={'project': project},
-            fields=['name']
-        )
-        if len(construction_site_descriptions) > 0:
+        construction_site_descriptions = has_construction_site_description(project)
+        if construction_site_descriptions:
             construction_site_doc = frappe.get_doc("Construction Site Description", construction_site_descriptions[0]['name'])
             details['construction_site_description'] = construction_site_doc.as_dict()
         if project_doc.manager:
