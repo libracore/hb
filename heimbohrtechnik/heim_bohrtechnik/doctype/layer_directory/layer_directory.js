@@ -1,4 +1,4 @@
-// Copyright (c) 2022-2024, libracore AG and contributors
+// Copyright (c) 2022-2025, libracore AG and contributors
 // For license information, please see license.txt
 
 frappe.ui.form.on('Layer Directory', {
@@ -96,6 +96,7 @@ function autocomplete_object(frm) {
                 }
                 
                 // find addresses
+                let rewrite_disposer = false;
                 for (var i = 0; i < data.object.addresses.length; i++) {
                     if (data.object.addresses[i].address_type === "Geologe") {
                         if (data.object.addresses[i].is_simple === 1) {
@@ -121,7 +122,14 @@ function autocomplete_object(frm) {
                         } else {
                             cur_frm.set_value("disposer", (data.object.addresses[i].party_name || ""));
                         }
+                        // override disposer from forwarder in case of L-03749 / Muldenlieferant leert/stellt
+                        if (data.object.addresses[i].party === "L-03749") {
+                            rewrite_disposer = true;
+                        }
                     }
+                }
+                if (rewrite_disposer) {
+                    cur_frm.set_value("disposer", cur_frm.doc.forwarder);
                 }
             }
         });
