@@ -4,7 +4,7 @@
 
 import frappe
 from frappe.model.document import Document
-from frappe.utils import cint
+from frappe.utils import cint, get_link_to_form
 from frappe import _
 import json
 
@@ -176,6 +176,7 @@ def get_subcontracting_order_map(project):
     wall_box_type = ""
     mount_type = ""
     round_shaft_type = ""
+    orders = []
     for item in order_items:
         if item.get('wizard_field') == "do_probing":
             probe_count = item.get('qty')
@@ -250,8 +251,14 @@ def get_subcontracting_order_map(project):
                 })
                 if field.get('fieldtype') == "Check":
                     field['default'] = 1
-                
-                #break   # need to process all fields in case of later parameters
+            elif field.get('fieldname') == 'html_head':
+                if item.get("subcontracting_order") not in orders:
+                    orders.append(item.get("subcontracting_order"))
+                    headline = _("Aufträge: {0}").format(", ".join([
+                        get_link_to_form("Subcontracting Order", o, o) for o in orders
+                    ]))
+                    field['options'] = headline
+                    
         
         
             
@@ -600,6 +607,7 @@ Field structure for the subcontracting wizard
 @frappe.whitelist()
 def get_subcontracing_fields():
     fields = [
+            { 'fieldtype': "HTML", 'fieldname': "html_head"},
             # Bohrpunkt Sondieren
             { 'fieldtype': "Section Break", 'fieldname': "sec_probing", 'label': _("Bohrpunkt Sondieren") },
             { 'fieldtype': "Data", 'fieldname': "remarks_probing", 'label': _("Bemerkungen") },
