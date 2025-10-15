@@ -258,10 +258,9 @@ def get_subcontracting_order_map(project):
                         get_link_to_form("Subcontracting Order", o, o) for o in orders
                     ]))
                     field['options'] = headline
-                    
+                    # store order reference
+                    field['subcontracting_order'] = item.get('subcontracting_order')
         
-        
-            
     return fields
 
 """
@@ -538,6 +537,9 @@ def save_subcontracting_wizard(project, fields, values):
                 'wizard_field': fieldname, 
                 'wizard_description_field': "remarks_wall"
             }
+        elif fieldname == "html_head":
+            # store first subcontracting order in the html head to extend on save
+            subcontracting_order = field.get('subcontracting_order')
             
         if params:
             subcontracting_order = update_activity(
@@ -549,6 +551,12 @@ def save_subcontracting_wizard(project, fields, values):
                 remarks=params.get('remarks'),
                 wizard_field=params.get('wizard_field'), 
                 wizard_description_field=params.get('wizard_description_field')
+            )
+        elif field.get('order_detail') and field.get('fieldtype') == "Check":
+            # this is a checkbox that had a value before and was removed
+            drop_activity(
+                subcontracting_order=field.get('subcontracting_order'),
+                subcontracting_order_detail=field.get('order_detail')
             )
     return
     
@@ -576,7 +584,6 @@ def update_activity(project, qty, description, subcontracting_order=None, \
                 'name': subcontracting_order_detail
             }
         )
-        subcontracting_order = frappe.get_value("tabSubcontracting Order Item", subcontracting_order_detail, "parent")
     else:
         if subcontracting_order:
             # append to existing
@@ -598,6 +605,19 @@ def update_activity(project, qty, description, subcontracting_order=None, \
         })
         order_doc.save(ignore_permissions=True)
         subcontracting_order = order_doc.name
+    frappe.db.commit()
+    return subcontracting_order
+
+def drop_activity(subcontracting_order, subcontracting_order_detail):
+    frappe.db.sql("""
+            DELETE FROM `tabSubcontracting Order Item`
+            WHERE `name` = %(name)s AND `parent` = %(parent)s;
+        """,
+        {
+            'parent': subcontracting_order,
+            'name': subcontracting_order_detail
+        }
+    )
     frappe.db.commit()
     return subcontracting_order
     
