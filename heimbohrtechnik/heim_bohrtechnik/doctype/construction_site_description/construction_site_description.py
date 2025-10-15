@@ -558,6 +558,16 @@ def save_subcontracting_wizard(project, fields, values):
                 subcontracting_order=field.get('subcontracting_order'),
                 subcontracting_order_detail=field.get('order_detail')
             )
+            
+    # check and attach images
+    if values.get('new_images'):
+        frappe.log_error("{0}".format(values))
+        for i in values.get('new_images'):
+            add_image(
+                subcontracting_order=subcontracting_order, 
+                description=i.get('description'),
+                image=i.get('image')
+            )
     return
     
     
@@ -620,6 +630,16 @@ def drop_activity(subcontracting_order, subcontracting_order_detail):
     )
     frappe.db.commit()
     return subcontracting_order
+
+def add_image(subcontracting_order, description, image):
+    doc = frappe.get_doc("Subcontracting Order", subcontracting_order)
+    doc.append("images", {
+        'description': description,
+        'image': image
+    })
+    doc.save(ignore_permissions=True)
+    frappe.db.commit()
+    return
     
 """
 Field structure for the subcontracting wizard
@@ -705,6 +725,15 @@ def get_subcontracing_fields():
             { 'fieldtype': "Column Break", 'fieldname': "col_wall_2" },
             { 'fieldtype': "Check", 'fieldname': "do_round_shaft", 'label': _("Rundschacht") },
             { 'fieldtype': "Select", 'fieldname': "round_shaft_type", 'options': "\n2-Fach\n3-Fach\n4-Fach\n5-Fach", 'label': _("Rundschachtart") },
-            { 'fieldtype': "Check", 'fieldname': "do_passable", 'label': _("Befahrbar") }
+            { 'fieldtype': "Check", 'fieldname': "do_passable", 'label': _("Befahrbar") },
+            # extend images
+            { 'fieldtype': "Section Break", 'fieldname': "sec_images", 'label': _("Bilder ergänzen"), 'description': _("Falls mehrere Verlängerungen bestehen, werden Bilder der letzten angehängt. Oben Verknüpfungen zu den Verlängerungen beachten.") },
+            { 'fieldtype': "Table", 'fieldname': "new_images", 'label': _("Neue Bilder"),
+              'fields': [
+                { 'fieldtype': "Data", 'fieldname': "description", 'label': _("Beschreibung"), 'in_list_view': 1, 'reqd': 1 },
+                { 'fieldtype': "Attach", 'fieldname': "image", 'label': _("Bild"), 'in_list_view': 1, 'reqd': 1 }
+              ],
+              'data': []
+            }
         ]
     return fields
