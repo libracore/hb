@@ -3,15 +3,20 @@ from frappe.utils import getdate, add_days
 
 @frappe.whitelist()
 def get_data(project, cur_subcontracting):
-    _project = frappe.get_doc("Project", project)
+    project_doc = frappe.get_doc("Project", project)
     subcontractings = get_all_subcontractings(project)
-    date_list = [_project.get("expected_start_date"), _project.get("expected_end_date")]
+    date_list = []              # potentially, the project is not yet planned
+    if project_doc.get("expected_start_date") and project_doc.get("expected_end_date"):
+        date_list.append(project_doc.get("expected_start_date"))
+        date_list.append(project_doc.get("expected_end_date"))
 
     for subcontracting in subcontractings:
-        date_list.append(subcontracting.get("from_date"))
-        date_list.append(subcontracting.get("to_date"))
+        if subcontracting.get("from_date"):
+            date_list.append(subcontracting.get("from_date"))
+        if subcontracting.get("to_date"):
+            date_list.append(subcontracting.get("to_date"))
 
-    days, render_data = get_render_data_and_days(_project, subcontractings, min(date_list), max(date_list), cur_subcontracting)
+    days, render_data = get_render_data_and_days(project_doc, subcontractings, min(date_list), max(date_list), cur_subcontracting)
     render_data = assign_lanes(render_data)
     
     return {'days': days, 'render_data': render_data}
@@ -149,23 +154,24 @@ def get_render_data_and_days(project, subcontractings, from_date, to_date, cur_s
         }
         gant_obj.append(_gant_obj)
     
-    render_start_col, render_span = get_render_indexes(wnd_start, wnd_end, project)
-    gant_obj.append({
-            "doctype": "Project",
-            "docname": project.get("name"),
-            "render_start_col": 1,
-            "render_span": 2,
-            "lane": 0,
-            "tooltip": """
-                {name} • 
-                {object_name} • 
-                {from_date} - {to_date}
-            """.format(name=project.get("name"), object_name = project.get("object_name", "-"), \
-                       from_date = getdate(project.get("expected_start_date")).strftime("%d.%m.%Y"), \
-                       to_date = getdate(project.get("expected_end_date")).strftime("%d.%m.%Y")),
-            "label": project.get("object_name", project.get("name", "-")),
-            "current": False,
-            "is_subcontract": False
-    })
+    if project.get("expected_start_date") and project.get("expected_end_date"):
+        render_start_col, render_span = get_render_indexes(wnd_start, wnd_end, project)
+        gant_obj.append({
+                "doctype": "Project",
+                "docname": project.get("name"),
+                "render_start_col": 1,
+                "render_span": 2,
+                "lane": 0,
+                "tooltip": """
+                    {name} • 
+                    {object_name} • 
+                    {from_date} - {to_date}
+                """.format(name=project.get("name"), object_name = project.get("object_name", "-"), \
+                        from_date = getdate(project.get("expected_start_date")).strftime("%d.%m.%Y"), \
+                        to_date = getdate(project.get("expected_end_date")).strftime("%d.%m.%Y")),
+                "label": project.get("object_name", project.get("name", "-")),
+                "current": False,
+                "is_subcontract": False
+        })
 
     return days, gant_obj
