@@ -107,7 +107,7 @@ def get_project_data(p, dauer):
     manager_short = frappe.get_cached_value("User", project.manager, "username") if project.manager else ''
     drilling_equipment = []
     construction_site = None
-    if len(construction_sites) > 0:
+    if construction_sites and len(construction_sites) > 0:
         construction_site = frappe.get_doc("Construction Site Description", construction_sites[0].get('name'))
         for de in (construction_site.drilling_equipment or []):
             drilling_equipment.append(de.drilling_equipment)
