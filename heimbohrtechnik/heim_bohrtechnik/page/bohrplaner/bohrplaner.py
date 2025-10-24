@@ -145,10 +145,10 @@ def get_project_data(p, dauer):
             saugauftrag = cl_entry.supplier_short_display or cl_entry.supplier_name
             if cl_entry.supplier == "L-03749":
                 flag_override_mud = True
-        elif cl_entry.activity == activities['external_crane']:
+        elif not flag_ext_crane and cl_entry.activity == activities['external_crane']:
             pneukran_details = cl_entry.as_dict()
             flag_ext_crane = True
-        elif cl_entry.activity == activities['internal_crane']:
+        elif not flag_int_crane and cl_entry.activity == activities['internal_crane']:
             pneukran_details = cl_entry.as_dict()
             flag_int_crane = True
         elif cl_entry.activity == activities['trough']:
