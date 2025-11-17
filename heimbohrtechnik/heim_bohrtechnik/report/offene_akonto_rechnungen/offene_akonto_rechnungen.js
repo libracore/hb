@@ -9,6 +9,13 @@ frappe.query_reports["Offene Akonto-Rechnungen"] = {
             "label": __("Sales Order"),
             "fieldtype": "Link",
             "options": "Sales Order"
+        },
+        {
+            "fieldname":"date",
+            "label": __("Date"),
+            "fieldtype": "Date",
+            "default": frappe.datetime.get_today(),
+            "reqd": 1
         }
     ],
     "onload": (report) => {
@@ -39,7 +46,7 @@ function create_accrual_booking() {
                 'fieldname': 'accrual_date',
                 'fieldtype': 'Date',
                 'label': __("Accrual Date"),
-                'default': frappe.datetime.get_today(),
+                'default': frappe.query_report.get_filter_value('date') ,
                 'onchange': function() {
                     console.log("onchange " + d.get_value('accrual_date'));
                     d.set_value("resolution_date", frappe.datetime.add_days(d.get_value('accrual_date'), 1));

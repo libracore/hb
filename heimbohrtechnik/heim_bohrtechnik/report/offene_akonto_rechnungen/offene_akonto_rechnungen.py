@@ -49,21 +49,33 @@ def get_data(filters):
             `tabProject`.`expected_end_date` AS `expected_end_date`
         FROM `tabSales Invoice` 
         LEFT JOIN `tabSales Invoice Item` ON `tabSales Invoice Item`.`parent` = `tabSales Invoice`.`name`
-        LEFT JOIN `tabDiscount Position` ON (
-            `tabDiscount Position`.`akonto_invoice_item` = `tabSales Invoice Item`.`name`
-            AND `tabDiscount Position`.`docstatus` < 2
-        )
+        LEFT JOIN 
+            (SELECT `tabDiscount Position`.`name`, `tabDiscount Position`.`akonto_invoice_item`, `tUse`.`posting_date`
+             FROM `tabDiscount Position`
+             LEFT JOIN `tabSales Invoice` AS `tUse` on `tUse`.`name` = `tabDiscount Position`.`parent`
+             WHERE
+                `tabDiscount Position`.`docstatus` < 2
+                AND `tUse`.`posting_date` <= %(date)s
+            ) AS `tAllocation Invoice`
+            ON `tAllocation Invoice`.`akonto_invoice_item` = `tabSales Invoice Item`.`name`
         LEFT JOIN `tabProject` ON `tabProject`.`name` = `tabSales Invoice`.`project`
         WHERE 
             `tabSales Invoice`.`docstatus` = 1
-            AND `tabSales Invoice Item`.`item_code` = "{akonto_item}"
-            AND `tabDiscount Position`.`name` IS NULL
+            AND `tabSales Invoice Item`.`item_code` = %(akonto_item)s
+            AND `tAllocation Invoice`.`name` IS NULL
+            AND `tabSales Invoice`.`posting_date` <= %(date)s
             {conditions}
         GROUP BY `tabSales Invoice`.`name`
         ORDER BY `tabSales Invoice`.`posting_date` ASC;
-    """.format(akonto_item=frappe.get_value("Heim Settings", "Heim Settings", "akonto_item"), conditions=conditions)
+    """.format(conditions=conditions)
     
-    data = frappe.db.sql(sql_query, as_dict=True)
+    data = frappe.db.sql(sql_query, 
+        {
+            'akonto_item': frappe.get_value("Heim Settings", "Heim Settings", "akonto_item"),
+            'date': filters.get('date')
+        },
+        as_dict=True
+    )
     
     return data
     
