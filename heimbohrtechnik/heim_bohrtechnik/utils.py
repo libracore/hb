@@ -671,8 +671,8 @@ def get_drill_notice_recipients(project, address_types):
     recipients = {'recipients': [], 'cc': []}
     p_doc = frappe.get_doc("Project", project)
     # drilling manager
-    if p_doc.drilling_team:
-        recipients['cc'].append(frappe.get_value("Drilling Team", p_doc.drilling_team, "email"))
+    #if p_doc.drilling_team:            # 2025-11-19: drop drilling team in cc for drill notice
+    #    recipients['cc'].append(frappe.get_value("Drilling Team", p_doc.drilling_team, "email"))
     if p_doc.manager:
         recipients['cc'].append(p_doc.manager)
     # addresses

@@ -199,6 +199,8 @@ class Object(Document):
                         _details += """ <span style="color: red;"><b>powerwave</b></span>"""
                     elif "flux" in (s.probe_type or "").lower():
                         _details += """ <span style="color: red;"><b>Flux</b></span>"""
+                    elif "barriera" in (s.probe_type or "").lower():
+                        _details += """ <span style="color: red;"><b>barriera</b></span>"""
                     elif "\"RT\"" in (s.probe_type or ""):
                         _details += """ <span style="color: red;"><b>RT</b></span>"""
                     
