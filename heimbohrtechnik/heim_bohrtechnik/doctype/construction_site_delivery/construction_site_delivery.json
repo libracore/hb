@@ -17,6 +17,7 @@
   "date",
   "to_date",
   "employee",
+  "employee_name",
   "employee_short",
   "color",
   "section_items",
@@ -141,9 +142,16 @@
    "fieldtype": "Color",
    "hidden": 1,
    "label": "Color"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
   }
  ],
- "modified": "2025-09-26 11:00:38.229792",
+ "modified": "2025-11-20 22:08:49.923923",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Construction Site Delivery",
