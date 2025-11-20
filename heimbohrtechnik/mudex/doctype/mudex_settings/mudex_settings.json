@@ -13,7 +13,8 @@
   "mud_item",
   "column_invoicing",
   "default_customer_for_mud",
-  "sales_invoice_print_format"
+  "sales_invoice_print_format",
+  "sales_price_list"
  ],
  "fields": [
   {
@@ -70,10 +71,16 @@
    "fieldtype": "Link",
    "label": "Default pH Sensor",
    "options": "pH Sensor"
+  },
+  {
+   "fieldname": "sales_price_list",
+   "fieldtype": "Link",
+   "label": "Sales Price List",
+   "options": "Price List"
   }
  ],
  "issingle": 1,
- "modified": "2025-05-09 12:15:05.094463",
+ "modified": "2025-11-20 21:27:29.057411",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "MudEx Settings",
