@@ -40,8 +40,17 @@ frappe.ui.form.on('Construction Site Description', {
     },
     project: function(frm) {
         // from project: link object
-        if ((!frm.doc.object) && (frm.doc.project)) {
+        if ((!frm.doc.object) && (frm.doc.project) && (!locals.ignore_object_update)) {
+            locals.ignore_object_update = true;
             cur_frm.set_value("object", frm.doc.project);
+            autocomplete_object(frm);
+        }
+    },
+    object: function(frm) {
+        // GUI change of object link
+        if ((frm.doc.object) && (!locals.ignore_object_update)) {
+            locals.ignore_object_update = true;
+            cur_frm.set_value("project", frm.doc.object);
             autocomplete_object(frm);
         }
     }
