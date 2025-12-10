@@ -296,7 +296,9 @@ DocType: Supplier,Required Activity,Erforderliche Tätigkeit
 DocType: Supplier,Short Display,Kürzel
 DocType: Supplier,Trough Size,Muldengrösse
 DocType: Supplier,Place Trough Rate,Preis Mulde stellen
-DocType: Supplier,Disposal Rate,Preis Entsorgung
+DocType: Supplier,Trough Pickup Rate,Preis Mulde abholen
+DocType: Supplier,Transport Rate Mud,Transportkosten Saugwagen
+DocType: Supplier,Disposal Rate,Preis Schlammentsorgung
 DocType: Supplier,Reach,Einzugsbereich
 DocType: Supplier,Trough Address,Muldenadresse
 DocType: Supplier,Other,Diverses
