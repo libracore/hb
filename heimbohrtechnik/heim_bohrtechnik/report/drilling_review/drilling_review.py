@@ -43,8 +43,11 @@ def get_data(filters):
     """.format(from_date=filters.from_date, to_date=filters.to_date), as_dict=True)
     
     for d in data:
-        d['avg'] = "{0} m".format(round(d['drilling_meters'] / d['drillings']))
-        d['deepest'] = "{0} m".format(d['deepest'])
-        d['drilling_meters'] = "{:,.0f} m".format(d['drilling_meters']).replace(",", "'")
+        if d['drillings']:
+            d['avg'] = "{0} m".format(round((d['drilling_meters'] or 0) / d['drillings']))
+        else:
+            d['avg'] = "- m"
+        d['deepest'] = "{0} m".format(d['deepest'] or 0)
+        d['drilling_meters'] = "{:,.0f} m".format(d['drilling_meters'] or 0).replace(",", "'")
         
     return data
