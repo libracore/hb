@@ -491,15 +491,18 @@ def get_traffic_lights_indicator(project):
     found_permits = 0
     found_permits_with_file = 0
     if not project.permits or len(project.permits) == 0:
-        objektname_color = BG_GREY                  # project has not permit records: grey
+        objektname_color = BG_GREY                  # project has no permit records: grey
     else:
         for permit in project.permits:
-            if 'Bohrbewilligung kantonal' in permit.permit:
+            if 'Bohrbewilligung' in permit.permit:             # formerly if 'Bohrbewilligung kantonal'
                 found_permits += 1
                 if permit.file:
                     found_permits_with_file += 1
-        if found_permits > 0 and found_permits == found_permits_with_file:
-            objektname_color = BG_GREEN         # all permits available: green
+        if found_permits > 0:
+            if found_permits == found_permits_with_file:
+                objektname_color = BG_GREEN         # all permits available: green
+            elif found_permits_with_file > 0:
+                objektname_color = BG_YELLOW         # some permits available: yellow
     colors.append(objektname_color)
     
     # objekt_strasse [3]
