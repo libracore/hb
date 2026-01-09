@@ -502,7 +502,7 @@ def get_traffic_lights_indicator(project):
             if found_permits == found_permits_with_file:
                 objektname_color = BG_GREEN         # all permits available: green
             elif found_permits_with_file > 0:
-                objektname_color = BG_YELLOW         # some permits available: yellow
+                objektname_color = BG_ORANGE         # some permits available: orange
     colors.append(objektname_color)
     
     # objekt_strasse [3]
