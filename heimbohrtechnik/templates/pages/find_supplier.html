@@ -63,7 +63,15 @@
         {% for hotel in hotels %}
             <tr class="tr">
                 <td class="td">{% if hotel.website %}<a href="https://{{ hotel.website }}">{{ hotel.supplier_name }}</a>{% else %}{{ hotel.supplier_name }}{% endif %}{% if hotel.main_hotel == 1 %}<i class="fa fa-star" aria-hidden="true"></i>{% endif %}</td>
-                <td class="td"><a href="geo:{{ hotel.gps_latitude }},{{ hotel.gps_longitude }}">{{ hotel.hauptadresse }}</a></td>
+                <td class="td"><a href="geo:{{ hotel.gps_latitude }},{{ hotel.gps_longitude }}">
+                    {% if hotel.trough_address %}
+                        {% set address = frappe.get_doc("Address", hotel.trough_address) %}
+                        {{ address.address_line1 or "" }},
+                        {{ address.pincode or "" }} {{ address.city or "" }}
+                    {% else %}
+                        {{ hotel.hauptadresse }}
+                    {% endif %}
+                </a></td>
                 <td class="td tacenter"><a href="tel:{{ hotel.telefon }}">{{ hotel.telefon or "-" }}</a></td>
                 <td class="td taright"><div id="hotel_distance_{{ loop.index0 }}"><i class="fa fa-spinner fa-spin" style="color: #274b82;"></i></div></td>
                 <td class="td taright"><div id="hotel_time_{{ loop.index0 }}"></div></td>

@@ -88,7 +88,7 @@ def find_closest_troughs(object_name):
             `tabSupplier`.`hauptadresse`, 
             `tabSupplier`.`telefon`, 
             `tabSupplier`.`main_hotel`, 
-            `tabSupplier`.`remarks`,
+            `tabSupplier Activity`.`remarks`,
             ((ABS(`tabSupplier Activity`.`gps_lat` - {lat}) + ABS(`tabSupplier Activity`.`gps_long` - {lon})) / POW(5, `tabSupplier`.`main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
             `tabSupplier Activity`.`gps_lat` AS `gps_latitude`, 
             `tabSupplier Activity`.`gps_long` AS `gps_longitude`,
@@ -124,7 +124,7 @@ def find_closest_mud(object_name):
             `tabSupplier`.`hauptadresse`, 
             `tabSupplier`.`telefon`, 
             `tabSupplier`.`main_hotel`, 
-            `tabSupplier`.`remarks`,
+            `tabSupplier Activity`.`remarks`,
             ((ABS(`tabSupplier Activity`.`gps_lat` - {lat}) + ABS(`tabSupplier Activity`.`gps_long` - {lon})) / POW(5, `tabSupplier`.`main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
             `tabSupplier Activity`.`gps_lat` AS `gps_latitude`, 
             `tabSupplier Activity`.`gps_long` AS `gps_longitude`,
