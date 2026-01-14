@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2024, libracore and Contributors
+# Copyright (c) 2023-2026, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 #
 #
@@ -294,3 +294,22 @@ def geolocate(query_string):
             frappe.log_error("{0}, {1}".format(response, err), "Geolocate failed")
         
         return None
+
+"""
+This is a public (restricted) location service to find gps from an address string using Open Streetmaps
+"""
+@frappe.whitelist(allow_guest=True)
+def geolocate_api(key, street, location):
+    if not key or key != frappe.get_value("Heim Settings", "Heim Settings", "routing_secret"):
+        return None
+    #return geolocate(query_string)
+    return get_gps_coordinates(street, location)
+    
+"""
+This is a public (restricted) routing service to find the travel distance between two GPS coordinates
+"""
+@frappe.whitelist(allow_guest=True)
+def travel_distance_api(key, from_lat, from_long, to_lat, to_long):
+    if not key or key != frappe.get_value("Heim Settings", "Heim Settings", "routing_secret"):
+        return None
+    return get_true_distance(from_lat, from_long, to_lat, to_long)

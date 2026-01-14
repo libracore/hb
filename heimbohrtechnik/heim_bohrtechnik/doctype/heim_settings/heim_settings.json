@@ -61,6 +61,7 @@
   "routing_host",
   "col_routing",
   "osm_blocked",
+  "routing_secret",
   "sec_feedback",
   "send_feedback_reminder",
   "column_break_56",
@@ -441,10 +442,15 @@
    "fieldtype": "Link",
    "label": "Subcontracting BKP",
    "options": "BKP Group"
+  },
+  {
+   "fieldname": "routing_secret",
+   "fieldtype": "Data",
+   "label": "Routing Secret"
   }
  ],
  "issingle": 1,
- "modified": "2025-01-15 21:14:19.814994",
+ "modified": "2026-01-14 10:08:19.358971",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Heim Settings",
