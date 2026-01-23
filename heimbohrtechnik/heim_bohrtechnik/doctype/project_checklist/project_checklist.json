@@ -109,7 +109,7 @@
    "fieldname": "trough_size",
    "fieldtype": "Select",
    "label": "Size",
-   "options": "\u00b110m\u00b3\n\u00b125m\u00b3\n\u00b140m\u00b3"
+   "options": "\u00b1 7m\u00b3\n\u00b110m\u00b3\n\u00b115m\u00b3\n\u00b125m\u00b3\n\u00b140m\u00b3"
   },
   {
    "fetch_from": "supplier.short_display",
@@ -138,7 +138,7 @@
   }
  ],
  "istable": 1,
- "modified": "2025-06-03 09:44:46.473345",
+ "modified": "2026-01-23 22:02:15.633992",
  "modified_by": "Administrator",
  "module": "Heim Bohrtechnik",
  "name": "Project Checklist",
