@@ -75,4 +75,10 @@
             {% endfor %}
         </td>
     </tr>
+    {% if dispo_bemerkungen %}
+    <tr>
+        <td><b>{{ __("Dispo-Bemerkungen") }}</b></td>
+        <td>{{ dispo_bemerkungen }}</td>
+    </tr>
+    {% endif %}
 </table>

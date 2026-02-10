@@ -463,7 +463,8 @@ frappe.bohrplaner = {
                         'object_location': details.object.object_location,
                         'object_street': details.object.object_street,
                         'cloud_url': details.project.cloud_url,
-                        'subprojects': []
+                        'subprojects': [],
+                        'dispo_bemerkungen': details.project.dispo_bemerkungen
                     };
                     let object_name_parts = details.object.name.split("-");
                     if (object_name_parts.length > 2) {
