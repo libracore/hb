@@ -654,10 +654,12 @@ def has_infomail(project):
         
 @frappe.whitelist()
 def reschedule_project(project=None, team=None, day=None, start_half_day=None, popup=False, 
-    new_project_start=None, new_project_end_date=None, end_half_day=None, visit_date=None, log=True):
+    new_project_start=None, new_project_end_date=None, end_half_day=None, visit_date=None, log=True, dispo_bemerkungen=None):
     project = frappe.get_doc("Project", project)
     if visit_date:
         project.visit_date = visit_date
+    if dispo_bemerkungen:
+        project.dispo_bemerkungen = dispo_bemerkungen
         
     project_changes = [{
         'project': project.name,

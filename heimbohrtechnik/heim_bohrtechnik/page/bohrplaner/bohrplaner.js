@@ -586,6 +586,18 @@ frappe.bohrplaner = {
                                 'read_only': 1,
                                 'hidden': 1
                             },
+                            {
+                                'fieldname': 'section_2', 
+                                'fieldtype': 'Section Break'
+                            },
+                            {
+                                'fieldname': 'dispo_bemerkungen', 
+                                'label': __('Dispo-Bemerkungen'), 
+                                'fieldtype': 'Text Editor', 
+                                'default': details.project.dispo_bemerkungen, 
+                                'reqd': 0,
+                                'read_only': (frappe.user.has_role("Dispo")) ? 0 : 1
+                            }
                         ],
                         'primary_action': function(){
                             d.hide();
@@ -601,7 +613,8 @@ frappe.bohrplaner = {
                                     'new_project_end_date': reshedule_data.end,
                                     'end_half_day': reshedule_data.end_hd,
                                     'team': reshedule_data.drilling_team,
-                                    'visit_date': reshedule_data.visit_date
+                                    'visit_date': reshedule_data.visit_date,
+                                    'dispo_bemerkungen': reshedule_data.dispo_bemerkungen
                                 },
                                 'async': false,
                                 'callback': function(response) {
