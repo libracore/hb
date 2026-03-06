@@ -58,7 +58,9 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
     } else {
         //Set Dates Ready only, if User is a Drilling Master
         document.getElementById("from").readOnly = true;
-        document.getElementById("to").readOnly = true; 
+        document.getElementById("from").disabled = true;        // hack: Safari will ignore read-only
+        document.getElementById("to").readOnly = true;
+        document.getElementById("to").disabled = true;         // hack: Safari will ignore read-only
     }
     
     // check routes and if there is a route, navigate to this
