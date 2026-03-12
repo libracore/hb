@@ -263,7 +263,10 @@ def geolocate(query_string):
     url = "https://nominatim.openstreetmap.org/search?q={query}&format=json&polygon=1&addressdetails=0".format(query=query_string)
     response = None
     try:
-        response = requests.get(url, headers={'referer': 'libracore geolocator'})
+        response = requests.get(url, headers={
+            'Referer': 'libracore geolocator',
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:148.0) Gecko/20100101 Firefox/148.0'
+        })
         data = response.json()
         gps_coordinates = None
         if len(data) > 0:
@@ -289,7 +292,7 @@ def geolocate(query_string):
             settings.osm_blocked = 1
             settings.save(ignore_permissions = True)
             frappe.db.commit()
-            frappe.throw(response.message)
+            frappe.throw(response.text)
         else:
             frappe.log_error("{0}, {1}".format(response, err), "Geolocate failed")
         
