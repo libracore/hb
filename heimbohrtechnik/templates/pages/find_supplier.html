@@ -62,7 +62,7 @@
     <tbody>
         {% for hotel in hotels %}
             <tr class="tr">
-                <td class="td">{% if hotel.website %}<a href="https://{{ hotel.website }}">{{ hotel.supplier_name }}</a>{% else %}{{ hotel.supplier_name }}{% endif %}{% if hotel.main_hotel == 1 %}<i class="fa fa-star" aria-hidden="true"></i>{% endif %}</td>
+                <td class="td">{% if hotel.website %}<a href="https://{{ hotel.website }}">{{ hotel.supplier_name }}</a>{% else %}<a href="/desk#Form/Supplier/{{ hotel.name }}">{{ hotel.supplier_name }}</a>{% endif %}{% if hotel.main_hotel == 1 %}<i class="fa fa-star" aria-hidden="true"></i>{% endif %}</td>
                 <td class="td"><a href="geo:{{ hotel.gps_latitude }},{{ hotel.gps_longitude }}">
                     {% if hotel.trough_address %}
                         {% set address = frappe.get_doc("Address", hotel.trough_address) %}
@@ -77,19 +77,27 @@
                 <td class="td taright"><div id="hotel_time_{{ loop.index0 }}"></div></td>
                 <td class="td">{{ hotel.remarks }}</td>
                 <td class="td">
-                    <div id="details_{{ loop.index0 }}" style="display: none; ">
+                    <div id="details_{{ loop.index0 }}" style="display: none; " class="detail_container" >
                         <table style="table">
                             <tr>
                                 <td>{{ _("Trough Size") }}</td>
-                                <td>{{ hotel.trough_size or '-' }}</td>
+                                <td>{{ hotel.trough_size or '-' }} {% if hotel.default_trough_size %}({{ hotel.default_trough_size }}){% endif %}</td>
                             </tr>
                             <tr>
                                 <td>{{ _("Place Trough Rate") }}</td>
                                 <td>{{ hotel.place_trough_rate or '-' }}</td>
                             </tr>
                             <tr>
+                                <td>{{ _("Trough Pickup Rate") }}</td>
+                                <td>{{ hotel.trough_pickup_rate or '-' }}</td>
+                            </tr>
+                            <tr>
                                 <td>{{ _("Disposal Rate") }}</td>
                                 <td>{{ hotel.disposal_rate or '-' }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ _("Transport Rate Mud") }}</td>
+                                <td>{{ hotel.transport_rate_mud or '-' }}</td>
                             </tr>
                             <tr>
                                 <td>{{ _("Reach") }}</td>

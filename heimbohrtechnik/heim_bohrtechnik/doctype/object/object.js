@@ -926,7 +926,10 @@ function find_trough(frm) {
                 'object_name': frm.doc.name
             },
             'callback': function (r) {
-                var d = new frappe.ui.Dialog({
+                // remove details from a previous dialog (in case of inproper closing)
+                let container = document.getElementsByClassName("detail_container");
+                for (let i = (container.length - 1); i >= 0; i--) { container[i].remove(); }
+                let d = new frappe.ui.Dialog({
                     'fields': [
                         {'fieldname': 'ht', 'fieldtype': 'HTML'}
                     ],
@@ -953,7 +956,9 @@ function find_mud(frm) {
                 'object_name': frm.doc.name
             },
             'callback': function (r) {
-                var d = new frappe.ui.Dialog({
+                let container = document.getElementsByClassName("detail_container");
+                for (let i = (container.length - 1); i >= 0; i--) { container[i].remove(); }
+                let d = new frappe.ui.Dialog({
                     'fields': [
                         {'fieldname': 'ht', 'fieldtype': 'HTML'}
                     ],
