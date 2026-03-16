@@ -541,13 +541,13 @@ def get_traffic_lights_indicator(project):
         SELECT `tabPurchase Order`.`per_received`, `tabPurchase Order`.`order_confirmation`, `tabPurchase Order`.`status`
         FROM `tabPurchase Order Item` 
         LEFT JOIN `tabPurchase Order` ON `tabPurchase Order`.`name` = `tabPurchase Order Item`.`parent`
-        WHERE `tabPurchase Order Item`.`item_group` = "1.02.01.01 EWS"
+        WHERE `tabPurchase Order Item`.`item_name` LIKE "%%EWS%%"
           AND `tabPurchase Order`.`object` = %(obj)s 
           AND `tabPurchase Order`.`docstatus` < 2;""",
         {
             'obj': project.object
         }, 
-        as_dict=True)
+        as_dict=True)                   # note: `item_group` = "1.02.01.01 EWS" is too restrictive
     if len(pos) > 0 and pos[0]['per_received'] != None:
         ews_details_color = BG_YELLOW               # yellow: ordered
         all_confirmed = True
