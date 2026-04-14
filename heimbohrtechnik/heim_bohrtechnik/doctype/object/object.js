@@ -912,8 +912,10 @@ function find_true_distance(frm, to_lat, to_long, target_distance_field, target_
             'to_long': to_long
         },
         'callback': function (r) {
-            document.getElementById(target_distance_field).innerHTML=r.message.data['distance_in_kilometers'].toFixed(1) + " km";
-            document.getElementById(target_duration_field).innerHTML=r.message.data['travel_time'].split(".")[0];
+            if (r.message) {
+                document.getElementById(target_distance_field).innerHTML=r.message.data['distance_in_kilometers'].toFixed(1) + " km";
+                document.getElementById(target_duration_field).innerHTML=r.message.data['travel_time'].split(".")[0];
+            }
         }
     });
  }

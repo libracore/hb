@@ -102,7 +102,7 @@ def find_closest_troughs(object_name):
             `tabSupplier Activity`.`trough_address`,
             `tabSupplier Activity`.`details`,
             `tabSupplier Activity`.`other`,
-            "/*MUD*/" AS `activity_type`
+            "/*TROUGH*/" AS `activity_type`
         FROM `tabSupplier Activity`
         LEFT JOIN `tabSupplier` ON `tabSupplier`.`name` = `tabSupplier Activity`.`parent`
         WHERE 
@@ -184,8 +184,12 @@ def get_true_distance(from_lat, from_long, to_lat, to_long):
         flo = from_long,
         tla = to_lat,
         tlo = to_long)
-    response = requests.get(link)
-    return response.json()
+    try:
+        response = requests.get(link)
+        return response.json()
+    except Exception as err:
+        frappe.log_error(err, "Error in get_true_distance")
+        return None
     
 @frappe.whitelist()
 def find_gps_for_address(address):
