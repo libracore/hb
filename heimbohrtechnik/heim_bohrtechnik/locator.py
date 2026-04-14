@@ -27,7 +27,7 @@ def find_closest_hotels(object_name):
             `telefon`, 
             `main_hotel`, 
             `remarks`,
-            ((ABS(`gps_latitude` - {lat}) + ABS(`gps_longitude` - {lon})) / POW(5, `main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
+            (SQRT(POW(ABS(`gps_latitude` - {lat}), 2) + POW(ABS(`gps_longitude` - {lon}), 2)) / POW(5, `main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
             `gps_latitude`, 
             `gps_longitude`
         FROM `tabSupplier`
@@ -65,7 +65,7 @@ def find_closest_parkings(object_name):
             `canton`,
             `gps_latitude`,
             `gps_longitude`,
-            ((ABS(`tabParking`.`gps_latitude` - {lat}) + ABS(`tabParking`.`gps_longitude` - {lon}))) AS `prox`        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
+            (SQRT(POW(ABS(`gps_latitude` - {lat}), 2) + POW(ABS(`gps_longitude` - {lon}), 2))) AS `prox`        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
         FROM `tabParking`
         WHERE 
             `gps_latitude` IS NOT NULL
@@ -89,7 +89,7 @@ def find_closest_troughs(object_name):
             `tabSupplier`.`telefon`, 
             `tabSupplier`.`main_hotel`, 
             `tabSupplier Activity`.`remarks`,
-            ((ABS(`tabSupplier Activity`.`gps_lat` - {lat}) + ABS(`tabSupplier Activity`.`gps_long` - {lon})) / POW(5, `tabSupplier`.`main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
+            (SQRT(POW(ABS(`tabSupplier Activity`.`gps_lat` - {lat}), 2) + POW(ABS(`tabSupplier Activity`.`gps_long` - {lon}), 2)) / POW(5, `tabSupplier`.`main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
             `tabSupplier Activity`.`gps_lat` AS `gps_latitude`, 
             `tabSupplier Activity`.`gps_long` AS `gps_longitude`,
             `tabSupplier Activity`.`trough_size`,
@@ -128,7 +128,7 @@ def find_closest_mud(object_name):
             `tabSupplier`.`telefon`, 
             `tabSupplier`.`main_hotel`, 
             `tabSupplier Activity`.`remarks`,
-            ((ABS(`tabSupplier Activity`.`gps_lat` - {lat}) + ABS(`tabSupplier Activity`.`gps_long` - {lon})) / POW(5, `tabSupplier`.`main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
+            (SQRT(POW(ABS(`tabSupplier Activity`.`gps_lat` - {lat}), 2) + POW(ABS(`tabSupplier Activity`.`gps_long` - {lon}), 2)) / POW(5, `tabSupplier`.`main_hotel`)) AS `prox`,        /* this is an approximation function by gps coordinates and a numeric factor in arbitrary units */
             `tabSupplier Activity`.`gps_lat` AS `gps_latitude`, 
             `tabSupplier Activity`.`gps_long` AS `gps_longitude`,
             `tabSupplier Activity`.`trough_size`,
