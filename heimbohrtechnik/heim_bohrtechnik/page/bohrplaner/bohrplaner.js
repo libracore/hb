@@ -598,7 +598,7 @@ frappe.bohrplaner = {
                                 'fieldtype': 'Text Editor', 
                                 'default': details.project.dispo_bemerkungen, 
                                 'reqd': 0,
-                                'read_only': (frappe.user.has_role("Dispo")) ? 0 : 1
+                                'read_only': ((frappe.user.has_role("Dispo") || (frappe.user.has_role("Project Manager"))) ? 0 : 1
                             }
                         ],
                         'primary_action': function(){
