@@ -2,7 +2,7 @@
     <table id="bohrplan_table">
         <thead>
             <tr>
-                <th rowspan="2" class="sticky-corner calendar-grid-header">
+                <th rowspan="2" class="sticky-corner calendar-grid-header"><div id="calendar-grid-header">
                     <div class="form-group">
                         <label for="from">{{ __("From") }}</label>
                         <input type="date" class="form-control" id="from">
@@ -11,7 +11,7 @@
                         <label for="to">{{ __("To") }}</label>
                         <input type="date" class="form-control" id="to">
                     </div> 
-                </th>
+                </div></th>
                 {% for day in days %}
                     {% if day_list[day] != "Sun" %}
                         {% if day_list[day] != "Sat" %}

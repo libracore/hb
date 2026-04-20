@@ -29,7 +29,7 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
         frappe.bohrplaner.reset_dates(page);
     });
     
-    if (!frappe.user.has_role("Bohrmeister")) {
+    if ((!frappe.user.has_role("Bohrmeister")) || (frappe.user.has_role("System Manager"))) {
         page.add_menu_item(__('Drucken'), () => {
             var from = $("#from").val();
             var to = $("#to").val();
@@ -59,8 +59,10 @@ frappe.pages['bohrplaner'].on_page_load = function(wrapper) {
         //Set Dates Ready only, if User is a Drilling Master
         document.getElementById("from").readOnly = true;
         document.getElementById("from").disabled = true;        // hack: Safari will ignore read-only
+        document.getElementById("calendar-grid-header").style.display = "none";        // ultimate hack: hide field
         document.getElementById("to").readOnly = true;
         document.getElementById("to").disabled = true;         // hack: Safari will ignore read-only
+        //document.getElementById("to").style.display = "none";         // ultimate hack: hide field
     }
     
     // check routes and if there is a route, navigate to this
@@ -77,14 +79,18 @@ frappe.bohrplaner = {
         var me = frappe.bohrplaner;
         me.page = page;
         
-        if (frappe.user.has_role("Bohrmeister")) {
+        if ((frappe.user.has_role("Bohrmeister")) && (!frappe.user.has_role("System Manager"))) {
             // hard-coded values for drilling masters
             let current_day = (new Date()).getDay();
+            // determine planning days until end of the week
             if (current_day < 5) {
                 locals.planning_days = (6 - current_day);
             } else {
                 locals.planning_days = 1;
             }
+            // 2026-04-17: allow to see next week as well
+            locals.planning_days += 7;
+            // past: allow last 30 days
             locals.planning_past_days = 30;
             locals.print_block_length_factor = 42;
         } else {
