@@ -81,7 +81,7 @@
                 <td class="td">{{ hotel.remarks }}</td>
                 <td class="td">
                     <div id="details_{{ loop.index0 }}" style="display: none; " class="detail_container" >
-                        <table style="table">
+                        <table style="table; ">
                             <tr>
                                 <td>{{ _("Trough Size") }}</td>
                                 <td>{{ hotel.trough_size or '-' }} {% if hotel.default_trough_size %}({{ hotel.default_trough_size }}){% endif %}</td>
