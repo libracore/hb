@@ -1454,3 +1454,31 @@ def set_employee_short(doc, event):
         doc.color = "#{red:02x}{green:02x}{blue:02x}".format(red=red, green=green, blue=blue)
     return
     
+
+"""
+Find warehouse with stock
+"""
+@frappe.whitelist()
+def get_available_warehouse(item_code, company):
+    warehouses = frappe.db.sql("""
+        SELECT `warehouse`
+        FROM `tabBin`
+        WHERE `item_code` = %(item_code)s
+          AND `warehouse` IN (
+            SELECT `name`
+            FROM `tabWarehouse`
+            WHERE `company` = %(company)s
+          )
+        ORDER BY `actual_qty` DESC;
+        """,
+        {
+            'item_code': item_code,
+            'company': company
+        },
+        as_dict=True
+    )
+    if len(warehouses) > 0:
+        return warehouses[0]['warehouse']
+    else:
+        return None
+        
