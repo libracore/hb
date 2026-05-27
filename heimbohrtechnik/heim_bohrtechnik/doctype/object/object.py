@@ -215,7 +215,7 @@ class Object(Document):
             WHERE 
                 `tabPurchase Order`.`docstatus` = 1
                 AND `tabPurchase Order`.`object` = %(object)s
-                AND `tabPurchase Order Item`.`item_name` LIKE "%EWS%"
+                AND `tabPurchase Order Item`.`item_name` LIKE "%%EWS%%"
             ORDER BY `tabPurchase Order`.`creation` DESC
             LIMIT 1;""",
             {'object': self.name},
