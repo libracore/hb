@@ -211,10 +211,12 @@ class Object(Document):
         supplier = frappe.db.sql("""
             SELECT `supplier_name`
             FROM `tabPurchase Order`
+            JOIN `tabPurchase Order Item` ON `tabPurchase Order Item`.`parent` = `tabPurchase Order`.`name`
             WHERE 
-                `docstatus` = 1
-                AND `object` = %(object)s
-            ORDER BY `creation` DESC
+                `tabPurchase Order`.`docstatus` = 1
+                AND `tabPurchase Order`.`object` = %(object)s
+                AND `tabPurchase Order Item`.`item_name` LIKE "%EWS%"
+            ORDER BY `tabPurchase Order`.`creation` DESC
             LIMIT 1;""",
             {'object': self.name},
             as_dict=True
