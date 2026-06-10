@@ -605,7 +605,7 @@ function check_warranty(frm) {
                     if (accrual > 0) {
                         var applied = false;
                         // check if this is already in the list
-                        for (var i = 0; i < frm.doc.discount_positions.length; i++) {
+                        for (var i = 0; i < (frm.doc.discount_positions || []).length; i++) {
                             if (frm.doc.discount_positions[i].description.includes("Garantierückbehalt")) {
                                 frappe.model.set_value(frm.doc.discount_positions[i].doctype, frm.doc.discount_positions[i].name,
                                 'percent', accrual);
@@ -627,7 +627,7 @@ function check_warranty(frm) {
             recalculate_markups_discounts(frm);
         } else if (frm.doc.title === "Schlussrechnung") {
             // remove warranty accrual from discounts
-            for (var i = (frm.doc.discount_positions.length - 1); i >= 0 ; i--) {
+            for (var i = ((frm.doc.discount_positions || []).length - 1); i >= 0 ; i--) {
                 if (frm.doc.discount_positions[i].description.includes("Garantierückbehalt")) {
                     cur_frm.get_field("discount_positions").grid.grid_rows[i].remove();
                 }
@@ -645,7 +645,7 @@ function check_warranty(frm) {
                         // apply to markup
                         var applied = false;
                         // check if this is already in the list
-                        for (var i = 0; i < frm.doc.markup_positions.length; i++) {
+                        for (var i = 0; i < (frm.doc.markup_positions || []).length; i++) {
                             if (frm.doc.markup_positions[i].description.includes("Garantierückbehalt")) {
                                 frappe.model.set_value(frm.doc.markup_positions[i].doctype, frm.doc.markup_positions[i].name,
                                 'percent', 0);
