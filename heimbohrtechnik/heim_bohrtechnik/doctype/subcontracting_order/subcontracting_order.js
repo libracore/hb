@@ -41,6 +41,11 @@ frappe.ui.form.on('Subcontracting Order', {
                 open_create_finish(frm);
             });
         }
+        
+        // direct link to cloud
+        if (frm.doc.project) {
+            find_object(frm, frm.doc.project, true);            // cloud_link_only
+        }
     },
     before_save: function(frm) {
         if (!frm.doc.object_name) {
@@ -64,7 +69,7 @@ frappe.ui.form.on('Subcontracting Order', {
     }
 });
 
-function find_object(frm, project) {
+function find_object(frm, project, cloud_link_only=false) {
     frappe.call({
         'method': "frappe.client.get",
         'args': {
@@ -72,9 +77,13 @@ function find_object(frm, project) {
             'name': project
         },
         'callback': function(response) {
-            var project = response.message;
-            cur_frm.set_value("object", project.object);
-            autocomplete_object(frm);
+            let project = response.message;
+            if (cloud_link_only) {
+                add_cloud_link(frm, project.cloud_url);
+            } else {
+                cur_frm.set_value("object", project.object);
+                autocomplete_object(frm);
+            }
         }
     });
 }
@@ -357,4 +366,10 @@ function setupFloatingTooltip($root){
 
 function show_gant(gant) {
     cur_frm.set_df_property('gant_like_html', 'options', gant);
+}
+
+function add_cloud_link(frm, cloud_url) {
+    frm.add_custom_button(__("Cloud"), function() {
+        window.open(cloud_url, '_blank').focus();
+    });
 }
