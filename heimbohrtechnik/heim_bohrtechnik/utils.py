@@ -788,6 +788,24 @@ def create_full_project_file(project):
     # create merger
     merger = PdfFileMerger(strict=False)                    # accept technically incorrect PDFs
     merger.append(pdf_file)
+    # append drilling information (Bohranzeige)
+    drilling_doc = frappe.get_all("Bohranzeige", filters={'project': project}, fields=['name', 'print_format'], order_by='modified DESC')
+    if drilling_doc:
+        drilling_html = frappe.get_print("Bohranzeige", drilling_doc[0]['name'], print_format=(drilling_doc[0]['print_format'] or "HB Bohranzeige"))
+        drilling_pdf = frappe.utils.pdf.get_pdf(drilling_html, print_format=(drilling_doc[0]['print_format'] or "HB Bohranzeige"))
+        drilling_pdf_file = "/tmp/{0}.pdf".format(uuid.uuid4().hex)
+        with open(drilling_pdf_file, mode='wb') as file:
+            file.write(drilling_pdf)
+        merger.append(drilling_pdf_file)
+    # append water supply if available
+    water_doc = frappe.get_all("Water Supply Registration", filters={'project': project}, fields=['name', 'print_format'], order_by='modified DESC')
+    if water_doc:
+        water_html = frappe.get_print("Water Supply Registration", water_doc[0]['name'], print_format=(water_doc[0]['print_format'] or "Wasseranmeldung (wrapper)"))
+        water_pdf = frappe.utils.pdf.get_pdf(water_html, print_format=(water_doc[0]['print_format'] or "Wasseranmeldung (wrapper)"))
+        water_pdf_file = "/tmp/{0}.pdf".format(uuid.uuid4().hex)
+        with open(water_pdf_file, mode='wb') as file:
+            file.write(water_pdf)
+        merger.append(water_pdf_file)
     # other pages from construction plans
     p_doc = frappe.get_doc("Project", project)
     if p_doc.plans:
