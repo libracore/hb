@@ -8,7 +8,9 @@
   "sec_order_api",
   "hpt_cloud_customer",
   "col_order_api",
-  "hpt_cloud_secret"
+  "hpt_cloud_secret",
+  "warehouse_section",
+  "default_warehouse"
  ],
  "fields": [
   {
@@ -34,10 +36,21 @@
    "fieldname": "hpt_cloud_secret",
    "fieldtype": "Data",
    "label": "HPT Cloud Secret"
+  },
+  {
+   "fieldname": "warehouse_section",
+   "fieldtype": "Section Break",
+   "label": "Warehouse"
+  },
+  {
+   "fieldname": "default_warehouse",
+   "fieldtype": "Link",
+   "label": "Default Warehouse",
+   "options": "Warehouse"
   }
  ],
  "issingle": 1,
- "modified": "2025-01-15 21:19:23.857376",
+ "modified": "2026-07-13 16:11:11.484972",
  "modified_by": "Administrator",
  "module": "HPT Solutions",
  "name": "HPT Settings",
