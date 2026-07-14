@@ -3,8 +3,10 @@
         <td style="width: 85% !important;">
             <b>{{ item_name }}</b><br>
             Artikelnummer: {{ item_code }}<br>
+            <span style="font-size: 10px;">
             Lagerort: {{ warehouse }}<br>
             Druckdatum: {{ date }}
+            </span>
         </td>
         <td style="text-align: right; width: 15% !important; ">
             <img src="https://data.libracore.ch/phpqrcode/api/qrcode.php?content={{ item_code }}&size=3" />
