@@ -15,6 +15,9 @@ frappe.ui.form.on('Item', {
         frm.add_custom_button(__("Gross"), function() {
             create_label(frm, "big");
         },__("Etikette erstellen"));  
+        frm.add_custom_button(__("HPT"), function() {
+            create_label(frm, "hpt");
+        },__("Etikette erstellen"));  
     }
 });
 

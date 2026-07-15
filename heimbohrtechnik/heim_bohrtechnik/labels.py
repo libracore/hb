@@ -7,16 +7,19 @@ from erpnextswiss.erpnextswiss.doctype.label_printer.label_printer import create
 def get_label(item, label_type):
     #get label printer
     settings = frappe.get_doc("Heim Settings", "Heim Settings")
-    if label_type == "small":
-        if not settings.item_label_printer_small:
-            frappe.throw(_("Please define a label printer for small article labels under Heim Settings"))
-        label_printer = settings.item_label_printer_small
-        label_template = "item_label_small.html"
-    elif label_type == "big":
-        if not settings.item_label_printer_big:
-            frappe.throw(_("Please define a label printer for big article labels under Heim Settings"))
-        label_printer = settings.item_label_printer_big
-        label_template = "item_label_big.html"
+    hpt_settings = frappe.get_doc("HPT Settings", "HPT Settings")
+
+    config_map = {
+        "small": ("item_label_printer_small", "item_label_small.html", _("small")),
+        "big": ("item_label_printer_big", "item_label_big.html", _("big")),
+        "hpt": ("item_label_printer_big", "item_label_hpt.html", _("big"))
+    }
+
+    printer_field, label_template, error_label = config_map[label_type]
+    
+    label_printer = settings.get(printer_field)
+    if not label_printer:
+        frappe.throw(_("Please define a label printer for {0} article labels under Heim Settings").format(error_label))
 
 
     #get raw data
@@ -29,7 +32,15 @@ def get_label(item, label_type):
     frappe.msgprint("Label Printer: {0}".format(data))
 
     #prepare content
+
+    if label_type == "hpt":
+        data.update({
+            "date": frappe.utils.formatdate(frappe.utils.today(), "dd.mm.yyyy"),
+            "warehouse": hpt_settings.default_warehouse or ""
+        })
+    
     content = frappe.render_template("heimbohrtechnik/templates/labels/"+label_template, data)
+    
     #create label
     printer=frappe.get_doc("Label Printer", label_printer)
     pdf = create_pdf(printer, content)
