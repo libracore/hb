@@ -77,3 +77,27 @@ Return a list of attachments of a document
 def get_document_attachments(dt, dn):
     return get_attachments(dt, dn)
     
+"""
+Get total mud for an object
+"""
+def get_total_mud(obj):
+    total_mud = frappe.db.sql("""
+        SELECT SUM(`weight`) AS `total_mud`
+        FROM `tabTruck Delivery Object`
+        WHERE 
+            `docstatus` = 1
+            AND `object` = %(obj)s;
+        """,
+        {
+            'obj': obj
+        },
+        as_dict=True
+    )
+    
+    if total_mud:
+        try:
+            return total_mud[0]['total_mud']
+        except:
+            return 0
+    else:
+        return 0
