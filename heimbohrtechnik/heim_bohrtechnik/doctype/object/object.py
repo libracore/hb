@@ -187,7 +187,9 @@ class Object(Document):
                     elif self.drilling_type == "Anodenbohrung":
                         _details += """ <span style="color: red;"><b>Anoden</b></span>"""
                     # probe highlighting
-                    if "vario" in (s.probe_type or "").lower():
+                    if "vario-rex" in (s.probe_type or "").lower():
+                        _details += """ <span style="color: red;"><b>Vario-Rex</b></span>"""
+                    elif "vario" in (s.probe_type or "").lower():
                         _details += """ <span style="color: red;"><b>Vario</b></span>"""
                     elif "rex" in (s.probe_type or "").lower():
                         _details += """ <span style="color: red;"><b>REX</b></span>"""
