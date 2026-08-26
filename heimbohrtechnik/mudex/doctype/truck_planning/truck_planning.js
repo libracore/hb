@@ -1,4 +1,4 @@
-// Copyright (c) 2021, libracore AG and contributors
+// Copyright (c) 2021-2026, libracore AG and contributors
 // For license information, please see license.txt
 
 frappe.ui.form.on('Truck Planning', {
@@ -11,29 +11,37 @@ frappe.ui.form.on('Truck Planning', {
             });
         });
         frm.add_custom_button(__("Delivery (Web)"), function() {
-            var url = window.location.origin + "/schlammanlieferung?truck=" + cur_frm.doc.truck 
-                + "&customer=" + cur_frm.doc.truck_customer 
-                + "&object=" + cur_frm.doc.object 
-                + "&key=" + cur_frm.doc.object_key;
-            window.open(url, '_blank').focus();
+            window.open(get_feedback_link(frm), '_blank').focus();
         });
         // button to create truck link
         frm.add_custom_button("<i class='fa fa-truck'></i> Link", function() {
-            var link = window.location.origin + "/schlammanlieferung?truck=" + cur_frm.doc.truck 
-                + "&customer=" + cur_frm.doc.truck_customer + "&object=" + cur_frm.doc.object 
-                + "&key=" + cur_frm.doc.object_key; 
+            let link = get_feedback_link(frm); 
             navigator.clipboard.writeText(link).then(function() {
                 frappe.show_alert( __("Link in der Zwischenablage") );
               }, function() {
                  frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
             });
         });
-        // button to create truck link
+        // button to create navigation link
         frm.add_custom_button("<i class='fa fa-map-marker'></i> Navigation", function() {
-            var url = "https://www.google.com/maps/dir//" 
-                + (cur_frm.doc.object_street || "").replace(" ", "+") + ","
-                + (cur_frm.doc.object_location || "").replace(" ", "+"); 
-            window.open(url, '_blank').focus();
+            window.open(get_navigation_link(frm), '_blank').focus();
+        });
+        // button to create whatsapp link
+        frm.add_custom_button("<i class='fa fa-whatsapp'></i> Whatapp", function() {
+            if (!frm.doc.truck_phone) {
+                frappe.prompt([
+                        {'fieldname': 'phone', 'fieldtype': 'Data', 'label': __('Phone'), 'reqd': 1}  
+                    ],
+                    function(values){
+                        cur_frm.set_value("truck_phone", values.phone);
+                        open_whatsapp(frm);
+                    },
+                    'Telefonnummer eingeben',
+                    'OK'
+                );
+            } else {
+                open_whatsapp(frm);
+            }
         });
     },
     object_name: function(frm) {
@@ -66,4 +74,42 @@ function set_details() {
         + cur_frm.doc.object + " - " 
         + cur_frm.doc.object_street + ", "
         + cur_frm.doc.object_location);
+}
+
+function get_feedback_link(frm) {
+    return window.location.origin + "/schlammanlieferung?truck=" + cur_frm.doc.truck 
+        + "&customer=" + cur_frm.doc.truck_customer 
+        + "&object=" + cur_frm.doc.object 
+        + "&key=" + cur_frm.doc.object_key; 
+}
+
+function get_navigation_link(frm) {
+    return "https://www.google.com/maps/dir//" 
+        + (cur_frm.doc.object_street || "").replace(" ", "+") + ","
+        + (cur_frm.doc.object_location || "").replace(" ", "+"); 
+}
+
+function open_whatsapp(frm) {
+    const link = createWhatsAppLink({
+        phoneNumber: (frm.doc.truck_phone || "").replaceAll("+", "").replaceAll(" ", ""),
+        date: (frm.doc.start_time || "").split(" ")[0],
+        time: (frm.doc.start_time || " ").split(" ")[1].substring(0, 5),
+        street: (frm.doc.object_address || "<br>").split("<br>")[0],
+        city: (frm.doc.object_address || "<br>").split("<br>")[1],
+        googleMapsLink: get_navigation_link(frm),
+        feedbackLink: get_feedback_link(frm)
+    });
+    window.open(link, '_blank').focus();
+}
+
+function createWhatsAppLink({ phoneNumber, date, time, street, city, googleMapsLink, feedbackLink }) {
+  const message = `Hallo, bitte am ${date} um ${time} Uhr in
+${street}
+${city}
+${googleMapsLink}
+absaugen.
+Hier ist der Wiegelink: ${feedbackLink}`;
+
+  const encodedMessage = encodeURIComponent(message);
+  return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 }

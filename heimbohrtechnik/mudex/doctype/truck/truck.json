@@ -18,6 +18,7 @@
   "customer",
   "customer_name",
   "user",
+  "phone",
   "section_weight",
   "net_weight",
   "column_weight",
@@ -120,9 +121,15 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Key"
+  },
+  {
+   "description": "Im Format +41 76 xxx xx xx eingeben",
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
   }
  ],
- "modified": "2024-06-14 16:36:50.760775",
+ "modified": "2026-08-26 21:38:11.289300",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "Truck",

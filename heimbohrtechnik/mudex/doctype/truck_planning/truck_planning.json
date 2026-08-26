@@ -5,6 +5,7 @@
  "engine": "InnoDB",
  "field_order": [
   "truck",
+  "truck_phone",
   "truck_title",
   "truck_owner",
   "truck_customer",
@@ -149,9 +150,16 @@
    "label": "Category",
    "options": "\nMudex Calendar\nDiesel",
    "read_only": 1
+  },
+  {
+   "fetch_from": "truck.phone",
+   "fieldname": "truck_phone",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Truck Phone"
   }
  ],
- "modified": "2023-08-22 13:52:28.557821",
+ "modified": "2026-08-26 21:51:27.497704",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "Truck Planning",
