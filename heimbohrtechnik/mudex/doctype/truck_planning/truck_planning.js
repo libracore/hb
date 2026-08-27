@@ -43,6 +43,15 @@ frappe.ui.form.on('Truck Planning', {
                 open_whatsapp(frm);
             }
         });
+        // button to create whatsapp to clipboard
+        frm.add_custom_button("<i class='fa fa-clipboard'></i> Whatapp", function() {
+            let link = get_whatsapp_message(frm); 
+            navigator.clipboard.writeText(link).then(function() {
+                frappe.show_alert( __("Link in der Zwischenablage") );
+              }, function() {
+                 frappe.show_alert( __("Kein Zugriff auf Zwischenablage") );
+            });
+        });
     },
     object_name: function(frm) {
         cur_frm.set_value("object_address", cur_frm.doc.object_street + "<br>" + cur_frm.doc.object_location);
@@ -89,27 +98,30 @@ function get_navigation_link(frm) {
         + (cur_frm.doc.object_location || "").replace(" ", "+"); 
 }
 
-function open_whatsapp(frm) {
-    const link = createWhatsAppLink({
-        phoneNumber: (frm.doc.truck_phone || "").replaceAll("+", "").replaceAll(" ", ""),
-        date: (frm.doc.start_time || "").split(" ")[0],
-        time: (frm.doc.start_time || " ").split(" ")[1].substring(0, 5),
-        street: (frm.doc.object_address || "<br>").split("<br>")[0],
-        city: (frm.doc.object_address || "<br>").split("<br>")[1],
-        googleMapsLink: get_navigation_link(frm),
-        feedbackLink: get_feedback_link(frm)
-    });
-    window.open(link, '_blank').focus();
-}
-
-function createWhatsAppLink({ phoneNumber, date, time, street, city, googleMapsLink, feedbackLink }) {
-  const message = `Hallo, bitte am ${date} um ${time} Uhr in
+function get_whatsapp_message(frm) {
+    let date = (frm.doc.start_time || "").split(" ")[0];
+    let time = (frm.doc.start_time || " ").split(" ")[1].substring(0, 5);
+    let street = (frm.doc.object_address || "<br>").split("<br>")[0];
+    let city = (frm.doc.object_address || "<br>").split("<br>")[1];
+    let googleMapsLink = get_navigation_link(frm);
+    let feedbackLink = get_feedback_link(frm);
+    
+    const message = `Hallo, bitte am ${date} um ${time} Uhr in
 ${street}
 ${city}
 ${googleMapsLink}
 absaugen.
 Hier ist der Wiegelink: ${feedbackLink}`;
 
-  const encodedMessage = encodeURIComponent(message);
-  return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    return message;
+}
+
+function open_whatsapp(frm) {
+    window.open(create_whatsapp_link(frm), '_blank').focus();
+}
+
+function create_whatsapp_link(frm) {
+    let phoneNumber = (frm.doc.truck_phone || "").replaceAll("+", "").replaceAll(" ", "");
+    const encodedMessage = encodeURIComponent(get_whatsapp_message(frm));
+    return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 }
