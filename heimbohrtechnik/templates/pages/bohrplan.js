@@ -5,6 +5,7 @@ $('document').ready(function(){
 frappe.bohrplaner = {
     open_subcontracting_order: function(element) {
         // window.open('/printview?doctype=Subcontracting%20Order&name=' + element.id + '&trigger_print=1&format=Verlängerungsauftrag&no_letterhead=1&_lang=en', '_blank'); // no permission
+        // this method does not render private images into the pdf
         var w = window.open(
             ("/api/method/heimbohrtechnik.templates.pages.bohrplan.get_subcontracting_pdf"  
                 + "?drilling_team=" + encodeURIComponent(locals.drilling_team)
@@ -15,6 +16,7 @@ frappe.bohrplaner = {
         if (!w) {
             frappe.msgprint(__("Please enable pop-ups")); return;
         }
+        // window.open('/files/' + element.id);
     }
 }
 

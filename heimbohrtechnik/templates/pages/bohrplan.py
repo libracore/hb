@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2022-2025, libracore and contributors
+# Copyright (c) 2022-2026, libracore and contributors
 # License: AGPL v3. See LICENCE
 
 from __future__ import unicode_literals
@@ -9,6 +9,9 @@ import json
 import datetime
 from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_content, get_overlay_datas, get_subproject_overlay_datas, get_internal_overlay_datas
 from frappe.utils.pdf import get_pdf
+import base64
+import re
+from frappe.utils.file_manager import get_file
 
 """
 This function checks the access and returns the restricted information
@@ -133,6 +136,7 @@ def get_subcontracting_pdf(key, drilling_team, subcontracting_order):
     css_html = f"<style>{css}</style>{raw_html}"
     # create html
     rendered_html = frappe.render_template(css_html, {'doc': doc} )
+    rendered_html = inline_private_images(rendered_html)
     # need to load the styles and tags
     content = frappe.render_template(
         'heimbohrtechnik/templates/includes/print.html',
@@ -145,3 +149,21 @@ def get_subcontracting_pdf(key, drilling_team, subcontracting_order):
     frappe.local.response.filename = f"{doc}.pdf"
     frappe.local.response.filecontent = pdf
     frappe.local.response.type = "download"
+
+def inline_private_images(html):
+    """Replace private file image src with base64 data URIs"""
+    def replace_src(match):
+        file_url = match.group(1)
+        if "/private/files/" not in file_url:
+            return match.group(0)
+        try:
+            file_doc = frappe.get_doc("File", {"file_url": file_url})
+            file_name, content = get_file(file_doc.name)
+            mime_type = frappe.utils.get_mimetype(file_name) or "image/png"
+            b64 = base64.b64encode(content).decode("utf-8")
+            return f'src="data:{mime_type};base64,{b64}"'
+        except Exception:
+            frappe.log_error(f"Could not inline image: {file_url}")
+            return match.group(0)
+
+    return re.sub(r'src="([^"]+)"', replace_src, html)

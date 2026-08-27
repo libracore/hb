@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2022, libracore AG and contributors
+# Copyright (c) 2022-2026, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
+from erpnextswiss.erpnextswiss.attach_pdf import execute as attach_pdf
+from frappe.desk.form.load import get_attachments
+from frappe.utils.file_manager import remove_file
 
 class SubcontractingOrder(Document):
     def before_save(self):
@@ -53,6 +56,21 @@ class SubcontractingOrder(Document):
                 frappe.db.commit()
         return
     
+    def on_update(self):
+        # self.attach_pdf()             # currently not in use - external pdf based on base64 private images
+        return
+    
+    def attach_pdf(self):
+        # check if this is already attached
+        attachments = get_attachments("Subcontracting Order", self.name)
+        for a in attachments:
+            if a.file_name == "{0}.pdf".format(self.name):
+                remove_file(a.name, "Subcontracting Order", self.name)
+        # create and attach
+        attach_pdf("Subcontracting Order", self.name, title=self.name, print_format="Verlängerungsauftrag")
+        frappe.db.commit()
+        return
+        
     def on_trash(self):
         # remove entries from linked projects
         frappe.db.sql("""
