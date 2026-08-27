@@ -1,0 +1,59 @@
+{% extends "templates/web.html" %}
+
+{% block title %} {{ _("Parkplätze") }} {% endblock %}
+
+{% block page_content %}
+    <div class="page-head">
+      <div class="list-wrap">
+        <div class="list-head">
+          <div></div>
+          <div>Adresse</div>
+          <div>Ort</div>
+          <div style="width: 50px; ">Kanton</div>
+          <div>GPS</div>
+          <div>Bemerkungen</div>
+        </div>
+
+        {% for p in parkings %}
+        <div class="list-row">
+          <div class="cb"></div>
+          <div class="cell-name">
+            <div class="p-icon" style="background:#2490ef;">P</div>
+            <div class="name-text">
+              <span class="title">{{ p.street or "-" }}</span>
+            </div>
+          </div>
+          <div class="cell">{{ p.pincode or "" }} {{ p.city or "" }}</div>
+          <div class="cell muted" style="width: 50px; "><span class="tag">{{ p.canton or "" }}</span></div>
+          <div class="cell">{{ p.gps_latitude or "0" }}, {{ p.gps_longitude or "0" }}</div>
+          <div class="cell" style="width: 150px; ">{% if p.remarks %}
+            <span class="status-pill status-active"><span class="dot"></span>{{ p.remarks }}</span>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      
+      <!-- Mobile card list -->
+      <div class="card-list">
+        {% for p in parkings %}  
+        <div class="addr-card">
+          <div class="p-icon" style="background:#2490ef;">P</div>
+          <div class="addr-card-body">
+            <div class="addr-card-top">
+              <span class="addr-card-title">{{ p.street or "-" }}</span>
+              {% if p.remarks %}
+                <span class="status-pill status-active"><span class="dot"></span>{{ p.remarks }}</span>
+                {% endif %}
+            </div>
+            <div class="addr-card-line">{{ p.gps_latitude or "0" }}, {{ p.gps_longitude or "0" }}</div>
+            <div class="addr-card-meta">
+              <span class="tag">{{ p.pincode or "" }} {{ p.city or "" }}, {{ p.canton or "" }}</span>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+{% endblock %}
