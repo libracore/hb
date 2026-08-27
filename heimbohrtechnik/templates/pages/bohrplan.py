@@ -12,6 +12,7 @@ from frappe.utils.pdf import get_pdf
 import base64
 import re
 from frappe.utils.file_manager import get_file
+import mimetypes
 
 """
 This function checks the access and returns the restricted information
@@ -163,7 +164,8 @@ def inline_private_images(html):
             with open(file_path, "rb") as f:
                 content = f.read()
 
-            mime_type = frappe.utils.get_mimetype(file_doc.file_name) or "image/png"
+            mime_type, _ = mimetypes.guess_type(file_doc.file_name)
+            mime_type = mime_type or "image/png"
             b64 = base64.b64encode(content).decode("utf-8")
             return f'src="data:{mime_type};base64,{b64}"'
         except Exception:
