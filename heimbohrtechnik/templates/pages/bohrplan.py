@@ -8,6 +8,7 @@ from frappe import _
 import json
 import datetime
 from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_content, get_overlay_datas, get_subproject_overlay_datas, get_internal_overlay_datas
+from frappe.utils.pdf import get_pdf
 
 """
 This function checks the access and returns the restricted information
@@ -118,3 +119,29 @@ def get_last_date(customer=None, key=None, drilling_team=None):
         return last_date[0]['expected_end_date']
     else:
         return None
+
+@frappe.whitelist(allow_guest=True)
+def get_subcontracting_pdf(key, drilling_team, subcontracting_order):
+    if not frappe.db.exists("Drilling Team", drilling_team):
+        return {'error': 'Invalid drilling team'}
+    if frappe.get_value("Drilling Team", drilling_team, "team_key") != key:
+        return {'error': 'Invalid key'}
+    
+    doc = frappe.get_doc("Subcontracting Order", subcontracting_order)
+    raw_html = frappe.get_value('Print Format', 'Verlängerungsauftrag', 'html')
+    css = frappe.get_value('Print Format', 'Verlängerungsauftrag', 'css')
+    css_html = f"<style>{css}</style>{raw_html}"
+    # create html
+    rendered_html = frappe.render_template(css_html, {'doc': doc} )
+    # need to load the styles and tags
+    content = frappe.render_template(
+        'heimbohrtechnik/templates/includes/print.html',
+        {'html': rendered_html}
+    )
+    options = {
+        'disable-smart-shrinking': ''
+    }
+    pdf = get_pdf(content, options)
+    frappe.local.response.filename = f"{doc}.pdf"
+    frappe.local.response.filecontent = pdf
+    frappe.local.response.type = "download"
