@@ -158,8 +158,12 @@ def inline_private_images(html):
             return match.group(0)
         try:
             file_doc = frappe.get_doc("File", {"file_url": file_url})
-            file_name, content = get_file(file_doc.name)
-            mime_type = frappe.utils.get_mimetype(file_name) or "image/png"
+            file_path = file_doc.get_full_path()  # resolves to the actual disk path
+
+            with open(file_path, "rb") as f:
+                content = f.read()
+
+            mime_type = frappe.utils.get_mimetype(file_doc.file_name) or "image/png"
             b64 = base64.b64encode(content).decode("utf-8")
             return f'src="data:{mime_type};base64,{b64}"'
         except Exception:
