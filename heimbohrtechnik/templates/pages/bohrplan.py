@@ -167,7 +167,10 @@ def inline_private_images(html):
             b64 = base64.b64encode(content).decode("utf-8")
             return f'src="data:{mime_type};base64,{b64}"'
         except Exception:
-            frappe.log_error(f"Could not inline image: {file_url}")
+            frappe.log_error(
+                title="PDF image inlining failed",
+                message=frappe.get_traceback()
+            )
             return match.group(0)
 
     return re.sub(r'src="([^"]+)"', replace_src, html)
