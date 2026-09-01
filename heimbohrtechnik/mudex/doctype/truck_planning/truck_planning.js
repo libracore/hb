@@ -27,6 +27,7 @@ frappe.ui.form.on('Truck Planning', {
             window.open(get_navigation_link(frm), '_blank').focus();
         });
         // button to create whatsapp link
+        /* 2026-09-01 removed whatsapp direct link
         frm.add_custom_button("<i class='fa fa-whatsapp'></i> Whatapp", function() {
             if (!frm.doc.truck_phone) {
                 frappe.prompt([
@@ -43,6 +44,7 @@ frappe.ui.form.on('Truck Planning', {
                 open_whatsapp(frm);
             }
         });
+        */
         // button to create whatsapp to clipboard
         frm.add_custom_button("<i class='fa fa-clipboard'></i> Whatapp", function() {
             let link = get_whatsapp_message(frm); 
