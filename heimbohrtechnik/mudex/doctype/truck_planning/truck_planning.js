@@ -106,11 +106,11 @@ function get_whatsapp_message(frm) {
     let googleMapsLink = get_navigation_link(frm);
     let feedbackLink = get_feedback_link(frm);
     
-    const message = `Hallo, bitte am ${date} um ${time} Uhr in
+    const message = `Hallo, bitte am ${date} um ${time} Uhr losfahren um in
 ${street}
 ${city}
 ${googleMapsLink}
-absaugen.
+abzusaugen.
 Hier ist der Wiegelink: ${feedbackLink}`;
 
     return message;
