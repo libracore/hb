@@ -99,7 +99,7 @@ function get_navigation_link(frm) {
 }
 
 function get_whatsapp_message(frm) {
-    let date = (frm.doc.start_time || "").split(" ")[0];
+    let date = (frm.doc.start_time || "").split(" ")[0].split('-').reverse().join('.');
     let time = (frm.doc.start_time || " ").split(" ")[1].substring(0, 5);
     let street = (frm.doc.object_address || "<br>").split("<br>")[0];
     let city = (frm.doc.object_address || "<br>").split("<br>")[1];
