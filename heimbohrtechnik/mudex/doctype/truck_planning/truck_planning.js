@@ -46,7 +46,7 @@ frappe.ui.form.on('Truck Planning', {
         });
         */
         // button to create whatsapp to clipboard
-        frm.add_custom_button("<i class='fa fa-clipboard'></i> Whatapp", function() {
+        frm.add_custom_button("<i class='fa fa-clipboard'></i> Whatsapp", function() {
             let link = get_whatsapp_message(frm); 
             navigator.clipboard.writeText(link).then(function() {
                 frappe.show_alert( __("Link in der Zwischenablage") );
