@@ -16,6 +16,10 @@ frappe.views.calendar["Truck Planning"] = {
             'right': 'month'
         }
     },*/
+    'options': {
+        'minTime': "05:00:00",
+        'maxTime': "19:00:00"
+    },
     'gantt': true,
     'filters': [
         {
