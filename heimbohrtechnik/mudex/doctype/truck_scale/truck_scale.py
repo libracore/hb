@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021, libracore AG and contributors
+# Copyright (c) 2021-2026, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 import telnetlib
-from frappe.utils import cint
+from frappe.utils import cint, get_datetime
 from random import randrange 
 
 class TruckScale(Document):
@@ -42,3 +42,35 @@ def get_weight(truck_scale, validated=False, debug=False):
         weight = -1
         frappe.log_error( "{0}: {1}".format(err, lines[-1]), "Get weight failed")
     return {'weight': weight, 'process_id': process_id}
+
+@frappe.whitelist()
+def trace_weight(truck_scale):
+    """
+    Record the current weight to the Truck Scale Trace (and limit number of trace data points)
+    
+    Can be executed from
+      $ bench execute heimbohrtechnik.mudex.doctype.truck_scale.truck_scale.trace_weight --kwargs "{'truck_scale': 'MudEx'}"
+    or (using access token/credentials)
+      /api/method/heimbohrtechnik.mudex.doctype.truck_scale.truck_scale.trace_weight?truck_scale=MudEx
+      
+    """
+    if not frappe.db.exists("Truck Scale", truck_scale):
+        return
+    weight = get_weight(truck_scale)
+    
+    # create record
+    trace = frappe.new_doc("Truck Scale Trace")
+    trace.timestamp = get_datetime()
+    trace.truck_scale = truck_scale
+    trace.weight = weight.get('weight') or 0
+    trace.insert()
+    frappe.db.commit()
+    
+    # clear out old records
+    frappe.db.sql("""
+        DELETE FROM `tabTruck Scale Trace`
+        WHERE `timestamp` < DATE_SUB(NOW(), INTERVAL 24 HOUR);"""
+    )
+    frappe.db.commit()
+    
+    return

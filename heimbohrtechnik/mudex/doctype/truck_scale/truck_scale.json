@@ -7,6 +7,7 @@
  "field_order": [
   "title",
   "weight_html",
+  "weight_chart_html",
   "section_connection",
   "host",
   "port",
@@ -71,9 +72,14 @@
    "fieldname": "validated",
    "fieldtype": "Check",
    "label": "Validated"
+  },
+  {
+   "fieldname": "weight_chart_html",
+   "fieldtype": "HTML",
+   "label": "Weight Chart"
   }
  ],
- "modified": "2021-12-23 21:18:12.363421",
+ "modified": "2026-09-17 17:50:30.899540",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "Truck Scale",
