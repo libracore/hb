@@ -1,0 +1,55 @@
+{
+ "creation": "2026-09-17 16:31:28.587853",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "truck_scale",
+  "timestamp",
+  "weight"
+ ],
+ "fields": [
+  {
+   "fieldname": "truck_scale",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Truck Scale",
+   "options": "Truck Scale",
+   "reqd": 1
+  },
+  {
+   "fieldname": "timestamp",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Timestamp"
+  },
+  {
+   "fieldname": "weight",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Weight"
+  }
+ ],
+ "modified": "2026-09-17 16:31:28.587853",
+ "modified_by": "Administrator",
+ "module": "MudEx",
+ "name": "Truck Scale Trace",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "timestamp"
+}
