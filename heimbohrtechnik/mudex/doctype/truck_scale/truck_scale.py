@@ -66,10 +66,34 @@ def trace_weight(truck_scale):
     trace.insert()
     frappe.db.commit()
     
+    # data point optimisation: if there is no change in last 3 point, clear out middle point
+    last_3_datapoints = frappe.db.sql("""
+        SELECT `name`, `weight`
+        FROM `tabTruck Scale Trace`
+        WHERE 
+            `truck_scale` = %(truck_scale)s
+        ORDER BY `creation` DESC
+        LIMIT 3; """,
+        {
+            'truck_scale': truck_scale
+        },
+        as_dict=True
+    )
+    if len(last_3_datapoints) == 3 and \
+        last_3_datapoints[0]['weight'] == last_3_datapoints[1]['weight'] and \
+        last_3_datapoints[1]['weight'] == last_3_datapoints[2]['weight']:
+        frappe.db.sql("""
+            DELETE FROM `tabTruck Scale Trace` WHERE `name` = %(name)s;
+            """,
+            {
+                'name': last_3_datapoints[1]['name']
+            }
+        )
+    
     # clear out old records
     frappe.db.sql("""
         DELETE FROM `tabTruck Scale Trace`
-        WHERE `timestamp` < DATE_SUB(NOW(), INTERVAL 24 HOUR);"""
+        WHERE `timestamp` < DATE_SUB(NOW(), INTERVAL 96 HOUR);"""
     )
     frappe.db.commit()
     
