@@ -1,0 +1,12 @@
+[Unit]
+Description=Scale Watcher Service
+After=network-online.target
+Want=network-online.target
+
+[Service]
+Type=oneshot
+User=frappe
+WorkingDirectory=/home/frappe/frappe-bench
+ExecStart=/home/frappe/frappe-bench/apps/heimbohrtechnik/heimbohrtechnik/scripts/scale_monitor/scale_monitor.sh
+Restart=no
+TimeoutStartSec=9s

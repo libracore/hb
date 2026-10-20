@@ -9,6 +9,9 @@ import telnetlib
 from frappe.utils import cint, get_datetime
 from random import randrange 
 
+# only consider weight above this threshold as positive displacement
+ZERO_WEIGHT_OFFSET = 250
+
 class TruckScale(Document):
     pass
 
@@ -89,6 +92,10 @@ def trace_weight(truck_scale):
                 'name': last_3_datapoints[1]['name']
             }
         )
+    elif len(last_3_datapoints) == 3 and \
+        last_3_datapoints[0]['weight'] > last_3_datapoints[1]['weight'] and \
+        last_3_datapoints[0]['weight'] > ZERO_WEIGHT_OFFSET:
+        positive_weight_detected()
     
     # clear out old records
     frappe.db.sql("""
@@ -96,5 +103,25 @@ def trace_weight(truck_scale):
         WHERE `timestamp` < DATE_SUB(NOW(), INTERVAL 96 HOUR);"""
     )
     frappe.db.commit()
+    
+    return
+
+
+def positive_weight_detected():
+    # trigger red signal
+    switch_red_on()
+    return
+    
+def switch_red_on():
+    # reset green
+    
+    # switch on red (permanent)
+    
+    return
+    
+def switch_green_on():
+    # switch off red
+    
+    # switch on green for 3 minutes
     
     return
