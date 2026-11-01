@@ -9,7 +9,7 @@ import telnetlib
 from frappe.utils import cint, get_datetime
 from random import randrange 
 import requests
-from requests.auth import HHTPDigestAuth
+from requests.auth import HTTPDigestAuth
 from frappe.utils.password import get_decrypted_password
 
 # only consider weight above this threshold as positive displacement
@@ -114,17 +114,31 @@ def positive_weight_detected(truck_scale):
     # trigger red signal
     switch_red_on(truck_scale)
     return
-    
+
+@frappe.whitelist()
 def switch_red_on(truck_scale):
+    scale = frappe.get_doc("Truck Scale", truck_scale)
+    password = get_decrypted_password("Truck Scale", truck_scale, "signal_password", False)
     # reset green
     
     # switch on red (permanent)
+    response = requests.get(
+        "http://{ip}/rpc/Switch.Set".format(ip=scale.signal_ip),
+        params={'id': scale.signal_red_id, 'on': "true"},
+        auth=HTTPDigestAuth(scale.signal_user, password),
+        timeout=5
+    )
     
+    if response.status_code != 200:
+        frappe.log_error(title="Switch signal error", message="Got status {0} with {1}".format(response.status_code, response.text))
+        
     return
 
+
+@frappe.whitelist()
 def switch_green_on(truck_scale):
     scale = frappe.get_doc("Truck Scale", truck_scale)
-    password = get_decrypted_passsword("Truck Scale", truck_scale, "signal_password", False)
+    password = get_decrypted_password("Truck Scale", truck_scale, "signal_password", False)
     
     # switch off red
     

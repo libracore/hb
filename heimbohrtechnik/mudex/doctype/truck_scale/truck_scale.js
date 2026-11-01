@@ -9,6 +9,14 @@ frappe.ui.form.on('Truck Scale', {
             });
             
             render_weight_chart(frm);
+            
+            frm.add_custom_button(__("Rot"), function() {
+                switch_signal_red(frm);
+            }, __("Ampel"));
+            
+            frm.add_custom_button(__("Grün"), function() {
+                switch_signal_green(frm);
+            }, __("Ampel"));
         }
     }
 });
@@ -26,6 +34,24 @@ function get_weight(frm) {
             } else {
                 console.log("Invalid response");
             }
+        }
+    });
+}
+
+function switch_signal_green(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.mudex.doctype.truck_scale.truck_scale.switch_green_on',
+        'args': {
+            'truck_scale': frm.doc.name
+        }
+    });
+}
+
+function switch_signal_green(frm) {
+    frappe.call({
+        'method': 'heimbohrtechnik.mudex.doctype.truck_scale.truck_scale.switch_green_on',
+        'args': {
+            'truck_scale': frm.doc.name
         }
     });
 }
