@@ -14,7 +14,14 @@
   "column_connection",
   "scale_type",
   "random_mode",
-  "validated"
+  "validated",
+  "sec_signal",
+  "signal_ip",
+  "signal_user",
+  "signal_password",
+  "col_signal",
+  "signal_green_id",
+  "signal_red_id"
  ],
  "fields": [
   {
@@ -77,9 +84,43 @@
    "fieldname": "weight_chart_html",
    "fieldtype": "HTML",
    "label": "Weight Chart"
+  },
+  {
+   "fieldname": "sec_signal",
+   "fieldtype": "Section Break",
+   "label": "Signal"
+  },
+  {
+   "fieldname": "signal_ip",
+   "fieldtype": "Data",
+   "label": "IP"
+  },
+  {
+   "fieldname": "signal_user",
+   "fieldtype": "Data",
+   "label": "User"
+  },
+  {
+   "fieldname": "signal_password",
+   "fieldtype": "Password",
+   "label": "Password"
+  },
+  {
+   "fieldname": "col_signal",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "signal_green_id",
+   "fieldtype": "Int",
+   "label": "Green ID"
+  },
+  {
+   "fieldname": "signal_red_id",
+   "fieldtype": "Int",
+   "label": "Red ID"
   }
  ],
- "modified": "2026-09-17 17:50:30.899540",
+ "modified": "2026-11-01 18:15:30.466644",
  "modified_by": "Administrator",
  "module": "MudEx",
  "name": "Truck Scale",

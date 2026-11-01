@@ -39,6 +39,7 @@ class Object(Document):
         else:
             return 0
     
+    @frappe.whitelist()
     def create_project(self, sales_order=None):
         if not frappe.db.exists("Project", self.name):
             project = frappe.get_doc({
@@ -76,6 +77,13 @@ class Object(Document):
                   'permit': p.permit,
                   'file': p.file
                 })
+                
+            for pl in self.plans:
+                project.append("plans", {
+                  'description': pl.description,
+                  'file': pl.file
+                })
+            
             # check sales order positions to extend checklist
             so_doc = None
             if sales_order and frappe.db.exists("Sales Order", sales_order):

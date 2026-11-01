@@ -1,4 +1,4 @@
-// Copyright (c) 2021-2024, libracore AG and contributors
+// Copyright (c) 2021-2026, libracore AG and contributors
 // For license information, please see license.txt
 
 // child table filter sets
@@ -124,9 +124,9 @@ frappe.ui.form.on('Object', {
                         // has no project
                         frm.add_custom_button(__('Create project'), function() {
                             frappe.call({
-                                method:"create_project",
-                                doc: frm.doc,
-                                callback: function(response) {
+                                'method': "create_project",
+                                'doc': frm.doc,
+                                'callback': function(response) {
                                     cur_frm.reload_doc();
                                 }
                             });

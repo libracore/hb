@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021-2024, libracore and contributors
+# Copyright (c) 2021-2026, libracore and contributors
 # License: AGPL v3. See LICENCE
 
 from __future__ import unicode_literals
@@ -8,6 +8,7 @@ from frappe import _
 import json
 import datetime
 from frappe.utils import cint, flt
+from heimbohrtechnik.mudex.doctype.truck_scale.truck_scale import switch_green_on
 
 @frappe.whitelist(allow_guest=True)
 def get_object_details(truck, customer, object_name, key):
@@ -88,6 +89,10 @@ def insert_delivery(truck, customer, object_name, full_weight, empty_weight, net
     })
     delivery = delivery.insert(ignore_permissions=True)
     delivery.submit()
+    
+    # switch signal to green
+    switch_green_on(config.default_scale)
+    
     return {'delivery': delivery.name}
     
 @frappe.whitelist(allow_guest=True)

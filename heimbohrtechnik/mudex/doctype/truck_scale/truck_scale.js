@@ -43,7 +43,7 @@ function render_weight_chart(frm) {
         'filters': { truck_scale: frm.doc.name },
         'fields': ['weight', 'timestamp'],
         'order_by': 'timestamp asc',
-        'limit': 1000
+        'limit': 100
     }).then(records => {
         if (!records.length) {
             wrapper.html('<p class="text-muted">' + __("Noch keine Gewichte aufgezeichnet. Läuft der Agent?") + '</p>');
