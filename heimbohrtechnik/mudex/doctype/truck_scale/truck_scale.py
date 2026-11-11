@@ -26,6 +26,7 @@ def get_weight(truck_scale, validated=False, debug=False):
         if cint(scale.random_mode) == 1:
             return {'weight': randrange(1000, 40000), 'process_id': "RANDOM"}
         connection = telnetlib.Telnet(scale.host, scale.port, timeout=10)   # connect
+        lines = None
         if scale.scale_type == "Pfister":
             if cint(scale.validated == 1) or validated:
                 connection.write(b"MP\r\n")                             # send get weight with process number command
@@ -46,7 +47,7 @@ def get_weight(truck_scale, validated=False, debug=False):
         connection.close()                                              # close connection
     except Exception as err:
         weight = -1
-        frappe.log_error( "{0}: {1}".format(err, lines[-1]), "Get weight failed")
+        frappe.log_error( "{0}: {1}".format(err, lines[-1] if lines else "[no output]"), "Get weight failed")
     return {'weight': weight, 'process_id': process_id}
 
 @frappe.whitelist()
