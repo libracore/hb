@@ -38,9 +38,9 @@ function get_weight(frm) {
     });
 }
 
-function switch_signal_green(frm) {
+function switch_signal_red(frm) {
     frappe.call({
-        'method': 'heimbohrtechnik.mudex.doctype.truck_scale.truck_scale.switch_green_on',
+        'method': 'heimbohrtechnik.mudex.doctype.truck_scale.truck_scale.switch_red_on',
         'args': {
             'truck_scale': frm.doc.name
         }
