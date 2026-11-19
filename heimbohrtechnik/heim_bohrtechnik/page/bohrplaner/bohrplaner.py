@@ -936,7 +936,7 @@ def get_user_planning_days(user):
     else:
         return {
             'planning_days': 30,
-            'planning_past_Days': 0,
+            'planning_past_days': 0,
             'print_block_length_factor': frappe.get_value("Heim Settings", "Heim Settings", "block_length_factor") or 51
         }
     
