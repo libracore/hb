@@ -142,8 +142,15 @@ frappe.bohrplaner = {
     },
     load_route: function(page) {
         if (frappe.route_options.from && frappe.route_options.project_name) {
-            document.getElementById("from").value = frappe.datetime.add_days(frappe.route_options.from, (-1) * locals.planning_past_days);
-            document.getElementById("to").value = frappe.datetime.add_days(frappe.route_options.from, locals.planning_days);
+            // one-shot values: consume them now so subsequent on_page_show
+            // events do not clobber dates the user has changed manually
+            var route_from = frappe.route_options.from;
+            frappe.bohrplaner.mark_project_name = frappe.route_options.project_name;
+            delete frappe.route_options.from;
+            delete frappe.route_options.project_name;
+            
+            document.getElementById("from").value = frappe.datetime.add_days(route_from, (-1) * locals.planning_past_days);
+            document.getElementById("to").value = frappe.datetime.add_days(route_from, locals.planning_days);
             
             frappe.bohrplaner.reset_dates(page);
             
@@ -253,9 +260,10 @@ frappe.bohrplaner = {
                     var data = contents[i];
                     frappe.bohrplaner.add_absences_overlay(page, data);
                 }
-                // in case of search, mark project
-                if (frappe.route_options.project_name) {
-                    frappe.bohrplaner.mark_project(frappe.route_options.project_name);
+                // in case of search, mark project (route_options are consumed by load_route)
+                if (frappe.bohrplaner.mark_project_name) {
+                    frappe.bohrplaner.mark_project(frappe.bohrplaner.mark_project_name);
+                    delete frappe.bohrplaner.mark_project_name;
                 }
                 
                 frappe.bohrplaner.add_mfk_overlay(page);

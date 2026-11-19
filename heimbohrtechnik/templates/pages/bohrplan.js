@@ -21,50 +21,44 @@ frappe.bohrplaner = {
 }
 
 function make() {
-    var planning_days = 30;
-    
     // fetch command line arguments
     get_command_line_arguments();
     
-    // set today as default "from" date
-    var now = new Date();
-    locals.from_date = now;
-    locals.to_date = add_days(now, planning_days);
+    // fetch planning window from Signature configuration
+    frappe.call({
+       'method': "heimbohrtechnik.templates.pages.bohrplan.get_planning_range",
+       'args': {
+            'customer': locals.customer,
+            'drilling_team': locals.drilling_team,
+            'key': locals.key,
+            'tv_mode': locals.tv_mode ? 1 : 0
+       },
+       'callback': function(response) {
+            if (response.message) {
+                locals.from_date = new Date(response.message.from_date);
+                locals.to_date = new Date(response.message.to_date);
 
-    if (locals.tv_mode) {
-        // for tv mode: verify key
-        frappe.call({
-           'method': "heimbohrtechnik.templates.pages.bohrplan.verify_secret",
-           'args': {
-                'key': locals.key
-           },
-           'callback': function(response) {
-                if (response.message) {
-                    // get grid
-                    get_grid()
-                }
-           }
-        });
-    } else {
-        // fetch date range from open projects
-        frappe.call({
-           'method': "heimbohrtechnik.templates.pages.bohrplan.get_last_date",
-           'args': {
-                'customer': locals.customer,
-                'drilling_team': locals.drilling_team,
-                'key': locals.key
-           },
-           'callback': function(response) {
-                if (response.message) {
-                    locals.to_date = new Date(response.message);
-                    // get grid
-                    get_grid()
+                if (locals.tv_mode) {
+                    // for tv mode: verify key
+                    frappe.call({
+                       'method': "heimbohrtechnik.templates.pages.bohrplan.verify_secret",
+                       'args': {
+                            'key': locals.key
+                       },
+                       'callback': function(response) {
+                            if (response.message) {
+                                // get grid
+                                get_grid()
+                            }
+                       }
+                    });
                 } else {
-                    console.log("no planned projects found");
+                    // get grid
+                    get_grid()
                 }
-           }
-        });
-    }
+            }
+       }
+    });
 }
 
 function get_grid() {
@@ -90,6 +84,16 @@ function get_grid() {
             };
             
             $(frappe.render_template(frappe.templates.calendar_grid, data)).appendTo($("#page-bohrplan"));
+            
+            // allow manual date adjustment in the header
+            $("#from").on('change', function() {
+                locals.from_date = new Date(this.value);
+                run(locals.from_date, locals.to_date);
+            });
+            $("#to").on('change', function() {
+                locals.to_date = new Date(this.value);
+                run(locals.from_date, locals.to_date);
+            });
             
             run(locals.from_date, locals.to_date);
        }

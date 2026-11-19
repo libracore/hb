@@ -9,6 +9,7 @@ import json
 import datetime
 from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_content, get_overlay_datas, get_subproject_overlay_datas, get_internal_overlay_datas
 from frappe.utils.pdf import get_pdf
+from frappe.utils.data import getdate
 import base64
 import re
 from frappe.utils.file_manager import get_file
@@ -19,7 +20,9 @@ This function checks the access and returns the restricted information
 """
 @frappe.whitelist(allow_guest=True)
 def get_grid(from_date, to_date, drilling_team=None, tv_mode=False):
-    data = get_content(from_date[1:11], to_date[1:11], only_teams=True if not drilling_team else False)
+    from_date = getdate(from_date).strftime("%Y-%m-%d")
+    to_date = getdate(to_date).strftime("%Y-%m-%d")
+    data = get_content(from_date, to_date, only_teams=True if not drilling_team else False)
 
     if drilling_team:
         dt = frappe.get_doc("Drilling Team", drilling_team).as_dict()
@@ -45,6 +48,9 @@ def get_data(key, from_date, to_date, customer=None, drilling_team=None, tv_mode
     if not customer and not drilling_team and not tv_mode:
         return {'error': 'No customer or drilling team'}
     
+    from_date = getdate(from_date).strftime("%Y-%m-%d")
+    to_date = getdate(to_date).strftime("%Y-%m-%d")
+    
     if customer:
         if not frappe.db.exists("Customer", customer):
             return {'error': 'Invalid customer'}
@@ -52,8 +58,8 @@ def get_data(key, from_date, to_date, customer=None, drilling_team=None, tv_mode
             return {'error': 'Invalid key'}
         
         data = {
-            'projects': get_overlay_datas(from_date[1:11], to_date[1:11], customer),
-            'internals': get_internal_overlay_datas(from_date[1:11], to_date[1:11], customer)
+            'projects': get_overlay_datas(from_date, to_date, customer),
+            'internals': get_internal_overlay_datas(from_date, to_date, customer)
         }
     elif drilling_team:
         if not frappe.db.exists("Drilling Team", drilling_team):
@@ -62,13 +68,13 @@ def get_data(key, from_date, to_date, customer=None, drilling_team=None, tv_mode
             return {'error': 'Invalid key'}
         
         data = {
-            'subprojects': get_subproject_overlay_datas(from_date[1:11], to_date[1:11], drilling_team)
+            'subprojects': get_subproject_overlay_datas(from_date, to_date, drilling_team)
         }
     else:
         # TV mode
         data = {
-            'projects': get_overlay_datas(from_date[1:11], to_date[1:11]),
-            'internals': get_internal_overlay_datas(from_date[1:11], to_date[1:11])
+            'projects': get_overlay_datas(from_date, to_date),
+            'internals': get_internal_overlay_datas(from_date, to_date)
         }
     
     return data
@@ -82,6 +88,30 @@ def verify_secret(key):
         return True
     else:
         return False
+
+"""
+Get the planning range for the public bohrplan page.
+Returns {'from_date', 'to_date'} as YYYY-MM-DD strings based on the Signature planning_days/planning_past_days values.
+"""
+@frappe.whitelist(allow_guest=True)
+def get_planning_range(customer=None, key=None, drilling_team=None, tv_mode=False):
+    planning_days = 30
+    planning_past_days = 0
+    try:
+        sig = frappe.db.get_value("Signature", {}, ["planning_days", "planning_past_days"], as_dict=True)
+        if sig:
+            if sig.get("planning_days") is not None:
+                planning_days = sig["planning_days"]
+            if sig.get("planning_past_days") is not None:
+                planning_past_days = sig["planning_past_days"]
+    except Exception:
+        pass
+    
+    today = getdate()
+    from_date = (today - datetime.timedelta(days=planning_past_days)).strftime("%Y-%m-%d")
+    to_date = (today + datetime.timedelta(days=planning_days)).strftime("%Y-%m-%d")
+    
+    return {"from_date": from_date, "to_date": to_date}
 
 """
 Compute the last planned date (for visible range)
