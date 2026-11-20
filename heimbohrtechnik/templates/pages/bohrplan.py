@@ -18,7 +18,19 @@ import mimetypes
 This function checks the access and returns the restricted information
 """
 @frappe.whitelist(allow_guest=True)
-def get_grid(from_date, to_date, drilling_team=None, tv_mode=False):
+def get_grid(key, from_date, to_date, drilling_team=None, tv_mode=False):
+    if drilling_team:
+        if not frappe.db.exists("Drilling Team", drilling_team):
+            return {'error': 'Invalid drilling team'}
+        if frappe.get_value("Drilling Team", drilling_team, "team_key") != key:
+            return {'error': 'Invalid key'}
+            
+    elif tv_mode:
+        if frappe.get_value("Heim Settings", "Heim Settings", "tv_access_secret") != key:
+            return {'error': 'Invalid key'}
+    else:
+        return {'error': 'Invalid request'}
+        
     data = get_content(from_date[1:11], to_date[1:11], only_teams=True if not drilling_team else False)
 
     if drilling_team:
@@ -66,6 +78,8 @@ def get_data(key, from_date, to_date, customer=None, drilling_team=None, tv_mode
         }
     else:
         # TV mode
+        if frappe.get_value("Heim Settings", "Heim Settings", "tv_access_secret") != key:
+            return {'error': 'Invalid key'}
         data = {
             'projects': get_overlay_datas(from_date[1:11], to_date[1:11]),
             'internals': get_internal_overlay_datas(from_date[1:11], to_date[1:11])

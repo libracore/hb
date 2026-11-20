@@ -71,6 +71,7 @@ function get_grid() {
     frappe.call({
        'method': "heimbohrtechnik.templates.pages.bohrplan.get_grid",
        'args': {
+            'key': locals.key,
             'from_date': locals.from_date,
             'to_date': locals.to_date,
             'drilling_team': locals.drilling_team,
