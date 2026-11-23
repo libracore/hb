@@ -469,7 +469,7 @@ def get_project_billing_status_color(project):
             WHERE `tabSales Invoice Item`.`sales_order` = %(so)s 
               AND `tabSales Invoice`.`docstatus` = 1
               AND (`tabSales Invoice`.`title` = "Teilrechnung"
-                OR `tabSales Invoice`.`title` LIKE CONCAT("%", "Akonto-Rechnung")); """,
+                OR `tabSales Invoice`.`title` LIKE "%%Akonto-Rechnung"); """,
             {
                 'so': sales_order
             }, 
@@ -684,7 +684,7 @@ def has_infomail(project):
     infomails = frappe.db.sql("""
         SELECT `name`
         FROM `tabInfomail`
-        WHERE `project` LIKE CONCAT( %(project_base)s, "%" );
+        WHERE `project` LIKE CONCAT( %(project_base)s, "%%" );
         """, {'project_base': project[:8]}, as_dict=True)
     return True if len(infomails) > 0 else False
         
@@ -1218,7 +1218,7 @@ def find_holiday_conflicts():
             FROM `tabProject`
             WHERE
                 `status` = "Open"
-                AND `object_location` LIKE CONCAT( "%", %(region)s)
+                AND `object_location` LIKE CONCAT( "%%", %(region)s)
                 AND `expected_start_date` IS NOT NULL
                 AND `expected_end_date` IS NOT NULL
                 AND `project_type` != "Internal"
@@ -1274,7 +1274,7 @@ def find_project_conflicts(drilling_team=None):
                 AND `drilling_team` = %(drilling_team)s
                 AND `expected_start_date` IS NOT NULL
                 AND `expected_end_date` >= CURDATE()
-                AND `name` NOT LIKE "P-INT-%"
+                AND `name` NOT LIKE "P-INT-%%"
             ORDER BY `expected_start_date` ASC, `modified` DESC
             """,
             {
