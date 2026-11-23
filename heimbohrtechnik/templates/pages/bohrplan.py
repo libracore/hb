@@ -13,6 +13,7 @@ import base64
 import re
 from frappe.utils.file_manager import get_file
 import mimetypes
+from hmac import compare_digest
 
 """
 This function checks the access and returns the restricted information
@@ -22,11 +23,11 @@ def get_grid(key, from_date, to_date, drilling_team=None, tv_mode=False):
     if drilling_team:
         if not frappe.db.exists("Drilling Team", drilling_team):
             return {'error': 'Invalid drilling team'}
-        if frappe.get_value("Drilling Team", drilling_team, "team_key") != key:
+        if not compare_digest(frappe.get_value("Drilling Team", drilling_team, "team_key"), key):
             return {'error': 'Invalid key'}
             
     elif tv_mode:
-        if frappe.get_value("Heim Settings", "Heim Settings", "tv_access_secret") != key:
+        if not key or not compare_digest(frappe.get_value("Heim Settings", "Heim Settings", "tv_access_secret"), key):
             return {'error': 'Invalid key'}
     else:
         return {'error': 'Invalid request'}
@@ -60,7 +61,7 @@ def get_data(key, from_date, to_date, customer=None, drilling_team=None, tv_mode
     if customer:
         if not frappe.db.exists("Customer", customer):
             return {'error': 'Invalid customer'}
-        if frappe.get_value("Customer", customer, "key") != key:
+        if not key or not compare_digest(frappe.get_value("Customer", customer, "key"), key):
             return {'error': 'Invalid key'}
         
         data = {
@@ -70,7 +71,7 @@ def get_data(key, from_date, to_date, customer=None, drilling_team=None, tv_mode
     elif drilling_team:
         if not frappe.db.exists("Drilling Team", drilling_team):
             return {'error': 'Invalid drilling team'}
-        if frappe.get_value("Drilling Team", drilling_team, "team_key") != key:
+        if not key or not compare_digest(frappe.get_value("Drilling Team", drilling_team, "team_key"), key):
             return {'error': 'Invalid key'}
         
         data = {
@@ -78,7 +79,7 @@ def get_data(key, from_date, to_date, customer=None, drilling_team=None, tv_mode
         }
     else:
         # TV mode
-        if frappe.get_value("Heim Settings", "Heim Settings", "tv_access_secret") != key:
+        if not key or not compare_digest(frappe.get_value("Heim Settings", "Heim Settings", "tv_access_secret"), key):
             return {'error': 'Invalid key'}
         data = {
             'projects': get_overlay_datas(from_date[1:11], to_date[1:11]),
@@ -92,7 +93,7 @@ Check secret
 """
 @frappe.whitelist(allow_guest=True)
 def verify_secret(key):
-    if frappe.get_value("Heim Settings", "Heim Settings", "tv_access_secret") == key:
+    if key and compare_digest(frappe.get_value("Heim Settings", "Heim Settings", "tv_access_secret"), key):
         return True
     else:
         return False
@@ -109,16 +110,16 @@ def get_last_date(customer=None, key=None, drilling_team=None):
     if customer:
         if not frappe.db.exists("Customer", customer):
             return None
-        if frappe.get_value("Customer", customer, "key") != key:
+        if not key or not compare_digest(frappe.get_value("Customer", customer, "key"), key):
             return None
         
         last_date = frappe.db.sql("""
             SELECT MAX(`expected_end_date`) AS `expected_end_date`
             FROM `tabProject`
-            WHERE `tabProject`.`customer` = "{customer}"
+            WHERE `tabProject`.`customer` = %(customer)s
               AND `tabProject`.`status` = "Open"
               ;
-        """.format(customer=customer), as_dict=True)
+        """, {'customer': customer}, as_dict=True)
     else:
         if not frappe.db.exists("Drilling Team", drilling_team):
             return None
@@ -129,9 +130,9 @@ def get_last_date(customer=None, key=None, drilling_team=None):
         last_date = frappe.db.sql("""
             SELECT MAX(`to_date`) AS `expected_end_date`
             FROM `tabSubcontracting Order`
-            WHERE `tabSubcontracting Order`.`drilling_team` = "{drilling_team}"
+            WHERE `tabSubcontracting Order`.`drilling_team` = %(drilling_team)s
               ;
-        """.format(drilling_team=drilling_team), as_dict=True)
+        """, {'drilling_team': drilling_team}, as_dict=True)
         
     if len(last_date) > 0:
         return last_date[0]['expected_end_date']
@@ -142,7 +143,7 @@ def get_last_date(customer=None, key=None, drilling_team=None):
 def get_subcontracting_pdf(key, drilling_team, subcontracting_order):
     if not frappe.db.exists("Drilling Team", drilling_team):
         return {'error': 'Invalid drilling team'}
-    if frappe.get_value("Drilling Team", drilling_team, "team_key") != key:
+    if not key or not compare_digest(frappe.get_value("Drilling Team", drilling_team, "team_key"), key):
         return {'error': 'Invalid key'}
     
     doc = frappe.get_doc("Subcontracting Order", subcontracting_order)

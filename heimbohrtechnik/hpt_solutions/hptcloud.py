@@ -1,4 +1,4 @@
-# Copyright (c) 2024-2025, libracore and Contributors
+# Copyright (c) 2024-2026, libracore and Contributors
 # License: GNU General Public License v3. See license.txt
 
 import frappe
@@ -6,6 +6,7 @@ import requests
 import base64
 from frappe.utils.file_manager import save_file
 from frappe.utils import cint
+from hmac import compare_digest
 
 def send_project(project, debug=False):
     settings = frappe.get_doc("HPT Settings", "HPT Settings")
@@ -89,7 +90,7 @@ def post_report(customer, secret, project, report, report_name, device_type, hol
     if not settings.hpt_cloud_customer or not settings.hpt_cloud_secret:
         frappe.log_error( "Posting report from hptcloud to ERP failed: missing configuration", "hptcloud" )
         return {'success': False}
-    if customer != settings.hpt_cloud_customer or secret != settings.hpt_cloud_secret:
+    if customer != settings.hpt_cloud_customer or not compare_digest(secret, settings.hpt_cloud_secret):
         frappe.log_error( "Posting report from hptcloud to ERP failed: invalid credentials", "hptcloud" )
         return {'success': False}
     if not frappe.db.exists("Project", project):

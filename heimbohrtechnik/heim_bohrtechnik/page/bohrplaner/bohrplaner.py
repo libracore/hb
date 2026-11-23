@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2017-2025, libracore and contributors
+# Copyright (c) 2017-2026, libracore and contributors
 
 from __future__ import unicode_literals
 import frappe
@@ -40,14 +40,7 @@ WEEKDAYS = {
 def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
     projects = []
     
-    customer_filter = ""
-    if customer:
-        customer_filter =  """ AND `tabProject`.`customer` = "{customer}" """.format(customer=customer)
-    drilling_team_filter = ""
-    if drilling_team:
-        drilling_team_filter = """ AND `tabProject`.`drilling_team` = '{drilling_team}'""".format(drilling_team=drilling_team)
-        
-    matching_projects = frappe.db.sql("""
+    query = """
         SELECT 
             `name`, 
             `drilling_team`, 
@@ -63,15 +56,27 @@ def get_overlay_datas(from_date, to_date, customer=None, drilling_team=None):
         WHERE `project_type` = "External"
           AND `status` IN ("Open", "Completed")
           AND 
-            ((`expected_start_date` BETWEEN '{from_date}' AND '{to_date}')
-             OR (`expected_end_date` BETWEEN '{from_date}' AND '{to_date}')
-             OR (`expected_start_date` < '{from_date}' AND `expected_end_date` > '{to_date}')
+            ((`expected_start_date` BETWEEN %(from_date)s AND %(to_date)s )
+             OR (`expected_end_date` BETWEEN %(from_date)s AND %(to_date)s )
+             OR (`expected_start_date` < %(from_date)s AND `expected_end_date` > %(to_date)s )
             )
-          {customer_filter}
-          {drilling_team_filter}
-        ORDER BY
-            `tabProject`.`expected_start_date` ASC;
-        """.format(from_date=from_date, to_date=to_date, customer_filter=customer_filter, drilling_team_filter=drilling_team_filter), as_dict=True)
+        """
+    if customer:
+        query +=  """ AND `tabProject`.`customer` = %(customer)s """
+    if drilling_team:
+        query += """ AND `tabProject`.`drilling_team` = %(drilling_team)s """
+    
+    query += """ ORDER BY
+            `tabProject`.`expected_start_date` ASC """
+            
+    matching_projects = frappe.db.sql(query,
+        {
+            'customer': customer,
+            'drilling_team': drilling_team,
+            'from_date': from_date, 
+            'to_date': to_date
+        }, 
+        as_dict=True)
 
     for p in matching_projects:
         if p.expected_start_date < getdate(from_date):
@@ -244,29 +249,35 @@ def get_short_time(d):
 @frappe.whitelist()
 def get_internal_overlay_datas(from_date, to_date, customer=None):
     projects = []
-    
-    customer_filter = ""
-    if customer:
-        customer_filter =  """ AND `tabProject`.`customer` = "{customer}" """.format(customer=customer)
         
-    matching_projects = frappe.db.sql("""
-                                            SELECT 
-                                                `name`, 
-                                                `drilling_team`, 
-                                                `expected_start_date`, 
-                                                `expected_end_date`, 
-                                                `start_half_day`, 
-                                                `end_half_day`, 
-                                                `object`
-                                            FROM `tabProject`
-                                            WHERE `project_type` = "Internal"
-                                              AND 
-                                                ((`expected_start_date` BETWEEN '{from_date}' AND '{to_date}')
-                                                 OR (`expected_end_date` BETWEEN '{from_date}' AND '{to_date}')
-                                                 OR (`expected_start_date` < '{from_date}' AND `expected_end_date` > '{to_date}')
-                                                )
-                                              {customer_filter}
-                                                """.format(from_date=from_date, to_date=to_date, customer_filter=customer_filter), as_dict=True)
+    query = """
+        SELECT 
+            `name`, 
+            `drilling_team`, 
+            `expected_start_date`, 
+            `expected_end_date`, 
+            `start_half_day`, 
+            `end_half_day`, 
+            `object`
+        FROM `tabProject`
+        WHERE `project_type` = "Internal"
+          AND 
+            ((`expected_start_date` BETWEEN '{from_date}' AND '{to_date}')
+             OR (`expected_end_date` BETWEEN '{from_date}' AND '{to_date}')
+             OR (`expected_start_date` < '{from_date}' AND `expected_end_date` > '{to_date}')
+            )
+            """
+    if customer:
+        query +=  """ AND `tabProject`.`customer` = %(customer)s """
+        
+    matching_projects = frappe.db.sql(query,
+        {
+            'customer': customer,
+            'from_date': from_date, 
+            'to_date': to_date
+        },
+        as_dict=True
+    )
     for p in matching_projects:
         project = frappe.get_doc("Project", p.name)
         if p.expected_start_date < getdate(from_date):
@@ -300,10 +311,8 @@ def get_subproject_overlay_datas(from_date, to_date, drilling_team=None):
     condition = ""
     earliest_start = None
     last_end = None
-    if drilling_team:
-        condition = """ AND `tabSubcontracting Order`.`drilling_team` = "{drilling_team}" """.format(drilling_team=drilling_team)
-        
-    subprojects = frappe.db.sql("""
+    
+    query = """
         SELECT
             `tabProject Subproject`.`start`,
             `tabProject Subproject`.`end`,
@@ -323,13 +332,23 @@ def get_subproject_overlay_datas(from_date, to_date, drilling_team=None):
         LEFT JOIN `tabSubcontracting Order` ON `tabSubcontracting Order`.`name` = `tabProject Subproject`.`subcontracting_order`
         LEFT JOIN `tabUser` ON `tabProject`.`manager` = `tabUser`.`name`
         WHERE 
-            (`tabProject Subproject`.`start` BETWEEN "{from_date}" AND "{to_date}"
-            OR `tabProject Subproject`.`end` BETWEEN "{from_date}" AND "{to_date}")
+            (`tabProject Subproject`.`start` BETWEEN %(from_date)s AND %(to_date)s
+            OR `tabProject Subproject`.`end` BETWEEN %(from_date)s AND %(to_date)s)
             AND `tabProject`.`status` IN ("Open", "Completed")
-            {condition}
-        ORDER BY 
-            `tabProject Subproject`.`team` ASC, `tabProject Subproject`.`start` ASC, `tabSubcontracting Order`.`prio` ASC;""".format(
-            from_date=from_date, to_date=to_date, condition=condition), as_dict=True)
+        """
+    if drilling_team:
+        query += """ AND `tabSubcontracting Order`.`drilling_team` = %(drilling_team)s """
+    query += """ ORDER BY 
+            `tabProject Subproject`.`team` ASC, `tabProject Subproject`.`start` ASC, `tabSubcontracting Order`.`prio` ASC"""
+            
+    subprojects = frappe.db.sql(query,
+        {
+            'drilling_team': drilling_team,
+            'from_date': from_date, 
+            'to_date': to_date
+        }, 
+        as_dict=True
+    )
     for subproject in subprojects:
         subproject_duration = calc_duration(subproject.start, subproject.end, from_date, to_date)
 
@@ -447,10 +466,15 @@ def get_project_billing_status_color(project):
             SELECT COUNT(`tabSales Invoice`.`name`) AS `qty` 
             FROM `tabSales Invoice Item`
             LEFT JOIN `tabSales Invoice` ON `tabSales Invoice`.`name` = `tabSales Invoice Item`.`parent`
-            WHERE `tabSales Invoice Item`.`sales_order` = '{so}' 
+            WHERE `tabSales Invoice Item`.`sales_order` = %(so)s 
               AND `tabSales Invoice`.`docstatus` = 1
               AND (`tabSales Invoice`.`title` = "Teilrechnung"
-                OR `tabSales Invoice`.`title` LIKE  "%Akonto-Rechnung"); """.format(so=sales_order), as_dict=True)[0].qty)
+                OR `tabSales Invoice`.`title` LIKE CONCAT("%", "Akonto-Rechnung")); """,
+            {
+                'so': sales_order
+            }, 
+            as_dict=True
+            )[0].qty)
         if akonto > 0:
             color = BG_LIGHT_GREEN         # light green
         sinv = int(frappe.db.sql("""
@@ -458,10 +482,15 @@ def get_project_billing_status_color(project):
             FROM `tabSales Invoice Item` 
             LEFT JOIN `tabSales Invoice` ON `tabSales Invoice`.`name` = `tabSales Invoice Item`.`parent`
             WHERE `tabSales Invoice Item`.`parenttype` = 'Sales Invoice' 
-              AND `tabSales Invoice Item`.`sales_order` = '{so}' 
+              AND `tabSales Invoice Item`.`sales_order` = %(so)s 
               AND `tabSales Invoice`.`docstatus` = 1 
               AND `tabSales Invoice`.`title` IN ("Schlussrechnung", "Rechnung"); 
-            """.format(so=sales_order), as_dict=True)[0].qty)
+            """,
+            {
+                'so': sales_order
+            }, 
+            as_dict=True
+        )[0].qty)
         if sinv > 0:
             color = BG_GREEN           # green
     return color
@@ -639,10 +668,11 @@ def has_public_area_request(project):
         FROM `tabRequest for Public Area Use` 
         LEFT JOIN `tabRelated Project` ON `tabRelated Project`.`parent` = `tabRequest for Public Area Use`.`name` 
         WHERE 
-            `tabRequest for Public Area Use`.`project` = "{project}" 
+            `tabRequest for Public Area Use`.`project` = %(project)s 
             OR (`tabRelated Project`.`parenttype` = "Request for Public Area Use"  
                 AND `tabRelated Project`.`project` = "{project}");
-        """.format(project=project), as_dict=True)
+        """,
+        {'project': project}, as_dict=True)
         
     if len(public_area_requests) > 0 and public_area_requests[0]['sent'] == 1:
         return True
@@ -654,8 +684,8 @@ def has_infomail(project):
     infomails = frappe.db.sql("""
         SELECT `name`
         FROM `tabInfomail`
-        WHERE `project` LIKE "{project_base}%";
-        """.format(project_base=project[:8]), as_dict=True)
+        WHERE `project` LIKE CONCAT( %(project_base)s, "%" );
+        """, {'project_base': project[:8]}, as_dict=True)
     return True if len(infomails) > 0 else False
         
 @frappe.whitelist()
@@ -846,10 +876,7 @@ def get_weekend_day_correction(from_date, to_date):
     return sundays
     
 def get_drilling_teams(only_teams=False):
-    team_filter = ''
-    if only_teams:
-        team_filter = """AND `drilling_team_type` = 'Bohrteam'"""
-    drilling_teams = frappe.db.sql("""
+    query = """
         SELECT 
             `name` AS `team_id`, 
             `title`, 
@@ -857,16 +884,24 @@ def get_drilling_teams(only_teams=False):
             `drt`, 
             `truck_and_weight`, 
             `has_trough`, 
-            IFNULL(`trough_details`, "{trough}") AS `trough_details`, 
+            IFNULL(`trough_details`, %(trough)s) AS `trough_details`, 
             `has_crane`, 
-            IFNULL(`crane_details`, "{crane}") AS `crane_details`, 
+            IFNULL(`crane_details`, %(crane)s) AS `crane_details`, 
             `phone`,
             `drilling_team_type`,
             `appartment`
         FROM `tabDrilling Team`
         WHERE `drilling_team_type` != 'Deaktiviert'
-        {team_filter}""".format(
-            trough=_('Has Trough'), crane=_('Has Crane'), team_filter=team_filter), as_dict=True)
+        """
+    if only_teams:
+        query += """ AND `drilling_team_type` = 'Bohrteam' """
+    drilling_teams = frappe.db.sql(query,
+        {
+            'trough': _('Has Trough'), 
+            'crane': _('Has Crane')
+        }, 
+        as_dict=True
+    )
         
     return drilling_teams
 
@@ -890,10 +925,14 @@ def get_absences_overlay_datas(from_date, to_date):
             `remarks`
         FROM `tabLeave Application`
         WHERE 
-            `from_date` <= '{to_date}'
-            AND`to_date` >= '{from_date}'
+            `from_date` <= %(to_date)s
+            AND`to_date` >= %(from_date)s
             AND `docstatus` < 2
-        ORDER BY `from_date` ASC, `employee_name` ASC;""".format(from_date=from_date, to_date=to_date), as_dict=True)
+        ORDER BY `from_date` ASC, `employee_name` ASC;""",
+        {
+            'from_date': from_date, 
+            'to_date': to_date
+        }, as_dict=True)
     
     for absence in absences_raw:
         duration = calc_duration(absence.from_date, absence.to_date, from_date, to_date)     # in ['dauer'] segments
@@ -1051,14 +1090,18 @@ def get_bohrplaner_html(start_date, previous_week=False):
             print(project)
             projects = frappe.db.sql("""SELECT `name`, `project_type`, `object_name`
                         FROM `tabProject` 
-                        WHERE CONCAT(`expected_start_date`, " ", IF(`start_half_day` = "VM", "06", "14")) <= '{date}' 
-                        AND CONCAT(`expected_end_date`, " ", IF(`end_half_day` = "VM", "06", "14")) >= '{date}'
-                        AND `drilling_team` = '{drillt}'
+                        WHERE CONCAT(`expected_start_date`, " ", IF(`start_half_day` = "VM", "06", "14")) <= %(date)s 
+                        AND CONCAT(`expected_end_date`, " ", IF(`end_half_day` = "VM", "06", "14")) >= %(date)s
+                        AND `drilling_team` = %(drillt)s
                         AND `status` IN ("Open", "Completed")
                         ORDER BY `project_type` DESC, 
-                        `expected_start_date` DESC;""".format(
-                        date = "{0} {1}".format(datetime.strptime(project['date'], "%d.%m.%Y").strftime("%Y-%m-%d"), "06" if project['vmnm'] == "VM" else "14"),
-                        drillt = drilling_team['team_id']), as_dict=True)
+                        `expected_start_date` DESC;""",
+                {
+                    'date': "{0} {1}".format(datetime.strptime(project['date'], "%d.%m.%Y").strftime("%Y-%m-%d"), "06" if project['vmnm'] == "VM" else "14"),
+                    'drillt': drilling_team['team_id']
+                }, 
+                as_dict=True
+            )
             
             if len(projects) > 0:
                 project['project'] = projects[0]['name']
@@ -1155,10 +1198,15 @@ def find_holiday_conflicts():
         holidays_raw = frappe.db.sql("""
                 SELECT `holiday_date` AS `date`
                 FROM `tabHoliday`
-                WHERE `parent` = "{region}"
+                WHERE `parent` = %(region)s
                   AND `parenttype` = "Regional Holidays"
                   AND `holiday_date` >= CURDATE();
-            """.format(region=region['region']), as_dict=True)
+            """,
+            {
+                'region': region['region']
+            }, 
+            as_dict=True
+        )
             
         holidays = []
         for h in holidays_raw:
@@ -1170,11 +1218,16 @@ def find_holiday_conflicts():
             FROM `tabProject`
             WHERE
                 `status` = "Open"
-                AND `object_location` LIKE "%{region}"
+                AND `object_location` LIKE CONCAT( "%", %(region)s)
                 AND `expected_start_date` IS NOT NULL
                 AND `expected_end_date` IS NOT NULL
                 AND `project_type` != "Internal"
-            """.format(region=region['region']), as_dict=True)
+            """,
+            {
+                'region': region['region']
+            }, 
+            as_dict=True
+        )
         
         for project in projects:
             contained = False
@@ -1218,12 +1271,17 @@ def find_project_conflicts(drilling_team=None):
             FROM `tabProject`
             WHERE
                 `status` IN ("Open")
-                AND `drilling_team` = "{0}"
+                AND `drilling_team` = %(drilling_team)s
                 AND `expected_start_date` IS NOT NULL
                 AND `expected_end_date` >= CURDATE()
                 AND `name` NOT LIKE "P-INT-%"
             ORDER BY `expected_start_date` ASC, `modified` DESC
-            """.format(drilling_team['name']), as_dict=True)
+            """,
+            {
+                'drilling_team': drilling_team['name']
+            }, 
+            as_dict=True
+        )
             
         if len(projects) > 1:
             for p in range(0, (len(projects) - 1)):
@@ -1246,24 +1304,34 @@ def get_conflict_details(p1, p2):
     
     # find by conflict affected subcontracting orders, public area uses, cranes and infomails
     road_blocks = frappe.db.sql("""
-        SELECT 
-            `tabRequest for Public Area Use`.`name`,
-            `tabRequest for Public Area Use`.`from_date`,
-            `tabRequest for Public Area Use`.`to_date`
-        FROM `tabRequest for Public Area Use`
-        LEFT JOIN `tabRelated Project` ON `tabRelated Project`.`parent` = `tabRequest for Public Area Use`.`name`
-        WHERE 
-            `tabRequest for Public Area Use`.`project` = "{project}"
-            OR `tabRelated Project`.`project` = "{project}"
-    """.format(project=p2), as_dict=True)
+            SELECT 
+                `tabRequest for Public Area Use`.`name`,
+                `tabRequest for Public Area Use`.`from_date`,
+                `tabRequest for Public Area Use`.`to_date`
+            FROM `tabRequest for Public Area Use`
+            LEFT JOIN `tabRelated Project` ON `tabRelated Project`.`parent` = `tabRequest for Public Area Use`.`name`
+            WHERE 
+                `tabRequest for Public Area Use`.`project` = %(project)s
+                OR `tabRelated Project`.`project` = %(project)s
+        """,
+        {
+            'project': p2
+        }, 
+        as_dict=True
+    )
     
     infomails = frappe.db.sql("""
-        SELECT 
-            `tabInfomail`.`name`
-        FROM `tabInfomail`
-        WHERE 
-            `tabInfomail`.`project` = "{project}"
-    """.format(project=p2), as_dict=True)
+            SELECT 
+                `tabInfomail`.`name`
+            FROM `tabInfomail`
+            WHERE 
+                `tabInfomail`.`project` = %(project)s
+        """,
+        {
+            'project': p2
+        }, 
+        as_dict=True
+    )
     
     crane = None
     for c in p2_doc.checklist:
@@ -1278,13 +1346,19 @@ def get_conflict_details(p1, p2):
             
     # find hte next project (adjacent), as this would have a conflict if this conflict is resolved
     adjacent_project = frappe.db.sql("""
-        SELECT `name`
-        FROM `tabProject`
-        WHERE `drilling_team` = "{drilling_team}"
-          AND (`expected_start_date` = "{same_day}"
-               OR `expected_start_date` = "{next_day}");
-    """.format(drilling_team=p2_doc.drilling_team, same_day=p2_doc.expected_end_date,
-        next_day=(p2_doc.expected_end_date + timedelta(days=1))), as_dict=True)
+            SELECT `name`
+            FROM `tabProject`
+            WHERE `drilling_team` = %(drilling_team)s
+              AND (`expected_start_date` = %(same_day)s
+                   OR `expected_start_date` = %(next_day)s );
+        """,
+        {
+            'drilling_team': p2_doc.drilling_team, 
+            'same_day': p2_doc.expected_end_date,
+            'next_day': (p2_doc.expected_end_date + timedelta(days=1))
+        }, 
+        as_dict=True
+    )
     if len(adjacent_project) > 0:
         adjacent_project = adjacent_project[0]['name']
     else:
@@ -1370,8 +1444,8 @@ def get_subproject_overview(project):
                                         `team`,
                                         `description`
                                     FROM `tabProject Subproject`
-                                    WHERE `parent` = '{project}'
-                                """.format(project=project), as_dict=True)
+                                    WHERE `parent` = %(project)s
+                                """, {'project': project}, as_dict=True)
     if len(subprojects) > 0:
         table = """<p>Mit dem Projekt verknüpfte Unterprojekte:</p>
                     <table style="width:100%;" class="project-search-modal-table">
@@ -1410,11 +1484,17 @@ def get_mfk_overlay_datas(from_date, to_date):
                     `start_time`, 
                     `end_time`
                     FROM `tabMFK`
-                    WHERE `start_time` BETWEEN '{from_date}' AND '{to_date}'
-                    OR `end_time` BETWEEN '{from_date}' AND '{to_date}'
-                """.format(from_date=from_date, to_date=to_date)
+                    WHERE `start_time` BETWEEN %(from_date)s AND %(to_date)s
+                    OR `end_time` BETWEEN %(from_date)s AND %(to_date)s
+                """
                 
-    data = frappe.db.sql(sql_query, as_dict=True)
+    data = frappe.db.sql(sql_query,
+        {
+            'from_date': from_date, 
+            'to_date': to_date
+        }, 
+        as_dict=True
+    )
     mfk_data = []
     shifts = {}
     for entry in data:
@@ -1455,17 +1535,23 @@ def move_projects(from_project, drilling_team, days):
         return {'error': 'No start date found'}
     
     raw_projects = frappe.db.sql("""SELECT
-            `name`,
-            `expected_start_date`,
-            `expected_end_date`,
-            `fixed_date`
-        FROM `tabProject`
-        WHERE 
-            `drilling_team` = "{drilling_team}"
-            AND `expected_start_date` >= "{start_date}"
-        ORDER BY `expected_start_date` ASC
-        ;
-    """.format(drilling_team=drilling_team, start_date=start_date), as_dict=True)
+                `name`,
+                `expected_start_date`,
+                `expected_end_date`,
+                `fixed_date`
+            FROM `tabProject`
+            WHERE 
+                `drilling_team` = %(drilling_team)s
+                AND `expected_start_date` >= %(start_date)s
+            ORDER BY `expected_start_date` ASC
+            ;
+        """,
+        {
+            'drilling_team': drilling_team, 
+            'start_date': start_date
+        }, 
+        as_dict=True
+    )
     
     projects = []
     first_project = True
@@ -1551,7 +1637,7 @@ def date_is_holiday(date):
     is_holiday = frappe.db.sql("""
         SELECT `parent`
         FROM `tabHoliday`
-        WHERE `holiday_date` = "{date}";""".format(date=date), as_dict=True)
+        WHERE `holiday_date` = %(date)s;""", {'date': date}, as_dict=True)
     if len(is_holiday) > 0:
         return True
     else:
