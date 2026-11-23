@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2023-2024, libracore AG and contributors
+# Copyright (c) 2023-2026, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-from frappe.core.doctype.communication.email import make as make_email
 from frappe.utils.data import getdate
 from heimbohrtechnik.heim_bohrtechnik.page.bohrplaner.bohrplaner import get_overlay_datas
 from frappe.utils import cint
@@ -64,12 +63,12 @@ def reminder():
                     default_sender = frappe.get_all("Email Account", 
                         filters={'enable_outgoing': 1, 'default_outgoing': 1}, 
                         fields=['name', 'email_id'])
-                    make_email(
-                        recipients=frappe.db.get_value("Drilling Team", project.get('bohrteam'), "email"),
+                    frappe.sendmail(
+                        recipients=[frappe.db.get_value("Drilling Team", project.get('bohrteam'), "email")],
                         sender=default_sender[0]['email_id'],
                         subject="Erinnerung: Bohrmeter Rückmeldung",
-                        content="Guten Morgen,<br><br>du hast gestern ({0}) keine Bohrmeter Rückmeldung eingereicht.".format(yesterday.strftime("%d.%m.%Y")),
-                        send_email=True)
+                        message="Guten Morgen,<br><br>du hast gestern ({0}) keine Bohrmeter Rückmeldung eingereicht.".format(yesterday.strftime("%d.%m.%Y")),
+                    )
                         
                     #check two additional days and send mail to head if there were no feedbacks for more than two days
                     check_inactivity(yesterday, project.get('bohrteam'), default_sender)
