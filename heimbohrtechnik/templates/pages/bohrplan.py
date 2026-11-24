@@ -19,13 +19,17 @@ from hmac import compare_digest
 This function checks the access and returns the restricted information
 """
 @frappe.whitelist(allow_guest=True)
-def get_grid(key, from_date, to_date, drilling_team=None, tv_mode=False):
+def get_grid(key, from_date, to_date, drilling_team=None, customer=None, tv_mode=False):
     if drilling_team:
         if not frappe.db.exists("Drilling Team", drilling_team):
             return {'error': 'Invalid drilling team'}
         if not compare_digest(frappe.get_value("Drilling Team", drilling_team, "team_key"), key):
             return {'error': 'Invalid key'}
-            
+    elif customer:
+        if not frappe.db.exists("Customer", customer):
+            return {'error': 'Invalid customer'}
+        if not key or not compare_digest(frappe.get_value("Customer", customer, "key"), key):
+            return {'error': 'Invalid key'} 
     elif tv_mode:
         if not key or not compare_digest(frappe.get_value("Heim Settings", "Heim Settings", "tv_access_secret"), key):
             return {'error': 'Invalid key'}

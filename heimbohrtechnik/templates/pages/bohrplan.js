@@ -72,6 +72,7 @@ function get_grid() {
        'method': "heimbohrtechnik.templates.pages.bohrplan.get_grid",
        'args': {
             'key': locals.key,
+            'customer': locals.customer,
             'from_date': locals.from_date,
             'to_date': locals.to_date,
             'drilling_team': locals.drilling_team,
