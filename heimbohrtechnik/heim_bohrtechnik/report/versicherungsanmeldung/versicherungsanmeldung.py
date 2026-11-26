@@ -1,4 +1,4 @@
-# Copyright (c) 2022-2024, libracore AG and contributors
+# Copyright (c) 2022-2026, libracore AG and contributors
 # For license information, please see license.txt
 
 from __future__ import unicode_literals
@@ -88,15 +88,15 @@ def has_insurance(project):
         LEFT JOIN `tabSales Order` ON `tabSales Order`.`name` = `tabProject`.`sales_order`
         LEFT JOIN `tabSales Order Item` ON 
             (`tabSales Order Item`.`parent` = `tabSales Order`.`name`
-             AND `tabSales Order Item`.`item_name` LIKE "%Versicherung%")
+             AND `tabSales Order Item`.`item_name` LIKE "%%Versicherung%%")
         WHERE 
-            `tabProject`.`name` LIKE %(project)s
+            `tabProject`.`name` LIKE CONCAT(%(project)s, "%%")
             AND `tabSales Order Item`.`alternativ` = 0
             AND `tabSales Order Item`.`eventual` = 0
             AND `tabSales Order Item`.`name` IS NOT NULL
         GROUP BY `tabProject`.`name`
     ;"""
-    data = frappe.db.sql(sql_query, {'project'="{0}%".format(project)}, as_dict=True)
+    data = frappe.db.sql(sql_query, {'project': project}, as_dict=True)
     return data
 
 def needs_insurance(sales_order):
@@ -107,7 +107,7 @@ def needs_insurance(sales_order):
         FROM `tabSales Order`
         LEFT JOIN `tabSales Order Item` ON 
             (`tabSales Order Item`.`parent` = `tabSales Order`.`name`
-             AND `tabSales Order Item`.`item_name` LIKE "%Versicherung%")
+             AND `tabSales Order Item`.`item_name` LIKE "%%Versicherung%%")
         WHERE 
             `tabSales Order Item`.`alternativ` = 0
             AND `tabSales Order Item`.`eventual` = 0
@@ -115,7 +115,7 @@ def needs_insurance(sales_order):
             AND `tabSales Order`.`name` = %(sales_order)s
         GROUP BY `tabSales Order`.`object`
     ;"""
-    data = frappe.db.sql(sql_query, {'sales_order': sales_order)}, as_dict=True)
+    data = frappe.db.sql(sql_query, {'sales_order': sales_order}, as_dict=True)
     if len(data) > 0:
         return True
     obj = frappe.get_value("Sales Order", sales_order, "object")

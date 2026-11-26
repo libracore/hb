@@ -1,7 +1,8 @@
 var global = {
     status: null,
     project: null,
-    drilling_sample: null
+    drilling_sample: null,
+    key: null
 };
 
 $('document').ready(function(){
@@ -101,23 +102,37 @@ function add_event_listeners(){
 
 function get_project() {
     const urlParams = new URLSearchParams(window.location.search);
-    const project = urlParams.get('project');
-    return project;
+    global.project = urlParams.get('project');
+    global.key = urlParams.get('key');
+    if ((!global.project) || (!global.key)) {
+        frappe.msgprint( 
+            __("Kein Projekt und/oder Schlüssel gefunden. Bitte die Anwendung über einen gültigen Link starten."), 
+            __("Fehler") ,
+            indictaor="red"
+        );
+    }
+    return global.project;
 }
 
 function fetch_project_data(){
-    global.project = get_project();
-
+    get_project();
+    
     if (global.project) {
         frappe.call({
-            method: 'heimbohrtechnik.heim_bohrtechnik.doctype.drilling_sample.drilling_sample.fetch_project_data',
+            method: 'heimbohrtechnik.templates.pages.drilling_sample_controller.fetch_project_data',
             args: {
-                "project_name": global.project
+                "project_name": global.project,
+                "key": global.key
             },
             'callback': function(r) {
-                let today_plus_7 = frappe.datetime.add_days(frappe.datetime.get_today(), 7);
-                let today_minus_90 = frappe.datetime.add_days(frappe.datetime.get_today(), -90);
-
+                const now = new Date();
+                let today_plus_7 = ((new Date(now)).setDate(now.getDate() + 7));
+                let today_minus_90 = ((new Date(now)).setDate(now.getDate() - 90));
+                
+                // console.log(r.message.expected_start_date);
+                // reformat
+                today_plus_7 = (new Date(today_plus_7)).toISOString().substring(0, 10);
+                today_minus_90 = (new Date(today_minus_90)).toISOString().substring(0, 10);
                 if ((r.message) && (r.message.expected_start_date <= today_plus_7) && (r.message.expected_end_date >= today_minus_90)) {
                     document.getElementById('project').innerHTML = "Projekt: " + global.project;
                     document.getElementById('project').setAttribute('readonly', true);
@@ -141,7 +156,8 @@ function fetch_samples(){
     frappe.call({
         "method": "heimbohrtechnik.templates.pages.drilling_sample_controller.get_drilling_sample",
         "args": {
-            "project": global.project
+            "project": global.project,
+            "key": global.key
         },
         "callback": function(response) {
             if (response.message) {
@@ -256,6 +272,7 @@ function submit_drilling_sample(){
         "method": "heimbohrtechnik.templates.pages.drilling_sample_controller.submit_drilling_sample",
         "args": {
             "project": global.project,
+            "key": global.key,
             "drilling_sample": global.drilling_sample,
             "status": global.status,
             "lagerort": lagerort,
