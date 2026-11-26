@@ -262,9 +262,9 @@ def get_internal_overlay_datas(from_date, to_date, customer=None):
         FROM `tabProject`
         WHERE `project_type` = "Internal"
           AND 
-            ((`expected_start_date` BETWEEN '{from_date}' AND '{to_date}')
-             OR (`expected_end_date` BETWEEN '{from_date}' AND '{to_date}')
-             OR (`expected_start_date` < '{from_date}' AND `expected_end_date` > '{to_date}')
+            ((`expected_start_date` BETWEEN %(from_date)s AND %(to_date)s)
+             OR (`expected_end_date` BETWEEN %(from_date)s AND %(to_date)s)
+             OR (`expected_start_date` < %(from_date)s AND `expected_end_date` > %(to_date)s )
             )
             """
     if customer:
