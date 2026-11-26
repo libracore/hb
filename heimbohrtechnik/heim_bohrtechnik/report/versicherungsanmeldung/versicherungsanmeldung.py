@@ -80,6 +80,10 @@ This function returns the insurances, in case a project has such
 """
 @frappe.whitelist()
 def has_insurance(project):
+    # use base project path
+    p_parts = project.split("-")
+    if len(p_parts) > 2:
+        project = "{0}-{1}".format(p_parts[0], p_parts[1])
     sql_query = """SELECT
             `tabProject`.`name` AS `project`,
             `tabSales Order`.`name` AS `sales_order`,
