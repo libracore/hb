@@ -90,13 +90,13 @@ def has_insurance(project):
             (`tabSales Order Item`.`parent` = `tabSales Order`.`name`
              AND `tabSales Order Item`.`item_name` LIKE "%Versicherung%")
         WHERE 
-            `tabProject`.`name` = "{project}"
+            `tabProject`.`name` LIKE %(project)s
             AND `tabSales Order Item`.`alternativ` = 0
             AND `tabSales Order Item`.`eventual` = 0
             AND `tabSales Order Item`.`name` IS NOT NULL
         GROUP BY `tabProject`.`name`
-    ;""".format(project=project)
-    data = frappe.db.sql(sql_query, as_dict=True)
+    ;"""
+    data = frappe.db.sql(sql_query, {'project'="{0}%".format(project)}, as_dict=True)
     return data
 
 def needs_insurance(sales_order):
@@ -112,10 +112,10 @@ def needs_insurance(sales_order):
             `tabSales Order Item`.`alternativ` = 0
             AND `tabSales Order Item`.`eventual` = 0
             AND `tabSales Order Item`.`name` IS NOT NULL
-            AND `tabSales Order`.`name` = "{sales_order}"
+            AND `tabSales Order`.`name` = %(sales_order)s
         GROUP BY `tabSales Order`.`object`
-    ;""".format(sales_order=sales_order)
-    data = frappe.db.sql(sql_query, as_dict=True)
+    ;"""
+    data = frappe.db.sql(sql_query, {'sales_order': sales_order)}, as_dict=True)
     if len(data) > 0:
         return True
     obj = frappe.get_value("Sales Order", sales_order, "object")
